@@ -1,469 +1,469 @@
-# Statistical Reporting Standards
+# 統計報告標準
 
-This document provides guidelines for reporting statistical analyses according to APA (American Psychological Association) style and general best practices for academic publications.
+本文件提供根據 APA（美國心理學會）風格和學術出版一般最佳實踐報告統計分析的指南。
 
-## General Principles
+## 一般原則
 
-1. **Transparency**: Report enough detail for replication
-2. **Completeness**: Include all planned analyses and outcomes
-3. **Honesty**: Report non-significant findings and violations
-4. **Clarity**: Write for your audience, define technical terms
-5. **Reproducibility**: Provide code, data, or supplements when possible
-
----
-
-## Pre-Registration and Planning
-
-### What to Report (Ideally Before Data Collection)
-
-1. **Hypotheses**: Clearly stated, directional when appropriate
-2. **Sample size justification**: Power analysis or other rationale
-3. **Data collection stopping rule**: When will you stop collecting data?
-4. **Variables**: All variables collected (not just those analyzed)
-5. **Exclusion criteria**: Rules for excluding participants/data points
-6. **Statistical analyses**: Planned tests, including:
-   - Primary analysis
-   - Secondary analyses
-   - Exploratory analyses (labeled as such)
-   - Handling of missing data
-   - Multiple comparison corrections
-   - Assumption checks
-
-**Why pre-register?**
-- Prevents HARKing (Hypothesizing After Results are Known)
-- Distinguishes confirmatory from exploratory analyses
-- Increases credibility and reproducibility
-
-**Platforms**: OSF, AsPredicted, ClinicalTrials.gov
+1. **透明性**：報告足夠的細節以供複製
+2. **完整性**：包含所有計畫的分析和結果
+3. **誠實性**：報告不顯著的發現和違反情況
+4. **清晰性**：為讀者撰寫，定義技術術語
+5. **可重現性**：盡可能提供程式碼、資料或補充資料
 
 ---
 
-## Methods Section
+## 預先註冊和規劃
 
-### Participants
+### 報告內容（理想上在資料收集前）
 
-**What to report**:
-- Total N, including excluded participants
-- Relevant demographics (age, gender, etc.)
-- Recruitment method
-- Inclusion/exclusion criteria
-- Attrition/dropout with reasons
+1. **假設**：清楚陳述，適當時具方向性
+2. **樣本大小合理性**：統計考驗力分析或其他理由
+3. **資料收集停止規則**：何時停止收集資料？
+4. **變數**：收集的所有變數（不僅是分析的）
+5. **排除準則**：排除參與者/資料點的規則
+6. **統計分析**：計畫的檢定，包括：
+   - 主要分析
+   - 次要分析
+   - 探索性分析（標註為探索性）
+   - 缺失資料處理
+   - 多重比較校正
+   - 假設檢驗
 
-**Example**:
-> "Participants were 150 undergraduate students (98 female, 52 male; M_age = 19.4 years, SD = 1.2, range 18-24) recruited from psychology courses in exchange for course credit. Five participants were excluded due to incomplete data (n = 3) or failing attention checks (n = 2), resulting in a final sample of 145."
+**為何預先註冊？**
+- 防止 HARKing（結果已知後假設）
+- 區分驗證性和探索性分析
+- 增加可信度和可重現性
 
-### Design
-
-**What to report**:
-- Study design (between-subjects, within-subjects, mixed)
-- Independent variables and levels
-- Dependent variables
-- Control variables/covariates
-- Randomization procedure
-- Blinding (single-blind, double-blind)
-
-**Example**:
-> "A 2 (feedback: positive vs. negative) × 2 (timing: immediate vs. delayed) between-subjects factorial design was used. Participants were randomly assigned to conditions using a computer-generated randomization sequence. The primary outcome was task performance measured as number of correct responses (0-20 scale)."
-
-### Measures
-
-**What to report**:
-- Full name of measure/instrument
-- Number of items
-- Scale/response format
-- Scoring method
-- Reliability (Cronbach's α, ICC, etc.)
-- Validity evidence (if applicable)
-
-**Example**:
-> "Depression was assessed using the Beck Depression Inventory-II (BDI-II; Beck et al., 1996), a 21-item self-report measure rated on a 4-point scale (0-3). Total scores range from 0 to 63, with higher scores indicating greater depression severity. The BDI-II demonstrated excellent internal consistency in this sample (α = .91)."
-
-### Procedure
-
-**What to report**:
-- Step-by-step description of what participants did
-- Timing and duration
-- Instructions given
-- Any manipulations or interventions
-
-**Example**:
-> "Participants completed the study online via Qualtrics. After providing informed consent, they completed demographic questions, were randomly assigned to one of four conditions, completed the experimental task (approximately 15 minutes), and finished with the outcome measures and debriefing. The entire session lasted approximately 30 minutes."
-
-### Data Analysis
-
-**What to report**:
-- Software used (with version)
-- Significance level (α)
-- Tail(s) of tests (one-tailed or two-tailed)
-- Assumption checks conducted
-- Missing data handling
-- Outlier treatment
-- Multiple comparison corrections
-- Effect size measures used
-
-**Example**:
-> "All analyses were conducted using Python 3.10 with scipy 1.11 and statsmodels 0.14. An alpha level of .05 was used for all significance tests. Assumptions of normality and homogeneity of variance were assessed using Shapiro-Wilk and Levene's tests, respectively. Missing data (< 2% for all variables) were handled using listwise deletion. Outliers beyond 3 SD from the mean were winsorized. For the primary ANOVA, partial eta-squared (η²_p) is reported as the effect size measure. Post hoc comparisons used Tukey's HSD to control family-wise error rate."
+**平台**：OSF、AsPredicted、ClinicalTrials.gov
 
 ---
 
-## Results Section
+## 方法部分
 
-### Descriptive Statistics
+### 參與者
 
-**What to report**:
-- Sample size (for each group if applicable)
-- Measures of central tendency (M, Mdn)
-- Measures of variability (SD, IQR, range)
-- Confidence intervals (when appropriate)
+**報告內容**：
+- 總 N，包括排除的參與者
+- 相關人口統計資料（年齡、性別等）
+- 招募方法
+- 納入/排除準則
+- 流失/退出及原因
 
-**Example (continuous outcome)**:
-> "Group A (n = 48) had a mean score of 75.2 (SD = 8.5, 95% CI [72.7, 77.7]), while Group B (n = 52) scored 68.3 (SD = 9.2, 95% CI [65.7, 70.9])."
+**範例**：
+> 「參與者為 150 名大學生（98 名女性，52 名男性；M_age = 19.4 歲，SD = 1.2，範圍 18-24），從心理學課程招募以換取課程學分。五名參與者因資料不完整（n = 3）或未通過注意力檢查（n = 2）而被排除，最終樣本為 145 人。」
 
-**Example (categorical outcome)**:
-> "Of the 145 participants, 89 (61.4%) chose Option A, 42 (29.0%) chose Option B, and 14 (9.7%) chose Option C."
+### 設計
 
-**Tables for descriptive statistics**:
-- Use tables for multiple variables or groups
-- Include M, SD, and n (minimum)
-- Can include range, skewness, kurtosis if relevant
+**報告內容**：
+- 研究設計（組間、組內、混合）
+- 自變數和水準
+- 依變數
+- 控制變數/共變數
+- 隨機化程序
+- 盲化（單盲、雙盲）
 
----
+**範例**：
+> 「採用 2（回饋：正向 vs. 負向）× 2（時機：立即 vs. 延遲）組間因子設計。參與者使用電腦產生的隨機序列被隨機分派到各條件。主要結果為測量正確回答數（0-20 量表）的任務表現。」
 
-### Assumption Checks
+### 測量工具
 
-**What to report**:
-- Which assumptions were tested
-- Results of diagnostic tests
-- Whether assumptions were met
-- Actions taken if violated
+**報告內容**：
+- 測量工具/工具的全名
+- 題目數量
+- 量表/回應格式
+- 計分方法
+- 信度（Cronbach's α、ICC 等）
+- 效度證據（如適用）
 
-**Example**:
-> "Normality was assessed using Shapiro-Wilk tests. Data for Group A (W = 0.97, p = .18) and Group B (W = 0.96, p = .12) did not significantly deviate from normality. Levene's test indicated homogeneity of variance, F(1, 98) = 1.23, p = .27. Therefore, assumptions for the independent samples t-test were satisfied."
+**範例**：
+> 「使用貝克憂鬱量表第二版（BDI-II；Beck et al., 1996）評估憂鬱，這是一份 21 題的自陳式測量工具，採用 4 點量表（0-3）評分。總分範圍從 0 到 63，分數越高表示憂鬱嚴重程度越高。BDI-II 在本樣本中展現優良的內部一致性（α = .91）。」
 
-**Example (violated)**:
-> "Shapiro-Wilk tests indicated significant departure from normality for Group C (W = 0.89, p = .003). Therefore, the non-parametric Mann-Whitney U test was used instead of the independent samples t-test."
+### 程序
 
----
+**報告內容**：
+- 參與者所做事項的逐步描述
+- 時間和持續時間
+- 給予的指導語
+- 任何操弄或介入
 
-### Inferential Statistics
+**範例**：
+> 「參與者透過 Qualtrics 線上完成研究。在提供知情同意後，他們完成人口統計問題，被隨機分派到四種條件之一，完成實驗任務（約 15 分鐘），並以結果測量和解說作為結束。整個過程約 30 分鐘。」
 
-#### T-Tests
+### 資料分析
 
-**What to report**:
-- Test statistic (t)
-- Degrees of freedom
-- p-value (exact if p > .001, otherwise p < .001)
-- Effect size (Cohen's d or Hedges' g) with CI
-- Direction of effect
-- Whether test was one- or two-tailed
+**報告內容**：
+- 使用的軟體（含版本）
+- 顯著水準（α）
+- 檢定的尾數（單尾或雙尾）
+- 進行的假設檢驗
+- 缺失資料處理
+- 離群值處理
+- 多重比較校正
+- 使用的效果量測量
 
-**Format**: t(df) = value, p = value, d = value, 95% CI [lower, upper]
-
-**Example (independent t-test)**:
-> "Group A (M = 75.2, SD = 8.5) scored significantly higher than Group B (M = 68.3, SD = 9.2), t(98) = 3.82, p < .001, d = 0.77, 95% CI [0.36, 1.18], two-tailed."
-
-**Example (paired t-test)**:
-> "Scores increased significantly from pretest (M = 65.4, SD = 10.2) to posttest (M = 71.8, SD = 9.7), t(49) = 4.21, p < .001, d = 0.64, 95% CI [0.33, 0.95]."
-
-**Example (Welch's t-test)**:
-> "Due to unequal variances, Welch's t-test was used. Group A scored significantly higher than Group B, t(94.3) = 3.65, p < .001, d = 0.74."
-
-**Example (non-significant)**:
-> "There was no significant difference between Group A (M = 72.1, SD = 8.3) and Group B (M = 70.5, SD = 8.9), t(98) = 0.91, p = .36, d = 0.18, 95% CI [-0.21, 0.57]."
-
----
-
-#### ANOVA
-
-**What to report**:
-- F statistic
-- Degrees of freedom (effect, error)
-- p-value
-- Effect size (η², η²_p, or ω²)
-- Means and SDs for all groups
-- Post hoc test results (if significant)
-
-**Format**: F(df_effect, df_error) = value, p = value, η²_p = value
-
-**Example (one-way ANOVA)**:
-> "There was a significant main effect of treatment condition on test scores, F(2, 147) = 8.45, p < .001, η²_p = .10. Post hoc comparisons using Tukey's HSD revealed that Condition A (M = 78.2, SD = 7.3) scored significantly higher than Condition B (M = 71.5, SD = 8.1, p = .002, d = 0.87) and Condition C (M = 70.1, SD = 7.9, p < .001, d = 1.07). Conditions B and C did not differ significantly (p = .52, d = 0.18)."
-
-**Example (factorial ANOVA)**:
-> "A 2 (feedback: positive vs. negative) × 2 (timing: immediate vs. delayed) between-subjects ANOVA revealed a significant main effect of feedback, F(1, 146) = 12.34, p < .001, η²_p = .08, but no significant main effect of timing, F(1, 146) = 2.10, p = .15, η²_p = .01. Critically, the interaction was significant, F(1, 146) = 6.78, p = .01, η²_p = .04. Simple effects analysis showed that positive feedback improved performance for immediate timing (M_diff = 8.2, p < .001) but not for delayed timing (M_diff = 1.3, p = .42)."
-
-**Example (repeated measures ANOVA)**:
-> "A one-way repeated measures ANOVA revealed a significant effect of time point on anxiety scores, F(2, 98) = 15.67, p < .001, η²_p = .24. Mauchly's test indicated that the assumption of sphericity was violated, χ²(2) = 8.45, p = .01, therefore Greenhouse-Geisser corrected values are reported (ε = 0.87). Pairwise comparisons with Bonferroni correction showed..."
+**範例**：
+> 「所有分析使用 Python 3.10 配合 scipy 1.11 和 statsmodels 0.14 進行。所有顯著性檢定使用 alpha 水準 .05。分別使用 Shapiro-Wilk 和 Levene 檢定評估常態性和變異數同質性假設。缺失資料（所有變數 < 2%）使用逐列刪除處理。超過平均值 3 SD 的離群值進行縮尾處理。對於主要變異數分析，報告偏 eta 平方（η²_p）作為效果量測量。事後比較使用 Tukey's HSD 控制整體錯誤率。」
 
 ---
 
-#### Correlation
+## 結果部分
 
-**What to report**:
-- Correlation coefficient (r or ρ)
-- Sample size
-- p-value
-- Direction and strength
-- Confidence interval
-- Coefficient of determination (r²) if relevant
+### 描述統計
 
-**Format**: r(df) = value, p = value, 95% CI [lower, upper]
+**報告內容**：
+- 樣本大小（如適用，每組）
+- 集中趨勢測量（M、Mdn）
+- 變異性測量（SD、IQR、範圍）
+- 信賴區間（適當時）
 
-**Example (Pearson)**:
-> "There was a moderate positive correlation between study time and exam score, r(148) = .42, p < .001, 95% CI [.27, .55], indicating that 18% of the variance in exam scores was shared with study time (r² = .18)."
+**範例（連續結果）**：
+> 「A 組（n = 48）平均分數為 75.2（SD = 8.5，95% CI [72.7, 77.7]），而 B 組（n = 52）分數為 68.3（SD = 9.2，95% CI [65.7, 70.9]）。」
 
-**Example (Spearman)**:
-> "A Spearman rank-order correlation revealed a significant positive association between class rank and motivation, ρ(118) = .38, p < .001, 95% CI [.21, .52]."
+**範例（類別結果）**：
+> 「在 145 名參與者中，89 人（61.4%）選擇選項 A，42 人（29.0%）選擇選項 B，14 人（9.7%）選擇選項 C。」
 
-**Example (non-significant)**:
-> "There was no significant correlation between age and reaction time, r(98) = -.12, p = .23, 95% CI [-.31, .08]."
-
----
-
-#### Regression
-
-**What to report**:
-- Overall model fit (R², adjusted R², F-test)
-- Coefficients (B, SE, β, t, p) for each predictor
-- Effect sizes
-- Confidence intervals for coefficients
-- Variance inflation factors (if multicollinearity assessed)
-
-**Format**: B = value, SE = value, β = value, t = value, p = value, 95% CI [lower, upper]
-
-**Example (simple regression)**:
-> "Simple linear regression showed that study hours significantly predicted exam scores, F(1, 148) = 42.5, p < .001, R² = .22. Specifically, each additional hour of study was associated with a 2.4-point increase in exam score (B = 2.40, SE = 0.37, β = .47, t = 6.52, p < .001, 95% CI [1.67, 3.13])."
-
-**Example (multiple regression)**:
-> "Multiple linear regression was conducted to predict exam scores from study hours, prior GPA, and attendance. The overall model was significant, F(3, 146) = 45.2, p < .001, R² = .48, adjusted R² = .47. Study hours (B = 1.80, SE = 0.31, β = .35, t = 5.78, p < .001, 95% CI [1.18, 2.42]) and prior GPA (B = 8.52, SE = 1.95, β = .28, t = 4.37, p < .001, 95% CI [4.66, 12.38]) were significant predictors, but attendance was not (B = 0.15, SE = 0.12, β = .08, t = 1.25, p = .21, 95% CI [-0.09, 0.39]). Multicollinearity was not a concern, as all VIF values were below 1.5."
-
-**Example (logistic regression)**:
-> "Logistic regression was conducted to predict pass/fail status from study hours. The overall model was significant, χ²(1) = 28.7, p < .001, Nagelkerke R² = .31. Each additional study hour increased the odds of passing by 1.35 times (OR = 1.35, 95% CI [1.18, 1.54], p < .001). The model correctly classified 76% of cases (sensitivity = 81%, specificity = 68%)."
+**描述統計表格**：
+- 對多個變數或組別使用表格
+- 包含 M、SD 和 n（最少）
+- 如果相關可包含範圍、偏態、峰度
 
 ---
 
-#### Chi-Square Tests
+### 假設檢驗
 
-**What to report**:
-- χ² statistic
-- Degrees of freedom
-- p-value
-- Effect size (Cramér's V or φ)
-- Observed and expected frequencies (or percentages)
+**報告內容**：
+- 檢驗了哪些假設
+- 診斷檢定結果
+- 假設是否滿足
+- 如果違反採取的行動
 
-**Format**: χ²(df, N = total) = value, p = value, Cramér's V = value
+**範例**：
+> 「使用 Shapiro-Wilk 檢定評估常態性。A 組（W = 0.97，p = .18）和 B 組（W = 0.96，p = .12）的資料未顯著偏離常態性。Levene 檢定顯示變異數同質性，F(1, 98) = 1.23，p = .27。因此，獨立樣本 t 檢定的假設獲得滿足。」
 
-**Example (2×2)**:
-> "A chi-square test of independence revealed a significant association between treatment group and outcome, χ²(1, N = 150) = 8.45, p = .004, φ = .24. Specifically, 72% of participants in the treatment group improved compared to 48% in the control group."
-
-**Example (larger table)**:
-> "A chi-square test examined the relationship between education level (high school, bachelor's, graduate) and political affiliation (liberal, moderate, conservative). The association was significant, χ²(4, N = 300) = 18.7, p = .001, Cramér's V = .18, indicating a small to moderate association."
-
-**Example (Fisher's exact)**:
-> "Due to expected cell counts below 5, Fisher's exact test was used. The association between treatment and outcome was significant, p = .018 (two-tailed), OR = 3.42, 95% CI [1.21, 9.64]."
+**範例（違反）**：
+> 「Shapiro-Wilk 檢定顯示 C 組顯著偏離常態性（W = 0.89，p = .003）。因此，使用無母數 Mann-Whitney U 檢定代替獨立樣本 t 檢定。」
 
 ---
 
-#### Non-Parametric Tests
+### 推論統計
 
-**Mann-Whitney U**:
-> "A Mann-Whitney U test indicated that Group A (Mdn = 75, IQR = 10) had significantly higher scores than Group B (Mdn = 68, IQR = 12), U = 845, z = 3.21, p = .001, r = .32."
+#### T 檢定
 
-**Wilcoxon signed-rank**:
-> "A Wilcoxon signed-rank test showed that scores increased significantly from pretest (Mdn = 65, IQR = 15) to posttest (Mdn = 72, IQR = 14), z = 3.89, p < .001, r = .39."
+**報告內容**：
+- 檢定統計量（t）
+- 自由度
+- p 值（p > .001 時報告確切值，否則 p < .001）
+- 效果量（Cohen's d 或 Hedges' g）含 CI
+- 效果方向
+- 檢定是單尾或雙尾
 
-**Kruskal-Wallis**:
-> "A Kruskal-Wallis test revealed significant differences among the three conditions, H(2) = 15.7, p < .001, η² = .09. Follow-up pairwise comparisons with Bonferroni correction showed..."
+**格式**：t(df) = value，p = value，d = value，95% CI [lower, upper]
 
----
+**範例（獨立 t 檢定）**：
+> 「A 組（M = 75.2，SD = 8.5）的分數顯著高於 B 組（M = 68.3，SD = 9.2），t(98) = 3.82，p < .001，d = 0.77，95% CI [0.36, 1.18]，雙尾。」
 
-#### Bayesian Statistics
+**範例（配對 t 檢定）**：
+> 「分數從前測（M = 65.4，SD = 10.2）到後測（M = 71.8，SD = 9.7）顯著增加，t(49) = 4.21，p < .001，d = 0.64，95% CI [0.33, 0.95]。」
 
-**What to report**:
-- Prior distributions used
-- Posterior estimates (mean/median, credible intervals)
-- Bayes Factor (if hypothesis testing)
-- Convergence diagnostics (R-hat, ESS)
-- Posterior predictive checks
+**範例（Welch t 檢定）**：
+> 「由於變異數不等，使用 Welch t 檢定。A 組分數顯著高於 B 組，t(94.3) = 3.65，p < .001，d = 0.74。」
 
-**Example (Bayesian t-test)**:
-> "A Bayesian independent samples t-test was conducted using weakly informative priors (Normal(0, 1) for mean difference). The posterior distribution of the mean difference had a mean of 6.8 (95% credible interval [3.2, 10.4]), indicating that Group A scored higher than Group B. The Bayes Factor BF₁₀ = 45.3 provided very strong evidence for a difference between groups. There was a 99.8% posterior probability that Group A's mean exceeded Group B's mean."
-
-**Example (Bayesian regression)**:
-> "A Bayesian linear regression was fitted with weakly informative priors (Normal(0, 10) for coefficients, Half-Cauchy(0, 5) for residual SD). The model showed that study hours credibly predicted exam scores (β = 0.52, 95% CI [0.38, 0.66]; 0 not included in interval). All convergence diagnostics were satisfactory (R-hat < 1.01, ESS > 1000 for all parameters). Posterior predictive checks indicated adequate model fit."
+**範例（不顯著）**：
+> 「A 組（M = 72.1，SD = 8.3）和 B 組（M = 70.5，SD = 8.9）之間沒有顯著差異，t(98) = 0.91，p = .36，d = 0.18，95% CI [-0.21, 0.57]。」
 
 ---
 
-## Effect Sizes
+#### 變異數分析
 
-### Always Report
+**報告內容**：
+- F 統計量
+- 自由度（效果、誤差）
+- p 值
+- 效果量（η²、η²_p 或 ω²）
+- 所有組別的平均值和 SD
+- 事後檢定結果（如顯著）
 
-**Why**:
-- p-values don't indicate magnitude
-- Required by APA and most journals
-- Essential for meta-analysis
-- Informs practical significance
+**格式**：F(df_effect, df_error) = value，p = value，η²_p = value
 
-**Which effect size?**
-- T-tests: Cohen's d or Hedges' g
-- ANOVA: η², η²_p, or ω²
-- Correlation: r (already is an effect size)
-- Regression: β (standardized), R², f²
-- Chi-square: Cramér's V or φ
+**範例（單因子變異數分析）**：
+> 「處理條件對測驗分數有顯著主效果，F(2, 147) = 8.45，p < .001，η²_p = .10。使用 Tukey's HSD 的事後比較顯示條件 A（M = 78.2，SD = 7.3）的分數顯著高於條件 B（M = 71.5，SD = 8.1，p = .002，d = 0.87）和條件 C（M = 70.1，SD = 7.9，p < .001，d = 1.07）。條件 B 和 C 沒有顯著差異（p = .52，d = 0.18）。」
 
-**With confidence intervals**:
-- Always report CIs for effect sizes when possible
-- Shows precision of estimate
-- More informative than point estimate alone
+**範例（因子變異數分析）**：
+> 「2（回饋：正向 vs. 負向）× 2（時機：立即 vs. 延遲）組間變異數分析顯示回饋有顯著主效果，F(1, 146) = 12.34，p < .001，η²_p = .08，但時機沒有顯著主效果，F(1, 146) = 2.10，p = .15，η²_p = .01。重要的是，交互作用顯著，F(1, 146) = 6.78，p = .01，η²_p = .04。簡單效果分析顯示正向回饋在立即時機時改善表現（M_diff = 8.2，p < .001）但在延遲時機時則否（M_diff = 1.3，p = .42）。」
+
+**範例（重複測量變異數分析）**：
+> 「單因子重複測量變異數分析顯示時間點對焦慮分數有顯著效果，F(2, 98) = 15.67，p < .001，η²_p = .24。Mauchly 檢定顯示球形性假設被違反，χ²(2) = 8.45，p = .01，因此報告 Greenhouse-Geisser 校正值（ε = 0.87）。含 Bonferroni 校正的成對比較顯示...」
 
 ---
 
-## Figures and Tables
+#### 相關
 
-### When to Use Tables vs. Figures
+**報告內容**：
+- 相關係數（r 或 ρ）
+- 樣本大小
+- p 值
+- 方向和強度
+- 信賴區間
+- 決定係數（r²）如相關
 
-**Tables**:
-- Exact values needed
-- Many variables/conditions
-- Descriptive statistics
-- Regression coefficients
-- Correlation matrices
+**格式**：r(df) = value，p = value，95% CI [lower, upper]
 
-**Figures**:
-- Patterns and trends
-- Distributions
-- Interactions
-- Comparisons across groups
-- Time series
+**範例（Pearson）**：
+> 「學習時間和考試分數之間有中度正相關，r(148) = .42，p < .001，95% CI [.27, .55]，表示考試分數 18% 的變異與學習時間共享（r² = .18）。」
 
-### Figure Guidelines
+**範例（Spearman）**：
+> 「Spearman 等級相關顯示班級排名和動機之間有顯著正向關聯，ρ(118) = .38，p < .001，95% CI [.21, .52]。」
 
-**General**:
-- Clear, readable labels
-- Sufficient font size (≥ 10pt)
-- High resolution (≥ 300 dpi for publications)
-- Monochrome-friendly (colorblind-accessible)
-- Error bars (SE or 95% CI; specify which!)
-- Legend when needed
+**範例（不顯著）**：
+> 「年齡和反應時間之間沒有顯著相關，r(98) = -.12，p = .23，95% CI [-.31, .08]。」
 
-**Common figure types**:
-- Bar charts: Group comparisons (include error bars)
-- Box plots: Distributions, outliers
-- Scatter plots: Correlations, relationships
-- Line graphs: Change over time, interactions
-- Violin plots: Distributions (better than box plots)
+---
 
-**Example figure caption**:
-> "Figure 1. Mean exam scores by study condition. Error bars represent 95% confidence intervals. * p < .05, ** p < .01, *** p < .001."
+#### 迴歸
 
-### Table Guidelines
+**報告內容**：
+- 整體模型配適（R²、調整後 R²、F 檢定）
+- 每個預測變數的係數（B、SE、β、t、p）
+- 效果量
+- 係數的信賴區間
+- 變異數膨脹因子（如評估多重共線性）
 
-**General**:
-- Clear column and row labels
-- Consistent decimal places (usually 2)
-- Horizontal lines only (not vertical)
-- Notes below table for clarifications
-- Statistical symbols in italics (p, M, SD, F, t, r)
+**格式**：B = value，SE = value，β = value，t = value，p = value，95% CI [lower, upper]
 
-**Example table**:
+**範例（簡單迴歸）**：
+> 「簡單線性迴歸顯示學習時數顯著預測考試分數，F(1, 148) = 42.5，p < .001，R² = .22。具體而言，每增加一小時學習與考試分數增加 2.4 分相關（B = 2.40，SE = 0.37，β = .47，t = 6.52，p < .001，95% CI [1.67, 3.13]）。」
 
-**Table 1**
-*Descriptive Statistics and Intercorrelations*
+**範例（多元迴歸）**：
+> 「進行多元線性迴歸以從學習時數、先前 GPA 和出席率預測考試分數。整體模型顯著，F(3, 146) = 45.2，p < .001，R² = .48，調整後 R² = .47。學習時數（B = 1.80，SE = 0.31，β = .35，t = 5.78，p < .001，95% CI [1.18, 2.42]）和先前 GPA（B = 8.52，SE = 1.95，β = .28，t = 4.37，p < .001，95% CI [4.66, 12.38]）是顯著預測變數，但出席率則否（B = 0.15，SE = 0.12，β = .08，t = 1.25，p = .21，95% CI [-0.09, 0.39]）。多重共線性不是問題，因為所有 VIF 值低於 1.5。」
 
-| Variable | M | SD | 1 | 2 | 3 |
+**範例（邏輯斯迴歸）**：
+> 「進行邏輯斯迴歸以從學習時數預測通過/失敗狀態。整體模型顯著，χ²(1) = 28.7，p < .001，Nagelkerke R² = .31。每增加一小時學習使通過的勝算增加 1.35 倍（OR = 1.35，95% CI [1.18, 1.54]，p < .001）。模型正確分類 76% 的案例（敏感度 = 81%，特異度 = 68%）。」
+
+---
+
+#### 卡方檢定
+
+**報告內容**：
+- χ² 統計量
+- 自由度
+- p 值
+- 效果量（Cramér's V 或 φ）
+- 觀察和期望次數（或百分比）
+
+**格式**：χ²(df, N = total) = value，p = value，Cramér's V = value
+
+**範例（2×2）**：
+> 「卡方獨立性檢定顯示處理組和結果之間有顯著關聯，χ²(1, N = 150) = 8.45，p = .004，φ = .24。具體而言，處理組 72% 的參與者改善，而對照組為 48%。」
+
+**範例（較大表格）**：
+> 「卡方檢定檢驗教育程度（高中、學士、研究所）和政治傾向（自由派、中立、保守派）之間的關係。關聯顯著，χ²(4, N = 300) = 18.7，p = .001，Cramér's V = .18，表示小到中度關聯。」
+
+**範例（Fisher 精確檢定）**：
+> 「由於期望細格次數低於 5，使用 Fisher 精確檢定。處理和結果之間的關聯顯著，p = .018（雙尾），OR = 3.42，95% CI [1.21, 9.64]。」
+
+---
+
+#### 無母數檢定
+
+**Mann-Whitney U**：
+> 「Mann-Whitney U 檢定顯示 A 組（Mdn = 75，IQR = 10）的分數顯著高於 B 組（Mdn = 68，IQR = 12），U = 845，z = 3.21，p = .001，r = .32。」
+
+**Wilcoxon 符號等級**：
+> 「Wilcoxon 符號等級檢定顯示分數從前測（Mdn = 65，IQR = 15）到後測（Mdn = 72，IQR = 14）顯著增加，z = 3.89，p < .001，r = .39。」
+
+**Kruskal-Wallis**：
+> 「Kruskal-Wallis 檢定顯示三種條件之間有顯著差異，H(2) = 15.7，p < .001，η² = .09。含 Bonferroni 校正的後續成對比較顯示...」
+
+---
+
+#### 貝氏統計
+
+**報告內容**：
+- 使用的先驗分布
+- 後驗估計（平均值/中位數、可信區間）
+- 貝氏因子（如進行假設檢定）
+- 收斂診斷（R-hat、ESS）
+- 後驗預測檢驗
+
+**範例（貝氏 t 檢定）**：
+> 「使用弱訊息性先驗（平均差異為 Normal(0, 1)）進行貝氏獨立樣本 t 檢定。平均差異的後驗分布平均值為 6.8（95% 可信區間 [3.2, 10.4]），表示 A 組分數高於 B 組。貝氏因子 BF₁₀ = 45.3 提供了組間差異的非常強證據。A 組平均值超過 B 組平均值的後驗機率為 99.8%。」
+
+**範例（貝氏迴歸）**：
+> 「使用弱訊息性先驗（係數為 Normal(0, 10)，殘差 SD 為 Half-Cauchy(0, 5)）擬合貝氏線性迴歸。模型顯示學習時數可信地預測考試分數（β = 0.52，95% CI [0.38, 0.66]；0 不包含在區間內）。所有收斂診斷令人滿意（所有參數 R-hat < 1.01，ESS > 1000）。後驗預測檢驗顯示模型配適良好。」
+
+---
+
+## 效果量
+
+### 務必報告
+
+**為什麼**：
+- p 值不表示大小
+- APA 和大多數期刊要求
+- 統合分析必要
+- 告知實際顯著性
+
+**使用哪個效果量？**
+- T 檢定：Cohen's d 或 Hedges' g
+- 變異數分析：η²、η²_p 或 ω²
+- 相關：r（本身就是效果量）
+- 迴歸：β（標準化）、R²、f²
+- 卡方檢定：Cramér's V 或 φ
+
+**含信賴區間**：
+- 盡可能報告效果量的 CI
+- 顯示估計的精確度
+- 比單點估計更具資訊量
+
+---
+
+## 圖表
+
+### 何時使用表格 vs. 圖
+
+**表格**：
+- 需要確切值
+- 多個變數/條件
+- 描述統計
+- 迴歸係數
+- 相關矩陣
+
+**圖**：
+- 模式和趨勢
+- 分布
+- 交互作用
+- 跨組比較
+- 時間序列
+
+### 圖指南
+
+**一般**：
+- 清晰、可讀的標籤
+- 足夠的字體大小（≥ 10pt）
+- 高解析度（出版 ≥ 300 dpi）
+- 單色友善（色盲可及）
+- 誤差線（SE 或 95% CI；指定哪個！）
+- 需要時加圖例
+
+**常見圖類型**：
+- 長條圖：組別比較（含誤差線）
+- 箱形圖：分布、離群值
+- 散佈圖：相關、關係
+- 折線圖：隨時間變化、交互作用
+- 小提琴圖：分布（比箱形圖好）
+
+**圖說範例**：
+> 「圖 1. 各研究條件的平均考試分數。誤差線代表 95% 信賴區間。* p < .05，** p < .01，*** p < .001。」
+
+### 表格指南
+
+**一般**：
+- 清晰的欄和列標籤
+- 一致的小數位數（通常 2 位）
+- 只有水平線（沒有垂直線）
+- 表格下方的註解用於說明
+- 統計符號使用斜體（p、M、SD、F、t、r）
+
+**表格範例**：
+
+**表 1**
+*描述統計和相關*
+
+| 變數 | M | SD | 1 | 2 | 3 |
 |----------|---|----|----|----|----|
-| 1. Study hours | 5.2 | 2.1 | — | | |
-| 2. Prior GPA | 3.1 | 0.5 | .42** | — | |
-| 3. Exam score | 75.3 | 10.2 | .47*** | .52*** | — |
+| 1. 學習時數 | 5.2 | 2.1 | — | | |
+| 2. 先前 GPA | 3.1 | 0.5 | .42** | — | |
+| 3. 考試分數 | 75.3 | 10.2 | .47*** | .52*** | — |
 
-*Note*. N = 150. ** p < .01. *** p < .001.
-
----
-
-## Common Mistakes to Avoid
-
-1. **Reporting p = .000**: Report p < .001 instead
-2. **Omitting effect sizes**: Always include them
-3. **Not reporting assumption checks**: Describe tests and outcomes
-4. **Confusing statistical and practical significance**: Discuss both
-5. **Only reporting significant results**: Report all planned analyses
-6. **Using "prove" or "confirm"**: Use "support" or "consistent with"
-7. **Saying "marginally significant" for .05 < p < .10**: Either significant or not
-8. **Reporting only one decimal for p-values**: Use two (p = .03, not p = .0)
-9. **Not specifying one- vs. two-tailed**: Always clarify
-10. **Inconsistent rounding**: Be consistent throughout
+*注*. N = 150. ** p < .01. *** p < .001.
 
 ---
 
-## Null Results
+## 應避免的常見錯誤
 
-### How to Report Non-Significant Findings
-
-**Don't say**:
-- "There was no effect"
-- "X and Y are unrelated"
-- "Groups are equivalent"
-
-**Do say**:
-- "There was no significant difference"
-- "The effect was not statistically significant"
-- "We did not find evidence for a relationship"
-
-**Include**:
-- Exact p-value (not just "ns" or "p > .05")
-- Effect size (shows magnitude even if not significant)
-- Confidence interval (may include meaningful values)
-- Power analysis (was study adequately powered?)
-
-**Example**:
-> "Contrary to our hypothesis, there was no significant difference in creativity scores between the music (M = 72.1, SD = 8.3) and silence (M = 70.5, SD = 8.9) conditions, t(98) = 0.91, p = .36, d = 0.18, 95% CI [-0.21, 0.57]. A post hoc sensitivity analysis revealed that the study had 80% power to detect an effect of d = 0.57 or larger, suggesting the null finding may reflect insufficient power to detect small effects."
+1. **報告 p = .000**：改報告 p < .001
+2. **省略效果量**：務必包含
+3. **不報告假設檢驗**：描述檢定和結果
+4. **混淆統計和實際顯著性**：討論兩者
+5. **只報告顯著結果**：報告所有計畫的分析
+6. **使用「證明」或「確認」**：使用「支持」或「一致」
+7. **對 .05 < p < .10 說「邊際顯著」**：顯著或不顯著
+8. **p 值只報告一位小數**：使用兩位（p = .03，不是 p = .0）
+9. **未指定單尾 vs. 雙尾**：務必澄清
+10. **四捨五入不一致**：全文保持一致
 
 ---
 
-## Reproducibility
+## 虛無結果
 
-### Materials to Share
+### 如何報告不顯著的發現
 
-1. **Data**: De-identified raw data (or aggregate if sensitive)
-2. **Code**: Analysis scripts
-3. **Materials**: Stimuli, measures, protocols
-4. **Supplements**: Additional analyses, tables
+**不要說**：
+- 「沒有效果」
+- 「X 和 Y 無關」
+- 「組別相等」
 
-**Where to share**:
-- Open Science Framework (OSF)
-- GitHub (for code)
-- Journal supplements
-- Institutional repository
+**要說**：
+- 「沒有顯著差異」
+- 「效果在統計上不顯著」
+- 「我們未發現關係的證據」
 
-**In paper**:
-> "Data, analysis code, and materials are available at https://osf.io/xxxxx/"
+**包含**：
+- 確切 p 值（不只是「ns」或「p > .05」）
+- 效果量（即使不顯著也顯示大小）
+- 信賴區間（可能包含有意義的值）
+- 統計考驗力分析（研究是否有足夠考驗力？）
 
----
-
-## Checklist for Statistical Reporting
-
-- [ ] Sample size and demographics
-- [ ] Study design clearly described
-- [ ] All measures described with reliability
-- [ ] Procedure detailed
-- [ ] Software and versions specified
-- [ ] Alpha level stated
-- [ ] Assumption checks reported
-- [ ] Descriptive statistics (M, SD, n)
-- [ ] Test statistics with df and p-values
-- [ ] Effect sizes with confidence intervals
-- [ ] All planned analyses reported (including non-significant)
-- [ ] Figures/tables properly formatted and labeled
-- [ ] Multiple comparisons corrections described
-- [ ] Missing data handling explained
-- [ ] Limitations discussed
-- [ ] Data/code availability statement
+**範例**：
+> 「與我們的假設相反，音樂（M = 72.1，SD = 8.3）和安靜（M = 70.5，SD = 8.9）條件在創造力分數上沒有顯著差異，t(98) = 0.91，p = .36，d = 0.18，95% CI [-0.21, 0.57]。事後敏感度分析顯示研究有 80% 的考驗力偵測 d = 0.57 或更大的效果，表明虛無發現可能反映偵測小效果的考驗力不足。」
 
 ---
 
-## Additional Resources
+## 可重現性
 
-- APA Publication Manual (7th edition)
-- CONSORT guidelines (for RCTs)
-- STROBE guidelines (for observational studies)
-- PRISMA guidelines (for systematic reviews/meta-analyses)
+### 應分享的材料
+
+1. **資料**：去識別化的原始資料（如敏感則使用彙總）
+2. **程式碼**：分析腳本
+3. **材料**：刺激物、測量工具、程序
+4. **補充資料**：額外分析、表格
+
+**在哪裡分享**：
+- 開放科學框架（OSF）
+- GitHub（程式碼）
+- 期刊補充資料
+- 機構典藏
+
+**在論文中**：
+> 「資料、分析程式碼和材料可在 https://osf.io/xxxxx/ 取得」
+
+---
+
+## 統計報告檢核清單
+
+- [ ] 樣本大小和人口統計資料
+- [ ] 清楚描述研究設計
+- [ ] 描述所有測量工具含信度
+- [ ] 詳述程序
+- [ ] 指定軟體和版本
+- [ ] 陳述 alpha 水準
+- [ ] 報告假設檢驗
+- [ ] 描述統計（M、SD、n）
+- [ ] 含 df 和 p 值的檢定統計量
+- [ ] 含信賴區間的效果量
+- [ ] 報告所有計畫的分析（包括不顯著的）
+- [ ] 圖表格式正確並標註
+- [ ] 描述多重比較校正
+- [ ] 說明缺失資料處理
+- [ ] 討論限制
+- [ ] 資料/程式碼可用性聲明
+
+---
+
+## 額外資源
+
+- APA 出版手冊（第 7 版）
+- CONSORT 指南（用於 RCT）
+- STROBE 指南（用於觀察性研究）
+- PRISMA 指南（用於系統性回顧/統合分析）
 - Wilkinson & Task Force on Statistical Inference (1999). Statistical methods in psychology journals.

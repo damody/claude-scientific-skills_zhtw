@@ -1,32 +1,32 @@
-# Vectorized Environments in Stable Baselines3
+# Stable Baselines3 中的向量化環境
 
-This document provides comprehensive information about vectorized environments in Stable Baselines3 for efficient parallel training.
+本文件提供 Stable Baselines3 中向量化環境的完整資訊，用於高效的平行訓練。
 
-## Overview
+## 概述
 
-Vectorized environments stack multiple independent environment instances into a single environment that processes actions and observations in batches. Instead of interacting with one environment at a time, you interact with `n` environments simultaneously.
+向量化環境將多個獨立環境實例堆疊成單一環境，以批次方式處理動作和觀測。您不是一次與一個環境互動，而是同時與 `n` 個環境互動。
 
-**Benefits:**
-- **Speed:** Parallel execution significantly accelerates training
-- **Sample efficiency:** Collect more diverse experiences faster
-- **Required for:** Frame stacking and normalization wrappers
-- **Better for:** On-policy algorithms (PPO, A2C)
+**優點：**
+- **速度：** 平行執行顯著加速訓練
+- **樣本效率：** 更快收集更多樣化的經驗
+- **必需用於：** 幀堆疊和正規化包裝器
+- **更適合：** 在線策略演算法（PPO、A2C）
 
-## VecEnv Types
+## VecEnv 類型
 
 ### DummyVecEnv
 
-Executes environments sequentially on the current Python process.
+在當前 Python 程序上順序執行環境。
 
 ```python
 from stable_baselines3.common.vec_env import DummyVecEnv
 
-# Method 1: Using make_vec_env
+# 方法 1：使用 make_vec_env
 from stable_baselines3.common.env_util import make_vec_env
 
 env = make_vec_env("CartPole-v1", n_envs=4, vec_env_cls=DummyVecEnv)
 
-# Method 2: Manual creation
+# 方法 2：手動建立
 def make_env():
     def _init():
         return gym.make("CartPole-v1")
@@ -35,17 +35,17 @@ def make_env():
 env = DummyVecEnv([make_env() for _ in range(4)])
 ```
 
-**When to use:**
-- Lightweight environments (CartPole, simple grids)
-- When multiprocessing overhead > computation time
-- Debugging (easier to trace errors)
-- Single-threaded environments
+**何時使用：**
+- 輕量級環境（CartPole、簡單網格）
+- 當多處理程序開銷 > 計算時間時
+- 除錯（更容易追蹤錯誤）
+- 單執行緒環境
 
-**Performance:** No actual parallelism (sequential execution).
+**效能：** 無實際平行性（順序執行）。
 
 ### SubprocVecEnv
 
-Executes each environment in a separate process, enabling true parallelism.
+在獨立程序中執行每個環境，實現真正的平行性。
 
 ```python
 from stable_baselines3.common.vec_env import SubprocVecEnv
@@ -54,12 +54,12 @@ from stable_baselines3.common.env_util import make_vec_env
 env = make_vec_env("CartPole-v1", n_envs=8, vec_env_cls=SubprocVecEnv)
 ```
 
-**When to use:**
-- Computationally expensive environments (physics simulations, 3D games)
-- When environment computation time justifies multiprocessing overhead
-- When you need true parallel execution
+**何時使用：**
+- 計算密集型環境（物理模擬、3D 遊戲）
+- 當環境計算時間足以抵消多處理程序開銷時
+- 當需要真正的平行執行時
 
-**Important:** Requires wrapping code in `if __name__ == "__main__":` when using forkserver or spawn:
+**重要：** 使用 forkserver 或 spawn 時需要將程式碼包裝在 `if __name__ == "__main__":` 中：
 
 ```python
 if __name__ == "__main__":
@@ -68,227 +68,227 @@ if __name__ == "__main__":
     model.learn(total_timesteps=100000)
 ```
 
-**Performance:** True parallelism across CPU cores.
+**效能：** 跨 CPU 核心的真正平行性。
 
-## Quick Setup with make_vec_env
+## 使用 make_vec_env 快速設置
 
-The easiest way to create vectorized environments:
+建立向量化環境最簡單的方式：
 
 ```python
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv
 
-# Basic usage
+# 基本使用
 env = make_vec_env("CartPole-v1", n_envs=4)
 
-# With SubprocVecEnv
+# 使用 SubprocVecEnv
 env = make_vec_env("CartPole-v1", n_envs=8, vec_env_cls=SubprocVecEnv)
 
-# With custom environment kwargs
+# 使用自訂環境 kwargs
 env = make_vec_env(
     "MyEnv-v0",
     n_envs=4,
     env_kwargs={"difficulty": "hard", "max_steps": 500}
 )
 
-# With custom seed
+# 使用自訂種子
 env = make_vec_env("CartPole-v1", n_envs=4, seed=42)
 ```
 
-## API Differences from Standard Gym
+## 與標準 Gym 的 API 差異
 
-Vectorized environments have a different API than standard Gym environments:
+向量化環境的 API 與標準 Gym 環境不同：
 
 ### reset()
 
-**Standard Gym:**
+**標準 Gym：**
 ```python
 obs, info = env.reset()
 ```
 
-**VecEnv:**
+**VecEnv：**
 ```python
-obs = env.reset()  # Returns only observations (numpy array)
-# Access info via env.reset_infos (list of dicts)
+obs = env.reset()  # 僅返回觀測（numpy 陣列）
+# 透過 env.reset_infos 存取 info（字典列表）
 infos = env.reset_infos
 ```
 
 ### step()
 
-**Standard Gym:**
+**標準 Gym：**
 ```python
 obs, reward, terminated, truncated, info = env.step(action)
 ```
 
-**VecEnv:**
+**VecEnv：**
 ```python
 obs, rewards, dones, infos = env.step(actions)
-# Returns 4-tuple instead of 5-tuple
+# 返回 4 元組而非 5 元組
 # dones = terminated | truncated
-# actions is an array of shape (n_envs,) or (n_envs, action_dim)
+# actions 是形狀為 (n_envs,) 或 (n_envs, action_dim) 的陣列
 ```
 
-### Auto-reset
+### 自動重置
 
-**VecEnv automatically resets environments when episodes end:**
+**VecEnv 在回合結束時自動重置環境：**
 
 ```python
-obs = env.reset()  # Shape: (n_envs, obs_dim)
+obs = env.reset()  # 形狀：(n_envs, obs_dim)
 for _ in range(1000):
-    actions = env.action_space.sample()  # Shape: (n_envs,)
+    actions = env.action_space.sample()  # 形狀：(n_envs,)
     obs, rewards, dones, infos = env.step(actions)
-    # If dones[i] is True, env i was automatically reset
-    # Final observation before reset available in infos[i]["terminal_observation"]
+    # 如果 dones[i] 為 True，環境 i 已自動重置
+    # 重置前的最終觀測可透過 infos[i]["terminal_observation"] 取得
 ```
 
-### Terminal Observations
+### 終端觀測
 
-When an episode ends, access the true final observation:
+當回合結束時，存取真正的最終觀測：
 
 ```python
 obs, rewards, dones, infos = env.step(actions)
 
 for i, done in enumerate(dones):
     if done:
-        # The obs[i] is already the reset observation
-        # True terminal observation is in info
+        # obs[i] 已經是重置後的觀測
+        # 真正的終端觀測在 info 中
         terminal_obs = infos[i]["terminal_observation"]
-        print(f"Episode ended with terminal observation: {terminal_obs}")
+        print(f"回合結束，終端觀測：{terminal_obs}")
 ```
 
-## Training with Vectorized Environments
+## 使用向量化環境訓練
 
-### On-Policy Algorithms (PPO, A2C)
+### 在線策略演算法（PPO、A2C）
 
-On-policy algorithms benefit greatly from vectorization:
+在線策略演算法從向量化中獲益顯著：
 
 ```python
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv
 
-# Create vectorized environment
+# 建立向量化環境
 env = make_vec_env("CartPole-v1", n_envs=8, vec_env_cls=SubprocVecEnv)
 
-# Train
+# 訓練
 model = PPO("MlpPolicy", env, verbose=1, n_steps=128)
 model.learn(total_timesteps=100000)
 
-# With n_envs=8 and n_steps=128:
-# - Collects 8*128=1024 steps per rollout
-# - Updates after every 1024 steps
+# 使用 n_envs=8 和 n_steps=128：
+# - 每次資料收集收集 8*128=1024 步
+# - 每 1024 步更新一次
 ```
 
-**Rule of thumb:** Use 4-16 parallel environments for on-policy methods.
+**經驗法則：** 在線策略方法使用 4-16 個平行環境。
 
-### Off-Policy Algorithms (SAC, TD3, DQN)
+### 離線策略演算法（SAC、TD3、DQN）
 
-Off-policy algorithms can use vectorization but benefit less:
+離線策略演算法可以使用向量化但受益較少：
 
 ```python
 from stable_baselines3 import SAC
 from stable_baselines3.common.env_util import make_vec_env
 
-# Use fewer environments (1-4)
+# 使用較少環境（1-4）
 env = make_vec_env("Pendulum-v1", n_envs=4)
 
-# Set gradient_steps=-1 for efficiency
+# 設定 gradient_steps=-1 以提高效率
 model = SAC(
     "MlpPolicy",
     env,
     verbose=1,
     train_freq=1,
-    gradient_steps=-1,  # Do 1 gradient step per env step (4 total with 4 envs)
+    gradient_steps=-1,  # 每個環境步驟執行 1 次梯度步驟（4 個環境共 4 次）
 )
 model.learn(total_timesteps=50000)
 ```
 
-**Rule of thumb:** Use 1-4 parallel environments for off-policy methods.
+**經驗法則：** 離線策略方法使用 1-4 個平行環境。
 
-## Wrappers for Vectorized Environments
+## 向量化環境的包裝器
 
 ### VecNormalize
 
-Normalizes observations and rewards using running statistics.
+使用執行統計正規化觀測和獎勵。
 
 ```python
 from stable_baselines3.common.vec_env import VecNormalize
 
 env = make_vec_env("Pendulum-v1", n_envs=4)
 
-# Wrap with normalization
+# 使用正規化包裝
 env = VecNormalize(
     env,
-    norm_obs=True,        # Normalize observations
-    norm_reward=True,     # Normalize rewards
-    clip_obs=10.0,        # Clip normalized observations
-    clip_reward=10.0,     # Clip normalized rewards
-    gamma=0.99,           # Discount factor for reward normalization
+    norm_obs=True,        # 正規化觀測
+    norm_reward=True,     # 正規化獎勵
+    clip_obs=10.0,        # 裁剪正規化後的觀測
+    clip_reward=10.0,     # 裁剪正規化後的獎勵
+    gamma=0.99,           # 獎勵正規化的折扣因子
 )
 
-# Train
+# 訓練
 model = PPO("MlpPolicy", env)
 model.learn(total_timesteps=50000)
 
-# Save model AND normalization statistics
+# 儲存模型和正規化統計
 model.save("ppo_pendulum")
 env.save("vec_normalize.pkl")
 
-# Load for evaluation
+# 載入用於評估
 env = make_vec_env("Pendulum-v1", n_envs=1)
 env = VecNormalize.load("vec_normalize.pkl", env)
-env.training = False  # Don't update stats during evaluation
-env.norm_reward = False  # Don't normalize rewards during evaluation
+env.training = False  # 評估時不更新統計
+env.norm_reward = False  # 評估時不正規化獎勵
 
 model = PPO.load("ppo_pendulum", env=env)
 ```
 
-**When to use:**
-- Continuous control tasks (especially MuJoCo)
-- When observation scales vary widely
-- When rewards have high variance
+**何時使用：**
+- 連續控制任務（特別是 MuJoCo）
+- 當觀測尺度變化很大時
+- 當獎勵變異數很高時
 
-**Important:**
-- Statistics are NOT saved with model - save separately
-- Disable training and reward normalization during evaluation
+**重要：**
+- 統計不會與模型一起儲存 - 需分開儲存
+- 評估時停用訓練和獎勵正規化
 
 ### VecFrameStack
 
-Stacks observations from multiple consecutive frames.
+堆疊多個連續幀的觀測。
 
 ```python
 from stable_baselines3.common.vec_env import VecFrameStack
 
 env = make_vec_env("PongNoFrameskip-v4", n_envs=8)
 
-# Stack 4 frames
+# 堆疊 4 幀
 env = VecFrameStack(env, n_stack=4)
 
-# Now observations have shape: (n_envs, n_stack, height, width)
+# 現在觀測形狀為：(n_envs, n_stack, height, width)
 model = PPO("CnnPolicy", env)
 model.learn(total_timesteps=1000000)
 ```
 
-**When to use:**
-- Atari games (stack 4 frames)
-- Environments where velocity information is needed
-- Partial observability problems
+**何時使用：**
+- Atari 遊戲（堆疊 4 幀）
+- 需要速度資訊的環境
+- 部分可觀測性問題
 
 ### VecVideoRecorder
 
-Records videos of agent behavior.
+錄製代理行為的影片。
 
 ```python
 from stable_baselines3.common.vec_env import VecVideoRecorder
 
 env = make_vec_env("CartPole-v1", n_envs=1)
 
-# Record videos
+# 錄製影片
 env = VecVideoRecorder(
     env,
     video_folder="./videos/",
-    record_video_trigger=lambda x: x % 2000 == 0,  # Record every 2000 steps
-    video_length=200,  # Max video length
+    record_video_trigger=lambda x: x % 2000 == 0,  # 每 2000 步錄製
+    video_length=200,  # 最大影片長度
     name_prefix="training"
 )
 
@@ -296,53 +296,53 @@ model = PPO("MlpPolicy", env)
 model.learn(total_timesteps=10000)
 ```
 
-**Output:** MP4 videos in `./videos/` directory.
+**輸出：** `./videos/` 目錄中的 MP4 影片。
 
 ### VecCheckNan
 
-Checks for NaN or infinite values in observations and rewards.
+檢查觀測和獎勵中的 NaN 或無限值。
 
 ```python
 from stable_baselines3.common.vec_env import VecCheckNan
 
 env = make_vec_env("CustomEnv-v0", n_envs=4)
 
-# Add NaN checking (useful for debugging)
+# 添加 NaN 檢查（用於除錯）
 env = VecCheckNan(env, raise_exception=True, warn_once=True)
 
 model = PPO("MlpPolicy", env)
 model.learn(total_timesteps=10000)
 ```
 
-**When to use:**
-- Debugging custom environments
-- Catching numerical instabilities
-- Validating environment implementation
+**何時使用：**
+- 除錯自訂環境
+- 捕捉數值不穩定性
+- 驗證環境實作
 
 ### VecTransposeImage
 
-Transposes image observations from (height, width, channels) to (channels, height, width).
+將圖像觀測從 (height, width, channels) 轉置為 (channels, height, width)。
 
 ```python
 from stable_baselines3.common.vec_env import VecTransposeImage
 
 env = make_vec_env("PongNoFrameskip-v4", n_envs=4)
 
-# Convert HWC to CHW format
+# 將 HWC 轉換為 CHW 格式
 env = VecTransposeImage(env)
 
 model = PPO("CnnPolicy", env)
 ```
 
-**When to use:**
-- When environment returns images in HWC format
-- SB3 expects CHW format for CNN policies
+**何時使用：**
+- 當環境返回 HWC 格式的圖像時
+- SB3 的 CNN 策略期望 CHW 格式
 
-## Advanced Usage
+## 進階使用
 
-### Custom VecEnv
+### 自訂 VecEnv
 
-Create custom vectorized environment:
+建立自訂向量化環境：
 
 ```python
 from stable_baselines3.common.vec_env import DummyVecEnv
@@ -350,103 +350,103 @@ import gymnasium as gym
 
 class CustomVecEnv(DummyVecEnv):
     def step_wait(self):
-        # Custom logic before/after stepping
+        # 在步進前/後的自訂邏輯
         obs, rewards, dones, infos = super().step_wait()
-        # Modify observations/rewards/etc
+        # 修改觀測/獎勵等
         return obs, rewards, dones, infos
 ```
 
-### Environment Method Calls
+### 環境方法呼叫
 
-Call methods on wrapped environments:
+在包裝的環境上呼叫方法：
 
 ```python
 env = make_vec_env("MyEnv-v0", n_envs=4)
 
-# Call method on all environments
+# 在所有環境上呼叫方法
 env.env_method("set_difficulty", "hard")
 
-# Call method on specific environment
+# 在特定環境上呼叫方法
 env.env_method("reset_level", indices=[0, 2])
 
-# Get attribute from all environments
+# 從所有環境取得屬性
 levels = env.get_attr("current_level")
 ```
 
-### Setting Attributes
+### 設定屬性
 
 ```python
-# Set attribute on all environments
+# 在所有環境上設定屬性
 env.set_attr("difficulty", "hard")
 
-# Set attribute on specific environments
+# 在特定環境上設定屬性
 env.set_attr("max_steps", 1000, indices=[1, 3])
 ```
 
-## Performance Optimization
+## 效能優化
 
-### Choosing Number of Environments
+### 選擇環境數量
 
-**On-Policy (PPO, A2C):**
+**在線策略（PPO、A2C）：**
 ```python
-# General rule: 4-16 environments
-# More environments = faster data collection
+# 一般規則：4-16 個環境
+# 更多環境 = 更快的資料收集
 n_envs = 8
 env = make_vec_env("CartPole-v1", n_envs=n_envs)
 
-# Adjust n_steps to maintain same rollout length
-# Total steps per rollout = n_envs * n_steps
-model = PPO("MlpPolicy", env, n_steps=128)  # 8*128 = 1024 steps/rollout
+# 調整 n_steps 以維持相同的資料收集長度
+# 每次資料收集的總步數 = n_envs * n_steps
+model = PPO("MlpPolicy", env, n_steps=128)  # 8*128 = 1024 步/資料收集
 ```
 
-**Off-Policy (SAC, TD3, DQN):**
+**離線策略（SAC、TD3、DQN）：**
 ```python
-# General rule: 1-4 environments
-# More doesn't help as much (replay buffer provides diversity)
+# 一般規則：1-4 個環境
+# 更多環境幫助不大（回放緩衝區提供多樣性）
 n_envs = 4
 env = make_vec_env("Pendulum-v1", n_envs=n_envs)
 
-model = SAC("MlpPolicy", env, gradient_steps=-1)  # 1 grad step per env step
+model = SAC("MlpPolicy", env, gradient_steps=-1)  # 每個環境步驟 1 次梯度步驟
 ```
 
-### CPU Core Utilization
+### CPU 核心利用
 
 ```python
 import multiprocessing
 
-# Use one less than total cores (leave one for Python main process)
+# 使用比總核心數少一的數量（留一個給 Python 主程序）
 n_cpus = multiprocessing.cpu_count() - 1
 env = make_vec_env("MyEnv-v0", n_envs=n_cpus, vec_env_cls=SubprocVecEnv)
 ```
 
-### Memory Considerations
+### 記憶體考量
 
 ```python
-# Large replay buffer + many environments = high memory usage
-# Reduce buffer size if memory constrained
+# 大型回放緩衝區 + 多個環境 = 高記憶體使用
+# 如果記憶體受限，減少緩衝區大小
 model = SAC(
     "MlpPolicy",
     env,
-    buffer_size=100_000,  # Reduced from 1M
+    buffer_size=100_000,  # 從 1M 減少
 )
 ```
 
-## Common Issues
+## 常見問題
 
-### Issue: "Can't pickle local object"
+### 問題："Can't pickle local object"
 
-**Cause:** SubprocVecEnv requires picklable environments.
+**原因：** SubprocVecEnv 需要可序列化的環境。
 
-**Solution:** Define environment creation outside class/function:
+**解決方案：** 在類別/函數外定義環境建立：
 
 ```python
-# Bad
+# 不好
 def train():
     def make_env():
         return gym.make("CartPole-v1")
     env = SubprocVecEnv([make_env for _ in range(4)])
 
-# Good
+# 好
 def make_env():
     return gym.make("CartPole-v1")
 
@@ -454,105 +454,105 @@ if __name__ == "__main__":
     env = SubprocVecEnv([make_env for _ in range(4)])
 ```
 
-### Issue: Different behavior between single and vectorized env
+### 問題：單一環境和向量化環境之間行為不同
 
-**Cause:** Auto-reset in vectorized environments.
+**原因：** 向量化環境中的自動重置。
 
-**Solution:** Handle terminal observations correctly:
+**解決方案：** 正確處理終端觀測：
 
 ```python
 obs, rewards, dones, infos = env.step(actions)
 for i, done in enumerate(dones):
     if done:
         terminal_obs = infos[i]["terminal_observation"]
-        # Process terminal_obs if needed
+        # 如果需要處理 terminal_obs
 ```
 
-### Issue: Slower with SubprocVecEnv than DummyVecEnv
+### 問題：SubprocVecEnv 比 DummyVecEnv 慢
 
-**Cause:** Environment too lightweight (multiprocessing overhead > computation).
+**原因：** 環境太輕量（多處理程序開銷 > 計算）。
 
-**Solution:** Use DummyVecEnv for simple environments:
+**解決方案：** 簡單環境使用 DummyVecEnv：
 
 ```python
-# For CartPole, use DummyVecEnv
+# 對於 CartPole，使用 DummyVecEnv
 env = make_vec_env("CartPole-v1", n_envs=8, vec_env_cls=DummyVecEnv)
 ```
 
-### Issue: Training crashes with SubprocVecEnv
+### 問題：使用 SubprocVecEnv 時訓練崩潰
 
-**Cause:** Environment not properly isolated or has shared state.
+**原因：** 環境未正確隔離或有共享狀態。
 
-**Solution:**
-- Ensure environment has no shared global state
-- Wrap code in `if __name__ == "__main__":`
-- Use DummyVecEnv for debugging
+**解決方案：**
+- 確保環境沒有共享的全域狀態
+- 將程式碼包裝在 `if __name__ == "__main__":` 中
+- 使用 DummyVecEnv 進行除錯
 
-## Best Practices
+## 最佳實踐
 
-1. **Use appropriate VecEnv type:**
-   - DummyVecEnv: Simple environments (CartPole, basic grids)
-   - SubprocVecEnv: Complex environments (MuJoCo, Unity, 3D games)
+1. **使用適當的 VecEnv 類型：**
+   - DummyVecEnv：簡單環境（CartPole、基本網格）
+   - SubprocVecEnv：複雜環境（MuJoCo、Unity、3D 遊戲）
 
-2. **Adjust hyperparameters for vectorization:**
-   - Divide `eval_freq`, `save_freq` by `n_envs` in callbacks
-   - Maintain same `n_steps * n_envs` for on-policy algorithms
+2. **為向量化調整超參數：**
+   - 在回調中將 `eval_freq`、`save_freq` 除以 `n_envs`
+   - 在線策略演算法維持相同的 `n_steps * n_envs`
 
-3. **Save normalization statistics:**
-   - Always save VecNormalize stats with model
-   - Disable training during evaluation
+3. **儲存正規化統計：**
+   - 始終與模型一起儲存 VecNormalize 統計
+   - 評估時停用訓練
 
-4. **Monitor memory usage:**
-   - More environments = more memory
-   - Reduce buffer size if needed
+4. **監控記憶體使用：**
+   - 更多環境 = 更多記憶體
+   - 如果需要，減少緩衝區大小
 
-5. **Test with DummyVecEnv first:**
-   - Easier debugging
-   - Ensure environment works before parallelizing
+5. **先用 DummyVecEnv 測試：**
+   - 更容易除錯
+   - 在平行化前確保環境正常運作
 
-## Examples
+## 範例
 
-### Basic Training Loop
+### 基本訓練迴圈
 
 ```python
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv
 
-# Create vectorized environment
+# 建立向量化環境
 env = make_vec_env("CartPole-v1", n_envs=8, vec_env_cls=SubprocVecEnv)
 
-# Train
+# 訓練
 model = PPO("MlpPolicy", env, verbose=1)
 model.learn(total_timesteps=100000)
 
-# Evaluate
+# 評估
 obs = env.reset()
 for _ in range(1000):
     action, _states = model.predict(obs, deterministic=True)
     obs, rewards, dones, infos = env.step(action)
 ```
 
-### With Normalization
+### 使用正規化
 
 ```python
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import VecNormalize
 
-# Create and normalize
+# 建立並正規化
 env = make_vec_env("Pendulum-v1", n_envs=4)
 env = VecNormalize(env, norm_obs=True, norm_reward=True)
 
-# Train
+# 訓練
 model = PPO("MlpPolicy", env)
 model.learn(total_timesteps=50000)
 
-# Save both
+# 儲存兩者
 model.save("model")
 env.save("vec_normalize.pkl")
 
-# Load for evaluation
+# 載入用於評估
 eval_env = make_vec_env("Pendulum-v1", n_envs=1)
 eval_env = VecNormalize.load("vec_normalize.pkl", eval_env)
 eval_env.training = False
@@ -561,8 +561,8 @@ eval_env.norm_reward = False
 model = PPO.load("model", env=eval_env)
 ```
 
-## Additional Resources
+## 額外資源
 
-- Official SB3 VecEnv Guide: https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html
-- VecEnv API Reference: https://stable-baselines3.readthedocs.io/en/master/common/vec_env.html
-- Multiprocessing Best Practices: https://docs.python.org/3/library/multiprocessing.html
+- 官方 SB3 VecEnv 指南：https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html
+- VecEnv API 參考：https://stable-baselines3.readthedocs.io/en/master/common/vec_env.html
+- 多處理程序最佳實踐：https://docs.python.org/3/library/multiprocessing.html

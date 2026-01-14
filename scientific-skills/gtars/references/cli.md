@@ -1,193 +1,193 @@
-# Command-Line Interface
+# 命令列介面
 
-Gtars provides a comprehensive CLI for genomic interval analysis directly from the terminal.
+Gtars 提供全面的 CLI，可直接從終端機進行基因體區間分析。
 
-## Installation
+## 安裝
 
 ```bash
-# Install with all features
+# 安裝所有功能
 cargo install gtars-cli --features "uniwig overlaprs igd bbcache scoring fragsplit"
 
-# Install specific features only
+# 只安裝特定功能
 cargo install gtars-cli --features "uniwig overlaprs"
 ```
 
-## Global Options
+## 全域選項
 
 ```bash
-# Display help
+# 顯示說明
 gtars --help
 
-# Show version
+# 顯示版本
 gtars --version
 
-# Verbose output
+# 詳細輸出
 gtars --verbose <command>
 
-# Quiet mode
+# 安靜模式
 gtars --quiet <command>
 ```
 
-## IGD Commands
+## IGD 命令
 
-Build and query IGD indexes for overlap detection:
+建立和查詢 IGD 索引以進行重疊偵測：
 
 ```bash
-# Build IGD index
+# 建立 IGD 索引
 gtars igd build --input regions.bed --output regions.igd
 
-# Query single region
+# 查詢單一區域
 gtars igd query --index regions.igd --region "chr1:1000-2000"
 
-# Query from file
+# 從檔案查詢
 gtars igd query --index regions.igd --query-file queries.bed --output results.bed
 
-# Count overlaps
+# 計數重疊
 gtars igd count --index regions.igd --query-file queries.bed
 ```
 
-## Overlap Commands
+## 重疊命令
 
-Compute overlaps between genomic region sets:
+計算基因體區域集之間的重疊：
 
 ```bash
-# Find overlapping regions
+# 尋找重疊區域
 gtars overlaprs overlap --set-a regions_a.bed --set-b regions_b.bed --output overlaps.bed
 
-# Count overlaps
+# 計數重疊
 gtars overlaprs count --set-a regions_a.bed --set-b regions_b.bed
 
-# Filter regions by overlap
+# 依重疊篩選區域
 gtars overlaprs filter --input regions.bed --filter overlapping.bed --output filtered.bed
 
-# Subtract regions
+# 區域差集
 gtars overlaprs subtract --set-a regions_a.bed --set-b regions_b.bed --output difference.bed
 ```
 
-## Uniwig Commands
+## Uniwig 命令
 
-Generate coverage tracks from genomic intervals:
+從基因體區間產生涵蓋度軌跡：
 
 ```bash
-# Generate coverage track
+# 產生涵蓋度軌跡
 gtars uniwig generate --input fragments.bed --output coverage.wig
 
-# Specify resolution
+# 指定解析度
 gtars uniwig generate --input fragments.bed --output coverage.wig --resolution 10
 
-# Generate BigWig
+# 產生 BigWig
 gtars uniwig generate --input fragments.bed --output coverage.bw --format bigwig
 
-# Strand-specific coverage
+# 鏈特異性涵蓋度
 gtars uniwig generate --input fragments.bed --output forward.wig --strand +
 ```
 
-## BBCache Commands
+## BBCache 命令
 
-Cache and manage BED files from BEDbase.org:
+從 BEDbase.org 快取和管理 BED 檔案：
 
 ```bash
-# Cache BED file from bedbase
+# 從 bedbase 快取 BED 檔案
 gtars bbcache fetch --id <bedbase_id> --output cached.bed
 
-# List cached files
+# 列出已快取的檔案
 gtars bbcache list
 
-# Clear cache
+# 清除快取
 gtars bbcache clear
 
-# Update cache
+# 更新快取
 gtars bbcache update
 ```
 
-## Scoring Commands
+## 評分命令
 
-Score fragment overlaps against reference datasets:
+對參考資料集評分片段重疊：
 
 ```bash
-# Score fragments
+# 評分片段
 gtars scoring score --fragments fragments.bed --reference reference.bed --output scores.txt
 
-# Batch scoring
+# 批次評分
 gtars scoring batch --fragments-dir ./fragments/ --reference reference.bed --output-dir ./scores/
 
-# Score with weights
+# 帶權重評分
 gtars scoring score --fragments fragments.bed --reference reference.bed --weights weights.txt --output scores.txt
 ```
 
-## FragSplit Commands
+## FragSplit 命令
 
-Split fragment files by cell barcodes or clusters:
+依細胞條碼或群集分割片段檔案：
 
 ```bash
-# Split by barcode
+# 依條碼分割
 gtars fragsplit split --input fragments.tsv --barcodes barcodes.txt --output-dir ./split/
 
-# Split by clusters
+# 依群集分割
 gtars fragsplit cluster-split --input fragments.tsv --clusters clusters.txt --output-dir ./clustered/
 
-# Filter fragments
+# 篩選片段
 gtars fragsplit filter --input fragments.tsv --min-fragments 100 --output filtered.tsv
 ```
 
-## Common Workflows
+## 常見工作流程
 
-### Workflow 1: Overlap Analysis Pipeline
+### 工作流程 1：重疊分析流程
 
 ```bash
-# Step 1: Build IGD index for reference
+# 步驟 1：為參考建立 IGD 索引
 gtars igd build --input reference_regions.bed --output reference.igd
 
-# Step 2: Query with experimental data
+# 步驟 2：用實驗資料查詢
 gtars igd query --index reference.igd --query-file experimental.bed --output overlaps.bed
 
-# Step 3: Generate statistics
+# 步驟 3：產生統計
 gtars overlaprs count --set-a experimental.bed --set-b reference_regions.bed
 ```
 
-### Workflow 2: Coverage Track Generation
+### 工作流程 2：涵蓋度軌跡產生
 
 ```bash
-# Step 1: Generate coverage
+# 步驟 1：產生涵蓋度
 gtars uniwig generate --input fragments.bed --output coverage.wig --resolution 10
 
-# Step 2: Convert to BigWig
+# 步驟 2：轉換為 BigWig
 gtars uniwig generate --input fragments.bed --output coverage.bw --format bigwig
 ```
 
-### Workflow 3: Fragment Processing
+### 工作流程 3：片段處理
 
 ```bash
-# Step 1: Filter fragments
+# 步驟 1：篩選片段
 gtars fragsplit filter --input raw_fragments.tsv --min-fragments 100 --output filtered.tsv
 
-# Step 2: Split by clusters
+# 步驟 2：依群集分割
 gtars fragsplit cluster-split --input filtered.tsv --clusters clusters.txt --output-dir ./by_cluster/
 
-# Step 3: Score against reference
+# 步驟 3：對參考評分
 gtars scoring batch --fragments-dir ./by_cluster/ --reference reference.bed --output-dir ./scores/
 ```
 
-## Input/Output Formats
+## 輸入/輸出格式
 
-### BED Format
-Standard 3-column or extended BED format:
+### BED 格式
+標準 3 欄或擴展 BED 格式：
 ```
 chr1    1000    2000
 chr1    3000    4000
 chr2    5000    6000
 ```
 
-### Fragment Format (TSV)
-Tab-separated format for single-cell fragments:
+### 片段格式（TSV）
+用於單細胞片段的製表符分隔格式：
 ```
 chr1    1000    2000    BARCODE1
 chr1    3000    4000    BARCODE2
 chr2    5000    6000    BARCODE1
 ```
 
-### WIG Format
-Wiggle format for coverage tracks:
+### WIG 格式
+用於涵蓋度軌跡的 Wiggle 格式：
 ```
 fixedStep chrom=chr1 start=1000 step=10
 12
@@ -195,28 +195,28 @@ fixedStep chrom=chr1 start=1000 step=10
 18
 ```
 
-## Performance Options
+## 效能選項
 
 ```bash
-# Set thread count
+# 設定執行緒數
 gtars --threads 8 <command>
 
-# Memory limit
+# 記憶體限制
 gtars --memory-limit 4G <command>
 
-# Buffer size
+# 緩衝區大小
 gtars --buffer-size 10000 <command>
 ```
 
-## Error Handling
+## 錯誤處理
 
 ```bash
-# Continue on errors
+# 錯誤時繼續
 gtars --continue-on-error <command>
 
-# Strict mode (fail on warnings)
+# 嚴格模式（警告時失敗）
 gtars --strict <command>
 
-# Log to file
+# 記錄到檔案
 gtars --log-file output.log <command>
 ```

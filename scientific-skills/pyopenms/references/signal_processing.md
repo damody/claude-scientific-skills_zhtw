@@ -1,325 +1,325 @@
-# Signal Processing
+# 訊號處理
 
-## Overview
+## 概述
 
-PyOpenMS provides algorithms for processing raw mass spectrometry data including smoothing, filtering, peak picking, centroiding, normalization, and deconvolution.
+PyOpenMS 提供處理原始質譜資料的演算法，包括平滑、濾波、峰值提取、質心化、正規化和去卷積。
 
-## Algorithm Pattern
+## 演算法模式
 
-Most signal processing algorithms follow a standard pattern:
+大多數訊號處理演算法遵循標準模式：
 
 ```python
 import pyopenms as ms
 
-# 1. Create algorithm instance
+# 1. 建立演算法實例
 algo = ms.AlgorithmName()
 
-# 2. Get and modify parameters
+# 2. 取得並修改參數
 params = algo.getParameters()
 params.setValue("parameter_name", value)
 algo.setParameters(params)
 
-# 3. Apply to data
-algo.filterExperiment(exp)  # or filterSpectrum(spec)
+# 3. 應用到資料
+algo.filterExperiment(exp)  # 或 filterSpectrum(spec)
 ```
 
-## Smoothing
+## 平滑
 
-### Gaussian Filter
+### 高斯濾波器
 
-Apply Gaussian smoothing to reduce noise:
+應用高斯平滑以減少雜訊：
 
 ```python
-# Create Gaussian filter
+# 建立高斯濾波器
 gaussian = ms.GaussFilter()
 
-# Configure parameters
+# 設定參數
 params = gaussian.getParameters()
-params.setValue("gaussian_width", 0.2)  # Width in m/z or RT units
-params.setValue("ppm_tolerance", 10.0)  # For m/z dimension
+params.setValue("gaussian_width", 0.2)  # m/z 或 RT 單位的寬度
+params.setValue("ppm_tolerance", 10.0)  # 用於 m/z 維度
 params.setValue("use_ppm_tolerance", "true")
 gaussian.setParameters(params)
 
-# Apply to experiment
+# 應用到實驗
 gaussian.filterExperiment(exp)
 
-# Or apply to single spectrum
+# 或應用到單一光譜
 spec = exp.getSpectrum(0)
 gaussian.filterSpectrum(spec)
 ```
 
-### Savitzky-Golay Filter
+### Savitzky-Golay 濾波器
 
-Polynomial smoothing that preserves peak shapes:
+保留峰形的多項式平滑：
 
 ```python
-# Create Savitzky-Golay filter
+# 建立 Savitzky-Golay 濾波器
 sg_filter = ms.SavitzkyGolayFilter()
 
-# Configure parameters
+# 設定參數
 params = sg_filter.getParameters()
-params.setValue("frame_length", 11)  # Window size (must be odd)
-params.setValue("polynomial_order", 4)  # Polynomial degree
+params.setValue("frame_length", 11)  # 視窗大小（必須為奇數）
+params.setValue("polynomial_order", 4)  # 多項式次數
 sg_filter.setParameters(params)
 
-# Apply smoothing
+# 應用平滑
 sg_filter.filterExperiment(exp)
 ```
 
-## Peak Picking and Centroiding
+## 峰值提取和質心化
 
-### Peak Picker High Resolution
+### 高解析度峰值提取器
 
-Detect peaks in high-resolution data:
+在高解析度資料中偵測峰值：
 
 ```python
-# Create peak picker
+# 建立峰值提取器
 peak_picker = ms.PeakPickerHiRes()
 
-# Configure parameters
+# 設定參數
 params = peak_picker.getParameters()
-params.setValue("signal_to_noise", 3.0)  # S/N threshold
-params.setValue("spacing_difference", 1.5)  # Minimum peak spacing
+params.setValue("signal_to_noise", 3.0)  # S/N 閾值
+params.setValue("spacing_difference", 1.5)  # 最小峰值間距
 peak_picker.setParameters(params)
 
-# Pick peaks
+# 提取峰值
 exp_picked = ms.MSExperiment()
 peak_picker.pickExperiment(exp, exp_picked)
 ```
 
-### Peak Picker for CWT
+### CWT 峰值提取器
 
-Continuous wavelet transform-based peak picking:
+連續小波轉換峰值提取：
 
 ```python
-# Create CWT peak picker
+# 建立 CWT 峰值提取器
 cwt_picker = ms.PeakPickerCWT()
 
-# Configure parameters
+# 設定參數
 params = cwt_picker.getParameters()
 params.setValue("signal_to_noise", 1.0)
-params.setValue("peak_width", 0.15)  # Expected peak width
+params.setValue("peak_width", 0.15)  # 預期峰值寬度
 cwt_picker.setParameters(params)
 
-# Pick peaks
+# 提取峰值
 cwt_picker.pickExperiment(exp, exp_picked)
 ```
 
-## Normalization
+## 正規化
 
-### Normalizer
+### 正規化器
 
-Normalize peak intensities within spectra:
+正規化光譜內的峰值強度：
 
 ```python
-# Create normalizer
+# 建立正規化器
 normalizer = ms.Normalizer()
 
-# Configure normalization method
+# 設定正規化方法
 params = normalizer.getParameters()
-params.setValue("method", "to_one")  # Options: "to_one", "to_TIC"
+params.setValue("method", "to_one")  # 選項："to_one"、"to_TIC"
 normalizer.setParameters(params)
 
-# Apply normalization
+# 應用正規化
 normalizer.filterExperiment(exp)
 ```
 
-## Peak Filtering
+## 峰值過濾
 
-### Threshold Mower
+### 閾值過濾器
 
-Remove peaks below intensity threshold:
+移除強度低於閾值的峰值：
 
 ```python
-# Create threshold filter
+# 建立閾值過濾器
 mower = ms.ThresholdMower()
 
-# Configure threshold
+# 設定閾值
 params = mower.getParameters()
-params.setValue("threshold", 1000.0)  # Absolute intensity threshold
+params.setValue("threshold", 1000.0)  # 絕對強度閾值
 mower.setParameters(params)
 
-# Apply filter
+# 應用過濾器
 mower.filterExperiment(exp)
 ```
 
-### Window Mower
+### 視窗過濾器
 
-Keep only highest peaks in sliding windows:
+在滑動視窗中只保留最高峰值：
 
 ```python
-# Create window mower
+# 建立視窗過濾器
 window_mower = ms.WindowMower()
 
-# Configure parameters
+# 設定參數
 params = window_mower.getParameters()
-params.setValue("windowsize", 50.0)  # Window size in m/z
-params.setValue("peakcount", 2)  # Keep top N peaks per window
+params.setValue("windowsize", 50.0)  # m/z 中的視窗大小
+params.setValue("peakcount", 2)  # 每個視窗保留前 N 個峰值
 window_mower.setParameters(params)
 
-# Apply filter
+# 應用過濾器
 window_mower.filterExperiment(exp)
 ```
 
-### N Largest Peaks
+### N 個最大峰值
 
-Keep only the N most intense peaks:
+只保留 N 個最強峰值：
 
 ```python
-# Create N largest filter
+# 建立 N 個最大過濾器
 n_largest = ms.NLargest()
 
-# Configure parameters
+# 設定參數
 params = n_largest.getParameters()
-params.setValue("n", 200)  # Keep 200 most intense peaks
+params.setValue("n", 200)  # 保留 200 個最強峰值
 n_largest.setParameters(params)
 
-# Apply filter
+# 應用過濾器
 n_largest.filterExperiment(exp)
 ```
 
-## Baseline Reduction
+## 基線消除
 
-### Morphological Filter
+### 形態學濾波器
 
-Remove baseline using morphological operations:
+使用形態學操作移除基線：
 
 ```python
-# Create morphological filter
+# 建立形態學濾波器
 morph_filter = ms.MorphologicalFilter()
 
-# Configure parameters
+# 設定參數
 params = morph_filter.getParameters()
-params.setValue("struc_elem_length", 3.0)  # Structuring element size
-params.setValue("method", "tophat")  # Method: "tophat", "bothat", "erosion", "dilation"
+params.setValue("struc_elem_length", 3.0)  # 結構元素大小
+params.setValue("method", "tophat")  # 方法："tophat"、"bothat"、"erosion"、"dilation"
 morph_filter.setParameters(params)
 
-# Apply filter
+# 應用濾波器
 morph_filter.filterExperiment(exp)
 ```
 
-## Spectrum Merging
+## 光譜合併
 
-### Spectra Merger
+### 光譜合併器
 
-Combine multiple spectra into one:
+將多個光譜合併為一個：
 
 ```python
-# Create merger
+# 建立合併器
 merger = ms.SpectraMerger()
 
-# Configure parameters
+# 設定參數
 params = merger.getParameters()
 params.setValue("average_gaussian:spectrum_type", "profile")
-params.setValue("average_gaussian:rt_FWHM", 5.0)  # RT window
+params.setValue("average_gaussian:rt_FWHM", 5.0)  # RT 視窗
 merger.setParameters(params)
 
-# Merge spectra
+# 合併光譜
 merger.mergeSpectraBlockWise(exp)
 ```
 
-## Deconvolution
+## 去卷積
 
-### Charge Deconvolution
+### 電荷去卷積
 
-Determine charge states and convert to neutral masses:
+確定電荷狀態並轉換為中性質量：
 
 ```python
-# Create feature deconvoluter
+# 建立特徵去卷積器
 deconvoluter = ms.FeatureDeconvolution()
 
-# Configure parameters
+# 設定參數
 params = deconvoluter.getParameters()
 params.setValue("charge_min", 1)
 params.setValue("charge_max", 4)
 params.setValue("potential_charge_states", "1,2,3,4")
 deconvoluter.setParameters(params)
 
-# Apply deconvolution
+# 應用去卷積
 feature_map_out = ms.FeatureMap()
 deconvoluter.compute(exp, feature_map, feature_map_out, ms.ConsensusMap())
 ```
 
-### Isotope Deconvolution
+### 同位素去卷積
 
-Remove isotopic patterns:
+移除同位素模式：
 
 ```python
-# Create isotope wavelet transform
+# 建立同位素小波轉換
 isotope_wavelet = ms.IsotopeWaveletTransform()
 
-# Configure parameters
+# 設定參數
 params = isotope_wavelet.getParameters()
 params.setValue("max_charge", 3)
 params.setValue("intensity_threshold", 10.0)
 isotope_wavelet.setParameters(params)
 
-# Apply transformation
+# 應用轉換
 isotope_wavelet.transform(exp)
 ```
 
-## Retention Time Alignment
+## 滯留時間對齊
 
-### Map Alignment
+### 圖對齊
 
-Align retention times across multiple runs:
+跨多次執行對齊滯留時間：
 
 ```python
-# Create map aligner
+# 建立圖對齊器
 aligner = ms.MapAlignmentAlgorithmPoseClustering()
 
-# Load multiple experiments
+# 載入多個實驗
 exp1 = ms.MSExperiment()
 exp2 = ms.MSExperiment()
 ms.MzMLFile().load("run1.mzML", exp1)
 ms.MzMLFile().load("run2.mzML", exp2)
 
-# Create reference
+# 建立參考
 reference = ms.MSExperiment()
 
-# Align experiments
+# 對齊實驗
 transformations = []
 aligner.align(exp1, exp2, transformations)
 
-# Apply transformation
+# 應用轉換
 transformer = ms.MapAlignmentTransformer()
 transformer.transformRetentionTimes(exp2, transformations[0])
 ```
 
-## Mass Calibration
+## 質量校正
 
-### Internal Calibration
+### 內部校正
 
-Calibrate mass axis using known reference masses:
+使用已知參考質量校正質量軸：
 
 ```python
-# Create internal calibration
+# 建立內部校正
 calibration = ms.InternalCalibration()
 
-# Set reference masses
-reference_masses = [500.0, 1000.0, 1500.0]  # Known m/z values
+# 設定參考質量
+reference_masses = [500.0, 1000.0, 1500.0]  # 已知 m/z 值
 
-# Calibrate
+# 校正
 calibration.calibrate(exp, reference_masses)
 ```
 
-## Quality Control
+## 品質控制
 
-### Spectrum Statistics
+### 光譜統計
 
-Calculate quality metrics:
+計算品質指標：
 
 ```python
-# Get spectrum
+# 取得光譜
 spec = exp.getSpectrum(0)
 
-# Calculate statistics
+# 計算統計
 mz, intensity = spec.get_peaks()
 
-# Total ion current
+# 總離子流
 tic = sum(intensity)
 
-# Base peak
+# 基峰
 base_peak_intensity = max(intensity)
 base_peak_mz = mz[intensity.argmax()]
 
@@ -327,60 +327,60 @@ print(f"TIC: {tic}")
 print(f"Base peak: {base_peak_mz} m/z at {base_peak_intensity}")
 ```
 
-## Spectrum Preprocessing Pipeline
+## 光譜前處理管線
 
-### Complete Preprocessing Example
+### 完整前處理範例
 
 ```python
 import pyopenms as ms
 
 def preprocess_experiment(input_file, output_file):
-    """Complete preprocessing pipeline."""
+    """完整前處理管線。"""
 
-    # Load data
+    # 載入資料
     exp = ms.MSExperiment()
     ms.MzMLFile().load(input_file, exp)
 
-    # 1. Smooth with Gaussian filter
+    # 1. 使用高斯濾波器平滑
     gaussian = ms.GaussFilter()
     gaussian.filterExperiment(exp)
 
-    # 2. Pick peaks
+    # 2. 提取峰值
     picker = ms.PeakPickerHiRes()
     exp_picked = ms.MSExperiment()
     picker.pickExperiment(exp, exp_picked)
 
-    # 3. Normalize intensities
+    # 3. 正規化強度
     normalizer = ms.Normalizer()
     params = normalizer.getParameters()
     params.setValue("method", "to_TIC")
     normalizer.setParameters(params)
     normalizer.filterExperiment(exp_picked)
 
-    # 4. Filter low-intensity peaks
+    # 4. 過濾低強度峰值
     mower = ms.ThresholdMower()
     params = mower.getParameters()
     params.setValue("threshold", 10.0)
     mower.setParameters(params)
     mower.filterExperiment(exp_picked)
 
-    # Save processed data
+    # 儲存處理後的資料
     ms.MzMLFile().store(output_file, exp_picked)
 
     return exp_picked
 
-# Run pipeline
+# 執行管線
 exp_processed = preprocess_experiment("raw_data.mzML", "processed_data.mzML")
 ```
 
-## Best Practices
+## 最佳實務
 
-### Parameter Optimization
+### 參數最佳化
 
-Test parameters on representative data:
+在代表性資料上測試參數：
 
 ```python
-# Try different Gaussian widths
+# 嘗試不同的高斯寬度
 widths = [0.1, 0.2, 0.5]
 
 for width in widths:
@@ -393,41 +393,41 @@ for width in widths:
     gaussian.setParameters(params)
     gaussian.filterExperiment(exp_test)
 
-    # Evaluate quality
-    # ... add evaluation code ...
+    # 評估品質
+    # ... 添加評估程式碼 ...
 ```
 
-### Preserve Original Data
+### 保留原始資料
 
-Keep original data for comparison:
+保留原始資料以進行比較：
 
 ```python
-# Load original
+# 載入原始
 exp_original = ms.MSExperiment()
 ms.MzMLFile().load("data.mzML", exp_original)
 
-# Create copy for processing
+# 建立處理用複本
 exp_processed = ms.MSExperiment(exp_original)
 
-# Process copy
+# 處理複本
 gaussian = ms.GaussFilter()
 gaussian.filterExperiment(exp_processed)
 
-# Original remains unchanged
+# 原始保持不變
 ```
 
-### Profile vs Centroid Data
+### 輪廓 vs 質心資料
 
-Check data type before processing:
+處理前檢查資料類型：
 
 ```python
-# Check if spectrum is centroided
+# 檢查光譜是否已質心化
 spec = exp.getSpectrum(0)
 
 if spec.isSorted():
-    # Likely centroided
+    # 可能是質心化的
     print("Centroid data")
 else:
-    # Likely profile
+    # 可能是輪廓
     print("Profile data - apply peak picking")
 ```

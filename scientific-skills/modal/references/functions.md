@@ -1,8 +1,8 @@
-# Modal Functions
+# Modal 函數
 
-## Basic Function Definition
+## 基本函數定義
 
-Decorate Python functions with `@app.function()`:
+使用 `@app.function()` 裝飾 Python 函數：
 
 ```python
 import modal
@@ -15,11 +15,11 @@ def my_function():
     return "result"
 ```
 
-## Calling Functions
+## 呼叫函數
 
-### Remote Execution
+### 遠端執行
 
-Call `.remote()` to run on Modal:
+呼叫 `.remote()` 在 Modal 上執行：
 
 ```python
 @app.local_entrypoint()
@@ -28,17 +28,17 @@ def main():
     print(result)
 ```
 
-### Local Execution
+### 本地執行
 
-Call `.local()` to run locally (useful for testing):
+呼叫 `.local()` 在本地執行（用於測試）：
 
 ```python
 result = my_function.local()
 ```
 
-## Function Parameters
+## 函數參數
 
-Functions accept standard Python arguments:
+函數接受標準的 Python 參數：
 
 ```python
 @app.function()
@@ -50,34 +50,34 @@ def main():
     result = process.remote(42, "answer")
 ```
 
-## Deployment
+## 部署
 
-### Ephemeral Apps
+### 臨時應用程式
 
-Run temporarily:
+暫時執行：
 ```bash
 modal run script.py
 ```
 
-### Deployed Apps
+### 已部署的應用程式
 
-Deploy persistently:
+持久部署：
 ```bash
 modal deploy script.py
 ```
 
-Access deployed functions from other code:
+從其他程式碼存取已部署的函數：
 
 ```python
 f = modal.Function.from_name("my-app", "my_function")
 result = f.remote(args)
 ```
 
-## Entrypoints
+## 進入點
 
-### Local Entrypoint
+### 本地進入點
 
-Code that runs on local machine:
+在本地機器上執行的程式碼：
 
 ```python
 @app.local_entrypoint()
@@ -86,25 +86,25 @@ def main():
     print(result)
 ```
 
-### Remote Entrypoint
+### 遠端進入點
 
-Use `@app.function()` without local_entrypoint - runs entirely on Modal:
+使用 `@app.function()` 而不使用 local_entrypoint - 完全在 Modal 上執行：
 
 ```python
 @app.function()
 def train_model():
-    # All code runs in Modal
+    # 所有程式碼都在 Modal 中執行
     ...
 ```
 
-Invoke with:
+使用以下命令調用：
 ```bash
 modal run script.py::app.train_model
 ```
 
-## Argument Parsing
+## 參數解析
 
-Entrypoints with primitive type arguments get automatic CLI parsing:
+具有原始類型參數的進入點會自動獲得 CLI 解析：
 
 ```python
 @app.local_entrypoint()
@@ -112,12 +112,12 @@ def main(foo: int, bar: str):
     some_function.remote(foo, bar)
 ```
 
-Run with:
+執行：
 ```bash
 modal run script.py --foo 1 --bar "hello"
 ```
 
-For custom parsing, accept variable-length arguments:
+對於自訂解析，接受可變長度參數：
 
 ```python
 import argparse
@@ -129,30 +129,30 @@ def train(*arglist):
     args = parser.parse_args(args=arglist)
 ```
 
-## Function Configuration
+## 函數配置
 
-Common parameters:
+常見參數：
 
 ```python
 @app.function(
-    image=my_image,           # Custom environment
-    gpu="A100",               # GPU type
-    cpu=2.0,                  # CPU cores
-    memory=4096,              # Memory in MB
-    timeout=3600,             # Timeout in seconds
-    retries=3,                # Number of retries
-    secrets=[my_secret],      # Environment secrets
-    volumes={"/data": vol},   # Persistent storage
+    image=my_image,           # 自訂環境
+    gpu="A100",               # GPU 類型
+    cpu=2.0,                  # CPU 核心
+    memory=4096,              # 記憶體（MB）
+    timeout=3600,             # 超時（秒）
+    retries=3,                # 重試次數
+    secrets=[my_secret],      # 環境密鑰
+    volumes={"/data": vol},   # 持久化儲存
 )
 def my_function():
     ...
 ```
 
-## Parallel Execution
+## 平行執行
 
 ### Map
 
-Run function on multiple inputs in parallel:
+在多個輸入上平行執行函數：
 
 ```python
 @app.function()
@@ -168,7 +168,7 @@ def main():
 
 ### Starmap
 
-For functions with multiple arguments:
+對於有多個參數的函數：
 
 ```python
 @app.function()
@@ -181,7 +181,7 @@ def main():
     # [3, 7]
 ```
 
-### Exception Handling
+### 例外處理
 
 ```python
 results = my_func.map(
@@ -192,9 +192,9 @@ results = my_func.map(
 # [0, 1, Exception('error')]
 ```
 
-## Async Functions
+## 非同步函數
 
-Define async functions:
+定義非同步函數：
 
 ```python
 @app.function()
@@ -207,9 +207,9 @@ async def main():
     result = await async_function.remote.aio(42)
 ```
 
-## Generator Functions
+## 生成器函數
 
-Return iterators for streaming results:
+返回迭代器以串流結果：
 
 ```python
 @app.function()
@@ -223,28 +223,28 @@ def main():
         print(value)
 ```
 
-## Spawning Functions
+## 產生函數
 
-Submit functions for background execution:
+提交函數進行背景執行：
 
 ```python
 @app.function()
 def process_job(data):
-    # Long-running job
+    # 長時間執行的任務
     return result
 
 @app.local_entrypoint()
 def main():
-    # Spawn without waiting
+    # 產生但不等待
     call = process_job.spawn(data)
 
-    # Get result later
+    # 稍後取得結果
     result = call.get(timeout=60)
 ```
 
-## Programmatic Execution
+## 程式化執行
 
-Run apps programmatically:
+以程式化方式執行應用程式：
 
 ```python
 def main():
@@ -253,9 +253,9 @@ def main():
             result = some_function.remote()
 ```
 
-## Specifying Entrypoint
+## 指定進入點
 
-With multiple functions, specify which to run:
+有多個函數時，指定要執行哪一個：
 
 ```python
 @app.function()
@@ -267,7 +267,7 @@ def g():
     print("Function g")
 ```
 
-Run specific function:
+執行特定函數：
 ```bash
 modal run script.py::app.f
 modal run script.py::app.g

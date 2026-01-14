@@ -1,51 +1,51 @@
-# Metabolomics Workflows
+# 代謝體學工作流程
 
-## Overview
+## 概述
 
-PyOpenMS provides specialized tools for untargeted metabolomics analysis including feature detection optimized for small molecules, adduct grouping, compound identification, and integration with metabolomics databases.
+PyOpenMS 為非標靶代謝體學分析提供專門工具，包括針對小分子最佳化的特徵偵測、加合物分組、化合物鑑定，以及與代謝體學資料庫的整合。
 
-## Untargeted Metabolomics Pipeline
+## 非標靶代謝體學管線
 
-### Complete Workflow
+### 完整工作流程
 
 ```python
 import pyopenms as ms
 
 def metabolomics_pipeline(input_files, output_dir):
     """
-    Complete untargeted metabolomics workflow.
+    完整的非標靶代謝體學工作流程。
 
     Args:
-        input_files: List of mzML file paths (one per sample)
-        output_dir: Directory for output files
+        input_files: mzML 檔案路徑列表（每個樣本一個）
+        output_dir: 輸出檔案目錄
     """
 
-    # Step 1: Peak picking and feature detection
+    # 步驟 1：峰值提取和特徵偵測
     feature_maps = []
 
     for mzml_file in input_files:
         print(f"Processing {mzml_file}...")
 
-        # Load data
+        # 載入資料
         exp = ms.MSExperiment()
         ms.MzMLFile().load(mzml_file, exp)
 
-        # Peak picking if needed
+        # 如果需要進行峰值提取
         if not exp.getSpectrum(0).isSorted():
             picker = ms.PeakPickerHiRes()
             exp_picked = ms.MSExperiment()
             picker.pickExperiment(exp, exp_picked)
             exp = exp_picked
 
-        # Feature detection
+        # 特徵偵測
         ff = ms.FeatureFinder()
         params = ff.getParameters("centroided")
 
-        # Metabolomics-specific parameters
-        params.setValue("mass_trace:mz_tolerance", 5.0)  # ppm, tighter for metabolites
+        # 代謝體學特定參數
+        params.setValue("mass_trace:mz_tolerance", 5.0)  # ppm，代謝物較嚴格
         params.setValue("mass_trace:min_spectra", 5)
         params.setValue("isotopic_pattern:charge_low", 1)
-        params.setValue("isotopic_pattern:charge_high", 2)  # Mostly singly charged
+        params.setValue("isotopic_pattern:charge_high", 2)  # 主要是單電荷
 
         features = ms.FeatureMap()
         ff.run("centroided", exp, features, params, ms.FeatureMap())
@@ -55,7 +55,7 @@ def metabolomics_pipeline(input_files, output_dir):
 
         print(f"  Detected {features.size()} features")
 
-    # Step 2: Adduct detection and grouping
+    # 步驟 2：加合物偵測和分組
     print("Detecting adducts...")
     adduct_grouped_maps = []
 
@@ -71,7 +71,7 @@ def metabolomics_pipeline(input_files, output_dir):
         adduct_detector.compute(fm, fm_out, ms.ConsensusMap())
         adduct_grouped_maps.append(fm_out)
 
-    # Step 3: RT alignment
+    # 步驟 3：RT 對齊
     print("Aligning retention times...")
     aligner = ms.MapAlignmentAlgorithmPoseClustering()
 
@@ -85,12 +85,12 @@ def metabolomics_pipeline(input_files, output_dir):
     transformations = []
     aligner.align(adduct_grouped_maps, aligned_maps, transformations)
 
-    # Step 4: Feature linking
+    # 步驟 4：特徵連結
     print("Linking features...")
     grouper = ms.FeatureGroupingAlgorithmQT()
 
     params = grouper.getParameters()
-    params.setValue("distance_RT:max_difference", 60.0)  # seconds
+    params.setValue("distance_RT:max_difference", 60.0)  # 秒
     params.setValue("distance_MZ:max_difference", 5.0)  # ppm
     params.setValue("distance_MZ:unit", "ppm")
     grouper.setParameters(params)
@@ -100,16 +100,16 @@ def metabolomics_pipeline(input_files, output_dir):
 
     print(f"Created {consensus_map.size()} consensus features")
 
-    # Step 5: Gap filling (fill missing values)
+    # 步驟 5：填補間隙（填補遺漏值）
     print("Filling gaps...")
-    # Gap filling not directly available in Python API
-    # Would use TOPP tool FeatureFinderMetaboIdent
+    # Python API 中無法直接使用間隙填補
+    # 需要使用 TOPP 工具 FeatureFinderMetaboIdent
 
-    # Step 6: Export results
+    # 步驟 6：匯出結果
     consensus_file = f"{output_dir}/consensus.consensusXML"
     ms.ConsensusXMLFile().store(consensus_file, consensus_map)
 
-    # Export to CSV for downstream analysis
+    # 匯出到 CSV 以進行下游分析
     df = consensus_map.get_df()
     csv_file = f"{output_dir}/metabolite_table.csv"
     df.to_csv(csv_file, index=False)
@@ -118,23 +118,23 @@ def metabolomics_pipeline(input_files, output_dir):
 
     return consensus_map
 
-# Run pipeline
+# 執行管線
 input_files = ["sample1.mzML", "sample2.mzML", "sample3.mzML"]
 consensus = metabolomics_pipeline(input_files, "output")
 ```
 
-## Adduct Detection
+## 加合物偵測
 
-### Configure Adduct Types
+### 設定加合物類型
 
 ```python
-# Create adduct detector
+# 建立加合物偵測器
 adduct_detector = ms.MetaboliteAdductDecharger()
 
-# Configure common adducts
+# 設定常見加合物
 params = adduct_detector.getParameters()
 
-# Positive mode adducts
+# 正離子模式加合物
 positive_adducts = [
     "[M+H]+",
     "[M+Na]+",
@@ -144,32 +144,32 @@ positive_adducts = [
     "[M+H-H2O]+"
 ]
 
-# Negative mode adducts
+# 負離子模式加合物
 negative_adducts = [
     "[M-H]-",
     "[M+Cl]-",
-    "[M+FA-H]-",  # Formate
+    "[M+FA-H]-",  # 甲酸根
     "[2M-H]-"
 ]
 
-# Set for positive mode
+# 設定正離子模式
 params.setValue("potential_adducts", ",".join(positive_adducts))
 params.setValue("charge_min", 1)
 params.setValue("charge_max", 1)
 params.setValue("max_neutrals", 1)
 adduct_detector.setParameters(params)
 
-# Apply adduct detection
+# 應用加合物偵測
 feature_map_out = ms.FeatureMap()
 adduct_detector.compute(feature_map, feature_map_out, ms.ConsensusMap())
 ```
 
-### Access Adduct Information
+### 存取加合物資訊
 
 ```python
-# Check adduct annotations
+# 檢查加合物註釋
 for feature in feature_map_out:
-    # Get adduct type if annotated
+    # 如果有註釋則取得加合物類型
     if feature.metaValueExists("adduct"):
         adduct = feature.getMetaValue("adduct")
         neutral_mass = feature.getMetaValue("neutral_mass")
@@ -178,33 +178,33 @@ for feature in feature_map_out:
         print(f"  Neutral mass: {neutral_mass:.4f}")
 ```
 
-## Compound Identification
+## 化合物鑑定
 
-### Mass-Based Annotation
+### 基於質量的註釋
 
 ```python
-# Annotate features with compound database
+# 使用化合物資料庫註釋特徵
 from pyopenms import MassDecomposition
 
-# Load compound database (example structure)
-# In practice, use external database like HMDB, METLIN
+# 載入化合物資料庫（範例結構）
+# 實務上使用外部資料庫如 HMDB、METLIN
 
 compound_db = [
     {"name": "Glucose", "formula": "C6H12O6", "mass": 180.0634},
     {"name": "Citric acid", "formula": "C6H8O7", "mass": 192.0270},
-    # ... more compounds
+    # ... 更多化合物
 ]
 
-# Annotate features
+# 註釋特徵
 mass_tolerance = 5.0  # ppm
 
 for feature in feature_map:
     observed_mz = feature.getMZ()
 
-    # Calculate neutral mass (assuming [M+H]+)
-    neutral_mass = observed_mz - 1.007276  # Proton mass
+    # 計算中性質量（假設 [M+H]+）
+    neutral_mass = observed_mz - 1.007276  # 質子質量
 
-    # Search database
+    # 搜尋資料庫
     for compound in compound_db:
         mass_error_ppm = abs(neutral_mass - compound["mass"]) / compound["mass"] * 1e6
 
@@ -215,14 +215,14 @@ for feature in feature_map:
             print(f"  Error: {mass_error_ppm:.2f} ppm")
 ```
 
-### MS/MS-Based Identification
+### 基於 MS/MS 的鑑定
 
 ```python
-# Load MS2 data
+# 載入 MS2 資料
 exp = ms.MSExperiment()
 ms.MzMLFile().load("data_with_ms2.mzML", exp)
 
-# Extract MS2 spectra
+# 提取 MS2 光譜
 ms2_spectra = []
 for spec in exp:
     if spec.getMSLevel() == 2:
@@ -230,22 +230,22 @@ for spec in exp:
 
 print(f"Found {len(ms2_spectra)} MS2 spectra")
 
-# Match to spectral library
-# (Requires external tool or custom implementation)
+# 與光譜庫匹配
+# （需要外部工具或自訂實作）
 ```
 
-## Data Normalization
+## 資料正規化
 
-### Total Ion Current (TIC) Normalization
+### 總離子流（TIC）正規化
 
 ```python
 import numpy as np
 
-# Load consensus map
+# 載入共識圖
 consensus_map = ms.ConsensusMap()
 ms.ConsensusXMLFile().load("consensus.consensusXML", consensus_map)
 
-# Calculate TIC per sample
+# 計算每個樣本的 TIC
 n_samples = len(consensus_map.getColumnHeaders())
 tic_per_sample = np.zeros(n_samples)
 
@@ -256,13 +256,13 @@ for cons_feature in consensus_map:
 
 print("TIC per sample:", tic_per_sample)
 
-# Normalize to median TIC
+# 正規化到中位數 TIC
 median_tic = np.median(tic_per_sample)
 normalization_factors = median_tic / tic_per_sample
 
 print("Normalization factors:", normalization_factors)
 
-# Apply normalization
+# 應用正規化
 consensus_map_normalized = ms.ConsensusMap(consensus_map)
 for cons_feature in consensus_map_normalized:
     feature_list = cons_feature.getFeatureList()
@@ -272,187 +272,187 @@ for cons_feature in consensus_map_normalized:
         handle.setIntensity(normalized_intensity)
 ```
 
-## Quality Control
+## 品質控制
 
-### Coefficient of Variation (CV) Filtering
+### 變異係數（CV）過濾
 
 ```python
 import pandas as pd
 import numpy as np
 
-# Export to pandas
+# 匯出到 pandas
 df = consensus_map.get_df()
 
-# Assume QC samples are columns with 'QC' in name
+# 假設 QC 樣本是名稱中含有 'QC' 的欄位
 qc_cols = [col for col in df.columns if 'QC' in col]
 
 if qc_cols:
-    # Calculate CV for each feature in QC samples
+    # 計算 QC 樣本中每個特徵的 CV
     qc_data = df[qc_cols]
     cv = (qc_data.std(axis=1) / qc_data.mean(axis=1)) * 100
 
-    # Filter features with CV < 30% in QC samples
+    # 過濾 QC 樣本中 CV < 30% 的特徵
     good_features = df[cv < 30]
 
     print(f"Features before CV filter: {len(df)}")
     print(f"Features after CV filter: {len(good_features)}")
 ```
 
-### Blank Filtering
+### 空白過濾
 
 ```python
-# Remove features present in blank samples
+# 移除空白樣本中存在的特徵
 blank_cols = [col for col in df.columns if 'Blank' in col]
 sample_cols = [col for col in df.columns if 'Sample' in col]
 
 if blank_cols and sample_cols:
-    # Calculate mean intensity in blanks and samples
+    # 計算空白和樣本中的平均強度
     blank_mean = df[blank_cols].mean(axis=1)
     sample_mean = df[sample_cols].mean(axis=1)
 
-    # Keep features with 3x higher intensity in samples than blanks
-    ratio = sample_mean / (blank_mean + 1)  # Add 1 to avoid division by zero
+    # 保留樣本中強度比空白高 3 倍的特徵
+    ratio = sample_mean / (blank_mean + 1)  # 加 1 避免除以零
     filtered_df = df[ratio > 3]
 
     print(f"Features before blank filtering: {len(df)}")
     print(f"Features after blank filtering: {len(filtered_df)}")
 ```
 
-## Missing Value Imputation
+## 遺漏值填補
 
 ```python
 import pandas as pd
 import numpy as np
 
-# Load data
+# 載入資料
 df = consensus_map.get_df()
 
-# Replace zeros with NaN
+# 將零值替換為 NaN
 df = df.replace(0, np.nan)
 
-# Count missing values
+# 計算遺漏值
 missing_per_feature = df.isnull().sum(axis=1)
 print(f"Features with >50% missing: {sum(missing_per_feature > len(df.columns)/2)}")
 
-# Simple imputation: replace with minimum value
+# 簡單填補：用最小值替換
 for col in df.columns:
     if df[col].dtype in [np.float64, np.int64]:
-        min_val = df[col].min() / 2  # Half minimum
+        min_val = df[col].min() / 2  # 最小值的一半
         df[col].fillna(min_val, inplace=True)
 ```
 
-## Metabolite Table Export
+## 代謝物表格匯出
 
-### Create Analysis-Ready Table
+### 建立分析就緒表格
 
 ```python
 import pandas as pd
 
 def create_metabolite_table(consensus_map, output_file):
     """
-    Create metabolite quantification table for statistical analysis.
+    建立用於統計分析的代謝物定量表格。
     """
 
-    # Get column headers (file descriptions)
+    # 取得欄位標頭（檔案描述）
     headers = consensus_map.getColumnHeaders()
 
-    # Initialize data structure
+    # 初始化資料結構
     data = {
         'mz': [],
         'rt': [],
         'feature_id': []
     }
 
-    # Add sample columns
+    # 添加樣本欄位
     for map_idx, header in headers.items():
         sample_name = header.label or f"Sample_{map_idx}"
         data[sample_name] = []
 
-    # Extract feature data
+    # 提取特徵資料
     for idx, cons_feature in enumerate(consensus_map):
         data['mz'].append(cons_feature.getMZ())
         data['rt'].append(cons_feature.getRT())
         data['feature_id'].append(f"F{idx:06d}")
 
-        # Initialize intensities
+        # 初始化強度
         intensities = {map_idx: 0.0 for map_idx in headers.keys()}
 
-        # Fill in measured intensities
+        # 填入測量的強度
         for handle in cons_feature.getFeatureList():
             map_idx = handle.getMapIndex()
             intensities[map_idx] = handle.getIntensity()
 
-        # Add to data structure
+        # 添加到資料結構
         for map_idx, header in headers.items():
             sample_name = header.label or f"Sample_{map_idx}"
             data[sample_name].append(intensities[map_idx])
 
-    # Create DataFrame
+    # 建立 DataFrame
     df = pd.DataFrame(data)
 
-    # Sort by RT
+    # 按 RT 排序
     df = df.sort_values('rt')
 
-    # Save to CSV
+    # 儲存到 CSV
     df.to_csv(output_file, index=False)
 
     print(f"Metabolite table with {len(df)} features saved to {output_file}")
 
     return df
 
-# Create table
+# 建立表格
 df = create_metabolite_table(consensus_map, "metabolite_table.csv")
 ```
 
-## Integration with External Tools
+## 與外部工具整合
 
-### Export for MetaboAnalyst
+### 匯出到 MetaboAnalyst
 
 ```python
 def export_for_metaboanalyst(df, output_file):
     """
-    Format data for MetaboAnalyst input.
+    格式化資料以供 MetaboAnalyst 輸入。
 
-    Requires sample names as columns, features as rows.
+    需要樣本名稱作為欄位，特徵作為列。
     """
 
-    # Transpose DataFrame
-    # Remove metadata columns
+    # 轉置 DataFrame
+    # 移除中繼資料欄位
     sample_cols = [col for col in df.columns if col not in ['mz', 'rt', 'feature_id']]
 
-    # Extract sample data
+    # 提取樣本資料
     sample_data = df[sample_cols]
 
-    # Transpose (samples as rows, features as columns)
+    # 轉置（樣本作為列，特徵作為欄位）
     df_transposed = sample_data.T
 
-    # Add feature identifiers as column names
+    # 添加特徵識別符作為欄位名稱
     df_transposed.columns = df['feature_id']
 
-    # Save
+    # 儲存
     df_transposed.to_csv(output_file)
 
     print(f"MetaboAnalyst format saved to {output_file}")
 
-# Export
+# 匯出
 export_for_metaboanalyst(df, "for_metaboanalyst.csv")
 ```
 
-## Best Practices
+## 最佳實務
 
-### Sample Size and Replicates
+### 樣本量和重複
 
-- Include QC samples (pooled sample) every 5-10 injections
-- Run blank samples to identify contamination
-- Use at least 3 biological replicates per group
-- Randomize sample injection order
+- 每 5-10 次注射包含 QC 樣本（混合樣本）
+- 執行空白樣本以識別污染
+- 每組至少使用 3 個生物重複
+- 隨機化樣本注射順序
 
-### Parameter Optimization
+### 參數最佳化
 
-Test parameters on pooled QC sample:
+在混合 QC 樣本上測試參數：
 
 ```python
-# Test different mass trace parameters
+# 測試不同的質量追蹤參數
 mz_tolerances = [3.0, 5.0, 10.0]
 min_spectra_values = [3, 5, 7]
 
@@ -469,14 +469,14 @@ for tol in mz_tolerances:
         print(f"tol={tol}, min_spec={min_spec}: {features.size()} features")
 ```
 
-### Retention Time Windows
+### 滯留時間視窗
 
-Adjust based on chromatographic method:
+根據層析方法調整：
 
 ```python
-# For 10-minute LC gradient
-params.setValue("distance_RT:max_difference", 30.0)  # 30 seconds
+# 10 分鐘 LC 梯度
+params.setValue("distance_RT:max_difference", 30.0)  # 30 秒
 
-# For 60-minute LC gradient
-params.setValue("distance_RT:max_difference", 90.0)  # 90 seconds
+# 60 分鐘 LC 梯度
+params.setValue("distance_RT:max_difference", 90.0)  # 90 秒
 ```

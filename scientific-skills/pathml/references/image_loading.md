@@ -1,209 +1,209 @@
-# Image Loading & Formats
+# 影像載入與格式
 
-## Overview
+## 概述
 
-PathML provides comprehensive support for loading whole-slide images (WSI) from 160+ proprietary medical imaging formats. The framework abstracts vendor-specific complexities through unified slide classes and interfaces, enabling seamless access to image pyramids, metadata, and regions of interest across different file formats.
+PathML 提供全面的支援，可從 160+ 種專有醫學影像格式載入全切片影像（WSI）。該框架透過統一的切片類別和介面抽象化廠商特定的複雜性，實現對不同檔案格式的影像金字塔、元資料和感興趣區域的無縫存取。
 
-## Supported Formats
+## 支援的格式
 
-PathML supports the following slide formats:
+PathML 支援以下切片格式：
 
-### Brightfield Microscopy Formats
-- **Aperio SVS** (`.svs`) - Leica Biosystems
-- **Hamamatsu NDPI** (`.ndpi`) - Hamamatsu Photonics
-- **Leica SCN** (`.scn`) - Leica Biosystems
-- **Zeiss ZVI** (`.zvi`) - Carl Zeiss
-- **3DHISTECH** (`.mrxs`) - 3DHISTECH Ltd.
-- **Ventana BIF** (`.bif`) - Roche Ventana
-- **Generic tiled TIFF** (`.tif`, `.tiff`)
+### 明場顯微鏡格式
+- **Aperio SVS**（`.svs`）- Leica Biosystems
+- **Hamamatsu NDPI**（`.ndpi`）- Hamamatsu Photonics
+- **Leica SCN**（`.scn`）- Leica Biosystems
+- **Zeiss ZVI**（`.zvi`）- Carl Zeiss
+- **3DHISTECH**（`.mrxs`）- 3DHISTECH Ltd.
+- **Ventana BIF**（`.bif`）- Roche Ventana
+- **通用 tiled TIFF**（`.tif`、`.tiff`）
 
-### Medical Imaging Standards
-- **DICOM** (`.dcm`) - Digital Imaging and Communications in Medicine
-- **OME-TIFF** (`.ome.tif`, `.ome.tiff`) - Open Microscopy Environment
+### 醫學影像標準
+- **DICOM**（`.dcm`）- 醫學數位影像與通訊
+- **OME-TIFF**（`.ome.tif`、`.ome.tiff`）- 開放顯微鏡環境
 
-### Multiparametric Imaging
-- **CODEX** - Spatial proteomics imaging
-- **Vectra** (`.qptiff`) - Multiplex immunofluorescence
-- **MERFISH** - Multiplexed error-robust FISH
+### 多參數影像
+- **CODEX** - 空間蛋白質組學影像
+- **Vectra**（`.qptiff`）- 多重免疫螢光
+- **MERFISH** - 多重錯誤穩健 FISH
 
-PathML leverages OpenSlide and other specialized libraries to handle format-specific nuances automatically.
+PathML 利用 OpenSlide 和其他專門的函式庫自動處理格式特定的細節。
 
-## Core Classes for Loading Images
+## 影像載入的核心類別
 
 ### SlideData
 
-`SlideData` is the fundamental class for representing whole-slide images in PathML.
+`SlideData` 是 PathML 中表示全切片影像的基本類別。
 
-**Loading from file:**
+**從檔案載入：**
 ```python
 from pathml.core import SlideData
 
-# Load a whole-slide image
+# 載入全切片影像
 wsi = SlideData.from_slide("path/to/slide.svs")
 
-# Load with specific backend
+# 使用特定後端載入
 wsi = SlideData.from_slide("path/to/slide.svs", backend="openslide")
 
-# Load from OME-TIFF
+# 從 OME-TIFF 載入
 wsi = SlideData.from_slide("path/to/slide.ome.tiff", backend="bioformats")
 ```
 
-**Key attributes:**
-- `wsi.slide` - Backend slide object (OpenSlide, BioFormats, etc.)
-- `wsi.tiles` - Collection of image tiles
-- `wsi.metadata` - Slide metadata dictionary
-- `wsi.level_dimensions` - Image pyramid level dimensions
-- `wsi.level_downsamples` - Downsample factors for each pyramid level
+**關鍵屬性：**
+- `wsi.slide` - 後端切片物件（OpenSlide、BioFormats 等）
+- `wsi.tiles` - 影像圖磚集合
+- `wsi.metadata` - 切片元資料字典
+- `wsi.level_dimensions` - 影像金字塔各層級維度
+- `wsi.level_downsamples` - 每個金字塔層級的降採樣因子
 
-**Methods:**
-- `wsi.generate_tiles()` - Generate tiles from the slide
-- `wsi.read_region()` - Read a specific region at a given level
-- `wsi.get_thumbnail()` - Get a thumbnail image
+**方法：**
+- `wsi.generate_tiles()` - 從切片生成圖磚
+- `wsi.read_region()` - 在指定層級讀取特定區域
+- `wsi.get_thumbnail()` - 取得縮圖影像
 
 ### SlideType
 
-`SlideType` is an enumeration defining supported slide backends:
+`SlideType` 是定義支援的切片後端的列舉：
 
 ```python
 from pathml.core import SlideType
 
-# Available backends
-SlideType.OPENSLIDE  # For most WSI formats (SVS, NDPI, etc.)
-SlideType.BIOFORMATS  # For OME-TIFF and other formats
-SlideType.DICOM  # For DICOM WSI
-SlideType.VectraQPTIFF  # For Vectra multiplex IF
+# 可用後端
+SlideType.OPENSLIDE  # 用於大多數 WSI 格式（SVS、NDPI 等）
+SlideType.BIOFORMATS  # 用於 OME-TIFF 和其他格式
+SlideType.DICOM  # 用於 DICOM WSI
+SlideType.VectraQPTIFF  # 用於 Vectra 多重 IF
 ```
 
-### Specialized Slide Classes
+### 專門的切片類別
 
-PathML provides specialized slide classes for specific imaging modalities:
+PathML 為特定影像模式提供專門的切片類別：
 
-**CODEXSlide:**
+**CODEXSlide：**
 ```python
 from pathml.core import CODEXSlide
 
-# Load CODEX spatial proteomics data
+# 載入 CODEX 空間蛋白質組學資料
 codex_slide = CODEXSlide(
     path="path/to/codex_dir",
-    stain="IF",  # Immunofluorescence
+    stain="IF",  # 免疫螢光
     backend="bioformats"
 )
 ```
 
-**VectraSlide:**
+**VectraSlide：**
 ```python
 from pathml.core import types
 
-# Load Vectra multiplex IF data
+# 載入 Vectra 多重 IF 資料
 vectra_slide = SlideData.from_slide(
     "path/to/vectra.qptiff",
     backend=SlideType.VectraQPTIFF
 )
 ```
 
-**MultiparametricSlide:**
+**MultiparametricSlide：**
 ```python
 from pathml.core import MultiparametricSlide
 
-# Generic multiparametric imaging
+# 通用多參數影像
 mp_slide = MultiparametricSlide(path="path/to/multiparametric_data")
 ```
 
-## Loading Strategies
+## 載入策略
 
-### Tile-Based Loading
+### 基於圖磚的載入
 
-For large WSI files, tile-based loading enables memory-efficient processing:
+對於大型 WSI 檔案，基於圖磚的載入可實現記憶體效率的處理：
 
 ```python
 from pathml.core import SlideData
 
-# Load slide
+# 載入切片
 wsi = SlideData.from_slide("path/to/slide.svs")
 
-# Generate tiles at specific magnification level
+# 在特定放大層級生成圖磚
 wsi.generate_tiles(
-    level=0,  # Pyramid level (0 = highest resolution)
-    tile_size=256,  # Tile dimensions in pixels
-    stride=256,  # Spacing between tiles (256 = no overlap)
-    pad=False  # Whether to pad edge tiles
+    level=0,  # 金字塔層級（0 = 最高解析度）
+    tile_size=256,  # 圖磚維度（像素）
+    stride=256,  # 圖磚間距（256 = 無重疊）
+    pad=False  # 是否填充邊緣圖磚
 )
 
-# Iterate over tiles
+# 遍歷圖磚
 for tile in wsi.tiles:
-    image = tile.image  # numpy array
-    coords = tile.coords  # (x, y) coordinates
-    # Process tile...
+    image = tile.image  # numpy 陣列
+    coords = tile.coords  # (x, y) 座標
+    # 處理圖磚...
 ```
 
-**Overlapping tiles:**
+**重疊圖磚：**
 ```python
-# Generate tiles with 50% overlap
+# 生成 50% 重疊的圖磚
 wsi.generate_tiles(
     level=0,
     tile_size=256,
-    stride=128  # 50% overlap
+    stride=128  # 50% 重疊
 )
 ```
 
-### Region-Based Loading
+### 基於區域的載入
 
-Extract specific regions of interest directly:
+直接提取特定感興趣區域：
 
 ```python
-# Read region at specific location and level
+# 在特定位置和層級讀取區域
 region = wsi.read_region(
-    location=(10000, 15000),  # (x, y) in level 0 coordinates
-    level=1,  # Pyramid level
-    size=(512, 512)  # Width, height in pixels
+    location=(10000, 15000),  # 層級 0 座標中的 (x, y)
+    level=1,  # 金字塔層級
+    size=(512, 512)  # 寬度、高度（像素）
 )
 
-# Returns numpy array
+# 返回 numpy 陣列
 ```
 
-### Pyramid Level Selection
+### 金字塔層級選擇
 
-Whole-slide images are stored in multi-resolution pyramids. Select the appropriate level based on desired magnification:
+全切片影像以多解析度金字塔儲存。根據所需放大倍率選擇適當的層級：
 
 ```python
-# Inspect available levels
+# 檢查可用層級
 print(wsi.level_dimensions)  # [(width0, height0), (width1, height1), ...]
 print(wsi.level_downsamples)  # [1.0, 4.0, 16.0, ...]
 
-# Load at lower resolution for faster processing
-wsi.generate_tiles(level=2, tile_size=256)  # Use level 2 (16x downsampled)
+# 在較低解析度載入以加快處理
+wsi.generate_tiles(level=2, tile_size=256)  # 使用層級 2（16x 降採樣）
 ```
 
-**Common pyramid levels:**
-- Level 0: Full resolution (e.g., 40x magnification)
-- Level 1: 4x downsampled (e.g., 10x magnification)
-- Level 2: 16x downsampled (e.g., 2.5x magnification)
-- Level 3: 64x downsampled (thumbnail)
+**常見金字塔層級：**
+- 層級 0：完整解析度（例如 40x 放大）
+- 層級 1：4x 降採樣（例如 10x 放大）
+- 層級 2：16x 降採樣（例如 2.5x 放大）
+- 層級 3：64x 降採樣（縮圖）
 
-### Thumbnail Loading
+### 縮圖載入
 
-Generate low-resolution thumbnails for visualization and quality control:
+生成低解析度縮圖用於視覺化和品質控制：
 
 ```python
-# Get thumbnail
+# 取得縮圖
 thumbnail = wsi.get_thumbnail(size=(1024, 1024))
 
-# Display with matplotlib
+# 使用 matplotlib 顯示
 import matplotlib.pyplot as plt
 plt.imshow(thumbnail)
 plt.axis('off')
 plt.show()
 ```
 
-## Batch Loading with SlideDataset
+## 使用 SlideDataset 批次載入
 
-Process multiple slides efficiently using `SlideDataset`:
+使用 `SlideDataset` 高效處理多個切片：
 
 ```python
 from pathml.core import SlideDataset
 import glob
 
-# Create dataset from multiple slides
+# 從多個切片創建資料集
 slide_paths = glob.glob("data/*.svs")
 dataset = SlideDataset(
     slide_paths,
@@ -212,197 +212,197 @@ dataset = SlideDataset(
     level=0
 )
 
-# Iterate over all tiles from all slides
+# 遍歷所有切片的所有圖磚
 for tile in dataset:
     image = tile.image
     slide_id = tile.slide_id
-    # Process tile...
+    # 處理圖磚...
 ```
 
-**With preprocessing pipeline:**
+**使用預處理管道：**
 ```python
 from pathml.preprocessing import Pipeline, StainNormalizationHE
 
-# Create pipeline
+# 創建管道
 pipeline = Pipeline([
     StainNormalizationHE(target='normalize')
 ])
 
-# Apply to entire dataset
+# 應用到整個資料集
 dataset = SlideDataset(slide_paths)
 dataset.run(pipeline, distributed=True, n_workers=8)
 ```
 
-## Metadata Access
+## 元資料存取
 
-Extract slide metadata including acquisition parameters, magnification, and vendor-specific information:
+提取切片元資料，包括擷取參數、放大倍率和廠商特定資訊：
 
 ```python
-# Access metadata
+# 存取元資料
 metadata = wsi.metadata
 
-# Common metadata fields
-print(metadata.get('openslide.objective-power'))  # Magnification
-print(metadata.get('openslide.mpp-x'))  # Microns per pixel X
-print(metadata.get('openslide.mpp-y'))  # Microns per pixel Y
-print(metadata.get('openslide.vendor'))  # Scanner vendor
+# 常見元資料欄位
+print(metadata.get('openslide.objective-power'))  # 放大倍率
+print(metadata.get('openslide.mpp-x'))  # X 方向每像素微米數
+print(metadata.get('openslide.mpp-y'))  # Y 方向每像素微米數
+print(metadata.get('openslide.vendor'))  # 掃描儀廠商
 
-# Slide dimensions
-print(wsi.level_dimensions[0])  # (width, height) at level 0
+# 切片維度
+print(wsi.level_dimensions[0])  # 層級 0 的 (寬度, 高度)
 ```
 
-## Working with DICOM Slides
+## 處理 DICOM 切片
 
-PathML supports DICOM WSI through specialized handling:
+PathML 透過專門處理支援 DICOM WSI：
 
 ```python
 from pathml.core import SlideData, SlideType
 
-# Load DICOM WSI
+# 載入 DICOM WSI
 dicom_slide = SlideData.from_slide(
     "path/to/slide.dcm",
     backend=SlideType.DICOM
 )
 
-# DICOM-specific metadata
+# DICOM 特定元資料
 print(dicom_slide.metadata.get('PatientID'))
 print(dicom_slide.metadata.get('StudyDate'))
 ```
 
-## Working with OME-TIFF
+## 處理 OME-TIFF
 
-OME-TIFF provides an open standard for multi-dimensional imaging:
+OME-TIFF 為多維影像提供開放標準：
 
 ```python
 from pathml.core import SlideData
 
-# Load OME-TIFF
+# 載入 OME-TIFF
 ome_slide = SlideData.from_slide(
     "path/to/slide.ome.tiff",
     backend="bioformats"
 )
 
-# Access channel information for multi-channel images
-n_channels = ome_slide.shape[2]  # Number of channels
+# 存取多通道影像的通道資訊
+n_channels = ome_slide.shape[2]  # 通道數量
 ```
 
-## Performance Considerations
+## 效能考量
 
-### Memory Management
+### 記憶體管理
 
-For large WSI files (often >1GB), use tile-based loading to avoid memory exhaustion:
+對於大型 WSI 檔案（通常 >1GB），使用基於圖磚的載入以避免記憶體耗盡：
 
 ```python
-# Efficient: Tile-based processing
+# 高效：基於圖磚的處理
 wsi.generate_tiles(level=1, tile_size=256)
 for tile in wsi.tiles:
-    process_tile(tile)  # Process one tile at a time
+    process_tile(tile)  # 一次處理一個圖磚
 
-# Inefficient: Loading entire slide into memory
-full_image = wsi.read_region((0, 0), level=0, wsi.level_dimensions[0])  # May crash
+# 低效：將整個切片載入記憶體
+full_image = wsi.read_region((0, 0), level=0, wsi.level_dimensions[0])  # 可能當機
 ```
 
-### Distributed Processing
+### 分散式處理
 
-Use Dask for parallel processing across multiple workers:
+使用 Dask 進行多工作者的並行處理：
 
 ```python
 from pathml.core import SlideDataset
 from dask.distributed import Client
 
-# Start Dask client
+# 啟動 Dask 客戶端
 client = Client(n_workers=8, threads_per_worker=2)
 
-# Process dataset in parallel
+# 並行處理資料集
 dataset = SlideDataset(slide_paths)
 dataset.run(pipeline, distributed=True, client=client)
 ```
 
-### Level Selection
+### 層級選擇
 
-Balance resolution and performance by selecting appropriate pyramid levels:
+通過選擇適當的金字塔層級來平衡解析度和效能：
 
-- **Level 0:** Use for final analysis requiring maximum detail
-- **Level 1-2:** Use for most preprocessing and model training
-- **Level 3+:** Use for thumbnails, quality control, and rapid exploration
+- **層級 0：** 用於需要最大細節的最終分析
+- **層級 1-2：** 用於大多數預處理和模型訓練
+- **層級 3+：** 用於縮圖、品質控制和快速探索
 
-## Common Issues and Solutions
+## 常見問題與解決方案
 
-**Issue: Slide fails to load**
-- Verify file format is supported
-- Check file permissions and path
-- Try different backend: `backend="bioformats"` or `backend="openslide"`
+**問題：切片載入失敗**
+- 驗證檔案格式受支援
+- 檢查檔案權限和路徑
+- 嘗試不同後端：`backend="bioformats"` 或 `backend="openslide"`
 
-**Issue: Out of memory errors**
-- Use tile-based loading instead of full-slide loading
-- Process at lower pyramid level (e.g., level=1 or level=2)
-- Reduce tile_size parameter
-- Enable distributed processing with Dask
+**問題：記憶體不足錯誤**
+- 使用基於圖磚的載入而非完整切片載入
+- 在較低金字塔層級處理（例如 level=1 或 level=2）
+- 減少 tile_size 參數
+- 使用 Dask 啟用分散式處理
 
-**Issue: Color inconsistencies across slides**
-- Apply stain normalization preprocessing (see `preprocessing.md`)
-- Check scanner metadata for calibration information
-- Use `StainNormalizationHE` transform in preprocessing pipeline
+**問題：切片間顏色不一致**
+- 應用染色正規化預處理（見 `preprocessing.md`）
+- 檢查掃描儀元資料以取得校準資訊
+- 在預處理管道中使用 `StainNormalizationHE` 轉換
 
-**Issue: Metadata missing or incorrect**
-- Different vendors store metadata in different locations
-- Use `wsi.metadata` to inspect available fields
-- Some formats may have limited metadata support
+**問題：元資料缺失或不正確**
+- 不同廠商將元資料儲存在不同位置
+- 使用 `wsi.metadata` 檢查可用欄位
+- 某些格式可能有有限的元資料支援
 
-## Best Practices
+## 最佳實踐
 
-1. **Always inspect pyramid structure** before processing: Check `level_dimensions` and `level_downsamples` to understand available resolutions
+1. **處理前始終檢查金字塔結構：** 檢查 `level_dimensions` 和 `level_downsamples` 以了解可用解析度
 
-2. **Use appropriate pyramid levels**: Process at level 1-2 for most tasks; reserve level 0 for final high-resolution analysis
+2. **使用適當的金字塔層級：** 大多數任務在層級 1-2 處理；將層級 0 保留給最終高解析度分析
 
-3. **Tile with overlap** for segmentation tasks: Use stride < tile_size to avoid edge artifacts
+3. **分割任務使用重疊圖磚：** 使用 stride < tile_size 以避免邊緣偽影
 
-4. **Verify magnification consistency**: Check `openslide.objective-power` metadata when combining slides from different sources
+4. **驗證放大倍率一致性：** 合併不同來源的切片時檢查 `openslide.objective-power` 元資料
 
-5. **Handle vendor-specific formats**: Use specialized slide classes (CODEXSlide, VectraSlide) for multiparametric data
+5. **處理廠商特定格式：** 對多參數資料使用專門的切片類別（CODEXSlide、VectraSlide）
 
-6. **Implement quality control**: Generate thumbnails and inspect for artifacts before processing
+6. **實施品質控制：** 處理前生成縮圖並檢查偽影
 
-7. **Use distributed processing** for large datasets: Leverage Dask for parallel processing across multiple workers
+7. **對大型資料集使用分散式處理：** 利用 Dask 進行多工作者的並行處理
 
-## Example Workflows
+## 範例工作流程
 
-### Loading and Inspecting a New Slide
+### 載入並檢查新切片
 
 ```python
 from pathml.core import SlideData
 import matplotlib.pyplot as plt
 
-# Load slide
+# 載入切片
 wsi = SlideData.from_slide("path/to/slide.svs")
 
-# Inspect properties
-print(f"Dimensions: {wsi.level_dimensions}")
-print(f"Downsamples: {wsi.level_downsamples}")
-print(f"Magnification: {wsi.metadata.get('openslide.objective-power')}")
+# 檢查屬性
+print(f"維度：{wsi.level_dimensions}")
+print(f"降採樣：{wsi.level_downsamples}")
+print(f"放大倍率：{wsi.metadata.get('openslide.objective-power')}")
 
-# Generate thumbnail for QC
+# 生成縮圖進行品質控制
 thumbnail = wsi.get_thumbnail(size=(1024, 1024))
 plt.imshow(thumbnail)
-plt.title(f"Slide: {wsi.name}")
+plt.title(f"切片：{wsi.name}")
 plt.axis('off')
 plt.show()
 ```
 
-### Processing Multiple Slides
+### 處理多個切片
 
 ```python
 from pathml.core import SlideDataset
 from pathml.preprocessing import Pipeline, TissueDetectionHE
 import glob
 
-# Find all slides
+# 尋找所有切片
 slide_paths = glob.glob("data/slides/*.svs")
 
-# Create pipeline
+# 創建管道
 pipeline = Pipeline([TissueDetectionHE()])
 
-# Process all slides
+# 處理所有切片
 dataset = SlideDataset(
     slide_paths,
     tile_size=512,
@@ -410,25 +410,25 @@ dataset = SlideDataset(
     level=1
 )
 
-# Run pipeline with distributed processing
+# 使用分散式處理執行管道
 dataset.run(pipeline, distributed=True, n_workers=8)
 
-# Save processed data
+# 儲存處理過的資料
 dataset.to_hdf5("processed_dataset.h5")
 ```
 
-### Loading CODEX Multiparametric Data
+### 載入 CODEX 多參數資料
 
 ```python
 from pathml.core import CODEXSlide
 from pathml.preprocessing import Pipeline, CollapseRunsCODEX, SegmentMIF
 
-# Load CODEX slide
+# 載入 CODEX 切片
 codex = CODEXSlide("path/to/codex_dir", stain="IF")
 
-# Create CODEX-specific pipeline
+# 創建 CODEX 特定管道
 pipeline = Pipeline([
-    CollapseRunsCODEX(z_slice=2),  # Select z-slice
+    CollapseRunsCODEX(z_slice=2),  # 選擇 z 切面
     SegmentMIF(
         nuclear_channel='DAPI',
         cytoplasm_channel='CD45',
@@ -436,13 +436,13 @@ pipeline = Pipeline([
     )
 ])
 
-# Process
+# 處理
 pipeline.run(codex)
 ```
 
-## Additional Resources
+## 其他資源
 
-- **PathML Documentation:** https://pathml.readthedocs.io/
-- **OpenSlide:** https://openslide.org/ (underlying library for WSI formats)
-- **Bio-Formats:** https://www.openmicroscopy.org/bio-formats/ (alternative backend)
-- **DICOM Standard:** https://www.dicomstandard.org/
+- **PathML 文件：** https://pathml.readthedocs.io/
+- **OpenSlide：** https://openslide.org/（WSI 格式的底層函式庫）
+- **Bio-Formats：** https://www.openmicroscopy.org/bio-formats/（替代後端）
+- **DICOM 標準：** https://www.dicomstandard.org/

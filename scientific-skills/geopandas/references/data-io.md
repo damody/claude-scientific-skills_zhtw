@@ -1,157 +1,157 @@
-# Reading and Writing Spatial Data
+# 讀取和寫入空間資料
 
-## Reading Files
+## 讀取檔案
 
-Use `geopandas.read_file()` to import vector spatial data:
+使用 `geopandas.read_file()` 匯入向量空間資料：
 
 ```python
 import geopandas as gpd
 
-# Read from file
+# 從檔案讀取
 gdf = gpd.read_file("data.shp")
 gdf = gpd.read_file("data.geojson")
 gdf = gpd.read_file("data.gpkg")
 
-# Read from URL
+# 從 URL 讀取
 gdf = gpd.read_file("https://example.com/data.geojson")
 
-# Read from ZIP archive
+# 從 ZIP 壓縮檔讀取
 gdf = gpd.read_file("data.zip")
 ```
 
-### Performance: Arrow Acceleration
+### 效能：Arrow 加速
 
-For 2-4x faster reading, use Arrow:
+使用 Arrow 可獲得 2-4 倍更快的讀取速度：
 
 ```python
 gdf = gpd.read_file("data.gpkg", use_arrow=True)
 ```
 
-Requires PyArrow: `uv pip install pyarrow`
+需要 PyArrow：`uv pip install pyarrow`
 
-### Filtering During Read
+### 讀取時過濾
 
-Pre-filter data to load only what's needed:
+預過濾資料以僅載入所需內容：
 
 ```python
-# Load specific rows
-gdf = gpd.read_file("data.gpkg", rows=100)  # First 100 rows
-gdf = gpd.read_file("data.gpkg", rows=slice(10, 20))  # Rows 10-20
+# 載入特定行
+gdf = gpd.read_file("data.gpkg", rows=100)  # 前 100 行
+gdf = gpd.read_file("data.gpkg", rows=slice(10, 20))  # 第 10-20 行
 
-# Load specific columns
+# 載入特定欄位
 gdf = gpd.read_file("data.gpkg", columns=['name', 'population'])
 
-# Spatial filter with bounding box
+# 使用邊界框空間過濾
 gdf = gpd.read_file("data.gpkg", bbox=(xmin, ymin, xmax, ymax))
 
-# Spatial filter with geometry mask
+# 使用幾何遮罩空間過濾
 gdf = gpd.read_file("data.gpkg", mask=polygon_geometry)
 
-# SQL WHERE clause (requires Fiona 1.9+ or Pyogrio)
+# SQL WHERE 子句（需要 Fiona 1.9+ 或 Pyogrio）
 gdf = gpd.read_file("data.gpkg", where="population > 1000000")
 
-# Skip geometry (returns pandas DataFrame)
+# 跳過幾何（返回 pandas DataFrame）
 df = gpd.read_file("data.gpkg", ignore_geometry=True)
 ```
 
-## Writing Files
+## 寫入檔案
 
-Use `to_file()` to export:
+使用 `to_file()` 匯出：
 
 ```python
-# Write to Shapefile
+# 寫入 Shapefile
 gdf.to_file("output.shp")
 
-# Write to GeoJSON
+# 寫入 GeoJSON
 gdf.to_file("output.geojson", driver='GeoJSON')
 
-# Write to GeoPackage (supports multiple layers)
+# 寫入 GeoPackage（支援多圖層）
 gdf.to_file("output.gpkg", layer='layer1', driver="GPKG")
 
-# Arrow acceleration for faster writing
+# Arrow 加速以更快寫入
 gdf.to_file("output.gpkg", use_arrow=True)
 ```
 
-### Supported Formats
+### 支援的格式
 
-List all available drivers:
+列出所有可用的驅動程式：
 
 ```python
 import pyogrio
 pyogrio.list_drivers()
 ```
 
-Common formats: Shapefile, GeoJSON, GeoPackage (GPKG), KML, MapInfo File, CSV (with WKT geometry)
+常見格式：Shapefile、GeoJSON、GeoPackage (GPKG)、KML、MapInfo File、CSV（含 WKT 幾何）
 
-## Parquet and Feather
+## Parquet 和 Feather
 
-Columnar formats preserving spatial information with support for multiple geometry columns:
+支援多幾何欄位並保留空間資訊的欄式格式：
 
 ```python
-# Write
+# 寫入
 gdf.to_parquet("data.parquet")
 gdf.to_feather("data.feather")
 
-# Read
+# 讀取
 gdf = gpd.read_parquet("data.parquet")
 gdf = gpd.read_feather("data.feather")
 ```
 
-Advantages:
-- Faster I/O than traditional formats
-- Better compression
-- Preserves multiple geometry columns
-- Schema versioning support
+優點：
+- 比傳統格式更快的 I/O
+- 更好的壓縮
+- 保留多幾何欄位
+- 支援 schema 版本控制
 
-## PostGIS Databases
+## PostGIS 資料庫
 
-### Reading from PostGIS
+### 從 PostGIS 讀取
 
 ```python
 from sqlalchemy import create_engine
 
 engine = create_engine('postgresql://user:password@host:port/database')
 
-# Read entire table
+# 讀取整個表格
 gdf = gpd.read_postgis("SELECT * FROM table_name", con=engine, geom_col='geometry')
 
-# Read with SQL query
+# 使用 SQL 查詢讀取
 gdf = gpd.read_postgis("SELECT * FROM table WHERE population > 100000", con=engine, geom_col='geometry')
 ```
 
-### Writing to PostGIS
+### 寫入 PostGIS
 
 ```python
-# Create or replace table
+# 建立或取代表格
 gdf.to_postgis("table_name", con=engine, if_exists='replace')
 
-# Append to existing table
+# 附加到現有表格
 gdf.to_postgis("table_name", con=engine, if_exists='append')
 
-# Fail if table exists
+# 如果表格存在則失敗
 gdf.to_postgis("table_name", con=engine, if_exists='fail')
 ```
 
-Requires: `uv pip install psycopg2` or `uv pip install psycopg` and `uv pip install geoalchemy2`
+需要：`uv pip install psycopg2` 或 `uv pip install psycopg` 和 `uv pip install geoalchemy2`
 
-## File-like Objects
+## 類檔案物件
 
-Read from file handles or in-memory buffers:
+從檔案控制代碼或記憶體緩衝區讀取：
 
 ```python
-# From file handle
+# 從檔案控制代碼
 with open('data.geojson', 'r') as f:
     gdf = gpd.read_file(f)
 
-# From StringIO
+# 從 StringIO
 from io import StringIO
 geojson_string = '{"type": "FeatureCollection", ...}'
 gdf = gpd.read_file(StringIO(geojson_string))
 ```
 
-## Remote Storage (fsspec)
+## 遠端儲存（fsspec）
 
-Access data from cloud storage:
+從雲端儲存存取資料：
 
 ```python
 # S3

@@ -1,167 +1,167 @@
-# Dask Schedulers
+# Dask 排程器
 
-## Overview
+## 概述
 
-Dask provides multiple task schedulers, each suited to different workloads. The scheduler determines how tasks are executed: sequentially, in parallel threads, in parallel processes, or distributed across a cluster.
+Dask 提供多種任務排程器，各適用於不同的工作負載。排程器決定任務如何執行：順序、平行執行緒、平行程序或分散到叢集。
 
-## Scheduler Types
+## 排程器類型
 
-### Single-Machine Schedulers
+### 單機排程器
 
-#### 1. Local Threads (Default)
+#### 1. 本地執行緒（預設）
 
-**Description**: The threaded scheduler executes computations with a local `concurrent.futures.ThreadPoolExecutor`.
+**描述**：執行緒排程器使用本地 `concurrent.futures.ThreadPoolExecutor` 執行運算。
 
-**When to Use**:
-- Numeric computations in NumPy, Pandas, scikit-learn
-- Libraries that release the GIL (Global Interpreter Lock)
-- Operations benefit from shared memory access
-- Default for Dask Arrays and DataFrames
+**使用時機**：
+- NumPy、Pandas、scikit-learn 中的數值運算
+- 釋放 GIL（全域直譯器鎖）的函式庫
+- 受益於共享記憶體存取的操作
+- Dask Arrays 和 DataFrames 的預設
 
-**Characteristics**:
-- Low overhead
-- Shared memory between threads
-- Best for GIL-releasing operations
-- Poor for pure Python code (GIL contention)
+**特性**：
+- 低開銷
+- 執行緒間共享記憶體
+- 最適合釋放 GIL 的操作
+- 對純 Python 程式碼效果差（GIL 競爭）
 
-**Example**:
+**範例**：
 ```python
 import dask.array as da
 
-# Uses threads by default
+# 預設使用執行緒
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
-result = x.mean().compute()  # Computed with threads
+result = x.mean().compute()  # 使用執行緒計算
 ```
 
-**Explicit Configuration**:
+**明確配置**：
 ```python
 import dask
 
-# Set globally
+# 全域設定
 dask.config.set(scheduler='threads')
 
-# Or per-compute
+# 或每次 compute 設定
 result = x.mean().compute(scheduler='threads')
 ```
 
-#### 2. Local Processes
+#### 2. 本地程序
 
-**Description**: Multiprocessing scheduler that uses `concurrent.futures.ProcessPoolExecutor`.
+**描述**：使用 `concurrent.futures.ProcessPoolExecutor` 的多程序排程器。
 
-**When to Use**:
-- Pure Python code with GIL contention
-- Text processing and Python collections
-- Operations that benefit from process isolation
-- CPU-bound Python code
+**使用時機**：
+- 具有 GIL 競爭的純 Python 程式碼
+- 文字處理和 Python 集合
+- 受益於程序隔離的操作
+- CPU 密集型 Python 程式碼
 
-**Characteristics**:
-- Bypasses GIL limitations
-- Incurs data transfer costs between processes
-- Higher overhead than threads
-- Ideal for linear workflows with small inputs/outputs
+**特性**：
+- 繞過 GIL 限制
+- 程序間資料傳輸有成本
+- 比執行緒開銷更高
+- 適合具有小輸入/輸出的線性工作流程
 
-**Example**:
+**範例**：
 ```python
 import dask.bag as db
 
-# Good for Python object processing
+# 適合 Python 物件處理
 bag = db.read_text('data/*.txt')
 result = bag.map(complex_python_function).compute(scheduler='processes')
 ```
 
-**Explicit Configuration**:
+**明確配置**：
 ```python
 import dask
 
-# Set globally
+# 全域設定
 dask.config.set(scheduler='processes')
 
-# Or per-compute
+# 或每次 compute 設定
 result = computation.compute(scheduler='processes')
 ```
 
-**Limitations**:
-- Data must be serializable (pickle)
-- Overhead from process creation
-- Memory overhead from data copying
+**限制**：
+- 資料必須可序列化（pickle）
+- 程序建立的開銷
+- 資料複製的記憶體開銷
 
-#### 3. Single Thread (Synchronous)
+#### 3. 單執行緒（同步）
 
-**Description**: The single-threaded synchronous scheduler executes all computations in the local thread with no parallelism at all.
+**描述**：單執行緒同步排程器在本地執行緒中執行所有運算，完全沒有平行化。
 
-**When to Use**:
-- Debugging with pdb
-- Profiling with standard Python tools
-- Understanding errors in detail
-- Development and testing
+**使用時機**：
+- 使用 pdb 除錯
+- 使用標準 Python 工具進行效能分析
+- 詳細理解錯誤
+- 開發和測試
 
-**Characteristics**:
-- No parallelism
-- Easy debugging
-- No overhead
-- Deterministic execution
+**特性**：
+- 無平行化
+- 易於除錯
+- 無開銷
+- 確定性執行
 
-**Example**:
+**範例**：
 ```python
 import dask
 
-# Enable for debugging
+# 啟用以進行除錯
 dask.config.set(scheduler='synchronous')
 
-# Now can use pdb
-result = computation.compute()  # Runs in single thread
+# 現在可以使用 pdb
+result = computation.compute()  # 在單執行緒中執行
 ```
 
-**Debugging with IPython**:
+**在 IPython 中除錯**：
 ```python
-# In IPython/Jupyter
+# 在 IPython/Jupyter 中
 %pdb on
 
 dask.config.set(scheduler='synchronous')
-result = problematic_computation.compute()  # Drops into debugger on error
+result = problematic_computation.compute()  # 錯誤時進入除錯器
 ```
 
-### Distributed Schedulers
+### 分散式排程器
 
-#### 4. Local Distributed
+#### 4. 本地分散式
 
-**Description**: Despite its name, this scheduler runs effectively on personal machines using the distributed scheduler infrastructure.
+**描述**：儘管名稱如此，這個排程器使用分散式排程器基礎架構有效地在個人機器上執行。
 
-**When to Use**:
-- Need diagnostic dashboard
-- Asynchronous APIs
-- Better data locality handling than multiprocessing
-- Development before scaling to cluster
-- Want distributed features on single machine
+**使用時機**：
+- 需要診斷儀表板
+- 非同步 API
+- 比多程序更好的資料局部性處理
+- 擴展到叢集前的開發
+- 在單機上需要分散式功能
 
-**Characteristics**:
-- Provides dashboard for monitoring
-- Better memory management
-- More overhead than threads/processes
-- Can scale to cluster later
+**特性**：
+- 提供監控儀表板
+- 更好的記憶體管理
+- 比執行緒/程序更高的開銷
+- 之後可以擴展到叢集
 
-**Example**:
+**範例**：
 ```python
 from dask.distributed import Client
 import dask.dataframe as dd
 
-# Create local cluster
-client = Client()  # Automatically uses all cores
+# 建立本地叢集
+client = Client()  # 自動使用所有核心
 
-# Use distributed scheduler
+# 使用分散式排程器
 ddf = dd.read_csv('data.csv')
 result = ddf.groupby('category').mean().compute()
 
-# View dashboard
+# 查看儀表板
 print(client.dashboard_link)
 
-# Clean up
+# 清理
 client.close()
 ```
 
-**Configuration Options**:
+**配置選項**：
 ```python
-# Control resources
+# 控制資源
 client = Client(
     n_workers=4,
     threads_per_worker=2,
@@ -169,28 +169,28 @@ client = Client(
 )
 ```
 
-#### 5. Cluster Distributed
+#### 5. 叢集分散式
 
-**Description**: For scaling across multiple machines using the distributed scheduler.
+**描述**：用於使用分散式排程器跨多台機器擴展。
 
-**When to Use**:
-- Data exceeds single machine capacity
-- Need computational power beyond one machine
-- Production deployments
-- Cluster computing environments (HPC, cloud)
+**使用時機**：
+- 資料超過單機容量
+- 需要超過一台機器的運算能力
+- 生產部署
+- 叢集運算環境（HPC、雲端）
 
-**Characteristics**:
-- Scales to hundreds of machines
-- Requires cluster setup
-- Network communication overhead
-- Advanced features (adaptive scaling, task prioritization)
+**特性**：
+- 擴展到數百台機器
+- 需要叢集設定
+- 網路通訊開銷
+- 進階功能（自適應擴展、任務優先順序）
 
-**Example with Dask-Jobqueue (HPC)**:
+**使用 Dask-Jobqueue（HPC）的範例**：
 ```python
 from dask_jobqueue import SLURMCluster
 from dask.distributed import Client
 
-# Create cluster on HPC with SLURM
+# 在 HPC 上使用 SLURM 建立叢集
 cluster = SLURMCluster(
     cores=24,
     memory='100GB',
@@ -198,25 +198,25 @@ cluster = SLURMCluster(
     queue='regular'
 )
 
-# Scale to 10 jobs
+# 擴展到 10 個作業
 cluster.scale(jobs=10)
 
-# Connect client
+# 連接 client
 client = Client(cluster)
 
-# Run computation
+# 執行運算
 result = computation.compute()
 
 client.close()
 ```
 
-**Example with Dask on Kubernetes**:
+**Dask on Kubernetes 的範例**：
 ```python
 from dask_kubernetes import KubeCluster
 from dask.distributed import Client
 
 cluster = KubeCluster()
-cluster.scale(20)  # 20 workers
+cluster.scale(20)  # 20 個 workers
 
 client = Client(cluster)
 result = computation.compute()
@@ -224,14 +224,14 @@ result = computation.compute()
 client.close()
 ```
 
-## Scheduler Configuration
+## 排程器配置
 
-### Global Configuration
+### 全域配置
 
 ```python
 import dask
 
-# Set scheduler globally for session
+# 為會話全域設定排程器
 dask.config.set(scheduler='threads')
 dask.config.set(scheduler='processes')
 dask.config.set(scheduler='synchronous')
@@ -242,263 +242,263 @@ dask.config.set(scheduler='synchronous')
 ```python
 import dask
 
-# Temporarily use different scheduler
+# 暫時使用不同的排程器
 with dask.config.set(scheduler='processes'):
     result = computation.compute()
 
-# Back to default scheduler
+# 回到預設排程器
 result2 = computation2.compute()
 ```
 
-### Per-Compute
+### 每次 Compute
 
 ```python
-# Specify scheduler per compute call
+# 每次 compute 呼叫指定排程器
 result = computation.compute(scheduler='threads')
 result = computation.compute(scheduler='processes')
 result = computation.compute(scheduler='synchronous')
 ```
 
-### Distributed Client
+### 分散式 Client
 
 ```python
 from dask.distributed import Client
 
-# Using client automatically sets distributed scheduler
+# 使用 client 自動設定分散式排程器
 client = Client()
 
-# All computations use distributed scheduler
+# 所有運算使用分散式排程器
 result = computation.compute()
 
 client.close()
 ```
 
-## Choosing the Right Scheduler
+## 選擇正確的排程器
 
-### Decision Matrix
+### 決策矩陣
 
-| Workload Type | Recommended Scheduler | Rationale |
+| 工作負載類型 | 建議排程器 | 理由 |
 |--------------|----------------------|-----------|
-| NumPy/Pandas operations | Threads (default) | GIL-releasing, shared memory |
-| Pure Python objects | Processes | Avoids GIL contention |
-| Text/log processing | Processes | Python-heavy operations |
-| Debugging | Synchronous | Easy debugging, deterministic |
-| Need dashboard | Local Distributed | Monitoring and diagnostics |
-| Multi-machine | Cluster Distributed | Exceeds single machine capacity |
-| Small data, quick tasks | Threads | Lowest overhead |
-| Large data, single machine | Local Distributed | Better memory management |
+| NumPy/Pandas 操作 | 執行緒（預設） | 釋放 GIL，共享記憶體 |
+| 純 Python 物件 | 程序 | 避免 GIL 競爭 |
+| 文字/日誌處理 | 程序 | Python 密集型操作 |
+| 除錯 | 同步 | 易於除錯，確定性 |
+| 需要儀表板 | 本地分散式 | 監控和診斷 |
+| 多機器 | 叢集分散式 | 超過單機容量 |
+| 小資料，快速任務 | 執行緒 | 最低開銷 |
+| 大資料，單機 | 本地分散式 | 更好的記憶體管理 |
 
-### Performance Considerations
+### 效能考量
 
-**Threads**:
-- Overhead: ~10 µs per task
-- Best for: Numeric operations
-- Memory: Shared
-- GIL: Affected by GIL
+**執行緒**：
+- 開銷：每個任務約 10 µs
+- 最適合：數值操作
+- 記憶體：共享
+- GIL：受 GIL 影響
 
-**Processes**:
-- Overhead: ~10 ms per task
-- Best for: Python operations
-- Memory: Copied between processes
-- GIL: Not affected
+**程序**：
+- 開銷：每個任務約 10 ms
+- 最適合：Python 操作
+- 記憶體：程序間複製
+- GIL：不受影響
 
-**Synchronous**:
-- Overhead: ~1 µs per task
-- Best for: Debugging
-- Memory: No parallelism
-- GIL: Not relevant
+**同步**：
+- 開銷：每個任務約 1 µs
+- 最適合：除錯
+- 記憶體：無平行化
+- GIL：不相關
 
-**Distributed**:
-- Overhead: ~1 ms per task
-- Best for: Complex workflows, monitoring
-- Memory: Managed by scheduler
-- GIL: Workers can use threads or processes
+**分散式**：
+- 開銷：每個任務約 1 ms
+- 最適合：複雜工作流程、監控
+- 記憶體：由排程器管理
+- GIL：Workers 可以使用執行緒或程序
 
-## Thread Configuration for Distributed Scheduler
+## 分散式排程器的執行緒配置
 
-### Setting Thread Count
+### 設定執行緒數量
 
 ```python
 from dask.distributed import Client
 
-# Control thread/worker configuration
+# 控制執行緒/worker 配置
 client = Client(
-    n_workers=4,           # Number of worker processes
-    threads_per_worker=2   # Threads per worker process
+    n_workers=4,           # worker 程序數量
+    threads_per_worker=2   # 每個 worker 程序的執行緒數
 )
 ```
 
-### Recommended Configuration
+### 建議配置
 
-**For Numeric Workloads**:
-- Aim for roughly 4 threads per process
-- Balance between parallelism and overhead
-- Example: 8 cores → 2 workers with 4 threads each
+**用於數值工作負載**：
+- 目標約每個程序 4 個執行緒
+- 平行性和開銷之間取得平衡
+- 範例：8 核心 → 2 個 workers，每個 4 個執行緒
 
-**For Python Workloads**:
-- Use more workers with fewer threads
-- Example: 8 cores → 8 workers with 1 thread each
+**用於 Python 工作負載**：
+- 使用更多 workers，更少執行緒
+- 範例：8 核心 → 8 個 workers，每個 1 個執行緒
 
-### Environment Variables
+### 環境變數
 
 ```bash
-# Set thread count via environment
+# 透過環境設定執行緒數量
 export DASK_NUM_WORKERS=4
 export DASK_THREADS_PER_WORKER=2
 
-# Or via config file
+# 或透過設定檔
 ```
 
-## Common Patterns
+## 常見模式
 
-### Development to Production
+### 從開發到生產
 
 ```python
-# Development: Use local distributed for testing
+# 開發：使用本地分散式進行測試
 from dask.distributed import Client
-client = Client(processes=False)  # In-process for debugging
+client = Client(processes=False)  # 程序內以便除錯
 
-# Production: Scale to cluster
+# 生產：擴展到叢集
 from dask.distributed import Client
 client = Client('scheduler-address:8786')
 ```
 
-### Mixed Workloads
+### 混合工作負載
 
 ```python
 import dask
 import dask.dataframe as dd
 
-# Use threads for DataFrame operations
+# 對 DataFrame 操作使用執行緒
 ddf = dd.read_parquet('data.parquet')
 result1 = ddf.mean().compute(scheduler='threads')
 
-# Use processes for Python code
+# 對 Python 程式碼使用程序
 import dask.bag as db
 bag = db.read_text('logs/*.txt')
 result2 = bag.map(parse_log).compute(scheduler='processes')
 ```
 
-### Debugging Workflow
+### 除錯工作流程
 
 ```python
 import dask
 
-# Step 1: Debug with synchronous scheduler
+# 步驟 1：使用同步排程器除錯
 dask.config.set(scheduler='synchronous')
 result = problematic_computation.compute()
 
-# Step 2: Test with threads
+# 步驟 2：使用執行緒測試
 dask.config.set(scheduler='threads')
 result = computation.compute()
 
-# Step 3: Scale with distributed
+# 步驟 3：使用分散式擴展
 from dask.distributed import Client
 client = Client()
 result = computation.compute()
 ```
 
-## Monitoring and Diagnostics
+## 監控和診斷
 
-### Dashboard Access (Distributed Only)
+### 儀表板存取（僅分散式）
 
 ```python
 from dask.distributed import Client
 
 client = Client()
 
-# Get dashboard URL
+# 取得儀表板 URL
 print(client.dashboard_link)
-# Opens dashboard in browser showing:
-# - Task progress
-# - Worker status
-# - Memory usage
-# - Task stream
-# - Resource utilization
+# 在瀏覽器中開啟儀表板，顯示：
+# - 任務進度
+# - Worker 狀態
+# - 記憶體使用
+# - 任務串流
+# - 資源使用率
 ```
 
-### Performance Profiling
+### 效能分析
 
 ```python
-# Profile computation
+# 分析運算
 from dask.distributed import Client
 
 client = Client()
 result = computation.compute()
 
-# Get performance report
+# 取得效能報告
 client.profile(filename='profile.html')
 ```
 
-### Resource Monitoring
+### 資源監控
 
 ```python
-# Check worker info
+# 檢查 worker 資訊
 client.scheduler_info()
 
-# Get current tasks
+# 取得當前任務
 client.who_has()
 
-# Memory usage
+# 記憶體使用
 client.run(lambda: psutil.virtual_memory().percent)
 ```
 
-## Advanced Configuration
+## 進階配置
 
-### Custom Executors
+### 自訂 Executors
 
 ```python
 from concurrent.futures import ThreadPoolExecutor
 import dask
 
-# Use custom thread pool
+# 使用自訂執行緒池
 with ThreadPoolExecutor(max_workers=4) as executor:
     dask.config.set(pool=executor)
     result = computation.compute(scheduler='threads')
 ```
 
-### Adaptive Scaling (Distributed)
+### 自適應擴展（分散式）
 
 ```python
 from dask.distributed import Client
 
 client = Client()
 
-# Enable adaptive scaling
+# 啟用自適應擴展
 client.cluster.adapt(minimum=2, maximum=10)
 
-# Cluster scales based on workload
+# 叢集根據工作負載擴展
 result = computation.compute()
 ```
 
-### Worker Plugins
+### Worker 外掛
 
 ```python
 from dask.distributed import Client, WorkerPlugin
 
 class CustomPlugin(WorkerPlugin):
     def setup(self, worker):
-        # Initialize worker-specific resources
+        # 初始化 worker 特定資源
         worker.custom_resource = initialize_resource()
 
 client = Client()
 client.register_worker_plugin(CustomPlugin())
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Slow Performance with Threads
-**Problem**: Pure Python code slow with threaded scheduler
-**Solution**: Switch to processes or distributed scheduler
+### 執行緒效能緩慢
+**問題**：純 Python 程式碼在執行緒排程器下很慢
+**解決方案**：切換到程序或分散式排程器
 
-### Memory Errors with Processes
-**Problem**: Data too large to pickle/copy between processes
-**Solution**: Use threaded or distributed scheduler
+### 程序記憶體錯誤
+**問題**：資料太大無法在程序間 pickle/複製
+**解決方案**：使用執行緒或分散式排程器
 
-### Debugging Difficult
-**Problem**: Can't use pdb with parallel schedulers
-**Solution**: Use synchronous scheduler for debugging
+### 難以除錯
+**問題**：無法在平行排程器中使用 pdb
+**解決方案**：使用同步排程器進行除錯
 
-### Task Overhead High
-**Problem**: Many tiny tasks causing overhead
-**Solution**: Use threaded scheduler (lowest overhead) or increase chunk sizes
+### 任務開銷過高
+**問題**：許多微小任務導致開銷
+**解決方案**：使用執行緒排程器（最低開銷）或增加分塊大小

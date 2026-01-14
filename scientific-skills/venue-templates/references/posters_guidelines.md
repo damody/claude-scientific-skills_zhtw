@@ -1,318 +1,318 @@
-# Research Poster Guidelines
+# 研究海報指南
 
-Comprehensive guidelines for creating effective academic research posters including sizing, layout, typography, and design best practices.
+製作有效學術研究海報的完整指南，包含尺寸、版面配置、字型和設計最佳實踐。
 
-**Last Updated**: 2024
+**最後更新**：2024
 
 ---
 
-## Standard Poster Sizes
+## 標準海報尺寸
 
-### International Sizes (ISO 216)
+### 國際尺寸（ISO 216）
 
-| Size | Dimensions (mm) | Dimensions (inches) | Common Use |
+| 尺寸 | 尺寸（mm） | 尺寸（英寸） | 常見用途 |
 |------|----------------|---------------------|------------|
-| **A0** | 841 × 1189 | 33.1 × 46.8 | Most common international standard |
-| **A1** | 594 × 841 | 23.4 × 33.1 | Smaller conferences, travel-friendly |
-| **A2** | 420 × 594 | 16.5 × 23.4 | Mini posters, small venues |
+| **A0** | 841 × 1189 | 33.1 × 46.8 | 最常見的國際標準 |
+| **A1** | 594 × 841 | 23.4 × 33.1 | 較小型會議、方便攜帶 |
+| **A2** | 420 × 594 | 16.5 × 23.4 | 迷你海報、小型場所 |
 
-### US Sizes
+### 美國尺寸
 
-| Size | Dimensions (inches) | Dimensions (mm) | Common Use |
+| 尺寸 | 尺寸（英寸） | 尺寸（mm） | 常見用途 |
 |------|-------------------|-----------------|------------|
-| **36" × 48"** | 36 × 48 | 914 × 1219 | Common US conference size (portrait) |
-| **42" × 56"** | 42 × 56 | 1067 × 1422 | Large format US posters |
-| **48" × 36"** | 48 × 36 | 1219 × 914 | Landscape orientation |
-| **48" × 96"** | 48 × 96 | 1219 × 2438 | Extra-wide format |
+| **36" × 48"** | 36 × 48 | 914 × 1219 | 常見美國會議尺寸（直式） |
+| **42" × 56"** | 42 × 56 | 1067 × 1422 | 大型美國海報 |
+| **48" × 36"** | 48 × 36 | 1219 × 914 | 橫式方向 |
+| **48" × 96"** | 48 × 96 | 1219 × 2438 | 超寬格式 |
 
-### Other Common Sizes
+### 其他常見尺寸
 
-| Size | Dimensions | Notes |
+| 尺寸 | 尺寸 | 備註 |
 |------|-----------|-------|
-| **90 cm × 120 cm** | 900 × 1200 mm / 35.4 × 47.2 in | Common in Europe |
-| **40" × 30"** | 1016 × 762 mm | Landscape format |
-| **3 ft × 4 ft** | 914 × 1219 mm / 36 × 48 in | Same as 36×48 |
+| **90 cm × 120 cm** | 900 × 1200 mm / 35.4 × 47.2 in | 歐洲常見 |
+| **40" × 30"** | 1016 × 762 mm | 橫式格式 |
+| **3 ft × 4 ft** | 914 × 1219 mm / 36 × 48 in | 同 36×48 |
 
-### Orientation
+### 方向
 
-- **Portrait**: Most common (height > width)
-  - Better for long visual flows (top to bottom)
-  - Examples: A0, 36"×48"
-- **Landscape**: Less common but sometimes preferred
-  - Better for wide content, timelines
-  - Examples: 48"×36", 40"×30"
+- **直式（Portrait）**：最常見（高度 > 寬度）
+  - 適合長視覺流程（由上而下）
+  - 範例：A0、36"×48"
+- **橫式（Landscape）**：較不常見但有時偏好
+  - 適合寬內容、時間軸
+  - 範例：48"×36"、40"×30"
 
-**Always verify**: Check conference specifications before designing!
+**務必確認**：設計前請檢查會議規格！
 
 ---
 
-## Typography and Font Sizes
+## 字型與字體大小
 
-### Recommended Font Sizes by Distance
+### 依觀看距離建議的字體大小
 
-Posters are viewed from 3-6 feet (1-2 meters) away:
+海報從 3-6 英尺（1-2 公尺）外觀看：
 
-| Element | Size Range | Recommended |
+| 元素 | 大小範圍 | 建議值 |
 |---------|-----------|-------------|
-| **Title** | 60-85 pt | 72-85 pt |
-| **Author Names** | 48-60 pt | 54 pt |
-| **Affiliations** | 32-40 pt | 36 pt |
-| **Section Headers** | 36-48 pt | 42 pt |
-| **Body Text** | 24-32 pt | 28 pt |
-| **Figure Captions** | 20-24 pt | 22 pt |
-| **References** | 18-22 pt | 20 pt |
+| **標題** | 60-85 pt | 72-85 pt |
+| **作者姓名** | 48-60 pt | 54 pt |
+| **單位** | 32-40 pt | 36 pt |
+| **章節標題** | 36-48 pt | 42 pt |
+| **內文** | 24-32 pt | 28 pt |
+| **圖說** | 20-24 pt | 22 pt |
+| **參考文獻** | 18-22 pt | 20 pt |
 
-### Font Families
+### 字型家族
 
-**Sans-Serif (Recommended for Posters)**:
+**無襯線字型（Sans-Serif，海報建議使用）**：
 - Arial
 - Helvetica
 - Calibri
 - Futura
 - Gill Sans
-- **Why**: Clean, readable at distance
+- **原因**：清晰、遠距離可讀
 
-**Serif (Use Sparingly)**:
+**襯線字型（Serif，謹慎使用）**：
 - Times New Roman
 - Georgia
 - Palatino
-- **When**: Body text if preferred, but sans-serif better for headers
+- **使用時機**：如偏好可用於內文，但標題最好用無襯線字型
 
-**Monospace**:
+**等寬字型（Monospace）**：
 - Courier New
 - Consolas
-- **When**: Code snippets only
+- **使用時機**：僅用於程式碼片段
 
-### Typography Best Practices
+### 字型最佳實踐
 
-1. **Limit fonts**: Use 1-2 font families maximum
-2. **Hierarchy**: Establish clear size hierarchy
-3. **Weight**: Use bold for emphasis, not italics
-4. **Alignment**: Left-align body text, center title
-5. **Spacing**: Generous line spacing (1.2-1.5)
-6. **Consistency**: Same fonts for similar elements
+1. **限制字型**：最多使用 1-2 種字型家族
+2. **層次**：建立清晰的大小層次
+3. **粗細**：使用粗體強調，而非斜體
+4. **對齊**：內文左對齊，標題置中
+5. **間距**：充足的行距（1.2-1.5）
+6. **一致性**：類似元素使用相同字型
 
 ---
 
-## Layout and Design Principles
+## 版面配置與設計原則
 
-### Grid-Based Layouts
+### 網格式版面配置
 
-**Column Structures**:
+**欄結構**：
 
-| Layout | Columns | Best For |
+| 版面配置 | 欄數 | 適用場景 |
 |--------|---------|----------|
-| **Single Column** | 1 | Simple, linear flow; timeline posters |
-| **Two Column** | 2 | Most common; balanced layout |
-| **Three Column** | 3 | Dense content; multi-part studies |
-| **Four Column** | 4 | Very dense; avoid if possible |
+| **單欄** | 1 | 簡單、線性流程；時間軸海報 |
+| **雙欄** | 2 | 最常見；平衡的版面配置 |
+| **三欄** | 3 | 密集內容；多部分研究 |
+| **四欄** | 4 | 非常密集；盡可能避免 |
 
-**Recommended**: **2 or 3 columns** for most research posters
+**建議**：大多數研究海報使用 **2 或 3 欄**
 
-### Visual Flow
+### 視覺流程
 
-**Reading Order** (Western conventions):
-1. Top to bottom
-2. Left to right
-3. Z-pattern or F-pattern
+**閱讀順序**（西方慣例）：
+1. 由上而下
+2. 由左而右
+3. Z 型或 F 型模式
 
-**Section Ordering** (typical):
+**章節順序**（典型）：
 ```
 +----------------------------------+
-|            TITLE                 |
-|     Authors, Affiliations        |
+|            標題                   |
+|      作者、單位                   |
 +----------------------------------+
-| Introduction | Results           |
-|              |                   |
-| Methods      | Discussion        |
-|              |                   |
-| [Optional]   | Conclusions       |
+| 引言       | 結果                |
+|            |                     |
+| 方法       | 討論                |
+|            |                     |
+| [可選]     | 結論                |
 +----------------------------------+
-|         References / QR Code     |
+|         參考文獻 / QR Code        |
 +----------------------------------+
 ```
 
-### Spacing and Margins
+### 間距與邊距
 
-- **Outer margins**: 1-2 inches (2.5-5 cm) all sides
-- **Column spacing**: 0.5-1 inch (1.3-2.5 cm)
-- **Inter-section spacing**: 0.5-1 inch
-- **White space**: 30-40% of poster should be white space
+- **外邊距**：四邊 1-2 英寸（2.5-5 cm）
+- **欄間距**：0.5-1 英寸（1.3-2.5 cm）
+- **章節間距**：0.5-1 英寸
+- **留白**：海報的 30-40% 應為留白
 
-**Avoid**: Dense, text-heavy layouts with minimal white space
-
----
-
-## Color Schemes
-
-### Colorblind-Safe Palettes
-
-Use colorblind-friendly color combinations:
-
-**Okabe-Ito Palette** (Recommended):
-- Orange: `#E69F00`
-- Sky Blue: `#56B4E9`
-- Bluish Green: `#009E73`
-- Yellow: `#F0E442`
-- Blue: `#0072B2`
-- Vermillion: `#D55E00`
-- Reddish Purple: `#CC79A7`
-- Black: `#000000`
-- Gray: `#999999`
-
-**Viridis Palette** (sequential):
-- Good for heatmaps and gradients
-- Colorblind-safe and perceptually uniform
-
-### Color Usage Guidelines
-
-**Background**:
-- **White or light gray**: Most common, professional
-- **Light colored**: Pale blue, beige (use cautiously)
-- **Avoid dark backgrounds**: Harder to read, expensive to print
-
-**Text**:
-- **Dark on light**: Black or dark gray text on white/light backgrounds
-- **Contrast ratio**: At least 4.5:1 (WCAG AA standard)
-
-**Accent Colors**:
-- Use 2-3 accent colors maximum
-- Section headers, key findings
-- Consistent throughout poster
-
-**Figures**:
-- Colorblind-safe palettes
-- Sufficient contrast
-- Test in grayscale
-
-### Color Contrast Tools
-- WebAIM Contrast Checker: https://webaim.org/resources/contrastchecker/
-- Coblis (Color Blindness Simulator): https://www.color-blindness.com/coblis-color-blindness-simulator/
+**避免**：密集、文字過多且留白最少的版面配置
 
 ---
 
-## Content Structure
+## 配色方案
 
-### Essential Sections
+### 色盲友善調色盤
 
-#### 1. Title Section
-- **Title**: Clear, specific, engaging
-- **Authors**: Names (underline presenting author)
-- **Affiliations**: Institutions, departments
-- **Logo**: Institutional logo (corner)
-- **Contact**: Email, QR code to paper/website
+使用色盲友善的色彩組合：
 
-#### 2. Introduction/Background
-- **Purpose**: Context and motivation
-- **Length**: 100-200 words
-- **Include**: 
-  - Problem statement
-  - Research gap
-  - Objectives/hypothesis
+**Okabe-Ito 調色盤**（建議使用）：
+- 橙色：`#E69F00`
+- 天空藍：`#56B4E9`
+- 藍綠色：`#009E73`
+- 黃色：`#F0E442`
+- 藍色：`#0072B2`
+- 朱紅色：`#D55E00`
+- 紅紫色：`#CC79A7`
+- 黑色：`#000000`
+- 灰色：`#999999`
 
-#### 3. Methods
-- **Purpose**: How you did the study
-- **Format**: 
-  - Bullet points preferred
-  - Flow diagram if complex
-  - Key parameters
-- **Include**: Sample size, procedures, analysis
+**Viridis 調色盤**（序列型）：
+- 適合熱圖和漸層
+- 色盲友善且感知均勻
 
-#### 4. Results
-- **Purpose**: What you found
-- **Format**: Primarily visual (figures, tables, charts)
-- **Include**:
-  - Key findings (2-4 main results)
-  - Statistical significance
-  - Visual evidence
+### 色彩使用指南
 
-#### 5. Discussion/Conclusions
-- **Purpose**: What it means
-- **Length**: 100-200 words
-- **Include**:
-  - Interpretation
-  - Implications
-  - Limitations
-  - Future work
+**背景**：
+- **白色或淺灰色**：最常見、專業
+- **淺色**：淡藍色、米色（謹慎使用）
+- **避免深色背景**：難以閱讀、列印成本高
 
-#### 6. References
-- **Format**: Small font, abbreviated citations
-- **Include**: Key citations only (5-10)
-- **Style**: Any consistent style
+**文字**：
+- **淺底深字**：白色/淺色背景上的黑色或深灰色文字
+- **對比度**：至少 4.5:1（WCAG AA 標準）
 
-### Optional Sections
-- **Abstract**: Sometimes included, often omitted
-- **Acknowledgments**: Funding, collaborators
-- **Future Work**: Next steps
+**強調色**：
+- 最多使用 2-3 種強調色
+- 用於章節標題、關鍵發現
+- 全海報保持一致
+
+**圖片**：
+- 色盲友善調色盤
+- 足夠的對比度
+- 以灰階測試
+
+### 色彩對比工具
+- WebAIM Contrast Checker：https://webaim.org/resources/contrastchecker/
+- Coblis（色盲模擬器）：https://www.color-blindness.com/coblis-color-blindness-simulator/
 
 ---
 
-## Visual Elements
+## 內容結構
 
-### Figures and Plots
+### 必要章節
 
-**Principles**:
-1. **Simplify**: Remove clutter, emphasize key points
-2. **Enlarge**: Make larger than in paper
-3. **Label clearly**: Large axis labels, legends
-4. **Standalone**: Each figure tells a complete story
-5. **High resolution**: 300 dpi minimum
+#### 1. 標題區塊
+- **標題**：清晰、具體、引人注目
+- **作者**：姓名（報告者劃線）
+- **單位**：機構、系所
+- **標誌**：機構標誌（角落）
+- **聯絡**：電子郵件、論文/網站的 QR code
 
-**Figure Types**:
-- **Photographs**: High quality, cropped appropriately
-- **Graphs**: Bar charts, line plots, scatter plots
-- **Heatmaps**: Use colorblind-safe colormaps
-- **Schematics**: Diagrams, flowcharts
-- **Tables**: Simple tables (complex tables → figure)
+#### 2. 引言/背景
+- **目的**：背景與動機
+- **長度**：100-200 字
+- **包含**：
+  - 問題陳述
+  - 研究缺口
+  - 目標/假說
 
-### Tables
+#### 3. 方法
+- **目的**：如何進行研究
+- **格式**：
+  - 偏好條列式
+  - 如複雜則使用流程圖
+  - 關鍵參數
+- **包含**：樣本大小、程序、分析
 
-**When to Use**:
-- Precise numerical values needed
-- Comparisons across conditions
-- Summary statistics
+#### 4. 結果
+- **目的**：發現了什麼
+- **格式**：以視覺為主（圖片、表格、圖表）
+- **包含**：
+  - 關鍵發現（2-4 個主要結果）
+  - 統計顯著性
+  - 視覺證據
 
-**Best Practices**:
-- **Keep simple**: 3-5 columns, 5-10 rows maximum
-- **Large fonts**: Same size as body text
-- **Clear headers**: Bold column/row headers
-- **Alternating rows**: Light shading for readability
-- **Minimal lines**: Horizontal lines only (no vertical)
+#### 5. 討論/結論
+- **目的**：這意味著什麼
+- **長度**：100-200 字
+- **包含**：
+  - 解釋
+  - 意涵
+  - 限制
+  - 未來工作
 
-### Icons and Graphics
+#### 6. 參考文獻
+- **格式**：小字型、縮寫引用
+- **包含**：僅關鍵引用（5-10 篇）
+- **格式**：任何一致的格式
 
-**Use**:
-- Icons for visual interest (methods, concepts)
-- Simple graphics to break text
-- Arrows to guide flow
-
-**Sources**:
-- Noun Project: https://thenounproject.com/
-- BioRender: https://biorender.com/ (scientific illustrations)
-- Font Awesome: https://fontawesome.com/ (icons)
-
-**Caution**: Don't overuse; maintain professionalism
+### 可選章節
+- **摘要**：有時包含，常被省略
+- **致謝**：經費、合作者
+- **未來工作**：下一步
 
 ---
 
-## LaTeX Poster Packages
+## 視覺元素
+
+### 圖片與圖表
+
+**原則**：
+1. **簡化**：移除雜亂，強調關鍵點
+2. **放大**：比論文中更大
+3. **清楚標註**：大字型的軸標籤、圖例
+4. **獨立完整**：每張圖講述完整故事
+5. **高解析度**：最低 300 dpi
+
+**圖片類型**：
+- **照片**：高品質、適當裁切
+- **圖表**：長條圖、折線圖、散點圖
+- **熱圖**：使用色盲友善色彩圖
+- **示意圖**：圖解、流程圖
+- **表格**：簡單表格（複雜表格 → 圖片）
+
+### 表格
+
+**使用時機**：
+- 需要精確數值
+- 跨條件比較
+- 摘要統計
+
+**最佳實踐**：
+- **保持簡單**：最多 3-5 欄、5-10 列
+- **大字型**：與內文相同大小
+- **清楚標題**：粗體欄/列標題
+- **交替列**：淺色陰影提高可讀性
+- **最少線條**：僅水平線（無垂直線）
+
+### 圖示與圖形
+
+**使用**：
+- 圖示增加視覺趣味（方法、概念）
+- 簡單圖形打斷文字
+- 箭頭引導流程
+
+**資源**：
+- Noun Project：https://thenounproject.com/
+- BioRender：https://biorender.com/（科學插圖）
+- Font Awesome：https://fontawesome.com/（圖示）
+
+**注意**：不要過度使用；保持專業性
+
+---
+
+## LaTeX 海報套件
 
 ### beamerposter
 
-**Description**: Extension of Beamer for posters  
-**Best For**: Academic conferences, classic layout  
-**Pros**: 
-- Familiar to Beamer users
-- Clean, professional appearance
-- Many themes available
+**說明**：Beamer 的海報擴展
+**適用於**：學術會議、經典版面配置
+**優點**：
+- Beamer 使用者熟悉
+- 乾淨、專業外觀
+- 多種主題可用
 
-**Cons**:
-- Less flexible than tikzposter
-- Can be verbose
+**缺點**：
+- 比 tikzposter 彈性較低
+- 可能較冗長
 
-**Template**: `assets/posters/beamerposter_academic.tex`
+**模板**：`assets/posters/beamerposter_academic.tex`
 
-**Example Usage**:
+**使用範例**：
 ```latex
 \documentclass[final]{beamer}
 \usepackage[size=a0,scale=1.24]{beamerposter}
@@ -323,20 +323,20 @@ Use colorblind-friendly color combinations:
 
 ### tikzposter
 
-**Description**: Modern poster package using TikZ  
-**Best For**: Colorful, modern designs  
-**Pros**:
-- Highly customizable
-- Modern, attractive themes
-- Block-based layout
+**說明**：使用 TikZ 的現代海報套件
+**適用於**：色彩豐富、現代設計
+**優點**：
+- 高度可自訂
+- 現代、吸引人的主題
+- 區塊式版面配置
 
-**Cons**:
-- Steeper learning curve
-- Can be slow to compile
+**缺點**：
+- 學習曲線較陡
+- 編譯可能較慢
 
-**Template**: `assets/posters/tikzposter_research.tex`
+**模板**：`assets/posters/tikzposter_research.tex`
 
-**Example Usage**:
+**使用範例**：
 ```latex
 \documentclass[25pt, a0paper, portrait]{tikzposter}
 \usetheme{Autumn}
@@ -347,282 +347,281 @@ Use colorblind-friendly color combinations:
 
 ### baposter
 
-**Description**: Box-and-poster system  
-**Best For**: Structured, multi-column layouts  
-**Pros**:
-- Excellent column control
-- Header boxes, structured layout
-- Good for dense content
+**說明**：框與海報系統
+**適用於**：結構化、多欄版面配置
+**優點**：
+- 優秀的欄控制
+- 標題框、結構化版面配置
+- 適合密集內容
 
-**Cons**:
-- Complex syntax
-- Less commonly used
+**缺點**：
+- 語法複雜
+- 較不常用
 
-**Template**: `assets/posters/baposter_conference.tex`
+**模板**：`assets/posters/baposter_conference.tex`
 
-**Example Usage**:
+**使用範例**：
 ```latex
 \documentclass[a0paper,portrait]{baposter}
 ```
 
 ---
 
-## Printing and File Preparation
+## 列印與檔案準備
 
-### File Format
+### 檔案格式
 
-**For Printing**:
-- **PDF**: Universal standard
-- **High resolution**: 300 dpi minimum, 600 dpi for photos
-- **Color space**: RGB for most printers (check with printer)
-- **Embed fonts**: Ensure all fonts embedded
-- **Flatten**: No transparency issues
+**列印用**：
+- **PDF**：通用標準
+- **高解析度**：最低 300 dpi，照片 600 dpi
+- **色彩空間**：大多數印表機用 RGB（請與印刷商確認）
+- **嵌入字型**：確保所有字型已嵌入
+- **平面化**：無透明度問題
 
-### Print Quality Checks
+### 列印品質檢查
 
-Before printing:
-1. **Proofread**: Check for typos, errors
-2. **Colors**: Check in print preview
-3. **Resolution**: Zoom to 100%, check figure quality
-4. **Margins**: Verify nothing cut off
-5. **Test print**: Print small version (A4) to check layout
+列印前：
+1. **校對**：檢查錯字、錯誤
+2. **色彩**：在列印預覽中檢查
+3. **解析度**：放大至 100%，檢查圖片品質
+4. **邊距**：確認無內容被裁切
+5. **測試列印**：列印小版本（A4）檢查版面配置
 
-### Print Providers
+### 列印服務商
 
-**Options**:
-1. **University print shop**: Often cheapest, convenient
-2. **FedEx Office**: Widely available
-3. **Online services**: 
+**選項**：
+1. **大學印刷店**：通常最便宜、方便
+2. **FedEx Office**：廣泛可用
+3. **線上服務**：
    - Vistaprint
    - Printful
-   - Academic Poster Printing (specialized)
+   - Academic Poster Printing（專業服務）
 
-**Cost**: Typically $50-150 for A0 glossy poster
+**費用**：A0 亮面海報通常 $50-150
 
-### Paper Types
+### 紙張類型
 
-| Paper Type | Description | Best For |
+| 紙張類型 | 說明 | 適用場景 |
 |-----------|-------------|----------|
-| **Matte** | Non-reflective finish | Well-lit venues, minimal glare |
-| **Glossy** | Shiny, vibrant colors | Photos, colorful figures |
-| **Satin/Semi-gloss** | Between matte and glossy | Balanced option (recommended) |
-| **Fabric** | Wrinkle-resistant, rollable | Travel, re-use |
+| **霧面** | 無反光表面 | 光線充足的場所、最少眩光 |
+| **亮面** | 光亮、鮮豔色彩 | 照片、彩色圖片 |
+| **緞面/半亮面** | 介於霧面和亮面之間 | 平衡選擇（建議使用） |
+| **布質** | 防皺、可捲曲 | 旅行、重複使用 |
 
-**Recommendation**: **Satin or matte** for most academic posters
-
----
-
-## QR Codes
-
-### What to Include
-
-Generate QR codes linking to:
-- **Paper PDF**: Published or preprint
-- **Supplementary materials**: Data, code, videos
-- **Personal website**: Lab or researcher page
-- **Video abstract**: 1-2 minute video summary
-- **Online version**: Interactive poster
-
-### Placement
-
-- **Common locations**: 
-  - Bottom right corner
-  - Next to references
-  - Near contact information
-- **Size**: 3-4 inches (7-10 cm) square
-- **Label**: "Scan for paper" or "More info"
-
-### QR Code Generators
-- QR Code Generator: https://www.qr-code-generator.com/
-- QRStuff: https://www.qrstuff.com/
-- LaTeX package: `qrcode` for generating in LaTeX
+**建議**：大多數學術海報使用**緞面或霧面**
 
 ---
 
-## Design Best Practices
+## QR Code
 
-### Do's
+### 包含內容
 
-✓ **Use large fonts** (28pt+ for body text)  
-✓ **Keep text minimal** (30-40% of poster)  
-✓ **Use visuals** (60-70% figures, plots, images)  
-✓ **Tell a story** (clear narrative flow)  
-✓ **Colorblind-safe colors**  
-✓ **Test readability** (view from 6 feet away)  
-✓ **Include contact info** (email, QR code)  
-✓ **Proofread** (multiple times!)
+生成連結到的 QR code：
+- **論文 PDF**：已發表或預印本
+- **補充材料**：資料、程式碼、影片
+- **個人網站**：實驗室或研究人員頁面
+- **影片摘要**：1-2 分鐘影片摘要
+- **線上版本**：互動式海報
 
-### Don'ts
+### 放置位置
 
-✗ **Don't use small fonts** (<24pt body text)  
-✗ **Don't overcrowd** (leave white space)  
-✗ **Don't use complex tables** (simplify or visualize)  
-✗ **Don't use full paragraphs** (use bullets)  
-✗ **Don't use many fonts** (1-2 max)  
-✗ **Don't use low-res images** (<300 dpi)  
-✗ **Don't use red-green contrasts** (colorblind issue)  
-✗ **Don't make it a paper** (posters ≠ papers)
+- **常見位置**：
+  - 右下角
+  - 參考文獻旁
+  - 聯絡資訊附近
+- **尺寸**：3-4 英寸（7-10 cm）正方形
+- **標籤**：「Scan for paper」或「More info」
 
----
-
-## Poster Presentation Tips
-
-### During the Poster Session
-
-1. **Stand by your poster**: Be available, engaged
-2. **Elevator pitch ready**: 1-2 minute summary prepared
-3. **Different depths**: Short version (1 min), medium (3 min), deep dive (10 min)
-4. **Engage visitors**: Ask questions, invite discussion
-5. **Business cards**: Have them ready
-6. **Notebook**: Record feedback, questions
-7. **Handouts**: Optional 1-page summary (with QR code)
-
-### Talking Through Your Poster
-
-**30-second version**:
-- What is the problem?
-- What did you do?
-- What did you find?
-
-**2-minute version**:
-- Background + motivation
-- Methods (briefly)
-- Key result (show main figure)
-- Conclusion + implications
-
-**5+ minute version**:
-- Full walkthrough
-- Address specific questions
-- Discuss limitations, future work
+### QR Code 生成器
+- QR Code Generator：https://www.qr-code-generator.com/
+- QRStuff：https://www.qrstuff.com/
+- LaTeX 套件：`qrcode` 用於在 LaTeX 中生成
 
 ---
 
-## Accessibility Considerations
+## 設計最佳實踐
 
-### Visual Accessibility
+### 應該做的
 
-1. **Color contrast**: High contrast (4.5:1 minimum)
-2. **Colorblind-safe**: Use Okabe-Ito or similar palettes
-3. **Font size**: Large enough to read from distance
-4. **Font choice**: Clear, sans-serif fonts
-5. **Alt text**: Consider providing text description
+✓ **使用大字型**（內文 28pt+）
+✓ **保持文字最少**（海報的 30-40%）
+✓ **使用視覺元素**（60-70% 圖片、圖表、影像）
+✓ **講述故事**（清晰的敘事流程）
+✓ **色盲友善色彩**
+✓ **測試可讀性**（從 6 英尺外觀看）
+✓ **包含聯絡資訊**（電子郵件、QR code）
+✓ **校對**（多次！）
 
-### Physical Accessibility
+### 不該做的
 
-1. **Mounting height**: Low enough for wheelchair users to read bottom
-2. **QR codes**: Provide alternative (short URL, handout)
-
----
-
-## Checklist Before Printing
-
-- [ ] Proofread all text (typos, grammar)
-- [ ] Check author names and affiliations
-- [ ] Verify all figures are high resolution (300+ dpi)
-- [ ] Ensure colorblind-safe color schemes
-- [ ] Test readability from 6 feet away (print small version)
-- [ ] Verify poster dimensions match conference requirements
-- [ ] Check that fonts are embedded in PDF
-- [ ] Include contact information (email, QR code)
-- [ ] Add institutional logo
-- [ ] Verify references are accurate
-- [ ] Ensure figures have clear labels and captions
-- [ ] Check that layout is not too dense (adequate white space)
-- [ ] Verify QR codes work (test scan)
-- [ ] Confirm file is high-resolution PDF
-- [ ] Get feedback from colleagues
+✗ **不要使用小字型**（內文 <24pt）
+✗ **不要過度擁擠**（留出留白）
+✗ **不要使用複雜表格**（簡化或視覺化）
+✗ **不要使用完整段落**（使用條列式）
+✗ **不要使用太多字型**（最多 1-2 種）
+✗ **不要使用低解析度影像**（<300 dpi）
+✗ **不要使用紅綠對比**（色盲問題）
+✗ **不要把它做成論文**（海報 ≠ 論文）
 
 ---
 
-## Example Poster Layouts
+## 海報報告技巧
 
-### Layout 1: Two-Column (Recommended for Most)
+### 海報展示期間
+
+1. **站在海報旁**：保持在場、參與
+2. **電梯簡報準備好**：準備 1-2 分鐘摘要
+3. **不同深度**：短版（1 分鐘）、中版（3 分鐘）、深入版（10 分鐘）
+4. **與訪客互動**：提問、邀請討論
+5. **名片**：準備好
+6. **筆記本**：記錄回饋、問題
+7. **講義**：可選的 1 頁摘要（含 QR code）
+
+### 講解海報
+
+**30 秒版本**：
+- 問題是什麼？
+- 您做了什麼？
+- 您發現了什麼？
+
+**2 分鐘版本**：
+- 背景 + 動機
+- 方法（簡短）
+- 關鍵結果（展示主要圖片）
+- 結論 + 意涵
+
+**5+ 分鐘版本**：
+- 完整講解
+- 回答具體問題
+- 討論限制、未來工作
+
+---
+
+## 無障礙考量
+
+### 視覺無障礙
+
+1. **色彩對比**：高對比度（最低 4.5:1）
+2. **色盲友善**：使用 Okabe-Ito 或類似調色盤
+3. **字體大小**：足夠大以便從遠處閱讀
+4. **字型選擇**：清晰的無襯線字型
+5. **替代文字**：考慮提供文字說明
+
+### 實體無障礙
+
+1. **懸掛高度**：低到輪椅使用者可閱讀底部
+2. **QR code**：提供替代方案（短網址、講義）
+
+---
+
+## 列印前檢核表
+
+- [ ] 校對所有文字（錯字、文法）
+- [ ] 檢查作者姓名和單位
+- [ ] 確認所有圖片為高解析度（300+ dpi）
+- [ ] 確保色盲友善配色方案
+- [ ] 從 6 英尺外測試可讀性（列印小版本）
+- [ ] 確認海報尺寸符合會議要求
+- [ ] 檢查字型已嵌入 PDF
+- [ ] 包含聯絡資訊（電子郵件、QR code）
+- [ ] 新增機構標誌
+- [ ] 確認參考文獻正確
+- [ ] 確保圖片有清楚的標籤和圖說
+- [ ] 檢查版面配置不會太密集（足夠留白）
+- [ ] 確認 QR code 可用（測試掃描）
+- [ ] 確認檔案為高解析度 PDF
+- [ ] 獲取同事回饋
+
+---
+
+## 範例海報版面配置
+
+### 版面配置 1：雙欄（大多數情況建議使用）
 
 ```
 +----------------------------------------+
-|              TITLE                     |
-|      Authors & Affiliations            |
+|              標題                       |
+|        作者 & 單位                      |
 +----------------------------------------+
-|  INTRO    |  RESULTS                   |
-|           |                            |
-|  METHODS  |  RESULTS (cont.)           |
-|           |                            |
-|           |  DISCUSSION/CONCLUSIONS    |
+|   引言     |  結果                      |
+|            |                           |
+|   方法     |  結果（續）                |
+|            |                           |
+|            |  討論/結論                 |
 +----------------------------------------+
-|        REFERENCES    |    QR CODE      |
+|        參考文獻     |    QR CODE        |
 +----------------------------------------+
 ```
 
-### Layout 2: Three-Column
+### 版面配置 2：三欄
 
 ```
 +---------------------------------------+
-|              TITLE                    |
-|      Authors & Affiliations           |
+|              標題                      |
+|        作者 & 單位                     |
 +---------------------------------------+
-| INTRO  | RESULTS | DISCUSSION         |
-|        |         |                    |
-| METHOD | RESULTS | CONCLUSIONS        |
-|        |         |                    |
-|        | RESULTS | FUTURE WORK        |
+| 引言   | 結果    | 討論                |
+|        |        |                     |
+| 方法   | 結果    | 結論                |
+|        |        |                     |
+|        | 結果    | 未來工作            |
 +---------------------------------------+
-|    REFERENCES       |   QR CODE       |
+|    參考文獻        |   QR CODE         |
 +---------------------------------------+
 ```
 
-### Layout 3: Horizontal Flow
+### 版面配置 3：水平流程
 
 ```
 +----------------------------------------+
-|              TITLE                     |
-|      Authors & Affiliations            |
+|              標題                       |
+|        作者 & 單位                      |
 +----------------------------------------+
-|  INTRODUCTION    |    METHODS          |
+|   引言          |    方法               |
 +----------------------------------------+
-|           RESULTS                      |
-|    (large figure spanning width)       |
+|            結果                         |
+|     （跨全寬的大圖片）                  |
 +----------------------------------------+
-|  DISCUSSION      |   CONCLUSIONS       |
+|   討論          |   結論                |
 +----------------------------------------+
-|        REFERENCES    |    QR CODE      |
+|        參考文獻     |    QR CODE        |
 +----------------------------------------+
 ```
 
 ---
 
-## Resources
+## 資源
 
-### LaTeX Templates
+### LaTeX 模板
 - `assets/posters/beamerposter_academic.tex`
 - `assets/posters/tikzposter_research.tex`
 - `assets/posters/baposter_conference.tex`
 
-### Online Resources
-- Better Posters Blog: https://betterposters.blogspot.com/
-- Colorblind Safe Palettes: https://colorbrewer2.org/
-- BioRender (scientific illustrations): https://biorender.com/
-- Poster Design Guide (Colin Purrington): https://colinpurrington.com/tips/poster-design/
+### 線上資源
+- Better Posters Blog：https://betterposters.blogspot.com/
+- Colorblind Safe Palettes：https://colorbrewer2.org/
+- BioRender（科學插圖）：https://biorender.com/
+- Poster Design Guide (Colin Purrington)：https://colinpurrington.com/tips/poster-design/
 
-### Tools
-- **Inkscape**: Free vector graphics editor
-- **PowerPoint**: Surprisingly popular for posters
-- **Illustrator**: Professional design tool
-- **LaTeX**: Best for reproducibility, version control
+### 工具
+- **Inkscape**：免費向量圖形編輯器
+- **PowerPoint**：令人驚訝地受歡迎用於海報
+- **Illustrator**：專業設計工具
+- **LaTeX**：最適合可重現性、版本控制
 
 ---
 
-## Summary
+## 摘要
 
-**Key Takeaways**:
+**重點摘要**：
 
-1. **Size**: Verify conference requirements (typically A0 or 36"×48")
-2. **Fonts**: Large (28pt+ body, 72pt+ title)
-3. **Layout**: 2-3 columns, generous white space
-4. **Visuals**: 60-70% visual content
-5. **Colors**: Colorblind-safe, high contrast
-6. **Content**: Tell a story, keep text minimal
-7. **Quality**: 300+ dpi, test print
-8. **Accessibility**: Readable from distance, clear hierarchy
+1. **尺寸**：確認會議要求（通常 A0 或 36"×48"）
+2. **字型**：大（內文 28pt+，標題 72pt+）
+3. **版面配置**：2-3 欄，充足留白
+4. **視覺元素**：60-70% 視覺內容
+5. **色彩**：色盲友善、高對比度
+6. **內容**：講述故事，保持文字最少
+7. **品質**：300+ dpi，測試列印
+8. **無障礙**：遠距離可讀、清晰層次
 
-**Remember**: A poster is **not a paper** - it's a visual summary designed to spark conversations!
-
+**記住**：海報**不是論文**——它是旨在引發對話的視覺摘要！

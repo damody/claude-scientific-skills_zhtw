@@ -1,194 +1,194 @@
-# Example: GBM Molecular Subtype Cohort Analysis
+# 範例：GBM 分子亞型世代分析
 
-## Clinical Context
+## 臨床背景
 
-This example demonstrates a patient cohort analysis stratified by molecular biomarkers, similar to the GBM Mesenchymal-Immune-Active cluster analysis provided as reference.
+本範例展示依分子生物標記分層的病患世代分析，類似於作為參考提供的 GBM 間葉-免疫活化群集分析。
 
-## Cohort Overview
+## 世代概述
 
-**Disease**: Glioblastoma (GBM), IDH-wild-type
+**疾病**：膠質母細胞瘤（GBM），IDH 野生型
 
-**Study Population**: n=60 patients with newly diagnosed GBM treated with standard Stupp protocol (temozolomide + radiation → adjuvant temozolomide)
+**研究群體**：n=60 位新診斷 GBM 病患，接受標準 Stupp 方案治療（temozolomide + 放射治療 → 輔助 temozolomide）
 
-**Molecular Classification**: Verhaak 2010 subtypes with immune signature refinement
-- **Group A**: Mesenchymal-Immune-Active subtype (n=18, 30%)
-- **Group B**: Other molecular subtypes (Proneural, Classical, Neural) (n=42, 70%)
+**分子分類**：Verhaak 2010 亞型加免疫特徵細化
+- **A 組**：間葉-免疫活化亞型（n=18，30%）
+- **B 組**：其他分子亞型（前神經型、經典型、神經型）（n=42，70%）
 
-**Study Period**: January 2019 - December 2022
+**研究期間**：2019 年 1 月 - 2022 年 12 月
 
-**Data Source**: Single academic medical center, retrospective cohort analysis
+**資料來源**：單一學術醫學中心，回顧性世代分析
 
-## Biomarker Classification
+## 生物標記分類
 
-### Mesenchymal-Immune-Active Subtype Characteristics
+### 間葉-免疫活化亞型特徵
 
-**Molecular Features**:
-- NF1 alterations (mutations or deletions): 72% (13/18)
-- High YKL-40 (CHI3L1) expression: 100% (18/18, median z-score +2.8)
-- Immune gene signature: Elevated (median ESTIMATE immune score +1250)
-- CD163+ macrophage infiltration: High density (median 195 cells/mm², range 120-340)
-- MES (mesenchymal) signature score: >0.5 (all patients)
+**分子特徵**：
+- NF1 變異（突變或缺失）：72%（13/18）
+- 高 YKL-40（CHI3L1）表現：100%（18/18，中位 z 分數 +2.8）
+- 免疫基因特徵：升高（中位 ESTIMATE 免疫評分 +1250）
+- CD163+ 巨噬細胞浸潤：高密度（中位 195 cells/mm²，範圍 120-340）
+- MES（間葉）特徵評分：>0.5（所有病患）
 
-**Clinical Characteristics**:
-- Median age: 64 years (range 42-76)
-- Male: 61% (11/18)
-- Tumor location: Temporal lobe predominant (55%)
-- Multifocal disease: 33% (6/18) - higher than overall cohort
+**臨床特徵**：
+- 中位年齡：64 歲（範圍 42-76）
+- 男性：61%（11/18）
+- 腫瘤位置：顳葉為主（55%）
+- 多發性疾病：33%（6/18）- 高於整體世代
 
-### Comparison Groups (Other Subtypes)
+### 比較組（其他亞型）
 
-**Molecular Features**:
-- Proneural: n=15 (25%) - PDGFRA amplification, younger age
-- Classical: n=18 (30%) - EGFR amplification, chromosome 7+/10-
-- Neural: n=9 (15%) - neuronal markers, may include normal tissue
+**分子特徵**：
+- 前神經型：n=15（25%）- PDGFRA 擴增，較年輕
+- 經典型：n=18（30%）- EGFR 擴增，染色體 7+/10-
+- 神經型：n=9（15%）- 神經元標記，可能包含正常組織
 
-## Treatment Outcomes
+## 治療結果
 
-### Response Assessment (RANO Criteria)
+### 反應評估（RANO 標準）
 
-**Objective Response Rate** (after chemoradiation, ~3 months):
-- Mesenchymal-Immune-Active: 6/18 (33%) - CR 0, PR 6  
-- Other subtypes: 18/42 (43%) - CR 1, PR 17
-- p = 0.48 (Fisher's exact)
+**客觀反應率**（化放療後，約 3 個月）：
+- 間葉-免疫活化型：6/18（33%）- CR 0，PR 6
+- 其他亞型：18/42（43%）- CR 1，PR 17
+- p = 0.48（Fisher's exact 檢定）
 
-**Interpretation**: No significant difference in initial response rates
+**解釋**：初始反應率無顯著差異
 
-### Survival Outcomes
+### 存活結果
 
-**Progression-Free Survival (PFS)**:
-- Mesenchymal-Immune-Active: Median 7.2 months (95% CI 5.8-9.1)
-- Other subtypes: Median 9.5 months (95% CI 8.1-11.3)
-- Hazard Ratio: 1.58 (95% CI 0.89-2.81), p = 0.12
-- 6-month PFS rate: 61% vs 74%
+**無惡化存活（PFS）**：
+- 間葉-免疫活化型：中位 7.2 個月（95% CI 5.8-9.1）
+- 其他亞型：中位 9.5 個月（95% CI 8.1-11.3）
+- 風險比：1.58（95% CI 0.89-2.81），p = 0.12
+- 6 個月 PFS 率：61% vs 74%
 
-**Overall Survival (OS)**:
-- Mesenchymal-Immune-Active: Median 12.8 months (95% CI 10.2-15.4)
-- Other subtypes: Median 16.3 months (95% CI 14.7-18.9)
-- Hazard Ratio: 1.72 (95% CI 0.95-3.11), p = 0.073
-- 12-month OS rate: 55% vs 68%
-- 24-month OS rate: 17% vs 31%
+**整體存活（OS）**：
+- 間葉-免疫活化型：中位 12.8 個月（95% CI 10.2-15.4）
+- 其他亞型：中位 16.3 個月（95% CI 14.7-18.9）
+- 風險比：1.72（95% CI 0.95-3.11），p = 0.073
+- 12 個月 OS 率：55% vs 68%
+- 24 個月 OS 率：17% vs 31%
 
-**Interpretation**: Trend toward worse survival in mesenchymal-immune-active subtype, not reaching statistical significance in this cohort size
+**解釋**：間葉-免疫活化亞型有較差存活的趨勢，但在此世代規模中未達統計顯著性
 
-### Response to Bevacizumab at Recurrence
+### 復發時對 Bevacizumab 的反應
 
-**Subset Analysis** (patients receiving bevacizumab at first recurrence, n=35):
-- Mesenchymal-Immune-Active: n=12
-  - ORR: 58% (7/12)
-  - Median PFS2 (from bevacizumab start): 6.8 months
-- Other subtypes: n=23
-  - ORR: 35% (8/23)
-  - Median PFS2: 4.2 months
-- p = 0.19 (Fisher's exact for ORR)
-- HR for PFS2: 0.62 (95% CI 0.29-1.32), p = 0.21
+**子集分析**（首次復發時接受 bevacizumab 的病患，n=35）：
+- 間葉-免疫活化型：n=12
+  - ORR：58%（7/12）
+  - 中位 PFS2（從 bevacizumab 開始）：6.8 個月
+- 其他亞型：n=23
+  - ORR：35%（8/23）
+  - 中位 PFS2：4.2 個月
+- p = 0.19（Fisher's exact 檢定，ORR）
+- PFS2 的 HR：0.62（95% CI 0.29-1.32），p = 0.21
 
-**Interpretation**: Exploratory finding suggesting enhanced benefit from bevacizumab in mesenchymal-immune-active subtype (not statistically significant with small sample)
+**解釋**：探索性發現提示間葉-免疫活化亞型可能從 bevacizumab 獲得增強益處（小樣本未達統計顯著性）
 
-## Safety Profile
+## 安全性概況
 
-**Treatment-Related Adverse Events** (Temozolomide):
+**治療相關不良事件**（Temozolomide）：
 
-No significant differences in toxicity between molecular subtypes:
-- Lymphopenia (any grade): 89% vs 86%, p = 0.77
-- Thrombocytopenia (grade 3-4): 22% vs 19%, p = 0.79
-- Fatigue (any grade): 94% vs 90%, p = 0.60
-- Treatment discontinuation: 17% vs 14%, p = 0.77
+分子亞型間毒性無顯著差異：
+- 淋巴細胞減少（任何等級）：89% vs 86%，p = 0.77
+- 血小板減少（3-4 級）：22% vs 19%，p = 0.79
+- 疲勞（任何等級）：94% vs 90%，p = 0.60
+- 治療中止：17% vs 14%，p = 0.77
 
-## Clinical Implications
+## 臨床影響
 
-### Treatment Recommendations
+### 治療建議
 
-**For Mesenchymal-Immune-Active GBM**:
+**針對間葉-免疫活化型 GBM**：
 
-1. **First-Line**: Standard Stupp protocol (no change based on subtype)
-   - Evidence: No proven benefit for alternative first-line strategies
-   - GRADE: 1A (strong recommendation, high-quality evidence)
+1. **第一線**：標準 Stupp 方案（不因亞型而改變）
+   - 證據：無證據顯示替代第一線策略有益處
+   - GRADE：1A（強力建議，高品質證據）
 
-2. **At Recurrence - Consider Bevacizumab Earlier**:
-   - Rationale: Exploratory data suggesting enhanced anti-angiogenic response
-   - Evidence: Mesenchymal GBM has high VEGF expression, angiogenic phenotype
-   - GRADE: 2C (conditional recommendation, low-quality evidence from subset)
+2. **復發時 - 考慮較早使用 Bevacizumab**：
+   - 理由：探索性資料提示增強的抗血管生成反應
+   - 證據：間葉型 GBM 有高 VEGF 表現，血管生成表型
+   - GRADE：2C（有條件建議，來自子集的低品質證據）
 
-3. **Clinical Trial Enrollment - Immunotherapy Combinations**:
-   - Rationale: High immune cell infiltration may predict immunotherapy benefit
-   - Targets: PD-1/PD-L1 blockade ± anti-CTLA-4 or anti-angiogenic agents
-   - Evidence: Ongoing trials (CheckMate-498, CheckMate-548 showed negative results, but did not select for immune-active)
-   - GRADE: R (research recommendation)
+3. **臨床試驗登記 - 免疫治療組合**：
+   - 理由：高免疫細胞浸潤可能預測免疫治療益處
+   - 標靶：PD-1/PD-L1 阻斷 ± 抗 CTLA-4 或抗血管生成劑
+   - 證據：進行中試驗（CheckMate-498、CheckMate-548 顯示陰性結果，但未選擇免疫活化型）
+   - GRADE：R（研究建議）
 
-**For Other GBM Subtypes**:
-- Standard treatment per NCCN guidelines
-- Consider tumor treating fields (Optune) after radiation completion
-- Clinical trials based on specific molecular features (EGFR amplification → EGFR inhibitor trials)
+**針對其他 GBM 亞型**：
+- 依 NCCN 指南的標準治療
+- 放射治療完成後考慮腫瘤治療電場（Optune）
+- 基於特定分子特徵的臨床試驗（EGFR 擴增 → EGFR 抑制劑試驗）
 
-### Prognostic Information
+### 預後資訊
 
-**Counseling Patients**:
-- Mesenchymal-immune-active subtype associated with trend toward shorter survival (12.8 vs 16.3 months)
-- Not definitive due to small sample size and confidence intervals overlapping
-- Prospective validation needed
-- Should not alter standard first-line treatment
+**病患諮詢**：
+- 間葉-免疫活化亞型與較短存活趨勢相關（12.8 vs 16.3 個月）
+- 因小樣本和信賴區間重疊而非決定性
+- 需前瞻性驗證
+- 不應改變標準第一線治療
 
-## Study Limitations
+## 研究限制
 
-1. **Small Sample Size**: n=18 in mesenchymal-immune-active group limits statistical power
-2. **Retrospective Design**: Potential selection bias, unmeasured confounders
-3. **Single Institution**: May not generalize to other populations
-4. **Heterogeneous Recurrence Treatment**: Not all patients received bevacizumab; treatment selection bias
-5. **Molecular Classification**: Based on bulk tumor RNA-seq; intratumoral heterogeneity not captured
-6. **No Central Pathology Review**: Molecular classification performed locally
+1. **小樣本**：間葉-免疫活化組 n=18 限制統計效力
+2. **回顧性設計**：潛在選擇偏誤、未測量的混淆因子
+3. **單一機構**：可能無法推廣至其他群體
+4. **復發治療異質性**：並非所有病患接受 bevacizumab；治療選擇偏誤
+5. **分子分類**：基於腫瘤塊 RNA-seq；未捕捉腫瘤內異質性
+6. **無中央病理審查**：分子分類在當地進行
 
-## Future Directions
+## 未來方向
 
-1. **Prospective Validation**: Confirm survival differences in independent cohort (n>100 per group for adequate power)
-2. **Biomarker Testing**: Develop clinically feasible assay for mesenchymal-immune subtype identification
-3. **Clinical Trial Design**: Immunotherapy combinations targeting mesenchymal-immune-active GBM specifically
-4. **Mechanistic Studies**: Investigate why mesenchymal-immune GBM may respond better to bevacizumab
-5. **Longitudinal Analysis**: Track molecular subtype evolution over treatment course
+1. **前瞻性驗證**：在獨立世代確認存活差異（每組 n>100 以獲得足夠效力）
+2. **生物標記檢測**：開發臨床可行的間葉-免疫亞型鑑定檢測
+3. **臨床試驗設計**：特別針對間葉-免疫活化型 GBM 的免疫治療組合
+4. **機制研究**：探究為何間葉-免疫型 GBM 可能對 bevacizumab 反應更好
+5. **縱向分析**：追蹤治療過程中分子亞型的演變
 
-## Data Presentation Example
+## 資料呈現範例
 
-### Baseline Characteristics Table
-
-```
-Characteristic                    Mesenchymal-IA (n=18)  Other (n=42)  p-value
-Age, years (median [IQR])         64 [56-71]            61 [53-68]    0.42
-Sex, n (%)
-  Male                            11 (61%)              24 (57%)      0.78
-  Female                          7 (39%)               18 (43%)
-ECOG PS, n (%)
-  0-1                             15 (83%)              37 (88%)      0.63
-  2                               3 (17%)               5 (12%)
-Tumor location
-  Frontal                         4 (22%)               15 (36%)      0.35
-  Temporal                        10 (56%)              16 (38%)
-  Parietal/Occipital              4 (22%)               11 (26%)
-Extent of resection
-  Gross total                     8 (44%)               22 (52%)      0.58
-  Subtotal                        10 (56%)              20 (48%)
-MGMT promoter methylated          5 (28%)               18 (43%)      0.27
-```
-
-### Survival Outcomes Summary
+### 基線特徵表
 
 ```
-Endpoint                          Mesenchymal-IA        Other         HR (95% CI)        p-value
-Median PFS, months (95% CI)       7.2 (5.8-9.1)        9.5 (8.1-11.3) 1.58 (0.89-2.81)   0.12
-6-month PFS rate                  61%                  74%
-Median OS, months (95% CI)        12.8 (10.2-15.4)     16.3 (14.7-18.9) 1.72 (0.95-3.11) 0.073
-12-month OS rate                  55%                  68%
-24-month OS rate                  17%                  31%
+特徵                          間葉-IA (n=18)    其他 (n=42)     p 值
+年齡，歲（中位 [IQR]）         64 [56-71]       61 [53-68]     0.42
+性別，n (%)
+  男性                        11 (61%)          24 (57%)       0.78
+  女性                        7 (39%)           18 (43%)
+ECOG PS，n (%)
+  0-1                         15 (83%)          37 (88%)       0.63
+  2                           3 (17%)           5 (12%)
+腫瘤位置
+  額葉                        4 (22%)           15 (36%)       0.35
+  顳葉                        10 (56%)          16 (38%)
+  頂/枕葉                     4 (22%)           11 (26%)
+切除程度
+  全切除                      8 (44%)           22 (52%)       0.58
+  次全切除                    10 (56%)          20 (48%)
+MGMT 啟動子甲基化             5 (28%)           18 (43%)       0.27
 ```
 
-## Key Takeaways
+### 存活結果摘要
 
-1. **Molecular heterogeneity exists** in GBM with distinct subtypes
-2. **Mesenchymal-immune-active subtype** characterized by NF1 alterations, immune infiltration
-3. **Trend toward worse prognosis** but not statistically significant (power limitations)
-4. **Potential bevacizumab benefit** hypothesis-generating, requires prospective validation
-5. **Immunotherapy target**: High immune infiltration rational for checkpoint inhibitor trials
-6. **Clinical implementation pending**: Need prospective validation before routine subtyping
+```
+終點                          間葉-IA          其他           HR (95% CI)          p 值
+中位 PFS，月（95% CI）         7.2 (5.8-9.1)   9.5 (8.1-11.3)  1.58 (0.89-2.81)    0.12
+6 個月 PFS 率                  61%             74%
+中位 OS，月（95% CI）          12.8 (10.2-15.4) 16.3 (14.7-18.9) 1.72 (0.95-3.11)  0.073
+12 個月 OS 率                  55%             68%
+24 個月 OS 率                  17%             31%
+```
 
-## References
+## 關鍵要點
+
+1. **分子異質性存在**於 GBM 中，具有不同亞型
+2. **間葉-免疫活化亞型**特徵為 NF1 變異、免疫浸潤
+3. **較差預後趨勢**但未達統計顯著性（效力限制）
+4. **潛在 bevacizumab 益處**為假說生成，需前瞻性驗證
+5. **免疫治療標靶**：高免疫浸潤為檢查點抑制劑試驗的合理依據
+6. **臨床實施待定**：常規亞型分類前需前瞻性驗證
+
+## 參考文獻
 
 1. Verhaak RG, et al. Integrated genomic analysis identifies clinically relevant subtypes of glioblastoma characterized by abnormalities in PDGFRA, IDH1, EGFR, and NF1. Cancer Cell. 2010;17(1):98-110.
 2. Wang Q, et al. Tumor Evolution of Glioma-Intrinsic Gene Expression Subtypes Associates with Immunological Changes in the Microenvironment. Cancer Cell. 2017;32(1):42-56.
@@ -198,11 +198,10 @@ Median OS, months (95% CI)        12.8 (10.2-15.4)     16.3 (14.7-18.9) 1.72 (0.
 
 ---
 
-**This example demonstrates**:
-- Biomarker-based stratification methodology
-- Outcome reporting with appropriate statistics
-- Clinical contextualization of findings
-- Evidence-based recommendations with grading
-- Transparent limitation discussion
-- Structure suitable for pharmaceutical/clinical research documentation
-
+**本範例展示**：
+- 生物標記分層方法論
+- 含適當統計的結果報告
+- 發現的臨床脈絡化
+- 含分級的證據導向建議
+- 透明的限制討論
+- 適合製藥/臨床研究文件的結構

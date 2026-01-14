@@ -1,999 +1,999 @@
-# Market Research Report Structure Guide
+# 市場研究報告結構指南
 
-Detailed guidance for writing each section of a comprehensive market research report.
-
----
-
-## Front Matter
-
-### Cover Page
-
-**Purpose:** Create a strong first impression and communicate report scope.
-
-**Required Elements:**
-- Report title (clear, specific to market being analyzed)
-- Subtitle (e.g., "Comprehensive Market Analysis Report")
-- Hero visualization (executive summary infographic or market-relevant image)
-- Date of publication
-- Prepared by / Author organization
-- Classification (Confidential, Internal Use, Public)
-- Report type identifier
-
-**Best Practices:**
-- Title should include market name and geography if relevant
-- Use professional, high-quality hero image
-- Keep design clean and uncluttered
-- Include version number if applicable
+撰寫全面市場研究報告各章節的詳細指引。
 
 ---
 
-### Table of Contents
+## 前置部分
 
-**Auto-generated in LaTeX.** Ensure all chapters, sections, and subsections use proper commands for inclusion.
+### 封面
 
-**Include:**
-- List of Figures (all visualizations with page numbers)
-- List of Tables (all data tables with page numbers)
+**目的：** 建立良好的第一印象並傳達報告範圍。
 
----
+**必要元素：**
+- 報告標題（清楚、針對所分析的市場）
+- 副標題（例如：「全面市場分析報告」）
+- 主視覺圖（執行摘要資訊圖表或市場相關圖像）
+- 出版日期
+- 編製方 / 作者組織
+- 機密等級（機密、內部使用、公開）
+- 報告類型識別碼
 
-### Executive Summary (2-3 pages)
-
-**Purpose:** Provide a standalone summary that allows busy executives to understand key findings without reading the full report.
-
-**Required Sections:**
-
-#### Market Snapshot Box
-Key metrics displayed prominently:
-- Current market size with year
-- Projected market size with year
-- CAGR (compound annual growth rate)
-- Largest segment and market share
-- Fastest growing region and growth rate
-- Key adoption/penetration metrics
-
-#### Investment Thesis / Why This Matters
-3-5 bullet points explaining:
-- Why this market is attractive
-- Key factors driving opportunity
-- Timing considerations
-- Risk-adjusted assessment
-
-#### Key Findings Summary
-Organized by theme:
-- Market Dynamics (2-3 points)
-- Competitive Landscape (2-3 points)
-- Growth Drivers (2-3 points)
-- Risk Factors (2-3 points)
-
-#### Strategic Recommendations
-Top 5 actionable recommendations, each with:
-- Clear action statement
-- Expected outcome
-- Priority level (immediate, near-term, medium-term)
-
-**Visual Requirements:**
-- 1-2 visuals maximum
-- Executive summary infographic strongly recommended
-- Key metrics visualization
-
-**Writing Guidelines:**
-- Write this section LAST after completing all analysis
-- Every statement should be supported by analysis in the main report
-- Use specific numbers, not vague qualifiers
-- Lead with most important findings
-- Keep paragraphs short (2-4 sentences)
+**最佳實務：**
+- 標題應包含市場名稱和地理範圍（如相關）
+- 使用專業、高品質的主視覺圖
+- 保持設計簡潔整齊
+- 如適用，包含版本編號
 
 ---
 
-## Core Analysis Chapters
+### 目錄
 
-### Chapter 1: Market Overview & Definition (4-5 pages)
+**在 LaTeX 中自動生成。** 確保所有章節、節和小節使用正確的命令以被包含。
 
-**Purpose:** Establish clear boundaries and context for the analysis.
-
-#### Section 1.1: Market Definition
-
-**Content Requirements:**
-- Precise definition of the market being analyzed
-- Products/services included in scope
-- Products/services explicitly excluded
-- Industry classification codes (NAICS, SIC, GICS if applicable)
-- Relationship to adjacent markets
-
-**Writing Approach:**
-- Begin with a clear, one-paragraph definition
-- Use a callout box to highlight the formal definition
-- Explain the rationale for scope decisions
-- Address common misconceptions about market boundaries
-
-#### Section 1.2: Scope and Boundaries
-
-**Cover:**
-- Geographic scope (global, regional, specific countries)
-- Product/service scope with specific categories
-- Time horizon (historical period + forecast period)
-- Customer segments included
-
-#### Section 1.3: Industry Ecosystem
-
-**Content Requirements:**
-- Value chain from inputs to end users
-- Key stakeholders at each stage
-- Relationships and dependencies between stakeholders
-- Information flows
-- Money flows
-- Power dynamics
-
-**Required Visual:** Industry ecosystem/value chain diagram
-
-**Writing Approach:**
-- Start with overview of the ecosystem
-- Describe each stakeholder category in detail
-- Explain how value is created and captured
-- Identify where power concentrates in the value chain
-
-#### Section 1.4: Market Structure
-
-**Content Requirements:**
-- Market concentration analysis (HHI, CR4, CR8)
-- Industry lifecycle stage assessment
-- Market fragmentation analysis
-- Vertical integration analysis
-
-#### Section 1.5: Historical Context
-
-**Content Requirements:**
-- When the market emerged
-- Key milestones in market development
-- Major disruptions and shifts
-- Evolution of competitive dynamics
-- How customer needs have changed
-
-**Required Visuals (2 total):**
-1. Industry ecosystem diagram
-2. Market structure or industry lifecycle diagram
+**包含：**
+- 圖表清單（所有視覺化及其頁碼）
+- 表格清單（所有資料表及其頁碼）
 
 ---
 
-### Chapter 2: Market Size & Growth Analysis (6-8 pages)
+### 執行摘要（2-3 頁）
 
-**Purpose:** Provide comprehensive quantitative analysis of market opportunity.
+**目的：** 提供獨立的摘要，讓忙碌的高階主管無需閱讀完整報告即可了解關鍵發現。
 
-#### Section 2.1: Total Addressable Market (TAM)
+**必要章節：**
 
-**Content Requirements:**
-- Current market size with source and methodology
-- Historical market size (5-10 years back)
-- Projected market size (5-10 years forward)
-- Year-over-year growth rates
-- CAGR (historical and projected)
+#### 市場概況方塊
+顯眼呈現關鍵指標：
+- 目前市場規模及年份
+- 預測市場規模及年份
+- 年複合成長率
+- 最大區隔及市場份額
+- 成長最快區域及成長率
+- 關鍵採用/滲透指標
 
-**Data Table Required:**
-Year-by-year market projections table showing:
-- Year
-- Market size (USD)
-- YoY growth rate
-- Cumulative CAGR
+#### 投資論點 / 重要性說明
+3-5 個要點說明：
+- 為什麼這個市場具有吸引力
+- 推動機會的關鍵因素
+- 時機考量
+- 風險調整後評估
 
-**Writing Approach:**
-- State the bottom line first (total opportunity)
-- Provide historical context
-- Explain projection methodology
-- State key assumptions
-- Cite multiple sources where possible
+#### 主要發現摘要
+按主題組織：
+- 市場動態（2-3 點）
+- 競爭格局（2-3 點）
+- 成長驅動因素（2-3 點）
+- 風險因素（2-3 點）
 
-#### Section 2.2: Serviceable Addressable Market (SAM)
+#### 策略建議
+前 5 項可執行建議，每項包含：
+- 清晰的行動說明
+- 預期成果
+- 優先順序層級（立即、近期、中期）
 
-**Content Requirements:**
-- Definition of SAM for this market
-- SAM calculation methodology
-- Segment breakdown within SAM
-- Growth rates by segment
+**視覺需求：**
+- 最多 1-2 個視覺元素
+- 強烈建議使用執行摘要資訊圖表
+- 關鍵指標視覺化
 
-**Data Table Required:**
-Segment analysis table showing:
-- Segment name
-- 2024 value
-- 2034 value
-- CAGR
-- Market share
-
-#### Section 2.3: Serviceable Obtainable Market (SOM)
-
-**Content Requirements:**
-- Realistic market share scenarios
-- Conservative estimate with assumptions
-- Base case estimate with assumptions
-- Optimistic estimate with assumptions
-- Factors affecting market share capture
-
-**Required Visual:** TAM/SAM/SOM concentric circles diagram
-
-#### Section 2.4: Regional Market Analysis
-
-**Content Requirements:**
-- Market size by region
-- Growth rates by region
-- Regional market share
-- Regional drivers and differences
-- Detailed analysis of top 3-4 regions
-
-**Required Visual:** Regional breakdown chart (pie or treemap)
-
-**Regions to cover:**
-- North America (with US/Canada breakdown if relevant)
-- Europe (with key country breakdown)
-- Asia-Pacific (with China, Japan, India focus)
-- Latin America
-- Middle East & Africa
-
-#### Section 2.5: Segment Analysis
-
-**Content Requirements:**
-- Definition of market segments
-- Size of each segment
-- Growth rate of each segment
-- Key drivers for each segment
-- Competitive dynamics by segment
-
-**Required Visual:** Segment growth comparison chart
-
-**Required Visuals (4 total):**
-1. Market growth trajectory chart
-2. TAM/SAM/SOM diagram
-3. Regional breakdown chart
-4. Segment growth comparison chart
+**寫作指南：**
+- 在完成所有分析後最後撰寫此章節
+- 每項陳述都應有主報告中的分析支持
+- 使用具體數字，而非模糊修飾詞
+- 以最重要的發現為先
+- 段落保持簡短（2-4 句）
 
 ---
 
-### Chapter 3: Industry Drivers & Trends (5-6 pages)
+## 核心分析章節
 
-**Purpose:** Identify and analyze factors driving market growth and evolution.
+### 第一章：市場概述與定義（4-5 頁）
 
-#### Section 3.1: Primary Growth Drivers
+**目的：** 建立分析的清晰邊界和背景脈絡。
 
-**Content Requirements:**
-- Identification of 5-10 key growth drivers
-- Quantified impact assessment for each
-- Timeline for impact
-- Evidence and data supporting each driver
+#### 1.1 節：市場定義
 
-**For each driver, include:**
-- Clear description
-- Mechanism of impact on market
-- Quantified impact estimate
-- Timeline (immediate, 1-3 years, 3-5 years)
-- Supporting data/evidence
+**內容需求：**
+- 精確定義所分析的市場
+- 範圍內的產品/服務
+- 明確排除的產品/服務
+- 產業分類代碼（如適用，NAICS、SIC、GICS）
+- 與相鄰市場的關係
 
-**Required Visual:** Driver impact matrix (probability vs. impact)
+**寫作方法：**
+- 以清晰的一段定義開始
+- 使用說明方塊突顯正式定義
+- 解釋範圍決策的理由
+- 說明關於市場邊界的常見誤解
 
-#### Section 3.2: PESTLE Analysis
+#### 1.2 節：範圍與邊界
 
-Comprehensive analysis of external factors:
+**涵蓋：**
+- 地理範圍（全球、區域、特定國家）
+- 產品/服務範圍及具體類別
+- 時間範圍（歷史期間 + 預測期間）
+- 包含的客戶區隔
 
-**Political:**
-- Government policies affecting the market
-- Political stability in key markets
-- Trade policies and tariffs
-- Government support programs
+#### 1.3 節：產業生態系統
 
-**Economic:**
-- Economic growth trends
-- Interest rate environment
-- Inflation impacts
-- Currency effects
-- Consumer spending trends
+**內容需求：**
+- 從投入到終端使用者的價值鏈
+- 各階段的關鍵利害關係人
+- 利害關係人之間的關係和相依性
+- 資訊流
+- 資金流
+- 權力動態
 
-**Social:**
-- Demographic trends
-- Cultural shifts
-- Consumer behavior changes
-- Workforce trends
-- Health and wellness trends
+**必要視覺：** 產業生態系統/價值鏈圖
 
-**Technological:**
-- Enabling technologies
-- Digital transformation
-- Automation trends
-- Technology adoption curves
+**寫作方法：**
+- 從生態系統概述開始
+- 詳細描述每個利害關係人類別
+- 解釋價值如何創造和獲取
+- 識別價值鏈中權力集中的位置
 
-**Legal:**
-- Regulatory requirements
-- Compliance costs
-- Intellectual property considerations
-- Employment regulations
+#### 1.4 節：市場結構
 
-**Environmental:**
-- Sustainability requirements
-- Environmental regulations
-- Climate impacts
-- Resource availability
+**內容需求：**
+- 市場集中度分析（HHI、CR4、CR8）
+- 產業生命週期階段評估
+- 市場分散程度分析
+- 垂直整合分析
 
-**Required Visual:** PESTLE analysis diagram
+#### 1.5 節：歷史背景
 
-#### Section 3.3: Emerging Trends
+**內容需求：**
+- 市場何時出現
+- 市場發展的關鍵里程碑
+- 重大顛覆和轉變
+- 競爭動態的演變
+- 客戶需求如何改變
 
-**Content Requirements:**
-- Identification of 5-8 emerging trends
-- Timeline for each trend
-- Expected impact on market
-- Companies/regions leading each trend
-
-**Required Visual:** Trends timeline or radar chart
-
-#### Section 3.4: Growth Inhibitors
-
-**Content Requirements:**
-- Factors slowing market growth
-- Barriers to adoption
-- Resource constraints
-- Competitive pressures
-- Regulatory hurdles
-
-**Required Visuals (3 total):**
-1. Driver impact matrix
-2. PESTLE analysis diagram
-3. Trends timeline
+**必要視覺（共 2 個）：**
+1. 產業生態系統圖
+2. 市場結構或產業生命週期圖
 
 ---
 
-### Chapter 4: Competitive Landscape (6-8 pages)
+### 第二章：市場規模與成長分析（6-8 頁）
 
-**Purpose:** Provide comprehensive analysis of competitive dynamics.
+**目的：** 提供市場機會的全面量化分析。
 
-#### Section 4.1: Market Structure Analysis
+#### 2.1 節：總潛在市場（TAM）
 
-**Content Requirements:**
-- Number of competitors
-- Market concentration (HHI index)
-- CR4 and CR8 ratios
-- Market fragmentation assessment
-- Competitive intensity rating
+**內容需求：**
+- 目前市場規模及來源和方法論
+- 歷史市場規模（回溯 5-10 年）
+- 預測市場規模（未來 5-10 年）
+- 年增率
+- 年複合成長率（歷史和預測）
 
-#### Section 4.2: Porter's Five Forces Analysis
+**必要資料表：**
+逐年市場預測表，顯示：
+- 年份
+- 市場規模（美元）
+- 年增率
+- 累計年複合成長率
 
-**For each force, provide:**
-- Rating: High / Medium / Low
-- Key factors driving the rating
-- Supporting evidence
-- Strategic implications
+**寫作方法：**
+- 先陳述結論（總機會）
+- 提供歷史背景
+- 解釋預測方法論
+- 陳述關鍵假設
+- 盡可能引用多個來源
 
-**Forces:**
-1. Threat of New Entrants
-2. Bargaining Power of Suppliers
-3. Bargaining Power of Buyers
-4. Threat of Substitutes
-5. Competitive Rivalry
+#### 2.2 節：可服務潛在市場（SAM）
 
-**Required Visual:** Porter's Five Forces diagram
+**內容需求：**
+- 此市場的 SAM 定義
+- SAM 計算方法論
+- SAM 內的區隔分布
+- 各區隔成長率
 
-**Writing Approach:**
-- Rate each force clearly
-- Provide 3-5 supporting factors per force
-- Include data where available
-- Discuss strategic implications
+**必要資料表：**
+區隔分析表，顯示：
+- 區隔名稱
+- 2024 年價值
+- 2034 年價值
+- 年複合成長率
+- 市場份額
 
-#### Section 4.3: Market Share Analysis
+#### 2.3 節：可獲得服務市場（SOM）
 
-**Content Requirements:**
-- Top 10 companies by market share
-- Market share trends (3-5 year view)
-- Share gains/losses by company
-- Regional market share variations
+**內容需求：**
+- 實際可達成的市場份額情境
+- 保守估計及假設
+- 基本情境估計及假設
+- 樂觀估計及假設
+- 影響市場份額獲取的因素
 
-**Required Visual:** Market share pie chart or bar chart
+**必要視覺：** TAM/SAM/SOM 同心圓圖
 
-**Data Table Required:**
-Top 10 companies showing:
-- Rank
-- Company name
-- Revenue/market size
-- Market share %
-- YoY growth/trend
+#### 2.4 節：區域市場分析
 
-#### Section 4.4: Competitive Positioning
+**內容需求：**
+- 各區域市場規模
+- 各區域成長率
+- 區域市場份額
+- 區域驅動因素和差異
+- 前 3-4 個區域的詳細分析
 
-**Content Requirements:**
-- Key dimensions of competition
-- Positioning of major players
-- Competitive advantages by company
-- Strategic moves and announcements
+**必要視覺：** 區域分布圖（圓餅圖或樹狀圖）
 
-**Required Visual:** Competitive positioning matrix (2x2)
+**涵蓋區域：**
+- 北美（如相關，含美國/加拿大細分）
+- 歐洲（含主要國家細分）
+- 亞太地區（以中國、日本、印度為重點）
+- 拉丁美洲
+- 中東和非洲
 
-**Common positioning dimensions:**
-- Market focus (niche vs. broad)
-- Solution approach (product vs. platform)
-- Price positioning (premium vs. value)
-- Geographic focus (regional vs. global)
-- Customer focus (enterprise vs. SMB)
+#### 2.5 節：區隔分析
 
-#### Section 4.5: Strategic Groups
+**內容需求：**
+- 市場區隔定義
+- 各區隔規模
+- 各區隔成長率
+- 各區隔關鍵驅動因素
+- 各區隔競爭動態
 
-**Content Requirements:**
-- Identification of strategic groups
-- Companies in each group
-- Mobility barriers between groups
-- Competitive dynamics within groups
+**必要視覺：** 區隔成長比較圖
 
-**Required Visual:** Strategic group map
-
-#### Section 4.6: Competitive Dynamics
-
-**Content Requirements:**
-- Recent M&A activity
-- Partnership announcements
-- Product launches
-- Pricing trends
-- Geographic expansion
-
-#### Section 4.7: Barriers to Entry
-
-**Content Requirements:**
-- Capital requirements
-- Regulatory barriers
-- Technology barriers
-- Brand and reputation
-- Distribution access
-- Economies of scale
-- Switching costs
-
-**Required Visuals (4 total):**
-1. Porter's Five Forces diagram
-2. Market share chart
-3. Competitive positioning matrix
-4. Strategic group map
+**必要視覺（共 4 個）：**
+1. 市場成長軌跡圖
+2. TAM/SAM/SOM 圖
+3. 區域分布圖
+4. 區隔成長比較圖
 
 ---
 
-### Chapter 5: Customer Analysis & Segmentation (4-5 pages)
+### 第三章：產業驅動因素與趨勢（5-6 頁）
 
-**Purpose:** Understand customer needs, behaviors, and segment attractiveness.
+**目的：** 識別和分析推動市場成長和演變的因素。
 
-#### Section 5.1: Customer Segmentation
+#### 3.1 節：主要成長驅動因素
 
-**Content Requirements:**
-- Definition of customer segments
-- Segment sizes and market share
-- Segment characteristics
-- Segment growth rates
+**內容需求：**
+- 識別 5-10 個關鍵成長驅動因素
+- 各項的量化影響評估
+- 影響時程
+- 支持各驅動因素的證據和資料
 
-**Required Visual:** Customer segmentation breakdown
+**各驅動因素需包含：**
+- 清晰描述
+- 對市場的影響機制
+- 量化影響估計
+- 時程（立即、1-3 年、3-5 年）
+- 支持資料/證據
 
-**Common segmentation approaches:**
-- By company size (Enterprise, Mid-market, SMB, Consumer)
-- By industry vertical
-- By geography
-- By buying behavior
-- By needs/use cases
+**必要視覺：** 驅動因素影響矩陣（機率 vs. 影響）
 
-#### Section 5.2: Segment Attractiveness Analysis
+#### 3.2 節：PESTLE 分析
 
-**Content Requirements:**
-- Attractiveness criteria
-- Segment scoring/ranking
-- Investment implications
-- Prioritization recommendations
+外部因素的全面分析：
 
-**Required Visual:** Segment attractiveness matrix
+**政治：**
+- 影響市場的政府政策
+- 主要市場的政治穩定性
+- 貿易政策和關稅
+- 政府支持計畫
 
-**Attractiveness factors:**
-- Segment size
-- Growth rate
-- Profitability
-- Competitive intensity
-- Accessibility
-- Strategic fit
+**經濟：**
+- 經濟成長趨勢
+- 利率環境
+- 通膨影響
+- 匯率效應
+- 消費支出趨勢
 
-#### Section 5.3: Customer Needs Analysis
+**社會：**
+- 人口結構趨勢
+- 文化轉變
+- 消費者行為變化
+- 勞動力趨勢
+- 健康和保健趨勢
 
-**For each segment, identify:**
-- Functional needs (what the product must do)
-- Emotional needs (how it makes them feel)
-- Social needs (how it affects their relationships)
-- Key pain points
-- Unmet needs
+**技術：**
+- 賦能技術
+- 數位轉型
+- 自動化趨勢
+- 技術採用曲線
 
-#### Section 5.4: Buying Behavior
+**法律：**
+- 法規要求
+- 合規成本
+- 智慧財產權考量
+- 勞動法規
 
-**Content Requirements:**
-- Purchase triggers
-- Decision-making process
-- Key decision makers and influencers
-- Evaluation criteria
-- Purchase channels
-- Buying cycle length
-- Price sensitivity
+**環境：**
+- 永續性要求
+- 環境法規
+- 氣候影響
+- 資源可及性
 
-#### Section 5.5: Customer Journey
+**必要視覺：** PESTLE 分析圖
 
-**Required Visual:** Customer journey map
+#### 3.3 節：新興趨勢
 
-**Journey stages to cover:**
-1. Awareness
-2. Consideration
-3. Decision
-4. Implementation/Onboarding
-5. Usage
-6. Advocacy/Renewal
+**內容需求：**
+- 識別 5-8 個新興趨勢
+- 各趨勢的時程
+- 對市場的預期影響
+- 領導各趨勢的公司/區域
 
-**Required Visuals (3 total):**
-1. Customer segmentation breakdown
-2. Segment attractiveness matrix
-3. Customer journey map
+**必要視覺：** 趨勢時間軸或雷達圖
 
----
+#### 3.4 節：成長抑制因素
 
-### Chapter 6: Technology & Innovation Landscape (4-5 pages)
+**內容需求：**
+- 減緩市場成長的因素
+- 採用障礙
+- 資源限制
+- 競爭壓力
+- 法規障礙
 
-**Purpose:** Analyze technology trends and innovation dynamics.
-
-#### Section 6.1: Current Technology Stack
-
-**Content Requirements:**
-- Core technologies in use
-- Infrastructure requirements
-- Integration landscape
-- Technology maturity levels
-
-#### Section 6.2: Technology Roadmap
-
-**Content Requirements:**
-- Near-term evolution (1-2 years)
-- Medium-term evolution (3-5 years)
-- Long-term evolution (5-10 years)
-- Key milestones and inflection points
-
-**Required Visual:** Technology roadmap diagram
-
-#### Section 6.3: Emerging Technologies
-
-**For each emerging technology, cover:**
-- Technology description
-- Current maturity level (TRL or similar)
-- Expected timeline to mainstream
-- Potential impact on market
-- Leading companies/regions
-
-**Common emerging technologies to assess:**
-- Artificial intelligence/ML
-- Cloud computing
-- IoT/Connected devices
-- Blockchain
-- Automation/Robotics
-- Domain-specific technologies
-
-#### Section 6.4: Innovation Trends
-
-**Content Requirements:**
-- R&D investment levels in industry
-- Patent filing trends
-- Startup activity and funding
-- Corporate innovation initiatives
-- University/research partnerships
-
-**Required Visual:** Innovation/adoption curve or hype cycle
-
-#### Section 6.5: Technology Adoption Barriers
-
-**Content Requirements:**
-- Technical complexity
-- Integration challenges
-- Cost barriers
-- Skills gaps
-- Security/privacy concerns
-- Change management challenges
-
-**Required Visuals (2 total):**
-1. Technology roadmap diagram
-2. Innovation/adoption curve
+**必要視覺（共 3 個）：**
+1. 驅動因素影響矩陣
+2. PESTLE 分析圖
+3. 趨勢時間軸
 
 ---
 
-### Chapter 7: Regulatory & Policy Environment (3-4 pages)
+### 第四章：競爭格局（6-8 頁）
 
-**Purpose:** Analyze regulatory framework and policy impacts.
+**目的：** 提供競爭動態的全面分析。
 
-#### Section 7.1: Current Regulatory Framework
+#### 4.1 節：市場結構分析
 
-**Content Requirements:**
-- Key regulations affecting the market
-- Regulatory bodies and their roles
-- Compliance requirements
-- Enforcement mechanisms
-- Penalties for non-compliance
+**內容需求：**
+- 競爭者數量
+- 市場集中度（HHI 指數）
+- CR4 和 CR8 比率
+- 市場分散程度評估
+- 競爭強度評級
 
-#### Section 7.2: Regulatory Timeline
+#### 4.2 節：波特五力分析
 
-**Required Visual:** Regulatory timeline
+**各力量需提供：**
+- 評級：高 / 中 / 低
+- 推動評級的關鍵因素
+- 支持證據
+- 策略意涵
 
-**Content Requirements:**
-- Historical regulatory milestones
-- Recent regulatory changes
-- Upcoming regulations
-- Expected future developments
+**五力：**
+1. 新進入者威脅
+2. 供應商議價能力
+3. 買家議價能力
+4. 替代品威脅
+5. 競爭對抗
 
-#### Section 7.3: Regulatory Impact Analysis
+**必要視覺：** 波特五力分析圖
 
-**Content Requirements:**
-- Compliance costs
-- Market access implications
-- Competitive implications
-- Product/service requirements
-- Operating restrictions
+**寫作方法：**
+- 清楚評估各力量
+- 各力量提供 3-5 個支持因素
+- 盡可能包含資料
+- 討論策略意涵
 
-#### Section 7.4: Policy Trends
+#### 4.3 節：市場份額分析
 
-**Content Requirements:**
-- Government priorities
-- Funding initiatives
-- Trade policies
-- Environmental policies
-- Industry-specific policies
+**內容需求：**
+- 市場份額前 10 名公司
+- 市場份額趨勢（3-5 年觀察）
+- 各公司份額增減
+- 區域市場份額差異
 
-#### Section 7.5: Regional Regulatory Differences
+**必要視覺：** 市場份額圓餅圖或長條圖
 
-**Content Requirements:**
-- Comparison of regulations by region
-- Harmonization efforts
-- Key differences to navigate
-- Best practices for compliance
+**必要資料表：**
+前 10 名公司，顯示：
+- 排名
+- 公司名稱
+- 營收/市場規模
+- 市場份額 %
+- 年增率/趨勢
 
-**Required Visuals (1 total):**
-1. Regulatory timeline
+#### 4.4 節：競爭定位
 
----
+**內容需求：**
+- 競爭的關鍵維度
+- 主要參與者的定位
+- 各公司的競爭優勢
+- 策略動態和公告
 
-### Chapter 8: Risk Analysis (3-4 pages)
+**必要視覺：** 競爭定位矩陣（2x2）
 
-**Purpose:** Identify, assess, and propose mitigations for key risks.
+**常見定位維度：**
+- 市場聚焦（利基 vs. 廣泛）
+- 解決方案類型（產品 vs. 平台）
+- 價格定位（高端 vs. 平價）
+- 地理聚焦（區域 vs. 全球）
+- 客戶聚焦（企業 vs. 中小企業）
 
-#### Section 8.1: Risk Overview
+#### 4.5 節：策略群組
 
-**Content Requirements:**
-- Risk categories covered
-- Risk assessment methodology
-- Overall risk profile assessment
+**內容需求：**
+- 識別策略群組
+- 各群組內的公司
+- 群組間的移動障礙
+- 群組內的競爭動態
 
-#### Section 8.2: Risk Assessment
+**必要視覺：** 策略群組圖
 
-**Required Visual:** Risk heatmap (probability vs. impact)
+#### 4.6 節：競爭動態
 
-**Risk categories to cover:**
-- Market risks
-- Competitive risks
-- Regulatory risks
-- Technology risks
-- Operational risks
-- Financial risks
-- Reputational risks
+**內容需求：**
+- 近期併購活動
+- 合作夥伴公告
+- 產品發布
+- 定價趨勢
+- 地理擴張
 
-**For each risk, include:**
-- Risk description
-- Probability rating (Low/Medium/High)
-- Impact rating (Low/Medium/High)
-- Overall risk rating
-- Contributing factors
-- Early warning indicators
+#### 4.7 節：進入障礙
 
-**Data Table Required:**
-Risk register showing:
-- Risk name
-- Category
-- Probability
-- Impact
-- Overall rating
-- Owner
+**內容需求：**
+- 資本需求
+- 法規障礙
+- 技術障礙
+- 品牌和聲譽
+- 通路取得
+- 規模經濟
+- 轉換成本
 
-#### Section 8.3: Detailed Risk Analysis
-
-Provide detailed analysis of top 5-10 risks, including:
-- Full description of the risk
-- Scenarios that could trigger it
-- Potential consequences
-- Affected stakeholders
-- Timeline considerations
-
-#### Section 8.4: Risk Mitigation Strategies
-
-**Required Visual:** Risk mitigation matrix
-
-**For each major risk, provide:**
-- Prevention strategies
-- Detection mechanisms
-- Response plans
-- Recovery approaches
-- Contingency plans
-
-**Required Visuals (2 total):**
-1. Risk heatmap
-2. Risk mitigation matrix
+**必要視覺（共 4 個）：**
+1. 波特五力分析圖
+2. 市場份額圖
+3. 競爭定位矩陣
+4. 策略群組圖
 
 ---
 
-## Strategic Recommendations Chapters
+### 第五章：客戶分析與區隔（4-5 頁）
 
-### Chapter 9: Strategic Opportunities & Recommendations (4-5 pages)
+**目的：** 了解客戶需求、行為和區隔吸引力。
 
-**Purpose:** Synthesize analysis into actionable strategic guidance.
+#### 5.1 節：客戶區隔
 
-#### Section 9.1: Opportunity Analysis
+**內容需求：**
+- 客戶區隔定義
+- 區隔規模和市場份額
+- 區隔特徵
+- 區隔成長率
 
-**Required Visual:** Opportunity matrix (attractiveness vs. ability to win)
+**必要視覺：** 客戶區隔分布圖
 
-**Content Requirements:**
-- Identification of 5-8 strategic opportunities
-- Sizing of each opportunity
-- Attractiveness assessment
-- Ability to win assessment
-- Prioritization
+**常見區隔方法：**
+- 按公司規模（企業、中型市場、中小企業、消費者）
+- 按產業垂直領域
+- 按地理位置
+- 按購買行為
+- 按需求/使用案例
 
-#### Section 9.2: Detailed Opportunity Analysis
+#### 5.2 節：區隔吸引力分析
 
-For each top opportunity, provide:
-- Description and scope
-- Market size potential
-- Growth trajectory
-- Key success factors
-- Required capabilities
-- Investment requirements
-- Expected returns
-- Timeline to value
+**內容需求：**
+- 吸引力標準
+- 區隔評分/排名
+- 投資意涵
+- 優先順序建議
 
-#### Section 9.3: Strategic Options Analysis
+**必要視覺：** 區隔吸引力矩陣
 
-**Content Requirements:**
-- Build (organic development) options
-- Buy (M&A) options
-- Partner (strategic alliances) options
-- Decision framework for each opportunity
+**吸引力因素：**
+- 區隔規模
+- 成長率
+- 獲利能力
+- 競爭強度
+- 可及性
+- 策略契合度
 
-#### Section 9.4: Prioritized Recommendations
+#### 5.3 節：客戶需求分析
 
-**Required Visual:** Recommendation priority matrix (impact vs. effort)
+**各區隔需識別：**
+- 功能需求（產品必須做什麼）
+- 情感需求（讓他們有什麼感受）
+- 社會需求（如何影響他們的關係）
+- 關鍵痛點
+- 未滿足需求
 
-**Structure recommendations in tiers:**
+#### 5.4 節：購買行為
 
-**Tier 1: Immediate Priority**
-- Actions to take in next 0-6 months
-- Quick wins with high impact
-- Foundation-setting activities
+**內容需求：**
+- 購買觸發因素
+- 決策過程
+- 關鍵決策者和影響者
+- 評估標準
+- 購買通路
+- 購買週期長度
+- 價格敏感度
 
-**Tier 2: Near-Term (6-12 months)**
-- Build on Tier 1 actions
-- Larger investments
-- Capability development
+#### 5.5 節：客戶旅程
 
-**Tier 3: Medium-Term (1-2 years)**
-- Strategic initiatives
-- Major investments
-- Transformational changes
+**必要視覺：** 客戶旅程圖
 
-**For each recommendation:**
-- Clear action statement
-- Rationale (why this matters)
-- Expected outcome
-- Investment required
-- Timeline
-- Success metrics
-- Dependencies
+**涵蓋的旅程階段：**
+1. 認知
+2. 考慮
+3. 決策
+4. 實施/上線
+5. 使用
+6. 擁護/續約
 
-#### Section 9.5: Success Factors
-
-**Content Requirements:**
-- Critical success factors for implementation
-- Organizational capabilities required
-- Resource requirements
-- External dependencies
-- Timing considerations
-
-**Required Visuals (3 total):**
-1. Opportunity matrix
-2. Strategic options framework
-3. Recommendation priority matrix
+**必要視覺（共 3 個）：**
+1. 客戶區隔分布圖
+2. 區隔吸引力矩陣
+3. 客戶旅程圖
 
 ---
 
-### Chapter 10: Implementation Roadmap (3-4 pages)
+### 第六章：技術與創新格局（4-5 頁）
 
-**Purpose:** Provide actionable implementation guidance.
+**目的：** 分析技術趨勢和創新動態。
 
-#### Section 10.1: Implementation Overview
+#### 6.1 節：目前技術堆疊
 
-**Content Requirements:**
-- Phased approach description
-- Overall timeline
-- Key dependencies
-- Critical path items
+**內容需求：**
+- 使用中的核心技術
+- 基礎設施需求
+- 整合格局
+- 技術成熟度等級
 
-#### Section 10.2: Phased Implementation Plan
+#### 6.2 節：技術路線圖
 
-**Required Visual:** Implementation timeline/Gantt chart
+**內容需求：**
+- 近期演變（1-2 年）
+- 中期演變（3-5 年）
+- 長期演變（5-10 年）
+- 關鍵里程碑和轉折點
 
-**For each phase:**
-- Phase name and duration
-- Objectives
-- Key activities
-- Deliverables
-- Resources required
-- Dependencies
-- Success criteria
+**必要視覺：** 技術路線圖
 
-**Typical phases:**
-- Phase 1: Foundation (months 1-6)
-- Phase 2: Build (months 4-12)
-- Phase 3: Scale (months 10-18)
-- Phase 4: Optimize (months 16-24)
+#### 6.3 節：新興技術
 
-#### Section 10.3: Key Milestones
+**各新興技術需涵蓋：**
+- 技術描述
+- 目前成熟度等級（TRL 或類似）
+- 預期主流化時程
+- 對市場的潛在影響
+- 領導的公司/區域
 
-**Required Visual:** Milestone tracker
+**常見需評估的新興技術：**
+- 人工智慧/機器學習
+- 雲端運算
+- 物聯網/連網裝置
+- 區塊鏈
+- 自動化/機器人
+- 領域特定技術
 
-**Data Table Required:**
-Milestone table showing:
-- Milestone name
-- Target date
-- Owner
-- Success criteria
-- Dependencies
+#### 6.4 節：創新趨勢
 
-#### Section 10.4: Resource Requirements
+**內容需求：**
+- 產業研發投資水準
+- 專利申請趨勢
+- 新創公司活動和募資
+- 企業創新倡議
+- 大學/研究機構合作
 
-**Content Requirements:**
-- Team structure and roles
-- Budget allocation by phase
-- Technology requirements
-- External support needs
-- Training requirements
+**必要視覺：** 創新/採用曲線或技術成熟度曲線
 
-#### Section 10.5: Governance Structure
+#### 6.5 節：技術採用障礙
 
-**Content Requirements:**
-- Decision-making authority
-- Reporting structure
-- Review cadence
-- Escalation paths
-- Change management process
+**內容需求：**
+- 技術複雜性
+- 整合挑戰
+- 成本障礙
+- 技能缺口
+- 安全/隱私疑慮
+- 變革管理挑戰
 
-**Required Visuals (2 total):**
-1. Implementation timeline/Gantt
-2. Milestone tracker
+**必要視覺（共 2 個）：**
+1. 技術路線圖
+2. 創新/採用曲線
 
 ---
 
-### Chapter 11: Investment Thesis & Financial Projections (3-4 pages)
+### 第七章：法規與政策環境（3-4 頁）
 
-**Purpose:** Provide financial framework for decision-making.
+**目的：** 分析法規框架和政策影響。
 
-#### Section 11.1: Investment Summary
+#### 7.1 節：目前法規框架
 
-**Content Requirements:**
-- Summary of investment opportunity
-- Key value drivers
-- Expected returns
-- Investment timeline
-- Risk-adjusted assessment
+**內容需求：**
+- 影響市場的主要法規
+- 監管機構及其角色
+- 合規要求
+- 執法機制
+- 違規處罰
 
-#### Section 11.2: Financial Projections
+#### 7.2 節：法規時間軸
 
-**Required Visual:** Financial projections chart
+**必要視覺：** 法規時間軸
 
-**Data Table Required:**
-5-year projections showing:
-- Revenue
-- Growth rate
-- Gross margin
+**內容需求：**
+- 歷史法規里程碑
+- 近期法規變更
+- 即將實施的法規
+- 預期未來發展
+
+#### 7.3 節：法規影響分析
+
+**內容需求：**
+- 合規成本
+- 市場進入意涵
+- 競爭意涵
+- 產品/服務要求
+- 營運限制
+
+#### 7.4 節：政策趨勢
+
+**內容需求：**
+- 政府優先事項
+- 資助倡議
+- 貿易政策
+- 環境政策
+- 產業特定政策
+
+#### 7.5 節：區域法規差異
+
+**內容需求：**
+- 各區域法規比較
+- 協調努力
+- 需應對的關鍵差異
+- 合規最佳實務
+
+**必要視覺（共 1 個）：**
+1. 法規時間軸
+
+---
+
+### 第八章：風險分析（3-4 頁）
+
+**目的：** 識別、評估並提出關鍵風險的緩解措施。
+
+#### 8.1 節：風險概述
+
+**內容需求：**
+- 涵蓋的風險類別
+- 風險評估方法論
+- 整體風險概況評估
+
+#### 8.2 節：風險評估
+
+**必要視覺：** 風險熱力圖（機率 vs. 影響）
+
+**涵蓋的風險類別：**
+- 市場風險
+- 競爭風險
+- 法規風險
+- 技術風險
+- 營運風險
+- 財務風險
+- 聲譽風險
+
+**各風險需包含：**
+- 風險描述
+- 機率評級（低/中/高）
+- 影響評級（低/中/高）
+- 整體風險評級
+- 貢獻因素
+- 早期預警指標
+
+**必要資料表：**
+風險登記冊，顯示：
+- 風險名稱
+- 類別
+- 機率
+- 影響
+- 整體評級
+- 負責人
+
+#### 8.3 節：詳細風險分析
+
+提供前 5-10 個風險的詳細分析，包括：
+- 完整風險描述
+- 可能觸發的情境
+- 潛在後果
+- 受影響的利害關係人
+- 時程考量
+
+#### 8.4 節：風險緩解策略
+
+**必要視覺：** 風險緩解矩陣
+
+**各主要風險需提供：**
+- 預防策略
+- 偵測機制
+- 回應計畫
+- 復原方法
+- 應變計畫
+
+**必要視覺（共 2 個）：**
+1. 風險熱力圖
+2. 風險緩解矩陣
+
+---
+
+## 策略建議章節
+
+### 第九章：策略機會與建議（4-5 頁）
+
+**目的：** 將分析綜合為可執行的策略指引。
+
+#### 9.1 節：機會分析
+
+**必要視覺：** 機會矩陣（吸引力 vs. 獲勝能力）
+
+**內容需求：**
+- 識別 5-8 個策略機會
+- 各機會規模評估
+- 吸引力評估
+- 獲勝能力評估
+- 優先順序排定
+
+#### 9.2 節：詳細機會分析
+
+各優先機會需提供：
+- 描述和範圍
+- 市場規模潛力
+- 成長軌跡
+- 關鍵成功因素
+- 所需能力
+- 投資需求
+- 預期報酬
+- 價值實現時程
+
+#### 9.3 節：策略選項分析
+
+**內容需求：**
+- 建立（有機發展）選項
+- 購買（併購）選項
+- 合作（策略聯盟）選項
+- 各機會的決策框架
+
+#### 9.4 節：優先建議
+
+**必要視覺：** 建議優先順序矩陣（影響 vs. 努力程度）
+
+**建議分層結構：**
+
+**第一層：立即優先**
+- 未來 0-6 個月內採取的行動
+- 高影響的速贏
+- 奠定基礎的活動
+
+**第二層：近期（6-12 個月）**
+- 以第一層行動為基礎
+- 較大投資
+- 能力開發
+
+**第三層：中期（1-2 年）**
+- 策略倡議
+- 重大投資
+- 轉型變革
+
+**各建議需包含：**
+- 清晰的行動說明
+- 理由（為什麼重要）
+- 預期成果
+- 所需投資
+- 時程
+- 成功指標
+- 相依關係
+
+#### 9.5 節：成功因素
+
+**內容需求：**
+- 實施的關鍵成功因素
+- 所需組織能力
+- 資源需求
+- 外部相依關係
+- 時機考量
+
+**必要視覺（共 3 個）：**
+1. 機會矩陣
+2. 策略選項框架
+3. 建議優先順序矩陣
+
+---
+
+### 第十章：實施路線圖（3-4 頁）
+
+**目的：** 提供可執行的實施指引。
+
+#### 10.1 節：實施概述
+
+**內容需求：**
+- 分階段方法說明
+- 整體時程
+- 關鍵相依關係
+- 關鍵路徑項目
+
+#### 10.2 節：分階段實施計畫
+
+**必要視覺：** 實施時程表/甘特圖
+
+**各階段需包含：**
+- 階段名稱和時長
+- 目標
+- 關鍵活動
+- 交付成果
+- 所需資源
+- 相依關係
+- 成功標準
+
+**典型階段：**
+- 第一階段：奠基（第 1-6 個月）
+- 第二階段：建置（第 4-12 個月）
+- 第三階段：規模化（第 10-18 個月）
+- 第四階段：優化（第 16-24 個月）
+
+#### 10.3 節：關鍵里程碑
+
+**必要視覺：** 里程碑追蹤器
+
+**必要資料表：**
+里程碑表，顯示：
+- 里程碑名稱
+- 目標日期
+- 負責人
+- 成功標準
+- 相依關係
+
+#### 10.4 節：資源需求
+
+**內容需求：**
+- 團隊結構和角色
+- 各階段預算配置
+- 技術需求
+- 外部支援需求
+- 培訓需求
+
+#### 10.5 節：治理結構
+
+**內容需求：**
+- 決策權責
+- 報告結構
+- 審查節奏
+- 升級路徑
+- 變革管理流程
+
+**必要視覺（共 2 個）：**
+1. 實施時程表/甘特圖
+2. 里程碑追蹤器
+
+---
+
+### 第十一章：投資論點與財務預測（3-4 頁）
+
+**目的：** 提供決策的財務框架。
+
+#### 11.1 節：投資摘要
+
+**內容需求：**
+- 投資機會摘要
+- 關鍵價值驅動因素
+- 預期報酬
+- 投資時程
+- 風險調整後評估
+
+#### 11.2 節：財務預測
+
+**必要視覺：** 財務預測圖
+
+**必要資料表：**
+5 年預測，顯示：
+- 營收
+- 成長率
+- 毛利率
 - EBITDA
-- EBITDA margin
-- Key operating metrics
+- EBITDA 利潤率
+- 關鍵營運指標
 
-#### Section 11.3: Scenario Analysis
+#### 11.3 節：情境分析
 
-**Required Visual:** Scenario comparison chart
+**必要視覺：** 情境分析比較圖
 
-**Three scenarios:**
-- Conservative: Lower growth, higher costs
-- Base Case: Expected performance
-- Optimistic: Favorable conditions
+**三種情境：**
+- 保守：較低成長、較高成本
+- 基本情境：預期表現
+- 樂觀：有利條件
 
-**For each scenario:**
-- Key assumptions
-- Revenue projections
-- Profitability projections
-- Investment requirements
-- Return metrics
+**各情境需包含：**
+- 關鍵假設
+- 營收預測
+- 獲利預測
+- 投資需求
+- 報酬指標
 
-#### Section 11.4: Key Assumptions
+#### 11.4 節：關鍵假設
 
-**Document all assumptions:**
-- Market growth assumptions
-- Market share assumptions
-- Pricing assumptions
-- Cost assumptions
-- Timing assumptions
-- Competitive assumptions
+**記錄所有假設：**
+- 市場成長假設
+- 市場份額假設
+- 定價假設
+- 成本假設
+- 時程假設
+- 競爭假設
 
-#### Section 11.5: Sensitivity Analysis
+#### 11.5 節：敏感度分析
 
-**Content Requirements:**
-- Key variables affecting returns
-- Sensitivity to market growth
-- Sensitivity to pricing
-- Sensitivity to timing
-- Break-even analysis
+**內容需求：**
+- 影響報酬的關鍵變數
+- 對市場成長的敏感度
+- 對定價的敏感度
+- 對時程的敏感度
+- 損益兩平分析
 
-#### Section 11.6: Return Expectations
+#### 11.6 節：報酬預期
 
-**Content Requirements:**
-- ROI projections
-- Payback period
-- IRR estimates
-- NPV analysis
-- Multiple analysis (if applicable)
+**內容需求：**
+- 投資報酬率預測
+- 回收期
+- 內部報酬率估計
+- 淨現值分析
+- 倍數分析（如適用）
 
-**Required Visuals (2 total):**
-1. Financial projections chart
-2. Scenario comparison chart
-
----
-
-## Back Matter
-
-### Appendix A: Methodology & Data Sources
-
-**Content Requirements:**
-- Research methodology description
-- Primary research methods
-- Secondary research sources
-- Data collection timeframe
-- Analytical frameworks used
-- Limitations and assumptions
-
-### Appendix B: Detailed Market Data
-
-**Content Requirements:**
-- Comprehensive data tables
-- Year-by-year market data
-- Regional breakdowns
-- Segment details
-- Historical data series
-
-### Appendix C: Company Profiles
-
-**For each major company:**
-- Company overview
-- Headquarters and key locations
-- Revenue and employee count
-- Market position
-- Key products/services
-- Recent developments
-- Strategic focus
-
-### References/Bibliography
-
-**All sources cited:**
-- Market research reports
-- Industry publications
-- Government data
-- Company reports
-- Academic sources
-- News articles
+**必要視覺（共 2 個）：**
+1. 財務預測圖
+2. 情境分析比較圖
 
 ---
 
-## Quality Checklist
+## 後置部分
 
-Before finalizing, verify:
+### 附錄 A：方法論與資料來源
 
-- [ ] All required sections are complete
-- [ ] All data points have sources
-- [ ] All 25-30 visuals are included
-- [ ] Executive summary captures key findings
-- [ ] Recommendations are actionable
-- [ ] Financial projections are internally consistent
-- [ ] No placeholder content remains
-- [ ] Page count exceeds 50 pages
-- [ ] Table of contents is accurate
-- [ ] All cross-references work
-- [ ] Bibliography is complete
+**內容需求：**
+- 研究方法論說明
+- 初級研究方法
+- 次級研究來源
+- 資料蒐集時間範圍
+- 使用的分析框架
+- 限制和假設
+
+### 附錄 B：詳細市場資料
+
+**內容需求：**
+- 全面的資料表
+- 逐年市場資料
+- 區域分布
+- 區隔詳情
+- 歷史資料序列
+
+### 附錄 C：公司概況
+
+**各主要公司需包含：**
+- 公司概述
+- 總部和主要據點
+- 營收和員工數
+- 市場地位
+- 主要產品/服務
+- 近期發展
+- 策略重點
+
+### 參考文獻/書目
+
+**所有引用來源：**
+- 市場研究報告
+- 產業出版物
+- 政府資料
+- 公司報告
+- 學術來源
+- 新聞文章
+
+---
+
+## 品質檢核清單
+
+定稿前確認：
+
+- [ ] 所有必要章節完整
+- [ ] 所有資料點附有來源
+- [ ] 所有 25-30 個視覺元素已包含
+- [ ] 執行摘要涵蓋關鍵發現
+- [ ] 建議可執行
+- [ ] 財務預測內部一致
+- [ ] 無佔位符內容
+- [ ] 頁數超過 50 頁
+- [ ] 目錄準確
+- [ ] 所有交叉參照有效
+- [ ] 書目完整

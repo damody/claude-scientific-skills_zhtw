@@ -1,183 +1,183 @@
-# Working with Variant Files (VCF/BCF)
+# 處理變異檔案（VCF/BCF）
 
-## Overview
+## 概述
 
-Pysam provides the `VariantFile` class for reading and writing VCF (Variant Call Format) and BCF (binary VCF) files. These files contain information about genetic variants, including SNPs, indels, and structural variants.
+Pysam 提供 `VariantFile` 類別用於讀取和寫入 VCF（Variant Call Format，變異呼叫格式）和 BCF（binary VCF，二進位 VCF）檔案。這些檔案包含遺傳變異的資訊，包括 SNP、indel 和結構變異。
 
-## Opening Variant Files
+## 開啟變異檔案
 
 ```python
 import pysam
 
-# Reading VCF
+# 讀取 VCF
 vcf = pysam.VariantFile("example.vcf")
 
-# Reading BCF (binary, compressed)
+# 讀取 BCF（二進位，壓縮）
 bcf = pysam.VariantFile("example.bcf")
 
-# Reading compressed VCF
+# 讀取壓縮的 VCF
 vcf_gz = pysam.VariantFile("example.vcf.gz")
 
-# Writing
+# 寫入
 outvcf = pysam.VariantFile("output.vcf", "w", header=vcf.header)
 ```
 
-## VariantFile Properties
+## VariantFile 屬性
 
-**Header Information:**
-- `header` - Complete VCF header with metadata
-- `header.contigs` - Dictionary of contigs/chromosomes
-- `header.samples` - List of sample names
-- `header.filters` - Dictionary of FILTER definitions
-- `header.info` - Dictionary of INFO field definitions
-- `header.formats` - Dictionary of FORMAT field definitions
+**標頭資訊：**
+- `header` - 包含元資料的完整 VCF 標頭
+- `header.contigs` - contig/染色體字典
+- `header.samples` - 樣本名稱列表
+- `header.filters` - FILTER 定義字典
+- `header.info` - INFO 欄位定義字典
+- `header.formats` - FORMAT 欄位定義字典
 
 ```python
 vcf = pysam.VariantFile("example.vcf")
 
-# List samples
+# 列出樣本
 print(f"Samples: {list(vcf.header.samples)}")
 
-# List contigs
+# 列出 contig
 for contig in vcf.header.contigs:
     print(f"{contig}: length={vcf.header.contigs[contig].length}")
 
-# List INFO fields
+# 列出 INFO 欄位
 for info in vcf.header.info:
     print(f"{info}: {vcf.header.info[info].description}")
 ```
 
-## Reading Variant Records
+## 讀取變異記錄
 
-### Iterate All Variants
+### 迭代所有變異
 
 ```python
 for variant in vcf:
     print(f"{variant.chrom}:{variant.pos} {variant.ref}>{variant.alts}")
 ```
 
-### Fetch Specific Region
+### 取得特定區域
 
-Requires tabix index (.tbi) for VCF.gz or index for BCF:
+VCF.gz 需要 tabix 索引（.tbi）或 BCF 需要索引：
 
 ```python
-# Fetch variants in region (1-based coordinates for region string)
+# 取得區域內的變異（區域字串使用 1-based 座標）
 for variant in vcf.fetch("chr1", 1000000, 2000000):
     print(f"{variant.chrom}:{variant.pos} {variant.id}")
 
-# Using region string (1-based)
+# 使用區域字串（1-based）
 for variant in vcf.fetch("chr1:1000000-2000000"):
     print(variant.pos)
 ```
 
-**Note:** Uses **1-based coordinates** in `fetch()` calls to match VCF specification.
+**注意：** `fetch()` 呼叫使用 **1-based 座標** 以匹配 VCF 規範。
 
-## VariantRecord Objects
+## VariantRecord 物件
 
-Each variant is represented as a `VariantRecord` object:
+每個變異表示為 `VariantRecord` 物件：
 
-### Position Information
-- `chrom` - Chromosome/contig name
-- `pos` - Position (1-based)
-- `start` - Start position (0-based)
-- `stop` - Stop position (0-based, exclusive)
-- `id` - Variant ID (e.g., rsID)
+### 位置資訊
+- `chrom` - 染色體/contig 名稱
+- `pos` - 位置（1-based）
+- `start` - 起始位置（0-based）
+- `stop` - 結束位置（0-based，排除）
+- `id` - 變異 ID（例如 rsID）
 
-### Allele Information
-- `ref` - Reference allele
-- `alts` - Tuple of alternate alleles
-- `alleles` - Tuple of all alleles (ref + alts)
+### 等位基因資訊
+- `ref` - 參考等位基因
+- `alts` - 替代等位基因元組
+- `alleles` - 所有等位基因元組（ref + alts）
 
-### Quality and Filtering
-- `qual` - Quality score (QUAL field)
-- `filter` - Filter status
+### 品質和過濾
+- `qual` - 品質分數（QUAL 欄位）
+- `filter` - 過濾狀態
 
-### INFO Fields
+### INFO 欄位
 
-Access INFO fields as dictionary:
+以字典方式存取 INFO 欄位：
 
 ```python
 for variant in vcf:
-    # Check if field exists
+    # 檢查欄位是否存在
     if "DP" in variant.info:
         depth = variant.info["DP"]
         print(f"Depth: {depth}")
 
-    # Get all INFO keys
+    # 取得所有 INFO 鍵
     print(f"INFO fields: {variant.info.keys()}")
 
-    # Access specific fields
+    # 存取特定欄位
     if "AF" in variant.info:
         allele_freq = variant.info["AF"]
         print(f"Allele frequency: {allele_freq}")
 ```
 
-### Sample Genotype Data
+### 樣本基因型資料
 
-Access sample data through `samples` dictionary:
+透過 `samples` 字典存取樣本資料：
 
 ```python
 for variant in vcf:
     for sample_name in variant.samples:
         sample = variant.samples[sample_name]
 
-        # Genotype (GT field)
+        # 基因型（GT 欄位）
         gt = sample["GT"]
         print(f"{sample_name} genotype: {gt}")
 
-        # Other FORMAT fields
+        # 其他 FORMAT 欄位
         if "DP" in sample:
             print(f"{sample_name} depth: {sample['DP']}")
         if "GQ" in sample:
             print(f"{sample_name} quality: {sample['GQ']}")
 
-        # Alleles for this genotype
+        # 此基因型的等位基因
         alleles = sample.alleles
         print(f"{sample_name} alleles: {alleles}")
 
-        # Phasing
+        # 定相
         if sample.phased:
             print(f"{sample_name} is phased")
 ```
 
-**Genotype representation:**
-- `(0, 0)` - Homozygous reference
-- `(0, 1)` - Heterozygous
-- `(1, 1)` - Homozygous alternate
-- `(None, None)` - Missing genotype
-- Phased: `(0|1)` vs unphased: `(0/1)`
+**基因型表示：**
+- `(0, 0)` - 同型合子參考
+- `(0, 1)` - 異型合子
+- `(1, 1)` - 同型合子替代
+- `(None, None)` - 缺失基因型
+- 已定相：`(0|1)` vs 未定相：`(0/1)`
 
-## Writing Variant Files
+## 寫入變異檔案
 
-### Creating Header
+### 建立標頭
 
 ```python
 header = pysam.VariantHeader()
 
-# Add contigs
+# 添加 contig
 header.contigs.add("chr1", length=248956422)
 header.contigs.add("chr2", length=242193529)
 
-# Add INFO fields
+# 添加 INFO 欄位
 header.add_line('##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">')
 header.add_line('##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency">')
 
-# Add FORMAT fields
+# 添加 FORMAT 欄位
 header.add_line('##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">')
 header.add_line('##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">')
 
-# Add samples
+# 添加樣本
 header.add_sample("sample1")
 header.add_sample("sample2")
 
-# Create output file
+# 建立輸出檔案
 outvcf = pysam.VariantFile("output.vcf", "w", header=header)
 ```
 
-### Creating Variant Records
+### 建立變異記錄
 
 ```python
-# Create new variant
+# 建立新變異
 record = outvcf.new_record()
 record.chrom = "chr1"
 record.pos = 100000
@@ -187,36 +187,36 @@ record.alts = ("G",)
 record.qual = 30
 record.filter.add("PASS")
 
-# Set INFO fields
+# 設定 INFO 欄位
 record.info["DP"] = 100
 record.info["AF"] = (0.25,)
 
-# Set genotype data
+# 設定基因型資料
 record.samples["sample1"]["GT"] = (0, 1)
 record.samples["sample1"]["DP"] = 50
 record.samples["sample2"]["GT"] = (0, 0)
 record.samples["sample2"]["DP"] = 50
 
-# Write to file
+# 寫入檔案
 outvcf.write(record)
 ```
 
-## Filtering Variants
+## 過濾變異
 
-### Basic Filtering
+### 基本過濾
 
 ```python
-# Filter by quality
+# 依品質過濾
 for variant in vcf:
     if variant.qual >= 30:
         print(f"High quality variant: {variant.chrom}:{variant.pos}")
 
-# Filter by depth
+# 依深度過濾
 for variant in vcf:
     if "DP" in variant.info and variant.info["DP"] >= 20:
         print(f"High depth variant: {variant.chrom}:{variant.pos}")
 
-# Filter by allele frequency
+# 依等位基因頻率過濾
 for variant in vcf:
     if "AF" in variant.info:
         for af in variant.info["AF"]:
@@ -224,27 +224,27 @@ for variant in vcf:
                 print(f"Common variant: {variant.chrom}:{variant.pos}")
 ```
 
-### Filtering by Genotype
+### 依基因型過濾
 
 ```python
-# Find variants where sample has alternate allele
+# 找出樣本具有替代等位基因的變異
 for variant in vcf:
     sample = variant.samples["sample1"]
     gt = sample["GT"]
 
-    # Check if has alternate allele
+    # 檢查是否有替代等位基因
     if gt and any(allele and allele > 0 for allele in gt):
         print(f"Sample has alt allele: {variant.chrom}:{variant.pos}")
 
-    # Check if homozygous alternate
+    # 檢查是否為同型合子替代
     if gt == (1, 1):
         print(f"Homozygous alt: {variant.chrom}:{variant.pos}")
 ```
 
-### Filter Field
+### 過濾欄位
 
 ```python
-# Check FILTER status
+# 檢查 FILTER 狀態
 for variant in vcf:
     if "PASS" in variant.filter or len(variant.filter) == 0:
         print(f"Passed filters: {variant.chrom}:{variant.pos}")
@@ -252,31 +252,31 @@ for variant in vcf:
         print(f"Failed: {variant.filter.keys()}")
 ```
 
-## Indexing VCF Files
+## 索引 VCF 檔案
 
-Create tabix index for compressed VCF:
+為壓縮的 VCF 建立 tabix 索引：
 
 ```python
-# Compress and index
+# 壓縮並索引
 pysam.tabix_index("example.vcf", preset="vcf", force=True)
-# Creates example.vcf.gz and example.vcf.gz.tbi
+# 建立 example.vcf.gz 和 example.vcf.gz.tbi
 ```
 
-Or use bcftools for BCF:
+或對 BCF 使用 bcftools：
 
 ```python
 pysam.bcftools.index("example.bcf")
 ```
 
-## Common Workflows
+## 常見工作流程
 
-### Extract Variants for Specific Samples
+### 提取特定樣本的變異
 
 ```python
 invcf = pysam.VariantFile("input.vcf")
 samples_to_keep = ["sample1", "sample3"]
 
-# Create new header with subset of samples
+# 建立具有樣本子集的新標頭
 new_header = invcf.header.copy()
 new_header.samples.clear()
 for sample in samples_to_keep:
@@ -285,7 +285,7 @@ for sample in samples_to_keep:
 outvcf = pysam.VariantFile("output.vcf", "w", header=new_header)
 
 for variant in invcf:
-    # Create new record
+    # 建立新記錄
     new_record = outvcf.new_record(
         contig=variant.chrom,
         start=variant.start,
@@ -297,14 +297,14 @@ for variant in invcf:
         info=variant.info
     )
 
-    # Copy genotype data for selected samples
+    # 複製選定樣本的基因型資料
     for sample in samples_to_keep:
         new_record.samples[sample].update(variant.samples[sample])
 
     outvcf.write(new_record)
 ```
 
-### Calculate Allele Frequencies
+### 計算等位基因頻率
 
 ```python
 vcf = pysam.VariantFile("example.vcf")
@@ -324,7 +324,7 @@ for variant in vcf:
         print(f"{variant.chrom}:{variant.pos} AF={af:.4f}")
 ```
 
-### Convert VCF to Summary Table
+### VCF 轉摘要表
 
 ```python
 import csv
@@ -347,19 +347,19 @@ with open("variants.csv", "w", newline="") as csvfile:
         ])
 ```
 
-## Performance Tips
+## 效能提示
 
-1. **Use BCF format** for better compression and faster access than VCF
-2. **Index files** with tabix for efficient region queries
-3. **Filter early** to reduce processing of irrelevant variants
-4. **Use INFO fields efficiently** - check existence before accessing
-5. **Batch write operations** when creating VCF files
+1. **使用 BCF 格式** 比 VCF 有更好的壓縮和更快的存取
+2. **索引檔案** 使用 tabix 進行高效的區域查詢
+3. **提早過濾** 減少處理不相關變異
+4. **高效使用 INFO 欄位** - 存取前檢查是否存在
+5. **批次寫入操作** 建立 VCF 檔案時
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Coordinate systems:** VCF uses 1-based coordinates, but VariantRecord.start is 0-based
-2. **Missing data:** Always check if INFO/FORMAT fields exist before accessing
-3. **Genotype tuples:** Genotypes are tuples, not lists—handle None values for missing data
-4. **Allele indexing:** In genotype (0, 1), 0=REF, 1=first ALT, 2=second ALT, etc.
-5. **Index requirement:** Region-based `fetch()` requires tabix index for VCF.gz
-6. **Header modification:** When subsetting samples, properly update header and copy FORMAT fields
+1. **座標系統：** VCF 使用 1-based 座標，但 VariantRecord.start 是 0-based
+2. **缺失資料：** 存取前總是檢查 INFO/FORMAT 欄位是否存在
+3. **基因型元組：** 基因型是元組，不是列表—處理缺失資料的 None 值
+4. **等位基因索引：** 在基因型 (0, 1) 中，0=REF、1=第一個 ALT、2=第二個 ALT 等
+5. **索引需求：** 基於區域的 `fetch()` 對 VCF.gz 需要 tabix 索引
+6. **標頭修改：** 子集化樣本時，正確更新標頭並複製 FORMAT 欄位

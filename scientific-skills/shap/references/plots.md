@@ -1,142 +1,142 @@
-# SHAP Visualization Reference
+# SHAP 視覺化參考
 
-This document provides comprehensive information about all SHAP plotting functions, their parameters, use cases, and best practices for visualizing model explanations.
+本文件提供所有 SHAP 繪圖函數、其參數、使用案例以及視覺化模型解釋最佳實踐的完整資訊。
 
-## Overview
+## 概述
 
-SHAP provides diverse visualization tools for explaining model predictions at both individual and global levels. Each plot type serves specific purposes in understanding feature importance, interactions, and prediction mechanisms.
+SHAP 提供多樣化的視覺化工具，用於在個別和全局層面解釋模型預測。每種繪圖類型在理解特徵重要性、互動和預測機制方面有其特定用途。
 
-## Plot Types
+## 繪圖類型
 
-### Waterfall Plots
+### 瀑布圖（Waterfall Plots）
 
-**Purpose**: Display explanations for individual predictions, showing how each feature moves the prediction from the baseline (expected value) toward the final prediction.
+**用途**：顯示個別預測的解釋，展示每個特徵如何將預測從基準值（期望值）推向最終預測。
 
-**Function**: `shap.plots.waterfall(explanation, max_display=10, show=True)`
+**函數**：`shap.plots.waterfall(explanation, max_display=10, show=True)`
 
-**Key Parameters**:
-- `explanation`: Single row from an Explanation object (not multiple samples)
-- `max_display`: Number of features to show (default: 10); less impactful features collapse into a single "other features" term
-- `show`: Whether to display the plot immediately
+**關鍵參數**：
+- `explanation`：來自 Explanation 物件的單行（非多個樣本）
+- `max_display`：要顯示的特徵數量（預設：10）；影響較小的特徵會合併為單一「其他特徵」項
+- `show`：是否立即顯示繪圖
 
-**Visual Elements**:
-- **X-axis**: Shows SHAP values (contribution to prediction)
-- **Starting point**: Model's expected value (baseline)
-- **Feature contributions**: Red bars (positive) or blue bars (negative) showing how each feature moves the prediction
-- **Feature values**: Displayed in gray to the left of feature names
-- **Ending point**: Final model prediction
+**視覺元素**：
+- **X 軸**：顯示 SHAP 值（對預測的貢獻）
+- **起點**：模型的期望值（基準值）
+- **特徵貢獻**：紅色條（正值）或藍色條（負值）顯示每個特徵如何移動預測
+- **特徵值**：以灰色顯示在特徵名稱左側
+- **終點**：最終模型預測
 
-**When to Use**:
-- Explaining individual predictions in detail
-- Understanding which features drove a specific decision
-- Communicating model behavior for single instances (e.g., loan denial, diagnosis)
-- Debugging unexpected predictions
+**何時使用**：
+- 詳細解釋個別預測
+- 理解哪些特徵驅動特定決策
+- 為單一實例傳達模型行為（例如，貸款拒絕、診斷）
+- 除錯意外預測
 
-**Important Notes**:
-- For XGBoost classifiers, predictions are explained in log-odds units (margin output before logistic transformation)
-- SHAP values sum to the difference between baseline and final prediction (additivity property)
-- Use scatter plots alongside waterfall plots to explore patterns across multiple samples
+**重要說明**：
+- 對於 XGBoost 分類器，預測以對數賠率單位解釋（logistic 轉換前的邊際輸出）
+- SHAP 值總和等於基準值和最終預測之間的差異（可加性屬性）
+- 使用散佈圖配合瀑布圖來探索多個樣本的模式
 
-**Example**:
+**範例**：
 ```python
 import shap
 
-# Compute SHAP values
+# 計算 SHAP 值
 explainer = shap.TreeExplainer(model)
 shap_values = explainer(X_test)
 
-# Plot waterfall for first prediction
+# 繪製第一個預測的瀑布圖
 shap.plots.waterfall(shap_values[0])
 
-# Show more features
+# 顯示更多特徵
 shap.plots.waterfall(shap_values[0], max_display=20)
 ```
 
-### Beeswarm Plots
+### 蜂群圖（Beeswarm Plots）
 
-**Purpose**: Information-dense summary of how top features impact model output across the entire dataset, combining feature importance with value distributions.
+**用途**：資訊密集的摘要，展示頂部特徵如何在整個資料集上影響模型輸出，結合特徵重要性和值分佈。
 
-**Function**: `shap.plots.beeswarm(shap_values, max_display=10, order=Explanation.abs.mean(0), color=None, show=True)`
+**函數**：`shap.plots.beeswarm(shap_values, max_display=10, order=Explanation.abs.mean(0), color=None, show=True)`
 
-**Key Parameters**:
-- `shap_values`: Explanation object containing multiple samples
-- `max_display`: Number of features to display (default: 10)
-- `order`: How to rank features
-  - `Explanation.abs.mean(0)`: Mean absolute SHAP values (default)
-  - `Explanation.abs.max(0)`: Maximum absolute values (highlights outlier impacts)
-- `color`: matplotlib colormap; defaults to red-blue scheme
-- `show`: Whether to display the plot immediately
+**關鍵參數**：
+- `shap_values`：包含多個樣本的 Explanation 物件
+- `max_display`：要顯示的特徵數量（預設：10）
+- `order`：如何對特徵進行排名
+  - `Explanation.abs.mean(0)`：平均絕對 SHAP 值（預設）
+  - `Explanation.abs.max(0)`：最大絕對值（突出離群值影響）
+- `color`：matplotlib 色彩圖；預設為紅藍配色
+- `show`：是否立即顯示繪圖
 
-**Visual Elements**:
-- **Y-axis**: Features ranked by importance
-- **X-axis**: SHAP value (impact on model output)
-- **Each dot**: Single instance from dataset
-- **Dot position (X)**: SHAP value magnitude
-- **Dot color**: Original feature value (red = high, blue = low)
-- **Dot clustering**: Shows density/distribution of impacts
+**視覺元素**：
+- **Y 軸**：按重要性排名的特徵
+- **X 軸**：SHAP 值（對模型輸出的影響）
+- **每個點**：資料集中的單一實例
+- **點位置（X）**：SHAP 值大小
+- **點顏色**：原始特徵值（紅色 = 高，藍色 = 低）
+- **點聚集**：顯示影響的密度/分佈
 
-**When to Use**:
-- Summarizing feature importance across entire datasets
-- Understanding both average and individual feature impacts
-- Identifying feature value patterns and their effects
-- Comparing global model behavior across features
-- Detecting nonlinear relationships (e.g., higher age → lower income likelihood)
+**何時使用**：
+- 總結整個資料集的特徵重要性
+- 理解平均和個別特徵影響
+- 識別特徵值模式及其效果
+- 比較不同特徵的全局模型行為
+- 檢測非線性關係（例如，較高年齡 → 較低收入可能性）
 
-**Practical Variations**:
+**實用變體**：
 ```python
-# Standard beeswarm plot
+# 標準蜂群圖
 shap.plots.beeswarm(shap_values)
 
-# Show more features
+# 顯示更多特徵
 shap.plots.beeswarm(shap_values, max_display=20)
 
-# Order by maximum absolute values (highlight outliers)
+# 按最大絕對值排序（突出離群值）
 shap.plots.beeswarm(shap_values, order=shap_values.abs.max(0))
 
-# Plot absolute SHAP values with fixed coloring
+# 繪製絕對 SHAP 值並使用固定著色
 shap.plots.beeswarm(shap_values.abs, color="shap_red")
 
-# Custom matplotlib colormap
+# 自訂 matplotlib 色彩圖
 shap.plots.beeswarm(shap_values, color=plt.cm.viridis)
 ```
 
-### Bar Plots
+### 長條圖（Bar Plots）
 
-**Purpose**: Display feature importance as mean absolute SHAP values, providing clean, simple visualizations of global feature impact.
+**用途**：以平均絕對 SHAP 值顯示特徵重要性，提供全局特徵影響的清晰、簡單視覺化。
 
-**Function**: `shap.plots.bar(shap_values, max_display=10, clustering=None, clustering_cutoff=0.5, show=True)`
+**函數**：`shap.plots.bar(shap_values, max_display=10, clustering=None, clustering_cutoff=0.5, show=True)`
 
-**Key Parameters**:
-- `shap_values`: Explanation object (can be single instance, global, or cohorts)
-- `max_display`: Maximum number of features/bars to show
-- `clustering`: Optional hierarchical clustering object from `shap.utils.hclust`
-- `clustering_cutoff`: Threshold for displaying clustering structure (0-1, default: 0.5)
+**關鍵參數**：
+- `shap_values`：Explanation 物件（可以是單一實例、全局或群組）
+- `max_display`：要顯示的最大特徵/長條數
+- `clustering`：來自 `shap.utils.hclust` 的可選階層聚類物件
+- `clustering_cutoff`：顯示聚類結構的閾值（0-1，預設：0.5）
 
-**Plot Types**:
+**繪圖類型**：
 
-#### Global Bar Plot
-Shows overall feature importance across all samples. Importance calculated as mean absolute SHAP value.
+#### 全局長條圖
+顯示所有樣本的整體特徵重要性。重要性計算為平均絕對 SHAP 值。
 
 ```python
-# Global feature importance
+# 全局特徵重要性
 explainer = shap.TreeExplainer(model)
 shap_values = explainer(X_test)
 shap.plots.bar(shap_values)
 ```
 
-#### Local Bar Plot
-Displays SHAP values for a single instance with feature values shown in gray.
+#### 局部長條圖
+顯示單一實例的 SHAP 值，特徵值以灰色顯示。
 
 ```python
-# Single prediction explanation
+# 單一預測解釋
 shap.plots.bar(shap_values[0])
 ```
 
-#### Cohort Bar Plot
-Compares feature importance across subgroups by passing a dictionary of Explanation objects.
+#### 群組長條圖
+透過傳遞 Explanation 物件的字典來比較子群組的特徵重要性。
 
 ```python
-# Compare cohorts
+# 比較群組
 cohorts = {
     "Group A": shap_values[mask_A],
     "Group B": shap_values[mask_B]
@@ -144,58 +144,58 @@ cohorts = {
 shap.plots.bar(cohorts)
 ```
 
-**Feature Clustering**:
-Identifies redundant features using model-based clustering (more accurate than correlation-based methods).
+**特徵聚類**：
+使用基於模型的聚類識別冗餘特徵（比基於相關性的方法更準確）。
 
 ```python
-# Add feature clustering
+# 添加特徵聚類
 clustering = shap.utils.hclust(X_train, y_train)
 shap.plots.bar(shap_values, clustering=clustering)
 
-# Adjust clustering display threshold
+# 調整聚類顯示閾值
 shap.plots.bar(shap_values, clustering=clustering, clustering_cutoff=0.3)
 ```
 
-**When to Use**:
-- Quick overview of global feature importance
-- Comparing feature importance across cohorts or models
-- Identifying redundant or correlated features
-- Clean, simple visualizations for presentations
+**何時使用**：
+- 快速概覽全局特徵重要性
+- 比較群組或模型間的特徵重要性
+- 識別冗餘或相關特徵
+- 簡報用的清晰、簡單視覺化
 
-### Force Plots
+### 力場圖（Force Plots）
 
-**Purpose**: Additive force visualization showing how features push prediction higher (red) or lower (blue) from baseline.
+**用途**：加性力場視覺化，顯示特徵如何將預測從基準值推高（紅色）或推低（藍色）。
 
-**Function**: `shap.plots.force(base_value, shap_values, features, feature_names=None, out_names=None, link="identity", matplotlib=False, show=True)`
+**函數**：`shap.plots.force(base_value, shap_values, features, feature_names=None, out_names=None, link="identity", matplotlib=False, show=True)`
 
-**Key Parameters**:
-- `base_value`: Expected value (baseline prediction)
-- `shap_values`: SHAP values for sample(s)
-- `features`: Feature values for sample(s)
-- `feature_names`: Optional feature names
-- `link`: Transform function ("identity" or "logit")
-- `matplotlib`: Use matplotlib backend (default: interactive JavaScript)
+**關鍵參數**：
+- `base_value`：期望值（基準預測）
+- `shap_values`：樣本的 SHAP 值
+- `features`：樣本的特徵值
+- `feature_names`：可選的特徵名稱
+- `link`：轉換函數（"identity" 或 "logit"）
+- `matplotlib`：使用 matplotlib 後端（預設：互動 JavaScript）
 
-**Visual Elements**:
-- **Baseline**: Starting prediction (expected value)
-- **Red arrows**: Features pushing prediction higher
-- **Blue arrows**: Features pushing prediction lower
-- **Final value**: Resulting prediction
+**視覺元素**：
+- **基準值**：起始預測（期望值）
+- **紅色箭頭**：將預測推高的特徵
+- **藍色箭頭**：將預測推低的特徵
+- **最終值**：結果預測
 
-**Interactive Features** (JavaScript mode):
-- Hover for detailed feature information
-- Multiple samples create stacked visualization
-- Can rotate for different perspectives
+**互動功能**（JavaScript 模式）：
+- 懸停顯示詳細特徵資訊
+- 多個樣本建立堆疊視覺化
+- 可旋轉以獲得不同視角
 
-**When to Use**:
-- Interactive exploration of predictions
-- Visualizing multiple predictions simultaneously
-- Presentations requiring interactive elements
-- Understanding prediction composition at a glance
+**何時使用**：
+- 互動探索預測
+- 同時視覺化多個預測
+- 需要互動元素的簡報
+- 一目了然地理解預測組成
 
-**Example**:
+**範例**：
 ```python
-# Single prediction force plot
+# 單一預測力場圖
 shap.plots.force(
     shap_values.base_values[0],
     shap_values.values[0],
@@ -203,7 +203,7 @@ shap.plots.force(
     matplotlib=True
 )
 
-# Multiple predictions (interactive)
+# 多個預測（互動）
 shap.plots.force(
     shap_values.base_values,
     shap_values.values,
@@ -211,123 +211,123 @@ shap.plots.force(
 )
 ```
 
-### Scatter Plots (Dependence Plots)
+### 散佈圖（Scatter Plots / 依賴圖）
 
-**Purpose**: Show relationship between feature values and their SHAP values, revealing how feature values impact predictions.
+**用途**：顯示特徵值和其 SHAP 值之間的關係，揭示特徵值如何影響預測。
 
-**Function**: `shap.plots.scatter(shap_values, color=None, hist=True, alpha=1, show=True)`
+**函數**：`shap.plots.scatter(shap_values, color=None, hist=True, alpha=1, show=True)`
 
-**Key Parameters**:
-- `shap_values`: Explanation object, can specify feature with subscript (e.g., `shap_values[:, "Age"]`)
-- `color`: Feature to use for coloring points (string name or Explanation object)
-- `hist`: Show histogram of feature values on y-axis
-- `alpha`: Point transparency (useful for dense plots)
+**關鍵參數**：
+- `shap_values`：Explanation 物件，可以用下標指定特徵（例如，`shap_values[:, "Age"]`）
+- `color`：用於著色點的特徵（字串名稱或 Explanation 物件）
+- `hist`：在 y 軸顯示特徵值的直方圖
+- `alpha`：點透明度（對密集繪圖有用）
 
-**Visual Elements**:
-- **X-axis**: Feature value
-- **Y-axis**: SHAP value (impact on prediction)
-- **Point color**: Another feature's value (for interaction detection)
-- **Histogram**: Distribution of feature values
+**視覺元素**：
+- **X 軸**：特徵值
+- **Y 軸**：SHAP 值（對預測的影響）
+- **點顏色**：另一個特徵的值（用於互動檢測）
+- **直方圖**：特徵值的分佈
 
-**When to Use**:
-- Understanding feature-prediction relationships
-- Detecting nonlinear effects
-- Identifying feature interactions
-- Validating or discovering patterns in model behavior
-- Exploring counterintuitive predictions from waterfall plots
+**何時使用**：
+- 理解特徵-預測關係
+- 檢測非線性效應
+- 識別特徵互動
+- 驗證或發現模型行為中的模式
+- 探索瀑布圖中的反直覺預測
 
-**Interaction Detection**:
-Color points by another feature to reveal interactions.
+**互動檢測**：
+按另一個特徵著色點以揭示互動。
 
 ```python
-# Basic dependence plot
+# 基本依賴圖
 shap.plots.scatter(shap_values[:, "Age"])
 
-# Color by another feature to show interactions
+# 按另一個特徵著色以顯示互動
 shap.plots.scatter(shap_values[:, "Age"], color=shap_values[:, "Education"])
 
-# Multiple features in one plot
+# 一張圖中顯示多個特徵
 shap.plots.scatter(shap_values[:, ["Age", "Education", "Hours-per-week"]])
 
-# Increase transparency for dense data
+# 增加密集資料的透明度
 shap.plots.scatter(shap_values[:, "Age"], alpha=0.5)
 ```
 
-### Heatmap Plots
+### 熱圖（Heatmap Plots）
 
-**Purpose**: Visualize SHAP values for multiple samples simultaneously, showing feature impacts across instances.
+**用途**：同時視覺化多個樣本的 SHAP 值，顯示跨實例的特徵影響。
 
-**Function**: `shap.plots.heatmap(shap_values, instance_order=None, feature_values=None, max_display=10, show=True)`
+**函數**：`shap.plots.heatmap(shap_values, instance_order=None, feature_values=None, max_display=10, show=True)`
 
-**Key Parameters**:
-- `shap_values`: Explanation object
-- `instance_order`: How to order instances (can be Explanation object for custom ordering)
-- `feature_values`: Display feature values on hover
-- `max_display`: Maximum features to display
+**關鍵參數**：
+- `shap_values`：Explanation 物件
+- `instance_order`：如何排序實例（可以是自訂排序的 Explanation 物件）
+- `feature_values`：懸停時顯示特徵值
+- `max_display`：要顯示的最大特徵數
 
-**Visual Elements**:
-- **Rows**: Individual instances/samples
-- **Columns**: Features
-- **Cell color**: SHAP value (red = positive, blue = negative)
-- **Intensity**: Magnitude of impact
+**視覺元素**：
+- **行**：個別實例/樣本
+- **列**：特徵
+- **儲存格顏色**：SHAP 值（紅色 = 正值，藍色 = 負值）
+- **強度**：影響大小
 
-**When to Use**:
-- Comparing explanations across multiple instances
-- Identifying patterns in feature impacts
-- Understanding which features vary most across predictions
-- Detecting subgroups or clusters with similar explanation patterns
+**何時使用**：
+- 比較多個實例的解釋
+- 識別特徵影響的模式
+- 理解哪些特徵在預測間變化最大
+- 檢測具有相似解釋模式的子群組或聚類
 
-**Example**:
+**範例**：
 ```python
-# Basic heatmap
+# 基本熱圖
 shap.plots.heatmap(shap_values)
 
-# Order instances by model output
+# 按模型輸出排序實例
 shap.plots.heatmap(shap_values, instance_order=shap_values.sum(1))
 
-# Show specific subset
+# 顯示特定子集
 shap.plots.heatmap(shap_values[:100])
 ```
 
-### Violin Plots
+### 小提琴圖（Violin Plots）
 
-**Purpose**: Similar to beeswarm plots but uses violin (kernel density) visualization instead of individual dots.
+**用途**：類似蜂群圖，但使用小提琴（核密度）視覺化而非個別點。
 
-**Function**: `shap.plots.violin(shap_values, features=None, feature_names=None, max_display=10, show=True)`
+**函數**：`shap.plots.violin(shap_values, features=None, feature_names=None, max_display=10, show=True)`
 
-**When to Use**:
-- Alternative to beeswarm when dataset is very large
-- Emphasizing distribution density over individual points
-- Cleaner visualization for presentations
+**何時使用**：
+- 當資料集非常大時作為蜂群圖的替代
+- 強調分佈密度而非個別點
+- 簡報用的更清晰視覺化
 
-**Example**:
+**範例**：
 ```python
 shap.plots.violin(shap_values)
 ```
 
-### Decision Plots
+### 決策圖（Decision Plots）
 
-**Purpose**: Show prediction paths through cumulative SHAP values, particularly useful for multiclass classification.
+**用途**：透過累積 SHAP 值顯示預測路徑，特別適用於多類別分類。
 
-**Function**: `shap.plots.decision(base_value, shap_values, features, feature_names=None, feature_order="importance", highlight=None, link="identity", show=True)`
+**函數**：`shap.plots.decision(base_value, shap_values, features, feature_names=None, feature_order="importance", highlight=None, link="identity", show=True)`
 
-**Key Parameters**:
-- `base_value`: Expected value
-- `shap_values`: SHAP values for samples
-- `features`: Feature values
-- `feature_order`: How to order features ("importance" or list)
-- `highlight`: Indices of samples to highlight
-- `link`: Transform function
+**關鍵參數**：
+- `base_value`：期望值
+- `shap_values`：樣本的 SHAP 值
+- `features`：特徵值
+- `feature_order`：如何排序特徵（"importance" 或列表）
+- `highlight`：要突出顯示的樣本索引
+- `link`：轉換函數
 
-**When to Use**:
-- Multiclass classification explanations
-- Understanding cumulative feature effects
-- Comparing prediction paths across samples
-- Identifying where predictions diverge
+**何時使用**：
+- 多類別分類解釋
+- 理解累積特徵效應
+- 比較跨樣本的預測路徑
+- 識別預測分歧的位置
 
-**Example**:
+**範例**：
 ```python
-# Decision plot for multiple predictions
+# 多個預測的決策圖
 shap.plots.decision(
     shap_values.base_values,
     shap_values.values,
@@ -335,7 +335,7 @@ shap.plots.decision(
     feature_names=X_test.columns.tolist()
 )
 
-# Highlight specific instances
+# 突出顯示特定實例
 shap.plots.decision(
     shap_values.base_values,
     shap_values.values,
@@ -344,164 +344,164 @@ shap.plots.decision(
 )
 ```
 
-## Plot Selection Guide
+## 繪圖選擇指南
 
-**For Individual Predictions**:
-- **Waterfall**: Best for detailed, sequential explanation
-- **Force**: Good for interactive exploration
-- **Bar (local)**: Simple, clean single-prediction importance
+**用於個別預測**：
+- **瀑布圖**：最適合詳細、順序解釋
+- **力場圖**：適合互動探索
+- **長條圖（局部）**：簡單、清晰的單一預測重要性
 
-**For Global Understanding**:
-- **Beeswarm**: Information-dense summary with value distributions
-- **Bar (global)**: Clean, simple importance ranking
-- **Violin**: Distribution-focused alternative to beeswarm
+**用於全局理解**：
+- **蜂群圖**：具有值分佈的資訊密集摘要
+- **長條圖（全局）**：清晰、簡單的重要性排名
+- **小提琴圖**：蜂群圖的分佈導向替代
 
-**For Feature Relationships**:
-- **Scatter**: Understand feature-prediction relationships and interactions
-- **Heatmap**: Compare patterns across multiple instances
+**用於特徵關係**：
+- **散佈圖**：理解特徵-預測關係和互動
+- **熱圖**：比較多個實例的模式
 
-**For Multiple Samples**:
-- **Heatmap**: Grid view of SHAP values
-- **Force (stacked)**: Interactive multi-sample visualization
-- **Decision**: Prediction paths for multiclass problems
+**用於多個樣本**：
+- **熱圖**：SHAP 值的網格視圖
+- **力場圖（堆疊）**：互動多樣本視覺化
+- **決策圖**：多類別問題的預測路徑
 
-**For Cohort Comparison**:
-- **Bar (cohort)**: Clean comparison of feature importance
-- **Multiple beeswarms**: Side-by-side distribution comparisons
+**用於群組比較**：
+- **長條圖（群組）**：清晰的特徵重要性比較
+- **多個蜂群圖**：並排分佈比較
 
-## Visualization Best Practices
+## 視覺化最佳實踐
 
-**1. Start Global, Then Go Local**:
-- Begin with beeswarm or bar plot to understand global patterns
-- Dive into waterfall or scatter plots for specific instances or features
+**1. 先全局，後局部**：
+- 從蜂群圖或長條圖開始理解全局模式
+- 深入瀑布圖或散佈圖研究特定實例或特徵
 
-**2. Use Multiple Plot Types**:
-- Different plots reveal different insights
-- Combine waterfall (individual) + scatter (relationship) + beeswarm (global)
+**2. 使用多種繪圖類型**：
+- 不同繪圖揭示不同見解
+- 結合瀑布圖（個別）+ 散佈圖（關係）+ 蜂群圖（全局）
 
-**3. Adjust max_display**:
-- Default (10) is good for presentations
-- Increase (20-30) for detailed analysis
-- Consider clustering for redundant features
+**3. 調整 max_display**：
+- 預設（10）適合簡報
+- 增加（20-30）用於詳細分析
+- 考慮對冗餘特徵使用聚類
 
-**4. Color Meaningfully**:
-- Use default red-blue for SHAP values (red = positive, blue = negative)
-- Color scatter plots by interacting features
-- Custom colormaps for specific domains
+**4. 有意義地使用顏色**：
+- 對 SHAP 值使用預設紅藍色（紅色 = 正值，藍色 = 負值）
+- 用互動特徵對散佈圖著色
+- 特定領域使用自訂色彩圖
 
-**5. Consider Audience**:
-- Technical audience: Beeswarm, scatter, heatmap
-- Non-technical audience: Waterfall, bar, force plots
-- Interactive presentations: Force plots with JavaScript
+**5. 考慮觀眾**：
+- 技術觀眾：蜂群圖、散佈圖、熱圖
+- 非技術觀眾：瀑布圖、長條圖、力場圖
+- 互動簡報：使用 JavaScript 的力場圖
 
-**6. Save High-Quality Figures**:
+**6. 儲存高品質圖形**：
 ```python
 import matplotlib.pyplot as plt
 
-# Create plot
+# 建立繪圖
 shap.plots.beeswarm(shap_values, show=False)
 
-# Save with high DPI
+# 以高 DPI 儲存
 plt.savefig('shap_plot.png', dpi=300, bbox_inches='tight')
 plt.close()
 ```
 
-**7. Handle Large Datasets**:
-- Sample subset for visualization (e.g., `shap_values[:1000]`)
-- Use violin instead of beeswarm for very large datasets
-- Adjust alpha for scatter plots with many points
+**7. 處理大型資料集**：
+- 對視覺化取樣子集（例如，`shap_values[:1000]`）
+- 對非常大的資料集使用小提琴圖而非蜂群圖
+- 對有許多點的散佈圖調整 alpha
 
-## Common Patterns and Workflows
+## 常見模式和工作流程
 
-**Pattern 1: Complete Model Explanation**
+**模式 1：完整模型解釋**
 ```python
-# 1. Global importance
+# 1. 全局重要性
 shap.plots.beeswarm(shap_values)
 
-# 2. Top feature relationships
+# 2. 頂部特徵關係
 for feature in top_features:
     shap.plots.scatter(shap_values[:, feature])
 
-# 3. Example predictions
+# 3. 範例預測
 for i in interesting_indices:
     shap.plots.waterfall(shap_values[i])
 ```
 
-**Pattern 2: Model Comparison**
+**模式 2：模型比較**
 ```python
-# Compute SHAP for multiple models
+# 計算多個模型的 SHAP
 shap_model1 = explainer1(X_test)
 shap_model2 = explainer2(X_test)
 
-# Compare feature importance
+# 比較特徵重要性
 shap.plots.bar({
     "Model 1": shap_model1,
     "Model 2": shap_model2
 })
 ```
 
-**Pattern 3: Subgroup Analysis**
+**模式 3：子群組分析**
 ```python
-# Define cohorts
+# 定義群組
 male_mask = X_test['Sex'] == 'Male'
 female_mask = X_test['Sex'] == 'Female'
 
-# Compare cohorts
+# 比較群組
 shap.plots.bar({
     "Male": shap_values[male_mask],
     "Female": shap_values[female_mask]
 })
 
-# Separate beeswarm plots
+# 分開的蜂群圖
 shap.plots.beeswarm(shap_values[male_mask])
 shap.plots.beeswarm(shap_values[female_mask])
 ```
 
-**Pattern 4: Debugging Predictions**
+**模式 4：除錯預測**
 ```python
-# Identify outliers or errors
+# 識別離群值或錯誤
 errors = (model.predict(X_test) != y_test)
 error_indices = np.where(errors)[0]
 
-# Explain errors
+# 解釋錯誤
 for idx in error_indices[:5]:
     print(f"Sample {idx}:")
     shap.plots.waterfall(shap_values[idx])
 
-    # Explore key features
+    # 探索關鍵特徵
     shap.plots.scatter(shap_values[:, "Key_Feature"])
 ```
 
-## Integration with Notebooks and Reports
+## 與 Notebooks 和報告的整合
 
-**Jupyter Notebooks**:
-- Interactive force plots work seamlessly
-- Use `show=True` (default) for inline display
-- Combine with markdown explanations
+**Jupyter Notebooks**：
+- 互動力場圖無縫運作
+- 使用 `show=True`（預設）進行內嵌顯示
+- 與 markdown 解釋結合
 
-**Static Reports**:
-- Use matplotlib backend for force plots
-- Save figures programmatically
-- Prefer waterfall and bar plots for clarity
+**靜態報告**：
+- 力場圖使用 matplotlib 後端
+- 程式化儲存圖形
+- 清晰度優先使用瀑布圖和長條圖
 
-**Web Applications**:
-- Export force plots as HTML
-- Use shap.save_html() for interactive visualizations
-- Consider generating plots on-demand
+**網頁應用程式**：
+- 將力場圖匯出為 HTML
+- 使用 shap.save_html() 進行互動視覺化
+- 考慮按需產生繪圖
 
-## Troubleshooting Visualizations
+## 視覺化疑難排解
 
-**Issue**: Plots don't display
-- **Solution**: Ensure matplotlib backend is set correctly; use `plt.show()` if needed
+**問題**：繪圖不顯示
+- **解決方案**：確保正確設定 matplotlib 後端；如需要使用 `plt.show()`
 
-**Issue**: Too many features cluttering plot
-- **Solution**: Reduce `max_display` parameter or use feature clustering
+**問題**：太多特徵使繪圖混亂
+- **解決方案**：減少 `max_display` 參數或使用特徵聚類
 
-**Issue**: Colors reversed or confusing
-- **Solution**: Check model output type (probability vs. log-odds) and use appropriate link function
+**問題**：顏色反轉或令人困惑
+- **解決方案**：檢查模型輸出類型（機率 vs. 對數賠率）並使用適當的連結函數
 
-**Issue**: Slow plotting with large datasets
-- **Solution**: Sample subset of data; use `shap_values[:1000]` for visualization
+**問題**：大型資料集繪圖緩慢
+- **解決方案**：對資料子集取樣；使用 `shap_values[:1000]` 進行視覺化
 
-**Issue**: Feature names missing
-- **Solution**: Ensure feature_names are in Explanation object or pass explicitly to plot functions
+**問題**：缺少特徵名稱
+- **解決方案**：確保特徵名稱在 Explanation 物件中或明確傳遞給繪圖函數

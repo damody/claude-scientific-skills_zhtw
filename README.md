@@ -1,617 +1,615 @@
-# Claude Scientific Skills
+# Claude 科學技能
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
-[![Skills](https://img.shields.io/badge/Skills-139-brightgreen.svg)](#whats-included)
+[![授權: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+[![技能](https://img.shields.io/badge/Skills-139-brightgreen.svg)](#包含內容)
 
-> 💼 For substantially more advanced capabilities including end-to-end research workflows built on top of Claude Scientific Skills, compute infrastructure, and publication quality outputs, check out [k-dense.ai](https://k-dense.ai/) and sign up for [K-Dense Web](https://app.k-dense.ai). One of the world's most advanced AI co-scientists. Get started with $50 of free credits!
+> 💼 如需更進階的功能，包括建構在 Claude 科學技能之上的端對端研究工作流程、運算基礎設施和出版品質輸出，請查看 [k-dense.ai](https://k-dense.ai/) 並註冊 [K-Dense Web](https://app.k-dense.ai)。這是世界上最先進的 AI 科學助手之一。開始使用可獲得 $50 美元免費額度！
 
-A comprehensive collection of **139 ready-to-use scientific skills** for Claude, created by the K-Dense team. Transform Claude into your AI research assistant capable of executing complex multi-step scientific workflows across biology, chemistry, medicine, and beyond.
+這是由 K-Dense 團隊建立的 **139 個即用型科學技能** 綜合集合。將 Claude 轉變為您的 AI 研究助理，能夠在生物學、化學、醫學等領域執行複雜的多步驟科學工作流程。
 
-These skills enable Claude to seamlessly work with specialized scientific libraries, databases, and tools across multiple scientific domains:
-- 🧬 Bioinformatics & Genomics - Sequence analysis, single-cell RNA-seq, gene regulatory networks, variant annotation, phylogenetic analysis
-- 🧪 Cheminformatics & Drug Discovery - Molecular property prediction, virtual screening, ADMET analysis, molecular docking, lead optimization
-- 🔬 Proteomics & Mass Spectrometry - LC-MS/MS processing, peptide identification, spectral matching, protein quantification
-- 🏥 Clinical Research & Precision Medicine - Clinical trials, pharmacogenomics, variant interpretation, drug safety, clinical decision support, treatment planning
-- 🧠 Healthcare AI & Clinical ML - EHR analysis, physiological signal processing, medical imaging, clinical prediction models
-- 🖼️ Medical Imaging & Digital Pathology - DICOM processing, whole slide image analysis, computational pathology, radiology workflows
-- 🤖 Machine Learning & AI - Deep learning, reinforcement learning, time series analysis, model interpretability, Bayesian methods
-- 🔮 Materials Science & Chemistry - Crystal structure analysis, phase diagrams, metabolic modeling, computational chemistry
-- 🌌 Physics & Astronomy - Astronomical data analysis, coordinate transformations, cosmological calculations, symbolic mathematics, physics computations
-- ⚙️ Engineering & Simulation - Discrete-event simulation, multi-objective optimization, metabolic engineering, systems modeling, process optimization
-- 📊 Data Analysis & Visualization - Statistical analysis, network analysis, time series, publication-quality figures, large-scale data processing, EDA
-- 🧪 Laboratory Automation - Liquid handling protocols, lab equipment control, workflow automation, LIMS integration
-- 📚 Scientific Communication - Literature review, peer review, scientific writing, document processing, posters, slides, schematics, citation management
-- 🔬 Multi-omics & Systems Biology - Multi-modal data integration, pathway analysis, network biology, systems-level insights
-- 🧬 Protein Engineering & Design - Protein language models, structure prediction, sequence design, function annotation
-- 🎓 Research Methodology - Hypothesis generation, scientific brainstorming, critical thinking, grant writing, scholar evaluation
+這些技能使 Claude 能夠無縫地使用跨多個科學領域的專業科學函式庫、資料庫和工具：
+- 🧬 生物資訊學與基因組學 - 序列分析、單細胞 RNA 定序、基因調控網路、變異註解、系統發生分析
+- 🧪 化學資訊學與藥物發現 - 分子性質預測、虛擬篩選、ADMET 分析、分子對接、先導化合物優化
+- 🔬 蛋白質組學與質譜分析 - LC-MS/MS 處理、胜肽鑑定、光譜比對、蛋白質定量
+- 🏥 臨床研究與精準醫學 - 臨床試驗、藥物基因組學、變異解讀、藥物安全、臨床決策支援、治療計畫
+- 🧠 醫療保健 AI 與臨床機器學習 - EHR 分析、生理訊號處理、醫學影像、臨床預測模型
+- 🖼️ 醫學影像與數位病理學 - DICOM 處理、全玻片影像分析、計算病理學、放射學工作流程
+- 🤖 機器學習與 AI - 深度學習、強化學習、時間序列分析、模型可解釋性、貝氏方法
+- 🔮 材料科學與化學 - 晶體結構分析、相圖、代謝建模、計算化學
+- 🌌 物理學與天文學 - 天文資料分析、座標轉換、宇宙學計算、符號數學、物理計算
+- ⚙️ 工程與模擬 - 離散事件模擬、多目標優化、代謝工程、系統建模、流程優化
+- 📊 資料分析與視覺化 - 統計分析、網路分析、時間序列、出版品質圖表、大規模資料處理、探索性資料分析
+- 🧪 實驗室自動化 - 液體處理協議、實驗室設備控制、工作流程自動化、LIMS 整合
+- 📚 科學傳播 - 文獻回顧、同儕審查、科學寫作、文件處理、海報、簡報、示意圖、引用管理
+- 🔬 多組學與系統生物學 - 多模態資料整合、路徑分析、網路生物學、系統層級洞察
+- 🧬 蛋白質工程與設計 - 蛋白質語言模型、結構預測、序列設計、功能註解
+- 🎓 研究方法論 - 假說生成、科學腦力激盪、批判性思考、研究計畫撰寫、學者評估
 
-**Transform Claude Code into an 'AI Scientist' on your desktop!**
+**將 Claude Code 轉變為您桌面上的「AI 科學家」！**
 
-> ⭐ **If you find this repository useful**, please consider giving it a star! It helps others discover these tools and encourages us to continue maintaining and expanding this collection.
-
----
-
-## 📦 What's Included
-
-This repository provides **139 scientific skills** organized into the following categories:
-
-- **28+ Scientific Databases** - Direct API access to OpenAlex, PubMed, bioRxiv, ChEMBL, UniProt, COSMIC, ClinicalTrials.gov, and more
-- **55+ Python Packages** - RDKit, Scanpy, PyTorch Lightning, scikit-learn, BioPython, BioServices, PennyLane, Qiskit, and others
-- **15+ Scientific Integrations** - Benchling, DNAnexus, LatchBio, OMERO, Protocols.io, and more
-- **30+ Analysis & Communication Tools** - Literature review, scientific writing, peer review, document processing, posters, slides, schematics, and more
-- **10+ Research & Clinical Tools** - Hypothesis generation, grant writing, clinical decision support, treatment plans, regulatory compliance
-
-Each skill includes:
-- ✅ Comprehensive documentation (`SKILL.md`)
-- ✅ Practical code examples
-- ✅ Use cases and best practices
-- ✅ Integration guides
-- ✅ Reference materials
+> ⭐ **如果您覺得這個儲存庫有用**，請考慮給它一顆星！這有助於其他人發現這些工具，並鼓勵我們繼續維護和擴展這個集合。
 
 ---
 
-## 📋 Table of Contents
+## 📦 包含內容
 
-- [What's Included](#whats-included)
-- [Why Use This?](#why-use-this)
-- [Getting Started](#getting-started)
-  - [Claude Code](#claude-code-recommended)
+此儲存庫提供 **139 個科學技能**，組織為以下類別：
+
+- **28+ 個科學資料庫** - 直接 API 存取 OpenAlex、PubMed、bioRxiv、ChEMBL、UniProt、COSMIC、ClinicalTrials.gov 等
+- **55+ 個 Python 套件** - RDKit、Scanpy、PyTorch Lightning、scikit-learn、BioPython、BioServices、PennyLane、Qiskit 等
+- **15+ 個科學整合** - Benchling、DNAnexus、LatchBio、OMERO、Protocols.io 等
+- **30+ 個分析與傳播工具** - 文獻回顧、科學寫作、同儕審查、文件處理、海報、簡報、示意圖等
+- **10+ 個研究與臨床工具** - 假說生成、研究計畫撰寫、臨床決策支援、治療計畫、法規遵循
+
+每個技能包含：
+- ✅ 完整文件（`SKILL.md`）
+- ✅ 實用程式碼範例
+- ✅ 使用案例與最佳實務
+- ✅ 整合指南
+- ✅ 參考資料
+
+---
+
+## 📋 目錄
+
+- [包含內容](#包含內容)
+- [為何使用這個？](#為何使用這個)
+- [開始使用](#開始使用)
+  - [Claude Code](#claude-code推薦)
   - [Cursor IDE](#cursor-ide)
-  - [Any MCP Client](#any-mcp-client)
-- [Prerequisites](#prerequisites)
-- [Quick Examples](#quick-examples)
-- [Use Cases](#use-cases)
-- [Available Skills](#available-skills)
-- [Contributing](#contributing)
-- [Troubleshooting](#troubleshooting)
-- [FAQ](#faq)
-- [Support](#support)
-- [Join Our Community](#join-our-community)
-- [Citation](#citation)
-- [License](#license)
+  - [任何 MCP 客戶端](#任何-mcp-客戶端)
+- [先決條件](#先決條件)
+- [快速範例](#快速範例)
+- [使用案例](#使用案例)
+- [可用技能](#可用技能)
+- [貢獻](#貢獻)
+- [疑難排解](#疑難排解)
+- [常見問題](#常見問題)
+- [支援](#支援)
+- [加入我們的社群](#加入我們的社群)
+- [引用](#引用)
+- [授權](#授權)
 
 ---
 
-## 🚀 Why Use This?
+## 🚀 為何使用這個？
 
-### ⚡ **Accelerate Your Research**
-- **Save Days of Work** - Skip API documentation research and integration setup
-- **Production-Ready Code** - Tested, validated examples following scientific best practices
-- **Multi-Step Workflows** - Execute complex pipelines with a single prompt
+### ⚡ **加速您的研究**
+- **節省數天的工作時間** - 跳過 API 文件研究和整合設定
+- **生產就緒程式碼** - 經過測試、驗證的範例，遵循科學最佳實務
+- **多步驟工作流程** - 用單一提示執行複雜的流程
 
-### 🎯 **Comprehensive Coverage**
-- **139 Skills** - Extensive coverage across all major scientific domains
-- **28+ Databases** - Direct access to OpenAlex, PubMed, bioRxiv, ChEMBL, UniProt, COSMIC, and more
-- **55+ Python Packages** - RDKit, Scanpy, PyTorch Lightning, scikit-learn, BioServices, PennyLane, Qiskit, and others
+### 🎯 **全面覆蓋**
+- **139 個技能** - 廣泛覆蓋所有主要科學領域
+- **28+ 個資料庫** - 直接存取 OpenAlex、PubMed、bioRxiv、ChEMBL、UniProt、COSMIC 等
+- **55+ 個 Python 套件** - RDKit、Scanpy、PyTorch Lightning、scikit-learn、BioServices、PennyLane、Qiskit 等
 
-### 🔧 **Easy Integration**
-- **One-Click Setup** - Install via Claude Code or MCP server
-- **Automatic Discovery** - Claude automatically finds and uses relevant skills
-- **Well Documented** - Each skill includes examples, use cases, and best practices
+### 🔧 **輕鬆整合**
+- **一鍵設定** - 透過 Claude Code 或 MCP 伺服器安裝
+- **自動發現** - Claude 自動找到並使用相關技能
+- **完善文件** - 每個技能都包含範例、使用案例和最佳實務
 
-### 🌟 **Maintained & Supported**
-- **Regular Updates** - Continuously maintained and expanded by K-Dense team
-- **Community Driven** - Open source with active community contributions
-- **Enterprise Ready** - Commercial support available for advanced needs
+### 🌟 **持續維護與支援**
+- **定期更新** - 由 K-Dense 團隊持續維護和擴展
+- **社群驅動** - 具有活躍社群貢獻的開源專案
+- **企業就緒** - 提供進階需求的商業支援
 
 ---
 
-## 🎯 Getting Started
+## 🎯 開始使用
 
-Choose your preferred platform to get started:
+選擇您偏好的平台開始：
 
-### 🖥️ Claude Code (Recommended)
+### 🖥️ Claude Code（推薦）
 
-> 📚 **New to Claude Code?** Check out the [Claude Code Quickstart Guide](https://docs.claude.com/en/docs/claude-code/quickstart) to get started. When using Claude Code please use the Skills as a plugin. Do not use the MCP server below.
+> 📚 **Claude Code 新手？** 查看 [Claude Code 快速入門指南](https://docs.claude.com/en/docs/claude-code/quickstart) 開始使用。使用 Claude Code 時，請將技能作為外掛使用。請勿使用下方的 MCP 伺服器。
 
-**Step 1: Install Claude Code**
+**步驟 1：安裝 Claude Code**
 
-**macOS:**
+**macOS：**
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-**Windows:**
+**Windows：**
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
 
-**Step 2: Register the Marketplace**
+**步驟 2：註冊市集**
 
 ```bash
 /plugin marketplace add K-Dense-AI/claude-scientific-skills
 ```
 
-**Step 3: Install Skills**
+**步驟 3：安裝技能**
 
-1. Open Claude Code
-2. Select **Browse and install plugins**
-3. Choose **claude-scientific-skills**
-4. Select **scientific-skills**
-5. Click **Install now**
+1. 開啟 Claude Code
+2. 選擇 **瀏覽並安裝外掛**
+3. 選擇 **claude-scientific-skills**
+4. 選擇 **scientific-skills**
+5. 點擊 **立即安裝**
 
-**That's it!** Claude will automatically use the appropriate skills when you describe your scientific tasks. Make sure to keep the skill up to date!
+**完成！** 當您描述科學任務時，Claude 會自動使用適當的技能。請確保保持技能為最新狀態！
 
 ---
 
 ### ⌨️ Cursor IDE
 
-One-click installation via our hosted MCP server:
+透過我們的託管 MCP 伺服器一鍵安裝：
 
 <a href="https://cursor.com/en-US/install-mcp?name=claude-scientific-skills&config=eyJ1cmwiOiJodHRwczovL21jcC5rLWRlbnNlLmFpL2NsYXVkZS1zY2llbnRpZmljLXNraWxscy9tY3AifQ%3D%3D">
   <picture>
     <source srcset="https://cursor.com/deeplink/mcp-install-light.svg" media="(prefers-color-scheme: dark)">
     <source srcset="https://cursor.com/deeplink/mcp-install-dark.svg" media="(prefers-color-scheme: light)">
-    <img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install MCP Server" style="height:2.7em;"/>
+    <img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="安裝 MCP 伺服器" style="height:2.7em;"/>
   </picture>
 </a>
 
 ---
 
-### 🔌 Any MCP Client (Not for Claude Code)
+### 🔌 任何 MCP 客戶端（非 Claude Code 使用）
 
-Access all skills via our MCP server in any MCP-compatible client (ChatGPT, Google ADK, OpenAI Agent SDK, etc.):
+透過我們的 MCP 伺服器在任何 MCP 相容客戶端（ChatGPT、Google ADK、OpenAI Agent SDK 等）存取所有技能：
 
-**Option 1: Hosted MCP Server** (Easiest)
+**選項 1：託管 MCP 伺服器**（最簡單）
 ```
 https://mcp.k-dense.ai/claude-scientific-skills/mcp
 ```
 
-**Option 2: Self-Hosted** (More Control)
-🔗 **[claude-skills-mcp](https://github.com/K-Dense-AI/claude-skills-mcp)** - Deploy your own MCP server
+**選項 2：自行託管**（更多控制）
+🔗 **[claude-skills-mcp](https://github.com/K-Dense-AI/claude-skills-mcp)** - 部署您自己的 MCP 伺服器
 
 ---
 
-## ⚙️ Prerequisites
+## ⚙️ 先決條件
 
-- **Python**: 3.9+ (3.12+ recommended for best compatibility)
-- **uv**: Python package manager (required for installing skill dependencies)
-- **Client**: Claude Code, Cursor, or any MCP-compatible client
-- **System**: macOS, Linux, or Windows with WSL2
-- **Dependencies**: Automatically handled by individual skills (check `SKILL.md` files for specific requirements)
+- **Python**：3.9+（建議 3.12+ 以獲得最佳相容性）
+- **uv**：Python 套件管理器（安裝技能相依性時需要）
+- **客戶端**：Claude Code、Cursor 或任何 MCP 相容客戶端
+- **系統**：macOS、Linux 或 Windows（含 WSL2）
+- **相依性**：由各個技能自動處理（查看 `SKILL.md` 檔案了解特定需求）
 
-### Installing uv
+### 安裝 uv
 
-The skills use `uv` as the package manager for installing Python dependencies. Install it using the instructions for your operating system:
+技能使用 `uv` 作為套件管理器來安裝 Python 相依性。根據您的作業系統使用以下說明安裝：
 
-**macOS and Linux:**
+**macOS 和 Linux：**
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-**Windows:**
+**Windows：**
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-**Alternative (via pip):**
+**替代方案（透過 pip）：**
 ```bash
 pip install uv
 ```
 
-After installation, verify it works by running:
+安裝後，執行以下命令確認是否正常運作：
 ```bash
 uv --version
 ```
 
-For more installation options and details, visit the [official uv documentation](https://docs.astral.sh/uv/).
+更多安裝選項和詳細資訊，請訪問 [官方 uv 文件](https://docs.astral.sh/uv/)。
 
 ---
 
-## 💡 Quick Examples
+## 💡 快速範例
 
-Once you've installed the skills, you can ask Claude to execute complex multi-step scientific workflows. Here are some example prompts:
+安裝技能後，您可以要求 Claude 執行複雜的多步驟科學工作流程。以下是一些範例提示：
 
-### 🧪 Drug Discovery Pipeline
-**Goal**: Find novel EGFR inhibitors for lung cancer treatment
+### 🧪 藥物發現流程
+**目標**：為肺癌治療尋找新型 EGFR 抑制劑
 
-**Prompt**:
+**提示**：
 ```
-Use available skills you have access to whenever possible. Query ChEMBL for EGFR inhibitors (IC50 < 50nM), analyze structure-activity relationships 
-with RDKit, generate improved analogs with datamol, perform virtual screening with DiffDock 
-against AlphaFold EGFR structure, search PubMed for resistance mechanisms, check COSMIC for 
-mutations, and create visualizations and a comprehensive report.
-```
-
-**Skills Used**: ChEMBL, RDKit, datamol, DiffDock, AlphaFold DB, PubMed, COSMIC, scientific visualization
-
----
-
-### 🔬 Single-Cell RNA-seq Analysis
-**Goal**: Comprehensive analysis of 10X Genomics data with public data integration
-
-**Prompt**:
-```
-Use available skills you have access to whenever possible. Load 10X dataset with Scanpy, perform QC and doublet removal, integrate with Cellxgene 
-Census data, identify cell types using NCBI Gene markers, run differential expression with 
-PyDESeq2, infer gene regulatory networks with Arboreto, enrich pathways via Reactome/KEGG, 
-and identify therapeutic targets with Open Targets.
+盡可能使用您可用的技能。從 ChEMBL 查詢 EGFR 抑制劑（IC50 < 50nM），使用 RDKit 分析結構-活性關係，
+使用 datamol 生成改進的類似物，使用 DiffDock 對 AlphaFold EGFR 結構進行虛擬篩選，
+在 PubMed 搜尋抗藥性機制，檢查 COSMIC 的突變，並建立視覺化和綜合報告。
 ```
 
-**Skills Used**: Scanpy, Cellxgene Census, NCBI Gene, PyDESeq2, Arboreto, Reactome, KEGG, Open Targets
+**使用的技能**：ChEMBL、RDKit、datamol、DiffDock、AlphaFold DB、PubMed、COSMIC、科學視覺化
 
 ---
 
-### 🧬 Multi-Omics Biomarker Discovery
-**Goal**: Integrate RNA-seq, proteomics, and metabolomics to predict patient outcomes
+### 🔬 單細胞 RNA 定序分析
+**目標**：整合公共資料的 10X Genomics 資料綜合分析
 
-**Prompt**:
+**提示**：
 ```
-Use available skills you have access to whenever possible. Analyze RNA-seq with PyDESeq2, process mass spec with pyOpenMS, integrate metabolites from 
-HMDB/Metabolomics Workbench, map proteins to pathways (UniProt/KEGG), find interactions via 
-STRING, correlate omics layers with statsmodels, build predictive model with scikit-learn, 
-and search ClinicalTrials.gov for relevant trials.
-```
-
-**Skills Used**: PyDESeq2, pyOpenMS, HMDB, Metabolomics Workbench, UniProt, KEGG, STRING, statsmodels, scikit-learn, ClinicalTrials.gov
-
----
-
-### 🎯 Virtual Screening Campaign
-**Goal**: Discover allosteric modulators for protein-protein interactions
-
-**Prompt**:
-```
-Use available skills you have access to whenever possible. Retrieve AlphaFold structures, identify interaction interface with BioPython, search ZINC 
-for allosteric candidates (MW 300-500, logP 2-4), filter with RDKit, dock with DiffDock, 
-rank with DeepChem, check PubChem suppliers, search USPTO patents, and optimize leads with 
-MedChem/molfeat.
+盡可能使用您可用的技能。使用 Scanpy 載入 10X 資料集，執行品質控制和雙細胞移除，與 Cellxgene
+Census 資料整合，使用 NCBI Gene 標記識別細胞類型，使用 PyDESeq2 執行差異表達分析，
+使用 Arboreto 推斷基因調控網路，透過 Reactome/KEGG 富集路徑，
+並使用 Open Targets 識別治療靶點。
 ```
 
-**Skills Used**: AlphaFold DB, BioPython, ZINC, RDKit, DiffDock, DeepChem, PubChem, USPTO, MedChem, molfeat
+**使用的技能**：Scanpy、Cellxgene Census、NCBI Gene、PyDESeq2、Arboreto、Reactome、KEGG、Open Targets
 
 ---
 
-### 🏥 Clinical Variant Interpretation
-**Goal**: Analyze VCF file for hereditary cancer risk assessment
+### 🧬 多組學生物標記發現
+**目標**：整合 RNA-seq、蛋白質組學和代謝組學來預測患者預後
 
-**Prompt**:
+**提示**：
 ```
-Use available skills you have access to whenever possible. Parse VCF with pysam, annotate variants with Ensembl VEP, query ClinVar for pathogenicity, 
-check COSMIC for cancer mutations, retrieve gene info from NCBI Gene, analyze protein impact 
-with UniProt, search PubMed for case reports, check ClinPGx for pharmacogenomics, generate 
-clinical report with ReportLab, and find matching trials on ClinicalTrials.gov.
-```
-
-**Skills Used**: pysam, Ensembl, ClinVar, COSMIC, NCBI Gene, UniProt, PubMed, ClinPGx, ReportLab, ClinicalTrials.gov
-
----
-
-### 🌐 Systems Biology Network Analysis
-**Goal**: Analyze gene regulatory networks from RNA-seq data
-
-**Prompt**:
-```
-Use available skills you have access to whenever possible. Query NCBI Gene for annotations, retrieve sequences from UniProt, identify interactions via 
-STRING, map to Reactome/KEGG pathways, analyze topology with Torch Geometric, reconstruct 
-GRNs with Arboreto, assess druggability with Open Targets, model with PyMC, visualize 
-networks, and search GEO for similar patterns.
+盡可能使用您可用的技能。使用 PyDESeq2 分析 RNA-seq，使用 pyOpenMS 處理質譜，整合 HMDB/Metabolomics
+Workbench 的代謝物，將蛋白質對應到路徑（UniProt/KEGG），透過 STRING 找到交互作用，
+使用 statsmodels 關聯組學層，使用 scikit-learn 建立預測模型，
+並在 ClinicalTrials.gov 搜尋相關試驗。
 ```
 
-**Skills Used**: NCBI Gene, UniProt, STRING, Reactome, KEGG, Torch Geometric, Arboreto, Open Targets, PyMC, GEO
-
-> 📖 **Want more examples?** Check out [docs/examples.md](docs/examples.md) for comprehensive workflow examples and detailed use cases across all scientific domains.
+**使用的技能**：PyDESeq2、pyOpenMS、HMDB、Metabolomics Workbench、UniProt、KEGG、STRING、statsmodels、scikit-learn、ClinicalTrials.gov
 
 ---
 
-## 🔬 Use Cases
+### 🎯 虛擬篩選活動
+**目標**：發現蛋白質-蛋白質交互作用的變構調節劑
 
-### 🧪 Drug Discovery & Medicinal Chemistry
-- **Virtual Screening**: Screen millions of compounds from PubChem/ZINC against protein targets
-- **Lead Optimization**: Analyze structure-activity relationships with RDKit, generate analogs with datamol
-- **ADMET Prediction**: Predict absorption, distribution, metabolism, excretion, and toxicity with DeepChem
-- **Molecular Docking**: Predict binding poses and affinities with DiffDock
-- **Bioactivity Mining**: Query ChEMBL for known inhibitors and analyze SAR patterns
+**提示**：
+```
+盡可能使用您可用的技能。檢索 AlphaFold 結構，使用 BioPython 識別交互界面，在 ZINC 搜尋變構候選物
+（MW 300-500，logP 2-4），使用 RDKit 過濾，使用 DiffDock 對接，使用 DeepChem 排序，
+檢查 PubChem 供應商，搜尋 USPTO 專利，並使用 MedChem/molfeat 優化先導化合物。
+```
 
-### 🧬 Bioinformatics & Genomics
-- **Sequence Analysis**: Process DNA/RNA/protein sequences with BioPython and pysam
-- **Single-Cell Analysis**: Analyze 10X Genomics data with Scanpy, identify cell types, infer GRNs with Arboreto
-- **Variant Annotation**: Annotate VCF files with Ensembl VEP, query ClinVar for pathogenicity
-- **Gene Discovery**: Query NCBI Gene, UniProt, and Ensembl for comprehensive gene information
-- **Network Analysis**: Identify protein-protein interactions via STRING, map to pathways (KEGG, Reactome)
-
-### 🏥 Clinical Research & Precision Medicine
-- **Clinical Trials**: Search ClinicalTrials.gov for relevant studies, analyze eligibility criteria
-- **Variant Interpretation**: Annotate variants with ClinVar, COSMIC, and ClinPGx for pharmacogenomics
-- **Drug Safety**: Query FDA databases for adverse events, drug interactions, and recalls
-- **Precision Therapeutics**: Match patient variants to targeted therapies and clinical trials
-
-### 🔬 Multi-Omics & Systems Biology
-- **Multi-Omics Integration**: Combine RNA-seq, proteomics, and metabolomics data
-- **Pathway Analysis**: Enrich differentially expressed genes in KEGG/Reactome pathways
-- **Network Biology**: Reconstruct gene regulatory networks, identify hub genes
-- **Biomarker Discovery**: Integrate multi-omics layers to predict patient outcomes
-
-### 📊 Data Analysis & Visualization
-- **Statistical Analysis**: Perform hypothesis testing, power analysis, and experimental design
-- **Publication Figures**: Create publication-quality visualizations with matplotlib and seaborn
-- **Network Visualization**: Visualize biological networks with NetworkX
-- **Report Generation**: Generate comprehensive PDF reports with ReportLab
-
-### 🧪 Laboratory Automation
-- **Protocol Design**: Create Opentrons protocols for automated liquid handling
-- **LIMS Integration**: Integrate with Benchling and LabArchives for data management
-- **Workflow Automation**: Automate multi-step laboratory workflows
+**使用的技能**：AlphaFold DB、BioPython、ZINC、RDKit、DiffDock、DeepChem、PubChem、USPTO、MedChem、molfeat
 
 ---
 
-## 📚 Available Skills
+### 🏥 臨床變異解讀
+**目標**：分析 VCF 檔案進行遺傳性癌症風險評估
 
-This repository contains **139 scientific skills** organized across multiple domains. Each skill provides comprehensive documentation, code examples, and best practices for working with scientific libraries, databases, and tools.
+**提示**：
+```
+盡可能使用您可用的技能。使用 pysam 解析 VCF，使用 Ensembl VEP 註解變異，查詢 ClinVar 的致病性，
+檢查 COSMIC 的癌症突變，從 NCBI Gene 檢索基因資訊，使用 UniProt 分析蛋白質影響，
+在 PubMed 搜尋病例報告，檢查 ClinPGx 的藥物基因組學，使用 ReportLab 生成臨床報告，
+並在 ClinicalTrials.gov 尋找匹配的試驗。
+```
 
-### Skill Categories
-
-#### 🧬 **Bioinformatics & Genomics** (16+ skills)
-- Sequence analysis: BioPython, pysam, scikit-bio, BioServices
-- Single-cell analysis: Scanpy, AnnData, scvi-tools, Arboreto, Cellxgene Census
-- Genomic tools: gget, geniml, gtars, deepTools, FlowIO, Zarr
-- Phylogenetics: ETE Toolkit
-
-#### 🧪 **Cheminformatics & Drug Discovery** (10+ skills)
-- Molecular manipulation: RDKit, Datamol, Molfeat
-- Deep learning: DeepChem, TorchDrug
-- Docking & screening: DiffDock
-- Drug-likeness: MedChem
-- Benchmarks: PyTDC
-
-#### 🔬 **Proteomics & Mass Spectrometry** (2 skills)
-- Spectral processing: matchms, pyOpenMS
-
-#### 🏥 **Clinical Research & Precision Medicine** (12+ skills)
-- Clinical databases: ClinicalTrials.gov, ClinVar, ClinPGx, COSMIC, FDA Databases
-- Healthcare AI: PyHealth, NeuroKit2, Clinical Decision Support
-- Clinical documentation: Clinical Reports, Treatment Plans
-- Variant analysis: Ensembl, NCBI Gene
-
-#### 🖼️ **Medical Imaging & Digital Pathology** (3 skills)
-- DICOM processing: pydicom
-- Whole slide imaging: histolab, PathML
-
-#### 🧠 **Neuroscience & Electrophysiology** (1 skill)
-- Neural recordings: Neuropixels-Analysis (extracellular spikes, silicon probes, spike sorting)
-
-#### 🤖 **Machine Learning & AI** (15+ skills)
-- Deep learning: PyTorch Lightning, Transformers, Stable Baselines3, PufferLib
-- Classical ML: scikit-learn, scikit-survival, SHAP
-- Time series: aeon
-- Bayesian methods: PyMC
-- Optimization: PyMOO
-- Graph ML: Torch Geometric
-- Dimensionality reduction: UMAP-learn
-- Statistical modeling: statsmodels
-
-#### 🔮 **Materials Science, Chemistry & Physics** (7 skills)
-- Materials: Pymatgen
-- Metabolic modeling: COBRApy
-- Astronomy: Astropy
-- Quantum computing: Cirq, PennyLane, Qiskit, QuTiP
-
-#### ⚙️ **Engineering & Simulation** (4 skills)
-- Numerical computing: MATLAB/Octave
-- Computational fluid dynamics: FluidSim
-- Discrete-event simulation: SimPy
-- Data processing: Dask, Polars, Vaex
-
-#### 📊 **Data Analysis & Visualization** (14+ skills)
-- Visualization: Matplotlib, Seaborn, Plotly, Scientific Visualization
-- Geospatial analysis: GeoPandas
-- Network analysis: NetworkX
-- Symbolic math: SymPy
-- PDF generation: ReportLab
-- Data access: Data Commons
-- Exploratory data analysis: EDA workflows
-- Statistical analysis: Statistical Analysis workflows
-
-#### 🧪 **Laboratory Automation** (3 skills)
-- Liquid handling: PyLabRobot
-- Protocol management: Protocols.io
-- LIMS integration: Benchling, LabArchives
-
-#### 🔬 **Multi-omics & Systems Biology** (5+ skills)
-- Pathway analysis: KEGG, Reactome, STRING
-- Multi-omics: BIOMNI, Denario, HypoGeniC
-- Data management: LaminDB
-
-#### 🧬 **Protein Engineering & Design** (2 skills)
-- Protein language models: ESM
-- Cloud laboratory platform: Adaptyv (automated protein testing and validation)
-
-#### 📚 **Scientific Communication** (20+ skills)
-- Literature: OpenAlex, PubMed, bioRxiv, Literature Review
-- Web search: Perplexity Search (AI-powered search with real-time information)
-- Writing: Scientific Writing, Peer Review
-- Document processing: XLSX, MarkItDown, Document Skills
-- Publishing: Paper-2-Web, Venue Templates
-- Presentations: Scientific Slides, LaTeX Posters, PPTX Posters
-- Diagrams: Scientific Schematics
-- Citations: Citation Management
-- Illustration: Generate Image (AI image generation with FLUX.2 Pro and Gemini 3 Pro (Nano Banana Pro))
-
-#### 🔬 **Scientific Databases** (28+ skills)
-- Protein: UniProt, PDB, AlphaFold DB
-- Chemical: PubChem, ChEMBL, DrugBank, ZINC, HMDB
-- Genomic: Ensembl, NCBI Gene, GEO, ENA, GWAS Catalog
-- Literature: bioRxiv (preprints)
-- Clinical: ClinVar, COSMIC, ClinicalTrials.gov, ClinPGx, FDA Databases
-- Pathways: KEGG, Reactome, STRING
-- Targets: Open Targets
-- Metabolomics: Metabolomics Workbench
-- Enzymes: BRENDA
-- Patents: USPTO
-
-#### 🔧 **Infrastructure & Platforms** (6+ skills)
-- Cloud compute: Modal
-- Genomics platforms: DNAnexus, LatchBio
-- Microscopy: OMERO
-- Automation: Opentrons
-- Tool discovery: ToolUniverse, Get Available Resources
-
-#### 🎓 **Research Methodology & Planning** (8+ skills)
-- Ideation: Scientific Brainstorming, Hypothesis Generation
-- Critical analysis: Scientific Critical Thinking, Scholar Evaluation
-- Funding: Research Grants
-- Discovery: Research Lookup
-- Market analysis: Market Research Reports
-
-#### ⚖️ **Regulatory & Standards** (1 skill)
-- Medical device standards: ISO 13485 Certification
-
-> 📖 **For complete details on all skills**, see [docs/scientific-skills.md](docs/scientific-skills.md)
-
-> 💡 **Looking for practical examples?** Check out [docs/examples.md](docs/examples.md) for comprehensive workflow examples across all scientific domains.
+**使用的技能**：pysam、Ensembl、ClinVar、COSMIC、NCBI Gene、UniProt、PubMed、ClinPGx、ReportLab、ClinicalTrials.gov
 
 ---
 
-## 🤝 Contributing
+### 🌐 系統生物學網路分析
+**目標**：從 RNA-seq 資料分析基因調控網路
 
-We welcome contributions to expand and improve this scientific skills repository!
+**提示**：
+```
+盡可能使用您可用的技能。從 NCBI Gene 查詢註解，從 UniProt 檢索序列，透過 STRING 識別交互作用，
+對應到 Reactome/KEGG 路徑，使用 Torch Geometric 分析拓撲，使用 Arboreto 重建 GRN，
+使用 Open Targets 評估可藥性，使用 PyMC 建模，視覺化網路，
+並在 GEO 搜尋相似模式。
+```
 
-### Ways to Contribute
+**使用的技能**：NCBI Gene、UniProt、STRING、Reactome、KEGG、Torch Geometric、Arboreto、Open Targets、PyMC、GEO
 
-✨ **Add New Skills**
-- Create skills for additional scientific packages or databases
-- Add integrations for scientific platforms and tools
-
-📚 **Improve Existing Skills**
-- Enhance documentation with more examples and use cases
-- Add new workflows and reference materials
-- Improve code examples and scripts
-- Fix bugs or update outdated information
-
-🐛 **Report Issues**
-- Submit bug reports with detailed reproduction steps
-- Suggest improvements or new features
-
-### How to Contribute
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-skill`)
-3. **Follow** the existing directory structure and documentation patterns
-4. **Ensure** all new skills include comprehensive `SKILL.md` files
-5. **Test** your examples and workflows thoroughly
-6. **Commit** your changes (`git commit -m 'Add amazing skill'`)
-7. **Push** to your branch (`git push origin feature/amazing-skill`)
-8. **Submit** a pull request with a clear description of your changes
-
-### Contribution Guidelines
-
-✅ Maintain consistency with existing skill documentation format  
-✅ Include practical, working examples in all contributions  
-✅ Ensure all code examples are tested and functional  
-✅ Follow scientific best practices in examples and workflows  
-✅ Update relevant documentation when adding new capabilities  
-✅ Provide clear comments and docstrings in code  
-✅ Include references to official documentation
-
-### Recognition
-
-Contributors are recognized in our community and may be featured in:
-- Repository contributors list
-- Special mentions in release notes
-- K-Dense community highlights
-
-Your contributions help make scientific computing more accessible and enable researchers to leverage AI tools more effectively!
+> 📖 **想要更多範例？** 查看 [docs/examples.md](docs/examples.md) 了解所有科學領域的完整工作流程範例和詳細使用案例。
 
 ---
 
-## 🔧 Troubleshooting
+## 🔬 使用案例
 
-### Common Issues
+### 🧪 藥物發現與藥物化學
+- **虛擬篩選**：從 PubChem/ZINC 篩選數百萬化合物對抗蛋白質靶點
+- **先導化合物優化**：使用 RDKit 分析結構-活性關係，使用 datamol 生成類似物
+- **ADMET 預測**：使用 DeepChem 預測吸收、分佈、代謝、排泄和毒性
+- **分子對接**：使用 DiffDock 預測結合姿態和親和力
+- **生物活性挖掘**：查詢 ChEMBL 已知抑制劑並分析 SAR 模式
 
-**Problem: Skills not loading in Claude Code**
-- Solution: Ensure you've installed the latest version of Claude Code
-- Try reinstalling the plugin: `/plugin marketplace add K-Dense-AI/claude-scientific-skills`
+### 🧬 生物資訊學與基因組學
+- **序列分析**：使用 BioPython 和 pysam 處理 DNA/RNA/蛋白質序列
+- **單細胞分析**：使用 Scanpy 分析 10X Genomics 資料，識別細胞類型，使用 Arboreto 推斷 GRN
+- **變異註解**：使用 Ensembl VEP 註解 VCF 檔案，查詢 ClinVar 的致病性
+- **基因發現**：查詢 NCBI Gene、UniProt 和 Ensembl 獲取全面的基因資訊
+- **網路分析**：透過 STRING 識別蛋白質-蛋白質交互作用，對應到路徑（KEGG、Reactome）
 
-**Problem: Missing Python dependencies**
-- Solution: Check the specific `SKILL.md` file for required packages
-- Install dependencies: `uv pip install package-name`
+### 🏥 臨床研究與精準醫學
+- **臨床試驗**：在 ClinicalTrials.gov 搜尋相關研究，分析資格標準
+- **變異解讀**：使用 ClinVar、COSMIC 和 ClinPGx 註解變異進行藥物基因組學分析
+- **藥物安全**：查詢 FDA 資料庫了解不良事件、藥物交互作用和召回
+- **精準治療**：將患者變異與標靶治療和臨床試驗配對
 
-**Problem: API rate limits**
-- Solution: Many databases have rate limits. Review the specific database documentation
-- Consider implementing caching or batch requests
+### 🔬 多組學與系統生物學
+- **多組學整合**：結合 RNA-seq、蛋白質組學和代謝組學資料
+- **路徑分析**：在 KEGG/Reactome 路徑中富集差異表達基因
+- **網路生物學**：重建基因調控網路，識別樞紐基因
+- **生物標記發現**：整合多組學層以預測患者預後
 
-**Problem: Authentication errors**
-- Solution: Some services require API keys. Check the `SKILL.md` for authentication setup
-- Verify your credentials and permissions
+### 📊 資料分析與視覺化
+- **統計分析**：執行假設檢定、檢定力分析和實驗設計
+- **出版圖表**：使用 matplotlib 和 seaborn 建立出版品質的視覺化
+- **網路視覺化**：使用 NetworkX 視覺化生物網路
+- **報告生成**：使用 ReportLab 生成綜合 PDF 報告
 
-**Problem: Outdated examples**
-- Solution: Report the issue via GitHub Issues
-- Check the official package documentation for updated syntax
-
----
-
-## ❓ FAQ
-
-### General Questions
-
-**Q: Is this free to use?**  
-A: Yes! This repository is MIT licensed. However, each individual skill has its own license specified in the `license` metadata field within its `SKILL.md` file—be sure to review and comply with those terms.
-
-**Q: Why are all skills grouped into one plugin instead of separate plugins?**  
-A: We believe good science in the age of AI is inherently interdisciplinary. Bundling all skills into a single plugin makes it trivial for you (and Claude) to bridge across fields—e.g., combining genomics, cheminformatics, clinical data, and machine learning in one workflow—without worrying about which individual skills to install or wire together.
-
-**Q: Can I use this for commercial projects?**  
-A: The repository itself is MIT licensed, which allows commercial use. However, individual skills may have different licenses—check the `license` field in each skill's `SKILL.md` file to ensure compliance with your intended use.
-
-**Q: Do all skills have the same license?**  
-A: No. Each skill has its own license specified in the `license` metadata field within its `SKILL.md` file. These licenses may differ from the repository's MIT License. Users are responsible for reviewing and adhering to the license terms of each individual skill they use.
-
-**Q: How often is this updated?**  
-A: We regularly update skills to reflect the latest versions of packages and APIs. Major updates are announced in release notes.
-
-**Q: Can I use this with other AI models?**  
-A: The skills are optimized for Claude but can be adapted for other models with MCP support. The MCP server works with any MCP-compatible client.
-
-### Installation & Setup
-
-**Q: Do I need all the Python packages installed?**  
-A: No! Only install the packages you need. Each skill specifies its requirements in its `SKILL.md` file.
-
-**Q: What if a skill doesn't work?**  
-A: First check the [Troubleshooting](#troubleshooting) section. If the issue persists, file an issue on GitHub with detailed reproduction steps.
-
-**Q: Do the skills work offline?**  
-A: Database skills require internet access to query APIs. Package skills work offline once Python dependencies are installed.
-
-### Contributing
-
-**Q: Can I contribute my own skills?**  
-A: Absolutely! We welcome contributions. See the [Contributing](#contributing) section for guidelines and best practices.
-
-**Q: How do I report bugs or suggest features?**  
-A: Open an issue on GitHub with a clear description. For bugs, include reproduction steps and expected vs actual behavior.
+### 🧪 實驗室自動化
+- **協議設計**：建立 Opentrons 自動化液體處理協議
+- **LIMS 整合**：與 Benchling 和 LabArchives 整合進行資料管理
+- **工作流程自動化**：自動化多步驟實驗室工作流程
 
 ---
 
-## 💬 Support
+## 📚 可用技能
 
-Need help? Here's how to get support:
+此儲存庫包含 **139 個科學技能**，組織跨多個領域。每個技能提供全面的文件、程式碼範例和使用科學函式庫、資料庫和工具的最佳實務。
 
-- 📖 **Documentation**: Check the relevant `SKILL.md` and `references/` folders
-- 🐛 **Bug Reports**: [Open an issue](https://github.com/K-Dense-AI/claude-scientific-skills/issues)
-- 💡 **Feature Requests**: [Submit a feature request](https://github.com/K-Dense-AI/claude-scientific-skills/issues/new)
-- 💼 **Enterprise Support**: Contact [K-Dense](https://k-dense.ai/) for commercial support
-- 🌐 **MCP Support**: Visit the [claude-skills-mcp](https://github.com/K-Dense-AI/claude-skills-mcp) repository or use our hosted MCP server
+### 技能類別
+
+#### 🧬 **生物資訊學與基因組學**（16+ 技能）
+- 序列分析：BioPython、pysam、scikit-bio、BioServices
+- 單細胞分析：Scanpy、AnnData、scvi-tools、Arboreto、Cellxgene Census
+- 基因組工具：gget、geniml、gtars、deepTools、FlowIO、Zarr
+- 系統發生學：ETE Toolkit
+
+#### 🧪 **化學資訊學與藥物發現**（10+ 技能）
+- 分子操作：RDKit、Datamol、Molfeat
+- 深度學習：DeepChem、TorchDrug
+- 對接與篩選：DiffDock
+- 藥物相似性：MedChem
+- 基準測試：PyTDC
+
+#### 🔬 **蛋白質組學與質譜分析**（2 技能）
+- 光譜處理：matchms、pyOpenMS
+
+#### 🏥 **臨床研究與精準醫學**（12+ 技能）
+- 臨床資料庫：ClinicalTrials.gov、ClinVar、ClinPGx、COSMIC、FDA 資料庫
+- 醫療保健 AI：PyHealth、NeuroKit2、臨床決策支援
+- 臨床文件：臨床報告、治療計畫
+- 變異分析：Ensembl、NCBI Gene
+
+#### 🖼️ **醫學影像與數位病理學**（3 技能）
+- DICOM 處理：pydicom
+- 全玻片影像：histolab、PathML
+
+#### 🧠 **神經科學與電生理學**（1 技能）
+- 神經記錄：Neuropixels-Analysis（細胞外脈衝、矽探針、脈衝分類）
+
+#### 🤖 **機器學習與 AI**（15+ 技能）
+- 深度學習：PyTorch Lightning、Transformers、Stable Baselines3、PufferLib
+- 傳統 ML：scikit-learn、scikit-survival、SHAP
+- 時間序列：aeon
+- 貝氏方法：PyMC
+- 優化：PyMOO
+- 圖神經網路：Torch Geometric
+- 降維：UMAP-learn
+- 統計建模：statsmodels
+
+#### 🔮 **材料科學、化學與物理**（7 技能）
+- 材料：Pymatgen
+- 代謝建模：COBRApy
+- 天文學：Astropy
+- 量子計算：Cirq、PennyLane、Qiskit、QuTiP
+
+#### ⚙️ **工程與模擬**（4 技能）
+- 數值計算：MATLAB/Octave
+- 計算流體力學：FluidSim
+- 離散事件模擬：SimPy
+- 資料處理：Dask、Polars、Vaex
+
+#### 📊 **資料分析與視覺化**（14+ 技能）
+- 視覺化：Matplotlib、Seaborn、Plotly、科學視覺化
+- 地理空間分析：GeoPandas
+- 網路分析：NetworkX
+- 符號數學：SymPy
+- PDF 生成：ReportLab
+- 資料存取：Data Commons
+- 探索性資料分析：EDA 工作流程
+- 統計分析：統計分析工作流程
+
+#### 🧪 **實驗室自動化**（3 技能）
+- 液體處理：PyLabRobot
+- 協議管理：Protocols.io
+- LIMS 整合：Benchling、LabArchives
+
+#### 🔬 **多組學與系統生物學**（5+ 技能）
+- 路徑分析：KEGG、Reactome、STRING
+- 多組學：BIOMNI、Denario、HypoGeniC
+- 資料管理：LaminDB
+
+#### 🧬 **蛋白質工程與設計**（2 技能）
+- 蛋白質語言模型：ESM
+- 雲端實驗室平台：Adaptyv（自動化蛋白質測試與驗證）
+
+#### 📚 **科學傳播**（20+ 技能）
+- 文獻：OpenAlex、PubMed、bioRxiv、文獻回顧
+- 網路搜尋：Perplexity Search（具有即時資訊的 AI 驅動搜尋）
+- 寫作：科學寫作、同儕審查
+- 文件處理：XLSX、MarkItDown、文件技能
+- 出版：Paper-2-Web、會議範本
+- 簡報：科學簡報、LaTeX 海報、PPTX 海報
+- 圖表：科學示意圖
+- 引用：引用管理
+- 插圖：生成圖像（使用 FLUX.2 Pro 和 Gemini 3 Pro（Nano Banana Pro）的 AI 圖像生成）
+
+#### 🔬 **科學資料庫**（28+ 技能）
+- 蛋白質：UniProt、PDB、AlphaFold DB
+- 化學：PubChem、ChEMBL、DrugBank、ZINC、HMDB
+- 基因組：Ensembl、NCBI Gene、GEO、ENA、GWAS Catalog
+- 文獻：bioRxiv（預印本）
+- 臨床：ClinVar、COSMIC、ClinicalTrials.gov、ClinPGx、FDA 資料庫
+- 路徑：KEGG、Reactome、STRING
+- 靶點：Open Targets
+- 代謝組學：Metabolomics Workbench
+- 酵素：BRENDA
+- 專利：USPTO
+
+#### 🔧 **基礎設施與平台**（6+ 技能）
+- 雲端運算：Modal
+- 基因組平台：DNAnexus、LatchBio
+- 顯微鏡：OMERO
+- 自動化：Opentrons
+- 工具發現：ToolUniverse、Get Available Resources
+
+#### 🎓 **研究方法論與規劃**（8+ 技能）
+- 發想：科學腦力激盪、假說生成
+- 批判分析：科學批判性思考、學者評估
+- 經費：研究計畫
+- 發現：研究查詢
+- 市場分析：市場研究報告
+
+#### ⚖️ **法規與標準**（1 技能）
+- 醫療器材標準：ISO 13485 認證
+
+> 📖 **所有技能的完整詳細資訊**，請參閱 [docs/scientific-skills.md](docs/scientific-skills.md)
+
+> 💡 **尋找實用範例？** 查看 [docs/examples.md](docs/examples.md) 了解所有科學領域的完整工作流程範例。
 
 ---
 
-## 🎉 Join Our Community!
+## 🤝 貢獻
 
-**We'd love to have you join us!** 🚀
+我們歡迎為擴展和改進此科學技能儲存庫的貢獻！
 
-Connect with other scientists, researchers, and AI enthusiasts using Claude for scientific computing. Share your discoveries, ask questions, get help with your projects, and collaborate with the community!
+### 貢獻方式
 
-🌟 **[Join our Slack Community](https://join.slack.com/t/k-densecommunity/shared_invite/zt-3iajtyls1-EwmkwIZk0g_o74311Tkf5g)** 🌟
+✨ **新增技能**
+- 為額外的科學套件或資料庫建立技能
+- 新增科學平台和工具的整合
 
-Whether you're just getting started or you're a power user, our community is here to support you. We share tips, troubleshoot issues together, showcase cool projects, and discuss the latest developments in AI-powered scientific research.
+📚 **改進現有技能**
+- 以更多範例和使用案例增強文件
+- 新增工作流程和參考資料
+- 改進程式碼範例和腳本
+- 修復錯誤或更新過時資訊
 
-**See you there!** 💬
+🐛 **回報問題**
+- 提交包含詳細重現步驟的錯誤報告
+- 建議改進或新功能
+
+### 如何貢獻
+
+1. **Fork** 儲存庫
+2. **建立** 功能分支（`git checkout -b feature/amazing-skill`）
+3. **遵循** 現有目錄結構和文件模式
+4. **確保** 所有新技能都包含完整的 `SKILL.md` 檔案
+5. **徹底測試** 您的範例和工作流程
+6. **提交** 您的變更（`git commit -m 'Add amazing skill'`）
+7. **推送** 到您的分支（`git push origin feature/amazing-skill`）
+8. **提交** 包含清楚變更描述的拉取請求
+
+### 貢獻指南
+
+✅ 保持與現有技能文件格式的一致性
+✅ 在所有貢獻中包含實用、可運作的範例
+✅ 確保所有程式碼範例都經過測試且功能正常
+✅ 在範例和工作流程中遵循科學最佳實務
+✅ 新增功能時更新相關文件
+✅ 在程式碼中提供清楚的註解和文件字串
+✅ 包含官方文件的參考
+
+### 認可
+
+貢獻者會在我們的社群中獲得認可，並可能在以下地方被特別提及：
+- 儲存庫貢獻者列表
+- 版本說明中的特別提及
+- K-Dense 社群亮點
+
+您的貢獻有助於讓科學計算更容易取得，並使研究人員能更有效地利用 AI 工具！
 
 ---
 
-## 📖 Citation
+## 🔧 疑難排解
 
-If you use Claude Scientific Skills in your research or project, please cite it as:
+### 常見問題
+
+**問題：技能無法在 Claude Code 中載入**
+- 解決方案：確保您已安裝最新版本的 Claude Code
+- 嘗試重新安裝外掛：`/plugin marketplace add K-Dense-AI/claude-scientific-skills`
+
+**問題：缺少 Python 相依性**
+- 解決方案：查看特定的 `SKILL.md` 檔案了解所需套件
+- 安裝相依性：`uv pip install package-name`
+
+**問題：API 速率限制**
+- 解決方案：許多資料庫有速率限制。查看特定資料庫文件
+- 考慮實作快取或批次請求
+
+**問題：認證錯誤**
+- 解決方案：某些服務需要 API 金鑰。查看 `SKILL.md` 了解認證設定
+- 驗證您的憑證和權限
+
+**問題：過時的範例**
+- 解決方案：透過 GitHub Issues 回報問題
+- 查看官方套件文件了解更新的語法
+
+---
+
+## ❓ 常見問題
+
+### 一般問題
+
+**問：這是免費使用的嗎？**
+答：是的！此儲存庫採用 MIT 授權。但是，每個技能都有自己的授權，在其 `SKILL.md` 檔案的 `license` 元資料欄位中指定——請務必查看並遵守這些條款。
+
+**問：為什麼所有技能都分組在一個外掛中，而不是分開的外掛？**
+答：我們相信 AI 時代的優秀科學本質上是跨學科的。將所有技能捆綁在一個外掛中，讓您（和 Claude）可以輕鬆跨領域橋接——例如，在一個工作流程中結合基因組學、化學資訊學、臨床資料和機器學習——無需擔心要安裝或連接哪些個別技能。
+
+**問：我可以將這用於商業專案嗎？**
+答：儲存庫本身採用 MIT 授權，允許商業使用。但是，個別技能可能有不同的授權——查看每個技能 `SKILL.md` 檔案中的 `license` 欄位以確保符合您的預期用途。
+
+**問：所有技能都有相同的授權嗎？**
+答：沒有。每個技能在其 `SKILL.md` 檔案的 `license` 元資料欄位中指定了自己的授權。這些授權可能與儲存庫的 MIT 授權不同。使用者有責任查看並遵守他們使用的每個技能的授權條款。
+
+**問：這多久更新一次？**
+答：我們定期更新技能以反映最新版本的套件和 API。主要更新會在版本說明中公告。
+
+**問：我可以將這與其他 AI 模型一起使用嗎？**
+答：這些技能針對 Claude 進行了優化，但可以調整用於其他支援 MCP 的模型。MCP 伺服器可與任何 MCP 相容客戶端一起使用。
+
+### 安裝與設定
+
+**問：我需要安裝所有 Python 套件嗎？**
+答：不需要！只安裝您需要的套件。每個技能在其 `SKILL.md` 檔案中指定其需求。
+
+**問：如果技能無法運作怎麼辦？**
+答：首先查看[疑難排解](#疑難排解)部分。如果問題持續存在，請在 GitHub 上提交包含詳細重現步驟的 issue。
+
+**問：技能可以離線運作嗎？**
+答：資料庫技能需要網路連線來查詢 API。一旦安裝 Python 相依性，套件技能可以離線運作。
+
+### 貢獻
+
+**問：我可以貢獻自己的技能嗎？**
+答：當然可以！我們歡迎貢獻。請參閱[貢獻](#貢獻)部分了解指南和最佳實務。
+
+**問：如何回報錯誤或建議功能？**
+答：在 GitHub 上開啟包含清楚描述的 issue。對於錯誤，請包含重現步驟以及預期與實際行為。
+
+---
+
+## 💬 支援
+
+需要幫助？以下是獲得支援的方式：
+
+- 📖 **文件**：查看相關的 `SKILL.md` 和 `references/` 資料夾
+- 🐛 **錯誤報告**：[開啟 issue](https://github.com/K-Dense-AI/claude-scientific-skills/issues)
+- 💡 **功能請求**：[提交功能請求](https://github.com/K-Dense-AI/claude-scientific-skills/issues/new)
+- 💼 **企業支援**：聯繫 [K-Dense](https://k-dense.ai/) 獲得商業支援
+- 🌐 **MCP 支援**：訪問 [claude-skills-mcp](https://github.com/K-Dense-AI/claude-skills-mcp) 儲存庫或使用我們的託管 MCP 伺服器
+
+---
+
+## 🎉 加入我們的社群！
+
+**我們很樂意讓您加入！** 🚀
+
+與其他使用 Claude 進行科學計算的科學家、研究人員和 AI 愛好者連結。分享您的發現、提出問題、獲得專案幫助，並與社群合作！
+
+🌟 **[加入我們的 Slack 社群](https://join.slack.com/t/k-densecommunity/shared_invite/zt-3iajtyls1-EwmkwIZk0g_o74311Tkf5g)** 🌟
+
+無論您是剛入門還是進階使用者，我們的社群都在這裡支援您。我們分享技巧、一起解決問題、展示酷炫專案，並討論 AI 驅動科學研究的最新發展。
+
+**那裡見！** 💬
+
+---
+
+## 📖 引用
+
+如果您在研究或專案中使用 Claude 科學技能，請以以下方式引用：
 
 ### BibTeX
 ```bibtex
@@ -620,7 +618,7 @@ If you use Claude Scientific Skills in your research or project, please cite it 
   title = {Claude Scientific Skills: A Comprehensive Collection of Scientific Tools for Claude AI},
   year = {2025},
   url = {https://github.com/K-Dense-AI/claude-scientific-skills},
-  note = {skills covering databases, packages, integrations, and analysis tools}
+  note = {涵蓋資料庫、套件、整合和分析工具的技能}
 }
 ```
 
@@ -634,34 +632,34 @@ K-Dense Inc. (2025). Claude Scientific Skills: A comprehensive collection of sci
 K-Dense Inc. Claude Scientific Skills: A Comprehensive Collection of Scientific Tools for Claude AI. 2025, github.com/K-Dense-AI/claude-scientific-skills.
 ```
 
-### Plain Text
+### 純文字
 ```
 Claude Scientific Skills by K-Dense Inc. (2025)
-Available at: https://github.com/K-Dense-AI/claude-scientific-skills
+可在以下網址取得：https://github.com/K-Dense-AI/claude-scientific-skills
 ```
 
-We appreciate acknowledgment in publications, presentations, or projects that benefit from these skills!
+我們感謝在受益於這些技能的出版物、簡報或專案中的致謝！
 
 ---
 
-## 📄 License
+## 📄 授權
 
-This project is licensed under the **MIT License**.
+此專案採用 **MIT 授權**。
 
-**Copyright © 2025 K-Dense Inc.** ([k-dense.ai](https://k-dense.ai/))
+**版權 © 2025 K-Dense Inc.** ([k-dense.ai](https://k-dense.ai/))
 
-### Key Points:
-- ✅ **Free for any use** (commercial and noncommercial)
-- ✅ **Open source** - modify, distribute, and use freely
-- ✅ **Permissive** - minimal restrictions on reuse
-- ⚠️ **No warranty** - provided "as is" without warranty of any kind
+### 重點：
+- ✅ **任何用途免費**（商業和非商業）
+- ✅ **開源** - 自由修改、分發和使用
+- ✅ **寬鬆** - 重複使用的限制最少
+- ⚠️ **無保證** - 以「現狀」提供，不提供任何形式的保證
 
-See [LICENSE.md](LICENSE.md) for full terms.
+完整條款請參閱 [LICENSE.md](LICENSE.md)。
 
-### Individual Skill Licenses
+### 個別技能授權
 
-> ⚠️ **Important**: Each skill has its own license specified in the `license` metadata field within its `SKILL.md` file. These licenses may differ from the repository's MIT License and may include additional terms or restrictions. **Users are responsible for reviewing and adhering to the license terms of each individual skill they use.**
+> ⚠️ **重要**：每個技能在其 `SKILL.md` 檔案的 `license` 元資料欄位中指定了自己的授權。這些授權可能與儲存庫的 MIT 授權不同，並可能包含額外條款或限制。**使用者有責任查看並遵守他們使用的每個技能的授權條款。**
 
-## Star History
+## Star 歷史
 
 [![Star History Chart](https://api.star-history.com/svg?repos=K-Dense-AI/claude-scientific-skills&type=date&legend=top-left)](https://www.star-history.com/#K-Dense-AI/claude-scientific-skills&type=date&legend=top-left)

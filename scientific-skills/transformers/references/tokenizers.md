@@ -1,14 +1,14 @@
-# Tokenizers
+# Tokenizers（分詞器）
 
-## Overview
+## 概述
 
-Tokenizers convert text into numerical representations (tokens) that models can process. They handle special tokens, padding, truncation, and attention masks.
+Tokenizers 將文字轉換為模型可以處理的數值表示（token）。它們處理特殊 token、填充（padding）、截斷（truncation）和注意力遮罩（attention masks）。
 
-## Loading Tokenizers
+## 載入 Tokenizers
 
 ### AutoTokenizer
 
-Automatically load the correct tokenizer for a model:
+自動為模型載入正確的 tokenizer：
 
 ```python
 from transformers import AutoTokenizer
@@ -16,14 +16,14 @@ from transformers import AutoTokenizer
 tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
 ```
 
-Load from local path:
+從本地路徑載入：
 ```python
 tokenizer = AutoTokenizer.from_pretrained("./local/tokenizer/path")
 ```
 
-## Basic Tokenization
+## 基本分詞
 
-### Encode Text
+### 編碼文字
 
 ```python
 # Simple encoding
@@ -36,7 +36,7 @@ tokens = tokenizer.tokenize(text)
 print(tokens)  # ['hello', ',', 'how', 'are', 'you', '?']
 ```
 
-### Decode Tokens
+### 解碼 Token
 
 ```python
 token_ids = [101, 7592, 1010, 2129, 2024, 2017, 1029, 102]
@@ -48,9 +48,9 @@ text = tokenizer.decode(token_ids, skip_special_tokens=True)
 print(text)  # "hello, how are you?"
 ```
 
-## The `__call__` Method
+## `__call__` 方法
 
-Primary tokenization interface:
+主要的分詞介面：
 
 ```python
 # Single text
@@ -64,17 +64,17 @@ print(inputs)
 # }
 ```
 
-Multiple texts:
+多個文字：
 ```python
 texts = ["Hello", "How are you?"]
 inputs = tokenizer(texts, padding=True, truncation=True)
 ```
 
-## Key Parameters
+## 關鍵參數
 
-### Return Tensors
+### 回傳張量
 
-**return_tensors**: Output format ("pt", "tf", "np")
+**return_tensors**：輸出格式（"pt"、"tf"、"np"）
 ```python
 # PyTorch tensors
 inputs = tokenizer("text", return_tensors="pt")
@@ -86,9 +86,9 @@ inputs = tokenizer("text", return_tensors="tf")
 inputs = tokenizer("text", return_tensors="np")
 ```
 
-### Padding
+### 填充
 
-**padding**: Pad sequences to same length
+**padding**：將序列填充到相同長度
 ```python
 # Pad to longest sequence in batch
 inputs = tokenizer(texts, padding=True)
@@ -100,14 +100,14 @@ inputs = tokenizer(texts, padding="max_length", max_length=128)
 inputs = tokenizer(texts, padding=False)
 ```
 
-**pad_to_multiple_of**: Pad to multiple of specified value
+**pad_to_multiple_of**：填充到指定值的倍數
 ```python
 inputs = tokenizer(texts, padding=True, pad_to_multiple_of=8)
 ```
 
-### Truncation
+### 截斷
 
-**truncation**: Limit sequence length
+**truncation**：限制序列長度
 ```python
 # Truncate to max_length
 inputs = tokenizer(text, truncation=True, max_length=512)
@@ -122,40 +122,40 @@ inputs = tokenizer(text1, text2, truncation="only_second")
 inputs = tokenizer(text1, text2, truncation="longest_first", max_length=512)
 ```
 
-### Max Length
+### 最大長度
 
-**max_length**: Maximum sequence length
+**max_length**：最大序列長度
 ```python
 inputs = tokenizer(text, max_length=512, truncation=True)
 ```
 
-### Additional Outputs
+### 額外輸出
 
-**return_attention_mask**: Include attention mask (default True)
+**return_attention_mask**：包含注意力遮罩（預設為 True）
 ```python
 inputs = tokenizer(text, return_attention_mask=True)
 ```
 
-**return_token_type_ids**: Segment IDs for sentence pairs
+**return_token_type_ids**：句子對的區段 ID
 ```python
 inputs = tokenizer(text1, text2, return_token_type_ids=True)
 ```
 
-**return_offsets_mapping**: Character position mapping (Fast tokenizers only)
+**return_offsets_mapping**：字元位置映射（僅 Fast tokenizers）
 ```python
 inputs = tokenizer(text, return_offsets_mapping=True)
 ```
 
-**return_length**: Include sequence lengths
+**return_length**：包含序列長度
 ```python
 inputs = tokenizer(texts, padding=True, return_length=True)
 ```
 
-## Special Tokens
+## 特殊 Token
 
-### Predefined Special Tokens
+### 預定義特殊 Token
 
-Access special tokens:
+存取特殊 token：
 ```python
 print(tokenizer.cls_token)      # [CLS] or <s>
 print(tokenizer.sep_token)      # [SEP] or </s>
@@ -170,9 +170,9 @@ print(tokenizer.cls_token_id)
 print(tokenizer.sep_token_id)
 ```
 
-### Add Special Tokens
+### 添加特殊 Token
 
-Manual control:
+手動控制：
 ```python
 # Automatically add special tokens (default True)
 inputs = tokenizer(text, add_special_tokens=True)
@@ -181,7 +181,7 @@ inputs = tokenizer(text, add_special_tokens=True)
 inputs = tokenizer(text, add_special_tokens=False)
 ```
 
-### Custom Special Tokens
+### 自訂特殊 Token
 
 ```python
 special_tokens_dict = {
@@ -195,9 +195,9 @@ print(f"Added {num_added} tokens")
 model.resize_token_embeddings(len(tokenizer))
 ```
 
-## Sentence Pairs
+## 句子對
 
-Tokenize text pairs:
+分詞文字對：
 
 ```python
 text1 = "What is the capital of France?"
@@ -209,9 +209,9 @@ inputs = tokenizer(text1, text2, padding=True, truncation=True)
 # Results in: [CLS] text1 [SEP] text2 [SEP]
 ```
 
-## Batch Encoding
+## 批次編碼
 
-Process multiple texts:
+處理多個文字：
 
 ```python
 texts = ["First text", "Second text", "Third text"]
@@ -227,7 +227,7 @@ for i in range(len(texts)):
 
 ## Fast Tokenizers
 
-Use Rust-based tokenizers for speed:
+使用基於 Rust 的 tokenizers 以獲得速度：
 
 ```python
 from transformers import AutoTokenizer
@@ -245,39 +245,39 @@ tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased", use_fast=True)
 tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased", use_fast=False)
 ```
 
-### Fast Tokenizer Features
+### Fast Tokenizer 功能
 
-**Offset mapping** (character positions):
+**偏移映射**（字元位置）：
 ```python
 inputs = tokenizer("Hello world", return_offsets_mapping=True)
 print(inputs["offset_mapping"])
 # [(0, 0), (0, 5), (6, 11), (0, 0)]  # [CLS], "Hello", "world", [SEP]
 ```
 
-**Token to word mapping**:
+**Token 到詞的映射**：
 ```python
 encoding = tokenizer("Hello world")
 word_ids = encoding.word_ids()
 print(word_ids)  # [None, 0, 1, None]  # [CLS]=None, "Hello"=0, "world"=1, [SEP]=None
 ```
 
-## Saving Tokenizers
+## 儲存 Tokenizers
 
-Save locally:
+本地儲存：
 ```python
 tokenizer.save_pretrained("./my_tokenizer")
 ```
 
-Push to Hub:
+推送到 Hub：
 ```python
 tokenizer.push_to_hub("username/my-tokenizer")
 ```
 
-## Advanced Usage
+## 進階用法
 
-### Vocabulary
+### 詞彙表
 
-Access vocabulary:
+存取詞彙表：
 ```python
 vocab = tokenizer.get_vocab()
 vocab_size = len(vocab)
@@ -289,9 +289,9 @@ token = tokenizer.convert_ids_to_tokens(100)
 token_id = tokenizer.convert_tokens_to_ids("hello")
 ```
 
-### Encoding Details
+### 編碼細節
 
-Get detailed encoding information:
+取得詳細的編碼資訊：
 
 ```python
 encoding = tokenizer("Hello world", return_tensors="pt")
@@ -302,9 +302,9 @@ word_ids = encoding.word_ids()
 sequence_ids = encoding.sequence_ids()
 ```
 
-### Custom Preprocessing
+### 自訂預處理
 
-Subclass for custom behavior:
+子類別化以實現自訂行為：
 
 ```python
 class CustomTokenizer(AutoTokenizer):
@@ -314,9 +314,9 @@ class CustomTokenizer(AutoTokenizer):
         return super().__call__(text, **kwargs)
 ```
 
-## Chat Templates
+## 聊天模板
 
-For conversational models:
+用於對話模型：
 
 ```python
 messages = [
@@ -334,9 +334,9 @@ print(text)
 inputs = tokenizer.apply_chat_template(messages, tokenize=True, return_tensors="pt")
 ```
 
-## Common Patterns
+## 常見模式
 
-### Pattern 1: Simple Text Classification
+### 模式 1：簡單文字分類
 
 ```python
 texts = ["I love this!", "I hate this!"]
@@ -354,7 +354,7 @@ inputs = tokenizer(
 outputs = model(**inputs, labels=torch.tensor(labels))
 ```
 
-### Pattern 2: Question Answering
+### 模式 2：問答
 
 ```python
 question = "What is the capital?"
@@ -370,7 +370,7 @@ inputs = tokenizer(
 )
 ```
 
-### Pattern 3: Text Generation
+### 模式 3：文字生成
 
 ```python
 prompt = "Once upon a time"
@@ -388,7 +388,7 @@ outputs = model.generate(
 text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 ```
 
-### Pattern 4: Dataset Tokenization
+### 模式 4：資料集分詞
 
 ```python
 def tokenize_function(examples):
@@ -403,41 +403,41 @@ def tokenize_function(examples):
 tokenized_dataset = dataset.map(tokenize_function, batched=True)
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Always specify return_tensors**: For model input
-2. **Use padding and truncation**: For batch processing
-3. **Set max_length explicitly**: Prevent memory issues
-4. **Use Fast tokenizers**: When available for speed
-5. **Handle pad_token**: Set to eos_token if None for generation
-6. **Add special tokens**: Leave enabled (default) unless specific reason
-7. **Resize embeddings**: After adding custom tokens
-8. **Decode with skip_special_tokens**: For cleaner output
-9. **Use batched processing**: For efficiency with datasets
-10. **Save tokenizer with model**: Ensure compatibility
+1. **始終指定 return_tensors**：用於模型輸入
+2. **使用 padding 和 truncation**：用於批次處理
+3. **明確設定 max_length**：防止記憶體問題
+4. **使用 Fast tokenizers**：可用時以獲得速度
+5. **處理 pad_token**：生成時若為 None 則設為 eos_token
+6. **添加特殊 token**：保持啟用（預設）除非有特定原因
+7. **調整嵌入大小**：添加自訂 token 後
+8. **使用 skip_special_tokens 解碼**：獲得更乾淨的輸出
+9. **使用批次處理**：提高資料集處理效率
+10. **將 tokenizer 與模型一起儲存**：確保相容性
 
-## Common Issues
+## 常見問題
 
-**Padding token not set:**
+**填充 token 未設定：**
 ```python
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
 ```
 
-**Sequence too long:**
+**序列太長：**
 ```python
 # Enable truncation
 inputs = tokenizer(text, truncation=True, max_length=512)
 ```
 
-**Mismatched vocabulary:**
+**詞彙表不匹配：**
 ```python
 # Always load tokenizer and model from same checkpoint
 tokenizer = AutoTokenizer.from_pretrained("model-id")
 model = AutoModel.from_pretrained("model-id")
 ```
 
-**Attention mask issues:**
+**注意力遮罩問題：**
 ```python
 # Ensure attention_mask is passed
 outputs = model(

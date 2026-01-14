@@ -1,41 +1,41 @@
-# Core Data Structures
+# 核心資料結構
 
-## Overview
+## 概述
 
-PyOpenMS uses C++ objects with Python bindings. Understanding these core data structures is essential for effective data manipulation.
+PyOpenMS 使用具有 Python 綁定的 C++ 物件。了解這些核心資料結構對於有效的資料操作至關重要。
 
-## Spectrum and Experiment Objects
+## 光譜和實驗物件
 
 ### MSExperiment
 
-Container for complete LC-MS experiment data (spectra and chromatograms).
+完整 LC-MS 實驗資料（光譜和層析圖）的容器。
 
 ```python
 import pyopenms as ms
 
-# Create experiment
+# 建立實驗
 exp = ms.MSExperiment()
 
-# Load from file
+# 從檔案載入
 ms.MzMLFile().load("data.mzML", exp)
 
-# Access properties
+# 存取屬性
 print(f"Number of spectra: {exp.getNrSpectra()}")
 print(f"Number of chromatograms: {exp.getNrChromatograms()}")
 
-# Get RT range
+# 取得 RT 範圍
 rts = [spec.getRT() for spec in exp]
 print(f"RT range: {min(rts):.1f} - {max(rts):.1f} seconds")
 
-# Access individual spectrum
+# 存取個別光譜
 spec = exp.getSpectrum(0)
 
-# Iterate through spectra
+# 迭代光譜
 for spec in exp:
     if spec.getMSLevel() == 2:
         print(f"MS2 spectrum at RT {spec.getRT():.2f}")
 
-# Get metadata
+# 取得中繼資料
 exp_settings = exp.getExperimentalSettings()
 instrument = exp_settings.getInstrument()
 print(f"Instrument: {instrument.getName()}")
@@ -43,32 +43,32 @@ print(f"Instrument: {instrument.getName()}")
 
 ### MSSpectrum
 
-Individual mass spectrum with m/z and intensity arrays.
+具有 m/z 和強度陣列的個別質譜。
 
 ```python
-# Create empty spectrum
+# 建立空光譜
 spec = ms.MSSpectrum()
 
-# Get from experiment
+# 從實驗取得
 exp = ms.MSExperiment()
 ms.MzMLFile().load("data.mzML", exp)
 spec = exp.getSpectrum(0)
 
-# Basic properties
+# 基本屬性
 print(f"MS level: {spec.getMSLevel()}")
 print(f"Retention time: {spec.getRT():.2f} seconds")
 print(f"Number of peaks: {spec.size()}")
 
-# Get peak data as numpy arrays
+# 將峰值資料取得為 numpy 陣列
 mz, intensity = spec.get_peaks()
 print(f"m/z range: {mz.min():.2f} - {mz.max():.2f}")
 print(f"Max intensity: {intensity.max():.0f}")
 
-# Access individual peaks
-for i in range(min(5, spec.size())):  # First 5 peaks
+# 存取個別峰值
+for i in range(min(5, spec.size())):  # 前 5 個峰值
     print(f"Peak {i}: m/z={mz[i]:.4f}, intensity={intensity[i]:.0f}")
 
-# Precursor information (for MS2)
+# 前驅離子資訊（用於 MS2）
 if spec.getMSLevel() == 2:
     precursors = spec.getPrecursors()
     if precursors:
@@ -77,7 +77,7 @@ if spec.getMSLevel() == 2:
         print(f"Precursor charge: {precursor.getCharge()}")
         print(f"Precursor intensity: {precursor.getIntensity():.0f}")
 
-# Set peak data
+# 設定峰值資料
 new_mz = [100.0, 200.0, 300.0]
 new_intensity = [1000.0, 2000.0, 1500.0]
 spec.set_peaks((new_mz, new_intensity))
@@ -85,65 +85,65 @@ spec.set_peaks((new_mz, new_intensity))
 
 ### MSChromatogram
 
-Chromatographic trace (TIC, XIC, or SRM transition).
+層析軌跡（TIC、XIC 或 SRM 轉換）。
 
 ```python
-# Access chromatogram from experiment
+# 從實驗存取層析圖
 for chrom in exp.getChromatograms():
     print(f"Chromatogram ID: {chrom.getNativeID()}")
 
-    # Get data
+    # 取得資料
     rt, intensity = chrom.get_peaks()
 
     print(f"  RT points: {len(rt)}")
     print(f"  Max intensity: {intensity.max():.0f}")
 
-    # Precursor info (for XIC)
+    # 前驅離子資訊（用於 XIC）
     precursor = chrom.getPrecursor()
     print(f"  Precursor m/z: {precursor.getMZ():.4f}")
 ```
 
-## Feature Objects
+## 特徵物件
 
 ### Feature
 
-Detected chromatographic peak with 2D spatial extent (RT-m/z).
+偵測到的層析峰，具有 2D 空間範圍（RT-m/z）。
 
 ```python
-# Load features
+# 載入特徵
 feature_map = ms.FeatureMap()
 ms.FeatureXMLFile().load("features.featureXML", feature_map)
 
-# Access individual feature
+# 存取個別特徵
 feature = feature_map[0]
 
-# Core properties
+# 核心屬性
 print(f"m/z: {feature.getMZ():.4f}")
 print(f"RT: {feature.getRT():.2f} seconds")
 print(f"Intensity: {feature.getIntensity():.0f}")
 print(f"Charge: {feature.getCharge()}")
 
-# Quality metrics
+# 品質指標
 print(f"Overall quality: {feature.getOverallQuality():.3f}")
 print(f"Width (RT): {feature.getWidth():.2f}")
 
-# Convex hull (spatial extent)
+# 凸包（空間範圍）
 hull = feature.getConvexHull()
 print(f"Hull points: {hull.getHullPoints().size()}")
 
-# Bounding box
+# 邊界框
 bbox = hull.getBoundingBox()
 print(f"RT range: {bbox.minPosition()[0]:.2f} - {bbox.maxPosition()[0]:.2f}")
 print(f"m/z range: {bbox.minPosition()[1]:.4f} - {bbox.maxPosition()[1]:.4f}")
 
-# Subordinate features (isotopes)
+# 附屬特徵（同位素）
 subordinates = feature.getSubordinates()
 if subordinates:
     print(f"Isotopic features: {len(subordinates)}")
     for sub in subordinates:
         print(f"  m/z: {sub.getMZ():.4f}, intensity: {sub.getIntensity():.0f}")
 
-# Metadata values
+# 中繼資料值
 if feature.metaValueExists("label"):
     label = feature.getMetaValue("label")
     print(f"Label: {label}")
@@ -151,63 +151,63 @@ if feature.metaValueExists("label"):
 
 ### FeatureMap
 
-Collection of features from a single LC-MS run.
+來自單一 LC-MS 執行的特徵集合。
 
 ```python
-# Create feature map
+# 建立特徵圖
 feature_map = ms.FeatureMap()
 
-# Load from file
+# 從檔案載入
 ms.FeatureXMLFile().load("features.featureXML", feature_map)
 
-# Access properties
+# 存取屬性
 print(f"Number of features: {feature_map.size()}")
 
-# Get unique features
+# 取得唯一特徵
 print(f"Unique features: {feature_map.getUniqueId()}")
 
-# Metadata
+# 中繼資料
 primary_path = feature_map.getPrimaryMSRunPath()
 if primary_path:
     print(f"Source file: {primary_path[0].decode()}")
 
-# Iterate through features
+# 迭代特徵
 for feature in feature_map:
     print(f"Feature: m/z={feature.getMZ():.4f}, RT={feature.getRT():.2f}")
 
-# Add new feature
+# 添加新特徵
 new_feature = ms.Feature()
 new_feature.setMZ(500.0)
 new_feature.setRT(300.0)
 new_feature.setIntensity(10000.0)
 feature_map.push_back(new_feature)
 
-# Sort features
-feature_map.sortByRT()  # or sortByMZ(), sortByIntensity()
+# 排序特徵
+feature_map.sortByRT()  # 或 sortByMZ()、sortByIntensity()
 
-# Export to pandas
+# 匯出到 pandas
 df = feature_map.get_df()
 print(df.head())
 ```
 
 ### ConsensusFeature
 
-Feature linked across multiple samples.
+跨多個樣本連結的特徵。
 
 ```python
-# Load consensus map
+# 載入共識圖
 consensus_map = ms.ConsensusMap()
 ms.ConsensusXMLFile().load("consensus.consensusXML", consensus_map)
 
-# Access consensus feature
+# 存取共識特徵
 cons_feature = consensus_map[0]
 
-# Consensus properties
+# 共識屬性
 print(f"Consensus m/z: {cons_feature.getMZ():.4f}")
 print(f"Consensus RT: {cons_feature.getRT():.2f}")
 print(f"Consensus intensity: {cons_feature.getIntensity():.0f}")
 
-# Get feature handles (individual map features)
+# 取得特徵控制代碼（個別圖的特徵）
 feature_list = cons_feature.getFeatureList()
 print(f"Present in {len(feature_list)} maps")
 
@@ -219,7 +219,7 @@ for handle in feature_list:
 
     print(f"  Map {map_idx}: m/z={mz:.4f}, RT={rt:.2f}, intensity={intensity:.0f}")
 
-# Get unique ID in originating map
+# 取得原始圖中的唯一 ID
 for handle in feature_list:
     unique_id = handle.getUniqueId()
     print(f"Unique ID: {unique_id}")
@@ -227,19 +227,19 @@ for handle in feature_list:
 
 ### ConsensusMap
 
-Collection of consensus features across samples.
+跨樣本的共識特徵集合。
 
 ```python
-# Create consensus map
+# 建立共識圖
 consensus_map = ms.ConsensusMap()
 
-# Load from file
+# 從檔案載入
 ms.ConsensusXMLFile().load("consensus.consensusXML", consensus_map)
 
-# Access properties
+# 存取屬性
 print(f"Consensus features: {consensus_map.size()}")
 
-# Column headers (file descriptions)
+# 欄位標頭（檔案描述）
 headers = consensus_map.getColumnHeaders()
 print(f"Number of files: {len(headers)}")
 
@@ -249,39 +249,39 @@ for map_idx, description in headers.items():
     print(f"  Label: {description.label}")
     print(f"  Size: {description.size}")
 
-# Iterate through consensus features
+# 迭代共識特徵
 for cons_feature in consensus_map:
     print(f"Consensus feature: m/z={cons_feature.getMZ():.4f}")
 
-# Export to DataFrame
+# 匯出到 DataFrame
 df = consensus_map.get_df()
 ```
 
-## Identification Objects
+## 鑑定物件
 
 ### PeptideIdentification
 
-Identification results for a single spectrum.
+單一光譜的鑑定結果。
 
 ```python
-# Load identifications
+# 載入鑑定
 protein_ids = []
 peptide_ids = []
 ms.IdXMLFile().load("identifications.idXML", protein_ids, peptide_ids)
 
-# Access peptide identification
+# 存取肽段鑑定
 peptide_id = peptide_ids[0]
 
-# Spectrum metadata
+# 光譜中繼資料
 print(f"RT: {peptide_id.getRT():.2f}")
 print(f"m/z: {peptide_id.getMZ():.4f}")
 
-# Identification metadata
+# 鑑定中繼資料
 print(f"Identifier: {peptide_id.getIdentifier()}")
 print(f"Score type: {peptide_id.getScoreType()}")
 print(f"Higher score better: {peptide_id.isHigherScoreBetter()}")
 
-# Get peptide hits
+# 取得肽段命中
 hits = peptide_id.getHits()
 print(f"Number of hits: {len(hits)}")
 
@@ -293,55 +293,55 @@ for hit in hits:
 
 ### PeptideHit
 
-Individual peptide match to a spectrum.
+與光譜匹配的個別肽段。
 
 ```python
-# Access hit
+# 存取命中
 hit = peptide_id.getHits()[0]
 
-# Sequence information
+# 序列資訊
 sequence = hit.getSequence()
 print(f"Sequence: {sequence.toString()}")
 print(f"Mass: {sequence.getMonoWeight():.4f}")
 
-# Score and rank
+# 分數和排名
 print(f"Score: {hit.getScore()}")
 print(f"Rank: {hit.getRank()}")
 
-# Charge state
+# 電荷狀態
 print(f"Charge: {hit.getCharge()}")
 
-# Protein accessions
+# 蛋白質登錄號
 accessions = hit.extractProteinAccessionsSet()
 for acc in accessions:
     print(f"Protein: {acc.decode()}")
 
-# Meta values (additional scores, errors)
-if hit.metaValueExists("MS:1002252"):  # mass error
+# 中繼值（額外分數、誤差）
+if hit.metaValueExists("MS:1002252"):  # 質量誤差
     mass_error = hit.getMetaValue("MS:1002252")
     print(f"Mass error: {mass_error:.4f} ppm")
 ```
 
 ### ProteinIdentification
 
-Protein-level identification information.
+蛋白質層級的鑑定資訊。
 
 ```python
-# Access protein identification
+# 存取蛋白質鑑定
 protein_id = protein_ids[0]
 
-# Search engine info
+# 搜尋引擎資訊
 print(f"Search engine: {protein_id.getSearchEngine()}")
 print(f"Search engine version: {protein_id.getSearchEngineVersion()}")
 
-# Search parameters
+# 搜尋參數
 search_params = protein_id.getSearchParameters()
 print(f"Database: {search_params.db}")
 print(f"Enzyme: {search_params.digestion_enzyme.getName()}")
 print(f"Missed cleavages: {search_params.missed_cleavages}")
 print(f"Precursor tolerance: {search_params.precursor_mass_tolerance}")
 
-# Protein hits
+# 蛋白質命中
 hits = protein_id.getHits()
 for hit in hits:
     print(f"Accession: {hit.getAccession()}")
@@ -351,147 +351,147 @@ for hit in hits:
 
 ### ProteinHit
 
-Individual protein identification.
+個別蛋白質鑑定。
 
 ```python
-# Access protein hit
+# 存取蛋白質命中
 protein_hit = protein_id.getHits()[0]
 
-# Protein information
+# 蛋白質資訊
 print(f"Accession: {protein_hit.getAccession()}")
 print(f"Description: {protein_hit.getDescription()}")
 print(f"Sequence: {protein_hit.getSequence()}")
 
-# Scoring
+# 評分
 print(f"Score: {protein_hit.getScore()}")
 print(f"Coverage: {protein_hit.getCoverage():.1f}%")
 
-# Rank
+# 排名
 print(f"Rank: {protein_hit.getRank()}")
 ```
 
-## Sequence Objects
+## 序列物件
 
 ### AASequence
 
-Amino acid sequence with modifications.
+帶有修飾的胺基酸序列。
 
 ```python
-# Create sequence from string
+# 從字串建立序列
 seq = ms.AASequence.fromString("PEPTIDE")
 
-# Basic properties
+# 基本屬性
 print(f"Sequence: {seq.toString()}")
 print(f"Length: {seq.size()}")
 print(f"Monoisotopic mass: {seq.getMonoWeight():.4f}")
 print(f"Average mass: {seq.getAverageWeight():.4f}")
 
-# Individual residues
+# 個別殘基
 for i in range(seq.size()):
     residue = seq.getResidue(i)
     print(f"Position {i}: {residue.getOneLetterCode()}")
     print(f"  Mass: {residue.getMonoWeight():.4f}")
     print(f"  Formula: {residue.getFormula().toString()}")
 
-# Modified sequence
+# 修飾序列
 mod_seq = ms.AASequence.fromString("PEPTIDEM(Oxidation)K")
 print(f"Modified: {mod_seq.isModified()}")
 
-# Check modifications
+# 檢查修飾
 for i in range(mod_seq.size()):
     residue = mod_seq.getResidue(i)
     if residue.isModified():
         print(f"Modification at {i}: {residue.getModificationName()}")
 
-# N-terminal and C-terminal modifications
+# N 端和 C 端修飾
 term_mod_seq = ms.AASequence.fromString("(Acetyl)PEPTIDE(Amidated)")
 ```
 
 ### EmpiricalFormula
 
-Molecular formula representation.
+分子式表示。
 
 ```python
-# Create formula
-formula = ms.EmpiricalFormula("C6H12O6")  # Glucose
+# 建立分子式
+formula = ms.EmpiricalFormula("C6H12O6")  # 葡萄糖
 
-# Properties
+# 屬性
 print(f"Formula: {formula.toString()}")
 print(f"Monoisotopic mass: {formula.getMonoWeight():.4f}")
 print(f"Average mass: {formula.getAverageWeight():.4f}")
 
-# Element composition
+# 元素組成
 print(f"Carbon atoms: {formula.getNumberOf(b'C')}")
 print(f"Hydrogen atoms: {formula.getNumberOf(b'H')}")
 print(f"Oxygen atoms: {formula.getNumberOf(b'O')}")
 
-# Arithmetic operations
+# 算術運算
 formula2 = ms.EmpiricalFormula("H2O")
-combined = formula + formula2  # Add water
+combined = formula + formula2  # 加水
 print(f"Combined: {combined.toString()}")
 ```
 
-## Parameter Objects
+## 參數物件
 
 ### Param
 
-Generic parameter container used by algorithms.
+演算法使用的通用參數容器。
 
 ```python
-# Get algorithm parameters
+# 取得演算法參數
 algo = ms.GaussFilter()
 params = algo.getParameters()
 
-# List all parameters
+# 列出所有參數
 for key in params.keys():
     value = params.getValue(key)
     print(f"{key}: {value}")
 
-# Get specific parameter
+# 取得特定參數
 gaussian_width = params.getValue("gaussian_width")
 print(f"Gaussian width: {gaussian_width}")
 
-# Set parameter
+# 設定參數
 params.setValue("gaussian_width", 0.2)
 
-# Apply modified parameters
+# 應用修改的參數
 algo.setParameters(params)
 
-# Copy parameters
+# 複製參數
 params_copy = ms.Param(params)
 ```
 
-## Best Practices
+## 最佳實務
 
-### Memory Management
+### 記憶體管理
 
 ```python
-# For large files, use indexed access instead of full loading
+# 對於大型檔案，使用索引存取而非完整載入
 indexed_mzml = ms.IndexedMzMLFileLoader()
 indexed_mzml.load("large_file.mzML")
 
-# Access specific spectrum without loading entire file
+# 存取特定光譜而不載入整個檔案
 spec = indexed_mzml.getSpectrumById(100)
 ```
 
-### Type Conversion
+### 型別轉換
 
 ```python
-# Convert peak arrays to numpy
+# 將峰值陣列轉換為 numpy
 import numpy as np
 
 mz, intensity = spec.get_peaks()
-# These are already numpy arrays
+# 這些已經是 numpy 陣列
 
-# Can perform numpy operations
+# 可以執行 numpy 操作
 filtered_mz = mz[intensity > 1000]
 ```
 
-### Object Copying
+### 物件複製
 
 ```python
-# Create deep copy
+# 建立深度複製
 exp_copy = ms.MSExperiment(exp)
 
-# Modifications to copy don't affect original
+# 對複製的修改不會影響原始
 ```

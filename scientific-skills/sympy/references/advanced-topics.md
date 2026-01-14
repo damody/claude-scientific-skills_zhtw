@@ -1,432 +1,432 @@
-# SymPy Advanced Topics
+# SymPy 進階主題
 
-This document covers SymPy's advanced mathematical capabilities including geometry, number theory, combinatorics, logic and sets, statistics, polynomials, and special functions.
+本文件涵蓋 SymPy 的進階數學能力，包括幾何、數論、組合學、邏輯和集合、統計、多項式和特殊函數。
 
-## Geometry
+## 幾何
 
-### 2D Geometry
+### 2D 幾何
 
 ```python
 from sympy.geometry import Point, Line, Circle, Triangle, Polygon
 
-# Points
+# 點
 p1 = Point(0, 0)
 p2 = Point(1, 1)
 p3 = Point(1, 0)
 
-# Distance between points
+# 點之間的距離
 dist = p1.distance(p2)
 
-# Lines
+# 線
 line = Line(p1, p2)
 line_from_eq = Line(Point(0, 0), slope=2)
 
-# Line properties
-line.slope       # Slope
-line.equation()  # Equation of line
-line.length      # oo (infinite for lines)
+# 線的性質
+line.slope       # 斜率
+line.equation()  # 線的方程式
+line.length      # oo（線為無限）
 
-# Line segment
+# 線段
 from sympy.geometry import Segment
 seg = Segment(p1, p2)
-seg.length       # Finite length
-seg.midpoint     # Midpoint
+seg.length       # 有限長度
+seg.midpoint     # 中點
 
-# Intersection
+# 交點
 line2 = Line(Point(0, 1), Point(1, 0))
 intersection = line.intersection(line2)  # [Point(1/2, 1/2)]
 
-# Circles
-circle = Circle(Point(0, 0), 5)  # Center, radius
+# 圓
+circle = Circle(Point(0, 0), 5)  # 圓心、半徑
 circle.area           # 25*pi
 circle.circumference  # 10*pi
 
-# Triangles
+# 三角形
 tri = Triangle(p1, p2, p3)
-tri.area       # Area
-tri.perimeter  # Perimeter
-tri.angles     # Dictionary of angles
-tri.vertices   # Tuple of vertices
+tri.area       # 面積
+tri.perimeter  # 周長
+tri.angles     # 角度字典
+tri.vertices   # 頂點元組
 
-# Polygons
+# 多邊形
 poly = Polygon(Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1))
 poly.area
 poly.perimeter
 poly.vertices
 ```
 
-### Geometric Queries
+### 幾何查詢
 
 ```python
-# Check if point is on line/curve
+# 檢查點是否在線/曲線上
 point = Point(0.5, 0.5)
 line.contains(point)
 
-# Check if parallel/perpendicular
+# 檢查是否平行/垂直
 line1 = Line(Point(0, 0), Point(1, 1))
 line2 = Line(Point(0, 1), Point(1, 2))
 line1.is_parallel(line2)  # True
 line1.is_perpendicular(line2)  # False
 
-# Tangent lines
+# 切線
 from sympy.geometry import Circle, Point
 circle = Circle(Point(0, 0), 5)
 point = Point(5, 0)
 tangents = circle.tangent_lines(point)
 ```
 
-### 3D Geometry
+### 3D 幾何
 
 ```python
 from sympy.geometry import Point3D, Line3D, Plane
 
-# 3D Points
+# 3D 點
 p1 = Point3D(0, 0, 0)
 p2 = Point3D(1, 1, 1)
 p3 = Point3D(1, 0, 0)
 
-# 3D Lines
+# 3D 線
 line = Line3D(p1, p2)
 
-# Planes
-plane = Plane(p1, p2, p3)  # From 3 points
-plane = Plane(Point3D(0, 0, 0), normal_vector=(1, 0, 0))  # From point and normal
+# 平面
+plane = Plane(p1, p2, p3)  # 從 3 個點
+plane = Plane(Point3D(0, 0, 0), normal_vector=(1, 0, 0))  # 從點和法向量
 
-# Plane equation
+# 平面方程式
 plane.equation()
 
-# Distance from point to plane
+# 點到平面的距離
 point = Point3D(2, 3, 4)
 dist = plane.distance(point)
 
-# Intersection of plane and line
+# 平面和線的交點
 intersection = plane.intersection(line)
 ```
 
-### Curves and Ellipses
+### 曲線和橢圓
 
 ```python
 from sympy.geometry import Ellipse, Curve
 from sympy import sin, cos, pi
 
-# Ellipse
+# 橢圓
 ellipse = Ellipse(Point(0, 0), hradius=3, vradius=2)
 ellipse.area          # 6*pi
-ellipse.eccentricity  # Eccentricity
+ellipse.eccentricity  # 離心率
 
-# Parametric curves
+# 參數曲線
 from sympy.abc import t
-curve = Curve((cos(t), sin(t)), (t, 0, 2*pi))  # Circle
+curve = Curve((cos(t), sin(t)), (t, 0, 2*pi))  # 圓
 ```
 
-## Number Theory
+## 數論
 
-### Prime Numbers
+### 質數
 
 ```python
 from sympy.ntheory import isprime, primerange, prime, nextprime, prevprime
 
-# Check if prime
+# 檢查是否為質數
 isprime(7)    # True
 isprime(10)   # False
 
-# Generate primes in range
+# 在範圍內生成質數
 list(primerange(10, 50))  # [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
 
-# nth prime
-prime(10)     # 29 (10th prime)
+# 第 n 個質數
+prime(10)     # 29（第 10 個質數）
 
-# Next and previous primes
+# 下一個和上一個質數
 nextprime(10)  # 11
 prevprime(10)  # 7
 ```
 
-### Prime Factorization
+### 質因數分解
 
 ```python
 from sympy import factorint, primefactors, divisors
 
-# Prime factorization
-factorint(60)  # {2: 2, 3: 1, 5: 1} means 2^2 * 3^1 * 5^1
+# 質因數分解
+factorint(60)  # {2: 2, 3: 1, 5: 1} 表示 2^2 * 3^1 * 5^1
 
-# List of prime factors
+# 質因數列表
 primefactors(60)  # [2, 3, 5]
 
-# All divisors
+# 所有因數
 divisors(60)  # [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60]
 ```
 
-### GCD and LCM
+### GCD 和 LCM
 
 ```python
 from sympy import gcd, lcm, igcd, ilcm
 
-# Greatest common divisor
+# 最大公因數
 gcd(60, 48)   # 12
-igcd(60, 48)  # 12 (integer version)
+igcd(60, 48)  # 12（整數版本）
 
-# Least common multiple
+# 最小公倍數
 lcm(60, 48)   # 240
-ilcm(60, 48)  # 240 (integer version)
+ilcm(60, 48)  # 240（整數版本）
 
-# Multiple arguments
+# 多個參數
 gcd(60, 48, 36)  # 12
 ```
 
-### Modular Arithmetic
+### 模運算
 
 ```python
 from sympy.ntheory import mod_inverse, totient, is_primitive_root
 
-# Modular inverse (find x such that a*x ≡ 1 (mod m))
-mod_inverse(3, 7)  # 5 (because 3*5 = 15 ≡ 1 (mod 7))
+# 模逆元（找 x 使得 a*x ≡ 1 (mod m)）
+mod_inverse(3, 7)  # 5（因為 3*5 = 15 ≡ 1 (mod 7)）
 
-# Euler's totient function
-totient(10)  # 4 (numbers less than 10 coprime to 10: 1,3,7,9)
+# 歐拉函數
+totient(10)  # 4（小於 10 且與 10 互質的數：1,3,7,9）
 
-# Primitive roots
+# 原根
 is_primitive_root(2, 5)  # True
 ```
 
-### Diophantine Equations
+### 丟番圖方程式
 
 ```python
 from sympy.solvers.diophantine import diophantine
 from sympy.abc import x, y, z
 
-# Linear Diophantine: ax + by = c
+# 線性丟番圖方程式：ax + by = c
 diophantine(3*x + 4*y - 5)  # {(4*t_0 - 5, -3*t_0 + 5)}
 
-# Quadratic forms
-diophantine(x**2 + y**2 - 25)  # Pythagorean-type equations
+# 二次形式
+diophantine(x**2 + y**2 - 25)  # 畢達哥拉斯型方程式
 
-# More complex equations
+# 更複雜的方程式
 diophantine(x**2 - 4*x*y + 8*y**2 - 3*x + 7*y - 5)
 ```
 
-### Continued Fractions
+### 連分數
 
 ```python
 from sympy import nsimplify, continued_fraction_iterator
 from sympy import Rational, pi
 
-# Convert to continued fraction
+# 轉換為連分數
 cf = continued_fraction_iterator(Rational(415, 93))
 list(cf)  # [4, 2, 6, 7]
 
-# Approximate irrational numbers
+# 近似無理數
 cf_pi = continued_fraction_iterator(pi.evalf(20))
 ```
 
-## Combinatorics
+## 組合學
 
-### Permutations and Combinations
+### 排列和組合
 
 ```python
 from sympy import factorial, binomial, factorial2
 from sympy.functions.combinatorial.numbers import nC, nP
 
-# Factorial
+# 階乘
 factorial(5)  # 120
 
-# Binomial coefficient (n choose k)
+# 二項係數（n 選 k）
 binomial(5, 2)  # 10
 
-# Permutations nPk = n!/(n-k)!
+# 排列 nPk = n!/(n-k)!
 nP(5, 2)  # 20
 
-# Combinations nCk = n!/(k!(n-k)!)
+# 組合 nCk = n!/(k!(n-k)!)
 nC(5, 2)  # 10
 
-# Double factorial n!!
+# 雙階乘 n!!
 factorial2(5)  # 15 (5*3*1)
 factorial2(6)  # 48 (6*4*2)
 ```
 
-### Permutation Objects
+### 排列物件
 
 ```python
 from sympy.combinatorics import Permutation
 
-# Create permutation (cycle notation)
-p = Permutation([1, 2, 0, 3])  # Sends 0->1, 1->2, 2->0, 3->3
-p = Permutation(0, 1, 2)(3)    # Cycle notation: (0 1 2)(3)
+# 建立排列（循環表示法）
+p = Permutation([1, 2, 0, 3])  # 送 0->1, 1->2, 2->0, 3->3
+p = Permutation(0, 1, 2)(3)    # 循環表示法：(0 1 2)(3)
 
-# Permutation operations
-p.order()       # Order of permutation
-p.is_even       # True if even permutation
-p.inversions()  # Number of inversions
+# 排列運算
+p.order()       # 排列的階
+p.is_even       # 如果是偶排列則為 True
+p.inversions()  # 逆序數
 
-# Compose permutations
+# 組合排列
 q = Permutation([2, 0, 1, 3])
-r = p * q       # Composition
+r = p * q       # 組合
 ```
 
-### Partitions
+### 分割
 
 ```python
 from sympy.utilities.iterables import partitions
 from sympy.functions.combinatorial.numbers import partition
 
-# Number of integer partitions
+# 整數分割數
 partition(5)  # 7 (5, 4+1, 3+2, 3+1+1, 2+2+1, 2+1+1+1, 1+1+1+1+1)
 
-# Generate all partitions
+# 生成所有分割
 list(partitions(4))
 # {4: 1}, {3: 1, 1: 1}, {2: 2}, {2: 1, 1: 2}, {1: 4}
 ```
 
-### Catalan and Fibonacci Numbers
+### 卡塔蘭數和費波那契數
 
 ```python
 from sympy import catalan, fibonacci, lucas
 
-# Catalan numbers
+# 卡塔蘭數
 catalan(5)  # 42
 
-# Fibonacci numbers
+# 費波那契數
 fibonacci(10)  # 55
-lucas(10)      # 123 (Lucas numbers)
+lucas(10)      # 123（盧卡斯數）
 ```
 
-### Group Theory
+### 群論
 
 ```python
 from sympy.combinatorics import PermutationGroup, Permutation
 
-# Create permutation group
+# 建立排列群
 p1 = Permutation([1, 0, 2])
 p2 = Permutation([0, 2, 1])
 G = PermutationGroup(p1, p2)
 
-# Group properties
-G.order()        # Order of group
-G.is_abelian     # Check if abelian
-G.is_cyclic()    # Check if cyclic
-G.elements       # All group elements
+# 群的性質
+G.order()        # 群的階
+G.is_abelian     # 檢查是否為交換群
+G.is_cyclic()    # 檢查是否為循環群
+G.elements       # 所有群元素
 ```
 
-## Logic and Sets
+## 邏輯和集合
 
-### Boolean Logic
+### 布林邏輯
 
 ```python
 from sympy import symbols, And, Or, Not, Xor, Implies, Equivalent
 from sympy.logic.boolalg import truth_table, simplify_logic
 
-# Define boolean variables
+# 定義布林變數
 x, y, z = symbols('x y z', bool=True)
 
-# Logical operations
+# 邏輯運算
 expr = And(x, Or(y, Not(z)))
 expr = Implies(x, y)  # x -> y
 expr = Equivalent(x, y)  # x <-> y
-expr = Xor(x, y)  # Exclusive OR
+expr = Xor(x, y)  # 互斥或
 
-# Simplification
+# 簡化
 expr = (x & y) | (x & ~y)
-simplified = simplify_logic(expr)  # Returns x
+simplified = simplify_logic(expr)  # 返回 x
 
-# Truth table
+# 真值表
 expr = Implies(x, y)
 print(truth_table(expr, [x, y]))
 ```
 
-### Sets
+### 集合
 
 ```python
 from sympy import FiniteSet, Interval, Union, Intersection, Complement
-from sympy import S  # For special sets
+from sympy import S  # 用於特殊集合
 
-# Finite sets
+# 有限集合
 A = FiniteSet(1, 2, 3, 4)
 B = FiniteSet(3, 4, 5, 6)
 
-# Set operations
+# 集合運算
 union = Union(A, B)              # {1, 2, 3, 4, 5, 6}
 intersection = Intersection(A, B)  # {3, 4}
 difference = Complement(A, B)     # {1, 2}
 
-# Intervals
+# 區間
 I = Interval(0, 1)              # [0, 1]
 I_open = Interval.open(0, 1)    # (0, 1)
 I_lopen = Interval.Lopen(0, 1)  # (0, 1]
 I_ropen = Interval.Ropen(0, 1)  # [0, 1)
 
-# Special sets
-S.Reals        # All real numbers
-S.Integers     # All integers
-S.Naturals     # Natural numbers
-S.EmptySet     # Empty set
-S.Complexes    # Complex numbers
+# 特殊集合
+S.Reals        # 所有實數
+S.Integers     # 所有整數
+S.Naturals     # 自然數
+S.EmptySet     # 空集合
+S.Complexes    # 複數
 
-# Set membership
+# 集合成員
 3 in A  # True
 7 in A  # False
 
-# Subset and superset
+# 子集和超集
 A.is_subset(B)    # False
 A.is_superset(B)  # False
 ```
 
-### Set Theory Operations
+### 集合論運算
 
 ```python
 from sympy import ImageSet, Lambda
 from sympy.abc import x
 
-# Image set (set of function values)
+# 像集（函數值的集合）
 squares = ImageSet(Lambda(x, x**2), S.Integers)
 # {x^2 | x ∈ ℤ}
 
-# Power set
+# 冪集
 from sympy.sets import FiniteSet
 A = FiniteSet(1, 2, 3)
-# Note: SymPy doesn't have direct powerset, but can generate
+# 注意：SymPy 沒有直接的冪集，但可以生成
 ```
 
-## Polynomials
+## 多項式
 
-### Polynomial Manipulation
+### 多項式操作
 
 ```python
 from sympy import Poly, symbols, factor, expand, roots
 x, y = symbols('x y')
 
-# Create polynomial
+# 建立多項式
 p = Poly(x**2 + 2*x + 1, x)
 
-# Polynomial properties
+# 多項式性質
 p.degree()       # 2
 p.coeffs()       # [1, 2, 1]
-p.as_expr()      # Convert back to expression
+p.as_expr()      # 轉換回運算式
 
-# Arithmetic
+# 算術
 p1 = Poly(x**2 + 1, x)
 p2 = Poly(x + 1, x)
 p3 = p1 + p2
 p4 = p1 * p2
-q, r = div(p1, p2)  # Quotient and remainder
+q, r = div(p1, p2)  # 商和餘數
 ```
 
-### Polynomial Roots
+### 多項式根
 
 ```python
 from sympy import roots, real_roots, count_roots
 
 p = Poly(x**3 - 6*x**2 + 11*x - 6, x)
 
-# All roots
+# 所有根
 r = roots(p)  # {1: 1, 2: 1, 3: 1}
 
-# Real roots only
+# 僅實根
 r = real_roots(p)
 
-# Count roots in interval
-count_roots(p, a, b)  # Number of roots in [a, b]
+# 計算區間內的根數
+count_roots(p, a, b)  # [a, b] 內的根數
 ```
 
-### Polynomial GCD and Factorization
+### 多項式 GCD 和因式分解
 
 ```python
 from sympy import gcd, lcm, factor, factor_list
@@ -434,16 +434,16 @@ from sympy import gcd, lcm, factor, factor_list
 p1 = Poly(x**2 - 1, x)
 p2 = Poly(x**2 - 2*x + 1, x)
 
-# GCD and LCM
+# GCD 和 LCM
 g = gcd(p1, p2)
 l = lcm(p1, p2)
 
-# Factorization
+# 因式分解
 f = factor(x**3 - x**2 + x - 1)  # (x - 1)*(x**2 + 1)
-factors = factor_list(x**3 - x**2 + x - 1)  # List form
+factors = factor_list(x**3 - x**2 + x - 1)  # 列表形式
 ```
 
-### Groebner Bases
+### Groebner 基
 
 ```python
 from sympy import groebner, symbols
@@ -451,13 +451,13 @@ from sympy import groebner, symbols
 x, y, z = symbols('x y z')
 polynomials = [x**2 + y**2 + z**2 - 1, x*y - z]
 
-# Compute Groebner basis
+# 計算 Groebner 基
 gb = groebner(polynomials, x, y, z)
 ```
 
-## Statistics
+## 統計
 
-### Random Variables
+### 隨機變數
 
 ```python
 from sympy.stats import (
@@ -465,171 +465,171 @@ from sympy.stats import (
     P, E, variance, density, sample
 )
 
-# Define random variables
-X = Normal('X', 0, 1)  # Normal(mean, std)
+# 定義隨機變數
+X = Normal('X', 0, 1)  # Normal(平均值, 標準差)
 Y = Uniform('Y', 0, 1)  # Uniform(a, b)
-Z = Exponential('Z', 1)  # Exponential(rate)
+Z = Exponential('Z', 1)  # Exponential(率)
 
-# Probability
+# 機率
 P(X > 0)  # 1/2
 P((X > 0) & (X < 1))
 
-# Expected value
+# 期望值
 E(X)  # 0
 E(X**2)  # 1
 
-# Variance
+# 變異數
 variance(X)  # 1
 
-# Density function
+# 機率密度函數
 density(X)(x)  # sqrt(2)*exp(-x**2/2)/(2*sqrt(pi))
 ```
 
-### Discrete Distributions
+### 離散分布
 
 ```python
 from sympy.stats import Die, Bernoulli, Binomial, Poisson
 
-# Die
+# 骰子
 D = Die('D', 6)
 P(D > 3)  # 1/2
 
-# Bernoulli
+# 伯努利分布
 B = Bernoulli('B', 0.5)
 P(B)  # 1/2
 
-# Binomial
+# 二項分布
 X = Binomial('X', 10, 0.5)
-P(X == 5)  # Probability of exactly 5 successes in 10 trials
+P(X == 5)  # 10 次試驗中恰好 5 次成功的機率
 
-# Poisson
+# 泊松分布
 Y = Poisson('Y', 3)
-P(Y < 2)  # Probability of less than 2 events
+P(Y < 2)  # 少於 2 個事件的機率
 ```
 
-### Joint Distributions
+### 聯合分布
 
 ```python
 from sympy.stats import Normal, P, E
 from sympy import symbols
 
-# Independent random variables
+# 獨立隨機變數
 X = Normal('X', 0, 1)
 Y = Normal('Y', 0, 1)
 
-# Joint probability
+# 聯合機率
 P((X > 0) & (Y > 0))  # 1/4
 
-# Covariance
+# 共變異數
 from sympy.stats import covariance
-covariance(X, Y)  # 0 (independent)
+covariance(X, Y)  # 0（獨立）
 ```
 
-## Special Functions
+## 特殊函數
 
-### Common Special Functions
+### 常見特殊函數
 
 ```python
 from sympy import (
-    gamma,      # Gamma function
-    beta,       # Beta function
-    erf,        # Error function
-    besselj,    # Bessel function of first kind
-    bessely,    # Bessel function of second kind
-    hermite,    # Hermite polynomial
-    legendre,   # Legendre polynomial
-    laguerre,   # Laguerre polynomial
-    chebyshevt, # Chebyshev polynomial (first kind)
-    zeta        # Riemann zeta function
+    gamma,      # Gamma 函數
+    beta,       # Beta 函數
+    erf,        # 誤差函數
+    besselj,    # 第一類 Bessel 函數
+    bessely,    # 第二類 Bessel 函數
+    hermite,    # Hermite 多項式
+    legendre,   # Legendre 多項式
+    laguerre,   # Laguerre 多項式
+    chebyshevt, # Chebyshev 多項式（第一類）
+    zeta        # Riemann zeta 函數
 )
 
-# Gamma function
-gamma(5)  # 24 (equivalent to 4!)
+# Gamma 函數
+gamma(5)  # 24（等於 4!）
 gamma(1/2)  # sqrt(pi)
 
-# Bessel functions
+# Bessel 函數
 besselj(0, x)  # J_0(x)
 bessely(1, x)  # Y_1(x)
 
-# Orthogonal polynomials
+# 正交多項式
 hermite(3, x)    # 8*x**3 - 12*x
 legendre(2, x)   # (3*x**2 - 1)/2
 laguerre(2, x)   # x**2/2 - 2*x + 1
 chebyshevt(3, x) # 4*x**3 - 3*x
 ```
 
-### Hypergeometric Functions
+### 超幾何函數
 
 ```python
 from sympy import hyper, meijerg
 
-# Hypergeometric function
+# 超幾何函數
 hyper([1, 2], [3], x)
 
-# Meijer G-function
+# Meijer G 函數
 meijerg([[1, 1], []], [[1], [0]], x)
 ```
 
-## Common Patterns
+## 常見模式
 
-### Pattern 1: Symbolic Geometry Problem
+### 模式 1：符號幾何問題
 
 ```python
 from sympy.geometry import Point, Triangle
 from sympy import symbols
 
-# Define symbolic triangle
+# 定義符號三角形
 a, b = symbols('a b', positive=True)
 tri = Triangle(Point(0, 0), Point(a, 0), Point(0, b))
 
-# Compute properties symbolically
+# 符號計算性質
 area = tri.area  # a*b/2
 perimeter = tri.perimeter  # a + b + sqrt(a**2 + b**2)
 ```
 
-### Pattern 2: Number Theory Calculation
+### 模式 2：數論計算
 
 ```python
 from sympy.ntheory import factorint, totient, isprime
 
-# Factor and analyze
+# 因式分解和分析
 n = 12345
 factors = factorint(n)
 phi = totient(n)
 is_prime = isprime(n)
 ```
 
-### Pattern 3: Combinatorial Generation
+### 模式 3：組合生成
 
 ```python
 from sympy.utilities.iterables import multiset_permutations, combinations
 
-# Generate all permutations
+# 生成所有排列
 perms = list(multiset_permutations([1, 2, 3]))
 
-# Generate combinations
+# 生成組合
 combs = list(combinations([1, 2, 3, 4], 2))
 ```
 
-### Pattern 4: Probability Calculation
+### 模式 4：機率計算
 
 ```python
 from sympy.stats import Normal, P, E, variance
 
 X = Normal('X', mu, sigma)
 
-# Compute statistics
+# 計算統計量
 mean = E(X)
 var = variance(X)
 prob = P(X > a)
 ```
 
-## Important Notes
+## 重要注意事項
 
-1. **Assumptions:** Many operations benefit from symbol assumptions (e.g., `positive=True`, `integer=True`).
+1. **假設：**許多運算受益於符號假設（例如 `positive=True`、`integer=True`）。
 
-2. **Symbolic vs Numeric:** These operations are symbolic. Use `evalf()` for numerical results.
+2. **符號 vs 數值：**這些運算是符號的。使用 `evalf()` 獲得數值結果。
 
-3. **Performance:** Complex symbolic operations can be slow. Consider numerical methods for large-scale computations.
+3. **效能：**複雜的符號運算可能很慢。考慮對大規模計算使用數值方法。
 
-4. **Exact arithmetic:** SymPy maintains exact representations (e.g., `sqrt(2)` instead of `1.414...`).
+4. **精確算術：**SymPy 維持精確表示（例如 `sqrt(2)` 而非 `1.414...`）。

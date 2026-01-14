@@ -1,65 +1,65 @@
-# Molecular Property Prediction
+# 分子性質預測
 
-## Overview
+## 概述
 
-Molecular property prediction involves predicting chemical, physical, or biological properties of molecules from their structure. TorchDrug provides comprehensive support for both classification and regression tasks on molecular graphs.
+分子性質預測涉及從分子結構預測化學、物理或生物性質。TorchDrug 為分子圖上的分類和迴歸任務提供全面支援。
 
-## Available Datasets
+## 可用資料集
 
-### Drug Discovery Datasets
+### 藥物發現資料集
 
-**Classification Tasks:**
-- **BACE** (1,513 molecules): Binary classification for β-secretase inhibition
-- **BBBP** (2,039 molecules): Blood-brain barrier penetration prediction
-- **HIV** (41,127 molecules): Ability to inhibit HIV replication
-- **Tox21** (7,831 molecules): Toxicity prediction across 12 targets
-- **ToxCast** (8,576 molecules): Toxicology screening
-- **ClinTox** (1,478 molecules): Clinical trial toxicity
-- **SIDER** (1,427 molecules): Drug side effects (27 system organ classes)
-- **MUV** (93,087 molecules): Maximum unbiased validation for virtual screening
+**分類任務：**
+- **BACE**（1,513 分子）：β-分泌酶抑制的二元分類
+- **BBBP**（2,039 分子）：血腦屏障穿透預測
+- **HIV**（41,127 分子）：抑制 HIV 複製的能力
+- **Tox21**（7,831 分子）：12 個標靶的毒性預測
+- **ToxCast**（8,576 分子）：毒理學篩選
+- **ClinTox**（1,478 分子）：臨床試驗毒性
+- **SIDER**（1,427 分子）：藥物副作用（27 個系統器官類別）
+- **MUV**（93,087 分子）：虛擬篩選的最大無偏驗證
 
-**Regression Tasks:**
-- **ESOL** (1,128 molecules): Water solubility prediction
-- **FreeSolv** (642 molecules): Hydration free energy
-- **Lipophilicity** (4,200 molecules): Octanol/water distribution coefficient
-- **SAMPL** (643 molecules): Solvation free energies
+**迴歸任務：**
+- **ESOL**（1,128 分子）：水溶性預測
+- **FreeSolv**（642 分子）：水合自由能
+- **Lipophilicity**（4,200 分子）：辛醇/水分配係數
+- **SAMPL**（643 分子）：溶劑化自由能
 
-### Large-Scale Datasets
+### 大規模資料集
 
-- **QM7** (7,165 molecules): Quantum mechanical properties
-- **QM8** (21,786 molecules): Electronic spectra and excited state properties
-- **QM9** (133,885 molecules): Geometric, energetic, electronic, and thermodynamic properties
-- **PCQM4M** (3,803,453 molecules): Large-scale quantum chemistry dataset
-- **ZINC250k/2M** (250k/2M molecules): Drug-like compounds for generative modeling
+- **QM7**（7,165 分子）：量子力學性質
+- **QM8**（21,786 分子）：電子光譜和激發態性質
+- **QM9**（133,885 分子）：幾何、能量、電子和熱力學性質
+- **PCQM4M**（3,803,453 分子）：大規模量子化學資料集
+- **ZINC250k/2M**（250k/2M 分子）：用於生成模型的類藥化合物
 
-## Task Types
+## 任務類型
 
 ### PropertyPrediction
 
-Standard task for graph-level property prediction supporting both classification and regression.
+支援分類和迴歸的圖級性質預測標準任務。
 
-**Key Parameters:**
-- `model`: Graph representation model (GNN)
-- `task`: "node", "edge", or "graph" level prediction
-- `criterion`: Loss function ("mse", "bce", "ce")
-- `metric`: Evaluation metrics ("mae", "rmse", "auroc", "auprc")
-- `num_mlp_layer`: Number of MLP layers for readout
+**關鍵參數：**
+- `model`：圖表示模型（GNN）
+- `task`：「node」、「edge」或「graph」級預測
+- `criterion`：損失函數（「mse」、「bce」、「ce」）
+- `metric`：評估指標（「mae」、「rmse」、「auroc」、「auprc」）
+- `num_mlp_layer`：讀出的 MLP 層數
 
-**Example Workflow:**
+**範例工作流程：**
 ```python
 import torch
 from torchdrug import core, models, tasks, datasets
 
-# Load dataset
+# 載入資料集
 dataset = datasets.BBBP("~/molecule-datasets/")
 
-# Define model
+# 定義模型
 model = models.GIN(input_dim=dataset.node_feature_dim,
                    hidden_dims=[256, 256, 256, 256],
                    edge_input_dim=dataset.edge_feature_dim,
                    batch_norm=True, readout="mean")
 
-# Define task
+# 定義任務
 task = tasks.PropertyPrediction(model, task=dataset.tasks,
                                  criterion="bce",
                                  metric=("auprc", "auroc"))
@@ -67,103 +67,103 @@ task = tasks.PropertyPrediction(model, task=dataset.tasks,
 
 ### MultipleBinaryClassification
 
-Specialized task for multi-label scenarios where each molecule can have multiple binary labels (e.g., Tox21, SIDER).
+專門用於多標籤場景的任務，其中每個分子可以有多個二元標籤（如 Tox21、SIDER）。
 
-**Key Features:**
-- Handles missing labels gracefully
-- Computes metrics per label and averaged
-- Supports weighted loss for imbalanced datasets
+**關鍵特徵：**
+- 優雅處理缺失標籤
+- 按標籤和平均計算指標
+- 支援不平衡資料集的加權損失
 
-## Model Selection
+## 模型選擇
 
-### Recommended Models by Task
+### 按任務推薦的模型
 
-**Small Molecules (< 1000 molecules):**
-- GIN (Graph Isomorphism Network)
-- SchNet (for 3D structures)
+**小型分子（< 1000 分子）：**
+- GIN（圖同構網路）
+- SchNet（用於 3D 結構）
 
-**Medium Datasets (1k-100k molecules):**
-- GCN, GAT, or GIN
-- NFP (Neural Fingerprint)
-- MPNN (Message Passing Neural Network)
+**中型資料集（1k-100k 分子）：**
+- GCN、GAT 或 GIN
+- NFP（神經指紋）
+- MPNN（訊息傳遞神經網路）
 
-**Large Datasets (> 100k molecules):**
-- Pre-trained models with fine-tuning
-- InfoGraph or MultiviewContrast for self-supervised pre-training
-- GIN with deeper architectures
+**大型資料集（> 100k 分子）：**
+- 帶微調的預訓練模型
+- InfoGraph 或 MultiviewContrast 用於自監督預訓練
+- 更深架構的 GIN
 
-**3D Structure Available:**
-- SchNet (continuous-filter convolutions)
-- GearNet (geometry-aware relational graph)
+**3D 結構可用時：**
+- SchNet（連續濾波卷積）
+- GearNet（幾何感知關係圖）
 
-## Feature Engineering
+## 特徵工程
 
-### Node Features
+### 節點特徵
 
-TorchDrug automatically extracts atom features:
-- Atom type
-- Formal charge
-- Explicit/implicit hydrogens
-- Hybridization
-- Aromaticity
-- Chirality
+TorchDrug 自動提取原子特徵：
+- 原子類型
+- 形式電荷
+- 顯式/隱式氫
+- 雜化
+- 芳香性
+- 手性
 
-### Edge Features
+### 邊特徵
 
-Bond features include:
-- Bond type (single, double, triple, aromatic)
-- Stereochemistry
-- Conjugation
-- Ring membership
+鍵特徵包括：
+- 鍵類型（單鍵、雙鍵、三鍵、芳香）
+- 立體化學
+- 共軛
+- 環成員資格
 
-### Custom Features
+### 自訂特徵
 
-Add custom node/edge features using transforms:
+使用轉換添加自訂節點/邊特徵：
 ```python
 from torchdrug import data, transforms
 
-# Add custom features
-transform = transforms.VirtualNode()  # Add virtual node
+# 添加自訂特徵
+transform = transforms.VirtualNode()  # 添加虛擬節點
 dataset = datasets.BBBP("~/molecule-datasets/",
                         transform=transform)
 ```
 
-## Training Workflow
+## 訓練工作流程
 
-### Basic Pipeline
+### 基本管線
 
-1. **Load Dataset**: Choose appropriate dataset
-2. **Split Data**: Use scaffold split for drug discovery
-3. **Define Model**: Select GNN architecture
-4. **Create Task**: Configure loss and metrics
-5. **Setup Optimizer**: Adam typically works well
-6. **Train**: Use PyTorch Lightning or custom loop
+1. **載入資料集**：選擇適當的資料集
+2. **分割資料**：藥物發現使用骨架分割
+3. **定義模型**：選擇 GNN 架構
+4. **建立任務**：配置損失和指標
+5. **設定最佳化器**：Adam 通常效果好
+6. **訓練**：使用 PyTorch Lightning 或自訂循環
 
-### Data Splitting Strategies
+### 資料分割策略
 
-**Random Split**: Standard train/val/test split
-**Scaffold Split**: Group molecules by Bemis-Murcko scaffolds (recommended for drug discovery)
-**Stratified Split**: Maintain label distribution across splits
+**隨機分割**：標準訓練/驗證/測試分割
+**骨架分割**：按 Bemis-Murcko 骨架分組分子（藥物發現推薦）
+**分層分割**：跨分割維持標籤分佈
 
-### Best Practices
+### 最佳實踐
 
-- Use scaffold splitting for realistic drug discovery evaluation
-- Apply data augmentation (virtual nodes, edges) for small datasets
-- Monitor multiple metrics (AUROC, AUPRC for classification; MAE, RMSE for regression)
-- Use early stopping based on validation performance
-- Consider ensemble methods for critical applications
-- Pre-train on large datasets before fine-tuning on small datasets
+- 使用骨架分割進行現實的藥物發現評估
+- 對小型資料集應用資料增強（虛擬節點、邊）
+- 監控多個指標（分類用 AUROC、AUPRC；迴歸用 MAE、RMSE）
+- 基於驗證效能使用早停
+- 對關鍵應用考慮集成方法
+- 在微調小型資料集前在大型資料集上預訓練
 
-## Common Issues and Solutions
+## 常見問題和解決方案
 
-**Issue: Poor performance on imbalanced datasets**
-- Solution: Use weighted loss, focal loss, or over/under-sampling
+**問題：不平衡資料集效能不佳**
+- 解決方案：使用加權損失、focal loss 或過/欠採樣
 
-**Issue: Overfitting on small datasets**
-- Solution: Increase regularization, use simpler models, apply data augmentation, or pre-train on larger datasets
+**問題：小型資料集過擬合**
+- 解決方案：增加正則化、使用更簡單模型、應用資料增強，或在更大資料集上預訓練
 
-**Issue: Large memory consumption**
-- Solution: Reduce batch size, use gradient accumulation, or implement graph sampling
+**問題：大量記憶體消耗**
+- 解決方案：減少批次大小、使用梯度累積，或實作圖採樣
 
-**Issue: Slow training**
-- Solution: Use GPU acceleration, optimize data loading with multiple workers, or use mixed precision training
+**問題：訓練緩慢**
+- 解決方案：使用 GPU 加速、使用多個工作程序最佳化資料載入，或使用混合精度訓練

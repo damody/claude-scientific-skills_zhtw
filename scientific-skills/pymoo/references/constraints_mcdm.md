@@ -1,12 +1,12 @@
-# Pymoo Constraints and Decision Making Reference
+# Pymoo 約束與決策參考
 
-Reference for constraint handling and multi-criteria decision making in pymoo.
+pymoo 中約束處理和多準則決策的參考。
 
-## Constraint Handling
+## 約束處理
 
-### Defining Constraints
+### 定義約束
 
-Constraints are specified in the Problem definition:
+約束在 Problem 定義中指定：
 
 ```python
 from pymoo.core.problem import ElementwiseProblem
@@ -17,136 +17,136 @@ class ConstrainedProblem(ElementwiseProblem):
         super().__init__(
             n_var=2,
             n_obj=2,
-            n_ieq_constr=2,    # Number of inequality constraints
-            n_eq_constr=1,      # Number of equality constraints
+            n_ieq_constr=2,    # 不等式約束數量
+            n_eq_constr=1,      # 等式約束數量
             xl=np.array([0, 0]),
             xu=np.array([5, 5])
         )
 
     def _evaluate(self, x, out, *args, **kwargs):
-        # Objectives
+        # 目標
         f1 = x[0]**2 + x[1]**2
         f2 = (x[0]-1)**2 + (x[1]-1)**2
 
         out["F"] = [f1, f2]
 
-        # Inequality constraints (formulated as g(x) <= 0)
+        # 不等式約束（公式為 g(x) <= 0）
         g1 = x[0] + x[1] - 5  # x[0] + x[1] >= 5 → -(x[0] + x[1] - 5) <= 0
         g2 = x[0]**2 + x[1]**2 - 25  # x[0]^2 + x[1]^2 <= 25
 
         out["G"] = [g1, g2]
 
-        # Equality constraints (formulated as h(x) = 0)
+        # 等式約束（公式為 h(x) = 0）
         h1 = x[0] - 2*x[1]
 
         out["H"] = [h1]
 ```
 
-**Constraint formulation rules:**
-- Inequality: `g(x) <= 0` (feasible when negative or zero)
-- Equality: `h(x) = 0` (feasible when zero)
-- Convert `g(x) >= 0` to `-g(x) <= 0`
+**約束公式規則：**
+- 不等式：`g(x) <= 0`（負值或零時可行）
+- 等式：`h(x) = 0`（為零時可行）
+- 將 `g(x) >= 0` 轉換為 `-g(x) <= 0`
 
-### Constraint Handling Techniques
+### 約束處理技術
 
-#### 1. Feasibility First (Default)
-**Mechanism:** Always prefer feasible over infeasible solutions
-**Comparison:**
-1. Both feasible → compare by objective values
-2. One feasible, one infeasible → feasible wins
-3. Both infeasible → compare by constraint violation
+#### 1. 可行性優先（預設）
+**機制：** 始終偏好可行解而非不可行解
+**比較：**
+1. 兩者都可行 → 按目標值比較
+2. 一個可行，一個不可行 → 可行者勝出
+3. 兩者都不可行 → 按約束違反比較
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.moo.nsga2 import NSGA2
 
-# Feasibility first is default for most algorithms
+# 可行性優先是大多數演算法的預設
 algorithm = NSGA2(pop_size=100)
 ```
 
-**Advantages:**
-- Works with any sorting-based algorithm
-- Simple and effective
-- No parameter tuning
+**優點：**
+- 適用於任何基於排序的演算法
+- 簡單有效
+- 無需參數調整
 
-**Disadvantages:**
-- May struggle with small feasible regions
-- Can ignore good infeasible solutions
+**缺點：**
+- 可行區域小時可能困難
+- 可能忽略好的不可行解
 
-#### 2. Penalty Methods
-**Mechanism:** Add penalty to objective based on constraint violation
-**Formula:** `F_penalized = F + penalty_factor * violation`
+#### 2. 懲罰方法
+**機制：** 根據約束違反向目標添加懲罰
+**公式：** `F_penalized = F + penalty_factor * violation`
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.soo.nonconvex.ga import GA
 from pymoo.constraints.as_penalty import ConstraintsAsPenalty
 
-# Wrap problem with penalty
+# 用懲罰包裝問題
 problem_with_penalty = ConstraintsAsPenalty(problem, penalty=1e6)
 
 algorithm = GA(pop_size=100)
 ```
 
-**Parameters:**
-- `penalty`: Penalty coefficient (tune based on problem scale)
+**參數：**
+- `penalty`：懲罰係數（根據問題尺度調整）
 
-**Advantages:**
-- Converts constrained to unconstrained problem
-- Works with any optimization algorithm
+**優點：**
+- 將約束問題轉換為無約束問題
+- 適用於任何最佳化演算法
 
-**Disadvantages:**
-- Penalty parameter sensitive
-- May need problem-specific tuning
+**缺點：**
+- 懲罰參數敏感
+- 可能需要針對問題調整
 
-#### 3. Constraint as Objective
-**Mechanism:** Treat constraint violation as additional objective
-**Result:** Multi-objective problem with M+1 objectives (M original + constraint)
+#### 3. 約束作為目標
+**機制：** 將約束違反視為額外目標
+**結果：** 具有 M+1 個目標的多目標問題（M 個原始目標 + 約束）
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.constraints.as_obj import ConstraintsAsObjective
 
-# Add constraint violation as objective
+# 將約束違反作為目標添加
 problem_with_cv_obj = ConstraintsAsObjective(problem)
 
 algorithm = NSGA2(pop_size=100)
 ```
 
-**Advantages:**
-- No parameter tuning
-- Maintains infeasible solutions that may be useful
-- Works well when feasible region is small
+**優點：**
+- 無需參數調整
+- 保留可能有用的不可行解
+- 可行區域小時效果好
 
-**Disadvantages:**
-- Increases problem dimensionality
-- More complex Pareto front analysis
+**缺點：**
+- 增加問題維度
+- 更複雜的 Pareto 前沿分析
 
-#### 4. Epsilon-Constraint Handling
-**Mechanism:** Dynamic feasibility threshold
-**Concept:** Gradually tighten constraint tolerance over generations
+#### 4. Epsilon 約束處理
+**機制：** 動態可行性閾值
+**概念：** 隨著世代逐漸收緊約束容差
 
-**Advantages:**
-- Smooth transition to feasible region
-- Helps with difficult constraint landscapes
+**優點：**
+- 平滑過渡到可行區域
+- 有助於處理困難的約束地形
 
-**Disadvantages:**
-- Algorithm-specific implementation
-- Requires parameter tuning
+**缺點：**
+- 特定演算法的實作
+- 需要參數調整
 
-#### 5. Repair Operators
-**Mechanism:** Modify infeasible solutions to satisfy constraints
-**Application:** After crossover/mutation, repair offspring
+#### 5. 修復運算子
+**機制：** 修改不可行解以滿足約束
+**應用：** 交叉/突變後修復子代
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.core.repair import Repair
 
 class MyRepair(Repair):
     def _do(self, problem, X, **kwargs):
-        # Project X onto feasible region
-        # Example: clip to bounds
+        # 將 X 投影到可行區域
+        # 範例：裁剪到邊界
         X = np.clip(X, problem.xl, problem.xu)
         return X
 
@@ -155,98 +155,98 @@ from pymoo.algorithms.soo.nonconvex.ga import GA
 algorithm = GA(pop_size=100, repair=MyRepair())
 ```
 
-**Advantages:**
-- Maintains feasibility throughout optimization
-- Can encode domain knowledge
+**優點：**
+- 在整個最佳化過程中維持可行性
+- 可以編碼領域知識
 
-**Disadvantages:**
-- Requires problem-specific implementation
-- May restrict search
+**缺點：**
+- 需要針對問題的實作
+- 可能限制搜尋
 
-### Constraint-Handling Algorithms
+### 約束處理演算法
 
-Some algorithms have built-in constraint handling:
+一些演算法有內建的約束處理：
 
-#### SRES (Stochastic Ranking Evolution Strategy)
-**Purpose:** Single-objective constrained optimization
-**Mechanism:** Stochastic ranking balances objectives and constraints
+#### SRES（隨機排序演化策略）
+**用途：** 單目標約束最佳化
+**機制：** 隨機排序平衡目標和約束
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.soo.nonconvex.sres import SRES
 
 algorithm = SRES()
 ```
 
-#### ISRES (Improved SRES)
-**Purpose:** Enhanced constrained optimization
-**Improvements:** Better parameter adaptation
+#### ISRES（改進的 SRES）
+**用途：** 增強的約束最佳化
+**改進：** 更好的參數適應
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.soo.nonconvex.isres import ISRES
 
 algorithm = ISRES()
 ```
 
-### Constraint Handling Guidelines
+### 約束處理指南
 
-**Choose technique based on:**
+**根據以下選擇技術：**
 
-| Problem Characteristic | Recommended Technique |
+| 問題特徵 | 建議技術 |
 |------------------------|----------------------|
-| Large feasible region | Feasibility First |
-| Small feasible region | Constraint as Objective, Repair |
-| Heavily constrained | SRES/ISRES, Epsilon-constraint |
-| Linear constraints | Repair (projection) |
-| Nonlinear constraints | Feasibility First, Penalty |
-| Known feasible solutions | Biased initialization |
+| 大的可行區域 | 可行性優先 |
+| 小的可行區域 | 約束作為目標、修復 |
+| 重度約束 | SRES/ISRES、Epsilon 約束 |
+| 線性約束 | 修復（投影） |
+| 非線性約束 | 可行性優先、懲罰 |
+| 已知可行解 | 有偏差的初始化 |
 
-## Multi-Criteria Decision Making (MCDM)
+## 多準則決策（MCDM）
 
-After obtaining a Pareto front, MCDM helps select preferred solution(s).
+獲得 Pareto 前沿後，MCDM 幫助選擇偏好的解。
 
-### Decision Making Context
+### 決策背景
 
-**Pareto front characteristics:**
-- Multiple non-dominated solutions
-- Each represents different trade-off
-- No objectively "best" solution
-- Requires decision maker preferences
+**Pareto 前沿特徵：**
+- 多個非支配解
+- 每個代表不同的權衡
+- 沒有客觀上「最佳」的解
+- 需要決策者偏好
 
-### MCDM Methods in Pymoo
+### Pymoo 中的 MCDM 方法
 
-#### 1. Pseudo-Weights
-**Concept:** Weight each objective, select solution minimizing weighted sum
-**Formula:** `score = w1*f1 + w2*f2 + ... + wM*fM`
+#### 1. 偽權重
+**概念：** 對每個目標加權，選擇最小化加權和的解
+**公式：** `score = w1*f1 + w2*f2 + ... + wM*fM`
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.mcdm.pseudo_weights import PseudoWeights
 
-# Define weights (must sum to 1)
-weights = np.array([0.3, 0.7])  # 30% weight on f1, 70% on f2
+# 定義權重（必須總和為 1）
+weights = np.array([0.3, 0.7])  # f1 權重 30%，f2 權重 70%
 
 dm = PseudoWeights(weights)
 best_idx = dm.do(result.F)
 best_solution = result.X[best_idx]
 ```
 
-**When to use:**
-- Clear preference articulation available
-- Objectives commensurable
-- Linear trade-offs acceptable
+**何時使用：**
+- 有明確的偏好表達
+- 目標可比較
+- 可接受線性權衡
 
-**Limitations:**
-- Requires weight specification
-- Linear assumption may not capture preferences
-- Sensitive to objective scaling
+**限制：**
+- 需要指定權重
+- 線性假設可能無法捕捉偏好
+- 對目標縮放敏感
 
-#### 2. Compromise Programming
-**Concept:** Select solution closest to ideal point
-**Metric:** Distance to ideal (e.g., Euclidean, Tchebycheff)
+#### 2. 妥協規劃
+**概念：** 選擇最接近理想點的解
+**度量：** 到理想點的距離（例如歐氏、Tchebycheff）
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.mcdm.compromise_programming import CompromiseProgramming
 
@@ -254,33 +254,33 @@ dm = CompromiseProgramming()
 best_idx = dm.do(result.F, ideal=ideal_point, nadir=nadir_point)
 ```
 
-**When to use:**
-- Ideal objective values known or estimable
-- Balanced consideration of all objectives
-- No clear weight preferences
+**何時使用：**
+- 已知或可估計理想目標值
+- 平衡考慮所有目標
+- 沒有明確的權重偏好
 
-#### 3. Interactive Decision Making
-**Concept:** Iterative preference refinement
-**Process:**
-1. Show representative solutions to decision maker
-2. Gather feedback on preferences
-3. Focus search on preferred regions
-4. Repeat until satisfactory solution found
+#### 3. 互動式決策
+**概念：** 迭代偏好細化
+**過程：**
+1. 向決策者展示代表性解
+2. 收集偏好回饋
+3. 將搜尋集中在偏好區域
+4. 重複直到找到滿意的解
 
-**Approaches:**
-- Reference point methods
-- Trade-off analysis
-- Progressive preference articulation
+**方法：**
+- 參考點方法
+- 權衡分析
+- 漸進式偏好表達
 
-### Decision Making Workflow
+### 決策工作流程
 
-**Step 1: Normalize objectives**
+**步驟 1：正規化目標**
 ```python
-# Normalize to [0, 1] for fair comparison
+# 正規化到 [0, 1] 以進行公平比較
 F_norm = (result.F - result.F.min(axis=0)) / (result.F.max(axis=0) - result.F.min(axis=0))
 ```
 
-**Step 2: Analyze trade-offs**
+**步驟 2：分析權衡**
 ```python
 from pymoo.visualization.scatter import Scatter
 
@@ -288,35 +288,35 @@ plot = Scatter()
 plot.add(result.F)
 plot.show()
 
-# Identify knee points, extreme solutions
+# 識別膝點、極端解
 ```
 
-**Step 3: Apply MCDM method**
+**步驟 3：應用 MCDM 方法**
 ```python
 from pymoo.mcdm.pseudo_weights import PseudoWeights
 
-weights = np.array([0.4, 0.6])  # Based on preferences
+weights = np.array([0.4, 0.6])  # 根據偏好
 dm = PseudoWeights(weights)
 selected = dm.do(F_norm)
 ```
 
-**Step 4: Validate selection**
+**步驟 4：驗證選擇**
 ```python
-# Visualize selected solution
+# 視覺化選定的解
 from pymoo.visualization.petal import Petal
 
 plot = Petal()
-plot.add(result.F[selected], label="Selected")
-# Add other candidates for comparison
+plot.add(result.F[selected], label="選定")
+# 添加其他候選解以進行比較
 plot.show()
 ```
 
-### Advanced MCDM Techniques
+### 進階 MCDM 技術
 
-#### Knee Point Detection
-**Concept:** Solutions where small improvement in one objective causes large degradation in others
+#### 膝點偵測
+**概念：** 一個目標的小改進會導致其他目標大幅退化的解
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.mcdm.knee import KneePoint
 
@@ -325,51 +325,51 @@ knee_idx = km.do(result.F)
 knee_solutions = result.X[knee_idx]
 ```
 
-**When to use:**
-- No clear preferences
-- Balanced trade-offs desired
-- Convex Pareto fronts
+**何時使用：**
+- 沒有明確偏好
+- 需要平衡的權衡
+- 凸 Pareto 前沿
 
-#### Hypervolume Contribution
-**Concept:** Select solutions contributing most to hypervolume
-**Use case:** Maintain diverse subset of solutions
+#### 超體積貢獻
+**概念：** 選擇對超體積貢獻最大的解
+**用例：** 維持多樣化的解子集
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.indicators.hv import HV
 
 hv = HV(ref_point=reference_point)
 hv_contributions = hv.calc_contributions(result.F)
 
-# Select top contributors
+# 選擇貢獻最大的
 top_k = 5
 top_indices = np.argsort(hv_contributions)[-top_k:]
 selected_solutions = result.X[top_indices]
 ```
 
-### Decision Making Guidelines
+### 決策指南
 
-**When decision maker has:**
+**當決策者有：**
 
-| Preference Information | Recommended Method |
+| 偏好資訊 | 建議方法 |
 |------------------------|-------------------|
-| Clear objective weights | Pseudo-Weights |
-| Ideal target values | Compromise Programming |
-| No prior preferences | Knee Point, Visual inspection |
-| Conflicting criteria | Interactive methods |
-| Need diverse subset | Hypervolume contribution |
+| 明確的目標權重 | 偽權重 |
+| 理想目標值 | 妥協規劃 |
+| 沒有先驗偏好 | 膝點、視覺檢查 |
+| 衝突準則 | 互動方法 |
+| 需要多樣化子集 | 超體積貢獻 |
 
-**Best practices:**
-1. **Normalize objectives** before MCDM
-2. **Visualize Pareto front** to understand trade-offs
-3. **Consider multiple methods** for robust selection
-4. **Validate results** with domain experts
-5. **Document assumptions** and preference sources
-6. **Perform sensitivity analysis** on weights/parameters
+**最佳實務：**
+1. **MCDM 前正規化目標**
+2. **視覺化 Pareto 前沿**以了解權衡
+3. **考慮多種方法**以進行穩健選擇
+4. **與領域專家驗證結果**
+5. **記錄假設**和偏好來源
+6. **對權重/參數進行敏感度分析**
 
-### Integration Example
+### 整合範例
 
-Complete workflow with constraint handling and decision making:
+包含約束處理和決策的完整工作流程：
 
 ```python
 from pymoo.algorithms.moo.nsga2 import NSGA2
@@ -377,16 +377,16 @@ from pymoo.optimize import minimize
 from pymoo.mcdm.pseudo_weights import PseudoWeights
 import numpy as np
 
-# Define constrained problem
+# 定義約束問題
 problem = MyConstrainedProblem()
 
-# Setup algorithm with feasibility-first constraint handling
+# 設定具有可行性優先約束處理的演算法
 algorithm = NSGA2(
     pop_size=100,
     eliminate_duplicates=True
 )
 
-# Optimize
+# 最佳化
 result = minimize(
     problem,
     algorithm,
@@ -395,23 +395,23 @@ result = minimize(
     verbose=True
 )
 
-# Filter feasible solutions only
-feasible_mask = result.CV[:, 0] == 0  # Constraint violation = 0
+# 只篩選可行解
+feasible_mask = result.CV[:, 0] == 0  # 約束違反 = 0
 F_feasible = result.F[feasible_mask]
 X_feasible = result.X[feasible_mask]
 
-# Normalize objectives
+# 正規化目標
 F_norm = (F_feasible - F_feasible.min(axis=0)) / (F_feasible.max(axis=0) - F_feasible.min(axis=0))
 
-# Apply MCDM
+# 應用 MCDM
 weights = np.array([0.5, 0.5])
 dm = PseudoWeights(weights)
 best_idx = dm.do(F_norm)
 
-# Get final solution
+# 獲取最終解
 best_solution = X_feasible[best_idx]
 best_objectives = F_feasible[best_idx]
 
-print(f"Selected solution: {best_solution}")
-print(f"Objective values: {best_objectives}")
+print(f"選定的解：{best_solution}")
+print(f"目標值：{best_objectives}")
 ```

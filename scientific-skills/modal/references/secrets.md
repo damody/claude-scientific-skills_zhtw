@@ -1,36 +1,36 @@
-# Secrets and Environment Variables
+# 密鑰和環境變數
 
-## Creating Secrets
+## 建立密鑰
 
-### Via Dashboard
+### 透過儀表板
 
-Create secrets at https://modal.com/secrets
+在 https://modal.com/secrets 建立密鑰
 
-Templates available for:
-- Database credentials (Postgres, MongoDB)
-- Cloud providers (AWS, GCP, Azure)
-- ML platforms (Weights & Biases, Hugging Face)
-- And more
+可用範本：
+- 資料庫憑證（Postgres、MongoDB）
+- 雲端提供商（AWS、GCP、Azure）
+- ML 平台（Weights & Biases、Hugging Face）
+- 以及更多
 
-### Via CLI
+### 透過 CLI
 
 ```bash
-# Create secret with key-value pairs
+# 使用鍵值對建立密鑰
 modal secret create my-secret KEY1=value1 KEY2=value2
 
-# Use environment variables
+# 使用環境變數
 modal secret create db-secret PGHOST=uri PGPASSWORD="$PGPASSWORD"
 
-# List secrets
+# 列出密鑰
 modal secret list
 
-# Delete secret
+# 刪除密鑰
 modal secret delete my-secret
 ```
 
-### Programmatically
+### 程式化方式
 
-From dictionary:
+從字典：
 
 ```python
 if modal.is_local():
@@ -44,7 +44,7 @@ def some_function():
     print(os.environ["FOO"])
 ```
 
-From .env file:
+從 .env 檔案：
 
 ```python
 @app.function(secrets=[modal.Secret.from_dotenv()])
@@ -53,20 +53,20 @@ def some_function():
     print(os.environ["USERNAME"])
 ```
 
-## Using Secrets
+## 使用密鑰
 
-Inject secrets into functions:
+將密鑰注入函數：
 
 ```python
 @app.function(secrets=[modal.Secret.from_name("my-secret")])
 def some_function():
     import os
     secret_key = os.environ["MY_PASSWORD"]
-    # Use secret
+    # 使用密鑰
     ...
 ```
 
-### Multiple Secrets
+### 多個密鑰
 
 ```python
 @app.function(secrets=[
@@ -74,33 +74,33 @@ def some_function():
     modal.Secret.from_name("api-keys"),
 ])
 def other_function():
-    # All keys from both secrets available
+    # 兩個密鑰的所有鍵都可用
     ...
 ```
 
-Later secrets override earlier ones if keys clash.
+如果鍵衝突，後面的密鑰會覆蓋前面的。
 
-## Environment Variables
+## 環境變數
 
-### Reserved Runtime Variables
+### 保留的執行時變數
 
-**All Containers**:
-- `MODAL_CLOUD_PROVIDER` - Cloud provider (AWS/GCP/OCI)
-- `MODAL_IMAGE_ID` - Image ID
-- `MODAL_REGION` - Region identifier (e.g., us-east-1)
-- `MODAL_TASK_ID` - Container task ID
+**所有容器**：
+- `MODAL_CLOUD_PROVIDER` - 雲端提供商（AWS/GCP/OCI）
+- `MODAL_IMAGE_ID` - 映像 ID
+- `MODAL_REGION` - 區域識別碼（例如：us-east-1）
+- `MODAL_TASK_ID` - 容器任務 ID
 
-**Function Containers**:
-- `MODAL_ENVIRONMENT` - Modal Environment name
-- `MODAL_IS_REMOTE` - Set to '1' in remote containers
-- `MODAL_IDENTITY_TOKEN` - OIDC token for function identity
+**函數容器**：
+- `MODAL_ENVIRONMENT` - Modal 環境名稱
+- `MODAL_IS_REMOTE` - 在遠端容器中設為 '1'
+- `MODAL_IDENTITY_TOKEN` - 函數身份的 OIDC 權杖
 
-**Sandbox Containers**:
-- `MODAL_SANDBOX_ID` - Sandbox ID
+**沙箱容器**：
+- `MODAL_SANDBOX_ID` - 沙箱 ID
 
-### Setting Environment Variables
+### 設定環境變數
 
-Via Image:
+透過映像：
 
 ```python
 image = modal.Image.debian_slim().env({"PORT": "6443"})
@@ -111,7 +111,7 @@ def my_function():
     port = os.environ["PORT"]
 ```
 
-Via Secrets:
+透過密鑰：
 
 ```python
 secret = modal.Secret.from_dict({"API_KEY": "secret-value"})
@@ -122,9 +122,9 @@ def my_function():
     api_key = os.environ["API_KEY"]
 ```
 
-## Common Secret Patterns
+## 常見密鑰模式
 
-### AWS Credentials
+### AWS 憑證
 
 ```python
 aws_secret = modal.Secret.from_name("my-aws-secret")
@@ -133,10 +133,10 @@ aws_secret = modal.Secret.from_name("my-aws-secret")
 def use_aws():
     import boto3
     s3 = boto3.client('s3')
-    # AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY automatically used
+    # AWS_ACCESS_KEY_ID 和 AWS_SECRET_ACCESS_KEY 自動使用
 ```
 
-### Hugging Face Token
+### Hugging Face 權杖
 
 ```python
 hf_secret = modal.Secret.from_name("huggingface")
@@ -144,11 +144,11 @@ hf_secret = modal.Secret.from_name("huggingface")
 @app.function(secrets=[hf_secret])
 def download_model():
     from transformers import AutoModel
-    # HF_TOKEN automatically used for authentication
+    # HF_TOKEN 自動用於驗證
     model = AutoModel.from_pretrained("private-model")
 ```
 
-### Database Credentials
+### 資料庫憑證
 
 ```python
 db_secret = modal.Secret.from_name("postgres-creds")
@@ -164,17 +164,17 @@ def query_db():
     )
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Never hardcode secrets** - Always use Modal Secrets
-2. **Use specific secrets** - Create separate secrets for different purposes
-3. **Rotate secrets regularly** - Update secrets periodically
-4. **Minimal scope** - Only attach secrets to functions that need them
-5. **Environment-specific** - Use different secrets for dev/staging/prod
+1. **永遠不要硬編碼密鑰** - 始終使用 Modal Secrets
+2. **使用特定密鑰** - 為不同目的建立不同的密鑰
+3. **定期輪換密鑰** - 定期更新密鑰
+4. **最小範圍** - 只將密鑰附加到需要它們的函數
+5. **環境特定** - 為 dev/staging/prod 使用不同的密鑰
 
-## Security Notes
+## 安全說明
 
-- Secrets are encrypted at rest
-- Only available to functions that explicitly request them
-- Not logged or exposed in dashboards
-- Can be scoped to specific environments
+- 密鑰在靜止時加密
+- 只有明確請求的函數才能存取
+- 不會記錄或在儀表板中顯示
+- 可以限定到特定環境

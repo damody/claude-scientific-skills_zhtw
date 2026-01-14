@@ -1,15 +1,15 @@
-# Circuit Transformations
+# 電路轉換
 
-This guide covers circuit optimization, compilation, and manipulation using Cirq's transformation framework.
+本指南涵蓋使用 Cirq 轉換框架進行電路優化、編譯和操作。
 
-## Transformer Framework
+## 轉換器框架
 
-### Basic Transformers
+### 基本轉換器
 
 ```python
 import cirq
 
-# Example circuit
+# 範例電路
 qubits = cirq.LineQubit.range(3)
 circuit = cirq.Circuit(
     cirq.H(qubits[0]),
@@ -17,22 +17,22 @@ circuit = cirq.Circuit(
     cirq.CNOT(qubits[1], qubits[2])
 )
 
-# Apply built-in transformer
+# 應用內建轉換器
 from cirq.transformers import optimize_for_target_gateset
 
-# Optimize to specific gate set
+# 優化為特定閘集
 optimized = optimize_for_target_gateset(
     circuit,
     gateset=cirq.SqrtIswapTargetGateset()
 )
 ```
 
-### Merge Single-Qubit Gates
+### 合併單量子位元閘
 
 ```python
 from cirq.transformers import merge_single_qubit_gates_to_phxz
 
-# Circuit with multiple single-qubit gates
+# 具有多個單量子位元閘的電路
 circuit = cirq.Circuit(
     cirq.H(q),
     cirq.T(q),
@@ -40,34 +40,34 @@ circuit = cirq.Circuit(
     cirq.H(q)
 )
 
-# Merge into single operation
+# 合併為單一操作
 merged = merge_single_qubit_gates_to_phxz(circuit)
 ```
 
-### Drop Negligible Operations
+### 移除可忽略操作
 
 ```python
 from cirq.transformers import drop_negligible_operations
 
-# Remove gates below threshold
+# 移除低於閾值的閘
 circuit_with_small_rotations = cirq.Circuit(
-    cirq.rz(1e-10)(q),  # Very small rotation
+    cirq.rz(1e-10)(q),  # 非常小的旋轉
     cirq.H(q)
 )
 
 cleaned = drop_negligible_operations(circuit_with_small_rotations, atol=1e-8)
 ```
 
-## Custom Transformers
+## 自訂轉換器
 
-### Transformer Decorator
+### 轉換器裝飾器
 
 ```python
 from cirq.transformers import transformer_api
 
 @transformer_api.transformer
 def remove_z_gates(circuit: cirq.Circuit) -> cirq.Circuit:
-    """Remove all Z gates from circuit."""
+    """從電路中移除所有 Z 閘。"""
     new_moments = []
     for moment in circuit:
         new_ops = [op for op in moment if not isinstance(op.gate, cirq.ZPowGate)]
@@ -75,17 +75,17 @@ def remove_z_gates(circuit: cirq.Circuit) -> cirq.Circuit:
             new_moments.append(cirq.Moment(new_ops))
     return cirq.Circuit(new_moments)
 
-# Use custom transformer
+# 使用自訂轉換器
 transformed = remove_z_gates(circuit)
 ```
 
-### Transformer Class
+### 轉換器類別
 
 ```python
 from cirq.transformers import transformer_primitives
 
 class HToRyTransformer(transformer_primitives.Transformer):
-    """Replace H gates with Ry(π/2)."""
+    """將 H 閘替換為 Ry(π/2)。"""
 
     def __call__(self, circuit: cirq.Circuit, *, context=None) -> cirq.Circuit:
         def map_op(op: cirq.Operation, _) -> cirq.OP_TREE:
@@ -99,28 +99,28 @@ class HToRyTransformer(transformer_primitives.Transformer):
             deep=True
         ).unfreeze(copy=False)
 
-# Apply transformer
+# 應用轉換器
 transformer = HToRyTransformer()
 result = transformer(circuit)
 ```
 
-## Gate Decomposition
+## 閘分解
 
-### Decompose to Target Gateset
+### 分解為目標閘集
 
 ```python
 from cirq.transformers import optimize_for_target_gateset
 
-# Decompose to CZ + single-qubit rotations
+# 分解為 CZ + 單量子位元旋轉
 target_gateset = cirq.CZTargetGateset()
 decomposed = optimize_for_target_gateset(circuit, gateset=target_gateset)
 
-# Decompose to √iSWAP gates
+# 分解為 √iSWAP 閘
 sqrt_iswap_gateset = cirq.SqrtIswapTargetGateset()
 decomposed = optimize_for_target_gateset(circuit, gateset=sqrt_iswap_gateset)
 ```
 
-### Custom Gate Decomposition
+### 自訂閘分解
 
 ```python
 class Toffoli(cirq.Gate):
@@ -128,7 +128,7 @@ class Toffoli(cirq.Gate):
         return 3
 
     def _decompose_(self, qubits):
-        """Decompose Toffoli into basic gates."""
+        """將 Toffoli 分解為基本閘。"""
         c1, c2, t = qubits
         return [
             cirq.H(t),
@@ -148,19 +148,19 @@ class Toffoli(cirq.Gate):
             cirq.CNOT(c1, c2)
         ]
 
-# Use decomposition
+# 使用分解
 circuit = cirq.Circuit(Toffoli()(q0, q1, q2))
 decomposed = cirq.decompose(circuit)
 ```
 
-## Circuit Optimization
+## 電路優化
 
-### Eject Z Gates
+### 彈出 Z 閘
 
 ```python
 from cirq.transformers import eject_z
 
-# Move Z gates to end of circuit
+# 將 Z 閘移到電路末端
 circuit = cirq.Circuit(
     cirq.H(q0),
     cirq.Z(q0),
@@ -170,44 +170,44 @@ circuit = cirq.Circuit(
 ejected = eject_z(circuit)
 ```
 
-### Eject Phase Gates
+### 彈出相位閘
 
 ```python
 from cirq.transformers import eject_phased_paulis
 
-# Consolidate phase gates
+# 整合相位閘
 optimized = eject_phased_paulis(circuit, atol=1e-8)
 ```
 
-### Drop Empty Moments
+### 移除空 Moments
 
 ```python
 from cirq.transformers import drop_empty_moments
 
-# Remove moments with no operations
+# 移除沒有操作的 moments
 cleaned = drop_empty_moments(circuit)
 ```
 
-### Align Measurements
+### 對齊測量
 
 ```python
 from cirq.transformers import dephase_measurements
 
-# Move measurements to end and remove operations after
+# 將測量移到末端並移除之後的操作
 aligned = dephase_measurements(circuit)
 ```
 
-## Circuit Compilation
+## 電路編譯
 
-### Compile for Hardware
+### 為硬體編譯
 
 ```python
 import cirq_google
 
-# Get device specification
+# 取得裝置規格
 device = cirq_google.Sycamore
 
-# Compile circuit to device
+# 將電路編譯到裝置
 from cirq.transformers import optimize_for_target_gateset
 
 compiled = optimize_for_target_gateset(
@@ -215,17 +215,17 @@ compiled = optimize_for_target_gateset(
     gateset=cirq_google.SycamoreTargetGateset()
 )
 
-# Validate compiled circuit
+# 驗證編譯後的電路
 device.validate_circuit(compiled)
 ```
 
-### Two-Qubit Gate Compilation
+### 雙量子位元閘編譯
 
 ```python
-# Compile to specific two-qubit gate
+# 編譯為特定雙量子位元閘
 from cirq import two_qubit_to_cz
 
-# Convert all two-qubit gates to CZ
+# 將所有雙量子位元閘轉換為 CZ
 cz_circuit = cirq.Circuit()
 for moment in circuit:
     for op in moment:
@@ -235,14 +235,14 @@ for moment in circuit:
             cz_circuit.append(op)
 ```
 
-## Qubit Routing
+## 量子位元路由
 
-### Route Circuit to Device Topology
+### 將電路路由到裝置拓撲
 
 ```python
 from cirq.transformers import route_circuit
 
-# Define device connectivity
+# 定義裝置連接性
 device_graph = cirq.NamedTopology(
     {
         (0, 0): [(0, 1), (1, 0)],
@@ -252,7 +252,7 @@ device_graph = cirq.NamedTopology(
     }
 )
 
-# Route logical qubits to physical qubits
+# 將邏輯量子位元路由到物理量子位元
 routed_circuit = route_circuit(
     circuit,
     device_graph=device_graph,
@@ -260,12 +260,12 @@ routed_circuit = route_circuit(
 )
 ```
 
-### SWAP Network Insertion
+### SWAP 網路插入
 
 ```python
-# Manually insert SWAPs for routing
+# 手動插入 SWAP 進行路由
 def insert_swaps(circuit, swap_locations):
-    """Insert SWAP gates at specified locations."""
+    """在指定位置插入 SWAP 閘。"""
     new_circuit = cirq.Circuit()
     moment_idx = 0
 
@@ -278,39 +278,39 @@ def insert_swaps(circuit, swap_locations):
     return new_circuit
 ```
 
-## Advanced Transformations
+## 進階轉換
 
-### Unitary Compilation
+### 么正編譯
 
 ```python
 import scipy.linalg
 
-# Compile arbitrary unitary to gate sequence
+# 將任意么正編譯為閘序列
 def compile_unitary(unitary, qubits):
-    """Compile 2x2 unitary using KAK decomposition."""
+    """使用 KAK 分解編譯 2x2 么正。"""
     from cirq.linalg import kak_decomposition
 
     decomp = kak_decomposition(unitary)
     operations = []
 
-    # Add single-qubit gates before
+    # 加入前置單量子位元閘
     operations.append(cirq.MatrixGate(decomp.single_qubit_operations_before[0])(qubits[0]))
     operations.append(cirq.MatrixGate(decomp.single_qubit_operations_before[1])(qubits[1]))
 
-    # Add interaction (two-qubit) part
+    # 加入交互作用（雙量子位元）部分
     x, y, z = decomp.interaction_coefficients
     operations.append(cirq.XXPowGate(exponent=x/np.pi)(qubits[0], qubits[1]))
     operations.append(cirq.YYPowGate(exponent=y/np.pi)(qubits[0], qubits[1]))
     operations.append(cirq.ZZPowGate(exponent=z/np.pi)(qubits[0], qubits[1]))
 
-    # Add single-qubit gates after
+    # 加入後置單量子位元閘
     operations.append(cirq.MatrixGate(decomp.single_qubit_operations_after[0])(qubits[0]))
     operations.append(cirq.MatrixGate(decomp.single_qubit_operations_after[1])(qubits[1]))
 
     return operations
 ```
 
-### Circuit Simplification
+### 電路簡化
 
 ```python
 from cirq.transformers import (
@@ -318,80 +318,80 @@ from cirq.transformers import (
     merge_single_qubit_gates_to_phxz
 )
 
-# Merge adjacent single-qubit gates
+# 合併相鄰單量子位元閘
 simplified = merge_single_qubit_gates_to_phxz(circuit)
 
-# Merge adjacent k-qubit unitaries
+# 合併相鄰 k 量子位元么正
 simplified = merge_k_qubit_unitaries(circuit, k=2)
 ```
 
-### Commutation-Based Optimization
+### 基於交換性的優化
 
 ```python
-# Commute Z gates through CNOT
+# 將 Z 閘通過 CNOT 交換
 def commute_z_through_cnot(circuit):
-    """Move Z gates through CNOT gates."""
+    """將 Z 閘通過 CNOT 閘移動。"""
     new_moments = []
 
     for moment in circuit:
         ops = list(moment)
-        # Find Z gates before CNOT
+        # 尋找 CNOT 之前的 Z 閘
         z_ops = [op for op in ops if isinstance(op.gate, cirq.ZPowGate)]
         cnot_ops = [op for op in ops if isinstance(op.gate, cirq.CXPowGate)]
 
-        # Apply commutation rules
-        # Z on control commutes, Z on target anticommutes
-        # (simplified logic here)
+        # 應用交換規則
+        # 控制端上的 Z 可交換，目標端上的 Z 反交換
+        # （這裡是簡化的邏輯）
 
         new_moments.append(cirq.Moment(ops))
 
     return cirq.Circuit(new_moments)
 ```
 
-## Transformation Pipelines
+## 轉換管線
 
-### Compose Multiple Transformers
+### 組合多個轉換器
 
 ```python
 from cirq.transformers import transformer_api
 
-# Build transformation pipeline
+# 建構轉換管線
 @transformer_api.transformer
 def optimization_pipeline(circuit: cirq.Circuit) -> cirq.Circuit:
-    # Step 1: Merge single-qubit gates
+    # 步驟 1：合併單量子位元閘
     circuit = merge_single_qubit_gates_to_phxz(circuit)
 
-    # Step 2: Drop negligible operations
+    # 步驟 2：移除可忽略操作
     circuit = drop_negligible_operations(circuit)
 
-    # Step 3: Eject Z gates
+    # 步驟 3：彈出 Z 閘
     circuit = eject_z(circuit)
 
-    # Step 4: Drop empty moments
+    # 步驟 4：移除空 moments
     circuit = drop_empty_moments(circuit)
 
     return circuit
 
-# Apply pipeline
+# 應用管線
 optimized = optimization_pipeline(circuit)
 ```
 
-## Validation and Analysis
+## 驗證和分析
 
-### Circuit Depth Reduction
+### 電路深度減少
 
 ```python
-# Measure circuit depth before and after
-print(f"Original depth: {len(circuit)}")
+# 測量轉換前後的電路深度
+print(f"原始深度：{len(circuit)}")
 optimized = optimization_pipeline(circuit)
-print(f"Optimized depth: {len(optimized)}")
+print(f"優化後深度：{len(optimized)}")
 ```
 
-### Gate Count Analysis
+### 閘計數分析
 
 ```python
 def count_gates(circuit):
-    """Count gates by type."""
+    """依類型計數閘。"""
     counts = {}
     for moment in circuit:
         for op in moment:
@@ -401,16 +401,16 @@ def count_gates(circuit):
 
 original_counts = count_gates(circuit)
 optimized_counts = count_gates(optimized)
-print(f"Original: {original_counts}")
-print(f"Optimized: {optimized_counts}")
+print(f"原始：{original_counts}")
+print(f"優化後：{optimized_counts}")
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Start with high-level transformers**: Use built-in transformers before writing custom ones
-2. **Chain transformers**: Apply multiple optimizations in sequence
-3. **Validate after transformation**: Ensure circuit correctness and device compatibility
-4. **Measure improvement**: Track depth and gate count reduction
-5. **Use appropriate gatesets**: Match target hardware capabilities
-6. **Consider commutativity**: Exploit gate commutation for optimization
-7. **Test on small circuits first**: Verify transformers work correctly before scaling
+1. **從高階轉換器開始**：先使用內建轉換器再寫自訂的
+2. **串連轉換器**：按順序應用多個優化
+3. **轉換後驗證**：確保電路正確性和裝置相容性
+4. **測量改進**：追蹤深度和閘計數減少
+5. **使用適當的閘集**：匹配目標硬體能力
+6. **考慮交換性**：利用閘交換進行優化
+7. **先在小電路測試**：擴展前驗證轉換器是否正確工作

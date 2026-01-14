@@ -1,383 +1,383 @@
-# NetworkX Graph Algorithms
+# NetworkX 圖演算法
 
-## Shortest Paths
+## 最短路徑
 
-### Single Source Shortest Paths
+### 單源最短路徑
 ```python
-# Dijkstra's algorithm (weighted graphs)
+# Dijkstra 演算法（加權圖）
 path = nx.shortest_path(G, source=1, target=5, weight='weight')
 length = nx.shortest_path_length(G, source=1, target=5, weight='weight')
 
-# All shortest paths from source
+# 從源點出發的所有最短路徑
 paths = nx.single_source_shortest_path(G, source=1)
 lengths = nx.single_source_shortest_path_length(G, source=1)
 
-# Bellman-Ford (handles negative weights)
+# Bellman-Ford（處理負權重）
 path = nx.bellman_ford_path(G, source=1, target=5, weight='weight')
 ```
 
-### All Pairs Shortest Paths
+### 全對最短路徑
 ```python
-# All pairs (returns iterator)
+# 所有節點對（返回迭代器）
 for source, paths in nx.all_pairs_shortest_path(G):
     print(f"From {source}: {paths}")
 
-# Floyd-Warshall algorithm
+# Floyd-Warshall 演算法
 lengths = dict(nx.all_pairs_shortest_path_length(G))
 ```
 
-### Specialized Shortest Path Algorithms
+### 專門最短路徑演算法
 ```python
-# A* algorithm (with heuristic)
+# A* 演算法（帶啟發函數）
 def heuristic(u, v):
-    # Custom heuristic function
+    # 自訂啟發函數
     return abs(u - v)
 
 path = nx.astar_path(G, source=1, target=5, heuristic=heuristic, weight='weight')
 
-# Average shortest path length
+# 平均最短路徑長度
 avg_length = nx.average_shortest_path_length(G)
 ```
 
-## Connectivity
+## 連通性
 
-### Connected Components (Undirected)
+### 連通分量（無向）
 ```python
-# Check if connected
+# 檢查是否連通
 is_connected = nx.is_connected(G)
 
-# Number of components
+# 分量數量
 num_components = nx.number_connected_components(G)
 
-# Get all components (returns iterator of sets)
+# 取得所有分量（返回集合的迭代器）
 components = list(nx.connected_components(G))
 largest_component = max(components, key=len)
 
-# Get component containing specific node
+# 取得包含特定節點的分量
 component = nx.node_connected_component(G, node=1)
 ```
 
-### Strong/Weak Connectivity (Directed)
+### 強/弱連通（有向）
 ```python
-# Strong connectivity (mutually reachable)
+# 強連通（相互可達）
 is_strongly_connected = nx.is_strongly_connected(G)
 strong_components = list(nx.strongly_connected_components(G))
 largest_scc = max(strong_components, key=len)
 
-# Weak connectivity (ignoring direction)
+# 弱連通（忽略方向）
 is_weakly_connected = nx.is_weakly_connected(G)
 weak_components = list(nx.weakly_connected_components(G))
 
-# Condensation (DAG of strongly connected components)
+# 凝縮圖（強連通分量的 DAG）
 condensed = nx.condensation(G)
 ```
 
-### Cuts and Connectivity
+### 割集和連通性
 ```python
-# Minimum node/edge cut
+# 最小節點/邊割集
 min_node_cut = nx.minimum_node_cut(G, s=1, t=5)
 min_edge_cut = nx.minimum_edge_cut(G, s=1, t=5)
 
-# Node/edge connectivity
+# 節點/邊連通性
 node_connectivity = nx.node_connectivity(G)
 edge_connectivity = nx.edge_connectivity(G)
 ```
 
-## Centrality Measures
+## 中心性度量
 
-### Degree Centrality
+### 度中心性
 ```python
-# Fraction of nodes each node is connected to
+# 每個節點連接的節點比例
 degree_cent = nx.degree_centrality(G)
 
-# For directed graphs
+# 對於有向圖
 in_degree_cent = nx.in_degree_centrality(G)
 out_degree_cent = nx.out_degree_centrality(G)
 ```
 
-### Betweenness Centrality
+### 介數中心性
 ```python
-# Fraction of shortest paths passing through node
+# 經過節點的最短路徑比例
 betweenness = nx.betweenness_centrality(G, weight='weight')
 
-# Edge betweenness
+# 邊介數
 edge_betweenness = nx.edge_betweenness_centrality(G, weight='weight')
 
-# Approximate for large graphs
-approx_betweenness = nx.betweenness_centrality(G, k=100)  # Sample 100 nodes
+# 大型圖的近似值
+approx_betweenness = nx.betweenness_centrality(G, k=100)  # 採樣 100 個節點
 ```
 
-### Closeness Centrality
+### 接近中心性
 ```python
-# Reciprocal of average shortest path length
+# 平均最短路徑長度的倒數
 closeness = nx.closeness_centrality(G)
 
-# For disconnected graphs
+# 對於非連通圖
 closeness = nx.closeness_centrality(G, wf_improved=True)
 ```
 
-### Eigenvector Centrality
+### 特徵向量中心性
 ```python
-# Centrality based on connections to high-centrality nodes
+# 基於與高中心性節點連接的中心性
 eigenvector = nx.eigenvector_centrality(G, max_iter=1000)
 
-# Katz centrality (variant with attenuation factor)
+# Katz 中心性（帶衰減因子的變體）
 katz = nx.katz_centrality(G, alpha=0.1, beta=1.0)
 ```
 
 ### PageRank
 ```python
-# Google's PageRank algorithm
+# Google 的 PageRank 演算法
 pagerank = nx.pagerank(G, alpha=0.85)
 
-# Personalized PageRank
+# 個人化 PageRank
 personalization = {node: 1.0 if node in [1, 2] else 0.0 for node in G}
 ppr = nx.pagerank(G, personalization=personalization)
 ```
 
-## Clustering
+## 聚類
 
-### Clustering Coefficients
+### 聚類係數
 ```python
-# Clustering coefficient for each node
+# 每個節點的聚類係數
 clustering = nx.clustering(G)
 
-# Average clustering coefficient
+# 平均聚類係數
 avg_clustering = nx.average_clustering(G)
 
-# Weighted clustering
+# 加權聚類
 weighted_clustering = nx.clustering(G, weight='weight')
 ```
 
-### Transitivity
+### 傳遞性
 ```python
-# Overall clustering (ratio of triangles to triads)
+# 整體聚類（三角形與三元組的比率）
 transitivity = nx.transitivity(G)
 ```
 
-### Triangles
+### 三角形
 ```python
-# Count triangles per node
+# 每個節點的三角形計數
 triangles = nx.triangles(G)
 
-# Total number of triangles
+# 三角形總數
 total_triangles = sum(triangles.values()) // 3
 ```
 
-## Community Detection
+## 社群檢測
 
-### Modularity-Based
+### 基於模組度
 ```python
 from networkx.algorithms import community
 
-# Greedy modularity maximization
+# 貪婪模組度最大化
 communities = community.greedy_modularity_communities(G)
 
-# Compute modularity
+# 計算模組度
 modularity = community.modularity(G, communities)
 ```
 
-### Label Propagation
+### 標籤傳播
 ```python
-# Fast community detection
+# 快速社群檢測
 communities = community.label_propagation_communities(G)
 ```
 
 ### Girvan-Newman
 ```python
-# Hierarchical community detection via edge betweenness
+# 透過邊介數的階層式社群檢測
 comp = community.girvan_newman(G)
 limited = itertools.takewhile(lambda c: len(c) <= 10, comp)
 for communities in limited:
     print(tuple(sorted(c) for c in communities))
 ```
 
-## Matching and Covering
+## 匹配和覆蓋
 
-### Maximum Matching
+### 最大匹配
 ```python
-# Maximum cardinality matching
+# 最大基數匹配
 matching = nx.max_weight_matching(G)
 
-# Check if matching is valid
+# 檢查匹配是否有效
 is_matching = nx.is_matching(G, matching)
 is_perfect = nx.is_perfect_matching(G, matching)
 ```
 
-### Minimum Vertex/Edge Cover
+### 最小頂點/邊覆蓋
 ```python
-# Minimum set of nodes covering all edges
+# 覆蓋所有邊的最小節點集
 min_vertex_cover = nx.approximation.min_weighted_vertex_cover(G)
 
-# Minimum edge dominating set
+# 最小邊支配集
 min_edge_dom = nx.approximation.min_edge_dominating_set(G)
 ```
 
-## Tree Algorithms
+## 樹演算法
 
-### Minimum Spanning Tree
+### 最小生成樹
 ```python
-# Kruskal's or Prim's algorithm
+# Kruskal 或 Prim 演算法
 mst = nx.minimum_spanning_tree(G, weight='weight')
 
-# Maximum spanning tree
+# 最大生成樹
 mst_max = nx.maximum_spanning_tree(G, weight='weight')
 
-# Enumerate all spanning trees
+# 列舉所有生成樹
 all_spanning = nx.all_spanning_trees(G)
 ```
 
-### Tree Properties
+### 樹屬性
 ```python
-# Check if graph is tree
+# 檢查圖是否為樹
 is_tree = nx.is_tree(G)
 is_forest = nx.is_forest(G)
 
-# For directed graphs
+# 對於有向圖
 is_arborescence = nx.is_arborescence(G)
 ```
 
-## Flow and Capacity
+## 流和容量
 
-### Maximum Flow
+### 最大流
 ```python
-# Maximum flow value
+# 最大流值
 flow_value = nx.maximum_flow_value(G, s=1, t=5, capacity='capacity')
 
-# Maximum flow with flow dict
+# 帶流字典的最大流
 flow_value, flow_dict = nx.maximum_flow(G, s=1, t=5, capacity='capacity')
 
-# Minimum cut
+# 最小割
 cut_value, partition = nx.minimum_cut(G, s=1, t=5, capacity='capacity')
 ```
 
-### Cost Flow
+### 成本流
 ```python
-# Minimum cost flow
+# 最小成本流
 flow_dict = nx.min_cost_flow(G, demand='demand', capacity='capacity', weight='weight')
 cost = nx.cost_of_flow(G, flow_dict, weight='weight')
 ```
 
-## Cycles
+## 迴圈
 
-### Finding Cycles
+### 尋找迴圈
 ```python
-# Simple cycles (for directed graphs)
+# 簡單迴圈（對於有向圖）
 cycles = list(nx.simple_cycles(G))
 
-# Cycle basis (for undirected graphs)
+# 迴圈基底（對於無向圖）
 basis = nx.cycle_basis(G)
 
-# Check if acyclic
+# 檢查是否無環
 is_dag = nx.is_directed_acyclic_graph(G)
 ```
 
-### Topological Sorting
+### 拓撲排序
 ```python
-# Only for DAGs
+# 僅適用於 DAG
 try:
     topo_order = list(nx.topological_sort(G))
 except nx.NetworkXError:
     print("Graph has cycles")
 
-# All topological sorts
+# 所有拓撲排序
 all_topo = nx.all_topological_sorts(G)
 ```
 
-## Cliques
+## 團
 
-### Finding Cliques
+### 尋找團
 ```python
-# All maximal cliques
+# 所有極大團
 cliques = list(nx.find_cliques(G))
 
-# Maximum clique (NP-complete, approximate)
+# 最大團（NP 完全，近似）
 max_clique = nx.approximation.max_clique(G)
 
-# Clique number
+# 團數
 clique_number = nx.graph_clique_number(G)
 
-# Number of maximal cliques containing each node
+# 包含每個節點的極大團數量
 clique_counts = nx.node_clique_number(G)
 ```
 
-## Graph Coloring
+## 圖著色
 
-### Node Coloring
+### 節點著色
 ```python
-# Greedy coloring
+# 貪婪著色
 coloring = nx.greedy_color(G, strategy='largest_first')
 
-# Different strategies: 'largest_first', 'smallest_last', 'random_sequential'
+# 不同策略：'largest_first'、'smallest_last'、'random_sequential'
 coloring = nx.greedy_color(G, strategy='smallest_last')
 ```
 
-## Isomorphism
+## 同構
 
-### Graph Isomorphism
+### 圖同構
 ```python
-# Check if graphs are isomorphic
+# 檢查圖是否同構
 is_isomorphic = nx.is_isomorphic(G1, G2)
 
-# Get isomorphism mapping
+# 取得同構映射
 from networkx.algorithms import isomorphism
 GM = isomorphism.GraphMatcher(G1, G2)
 if GM.is_isomorphic():
     mapping = GM.mapping
 ```
 
-### Subgraph Isomorphism
+### 子圖同構
 ```python
-# Check if G1 is subgraph isomorphic to G2
+# 檢查 G1 是否為 G2 的子圖同構
 is_subgraph_iso = nx.is_isomorphic(G1, G2.subgraph(nodes))
 ```
 
-## Traversal Algorithms
+## 遍歷演算法
 
-### Depth-First Search (DFS)
+### 深度優先搜索（DFS）
 ```python
-# DFS edges
+# DFS 邊
 dfs_edges = list(nx.dfs_edges(G, source=1))
 
-# DFS tree
+# DFS 樹
 dfs_tree = nx.dfs_tree(G, source=1)
 
-# DFS predecessors
+# DFS 前驅
 dfs_pred = nx.dfs_predecessors(G, source=1)
 
-# Preorder and postorder
+# 前序和後序
 preorder = list(nx.dfs_preorder_nodes(G, source=1))
 postorder = list(nx.dfs_postorder_nodes(G, source=1))
 ```
 
-### Breadth-First Search (BFS)
+### 廣度優先搜索（BFS）
 ```python
-# BFS edges
+# BFS 邊
 bfs_edges = list(nx.bfs_edges(G, source=1))
 
-# BFS tree
+# BFS 樹
 bfs_tree = nx.bfs_tree(G, source=1)
 
-# BFS predecessors and successors
+# BFS 前驅和後繼
 bfs_pred = nx.bfs_predecessors(G, source=1)
 bfs_succ = nx.bfs_successors(G, source=1)
 ```
 
-## Efficiency Considerations
+## 效率考量
 
-### Algorithm Complexity
-- Many algorithms have parameters to control computation time
-- For large graphs, consider approximate algorithms
-- Use `k` parameter to sample nodes in centrality calculations
-- Set `max_iter` for iterative algorithms
+### 演算法複雜度
+- 許多演算法有控制計算時間的參數
+- 對於大型圖，考慮近似演算法
+- 使用 `k` 參數在中心性計算中採樣節點
+- 為迭代演算法設定 `max_iter`
 
-### Memory Usage
-- Iterator-based functions (e.g., `nx.simple_cycles()`) save memory
-- Convert to list only when necessary
-- Use generators for large result sets
+### 記憶體使用
+- 基於迭代器的函數（例如 `nx.simple_cycles()`）節省記憶體
+- 只在必要時轉換為列表
+- 對大型結果集使用生成器
 
-### Numerical Precision
-When using weighted algorithms with floating-point numbers, results are approximate. Consider:
-- Using integer weights when possible
-- Setting appropriate tolerance parameters
-- Being aware of accumulated rounding errors in iterative algorithms
+### 數值精度
+當使用帶有浮點數的加權演算法時，結果是近似的。考慮：
+- 盡可能使用整數權重
+- 設定適當的容差參數
+- 注意迭代演算法中累積的捨入誤差

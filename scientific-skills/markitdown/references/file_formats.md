@@ -1,34 +1,34 @@
-# File Format Support
+# 檔案格式支援
 
-This document provides detailed information about each file format supported by MarkItDown.
+本文件提供 MarkItDown 支援的每種檔案格式的詳細資訊。
 
-## Document Formats
+## 文件格式
 
 ### PDF (.pdf)
 
-**Capabilities**:
-- Text extraction
-- Table detection
-- Metadata extraction
-- OCR for scanned documents (with dependencies)
+**功能**：
+- 文字擷取
+- 表格檢測
+- 元資料擷取
+- 掃描文件的 OCR（需要依賴項）
 
-**Dependencies**:
+**依賴項**：
 ```bash
 pip install 'markitdown[pdf]'
 ```
 
-**Best For**:
-- Scientific papers
-- Reports
-- Books
-- Forms
+**最適用於**：
+- 科學論文
+- 報告
+- 書籍
+- 表單
 
-**Limitations**:
-- Complex layouts may not preserve perfect formatting
-- Scanned PDFs require OCR setup
-- Some PDF features (annotations, forms) may not convert
+**限制**：
+- 複雜佈局可能無法保持完美格式
+- 掃描的 PDF 需要 OCR 設定
+- 某些 PDF 功能（註解、表單）可能無法轉換
 
-**Example**:
+**範例**：
 ```python
 from markitdown import MarkItDown
 
@@ -37,7 +37,7 @@ result = md.convert("research_paper.pdf")
 print(result.text_content)
 ```
 
-**Enhanced with Azure Document Intelligence**:
+**使用 Azure 文件智慧增強**：
 ```python
 md = MarkItDown(docintel_endpoint="https://YOUR-ENDPOINT.cognitiveservices.azure.com/")
 result = md.convert("complex_layout.pdf")
@@ -47,32 +47,32 @@ result = md.convert("complex_layout.pdf")
 
 ### Microsoft Word (.docx)
 
-**Capabilities**:
-- Text extraction
-- Table conversion
-- Heading hierarchy
-- List formatting
-- Basic text formatting (bold, italic)
+**功能**：
+- 文字擷取
+- 表格轉換
+- 標題層級
+- 列表格式
+- 基本文字格式（粗體、斜體）
 
-**Dependencies**:
+**依賴項**：
 ```bash
 pip install 'markitdown[docx]'
 ```
 
-**Best For**:
-- Research papers
-- Reports
-- Documentation
-- Manuscripts
+**最適用於**：
+- 研究論文
+- 報告
+- 文件
+- 手稿
 
-**Preserved Elements**:
-- Headings (converted to Markdown headers)
-- Tables (converted to Markdown tables)
-- Lists (bulleted and numbered)
-- Basic formatting (bold, italic)
-- Paragraphs
+**保留的元素**：
+- 標題（轉換為 Markdown 標題）
+- 表格（轉換為 Markdown 表格）
+- 列表（項目符號和編號）
+- 基本格式（粗體、斜體）
+- 段落
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("manuscript.docx")
 ```
@@ -81,23 +81,23 @@ result = md.convert("manuscript.docx")
 
 ### PowerPoint (.pptx)
 
-**Capabilities**:
-- Slide content extraction
-- Speaker notes
-- Table extraction
-- Image descriptions (with AI)
+**功能**：
+- 投影片內容擷取
+- 演講者備註
+- 表格擷取
+- 圖片描述（使用 AI）
 
-**Dependencies**:
+**依賴項**：
 ```bash
 pip install 'markitdown[pptx]'
 ```
 
-**Best For**:
-- Presentations
-- Lecture slides
-- Conference talks
+**最適用於**：
+- 簡報
+- 講座投影片
+- 研討會演講
 
-**Output Format**:
+**輸出格式**：
 ```markdown
 # Slide 1: Title
 
@@ -112,7 +112,7 @@ Content from slide 1...
 ...
 ```
 
-**With AI Image Descriptions**:
+**使用 AI 圖片描述**：
 ```python
 from openai import OpenAI
 
@@ -125,25 +125,25 @@ result = md.convert("presentation.pptx")
 
 ### Excel (.xlsx, .xls)
 
-**Capabilities**:
-- Sheet extraction
-- Table formatting
-- Data preservation
-- Formula values (calculated)
+**功能**：
+- 工作表擷取
+- 表格格式化
+- 資料保留
+- 公式值（計算後）
 
-**Dependencies**:
+**依賴項**：
 ```bash
-pip install 'markitdown[xlsx]'  # Modern Excel
-pip install 'markitdown[xls]'   # Legacy Excel
+pip install 'markitdown[xlsx]'  # 現代 Excel
+pip install 'markitdown[xls]'   # 舊版 Excel
 ```
 
-**Best For**:
-- Data tables
-- Research data
-- Statistical results
-- Experimental data
+**最適用於**：
+- 資料表
+- 研究資料
+- 統計結果
+- 實驗資料
 
-**Output Format**:
+**輸出格式**：
 ```markdown
 # Sheet: Results
 
@@ -153,34 +153,34 @@ pip install 'markitdown[xls]'   # Legacy Excel
 | 2      | 9.8     | 11.9      | 0.031   |
 ```
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("experimental_data.xlsx")
 ```
 
 ---
 
-## Image Formats
+## 圖片格式
 
-### Images (.jpg, .jpeg, .png, .gif, .webp)
+### 圖片 (.jpg, .jpeg, .png, .gif, .webp)
 
-**Capabilities**:
-- EXIF metadata extraction
-- OCR text extraction
-- AI-powered image descriptions
+**功能**：
+- EXIF 元資料擷取
+- OCR 文字擷取
+- AI 驅動的圖片描述
 
-**Dependencies**:
+**依賴項**：
 ```bash
-pip install 'markitdown[all]'  # Includes image support
+pip install 'markitdown[all]'  # 包含圖片支援
 ```
 
-**Best For**:
-- Scanned documents
-- Charts and graphs
-- Scientific diagrams
-- Photographs with text
+**最適用於**：
+- 掃描文件
+- 圖表和圖形
+- 科學圖表
+- 含文字的照片
 
-**Output Without AI**:
+**無 AI 的輸出**：
 ```markdown
 ![Image](image.jpg)
 
@@ -190,7 +190,7 @@ pip install 'markitdown[all]'  # Includes image support
 - Resolution: 4000x3000
 ```
 
-**Output With AI**:
+**使用 AI 的輸出**：
 ```python
 from openai import OpenAI
 
@@ -203,8 +203,8 @@ md = MarkItDown(
 result = md.convert("graph.png")
 ```
 
-**OCR for Text Extraction**:
-Requires Tesseract OCR:
+**用於文字擷取的 OCR**：
+需要 Tesseract OCR：
 ```bash
 # macOS
 brew install tesseract
@@ -215,27 +215,27 @@ sudo apt-get install tesseract-ocr
 
 ---
 
-## Audio Formats
+## 音訊格式
 
-### Audio (.wav, .mp3)
+### 音訊 (.wav, .mp3)
 
-**Capabilities**:
-- Metadata extraction
-- Speech-to-text transcription
-- Duration and technical info
+**功能**：
+- 元資料擷取
+- 語音轉文字轉錄
+- 時長和技術資訊
 
-**Dependencies**:
+**依賴項**：
 ```bash
 pip install 'markitdown[audio-transcription]'
 ```
 
-**Best For**:
-- Lecture recordings
-- Interviews
-- Podcasts
-- Meeting recordings
+**最適用於**：
+- 講座錄音
+- 訪談
+- 播客
+- 會議錄音
 
-**Output Format**:
+**輸出格式**：
 ```markdown
 # Audio: interview.mp3
 
@@ -248,80 +248,80 @@ pip install 'markitdown[audio-transcription]'
 [Transcribed text appears here...]
 ```
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("lecture.mp3")
 ```
 
 ---
 
-## Web Formats
+## 網頁格式
 
 ### HTML (.html, .htm)
 
-**Capabilities**:
-- Clean HTML to Markdown conversion
-- Link preservation
-- Table conversion
-- List formatting
+**功能**：
+- 乾淨的 HTML 到 Markdown 轉換
+- 連結保留
+- 表格轉換
+- 列表格式化
 
-**Best For**:
-- Web pages
-- Documentation
-- Blog posts
-- Online articles
+**最適用於**：
+- 網頁
+- 文件
+- 部落格文章
+- 線上文章
 
-**Output Format**: Clean Markdown with preserved links and structure
+**輸出格式**：保留連結和結構的乾淨 Markdown
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("webpage.html")
 ```
 
 ---
 
-### YouTube URLs
+### YouTube 網址
 
-**Capabilities**:
-- Fetch video transcriptions
-- Extract video metadata
-- Caption download
+**功能**：
+- 擷取影片轉錄
+- 擷取影片元資料
+- 字幕下載
 
-**Dependencies**:
+**依賴項**：
 ```bash
 pip install 'markitdown[youtube-transcription]'
 ```
 
-**Best For**:
-- Educational videos
-- Lectures
-- Talks
-- Tutorials
+**最適用於**：
+- 教育影片
+- 講座
+- 演講
+- 教學
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("https://www.youtube.com/watch?v=VIDEO_ID")
 ```
 
 ---
 
-## Data Formats
+## 資料格式
 
 ### CSV (.csv)
 
-**Capabilities**:
-- Automatic table conversion
-- Delimiter detection
-- Header preservation
+**功能**：
+- 自動表格轉換
+- 分隔符號檢測
+- 標題保留
 
-**Output Format**: Markdown tables
+**輸出格式**：Markdown 表格
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("data.csv")
 ```
 
-**Output**:
+**輸出**：
 ```markdown
 | Column1 | Column2 | Column3 |
 |---------|---------|---------|
@@ -332,17 +332,17 @@ result = md.convert("data.csv")
 
 ### JSON (.json)
 
-**Capabilities**:
-- Structured representation
-- Pretty formatting
-- Nested data visualization
+**功能**：
+- 結構化表示
+- 美觀格式化
+- 巢狀資料視覺化
 
-**Best For**:
-- API responses
-- Configuration files
-- Data exports
+**最適用於**：
+- API 回應
+- 設定檔
+- 資料匯出
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("data.json")
 ```
@@ -351,38 +351,38 @@ result = md.convert("data.json")
 
 ### XML (.xml)
 
-**Capabilities**:
-- Structure preservation
-- Attribute extraction
-- Formatted output
+**功能**：
+- 結構保留
+- 屬性擷取
+- 格式化輸出
 
-**Best For**:
-- Configuration files
-- Data interchange
-- Structured documents
+**最適用於**：
+- 設定檔
+- 資料交換
+- 結構化文件
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("config.xml")
 ```
 
 ---
 
-## Archive Formats
+## 壓縮格式
 
 ### ZIP (.zip)
 
-**Capabilities**:
-- Iterates through archive contents
-- Converts each file individually
-- Maintains directory structure in output
+**功能**：
+- 迭代處理壓縮檔內容
+- 個別轉換每個檔案
+- 在輸出中維護目錄結構
 
-**Best For**:
-- Document collections
-- Project archives
-- Batch conversions
+**最適用於**：
+- 文件集合
+- 專案壓縮檔
+- 批次轉換
 
-**Output Format**:
+**輸出格式**：
 ```markdown
 # Archive: documents.zip
 
@@ -395,101 +395,101 @@ result = md.convert("config.xml")
 [Content from document2.docx...]
 ```
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("archive.zip")
 ```
 
 ---
 
-## E-book Formats
+## 電子書格式
 
 ### EPUB (.epub)
 
-**Capabilities**:
-- Full text extraction
-- Chapter structure
-- Metadata extraction
+**功能**：
+- 完整文字擷取
+- 章節結構
+- 元資料擷取
 
-**Best For**:
-- E-books
-- Digital publications
-- Long-form content
+**最適用於**：
+- 電子書
+- 數位出版物
+- 長篇內容
 
-**Output Format**: Markdown with preserved chapter structure
+**輸出格式**：保留章節結構的 Markdown
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("book.epub")
 ```
 
 ---
 
-## Other Formats
+## 其他格式
 
-### Outlook Messages (.msg)
+### Outlook 郵件 (.msg)
 
-**Capabilities**:
-- Email content extraction
-- Attachment listing
-- Metadata (from, to, subject, date)
+**功能**：
+- 電子郵件內容擷取
+- 附件列表
+- 元資料（寄件者、收件者、主旨、日期）
 
-**Dependencies**:
+**依賴項**：
 ```bash
 pip install 'markitdown[outlook]'
 ```
 
-**Best For**:
-- Email archives
-- Communication records
+**最適用於**：
+- 電子郵件存檔
+- 通訊記錄
 
-**Example**:
+**範例**：
 ```python
 result = md.convert("message.msg")
 ```
 
 ---
 
-## Format-Specific Tips
+## 格式特定技巧
 
-### PDF Best Practices
+### PDF 最佳實踐
 
-1. **Use Azure Document Intelligence for complex layouts**:
+1. **對複雜佈局使用 Azure 文件智慧**：
    ```python
    md = MarkItDown(docintel_endpoint="endpoint_url")
    ```
 
-2. **For scanned PDFs, ensure OCR is set up**:
+2. **對於掃描的 PDF，確保已設定 OCR**：
    ```bash
    brew install tesseract  # macOS
    ```
 
-3. **Split very large PDFs before conversion** for better performance
+3. **在轉換前分割非常大的 PDF** 以獲得更好的效能
 
-### PowerPoint Best Practices
+### PowerPoint 最佳實踐
 
-1. **Use AI for visual content**:
+1. **對視覺內容使用 AI**：
    ```python
    md = MarkItDown(llm_client=client, llm_model="gpt-4o")
    ```
 
-2. **Check speaker notes** - they're included in output
+2. **檢查演講者備註** - 它們會包含在輸出中
 
-3. **Complex animations won't be captured** - static content only
+3. **複雜動畫不會被擷取** - 僅限靜態內容
 
-### Excel Best Practices
+### Excel 最佳實踐
 
-1. **Large spreadsheets** may take time to convert
+1. **大型試算表** 可能需要較長的轉換時間
 
-2. **Formulas are converted to their calculated values**
+2. **公式會轉換為其計算值**
 
-3. **Multiple sheets** are all included in output
+3. **多個工作表** 都會包含在輸出中
 
-4. **Charts become text descriptions** (use AI for better descriptions)
+4. **圖表會變成文字描述**（使用 AI 可獲得更好的描述）
 
-### Image Best Practices
+### 圖片最佳實踐
 
-1. **Use AI for meaningful descriptions**:
+1. **使用 AI 獲得有意義的描述**：
    ```python
    md = MarkItDown(
        llm_client=client,
@@ -498,44 +498,44 @@ result = md.convert("message.msg")
    )
    ```
 
-2. **For text-heavy images, ensure OCR dependencies** are installed
+2. **對於含大量文字的圖片，確保** 已安裝 OCR 依賴項
 
-3. **High-resolution images** may take longer to process
+3. **高解析度圖片** 可能需要較長的處理時間
 
-### Audio Best Practices
+### 音訊最佳實踐
 
-1. **Clear audio** produces better transcriptions
+1. **清晰的音訊** 會產生更好的轉錄
 
-2. **Long recordings** may take significant time
+2. **長錄音** 可能需要大量時間
 
-3. **Consider splitting long audio files** for faster processing
-
----
-
-## Unsupported Formats
-
-If you need to convert an unsupported format:
-
-1. **Create a custom converter** (see `api_reference.md`)
-2. **Look for plugins** on GitHub (#markitdown-plugin)
-3. **Pre-convert to supported format** (e.g., convert .rtf to .docx)
+3. **考慮分割長音訊檔案** 以加快處理速度
 
 ---
 
-## Format Detection
+## 不支援的格式
 
-MarkItDown automatically detects format from:
+如果您需要轉換不支援的格式：
 
-1. **File extension** (primary method)
-2. **MIME type** (fallback)
-3. **File signature** (magic bytes, fallback)
+1. **建立自訂轉換器**（參見 `api_reference.md`）
+2. **在 GitHub 上尋找外掛**（#markitdown-plugin）
+3. **預先轉換為支援的格式**（例如將 .rtf 轉換為 .docx）
 
-**Override detection**:
+---
+
+## 格式檢測
+
+MarkItDown 自動從以下來源檢測格式：
+
+1. **檔案副檔名**（主要方法）
+2. **MIME 類型**（後備）
+3. **檔案簽名**（magic bytes，後備）
+
+**覆蓋檢測**：
 ```python
-# Force specific format
+# 強制使用特定格式
 result = md.convert("file_without_extension", file_extension=".pdf")
 
-# With streams
+# 使用串流時
 with open("file", "rb") as f:
     result = md.convert_stream(f, file_extension=".pdf")
 ```

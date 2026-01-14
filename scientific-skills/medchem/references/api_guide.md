@@ -1,40 +1,40 @@
-# Medchem API Reference
+# Medchem API 參考
 
-Comprehensive reference for all medchem modules and functions.
+所有 medchem 模組和函數的完整參考。
 
-## Module: medchem.rules
+## 模組：medchem.rules
 
-### Class: RuleFilters
+### 類別：RuleFilters
 
-Filter molecules based on multiple medicinal chemistry rules.
+基於多個藥物化學規則篩選分子。
 
-**Constructor:**
+**建構函數：**
 ```python
 RuleFilters(rule_list: List[str])
 ```
 
-**Parameters:**
-- `rule_list`: List of rule names to apply. See available rules below.
+**參數：**
+- `rule_list`：要應用的規則名稱列表。請參閱下方的可用規則。
 
-**Methods:**
+**方法：**
 
 ```python
 __call__(mols: List[Chem.Mol], n_jobs: int = 1, progress: bool = False) -> Dict
 ```
-- `mols`: List of RDKit molecule objects
-- `n_jobs`: Number of parallel jobs (-1 uses all cores)
-- `progress`: Show progress bar
-- **Returns**: Dictionary with results for each rule
+- `mols`：RDKit 分子物件列表
+- `n_jobs`：平行工作數（-1 使用所有核心）
+- `progress`：顯示進度條
+- **返回**：包含每個規則結果的字典
 
-**Example:**
+**範例：**
 ```python
 rfilter = mc.rules.RuleFilters(rule_list=["rule_of_five", "rule_of_cns"])
 results = rfilter(mols=mol_list, n_jobs=-1, progress=True)
 ```
 
-### Module: medchem.rules.basic_rules
+### 模組：medchem.rules.basic_rules
 
-Individual rule functions that can be applied to single molecules.
+可應用於單一分子的個別規則函數。
 
 #### rule_of_five()
 
@@ -42,18 +42,18 @@ Individual rule functions that can be applied to single molecules.
 rule_of_five(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Lipinski's Rule of Five for oral bioavailability.
+Lipinski 的五規則，用於口服生物利用度（oral bioavailability）。
 
-**Criteria:**
-- Molecular weight ≤ 500 Da
+**標準：**
+- 分子量 ≤ 500 Da
 - LogP ≤ 5
-- H-bond donors ≤ 5
-- H-bond acceptors ≤ 10
+- 氫鍵供體 ≤ 5
+- 氫鍵受體 ≤ 10
 
-**Parameters:**
-- `mol`: SMILES string or RDKit molecule object
+**參數：**
+- `mol`：SMILES 字串或 RDKit 分子物件
 
-**Returns:** True if molecule passes all criteria
+**返回：** 如果分子通過所有標準則為 True
 
 #### rule_of_three()
 
@@ -61,15 +61,15 @@ Lipinski's Rule of Five for oral bioavailability.
 rule_of_three(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Rule of Three for fragment screening libraries.
+用於片段篩選庫的三規則。
 
-**Criteria:**
-- Molecular weight ≤ 300 Da
+**標準：**
+- 分子量 ≤ 300 Da
 - LogP ≤ 3
-- H-bond donors ≤ 3
-- H-bond acceptors ≤ 3
-- Rotatable bonds ≤ 3
-- Polar surface area ≤ 60 Ų
+- 氫鍵供體 ≤ 3
+- 氫鍵受體 ≤ 3
+- 可旋轉鍵 ≤ 3
+- 極性表面積 ≤ 60 Å²
 
 #### rule_of_oprea()
 
@@ -77,13 +77,13 @@ Rule of Three for fragment screening libraries.
 rule_of_oprea(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Oprea's lead-like criteria for hit-to-lead optimization.
+Oprea 的先導化合物類標準，用於苗頭化合物到先導化合物（hit-to-lead）最佳化。
 
-**Criteria:**
-- Molecular weight: 200-350 Da
-- LogP: -2 to 4
-- Rotatable bonds ≤ 7
-- Rings ≤ 4
+**標準：**
+- 分子量：200-350 Da
+- LogP：-2 到 4
+- 可旋轉鍵 ≤ 7
+- 環數 ≤ 4
 
 #### rule_of_cns()
 
@@ -91,13 +91,13 @@ Oprea's lead-like criteria for hit-to-lead optimization.
 rule_of_cns(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-CNS drug-likeness rules.
+CNS 類藥性規則。
 
-**Criteria:**
-- Molecular weight ≤ 450 Da
-- LogP: -1 to 5
-- H-bond donors ≤ 2
-- TPSA ≤ 90 Ų
+**標準：**
+- 分子量 ≤ 450 Da
+- LogP：-1 到 5
+- 氫鍵供體 ≤ 2
+- TPSA ≤ 90 Å²
 
 #### rule_of_leadlike_soft()
 
@@ -105,12 +105,12 @@ CNS drug-likeness rules.
 rule_of_leadlike_soft(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Soft lead-like criteria (more permissive).
+軟性先導化合物類標準（較寬鬆）。
 
-**Criteria:**
-- Molecular weight: 250-450 Da
-- LogP: -3 to 4
-- Rotatable bonds ≤ 10
+**標準：**
+- 分子量：250-450 Da
+- LogP：-3 到 4
+- 可旋轉鍵 ≤ 10
 
 #### rule_of_leadlike_strict()
 
@@ -118,13 +118,13 @@ Soft lead-like criteria (more permissive).
 rule_of_leadlike_strict(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Strict lead-like criteria (more restrictive).
+嚴格先導化合物類標準（較嚴格）。
 
-**Criteria:**
-- Molecular weight: 200-350 Da
-- LogP: -2 to 3.5
-- Rotatable bonds ≤ 7
-- Rings: 1-3
+**標準：**
+- 分子量：200-350 Da
+- LogP：-2 到 3.5
+- 可旋轉鍵 ≤ 7
+- 環數：1-3
 
 #### rule_of_veber()
 
@@ -132,11 +132,11 @@ Strict lead-like criteria (more restrictive).
 rule_of_veber(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Veber's rules for oral bioavailability.
+Veber 的口服生物利用度規則。
 
-**Criteria:**
-- Rotatable bonds ≤ 10
-- TPSA ≤ 140 Ų
+**標準：**
+- 可旋轉鍵 ≤ 10
+- TPSA ≤ 140 Å²
 
 #### rule_of_reos()
 
@@ -144,13 +144,13 @@ Veber's rules for oral bioavailability.
 rule_of_reos(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Rapid Elimination Of Swill (REOS) filter.
+Rapid Elimination Of Swill（REOS）篩選器。
 
-**Criteria:**
-- Molecular weight: 200-500 Da
-- LogP: -5 to 5
-- H-bond donors: 0-5
-- H-bond acceptors: 0-10
+**標準：**
+- 分子量：200-500 Da
+- LogP：-5 到 5
+- 氫鍵供體：0-5
+- 氫鍵受體：0-10
 
 #### rule_of_drug()
 
@@ -158,12 +158,12 @@ Rapid Elimination Of Swill (REOS) filter.
 rule_of_drug(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Combined drug-likeness criteria.
+組合的類藥性標準。
 
-**Criteria:**
-- Passes Rule of Five
-- Passes Veber rules
-- No PAINS substructures
+**標準：**
+- 通過五規則
+- 通過 Veber 規則
+- 無 PAINS 子結構
 
 #### golden_triangle()
 
@@ -171,11 +171,11 @@ Combined drug-likeness criteria.
 golden_triangle(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Golden Triangle for drug-likeness balance.
+類藥性平衡的黃金三角形。
 
-**Criteria:**
+**標準：**
 - 200 ≤ MW ≤ 50×LogP + 400
-- LogP: -2 to 5
+- LogP：-2 到 5
 
 #### pains_filter()
 
@@ -183,90 +183,90 @@ Golden Triangle for drug-likeness balance.
 pains_filter(mol: Union[str, Chem.Mol]) -> bool
 ```
 
-Pan Assay INterference compoundS (PAINS) filter.
+Pan Assay INterference compoundS（PAINS）篩選器。
 
-**Returns:** True if molecule does NOT contain PAINS substructures
+**返回：** 如果分子不包含 PAINS 子結構則為 True
 
 ---
 
-## Module: medchem.structural
+## 模組：medchem.structural
 
-### Class: CommonAlertsFilters
+### 類別：CommonAlertsFilters
 
-Filter for common structural alerts derived from ChEMBL and literature.
+用於源自 ChEMBL 和文獻的常見結構警示的篩選器。
 
-**Constructor:**
+**建構函數：**
 ```python
 CommonAlertsFilters()
 ```
 
-**Methods:**
+**方法：**
 
 ```python
 __call__(mols: List[Chem.Mol], n_jobs: int = 1, progress: bool = False) -> List[Dict]
 ```
 
-Apply common alerts filter to a list of molecules.
+將常見警示篩選器應用於分子列表。
 
-**Returns:** List of dictionaries with keys:
-- `has_alerts`: Boolean indicating if molecule has alerts
-- `alert_details`: List of matched alert patterns
-- `num_alerts`: Number of alerts found
+**返回：** 包含以下鍵的字典列表：
+- `has_alerts`：布林值，指示分子是否有警示
+- `alert_details`：匹配警示模式的列表
+- `num_alerts`：發現的警示數量
 
 ```python
 check_mol(mol: Chem.Mol) -> Tuple[bool, List[str]]
 ```
 
-Check a single molecule for structural alerts.
+檢查單一分子的結構警示。
 
-**Returns:** Tuple of (has_alerts, list_of_alert_names)
+**返回：** (has_alerts, 警示名稱列表) 的元組
 
-### Class: NIBRFilters
+### 類別：NIBRFilters
 
-Novartis NIBR medicinal chemistry filters.
+Novartis NIBR 藥物化學篩選器。
 
-**Constructor:**
+**建構函數：**
 ```python
 NIBRFilters()
 ```
 
-**Methods:**
+**方法：**
 
 ```python
 __call__(mols: List[Chem.Mol], n_jobs: int = 1, progress: bool = False) -> List[bool]
 ```
 
-Apply NIBR filters to molecules.
+將 NIBR 篩選器應用於分子。
 
-**Returns:** List of booleans (True if molecule passes)
+**返回：** 布林值列表（True 表示分子通過）
 
-### Class: LillyDemeritsFilters
+### 類別：LillyDemeritsFilters
 
-Eli Lilly's demerit-based structural alert system (275 rules).
+Eli Lilly 基於扣分的結構警示系統（275 條規則）。
 
-**Constructor:**
+**建構函數：**
 ```python
 LillyDemeritsFilters()
 ```
 
-**Methods:**
+**方法：**
 
 ```python
 __call__(mols: List[Chem.Mol], n_jobs: int = 1, progress: bool = False) -> List[Dict]
 ```
 
-Calculate Lilly demerits for molecules.
+計算分子的 Lilly 扣分。
 
-**Returns:** List of dictionaries with keys:
-- `demerits`: Total demerit score
-- `passes`: Boolean (True if demerits ≤ 100)
-- `matched_patterns`: List of matched patterns with scores
+**返回：** 包含以下鍵的字典列表：
+- `demerits`：總扣分分數
+- `passes`：布林值（如果扣分 ≤ 100 則為 True）
+- `matched_patterns`：包含分數的匹配模式列表
 
 ---
 
-## Module: medchem.functional
+## 模組：medchem.functional
 
-High-level functional API for common operations.
+用於常見操作的高階函數式 API。
 
 ### nibr_filter()
 
@@ -274,13 +274,13 @@ High-level functional API for common operations.
 nibr_filter(mols: List[Chem.Mol], n_jobs: int = 1) -> List[bool]
 ```
 
-Apply NIBR filters using functional API.
+使用函數式 API 應用 NIBR 篩選器。
 
-**Parameters:**
-- `mols`: List of molecules
-- `n_jobs`: Parallelization level
+**參數：**
+- `mols`：分子列表
+- `n_jobs`：平行化級別
 
-**Returns:** List of pass/fail booleans
+**返回：** 通過/失敗布林值列表
 
 ### common_alerts_filter()
 
@@ -288,9 +288,9 @@ Apply NIBR filters using functional API.
 common_alerts_filter(mols: List[Chem.Mol], n_jobs: int = 1) -> List[Dict]
 ```
 
-Apply common alerts filter using functional API.
+使用函數式 API 應用常見警示篩選器。
 
-**Returns:** List of results dictionaries
+**返回：** 結果字典列表
 
 ### lilly_demerits_filter()
 
@@ -298,54 +298,54 @@ Apply common alerts filter using functional API.
 lilly_demerits_filter(mols: List[Chem.Mol], n_jobs: int = 1) -> List[Dict]
 ```
 
-Calculate Lilly demerits using functional API.
+使用函數式 API 計算 Lilly 扣分。
 
 ---
 
-## Module: medchem.groups
+## 模組：medchem.groups
 
-### Class: ChemicalGroup
+### 類別：ChemicalGroup
 
-Detect specific chemical groups in molecules.
+偵測分子中的特定化學基團。
 
-**Constructor:**
+**建構函數：**
 ```python
 ChemicalGroup(groups: List[str], custom_smarts: Optional[Dict[str, str]] = None)
 ```
 
-**Parameters:**
-- `groups`: List of predefined group names
-- `custom_smarts`: Dictionary mapping custom group names to SMARTS patterns
+**參數：**
+- `groups`：預定義基團名稱列表
+- `custom_smarts`：將自訂基團名稱映射到 SMARTS 模式的字典
 
-**Predefined Groups:**
-- `"hinge_binders"`: Kinase hinge binding motifs
-- `"phosphate_binders"`: Phosphate binding groups
-- `"michael_acceptors"`: Michael acceptor electrophiles
-- `"reactive_groups"`: General reactive functionalities
+**預定義基團：**
+- `"hinge_binders"`：激酶鉸鏈結合基序
+- `"phosphate_binders"`：磷酸結合基團
+- `"michael_acceptors"`：麥可受體親電子基
+- `"reactive_groups"`：一般反應性功能
 
-**Methods:**
+**方法：**
 
 ```python
 has_match(mols: List[Chem.Mol]) -> List[bool]
 ```
 
-Check if molecules contain any of the specified groups.
+檢查分子是否包含任何指定的基團。
 
 ```python
 get_matches(mol: Chem.Mol) -> Dict[str, List[Tuple]]
 ```
 
-Get detailed match information for a single molecule.
+取得單一分子的詳細匹配資訊。
 
-**Returns:** Dictionary mapping group names to lists of atom indices
+**返回：** 將基團名稱映射到原子索引列表的字典
 
 ```python
 get_all_matches(mols: List[Chem.Mol]) -> List[Dict]
 ```
 
-Get match information for all molecules.
+取得所有分子的匹配資訊。
 
-**Example:**
+**範例：**
 ```python
 group = mc.groups.ChemicalGroup(groups=["hinge_binders", "phosphate_binders"])
 matches = group.get_all_matches(mol_list)
@@ -353,19 +353,19 @@ matches = group.get_all_matches(mol_list)
 
 ---
 
-## Module: medchem.catalogs
+## 模組：medchem.catalogs
 
-### Class: NamedCatalogs
+### 類別：NamedCatalogs
 
-Access to curated chemical catalogs.
+存取策展的化學目錄。
 
-**Available Catalogs:**
-- `"functional_groups"`: Common functional groups
-- `"protecting_groups"`: Protecting group structures
-- `"reagents"`: Common reagents
-- `"fragments"`: Standard fragments
+**可用目錄：**
+- `"functional_groups"`：常見官能基
+- `"protecting_groups"`：保護基結構
+- `"reagents"`：常見試劑
+- `"fragments"`：標準片段
 
-**Usage:**
+**用法：**
 ```python
 catalog = mc.catalogs.NamedCatalogs.get("functional_groups")
 matches = catalog.get_matches(mol)
@@ -373,9 +373,9 @@ matches = catalog.get_matches(mol)
 
 ---
 
-## Module: medchem.complexity
+## 模組：medchem.complexity
 
-Calculate molecular complexity metrics.
+計算分子複雜度指標。
 
 ### calculate_complexity()
 
@@ -383,40 +383,40 @@ Calculate molecular complexity metrics.
 calculate_complexity(mol: Chem.Mol, method: str = "bertz") -> float
 ```
 
-Calculate complexity score for a molecule.
+計算分子的複雜度分數。
 
-**Parameters:**
-- `mol`: RDKit molecule
-- `method`: Complexity metric ("bertz", "whitlock", "barone")
+**參數：**
+- `mol`：RDKit 分子
+- `method`：複雜度指標（"bertz"、"whitlock"、"barone"）
 
-**Returns:** Complexity score (higher = more complex)
+**返回：** 複雜度分數（越高 = 越複雜）
 
-### Class: ComplexityFilter
+### 類別：ComplexityFilter
 
-Filter molecules by complexity threshold.
+按複雜度閾值篩選分子。
 
-**Constructor:**
+**建構函數：**
 ```python
 ComplexityFilter(max_complexity: float, method: str = "bertz")
 ```
 
-**Methods:**
+**方法：**
 
 ```python
 __call__(mols: List[Chem.Mol], n_jobs: int = 1) -> List[bool]
 ```
 
-Filter molecules exceeding complexity threshold.
+篩選超過複雜度閾值的分子。
 
 ---
 
-## Module: medchem.constraints
+## 模組：medchem.constraints
 
-### Class: Constraints
+### 類別：Constraints
 
-Apply custom property-based constraints.
+應用自訂的基於性質的約束。
 
-**Constructor:**
+**建構函數：**
 ```python
 Constraints(
     mw_range: Optional[Tuple[float, float]] = None,
@@ -431,21 +431,21 @@ Constraints(
 )
 ```
 
-**Parameters:** All parameters are optional. Specify only the constraints needed.
+**參數：** 所有參數都是可選的。只需指定所需的約束。
 
-**Methods:**
+**方法：**
 
 ```python
 __call__(mols: List[Chem.Mol], n_jobs: int = 1) -> List[Dict]
 ```
 
-Apply constraints to molecules.
+將約束應用於分子。
 
-**Returns:** List of dictionaries with keys:
-- `passes`: Boolean indicating if all constraints pass
-- `violations`: List of constraint names that failed
+**返回：** 包含以下鍵的字典列表：
+- `passes`：布林值，指示是否通過所有約束
+- `violations`：失敗的約束名稱列表
 
-**Example:**
+**範例：**
 ```python
 constraints = mc.constraints.Constraints(
     mw_range=(200, 500),
@@ -457,9 +457,9 @@ results = constraints(mols=mol_list, n_jobs=-1)
 
 ---
 
-## Module: medchem.query
+## 模組：medchem.query
 
-Query language for complex filtering.
+用於複雜篩選的查詢語言。
 
 ### parse()
 
@@ -467,16 +467,16 @@ Query language for complex filtering.
 parse(query: str) -> Query
 ```
 
-Parse a medchem query string into a Query object.
+將 medchem 查詢字串解析為 Query 物件。
 
-**Query Syntax:**
-- Operators: `AND`, `OR`, `NOT`
-- Comparisons: `<`, `>`, `<=`, `>=`, `==`, `!=`
-- Properties: `complexity`, `lilly_demerits`, `mw`, `logp`, `tpsa`
-- Rules: `rule_of_five`, `rule_of_cns`, etc.
-- Filters: `common_alerts`, `nibr_filter`, `pains_filter`
+**查詢語法：**
+- 運算子：`AND`、`OR`、`NOT`
+- 比較：`<`、`>`、`<=`、`>=`、`==`、`!=`
+- 性質：`complexity`、`lilly_demerits`、`mw`、`logp`、`tpsa`
+- 規則：`rule_of_five`、`rule_of_cns` 等
+- 篩選器：`common_alerts`、`nibr_filter`、`pains_filter`
 
-**Example Queries:**
+**查詢範例：**
 ```python
 "rule_of_five AND NOT common_alerts"
 "rule_of_cns AND complexity < 400"
@@ -484,17 +484,17 @@ Parse a medchem query string into a Query object.
 "(rule_of_five OR rule_of_oprea) AND NOT pains_filter"
 ```
 
-### Class: Query
+### 類別：Query
 
-**Methods:**
+**方法：**
 
 ```python
 apply(mols: List[Chem.Mol], n_jobs: int = 1) -> List[bool]
 ```
 
-Apply parsed query to molecules.
+將解析的查詢應用於分子。
 
-**Example:**
+**範例：**
 ```python
 query = mc.query.parse("rule_of_five AND NOT common_alerts")
 results = query.apply(mols=mol_list, n_jobs=-1)
@@ -503,9 +503,9 @@ passing_mols = [mol for mol, passes in zip(mol_list, results) if passes]
 
 ---
 
-## Module: medchem.utils
+## 模組：medchem.utils
 
-Utility functions for working with molecules.
+用於處理分子的工具函數。
 
 ### batch_process()
 
@@ -519,14 +519,14 @@ batch_process(
 ) -> List
 ```
 
-Process molecules in parallel batches.
+以平行批次處理分子。
 
-**Parameters:**
-- `mols`: List of molecules
-- `func`: Function to apply to each molecule
-- `n_jobs`: Number of parallel workers
-- `progress`: Show progress bar
-- `batch_size`: Size of processing batches
+**參數：**
+- `mols`：分子列表
+- `func`：要應用於每個分子的函數
+- `n_jobs`：平行工作者數量
+- `progress`：顯示進度條
+- `batch_size`：處理批次的大小
 
 ### standardize_mol()
 
@@ -534,40 +534,40 @@ Process molecules in parallel batches.
 standardize_mol(mol: Chem.Mol) -> Chem.Mol
 ```
 
-Standardize molecule representation (sanitize, neutralize charges, etc.).
+標準化分子表示（清理、中和電荷等）。
 
 ---
 
-## Common Patterns
+## 常見模式
 
-### Pattern: Parallel Processing
+### 模式：平行處理
 
-All filters support parallelization:
+所有篩選器支援平行化：
 
 ```python
-# Use all CPU cores
+# 使用所有 CPU 核心
 results = filter_object(mols=mol_list, n_jobs=-1, progress=True)
 
-# Use specific number of cores
+# 使用特定數量的核心
 results = filter_object(mols=mol_list, n_jobs=4, progress=True)
 ```
 
-### Pattern: Combining Multiple Filters
+### 模式：組合多個篩選器
 
 ```python
 import medchem as mc
 
-# Apply multiple filters
+# 應用多個篩選器
 rule_filter = mc.rules.RuleFilters(rule_list=["rule_of_five"])
 alert_filter = mc.structural.CommonAlertsFilters()
 lilly_filter = mc.structural.LillyDemeritsFilters()
 
-# Get results
+# 取得結果
 rule_results = rule_filter(mols=mol_list, n_jobs=-1)
 alert_results = alert_filter(mols=mol_list, n_jobs=-1)
 lilly_results = lilly_filter(mols=mol_list, n_jobs=-1)
 
-# Combine criteria
+# 組合標準
 passing_mols = [
     mol for i, mol in enumerate(mol_list)
     if rule_results[i]["passes"]
@@ -576,25 +576,25 @@ passing_mols = [
 ]
 ```
 
-### Pattern: Working with DataFrames
+### 模式：使用 DataFrame
 
 ```python
 import pandas as pd
 import datamol as dm
 import medchem as mc
 
-# Load data
+# 載入資料
 df = pd.read_csv("molecules.csv")
 df["mol"] = df["smiles"].apply(dm.to_mol)
 
-# Apply filters
+# 應用篩選器
 rfilter = mc.rules.RuleFilters(rule_list=["rule_of_five", "rule_of_cns"])
 results = rfilter(mols=df["mol"].tolist(), n_jobs=-1)
 
-# Add results to dataframe
+# 將結果新增到 dataframe
 df["passes_ro5"] = [r["rule_of_five"] for r in results]
 df["passes_cns"] = [r["rule_of_cns"] for r in results]
 
-# Filter dataframe
+# 篩選 dataframe
 filtered_df = df[df["passes_ro5"] & df["passes_cns"]]
 ```

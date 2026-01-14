@@ -1,113 +1,113 @@
-# SymPy Matrices and Linear Algebra
+# SymPy 矩陣和線性代數
 
-This document covers SymPy's matrix operations, linear algebra capabilities, and solving systems of linear equations.
+本文件涵蓋 SymPy 的矩陣運算、線性代數能力，以及線性方程組求解。
 
-## Matrix Creation
+## 矩陣建立
 
-### Basic Matrix Construction
+### 基本矩陣構建
 
 ```python
 from sympy import Matrix, eye, zeros, ones, diag
 
-# From list of rows
+# 從列的列表
 M = Matrix([[1, 2], [3, 4]])
 M = Matrix([
     [1, 2, 3],
     [4, 5, 6]
 ])
 
-# Column vector
+# 行向量
 v = Matrix([1, 2, 3])
 
-# Row vector
+# 列向量
 v = Matrix([[1, 2, 3]])
 ```
 
-### Special Matrices
+### 特殊矩陣
 
 ```python
-# Identity matrix
-I = eye(3)  # 3x3 identity
+# 單位矩陣
+I = eye(3)  # 3x3 單位矩陣
 # [[1, 0, 0],
 #  [0, 1, 0],
 #  [0, 0, 1]]
 
-# Zero matrix
-Z = zeros(2, 3)  # 2 rows, 3 columns of zeros
+# 零矩陣
+Z = zeros(2, 3)  # 2 列、3 行的零
 
-# Ones matrix
-O = ones(3, 2)   # 3 rows, 2 columns of ones
+# 全一矩陣
+O = ones(3, 2)   # 3 列、2 行的一
 
-# Diagonal matrix
+# 對角矩陣
 D = diag(1, 2, 3)
 # [[1, 0, 0],
 #  [0, 2, 0],
 #  [0, 0, 3]]
 
-# Block diagonal
+# 區塊對角矩陣
 from sympy import BlockDiagMatrix
 A = Matrix([[1, 2], [3, 4]])
 B = Matrix([[5, 6], [7, 8]])
 BD = BlockDiagMatrix(A, B)
 ```
 
-## Matrix Properties and Access
+## 矩陣性質和存取
 
-### Shape and Dimensions
+### 形狀和維度
 
 ```python
 M = Matrix([[1, 2, 3], [4, 5, 6]])
 
-M.shape  # (2, 3) - returns tuple (rows, cols)
+M.shape  # (2, 3) - 返回元組 (列, 行)
 M.rows   # 2
 M.cols   # 3
 ```
 
-### Accessing Elements
+### 存取元素
 
 ```python
 M = Matrix([[1, 2, 3], [4, 5, 6]])
 
-# Single element
-M[0, 0]  # 1 (zero-indexed)
+# 單一元素
+M[0, 0]  # 1（從零開始索引）
 M[1, 2]  # 6
 
-# Row access
+# 列存取
 M[0, :]   # Matrix([[1, 2, 3]])
-M.row(0)  # Same as above
+M.row(0)  # 同上
 
-# Column access
+# 行存取
 M[:, 1]   # Matrix([[2], [5]])
-M.col(1)  # Same as above
+M.col(1)  # 同上
 
-# Slicing
-M[0:2, 0:2]  # Top-left 2x2 submatrix
+# 切片
+M[0:2, 0:2]  # 左上角 2x2 子矩陣
 ```
 
-### Modification
+### 修改
 
 ```python
 M = Matrix([[1, 2], [3, 4]])
 
-# Insert row
+# 插入列
 M = M.row_insert(1, Matrix([[5, 6]]))
 # [[1, 2],
 #  [5, 6],
 #  [3, 4]]
 
-# Insert column
+# 插入行
 M = M.col_insert(1, Matrix([7, 8]))
 
-# Delete row
+# 刪除列
 M = M.row_del(0)
 
-# Delete column
+# 刪除行
 M = M.col_del(1)
 ```
 
-## Basic Matrix Operations
+## 基本矩陣運算
 
-### Arithmetic Operations
+### 算術運算
 
 ```python
 from sympy import Matrix
@@ -115,178 +115,178 @@ from sympy import Matrix
 A = Matrix([[1, 2], [3, 4]])
 B = Matrix([[5, 6], [7, 8]])
 
-# Addition
+# 加法
 C = A + B
 
-# Subtraction
+# 減法
 C = A - B
 
-# Scalar multiplication
+# 純量乘法
 C = 2 * A
 
-# Matrix multiplication
+# 矩陣乘法
 C = A * B
 
-# Element-wise multiplication (Hadamard product)
+# 元素對元素乘法（Hadamard 乘積）
 C = A.multiply_elementwise(B)
 
-# Power
-C = A**2  # Same as A * A
+# 冪次
+C = A**2  # 同 A * A
 C = A**3  # A * A * A
 ```
 
-### Transpose and Conjugate
+### 轉置和共軛
 
 ```python
 M = Matrix([[1, 2], [3, 4]])
 
-# Transpose
+# 轉置
 M.T
 # [[1, 3],
 #  [2, 4]]
 
-# Conjugate (for complex matrices)
+# 共軛（用於複數矩陣）
 M.conjugate()
 
-# Conjugate transpose (Hermitian transpose)
-M.H  # Same as M.conjugate().T
+# 共軛轉置（Hermitian 轉置）
+M.H  # 同 M.conjugate().T
 ```
 
-### Inverse
+### 反矩陣
 
 ```python
 M = Matrix([[1, 2], [3, 4]])
 
-# Inverse
+# 反矩陣
 M_inv = M**-1
 M_inv = M.inv()
 
-# Verify
-M * M_inv  # Returns identity matrix
+# 驗證
+M * M_inv  # 返回單位矩陣
 
-# Check if invertible
-M.is_invertible()  # True or False
+# 檢查是否可逆
+M.is_invertible()  # True 或 False
 ```
 
-## Advanced Linear Algebra
+## 進階線性代數
 
-### Determinant
+### 行列式
 
 ```python
 M = Matrix([[1, 2], [3, 4]])
 M.det()  # -2
 
-# For symbolic matrices
+# 用於符號矩陣
 from sympy import symbols
 a, b, c, d = symbols('a b c d')
 M = Matrix([[a, b], [c, d]])
 M.det()  # a*d - b*c
 ```
 
-### Trace
+### 跡
 
 ```python
 M = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 M.trace()  # 1 + 5 + 9 = 15
 ```
 
-### Row Echelon Form
+### 列梯形式
 
 ```python
 M = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
-# Reduced Row Echelon Form
+# 簡化列梯形式
 rref_M, pivot_cols = M.rref()
-# rref_M is the RREF matrix
-# pivot_cols is tuple of pivot column indices
+# rref_M 是 RREF 矩陣
+# pivot_cols 是樞紐行索引的元組
 ```
 
-### Rank
+### 秩
 
 ```python
 M = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-M.rank()  # 2 (this matrix is rank-deficient)
+M.rank()  # 2（此矩陣秩不足）
 ```
 
-### Nullspace and Column Space
+### 零空間和行空間
 
 ```python
 M = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
-# Nullspace (kernel)
+# 零空間（核）
 null = M.nullspace()
-# Returns list of basis vectors for nullspace
+# 返回零空間的基向量列表
 
-# Column space
+# 行空間
 col = M.columnspace()
-# Returns list of basis vectors for column space
+# 返回行空間的基向量列表
 
-# Row space
+# 列空間
 row = M.rowspace()
-# Returns list of basis vectors for row space
+# 返回列空間的基向量列表
 ```
 
-### Orthogonalization
+### 正交化
 
 ```python
-# Gram-Schmidt orthogonalization
+# Gram-Schmidt 正交化
 vectors = [Matrix([1, 2, 3]), Matrix([4, 5, 6])]
 ortho = Matrix.orthogonalize(*vectors)
 
-# With normalization
+# 含正規化
 ortho_norm = Matrix.orthogonalize(*vectors, normalize=True)
 ```
 
-## Eigenvalues and Eigenvectors
+## 特徵值和特徵向量
 
-### Computing Eigenvalues
+### 計算特徵值
 
 ```python
 M = Matrix([[1, 2], [2, 1]])
 
-# Eigenvalues with multiplicities
+# 含重數的特徵值
 eigenvals = M.eigenvals()
-# Returns dict: {eigenvalue: multiplicity}
-# Example: {3: 1, -1: 1}
+# 返回字典：{特徵值: 重數}
+# 範例：{3: 1, -1: 1}
 
-# Just the eigenvalues as a list
+# 僅特徵值作為列表
 eigs = list(M.eigenvals().keys())
 ```
 
-### Computing Eigenvectors
+### 計算特徵向量
 
 ```python
 M = Matrix([[1, 2], [2, 1]])
 
-# Eigenvectors with eigenvalues
+# 含特徵值的特徵向量
 eigenvects = M.eigenvects()
-# Returns list of tuples: (eigenvalue, multiplicity, [eigenvectors])
-# Example: [(3, 1, [Matrix([1, 1])]), (-1, 1, [Matrix([1, -1])])]
+# 返回元組列表：(特徵值, 重數, [特徵向量])
+# 範例：[(3, 1, [Matrix([1, 1])]), (-1, 1, [Matrix([1, -1])])]
 
-# Access individual eigenvectors
+# 存取個別特徵向量
 for eigenval, multiplicity, eigenvecs in M.eigenvects():
-    print(f"Eigenvalue: {eigenval}")
-    print(f"Eigenvectors: {eigenvecs}")
+    print(f"特徵值：{eigenval}")
+    print(f"特徵向量：{eigenvecs}")
 ```
 
-### Diagonalization
+### 對角化
 
 ```python
 M = Matrix([[1, 2], [2, 1]])
 
-# Check if diagonalizable
-M.is_diagonalizable()  # True or False
+# 檢查是否可對角化
+M.is_diagonalizable()  # True 或 False
 
-# Diagonalize (M = P*D*P^-1)
+# 對角化（M = P*D*P^-1）
 P, D = M.diagonalize()
-# P: matrix of eigenvectors
-# D: diagonal matrix of eigenvalues
+# P：特徵向量矩陣
+# D：特徵值的對角矩陣
 
-# Verify
+# 驗證
 P * D * P**-1 == M  # True
 ```
 
-### Characteristic Polynomial
+### 特徵多項式
 
 ```python
 from sympy import symbols
@@ -294,120 +294,120 @@ lam = symbols('lambda')
 
 M = Matrix([[1, 2], [2, 1]])
 charpoly = M.charpoly(lam)
-# Returns characteristic polynomial
+# 返回特徵多項式
 ```
 
-### Jordan Normal Form
+### Jordan 標準形
 
 ```python
 M = Matrix([[2, 1, 0], [0, 2, 1], [0, 0, 2]])
 
-# Jordan form (for non-diagonalizable matrices)
+# Jordan 形式（用於不可對角化矩陣）
 P, J = M.jordan_form()
-# J is the Jordan normal form
-# P is the transformation matrix
+# J 是 Jordan 標準形
+# P 是變換矩陣
 ```
 
-## Matrix Decompositions
+## 矩陣分解
 
-### LU Decomposition
+### LU 分解
 
 ```python
 M = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 10]])
 
-# LU decomposition
+# LU 分解
 L, U, perm = M.LUdecomposition()
-# L: lower triangular
-# U: upper triangular
-# perm: permutation indices
+# L：下三角矩陣
+# U：上三角矩陣
+# perm：排列索引
 ```
 
-### QR Decomposition
+### QR 分解
 
 ```python
 M = Matrix([[1, 2], [3, 4], [5, 6]])
 
-# QR decomposition
+# QR 分解
 Q, R = M.QRdecomposition()
-# Q: orthogonal matrix
-# R: upper triangular matrix
+# Q：正交矩陣
+# R：上三角矩陣
 ```
 
-### Cholesky Decomposition
+### Cholesky 分解
 
 ```python
-# For positive definite symmetric matrices
+# 用於正定對稱矩陣
 M = Matrix([[4, 2], [2, 3]])
 
 L = M.cholesky()
-# L is lower triangular such that M = L*L.T
+# L 是下三角矩陣使得 M = L*L.T
 ```
 
-### Singular Value Decomposition (SVD)
+### 奇異值分解（SVD）
 
 ```python
 M = Matrix([[1, 2], [3, 4], [5, 6]])
 
-# SVD (note: may require numerical evaluation)
+# SVD（注意：可能需要數值評估）
 U, S, V = M.singular_value_decomposition()
 # M = U * S * V
 ```
 
-## Solving Linear Systems
+## 求解線性方程組
 
-### Using Matrix Equations
+### 使用矩陣方程式
 
 ```python
-# Solve Ax = b
+# 求解 Ax = b
 A = Matrix([[1, 2], [3, 4]])
 b = Matrix([5, 6])
 
-# Solution
-x = A.solve(b)  # or A**-1 * b
+# 解
+x = A.solve(b)  # 或 A**-1 * b
 
-# Least squares (for overdetermined systems)
+# 最小平方（用於超定系統）
 x = A.solve_least_squares(b)
 ```
 
-### Using linsolve
+### 使用 linsolve
 
 ```python
 from sympy import linsolve, symbols
 
 x, y = symbols('x y')
 
-# Method 1: List of equations
+# 方法 1：方程式列表
 eqs = [x + y - 5, 2*x - y - 1]
 sol = linsolve(eqs, [x, y])
 # {(2, 3)}
 
-# Method 2: Augmented matrix
+# 方法 2：增廣矩陣
 M = Matrix([[1, 1, 5], [2, -1, 1]])
 sol = linsolve(M, [x, y])
 
-# Method 3: A*x = b form
+# 方法 3：A*x = b 形式
 A = Matrix([[1, 1], [2, -1]])
 b = Matrix([5, 1])
 sol = linsolve((A, b), [x, y])
 ```
 
-### Underdetermined and Overdetermined Systems
+### 欠定和超定系統
 
 ```python
-# Underdetermined (infinite solutions)
+# 欠定（無窮多解）
 A = Matrix([[1, 2, 3]])
 b = Matrix([6])
-sol = A.solve(b)  # Returns parametric solution
+sol = A.solve(b)  # 返回參數解
 
-# Overdetermined (least squares)
+# 超定（最小平方）
 A = Matrix([[1, 2], [3, 4], [5, 6]])
 b = Matrix([1, 2, 3])
 sol = A.solve_least_squares(b)
 ```
 
-## Symbolic Matrices
+## 符號矩陣
 
-### Working with Symbolic Entries
+### 使用符號元素
 
 ```python
 from sympy import symbols, Matrix
@@ -415,60 +415,60 @@ from sympy import symbols, Matrix
 a, b, c, d = symbols('a b c d')
 M = Matrix([[a, b], [c, d]])
 
-# All operations work symbolically
+# 所有運算都符號運作
 M.det()  # a*d - b*c
 M.inv()  # Matrix([[d/(a*d - b*c), -b/(a*d - b*c)], ...])
-M.eigenvals()  # Symbolic eigenvalues
+M.eigenvals()  # 符號特徵值
 ```
 
-### Matrix Functions
+### 矩陣函式
 
 ```python
 from sympy import exp, sin, cos, Matrix
 
 M = Matrix([[0, 1], [-1, 0]])
 
-# Matrix exponential
+# 矩陣指數
 exp(M)
 
-# Trigonometric functions
+# 三角函式
 sin(M)
 cos(M)
 ```
 
-## Mutable vs Immutable Matrices
+## 可變 vs 不可變矩陣
 
 ```python
 from sympy import Matrix, ImmutableMatrix
 
-# Mutable (default)
+# 可變（預設）
 M = Matrix([[1, 2], [3, 4]])
-M[0, 0] = 5  # Allowed
+M[0, 0] = 5  # 允許
 
-# Immutable (for use as dictionary keys, etc.)
+# 不可變（用作字典鍵等）
 I = ImmutableMatrix([[1, 2], [3, 4]])
-# I[0, 0] = 5  # Error: ImmutableMatrix cannot be modified
+# I[0, 0] = 5  # 錯誤：ImmutableMatrix 無法修改
 ```
 
-## Sparse Matrices
+## 稀疏矩陣
 
-For large matrices with many zero entries:
+對於含有許多零元素的大型矩陣：
 
 ```python
 from sympy import SparseMatrix
 
-# Create sparse matrix
+# 建立稀疏矩陣
 S = SparseMatrix(1000, 1000, {(0, 0): 1, (100, 100): 2})
-# Only stores non-zero elements
+# 僅儲存非零元素
 
-# Convert dense to sparse
+# 將密集矩陣轉換為稀疏矩陣
 M = Matrix([[1, 0, 0], [0, 2, 0]])
 S = SparseMatrix(M)
 ```
 
-## Common Linear Algebra Patterns
+## 常見線性代數模式
 
-### Pattern 1: Solving Ax = b for Multiple b Vectors
+### 模式 1：對多個 b 向量求解 Ax = b
 
 ```python
 A = Matrix([[1, 2], [3, 4]])
@@ -481,46 +481,46 @@ x1 = A_inv * b1
 x2 = A_inv * b2
 ```
 
-### Pattern 2: Change of Basis
+### 模式 2：基底變換
 
 ```python
-# Given vectors in old basis, convert to new basis
+# 給定舊基底中的向量，轉換到新基底
 old_basis = [Matrix([1, 0]), Matrix([0, 1])]
 new_basis = [Matrix([1, 1]), Matrix([1, -1])]
 
-# Change of basis matrix
+# 基底變換矩陣
 P = Matrix.hstack(*new_basis)
 P_inv = P.inv()
 
-# Convert vector v from old to new basis
+# 將向量 v 從舊基底轉換到新基底
 v = Matrix([3, 4])
 v_new = P_inv * v
 ```
 
-### Pattern 3: Matrix Condition Number
+### 模式 3：矩陣條件數
 
 ```python
-# Estimate condition number (ratio of largest to smallest singular value)
+# 估計條件數（最大與最小奇異值的比值）
 M = Matrix([[1, 2], [3, 4]])
 eigenvals = M.eigenvals()
 cond = max(eigenvals.keys()) / min(eigenvals.keys())
 ```
 
-### Pattern 4: Projection Matrices
+### 模式 4：投影矩陣
 
 ```python
-# Project onto column space of A
+# 投影到 A 的行空間
 A = Matrix([[1, 0], [0, 1], [1, 1]])
 P = A * (A.T * A).inv() * A.T
-# P is projection matrix onto column space of A
+# P 是投影到 A 行空間的投影矩陣
 ```
 
-## Important Notes
+## 重要注意事項
 
-1. **Zero-testing:** SymPy's symbolic zero-testing can affect accuracy. For numerical work, consider using `evalf()` or numerical libraries.
+1. **零檢定：**SymPy 的符號零檢定可能影響精確度。對於數值工作，考慮使用 `evalf()` 或數值函式庫。
 
-2. **Performance:** For large numerical matrices, consider converting to NumPy using `lambdify` or using numerical linear algebra libraries directly.
+2. **效能：**對於大型數值矩陣，考慮使用 `lambdify` 轉換為 NumPy 或直接使用數值線性代數函式庫。
 
-3. **Symbolic computation:** Matrix operations with symbolic entries can be computationally expensive for large matrices.
+3. **符號計算：**含符號元素的矩陣運算對於大型矩陣可能計算量很大。
 
-4. **Assumptions:** Use symbol assumptions (e.g., `real=True`, `positive=True`) to help SymPy simplify matrix expressions correctly.
+4. **假設：**使用符號假設（例如 `real=True`、`positive=True`）幫助 SymPy 正確簡化矩陣運算式。

@@ -1,138 +1,138 @@
-# Metadata Extraction Guide
+# 後設資料擷取指南
 
-Comprehensive guide to extracting accurate citation metadata from DOIs, PMIDs, arXiv IDs, and URLs using various APIs and services.
+使用各種 API 和服務從 DOI、PMID、arXiv ID 和 URL 擷取準確引用後設資料的完整指南。
 
-## Overview
+## 概述
 
-Accurate metadata is essential for proper citations. This guide covers:
-- Identifying paper identifiers (DOI, PMID, arXiv ID)
-- Querying metadata APIs (CrossRef, PubMed, arXiv, DataCite)
-- Required BibTeX fields by entry type
-- Handling edge cases and special situations
-- Validating extracted metadata
+準確的後設資料對正確引用至關重要。本指南涵蓋：
+- 識別論文識別碼（DOI、PMID、arXiv ID）
+- 查詢後設資料 API（CrossRef、PubMed、arXiv、DataCite）
+- 各條目類型的必填 BibTeX 欄位
+- 處理邊緣案例和特殊情況
+- 驗證擷取的後設資料
 
-## Paper Identifiers
+## 論文識別碼
 
-### DOI (Digital Object Identifier)
+### DOI（數位物件識別碼）
 
-**Format**: `10.XXXX/suffix`
+**格式**：`10.XXXX/suffix`
 
-**Examples**:
+**範例**：
 ```
-10.1038/s41586-021-03819-2    # Nature article
-10.1126/science.aam9317       # Science article
-10.1016/j.cell.2023.01.001    # Cell article
-10.1371/journal.pone.0123456  # PLOS ONE article
+10.1038/s41586-021-03819-2    # Nature 文章
+10.1126/science.aam9317       # Science 文章
+10.1016/j.cell.2023.01.001    # Cell 文章
+10.1371/journal.pone.0123456  # PLOS ONE 文章
 ```
 
-**Properties**:
-- Permanent identifier
-- Most reliable for metadata
-- Resolves to current location
-- Publisher-assigned
+**特性**：
+- 永久識別碼
+- 最可靠的後設資料來源
+- 解析到當前位置
+- 由出版商指派
 
-**Where to find**:
-- First page of article
-- Article webpage
-- CrossRef, Google Scholar, PubMed
-- Usually prominent on publisher site
+**哪裡可以找到**：
+- 文章首頁
+- 文章網頁
+- CrossRef、Google Scholar、PubMed
+- 通常在出版商網站上顯眼位置
 
-### PMID (PubMed ID)
+### PMID（PubMed ID）
 
-**Format**: 8-digit number (typically)
+**格式**：8 位數數字（通常）
 
-**Examples**:
+**範例**：
 ```
 34265844
 28445112
 35476778
 ```
 
-**Properties**:
-- Specific to PubMed database
-- Biomedical literature only
-- Assigned by NCBI
-- Permanent identifier
+**特性**：
+- 專屬於 PubMed 資料庫
+- 僅限生物醫學文獻
+- 由 NCBI 指派
+- 永久識別碼
 
-**Where to find**:
-- PubMed search results
-- Article page on PubMed
-- Often in article PDF footer
-- PMC (PubMed Central) pages
+**哪裡可以找到**：
+- PubMed 搜尋結果
+- PubMed 文章頁面
+- 通常在文章 PDF 頁尾
+- PMC（PubMed Central）頁面
 
-### PMCID (PubMed Central ID)
+### PMCID（PubMed Central ID）
 
-**Format**: PMC followed by numbers
+**格式**：PMC 後接數字
 
-**Examples**:
+**範例**：
 ```
 PMC8287551
 PMC7456789
 ```
 
-**Properties**:
-- Free full-text articles in PMC
-- Subset of PubMed articles
-- Open access or author manuscripts
+**特性**：
+- PMC 中的免費全文文章
+- PubMed 文章的子集
+- 開放存取或作者手稿
 
 ### arXiv ID
 
-**Format**: YYMM.NNNNN or archive/YYMMNNN
+**格式**：YYMM.NNNNN 或 archive/YYMMNNN
 
-**Examples**:
+**範例**：
 ```
-2103.14030        # New format (since 2007)
-2401.12345        # 2024 submission
-arXiv:hep-th/9901001  # Old format
+2103.14030        # 新格式（2007 年以後）
+2401.12345        # 2024 年提交
+arXiv:hep-th/9901001  # 舊格式
 ```
 
-**Properties**:
-- Preprints (not peer-reviewed)
-- Physics, math, CS, q-bio, etc.
-- Version tracking (v1, v2, etc.)
-- Free, open access
+**特性**：
+- 預印本（未經同行評審）
+- 物理、數學、電腦科學、定量生物學等
+- 版本追蹤（v1、v2 等）
+- 免費、開放存取
 
-**Where to find**:
+**哪裡可以找到**：
 - arXiv.org
-- Often cited before publication
-- Paper PDF header
+- 通常在發表前被引用
+- 論文 PDF 頁首
 
-### Other Identifiers
+### 其他識別碼
 
-**ISBN** (Books):
+**ISBN**（書籍）：
 ```
 978-0-12-345678-9
 0-123-45678-9
 ```
 
-**arXiv category**:
+**arXiv 類別**：
 ```
-cs.LG    # Computer Science - Machine Learning
-q-bio.QM # Quantitative Biology - Quantitative Methods
-math.ST  # Mathematics - Statistics
+cs.LG    # 電腦科學 - 機器學習
+q-bio.QM # 定量生物學 - 定量方法
+math.ST  # 數學 - 統計學
 ```
 
-## Metadata APIs
+## 後設資料 API
 
 ### CrossRef API
 
-**Primary source for DOIs** - Most comprehensive metadata for journal articles.
+**DOI 的主要來源** - 期刊文章最全面的後設資料。
 
-**Base URL**: `https://api.crossref.org/works/`
+**基礎 URL**：`https://api.crossref.org/works/`
 
-**No API key required**, but polite pool recommended:
-- Add email to User-Agent
-- Gets better service
-- No rate limits
+**無需 API 金鑰**，但建議使用禮貌池：
+- 在 User-Agent 中添加電子郵件
+- 獲得更好的服務
+- 無速率限制
 
-#### Basic DOI Lookup
+#### 基本 DOI 查詢
 
-**Request**:
+**請求**：
 ```
 GET https://api.crossref.org/works/10.1038/s41586-021-03819-2
 ```
 
-**Response** (simplified):
+**回應**（簡化）：
 ```json
 {
   "message": {
@@ -154,53 +154,53 @@ GET https://api.crossref.org/works/10.1038/s41586-021-03819-2
 }
 ```
 
-#### Fields Available
+#### 可用欄位
 
-**Always present**:
-- `DOI`: Digital Object Identifier
-- `title`: Article title (array)
-- `type`: Content type (journal-article, book-chapter, etc.)
+**始終存在**：
+- `DOI`：數位物件識別碼
+- `title`：文章標題（陣列）
+- `type`：內容類型（journal-article、book-chapter 等）
 
-**Usually present**:
-- `author`: Array of author objects
-- `container-title`: Journal/book title
-- `published-print` or `published-online`: Publication date
-- `volume`, `issue`, `page`: Publication details
-- `publisher`: Publisher name
+**通常存在**：
+- `author`：作者物件陣列
+- `container-title`：期刊/書名
+- `published-print` 或 `published-online`：出版日期
+- `volume`、`issue`、`page`：出版詳細資訊
+- `publisher`：出版商名稱
 
-**Sometimes present**:
-- `abstract`: Article abstract
-- `subject`: Subject categories
-- `ISSN`: Journal ISSN
-- `ISBN`: Book ISBN
-- `reference`: Reference list
-- `is-referenced-by-count`: Citation count
+**有時存在**：
+- `abstract`：文章摘要
+- `subject`：主題類別
+- `ISSN`：期刊 ISSN
+- `ISBN`：書籍 ISBN
+- `reference`：參考文獻列表
+- `is-referenced-by-count`：引用次數
 
-#### Content Types
+#### 內容類型
 
-CrossRef `type` field values:
-- `journal-article`: Journal articles
-- `book-chapter`: Book chapters
-- `book`: Books
-- `proceedings-article`: Conference papers
-- `posted-content`: Preprints
-- `dataset`: Research datasets
-- `report`: Technical reports
-- `dissertation`: Theses/dissertations
+CrossRef `type` 欄位值：
+- `journal-article`：期刊文章
+- `book-chapter`：書籍章節
+- `book`：書籍
+- `proceedings-article`：會議論文
+- `posted-content`：預印本
+- `dataset`：研究資料集
+- `report`：技術報告
+- `dissertation`：論文/學位論文
 
 ### PubMed E-utilities API
 
-**Specialized for biomedical literature** - Curated metadata with MeSH terms.
+**專為生物醫學文獻** - 含 MeSH 詞彙的策展後設資料。
 
-**Base URL**: `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/`
+**基礎 URL**：`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/`
 
-**API key recommended** (free):
-- Higher rate limits
-- Better performance
+**建議使用 API 金鑰**（免費）：
+- 更高的速率限制
+- 更好的效能
 
-#### PMID to Metadata
+#### PMID 轉後設資料
 
-**Step 1: EFetch for full record**
+**步驟 1：使用 EFetch 取得完整記錄**
 
 ```
 GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?
@@ -210,11 +210,11 @@ GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?
   api_key=YOUR_KEY
 ```
 
-**Response**: XML with comprehensive metadata
+**回應**：包含完整後設資料的 XML
 
-**Step 2: Parse XML**
+**步驟 2：解析 XML**
 
-Key fields:
+關鍵欄位：
 ```xml
 <PubmedArticle>
   <MedlineCitation>
@@ -245,9 +245,9 @@ Key fields:
 </PubmedArticle>
 ```
 
-#### Unique PubMed Fields
+#### PubMed 獨有欄位
 
-**MeSH Terms**: Controlled vocabulary
+**MeSH 詞彙**：控制詞彙
 ```xml
 <MeshHeadingList>
   <MeshHeading>
@@ -256,7 +256,7 @@ Key fields:
 </MeshHeadingList>
 ```
 
-**Publication Types**:
+**出版類型**：
 ```xml
 <PublicationTypeList>
   <PublicationType UI="D016428">Journal Article</PublicationType>
@@ -264,7 +264,7 @@ Key fields:
 </PublicationTypeList>
 ```
 
-**Grant Information**:
+**經費資訊**：
 ```xml
 <GrantList>
   <Grant>
@@ -277,20 +277,20 @@ Key fields:
 
 ### arXiv API
 
-**Preprints in physics, math, CS, q-bio** - Free, open access.
+**物理、數學、電腦科學、定量生物學的預印本** - 免費、開放存取。
 
-**Base URL**: `http://export.arxiv.org/api/query`
+**基礎 URL**：`http://export.arxiv.org/api/query`
 
-**No API key required**
+**無需 API 金鑰**
 
-#### arXiv ID to Metadata
+#### arXiv ID 轉後設資料
 
-**Request**:
+**請求**：
 ```
 GET http://export.arxiv.org/api/query?id_list=2103.14030
 ```
 
-**Response**: Atom XML
+**回應**：Atom XML
 
 ```xml
 <entry>
@@ -307,60 +307,60 @@ GET http://export.arxiv.org/api/query?id_list=2103.14030
 </entry>
 ```
 
-#### Key Fields
+#### 關鍵欄位
 
-- `id`: arXiv URL
-- `title`: Preprint title
-- `author`: Author list
-- `published`: First version date
-- `updated`: Latest version date
-- `summary`: Abstract
-- `arxiv:doi`: DOI if published
-- `arxiv:journal_ref`: Journal reference if published
-- `category`: arXiv categories
+- `id`：arXiv URL
+- `title`：預印本標題
+- `author`：作者列表
+- `published`：首版日期
+- `updated`：最新版日期
+- `summary`：摘要
+- `arxiv:doi`：如已發表則有 DOI
+- `arxiv:journal_ref`：如已發表則有期刊參考
+- `category`：arXiv 類別
 
-#### Version Tracking
+#### 版本追蹤
 
-arXiv tracks versions:
-- `v1`: Initial submission
-- `v2`, `v3`, etc.: Revisions
+arXiv 追蹤版本：
+- `v1`：初始提交
+- `v2`、`v3` 等：修訂版
 
-**Always check** if preprint has been published in journal (use DOI if available).
+**始終檢查**預印本是否已在期刊發表（如可用則使用 DOI）。
 
 ### DataCite API
 
-**Research datasets, software, other outputs** - Assigns DOIs to non-traditional scholarly works.
+**研究資料集、軟體、其他產出** - 為非傳統學術產出指派 DOI。
 
-**Base URL**: `https://api.datacite.org/dois/`
+**基礎 URL**：`https://api.datacite.org/dois/`
 
-**Similar to CrossRef** but for datasets, software, code, etc.
+**類似 CrossRef** 但用於資料集、軟體、程式碼等。
 
-**Request**:
+**請求**：
 ```
 GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 ```
 
-**Response**: JSON with metadata for dataset/software
+**回應**：包含資料集/軟體後設資料的 JSON
 
-## Required BibTeX Fields
+## 必填 BibTeX 欄位
 
-### @article (Journal Articles)
+### @article（期刊文章）
 
-**Required**:
-- `author`: Author names
-- `title`: Article title
-- `journal`: Journal name
-- `year`: Publication year
+**必填**：
+- `author`：作者姓名
+- `title`：文章標題
+- `journal`：期刊名稱
+- `year`：出版年份
 
-**Optional but recommended**:
-- `volume`: Volume number
-- `number`: Issue number
-- `pages`: Page range (e.g., 123--145)
-- `doi`: Digital Object Identifier
-- `url`: URL if no DOI
-- `month`: Publication month
+**選用但建議**：
+- `volume`：卷號
+- `number`：期號
+- `pages`：頁碼範圍（例如 123--145）
+- `doi`：數位物件識別碼
+- `url`：如無 DOI 則用 URL
+- `month`：出版月份
 
-**Example**:
+**範例**：
 ```bibtex
 @article{Smith2024,
   author  = {Smith, John and Doe, Jane},
@@ -374,22 +374,22 @@ GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 }
 ```
 
-### @book (Books)
+### @book（書籍）
 
-**Required**:
-- `author` or `editor`: Author(s) or editor(s)
-- `title`: Book title
-- `publisher`: Publisher name
-- `year`: Publication year
+**必填**：
+- `author` 或 `editor`：作者或編輯
+- `title`：書名
+- `publisher`：出版商名稱
+- `year`：出版年份
 
-**Optional but recommended**:
-- `edition`: Edition number (if not first)
-- `address`: Publisher location
-- `isbn`: ISBN
-- `url`: URL
-- `series`: Series name
+**選用但建議**：
+- `edition`：版次（如非第一版）
+- `address`：出版商地點
+- `isbn`：ISBN
+- `url`：URL
+- `series`：叢書名稱
 
-**Example**:
+**範例**：
 ```bibtex
 @book{Kumar2021,
   author    = {Kumar, Vinay and Abbas, Abul K. and Aster, Jon C.},
@@ -401,23 +401,23 @@ GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 }
 ```
 
-### @inproceedings (Conference Papers)
+### @inproceedings（會議論文）
 
-**Required**:
-- `author`: Author names
-- `title`: Paper title
-- `booktitle`: Conference/proceedings name
-- `year`: Year
+**必填**：
+- `author`：作者姓名
+- `title`：論文標題
+- `booktitle`：會議/論文集名稱
+- `year`：年份
 
-**Optional but recommended**:
-- `pages`: Page range
-- `organization`: Organizing body
-- `publisher`: Publisher
-- `address`: Conference location
-- `month`: Conference month
-- `doi`: DOI if available
+**選用但建議**：
+- `pages`：頁碼範圍
+- `organization`：主辦單位
+- `publisher`：出版商
+- `address`：會議地點
+- `month`：會議月份
+- `doi`：如可用則有 DOI
 
-**Example**:
+**範例**：
 ```bibtex
 @inproceedings{Vaswani2017,
   author    = {Vaswani, Ashish and Shazeer, Noam and others},
@@ -429,23 +429,23 @@ GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 }
 ```
 
-### @incollection (Book Chapters)
+### @incollection（書籍章節）
 
-**Required**:
-- `author`: Chapter author(s)
-- `title`: Chapter title
-- `booktitle`: Book title
-- `publisher`: Publisher name
-- `year`: Publication year
+**必填**：
+- `author`：章節作者
+- `title`：章節標題
+- `booktitle`：書名
+- `publisher`：出版商名稱
+- `year`：出版年份
 
-**Optional but recommended**:
-- `editor`: Book editor(s)
-- `pages`: Chapter page range
-- `chapter`: Chapter number
-- `edition`: Edition
-- `address`: Publisher location
+**選用但建議**：
+- `editor`：書籍編輯
+- `pages`：章節頁碼範圍
+- `chapter`：章節號
+- `edition`：版次
+- `address`：出版商地點
 
-**Example**:
+**範例**：
 ```bibtex
 @incollection{Brown2020,
   author    = {Brown, Peter O. and Botstein, David},
@@ -458,21 +458,21 @@ GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 }
 ```
 
-### @phdthesis (Dissertations)
+### @phdthesis（博士論文）
 
-**Required**:
-- `author`: Author name
-- `title`: Thesis title
-- `school`: Institution
-- `year`: Year
+**必填**：
+- `author`：作者姓名
+- `title`：論文標題
+- `school`：機構
+- `year`：年份
 
-**Optional**:
-- `type`: Type (e.g., "PhD dissertation")
-- `address`: Institution location
-- `month`: Month
-- `url`: URL
+**選用**：
+- `type`：類型（例如「PhD dissertation」）
+- `address`：機構地點
+- `month`：月份
+- `url`：URL
 
-**Example**:
+**範例**：
 ```bibtex
 @phdthesis{Johnson2023,
   author = {Johnson, Mary L.},
@@ -483,19 +483,19 @@ GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 }
 ```
 
-### @misc (Preprints, Software, Datasets)
+### @misc（預印本、軟體、資料集）
 
-**Required**:
-- `author`: Author(s)
-- `title`: Title
-- `year`: Year
+**必填**：
+- `author`：作者
+- `title`：標題
+- `year`：年份
 
-**For preprints, add**:
-- `howpublished`: Repository (e.g., "bioRxiv")
-- `doi`: Preprint DOI
-- `note`: Preprint ID
+**對於預印本，添加**：
+- `howpublished`：儲存庫（例如「bioRxiv」）
+- `doi`：預印本 DOI
+- `note`：預印本 ID
 
-**Example (preprint)**:
+**範例（預印本）**：
 ```bibtex
 @misc{Zhang2024,
   author       = {Zhang, Yi and Chen, Li and Wang, Hui},
@@ -507,7 +507,7 @@ GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 }
 ```
 
-**Example (software)**:
+**範例（軟體）**：
 ```bibtex
 @misc{AlphaFold2021,
   author       = {DeepMind},
@@ -519,111 +519,111 @@ GET https://api.datacite.org/dois/10.5281/zenodo.1234567
 }
 ```
 
-## Extraction Workflows
+## 擷取工作流程
 
-### From DOI
+### 從 DOI
 
-**Best practice** - Most reliable source:
+**最佳實務** - 最可靠的來源：
 
 ```bash
-# Single DOI
+# 單一 DOI
 python scripts/extract_metadata.py --doi 10.1038/s41586-021-03819-2
 
-# Multiple DOIs
+# 多個 DOI
 python scripts/extract_metadata.py \
   --doi 10.1038/nature12345 \
   --doi 10.1126/science.abc1234 \
   --output refs.bib
 ```
 
-**Process**:
-1. Query CrossRef API with DOI
-2. Parse JSON response
-3. Extract required fields
-4. Determine entry type (@article, @book, etc.)
-5. Format as BibTeX
-6. Validate completeness
+**流程**：
+1. 使用 DOI 查詢 CrossRef API
+2. 解析 JSON 回應
+3. 擷取必填欄位
+4. 決定條目類型（@article、@book 等）
+5. 格式化為 BibTeX
+6. 驗證完整性
 
-### From PMID
+### 從 PMID
 
-**For biomedical literature**:
+**用於生物醫學文獻**：
 
 ```bash
-# Single PMID
+# 單一 PMID
 python scripts/extract_metadata.py --pmid 34265844
 
-# Multiple PMIDs
+# 多個 PMID
 python scripts/extract_metadata.py \
   --pmid 34265844 \
   --pmid 28445112 \
   --output refs.bib
 ```
 
-**Process**:
-1. Query PubMed EFetch with PMID
-2. Parse XML response
-3. Extract metadata including MeSH terms
-4. Check for DOI in response
-5. If DOI exists, optionally query CrossRef for additional metadata
-6. Format as BibTeX
+**流程**：
+1. 使用 PMID 查詢 PubMed EFetch
+2. 解析 XML 回應
+3. 擷取後設資料包括 MeSH 詞彙
+4. 檢查回應中是否有 DOI
+5. 如有 DOI，可選擇性查詢 CrossRef 取得額外後設資料
+6. 格式化為 BibTeX
 
-### From arXiv ID
+### 從 arXiv ID
 
-**For preprints**:
+**用於預印本**：
 
 ```bash
 python scripts/extract_metadata.py --arxiv 2103.14030
 ```
 
-**Process**:
-1. Query arXiv API with ID
-2. Parse Atom XML response
-3. Check for published version (DOI in response)
-4. If published: Use DOI and CrossRef
-5. If not published: Use preprint metadata
-6. Format as @misc with preprint note
+**流程**：
+1. 使用 ID 查詢 arXiv API
+2. 解析 Atom XML 回應
+3. 檢查是否有已發表版本（回應中的 DOI）
+4. 如已發表：使用 DOI 和 CrossRef
+5. 如未發表：使用預印本後設資料
+6. 格式化為帶預印本註釋的 @misc
 
-**Important**: Always check if preprint has been published!
+**重要**：始終檢查預印本是否已發表！
 
-### From URL
+### 從 URL
 
-**When you only have URL**:
+**當您只有 URL 時**：
 
 ```bash
 python scripts/extract_metadata.py \
   --url "https://www.nature.com/articles/s41586-021-03819-2"
 ```
 
-**Process**:
-1. Parse URL to extract identifier
-2. Identify type (DOI, PMID, arXiv)
-3. Extract identifier from URL
-4. Query appropriate API
-5. Format as BibTeX
+**流程**：
+1. 解析 URL 以擷取識別碼
+2. 識別類型（DOI、PMID、arXiv）
+3. 從 URL 擷取識別碼
+4. 查詢適當的 API
+5. 格式化為 BibTeX
 
-**URL patterns**:
+**URL 模式**：
 ```
-# DOI URLs
+# DOI URL
 https://doi.org/10.1038/nature12345
 https://dx.doi.org/10.1126/science.abc123
 https://www.nature.com/articles/s41586-021-03819-2
 
-# PubMed URLs
+# PubMed URL
 https://pubmed.ncbi.nlm.nih.gov/34265844/
 https://www.ncbi.nlm.nih.gov/pubmed/34265844
 
-# arXiv URLs
+# arXiv URL
 https://arxiv.org/abs/2103.14030
 https://arxiv.org/pdf/2103.14030.pdf
 ```
 
-### Batch Processing
+### 批次處理
 
-**From file with mixed identifiers**:
+**從包含混合識別碼的檔案**：
 
 ```bash
-# Create file with one identifier per line
-# identifiers.txt:
+# 建立每行一個識別碼的檔案
+# identifiers.txt：
 #   10.1038/nature12345
 #   34265844
 #   2103.14030
@@ -634,28 +634,28 @@ python scripts/extract_metadata.py \
   --output references.bib
 ```
 
-**Process**:
-- Script auto-detects identifier type
-- Queries appropriate API
-- Combines all into single BibTeX file
-- Handles errors gracefully
+**流程**：
+- 腳本自動檢測識別碼類型
+- 查詢適當的 API
+- 全部合併到單一 BibTeX 檔案
+- 優雅地處理錯誤
 
-## Special Cases and Edge Cases
+## 特殊情況和邊緣案例
 
-### Preprints Later Published
+### 後來發表的預印本
 
-**Issue**: Preprint cited, but journal version now available.
+**問題**：引用了預印本，但期刊版本現已可用。
 
-**Solution**:
-1. Check arXiv metadata for DOI field
-2. If DOI present, use published version
-3. Update citation to journal article
-4. Note preprint version in comments if needed
+**解決方案**：
+1. 檢查 arXiv 後設資料中的 DOI 欄位
+2. 如有 DOI，使用已發表版本
+3. 將引用更新為期刊文章
+4. 如需要，在註釋中註明預印本版本
 
-**Example**:
+**範例**：
 ```bibtex
-% Originally: arXiv:2103.14030
-% Published as:
+% 原先：arXiv:2103.14030
+% 已發表為：
 @article{Jumper2021,
   author  = {Jumper, John and Evans, Richard and others},
   title   = {Highly Accurate Protein Structure Prediction with {AlphaFold}},
@@ -667,16 +667,16 @@ python scripts/extract_metadata.py \
 }
 ```
 
-### Multiple Authors (et al.)
+### 多位作者（et al.）
 
-**Issue**: Many authors (10+).
+**問題**：許多作者（10 位以上）。
 
-**BibTeX practice**:
-- Include all authors if <10
-- Use "and others" for 10+
-- Or list all (journals vary)
+**BibTeX 實務**：
+- 如少於 10 位則包含所有
+- 10 位以上使用「and others」
+- 或列出所有（期刊要求不同）
 
-**Example**:
+**範例**：
 ```bibtex
 @article{LargeCollaboration2024,
   author = {First, Author and Second, Author and Third, Author and others},
@@ -684,13 +684,13 @@ python scripts/extract_metadata.py \
 }
 ```
 
-### Author Name Variations
+### 作者姓名變體
 
-**Issue**: Authors publish under different name formats.
+**問題**：作者以不同姓名格式發表。
 
-**Standardization**:
+**標準化**：
 ```
-# Common variations
+# 常見變體
 John Smith
 John A. Smith
 John Andrew Smith
@@ -698,26 +698,26 @@ J. A. Smith
 Smith, J.
 Smith, J. A.
 
-# BibTeX format (recommended)
+# BibTeX 格式（建議）
 author = {Smith, John A.}
 ```
 
-**Extraction preference**:
-1. Use full name if available
-2. Include middle initial if available
-3. Format: Last, First Middle
+**擷取優先順序**：
+1. 如可用則使用全名
+2. 如可用則包含中間名縮寫
+3. 格式：Last, First Middle
 
-### No DOI Available
+### 無可用 DOI
 
-**Issue**: Older papers or books without DOIs.
+**問題**：較舊的論文或書籍無 DOI。
 
-**Solutions**:
-1. Use PMID if available (biomedical)
-2. Use ISBN for books
-3. Use URL to stable source
-4. Include full publication details
+**解決方案**：
+1. 如可用則使用 PMID（生物醫學）
+2. 書籍使用 ISBN
+3. 使用穩定來源的 URL
+4. 包含完整出版詳細資訊
 
-**Example**:
+**範例**：
 ```bibtex
 @article{OldPaper1995,
   author  = {Author, Name},
@@ -731,16 +731,16 @@ author = {Smith, John A.}
 }
 ```
 
-### Conference Papers vs Journal Articles
+### 會議論文 vs 期刊文章
 
-**Issue**: Same work published in both.
+**問題**：同一研究在兩處發表。
 
-**Best practice**:
-- Cite journal version if both available
-- Journal version is archival
-- Conference version for timeliness
+**最佳實務**：
+- 如兩者都可用則引用期刊版本
+- 期刊版本是存檔版
+- 會議版本用於時效性
 
-**If citing conference**:
+**如引用會議**：
 ```bibtex
 @inproceedings{Smith2024conf,
   author    = {Smith, John},
@@ -750,7 +750,7 @@ author = {Smith, John A.}
 }
 ```
 
-**If citing journal**:
+**如引用期刊**：
 ```bibtex
 @article{Smith2024journal,
   author  = {Smith, John},
@@ -760,17 +760,17 @@ author = {Smith, John A.}
 }
 ```
 
-### Book Chapters vs Edited Collections
+### 書籍章節 vs 編輯文集
 
-**Extract correctly**:
-- Chapter: Use `@incollection`
-- Whole book: Use `@book`
-- Book editor: List in `editor` field
-- Chapter author: List in `author` field
+**正確擷取**：
+- 章節：使用 `@incollection`
+- 整本書：使用 `@book`
+- 書籍編輯：列在 `editor` 欄位
+- 章節作者：列在 `author` 欄位
 
-### Datasets and Software
+### 資料集和軟體
 
-**Use @misc** with appropriate fields:
+**使用 @misc** 並附上適當欄位：
 
 ```bibtex
 @misc{DatasetName2024,
@@ -783,88 +783,87 @@ author = {Smith, John A.}
 }
 ```
 
-## Validation After Extraction
+## 擷取後驗證
 
-Always validate extracted metadata:
+始終驗證擷取的後設資料：
 
 ```bash
 python scripts/validate_citations.py extracted_refs.bib
 ```
 
-**Check**:
-- All required fields present
-- DOI resolves correctly
-- Author names formatted consistently
-- Year is reasonable (4 digits)
-- Journal/publisher names correct
-- Page ranges use -- not -
-- Special characters handled properly
+**檢查**：
+- 所有必填欄位存在
+- DOI 正確解析
+- 作者姓名格式一致
+- 年份合理（4 位數）
+- 期刊/出版商名稱正確
+- 頁碼範圍使用 -- 而非 -
+- 特殊字元處理正確
 
-## Best Practices
+## 最佳實務
 
-### 1. Prefer DOI When Available
+### 1. 可用時優先使用 DOI
 
-DOIs provide:
-- Permanent identifier
-- Best metadata source
-- Publisher-verified information
-- Resolvable link
+DOI 提供：
+- 永久識別碼
+- 最佳後設資料來源
+- 出版商驗證的資訊
+- 可解析的連結
 
-### 2. Verify Automatically Extracted Metadata
+### 2. 驗證自動擷取的後設資料
 
-Spot-check:
-- Author names match publication
-- Title matches (including capitalization)
-- Year is correct
-- Journal name is complete
+抽查：
+- 作者姓名與出版物相符
+- 標題相符（包括大小寫）
+- 年份正確
+- 期刊名稱完整
 
-### 3. Handle Special Characters
+### 3. 處理特殊字元
 
-**LaTeX special characters**:
-- Protect capitalization: `{AlphaFold}`
-- Handle accents: `M{\"u}ller` or use Unicode
-- Chemical formulas: `H$_2$O` or `\ce{H2O}`
+**LaTeX 特殊字元**：
+- 保護大小寫：`{AlphaFold}`
+- 處理重音：`M{\"u}ller` 或使用 Unicode
+- 化學公式：`H$_2$O` 或 `\ce{H2O}`
 
-### 4. Use Consistent Citation Keys
+### 4. 使用一致的引用鍵
 
-**Convention**: `FirstAuthorYEARkeyword`
+**慣例**：`FirstAuthorYEARkeyword`
 ```
 Smith2024protein
 Doe2023machine
 Johnson2024cancer
 ```
 
-### 5. Include DOI for Modern Papers
+### 5. 現代論文包含 DOI
 
-All papers published after ~2000 should have DOI:
+約 2000 年以後發表的所有論文都應有 DOI：
 ```bibtex
 doi = {10.1038/nature12345}
 ```
 
-### 6. Document Source
+### 6. 記錄來源
 
-For non-standard sources, add note:
+對於非標準來源，添加註釋：
 ```bibtex
 note = {Preprint, not peer-reviewed}
 note = {Technical report}
 note = {Dataset accompanying [citation]}
 ```
 
-## Summary
+## 總結
 
-Metadata extraction workflow:
+後設資料擷取工作流程：
 
-1. **Identify**: Determine identifier type (DOI, PMID, arXiv, URL)
-2. **Query**: Use appropriate API (CrossRef, PubMed, arXiv)
-3. **Extract**: Parse response for required fields
-4. **Format**: Create properly formatted BibTeX entry
-5. **Validate**: Check completeness and accuracy
-6. **Verify**: Spot-check critical citations
+1. **識別**：確定識別碼類型（DOI、PMID、arXiv、URL）
+2. **查詢**：使用適當的 API（CrossRef、PubMed、arXiv）
+3. **擷取**：解析回應取得必填欄位
+4. **格式化**：建立正確格式的 BibTeX 條目
+5. **驗證**：檢查完整性和準確性
+6. **核實**：抽查關鍵引用
 
-**Use scripts** to automate:
-- `extract_metadata.py`: Universal extractor
-- `doi_to_bibtex.py`: Quick DOI conversion
-- `validate_citations.py`: Verify accuracy
+**使用腳本**自動化：
+- `extract_metadata.py`：通用擷取器
+- `doi_to_bibtex.py`：快速 DOI 轉換
+- `validate_citations.py`：驗證準確性
 
-**Always validate** extracted metadata before final submission!
-
+**最終提交前務必驗證**擷取的後設資料！

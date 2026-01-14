@@ -1,8 +1,8 @@
-# GPU Acceleration on Modal
+# Modal 上的 GPU 加速
 
-## Quick Start
+## 快速開始
 
-Run functions on GPUs with the `gpu` parameter:
+使用 `gpu` 參數在 GPU 上執行函數：
 
 ```python
 import modal
@@ -16,69 +16,69 @@ def run():
     assert torch.cuda.is_available()
 ```
 
-## Available GPU Types
+## 可用的 GPU 類型
 
-Modal supports the following GPUs:
+Modal 支援以下 GPU：
 
-- `T4` - Entry-level GPU
-- `L4` - Balanced performance and cost
-- `A10` - Up to 4 GPUs, 96 GB total
-- `A100` - 40GB or 80GB variants
-- `A100-40GB` - Specific 40GB variant
-- `A100-80GB` - Specific 80GB variant
-- `L40S` - 48 GB, excellent for inference
-- `H100` / `H100!` - Top-tier Hopper architecture
-- `H200` - Improved Hopper with more memory
-- `B200` - Latest Blackwell architecture
+- `T4` - 入門級 GPU
+- `L4` - 效能和成本平衡
+- `A10` - 最多 4 個 GPU，總共 96 GB
+- `A100` - 40GB 或 80GB 版本
+- `A100-40GB` - 特定 40GB 版本
+- `A100-80GB` - 特定 80GB 版本
+- `L40S` - 48 GB，非常適合推論
+- `H100` / `H100!` - 頂級 Hopper 架構
+- `H200` - 改進的 Hopper，更多記憶體
+- `B200` - 最新的 Blackwell 架構
 
-See https://modal.com/pricing for pricing.
+價格請參閱 https://modal.com/pricing。
 
-## GPU Count
+## GPU 數量
 
-Request multiple GPUs per container with `:n` syntax:
+使用 `:n` 語法為每個容器請求多個 GPU：
 
 ```python
 @app.function(gpu="H100:8")
 def run_llama_405b():
-    # 8 H100 GPUs available
+    # 8 個 H100 GPU 可用
     ...
 ```
 
-Supported counts:
-- B200, H200, H100, A100, L4, T4, L40S: up to 8 GPUs (up to 1,536 GB)
-- A10: up to 4 GPUs (up to 96 GB)
+支援的數量：
+- B200、H200、H100、A100、L4、T4、L40S：最多 8 個 GPU（最多 1,536 GB）
+- A10：最多 4 個 GPU（最多 96 GB）
 
-Note: Requesting >2 GPUs may result in longer wait times.
+注意：請求 >2 個 GPU 可能導致較長的等待時間。
 
-## GPU Selection Guide
+## GPU 選擇指南
 
-**For Inference (Recommended)**: Start with L40S
-- Excellent cost/performance
-- 48 GB memory
-- Good for LLaMA, Stable Diffusion, etc.
+**用於推論（推薦）**：從 L40S 開始
+- 優異的成本/效能比
+- 48 GB 記憶體
+- 適合 LLaMA、Stable Diffusion 等
 
-**For Training**: Consider H100 or A100
-- High compute throughput
-- Large memory for batch processing
+**用於訓練**：考慮 H100 或 A100
+- 高運算吞吐量
+- 大記憶體用於批次處理
 
-**For Memory-Bound Tasks**: H200 or A100-80GB
-- More memory capacity
-- Better for large models
+**用於記憶體受限的任務**：H200 或 A100-80GB
+- 更多記憶體容量
+- 更適合大型模型
 
-## B200 GPUs
+## B200 GPU
 
-NVIDIA's flagship Blackwell chip:
+NVIDIA 的旗艦 Blackwell 晶片：
 
 ```python
 @app.function(gpu="B200:8")
 def run_deepseek():
-    # Most powerful option
+    # 最強大的選項
     ...
 ```
 
-## H200 and H100 GPUs
+## H200 和 H100 GPU
 
-Hopper architecture GPUs with excellent software support:
+具有優秀軟體支援的 Hopper 架構 GPU：
 
 ```python
 @app.function(gpu="H100")
@@ -86,30 +86,30 @@ def train():
     ...
 ```
 
-### Automatic H200 Upgrades
+### 自動升級到 H200
 
-Modal may upgrade `gpu="H100"` to H200 at no extra cost. H200 provides:
-- 141 GB memory (vs 80 GB for H100)
-- 4.8 TB/s bandwidth (vs 3.35 TB/s)
+Modal 可能會免費將 `gpu="H100"` 升級到 H200。H200 提供：
+- 141 GB 記憶體（對比 H100 的 80 GB）
+- 4.8 TB/s 頻寬（對比 3.35 TB/s）
 
-To avoid automatic upgrades (e.g., for benchmarking):
+要避免自動升級（例如，用於基準測試）：
 ```python
 @app.function(gpu="H100!")
 def benchmark():
     ...
 ```
 
-## A100 GPUs
+## A100 GPU
 
-Ampere architecture with 40GB or 80GB variants:
+Ampere 架構，有 40GB 或 80GB 版本：
 
 ```python
-# May be automatically upgraded to 80GB
+# 可能會自動升級到 80GB
 @app.function(gpu="A100")
 def qwen_7b():
     ...
 
-# Specific variants
+# 特定版本
 @app.function(gpu="A100-40GB")
 def model_40gb():
     ...
@@ -119,26 +119,26 @@ def llama_70b():
     ...
 ```
 
-## GPU Fallbacks
+## GPU 備援
 
-Specify multiple GPU types with fallback:
+指定多個 GPU 類型作為備援：
 
 ```python
 @app.function(gpu=["H100", "A100-40GB:2"])
 def run_on_80gb():
-    # Tries H100 first, falls back to 2x A100-40GB
+    # 先嘗試 H100，備援到 2x A100-40GB
     ...
 ```
 
-Modal respects ordering and allocates most preferred available GPU.
+Modal 遵循順序並分配最優先可用的 GPU。
 
-## Multi-GPU Training
+## 多 GPU 訓練
 
-Modal supports multi-GPU training on a single node. Multi-node training is in closed beta.
+Modal 支援單節點多 GPU 訓練。多節點訓練處於封閉測試階段。
 
-### PyTorch Example
+### PyTorch 範例
 
-For frameworks that re-execute entrypoints, use subprocess or specific strategies:
+對於會重新執行進入點的框架，使用子程序或特定策略：
 
 ```python
 @app.function(gpu="A100:2")
@@ -153,16 +153,16 @@ def train():
     )
 ```
 
-For PyTorch Lightning, set strategy to `ddp_spawn` or `ddp_notebook`.
+對於 PyTorch Lightning，將策略設定為 `ddp_spawn` 或 `ddp_notebook`。
 
-## Performance Considerations
+## 效能考量
 
-**Memory-Bound vs Compute-Bound**:
-- Running models with small batch sizes is memory-bound
-- Newer GPUs have faster arithmetic than memory access
-- Speedup from newer hardware may not justify cost for memory-bound workloads
+**記憶體受限 vs 運算受限**：
+- 使用小批次大小執行模型是記憶體受限的
+- 較新的 GPU 的運算速度比記憶體存取更快
+- 對於記憶體受限的工作負載，較新硬體的加速可能不值得成本
 
-**Optimization**:
-- Use batching when possible
-- Consider L40S before jumping to H100/B200
-- Profile to identify bottlenecks
+**最佳化**：
+- 盡可能使用批次處理
+- 在跳到 H100/B200 之前考慮 L40S
+- 進行分析以識別瓶頸

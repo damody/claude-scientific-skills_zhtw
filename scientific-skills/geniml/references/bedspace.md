@@ -1,24 +1,24 @@
-# BEDspace: Joint Region and Metadata Embeddings
+# BEDspace：區域和元資料的聯合嵌入
 
-## Overview
+## 概述
 
-BEDspace applies the StarSpace model to genomic data, enabling simultaneous training of numerical embeddings for both region sets and their metadata labels in a shared low-dimensional space. This allows for rich queries across regions and metadata.
+BEDspace 將 StarSpace 模型應用於基因體資料，能夠同時訓練區域集和其元資料標籤的數值嵌入在共享的低維空間中。這允許跨區域和元資料進行豐富的查詢。
 
-## When to Use
+## 使用時機
 
-Use BEDspace when working with:
-- Region sets with associated metadata (cell types, tissues, conditions)
-- Search tasks requiring metadata-aware similarity
-- Cross-modal queries (e.g., "find regions similar to label X")
-- Joint analysis of genomic content and experimental conditions
+在處理以下情況時使用 BEDspace：
+- 具有相關元資料的區域集（細胞類型、組織、條件）
+- 需要元資料感知相似性的搜尋任務
+- 跨模態查詢（例如：「查找與標籤 X 相似的區域」）
+- 基因體內容和實驗條件的聯合分析
 
-## Workflow
+## 工作流程
 
-BEDspace consists of four sequential operations:
+BEDspace 由四個順序操作組成：
 
-### 1. Preprocess
+### 1. 預處理
 
-Format genomic intervals and metadata for StarSpace training:
+格式化基因體區間和元資料以進行 StarSpace 訓練：
 
 ```bash
 geniml bedspace preprocess \
@@ -29,17 +29,17 @@ geniml bedspace preprocess \
   --output preprocessed.txt
 ```
 
-**Required files:**
-- **Input folder**: Directory containing BED files
-- **Metadata CSV**: Must include `file_name` column matching BED filenames, plus metadata columns
-- **Universe file**: Reference BED file for tokenization
-- **Labels**: Comma-separated list of metadata columns to use
+**必要檔案：**
+- **輸入資料夾**：包含 BED 檔案的目錄
+- **元資料 CSV**：必須包含與 BED 檔案名稱匹配的 `file_name` 欄位，加上元資料欄位
+- **Universe 檔案**：用於符記化的參考 BED 檔案
+- **標籤**：逗號分隔的元資料欄位列表
 
-The preprocessing step adds `__label__` prefixes to metadata and converts regions to StarSpace-compatible format.
+預處理步驟為元資料添加 `__label__` 前綴，並將區域轉換為 StarSpace 相容格式。
 
-### 2. Train
+### 2. 訓練
 
-Execute StarSpace model on preprocessed data:
+在預處理資料上執行 StarSpace 模型：
 
 ```bash
 geniml bedspace train \
@@ -51,14 +51,14 @@ geniml bedspace train \
   --lr 0.05
 ```
 
-**Key training parameters:**
-- `--dim`: Embedding dimension (typical: 50-200)
-- `--epochs`: Training epochs (typical: 20-100)
-- `--lr`: Learning rate (typical: 0.01-0.1)
+**主要訓練參數：**
+- `--dim`：嵌入維度（典型值：50-200）
+- `--epochs`：訓練輪數（典型值：20-100）
+- `--lr`：學習率（典型值：0.01-0.1）
 
-### 3. Distances
+### 3. 距離
 
-Compute distance metrics between region sets and metadata labels:
+計算區域集和元資料標籤之間的距離指標：
 
 ```bash
 geniml bedspace distances \
@@ -68,38 +68,38 @@ geniml bedspace distances \
   --output distances.pkl
 ```
 
-This step creates a distance matrix needed for similarity searches.
+此步驟建立相似性搜尋所需的距離矩陣。
 
-### 4. Search
+### 4. 搜尋
 
-Retrieve similar items across three scenarios:
+在三種場景中擷取相似項目：
 
-**Region-to-Label (r2l)**: Query region set → retrieve similar metadata labels
+**區域到標籤（r2l）**：查詢區域集 → 擷取相似的元資料標籤
 ```bash
 geniml bedspace search -t r2l -d distances.pkl -q query_regions.bed -n 10
 ```
 
-**Label-to-Region (l2r)**: Query metadata label → retrieve similar region sets
+**標籤到區域（l2r）**：查詢元資料標籤 → 擷取相似的區域集
 ```bash
 geniml bedspace search -t l2r -d distances.pkl -q "T_cell" -n 10
 ```
 
-**Region-to-Region (r2r)**: Query region set → retrieve similar region sets
+**區域到區域（r2r）**：查詢區域集 → 擷取相似的區域集
 ```bash
 geniml bedspace search -t r2r -d distances.pkl -q query_regions.bed -n 10
 ```
 
-The `-n` parameter controls the number of results returned.
+`-n` 參數控制回傳的結果數量。
 
 ## Python API
 
 ```python
 from geniml.bedspace import BEDSpaceModel
 
-# Load trained model
+# 載入訓練好的模型
 model = BEDSpaceModel.load('model/')
 
-# Query similar items
+# 查詢相似項目
 results = model.search(
     query="T_cell",
     search_type="l2r",
@@ -107,21 +107,21 @@ results = model.search(
 )
 ```
 
-## Best Practices
+## 最佳實踐
 
-- **Metadata structure**: Ensure metadata CSV includes `file_name` column that exactly matches BED filenames (without path)
-- **Label selection**: Choose informative metadata columns that capture biological variation of interest
-- **Universe consistency**: Use the same universe file across preprocessing, distances, and any subsequent analyses
-- **Validation**: Preprocess and check output format before investing in training
-- **StarSpace installation**: Install StarSpace separately as it's an external dependency
+- **元資料結構**：確保元資料 CSV 包含與 BED 檔案名稱完全匹配的 `file_name` 欄位（不含路徑）
+- **標籤選擇**：選擇能捕捉感興趣生物變異的資訊性元資料欄位
+- **Universe 一致性**：在預處理、距離計算和任何後續分析中使用相同的 universe 檔案
+- **驗證**：在投入訓練之前預處理並檢查輸出格式
+- **StarSpace 安裝**：StarSpace 需要單獨安裝，因為它是外部依賴項
 
-## Output Interpretation
+## 輸出解釋
 
-Search results return items ranked by similarity in the joint embedding space:
-- **r2l**: Identifies metadata labels characterizing your query regions
-- **l2r**: Finds region sets matching your metadata criteria
-- **r2r**: Discovers region sets with similar genomic content
+搜尋結果回傳在聯合嵌入空間中按相似性排序的項目：
+- **r2l**：識別描述您查詢區域的元資料標籤
+- **l2r**：查找與您的元資料標準匹配的區域集
+- **r2r**：發現具有相似基因體內容的區域集
 
-## Requirements
+## 需求
 
-BEDspace requires StarSpace to be installed separately. Download from: https://github.com/facebookresearch/StarSpace
+BEDspace 需要單獨安裝 StarSpace。從以下網址下載：https://github.com/facebookresearch/StarSpace

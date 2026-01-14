@@ -1,199 +1,199 @@
-# Stable Baselines3 Algorithm Reference
+# Stable Baselines3 演算法參考
 
-This document provides detailed characteristics of all RL algorithms in Stable Baselines3 to help select the right algorithm for specific tasks.
+本文件提供 Stable Baselines3 中所有 RL 演算法的詳細特性，幫助為特定任務選擇正確的演算法。
 
-## Algorithm Comparison Table
+## 演算法比較表
 
-| Algorithm | Type | Action Space | Sample Efficiency | Training Speed | Use Case |
-|-----------|------|--------------|-------------------|----------------|----------|
-| **PPO** | On-Policy | All | Medium | Fast | General-purpose, stable |
-| **A2C** | On-Policy | All | Low | Very Fast | Quick prototyping, multiprocessing |
-| **SAC** | Off-Policy | Continuous | High | Medium | Continuous control, sample-efficient |
-| **TD3** | Off-Policy | Continuous | High | Medium | Continuous control, deterministic |
-| **DDPG** | Off-Policy | Continuous | High | Medium | Continuous control (use TD3 instead) |
-| **DQN** | Off-Policy | Discrete | Medium | Medium | Discrete actions, Atari games |
-| **HER** | Off-Policy | All | Very High | Medium | Goal-conditioned tasks |
-| **RecurrentPPO** | On-Policy | All | Medium | Slow | Partial observability (POMDP) |
+| 演算法 | 類型 | 動作空間 | 樣本效率 | 訓練速度 | 使用案例 |
+|--------|------|----------|----------|----------|----------|
+| **PPO** | 在線策略 | 全部 | 中等 | 快速 | 通用型，穩定 |
+| **A2C** | 在線策略 | 全部 | 低 | 非常快 | 快速原型設計，多處理程序 |
+| **SAC** | 離線策略 | 連續 | 高 | 中等 | 連續控制，樣本效率高 |
+| **TD3** | 離線策略 | 連續 | 高 | 中等 | 連續控制，確定性 |
+| **DDPG** | 離線策略 | 連續 | 高 | 中等 | 連續控制（建議改用 TD3） |
+| **DQN** | 離線策略 | 離散 | 中等 | 中等 | 離散動作，Atari 遊戲 |
+| **HER** | 離線策略 | 全部 | 非常高 | 中等 | 目標條件任務 |
+| **RecurrentPPO** | 在線策略 | 全部 | 中等 | 慢 | 部分可觀測性（POMDP） |
 
-## Detailed Algorithm Characteristics
+## 詳細演算法特性
 
-### PPO (Proximal Policy Optimization)
+### PPO（近端策略優化）
 
-**Overview:** General-purpose on-policy algorithm with good performance across many tasks.
+**概述：** 通用型在線策略演算法，在許多任務上具有良好表現。
 
-**Strengths:**
-- Stable and reliable training
-- Works with all action space types (Discrete, Box, MultiDiscrete, MultiBinary)
-- Good balance between sample efficiency and training speed
-- Excellent for multiprocessing with vectorized environments
-- Easy to tune
+**優點：**
+- 穩定且可靠的訓練
+- 適用於所有動作空間類型（Discrete、Box、MultiDiscrete、MultiBinary）
+- 樣本效率和訓練速度之間的良好平衡
+- 使用向量化環境進行多處理程序的絕佳選擇
+- 容易調整
 
-**Weaknesses:**
-- Less sample-efficient than off-policy methods
-- Requires many environment interactions
+**缺點：**
+- 樣本效率低於離線策略方法
+- 需要大量環境互動
 
-**Best For:**
-- General-purpose RL tasks
-- When stability is important
-- When you have cheap environment simulations
-- Tasks with continuous or discrete actions
+**最適合：**
+- 通用型 RL 任務
+- 當穩定性很重要時
+- 當環境模擬成本低時
+- 具有連續或離散動作的任務
 
-**Hyperparameter Guidance:**
-- `n_steps`: 2048-4096 for continuous, 128-256 for Atari
-- `learning_rate`: 3e-4 is a good default
-- `n_epochs`: 10 for continuous, 4 for Atari
-- `batch_size`: 64
-- `gamma`: 0.99 (0.995-0.999 for long episodes)
+**超參數指南：**
+- `n_steps`：連續控制 2048-4096，Atari 128-256
+- `learning_rate`：3e-4 是良好的預設值
+- `n_epochs`：連續控制 10，Atari 4
+- `batch_size`：64
+- `gamma`：0.99（長回合 0.995-0.999）
 
-### A2C (Advantage Actor-Critic)
+### A2C（優勢演員-評論家）
 
-**Overview:** Synchronous variant of A3C, simpler than PPO but less stable.
+**概述：** A3C 的同步變體，比 PPO 簡單但不太穩定。
 
-**Strengths:**
-- Very fast training (simpler than PPO)
-- Works with all action space types
-- Good for quick prototyping
-- Memory efficient
+**優點：**
+- 訓練非常快（比 PPO 簡單）
+- 適用於所有動作空間類型
+- 適合快速原型設計
+- 記憶體效率高
 
-**Weaknesses:**
-- Less stable than PPO
-- Requires careful hyperparameter tuning
-- Lower sample efficiency
+**缺點：**
+- 不如 PPO 穩定
+- 需要仔細調整超參數
+- 樣本效率較低
 
-**Best For:**
-- Quick experimentation
-- When training speed is critical
-- Simple environments
+**最適合：**
+- 快速實驗
+- 當訓練速度至關重要時
+- 簡單環境
 
-**Hyperparameter Guidance:**
-- `n_steps`: 5-256 depending on task
-- `learning_rate`: 7e-4
-- `gamma`: 0.99
+**超參數指南：**
+- `n_steps`：根據任務 5-256
+- `learning_rate`：7e-4
+- `gamma`：0.99
 
-### SAC (Soft Actor-Critic)
+### SAC（軟演員-評論家）
 
-**Overview:** Off-policy algorithm with entropy regularization, state-of-the-art for continuous control.
+**概述：** 具有熵正則化的離線策略演算法，連續控制的最先進方法。
 
-**Strengths:**
-- Excellent sample efficiency
-- Very stable training
-- Automatic entropy tuning
-- Good exploration through stochastic policy
-- State-of-the-art for robotics
+**優點：**
+- 優秀的樣本效率
+- 非常穩定的訓練
+- 自動熵調整
+- 透過隨機策略實現良好的探索
+- 機器人領域的最先進方法
 
-**Weaknesses:**
-- Only supports continuous action spaces (Box)
-- Slower wall-clock time than on-policy methods
-- More complex hyperparameters
+**缺點：**
+- 僅支援連續動作空間（Box）
+- 實際時間比在線策略方法慢
+- 超參數更複雜
 
-**Best For:**
-- Continuous control (robotics, physics simulations)
-- When sample efficiency is critical
-- Expensive environment simulations
-- Tasks requiring good exploration
+**最適合：**
+- 連續控制（機器人、物理模擬）
+- 當樣本效率至關重要時
+- 昂貴的環境模擬
+- 需要良好探索的任務
 
-**Hyperparameter Guidance:**
-- `learning_rate`: 3e-4
-- `buffer_size`: 1M for most tasks
-- `learning_starts`: 10000
-- `batch_size`: 256
-- `tau`: 0.005 (target network update rate)
-- `train_freq`: 1 with `gradient_steps=-1` for best performance
+**超參數指南：**
+- `learning_rate`：3e-4
+- `buffer_size`：大多數任務 1M
+- `learning_starts`：10000
+- `batch_size`：256
+- `tau`：0.005（目標網路更新率）
+- `train_freq`：1 搭配 `gradient_steps=-1` 以獲得最佳效能
 
-### TD3 (Twin Delayed DDPG)
+### TD3（雙延遲 DDPG）
 
-**Overview:** Improved DDPG with double Q-learning and delayed policy updates.
+**概述：** 改進的 DDPG，具有雙 Q 學習和延遲策略更新。
 
-**Strengths:**
-- High sample efficiency
-- Deterministic policy (good for deployment)
-- More stable than DDPG
-- Good for continuous control
+**優點：**
+- 高樣本效率
+- 確定性策略（適合部署）
+- 比 DDPG 更穩定
+- 適合連續控制
 
-**Weaknesses:**
-- Only supports continuous action spaces (Box)
-- Less exploration than SAC
-- Requires careful tuning
+**缺點：**
+- 僅支援連續動作空間（Box）
+- 探索性不如 SAC
+- 需要仔細調整
 
-**Best For:**
-- Continuous control tasks
-- When deterministic policies are preferred
-- Sample-efficient learning
+**最適合：**
+- 連續控制任務
+- 當偏好確定性策略時
+- 樣本效率學習
 
-**Hyperparameter Guidance:**
-- `learning_rate`: 1e-3
-- `buffer_size`: 1M
-- `learning_starts`: 10000
-- `batch_size`: 100
-- `policy_delay`: 2 (update policy every 2 critic updates)
+**超參數指南：**
+- `learning_rate`：1e-3
+- `buffer_size`：1M
+- `learning_starts`：10000
+- `batch_size`：100
+- `policy_delay`：2（每 2 次評論家更新進行一次策略更新）
 
-### DDPG (Deep Deterministic Policy Gradient)
+### DDPG（深度確定性策略梯度）
 
-**Overview:** Early off-policy continuous control algorithm.
+**概述：** 早期的離線策略連續控制演算法。
 
-**Strengths:**
-- Continuous action space support
-- Off-policy learning
+**優點：**
+- 連續動作空間支援
+- 離線策略學習
 
-**Weaknesses:**
-- Less stable than TD3 or SAC
-- Sensitive to hyperparameters
-- Generally outperformed by TD3
+**缺點：**
+- 不如 TD3 或 SAC 穩定
+- 對超參數敏感
+- 通常被 TD3 超越
 
-**Best For:**
-- Legacy compatibility
-- **Recommendation:** Use TD3 instead for new projects
+**最適合：**
+- 舊版相容性
+- **建議：** 新專案請改用 TD3
 
-### DQN (Deep Q-Network)
+### DQN（深度 Q 網路）
 
-**Overview:** Classic off-policy algorithm for discrete action spaces.
+**概述：** 用於離散動作空間的經典離線策略演算法。
 
-**Strengths:**
-- Sample-efficient for discrete actions
-- Experience replay enables reuse of past data
-- Proven success on Atari games
+**優點：**
+- 離散動作的樣本效率高
+- 經驗回放可重複使用過去的資料
+- 在 Atari 遊戲上證明成功
 
-**Weaknesses:**
-- Only supports discrete action spaces
-- Can be unstable without proper tuning
-- Overestimation bias
+**缺點：**
+- 僅支援離散動作空間
+- 沒有適當調整可能不穩定
+- 過估計偏差
 
-**Best For:**
-- Discrete action tasks
-- Atari games and similar environments
-- When sample efficiency matters
+**最適合：**
+- 離散動作任務
+- Atari 遊戲和類似環境
+- 當樣本效率很重要時
 
-**Hyperparameter Guidance:**
-- `learning_rate`: 1e-4
-- `buffer_size`: 100K-1M depending on task
-- `learning_starts`: 50000 for Atari
-- `batch_size`: 32
-- `exploration_fraction`: 0.1
-- `exploration_final_eps`: 0.05
+**超參數指南：**
+- `learning_rate`：1e-4
+- `buffer_size`：根據任務 100K-1M
+- `learning_starts`：Atari 50000
+- `batch_size`：32
+- `exploration_fraction`：0.1
+- `exploration_final_eps`：0.05
 
-**Variants:**
-- **QR-DQN**: Distributional RL version for better value estimates
-- **Maskable DQN**: For environments with action masking
+**變體：**
+- **QR-DQN**：分布式 RL 版本，用於更好的值估計
+- **Maskable DQN**：用於具有動作遮罩的環境
 
-### HER (Hindsight Experience Replay)
+### HER（事後經驗回放）
 
-**Overview:** Not a standalone algorithm but a replay buffer strategy for goal-conditioned tasks.
+**概述：** 不是獨立演算法，而是用於目標條件任務的回放緩衝區策略。
 
-**Strengths:**
-- Dramatically improves learning in sparse reward settings
-- Learns from failures by relabeling goals
-- Works with any off-policy algorithm (SAC, TD3, DQN)
+**優點：**
+- 在稀疏獎勵設定中顯著改善學習
+- 透過重新標記目標從失敗中學習
+- 適用於任何離線策略演算法（SAC、TD3、DQN）
 
-**Weaknesses:**
-- Only for goal-conditioned environments
-- Requires specific observation structure (Dict with "observation", "achieved_goal", "desired_goal")
+**缺點：**
+- 僅適用於目標條件環境
+- 需要特定的觀測結構（具有 "observation"、"achieved_goal"、"desired_goal" 的 Dict）
 
-**Best For:**
-- Goal-conditioned tasks (robotics manipulation, navigation)
-- Sparse reward environments
-- Tasks where goal is clear but reward is binary
+**最適合：**
+- 目標條件任務（機器人操作、導航）
+- 稀疏獎勵環境
+- 目標明確但獎勵為二元的任務
 
-**Usage:**
+**使用方式：**
 ```python
 from stable_baselines3 import SAC, HerReplayBuffer
 
@@ -203,77 +203,77 @@ model = SAC(
     replay_buffer_class=HerReplayBuffer,
     replay_buffer_kwargs=dict(
         n_sampled_goal=4,
-        goal_selection_strategy="future",  # or "episode", "final"
+        goal_selection_strategy="future",  # 或 "episode"、"final"
     ),
 )
 ```
 
 ### RecurrentPPO
 
-**Overview:** PPO with LSTM policy for handling partial observability.
+**概述：** 具有 LSTM 策略的 PPO，用於處理部分可觀測性。
 
-**Strengths:**
-- Handles partial observability (POMDP)
-- Can learn temporal dependencies
-- Good for memory-required tasks
+**優點：**
+- 處理部分可觀測性（POMDP）
+- 可以學習時間依賴性
+- 適合需要記憶的任務
 
-**Weaknesses:**
-- Slower training than standard PPO
-- More complex to tune
-- Requires sequential data
+**缺點：**
+- 訓練比標準 PPO 慢
+- 更難調整
+- 需要順序資料
 
-**Best For:**
-- Partially observable environments
-- Tasks requiring memory (e.g., navigation without full map)
-- Time-series problems
+**最適合：**
+- 部分可觀測環境
+- 需要記憶的任務（例如，沒有完整地圖的導航）
+- 時間序列問題
 
-## Algorithm Selection Guide
+## 演算法選擇指南
 
-### Decision Tree
+### 決策樹
 
-1. **What is your action space?**
-   - **Continuous (Box)** → Consider PPO, SAC, or TD3
-   - **Discrete** → Consider PPO, A2C, or DQN
-   - **MultiDiscrete/MultiBinary** → Use PPO or A2C
+1. **您的動作空間是什麼？**
+   - **連續（Box）** → 考慮 PPO、SAC 或 TD3
+   - **離散** → 考慮 PPO、A2C 或 DQN
+   - **MultiDiscrete/MultiBinary** → 使用 PPO 或 A2C
 
-2. **Is sample efficiency critical?**
-   - **Yes (expensive simulations)** → Use off-policy: SAC, TD3, DQN, or HER
-   - **No (cheap simulations)** → Use on-policy: PPO, A2C
+2. **樣本效率是否關鍵？**
+   - **是（昂貴的模擬）** → 使用離線策略：SAC、TD3、DQN 或 HER
+   - **否（便宜的模擬）** → 使用在線策略：PPO、A2C
 
-3. **Do you need fast wall-clock training?**
-   - **Yes** → Use PPO or A2C with vectorized environments
-   - **No** → Any algorithm works
+3. **您需要快速的實際訓練時間嗎？**
+   - **是** → 使用 PPO 或 A2C 搭配向量化環境
+   - **否** → 任何演算法都可以
 
-4. **Is the task goal-conditioned with sparse rewards?**
-   - **Yes** → Use HER with SAC or TD3
-   - **No** → Continue with standard algorithms
+4. **任務是否為目標條件且具有稀疏獎勵？**
+   - **是** → 使用 HER 搭配 SAC 或 TD3
+   - **否** → 繼續使用標準演算法
 
-5. **Is the environment partially observable?**
-   - **Yes** → Use RecurrentPPO
-   - **No** → Use standard algorithms
+5. **環境是否部分可觀測？**
+   - **是** → 使用 RecurrentPPO
+   - **否** → 使用標準演算法
 
-### Quick Recommendations
+### 快速建議
 
-- **Starting out / General tasks:** PPO
-- **Continuous control / Robotics:** SAC
-- **Discrete actions / Atari:** DQN or PPO
-- **Goal-conditioned / Sparse rewards:** SAC + HER
-- **Fast prototyping:** A2C
-- **Sample efficiency critical:** SAC, TD3, or DQN
-- **Partial observability:** RecurrentPPO
+- **入門 / 通用任務：** PPO
+- **連續控制 / 機器人：** SAC
+- **離散動作 / Atari：** DQN 或 PPO
+- **目標條件 / 稀疏獎勵：** SAC + HER
+- **快速原型設計：** A2C
+- **樣本效率關鍵：** SAC、TD3 或 DQN
+- **部分可觀測性：** RecurrentPPO
 
-## Training Configuration Tips
+## 訓練配置提示
 
-### For On-Policy Algorithms (PPO, A2C)
+### 在線策略演算法（PPO、A2C）
 
 ```python
-# Use vectorized environments for speed
+# 使用向量化環境以提高速度
 env = make_vec_env(env_id, n_envs=8, vec_env_cls=SubprocVecEnv)
 
 model = PPO(
     "MlpPolicy",
     env,
-    n_steps=2048,  # Collect this many steps per environment before update
+    n_steps=2048,  # 每次更新前在每個環境收集這麼多步驟
     batch_size=64,
     n_epochs=10,
     learning_rate=3e-4,
@@ -281,10 +281,10 @@ model = PPO(
 )
 ```
 
-### For Off-Policy Algorithms (SAC, TD3, DQN)
+### 離線策略演算法（SAC、TD3、DQN）
 
 ```python
-# Fewer environments, but use gradient_steps=-1 for efficiency
+# 較少環境，但使用 gradient_steps=-1 以提高效率
 env = make_vec_env(env_id, n_envs=4)
 
 model = SAC(
@@ -294,40 +294,40 @@ model = SAC(
     learning_starts=10000,
     batch_size=256,
     train_freq=1,
-    gradient_steps=-1,  # Do 1 gradient step per env step (4 with 4 envs)
+    gradient_steps=-1,  # 每個環境步驟執行 1 次梯度步驟（4 個環境共 4 次）
     learning_rate=3e-4,
 )
 ```
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Using DQN with continuous actions** - DQN only works with discrete actions
-2. **Not using vectorized environments with PPO/A2C** - Wastes potential speedup
-3. **Using too few environments** - On-policy methods need many samples
-4. **Using too large replay buffer** - Can cause memory issues
-5. **Not tuning learning rate** - Critical for stable training
-6. **Ignoring reward scaling** - Normalize rewards for better learning
-7. **Wrong policy type** - Use "CnnPolicy" for images, "MultiInputPolicy" for dict observations
+1. **使用 DQN 處理連續動作** - DQN 僅適用於離散動作
+2. **PPO/A2C 未使用向量化環境** - 浪費潛在的加速
+3. **使用太少環境** - 在線策略方法需要大量樣本
+4. **使用過大的回放緩衝區** - 可能導致記憶體問題
+5. **未調整學習率** - 對穩定訓練至關重要
+6. **忽略獎勵縮放** - 正規化獎勵以獲得更好的學習
+7. **錯誤的策略類型** - 圖像使用 "CnnPolicy"，字典觀測使用 "MultiInputPolicy"
 
-## Performance Benchmarks
+## 效能基準
 
-Approximate expected performance (mean reward) on common benchmarks:
+常見基準上的近似預期效能（平均獎勵）：
 
-### Continuous Control (MuJoCo)
-- **HalfCheetah-v3**: PPO ~1800, SAC ~12000, TD3 ~9500
-- **Hopper-v3**: PPO ~2500, SAC ~3600, TD3 ~3600
-- **Walker2d-v3**: PPO ~3000, SAC ~5500, TD3 ~5000
+### 連續控制（MuJoCo）
+- **HalfCheetah-v3**：PPO ~1800，SAC ~12000，TD3 ~9500
+- **Hopper-v3**：PPO ~2500，SAC ~3600，TD3 ~3600
+- **Walker2d-v3**：PPO ~3000，SAC ~5500，TD3 ~5000
 
-### Discrete Control (Atari)
-- **Breakout**: PPO ~400, DQN ~300
-- **Pong**: PPO ~20, DQN ~20
-- **Space Invaders**: PPO ~1000, DQN ~800
+### 離散控制（Atari）
+- **Breakout**：PPO ~400，DQN ~300
+- **Pong**：PPO ~20，DQN ~20
+- **Space Invaders**：PPO ~1000，DQN ~800
 
-*Note: Performance varies significantly with hyperparameters and training time.*
+*注意：效能會因超參數和訓練時間而有顯著差異。*
 
-## Additional Resources
+## 額外資源
 
-- **RL Baselines3 Zoo**: Collection of pre-trained agents and hyperparameters: https://github.com/DLR-RM/rl-baselines3-zoo
-- **Hyperparameter Tuning**: Use Optuna for systematic tuning
-- **Custom Policies**: Extend base policies for custom network architectures
-- **Contribution Repo**: SB3-Contrib for experimental algorithms (QR-DQN, TQC, etc.)
+- **RL Baselines3 Zoo**：預訓練代理和超參數集合：https://github.com/DLR-RM/rl-baselines3-zoo
+- **超參數調整**：使用 Optuna 進行系統化調整
+- **自訂策略**：擴展基礎策略以建立自訂網路架構
+- **貢獻儲存庫**：SB3-Contrib 提供實驗性演算法（QR-DQN、TQC 等）

@@ -1,127 +1,127 @@
-# Generalized Linear Models (GLM) Reference
+# 廣義線性模型（GLM）參考
 
-This document provides comprehensive guidance on generalized linear models in statsmodels, including families, link functions, and applications.
+本文件提供 statsmodels 中廣義線性模型的完整指引，包括分布族、連結函數和應用。
 
-## Overview
+## 概述
 
-GLMs extend linear regression to non-normal response distributions through:
-1. **Distribution family**: Specifies the conditional distribution of the response
-2. **Link function**: Transforms the linear predictor to the scale of the mean
-3. **Variance function**: Relates variance to the mean
+GLM 透過以下方式將線性迴歸擴展至非常態反應分布：
+1. **分布族**：指定反應變數的條件分布
+2. **連結函數**：將線性預測變數轉換至均值的尺度
+3. **變異數函數**：將變異數與均值關聯
 
-**General form**: g(μ) = Xβ, where g is the link function and μ = E(Y|X)
+**一般形式**：g(μ) = Xβ，其中 g 是連結函數，μ = E(Y|X)
 
-## When to Use GLM
+## 何時使用 GLM
 
-- **Binary outcomes**: Logistic regression (Binomial family with logit link)
-- **Count data**: Poisson or Negative Binomial regression
-- **Positive continuous data**: Gamma or Inverse Gaussian
-- **Non-normal distributions**: When OLS assumptions violated
-- **Link functions**: Need non-linear relationship between predictors and response scale
+- **二元結果**：邏輯斯迴歸（二項族配 logit 連結）
+- **計數資料**：Poisson 或負二項迴歸
+- **正值連續資料**：Gamma 或逆高斯
+- **非常態分布**：當 OLS 假設違反時
+- **連結函數**：需要預測變數與反應尺度間的非線性關係
 
-## Distribution Families
+## 分布族
 
-### Binomial Family
+### 二項族（Binomial Family）
 
-For binary outcomes (0/1) or proportions (k/n).
+用於二元結果（0/1）或比例（k/n）。
 
-**When to use:**
-- Binary classification
-- Success/failure outcomes
-- Proportions or rates
+**使用時機：**
+- 二元分類
+- 成功/失敗結果
+- 比例或率
 
-**Common links:**
-- Logit (default): log(μ/(1-μ))
-- Probit: Φ⁻¹(μ)
-- Log: log(μ)
+**常用連結：**
+- Logit（預設）：log(μ/(1-μ))
+- Probit：Φ⁻¹(μ)
+- Log：log(μ)
 
 ```python
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
-# Binary logistic regression
+# 二元邏輯斯迴歸
 model = sm.GLM(y, X, family=sm.families.Binomial())
 results = model.fit()
 
-# Formula API
+# 公式 API
 results = smf.glm('success ~ x1 + x2', data=df,
                   family=sm.families.Binomial()).fit()
 
-# Access predictions (probabilities)
+# 存取預測（機率）
 probs = results.predict(X_new)
 
-# Classification (0.5 threshold)
+# 分類（0.5 閾值）
 predictions = (probs > 0.5).astype(int)
 ```
 
-**Interpretation:**
+**解釋：**
 ```python
 import numpy as np
 
-# Odds ratios (for logit link)
+# 勝算比（對於 logit 連結）
 odds_ratios = np.exp(results.params)
 print("Odds ratios:", odds_ratios)
 
-# For 1-unit increase in x, odds multiply by exp(beta)
+# x 每增加 1 單位，勝算乘以 exp(beta)
 ```
 
-### Poisson Family
+### Poisson 族
 
-For count data (non-negative integers).
+用於計數資料（非負整數）。
 
-**When to use:**
-- Count outcomes (number of events)
-- Rare events
-- Rate modeling (with offset)
+**使用時機：**
+- 計數結果（事件數）
+- 稀有事件
+- 率建模（含偏移量）
 
-**Common links:**
-- Log (default): log(μ)
-- Identity: μ
-- Sqrt: √μ
+**常用連結：**
+- Log（預設）：log(μ)
+- Identity：μ
+- Sqrt：√μ
 
 ```python
-# Poisson regression
+# Poisson 迴歸
 model = sm.GLM(y, X, family=sm.families.Poisson())
 results = model.fit()
 
-# With exposure/offset for rates
-# If modeling rate = counts/exposure
+# 含暴露量/偏移量用於率
+# 若建模率 = 計數/暴露量
 model = sm.GLM(y, X, family=sm.families.Poisson(),
                offset=np.log(exposure))
 results = model.fit()
 
-# Interpretation: exp(beta) = multiplicative effect on expected count
+# 解釋：exp(beta) = 對期望計數的乘法效果
 import numpy as np
 rate_ratios = np.exp(results.params)
 print("Rate ratios:", rate_ratios)
 ```
 
-**Overdispersion check:**
+**過度離散檢查：**
 ```python
-# Deviance / df should be ~1 for Poisson
+# Poisson 的離差 / df 應約為 1
 overdispersion = results.deviance / results.df_resid
 print(f"Overdispersion: {overdispersion}")
 
-# If >> 1, consider Negative Binomial
+# 若 >> 1，考慮負二項
 if overdispersion > 1.5:
     print("Consider Negative Binomial model for overdispersion")
 ```
 
-### Negative Binomial Family
+### 負二項族（Negative Binomial Family）
 
-For overdispersed count data.
+用於過度離散的計數資料。
 
-**When to use:**
-- Count data with variance > mean
-- Excess zeros or large variance
-- Poisson model shows overdispersion
+**使用時機：**
+- 變異數 > 均值的計數資料
+- 過多零值或大變異數
+- Poisson 模型顯示過度離散
 
 ```python
-# Negative Binomial GLM
+# 負二項 GLM
 model = sm.GLM(y, X, family=sm.families.NegativeBinomial())
 results = model.fit()
 
-# Alternative: use discrete choice model with alpha estimation
+# 替代方案：使用離散選擇模型估計 alpha
 from statsmodels.discrete.discrete_model import NegativeBinomial
 nb_model = NegativeBinomial(y, X)
 nb_results = nb_model.fit()
@@ -129,253 +129,253 @@ nb_results = nb_model.fit()
 print(f"Dispersion parameter alpha: {nb_results.params[-1]}")
 ```
 
-### Gaussian Family
+### 高斯族（Gaussian Family）
 
-Equivalent to OLS but fit via IRLS (Iteratively Reweighted Least Squares).
+等同於 OLS，但透過 IRLS（迭代重加權最小平方法）配適。
 
-**When to use:**
-- Want GLM framework for consistency
-- Need robust standard errors
-- Comparing with other GLMs
+**使用時機：**
+- 為一致性而使用 GLM 框架
+- 需要穩健標準誤
+- 與其他 GLM 比較
 
-**Common links:**
-- Identity (default): μ
-- Log: log(μ)
-- Inverse: 1/μ
+**常用連結：**
+- Identity（預設）：μ
+- Log：log(μ)
+- Inverse：1/μ
 
 ```python
-# Gaussian GLM (equivalent to OLS)
+# 高斯 GLM（等同於 OLS）
 model = sm.GLM(y, X, family=sm.families.Gaussian())
 results = model.fit()
 
-# Verify equivalence with OLS
+# 驗證與 OLS 等價
 ols_results = sm.OLS(y, X).fit()
 print("Parameters close:", np.allclose(results.params, ols_results.params))
 ```
 
-### Gamma Family
+### Gamma 族
 
-For positive continuous data, often right-skewed.
+用於正值連續資料，通常右偏。
 
-**When to use:**
-- Positive outcomes (insurance claims, survival times)
-- Right-skewed distributions
-- Variance proportional to mean²
+**使用時機：**
+- 正值結果（保險理賠、存活時間）
+- 右偏分布
+- 變異數與均值² 成比例
 
-**Common links:**
-- Inverse (default): 1/μ
-- Log: log(μ)
-- Identity: μ
+**常用連結：**
+- Inverse（預設）：1/μ
+- Log：log(μ)
+- Identity：μ
 
 ```python
-# Gamma regression (common for cost data)
+# Gamma 迴歸（常用於成本資料）
 model = sm.GLM(y, X, family=sm.families.Gamma())
 results = model.fit()
 
-# Log link often preferred for interpretation
+# Log 連結通常較佳於解釋
 model = sm.GLM(y, X, family=sm.families.Gamma(link=sm.families.links.Log()))
 results = model.fit()
 
-# With log link, exp(beta) = multiplicative effect
+# 使用 log 連結，exp(beta) = 乘法效果
 import numpy as np
 effects = np.exp(results.params)
 ```
 
-### Inverse Gaussian Family
+### 逆高斯族（Inverse Gaussian Family）
 
-For positive continuous data with specific variance structure.
+用於具特定變異數結構的正值連續資料。
 
-**When to use:**
-- Positive skewed outcomes
-- Variance proportional to mean³
-- Alternative to Gamma
+**使用時機：**
+- 正偏結果
+- 變異數與均值³ 成比例
+- Gamma 的替代方案
 
-**Common links:**
-- Inverse squared (default): 1/μ²
-- Log: log(μ)
+**常用連結：**
+- Inverse squared（預設）：1/μ²
+- Log：log(μ)
 
 ```python
 model = sm.GLM(y, X, family=sm.families.InverseGaussian())
 results = model.fit()
 ```
 
-### Tweedie Family
+### Tweedie 族
 
-Flexible family covering multiple distributions.
+涵蓋多種分布的彈性族。
 
-**When to use:**
-- Insurance claims (mixture of zeros and continuous)
-- Semi-continuous data
-- Need flexible variance function
+**使用時機：**
+- 保險理賠（零值和連續值的混合）
+- 半連續資料
+- 需要彈性變異數函數
 
-**Special cases (power parameter p):**
-- p=0: Normal
-- p=1: Poisson
-- p=2: Gamma
-- p=3: Inverse Gaussian
-- 1<p<2: Compound Poisson-Gamma (common for insurance)
+**特殊情況（power 參數 p）：**
+- p=0：常態
+- p=1：Poisson
+- p=2：Gamma
+- p=3：逆高斯
+- 1<p<2：複合 Poisson-Gamma（保險常用）
 
 ```python
-# Tweedie with power=1.5
+# Tweedie 配 power=1.5
 model = sm.GLM(y, X, family=sm.families.Tweedie(link=sm.families.links.Log(),
                                                  var_power=1.5))
 results = model.fit()
 ```
 
-## Link Functions
+## 連結函數
 
-Link functions connect the linear predictor to the mean of the response.
+連結函數連接線性預測變數與反應變數的均值。
 
-### Available Links
+### 可用連結
 
 ```python
 from statsmodels.genmod import families
 
-# Identity: g(μ) = μ
+# Identity：g(μ) = μ
 link = families.links.Identity()
 
-# Log: g(μ) = log(μ)
+# Log：g(μ) = log(μ)
 link = families.links.Log()
 
-# Logit: g(μ) = log(μ/(1-μ))
+# Logit：g(μ) = log(μ/(1-μ))
 link = families.links.Logit()
 
-# Probit: g(μ) = Φ⁻¹(μ)
+# Probit：g(μ) = Φ⁻¹(μ)
 link = families.links.Probit()
 
-# Complementary log-log: g(μ) = log(-log(1-μ))
+# Complementary log-log：g(μ) = log(-log(1-μ))
 link = families.links.CLogLog()
 
-# Inverse: g(μ) = 1/μ
+# Inverse：g(μ) = 1/μ
 link = families.links.InversePower()
 
-# Inverse squared: g(μ) = 1/μ²
+# Inverse squared：g(μ) = 1/μ²
 link = families.links.InverseSquared()
 
-# Square root: g(μ) = √μ
+# Square root：g(μ) = √μ
 link = families.links.Sqrt()
 
-# Power: g(μ) = μ^p
+# Power：g(μ) = μ^p
 link = families.links.Power(power=2)
 ```
 
-### Choosing Link Functions
+### 選擇連結函數
 
-**Canonical links** (default for each family):
-- Binomial → Logit
+**正則連結（每個族的預設）：**
+- 二項 → Logit
 - Poisson → Log
 - Gamma → Inverse
-- Gaussian → Identity
-- Inverse Gaussian → Inverse squared
+- 高斯 → Identity
+- 逆高斯 → Inverse squared
 
-**When to use non-canonical:**
-- **Log link with Binomial**: Risk ratios instead of odds ratios
-- **Identity link**: Direct additive effects (when sensible)
-- **Probit vs Logit**: Similar results, preference based on field
-- **CLogLog**: Asymmetric relationship, common in survival analysis
+**何時使用非正則：**
+- **二項配 Log 連結**：風險比而非勝算比
+- **Identity 連結**：直接加法效果（當合理時）
+- **Probit vs Logit**：類似結果，根據領域偏好
+- **CLogLog**：非對稱關係，存活分析常用
 
 ```python
-# Example: Risk ratios with log-binomial model
+# 範例：log-binomial 模型的風險比
 model = sm.GLM(y, X, family=sm.families.Binomial(link=sm.families.links.Log()))
 results = model.fit()
 
-# exp(beta) now gives risk ratios, not odds ratios
+# exp(beta) 現在給出風險比，不是勝算比
 risk_ratios = np.exp(results.params)
 ```
 
-## Model Fitting and Results
+## 模型配適與結果
 
-### Basic Workflow
+### 基本工作流程
 
 ```python
 import statsmodels.api as sm
 
-# Add constant
+# 添加常數
 X = sm.add_constant(X_data)
 
-# Specify family and link
+# 指定族和連結
 family = sm.families.Poisson(link=sm.families.links.Log())
 
-# Fit model using IRLS
+# 使用 IRLS 配適模型
 model = sm.GLM(y, X, family=family)
 results = model.fit()
 
-# Summary
+# 摘要
 print(results.summary())
 ```
 
-### Results Attributes
+### 結果屬性
 
 ```python
-# Parameters and inference
-results.params              # Coefficients
-results.bse                 # Standard errors
-results.tvalues            # Z-statistics
-results.pvalues            # P-values
-results.conf_int()         # Confidence intervals
+# 參數和推論
+results.params              # 係數
+results.bse                 # 標準誤
+results.tvalues            # Z 統計量
+results.pvalues            # P 值
+results.conf_int()         # 信賴區間
 
-# Predictions
-results.fittedvalues       # Fitted values (μ)
-results.predict(X_new)     # Predictions for new data
+# 預測
+results.fittedvalues       # 擬合值（μ）
+results.predict(X_new)     # 新資料的預測
 
-# Model fit statistics
-results.aic                # Akaike Information Criterion
-results.bic                # Bayesian Information Criterion
-results.deviance           # Deviance
-results.null_deviance      # Null model deviance
-results.pearson_chi2       # Pearson chi-squared statistic
-results.df_resid           # Residual degrees of freedom
-results.llf                # Log-likelihood
+# 模型配適統計量
+results.aic                # Akaike 資訊準則
+results.bic                # Bayesian 資訊準則
+results.deviance           # 離差
+results.null_deviance      # 虛無模型離差
+results.pearson_chi2       # Pearson 卡方統計量
+results.df_resid           # 殘差自由度
+results.llf                # 對數概似
 
-# Residuals
-results.resid_response     # Response residuals (y - μ)
-results.resid_pearson      # Pearson residuals
-results.resid_deviance     # Deviance residuals
-results.resid_anscombe     # Anscombe residuals
-results.resid_working      # Working residuals
+# 殘差
+results.resid_response     # 反應殘差（y - μ）
+results.resid_pearson      # Pearson 殘差
+results.resid_deviance     # 離差殘差
+results.resid_anscombe     # Anscombe 殘差
+results.resid_working      # 工作殘差
 ```
 
-### Pseudo R-squared
+### 虛擬 R 平方
 
 ```python
-# McFadden's pseudo R-squared
+# McFadden 虛擬 R 平方
 pseudo_r2 = 1 - (results.deviance / results.null_deviance)
 print(f"Pseudo R²: {pseudo_r2:.4f}")
 
-# Adjusted pseudo R-squared
+# 調整後虛擬 R 平方
 n = len(y)
 k = len(results.params)
 adj_pseudo_r2 = 1 - ((n-1)/(n-k)) * (results.deviance / results.null_deviance)
 print(f"Adjusted Pseudo R²: {adj_pseudo_r2:.4f}")
 ```
 
-## Diagnostics
+## 診斷
 
-### Goodness of Fit
+### 配適度
 
 ```python
-# Deviance should be approximately χ² with df_resid degrees of freedom
+# 離差應約為具 df_resid 自由度的 χ² 分布
 from scipy import stats
 
 deviance_pval = 1 - stats.chi2.cdf(results.deviance, results.df_resid)
 print(f"Deviance test p-value: {deviance_pval}")
 
-# Pearson chi-squared test
+# Pearson 卡方檢定
 pearson_pval = 1 - stats.chi2.cdf(results.pearson_chi2, results.df_resid)
 print(f"Pearson chi² test p-value: {pearson_pval}")
 
-# Check for overdispersion/underdispersion
+# 檢查過度離散/欠離散
 dispersion = results.pearson_chi2 / results.df_resid
 print(f"Dispersion: {dispersion}")
-# Should be ~1; >1 suggests overdispersion, <1 underdispersion
+# 應約為 1；>1 表示過度離散，<1 表示欠離散
 ```
 
-### Residual Analysis
+### 殘差分析
 
 ```python
 import matplotlib.pyplot as plt
 
-# Deviance residuals vs fitted
+# 離差殘差 vs 擬合值
 plt.figure(figsize=(10, 6))
 plt.scatter(results.fittedvalues, results.resid_deviance, alpha=0.5)
 plt.xlabel('Fitted values')
@@ -384,28 +384,28 @@ plt.axhline(y=0, color='r', linestyle='--')
 plt.title('Deviance Residuals vs Fitted')
 plt.show()
 
-# Q-Q plot of deviance residuals
+# 離差殘差的 Q-Q 圖
 from statsmodels.graphics.gofplots import qqplot
 qqplot(results.resid_deviance, line='s')
 plt.title('Q-Q Plot of Deviance Residuals')
 plt.show()
 
-# For binary outcomes: binned residual plot
+# 二元結果：分組殘差圖
 if isinstance(results.model.family, sm.families.Binomial):
     from statsmodels.graphics.gofplots import qqplot
-    # Group predictions and compute average residuals
-    # (custom implementation needed)
+    # 分組預測並計算平均殘差
+    # （需要自訂實作）
     pass
 ```
 
-### Influence and Outliers
+### 影響和離群值
 
 ```python
 from statsmodels.stats.outliers_influence import GLMInfluence
 
 influence = GLMInfluence(results)
 
-# Leverage
+# 槓桿
 leverage = influence.hat_matrix_diag
 
 # Cook's distance
@@ -414,22 +414,22 @@ cooks_d = influence.cooks_distance[0]
 # DFFITS
 dffits = influence.dffits[0]
 
-# Find influential observations
+# 找出影響觀測值
 influential = np.where(cooks_d > 4/len(y))[0]
 print(f"Influential observations: {influential}")
 ```
 
-## Hypothesis Testing
+## 假設檢定
 
 ```python
-# Wald test for single parameter (automatically in summary)
+# 單參數 Wald 檢定（摘要中自動顯示）
 
-# Likelihood ratio test for nested models
-# Fit reduced model
+# 巢狀模型的概似比檢定
+# 配適精簡模型
 model_reduced = sm.GLM(y, X_reduced, family=family).fit()
 model_full = sm.GLM(y, X_full, family=family).fit()
 
-# LR statistic
+# LR 統計量
 lr_stat = 2 * (model_full.llf - model_reduced.llf)
 df = model_full.df_model - model_reduced.df_model
 
@@ -437,39 +437,39 @@ from scipy import stats
 lr_pval = 1 - stats.chi2.cdf(lr_stat, df)
 print(f"LR test p-value: {lr_pval}")
 
-# Wald test for multiple parameters
-# Test beta_1 = beta_2 = 0
+# 多參數 Wald 檢定
+# 檢定 beta_1 = beta_2 = 0
 R = [[0, 1, 0, 0], [0, 0, 1, 0]]
 wald_test = results.wald_test(R)
 print(wald_test)
 ```
 
-## Robust Standard Errors
+## 穩健標準誤
 
 ```python
-# Heteroscedasticity-robust (sandwich estimator)
+# 異質變異數穩健（三明治估計量）
 results_robust = results.get_robustcov_results(cov_type='HC0')
 
-# Cluster-robust
+# 群集穩健
 results_cluster = results.get_robustcov_results(cov_type='cluster',
                                                 groups=cluster_ids)
 
-# Compare standard errors
+# 比較標準誤
 print("Regular SE:", results.bse)
 print("Robust SE:", results_robust.bse)
 ```
 
-## Model Comparison
+## 模型比較
 
 ```python
-# AIC/BIC for non-nested models
+# 非巢狀模型的 AIC/BIC
 models = [model1_results, model2_results, model3_results]
 for i, res in enumerate(models, 1):
     print(f"Model {i}: AIC={res.aic:.2f}, BIC={res.bic:.2f}")
 
-# Likelihood ratio test for nested models (as shown above)
+# 巢狀模型的概似比檢定（如上所示）
 
-# Cross-validation for predictive performance
+# 預測表現的交叉驗證
 from sklearn.model_selection import KFold
 from sklearn.metrics import log_loss
 
@@ -489,56 +489,56 @@ for train_idx, val_idx in kf.split(X):
 print(f"CV Log Loss: {np.mean(cv_scores):.4f} ± {np.std(cv_scores):.4f}")
 ```
 
-## Prediction
+## 預測
 
 ```python
-# Point predictions
+# 點預測
 predictions = results.predict(X_new)
 
-# For classification: get probabilities and convert
+# 分類：取得機率並轉換
 if isinstance(family, sm.families.Binomial):
     probs = predictions
     class_predictions = (probs > 0.5).astype(int)
 
-# For counts: predictions are expected counts
+# 計數：預測為期望計數
 if isinstance(family, sm.families.Poisson):
     expected_counts = predictions
 
-# Prediction intervals via bootstrap
+# 透過 bootstrap 的預測區間
 n_boot = 1000
 boot_preds = np.zeros((n_boot, len(X_new)))
 
 for i in range(n_boot):
-    # Bootstrap resample
+    # Bootstrap 重抽樣
     boot_idx = np.random.choice(len(y), size=len(y), replace=True)
     X_boot, y_boot = X[boot_idx], y[boot_idx]
 
-    # Fit and predict
+    # 配適並預測
     boot_model = sm.GLM(y_boot, X_boot, family=family).fit()
     boot_preds[i] = boot_model.predict(X_new)
 
-# 95% prediction intervals
+# 95% 預測區間
 pred_lower = np.percentile(boot_preds, 2.5, axis=0)
 pred_upper = np.percentile(boot_preds, 97.5, axis=0)
 ```
 
-## Common Applications
+## 常見應用
 
-### Logistic Regression (Binary Classification)
+### 邏輯斯迴歸（二元分類）
 
 ```python
 import statsmodels.api as sm
 
-# Fit logistic regression
+# 配適邏輯斯迴歸
 X = sm.add_constant(X_data)
 model = sm.GLM(y, X, family=sm.families.Binomial())
 results = model.fit()
 
-# Odds ratios
+# 勝算比
 odds_ratios = np.exp(results.params)
 odds_ci = np.exp(results.conf_int())
 
-# Classification metrics
+# 分類指標
 from sklearn.metrics import classification_report, roc_auc_score
 
 probs = results.predict(X)
@@ -547,7 +547,7 @@ predictions = (probs > 0.5).astype(int)
 print(classification_report(y, predictions))
 print(f"AUC: {roc_auc_score(y, probs):.4f}")
 
-# ROC curve
+# ROC 曲線
 from sklearn.metrics import roc_curve
 import matplotlib.pyplot as plt
 
@@ -560,60 +560,60 @@ plt.title('ROC Curve')
 plt.show()
 ```
 
-### Poisson Regression (Count Data)
+### Poisson 迴歸（計數資料）
 
 ```python
-# Fit Poisson model
+# 配適 Poisson 模型
 X = sm.add_constant(X_data)
 model = sm.GLM(y_counts, X, family=sm.families.Poisson())
 results = model.fit()
 
-# Rate ratios
+# 率比
 rate_ratios = np.exp(results.params)
 print("Rate ratios:", rate_ratios)
 
-# Check overdispersion
+# 檢查過度離散
 dispersion = results.pearson_chi2 / results.df_resid
 if dispersion > 1.5:
     print(f"Overdispersion detected ({dispersion:.2f}). Consider Negative Binomial.")
 ```
 
-### Gamma Regression (Cost/Duration Data)
+### Gamma 迴歸（成本/持續時間資料）
 
 ```python
-# Fit Gamma model with log link
+# 配適 Gamma 模型配 log 連結
 X = sm.add_constant(X_data)
 model = sm.GLM(y_cost, X,
                family=sm.families.Gamma(link=sm.families.links.Log()))
 results = model.fit()
 
-# Multiplicative effects
+# 乘法效果
 effects = np.exp(results.params)
 print("Multiplicative effects on mean:", effects)
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Check distribution assumptions**: Plot histograms and Q-Q plots of response
-2. **Verify link function**: Use canonical links unless there's a reason not to
-3. **Examine residuals**: Deviance residuals should be approximately normal
-4. **Test for overdispersion**: Especially for Poisson models
-5. **Use offsets appropriately**: For rate modeling with varying exposure
-6. **Consider robust SEs**: When variance assumptions questionable
-7. **Compare models**: Use AIC/BIC for non-nested, LR test for nested
-8. **Interpret on original scale**: Transform coefficients (e.g., exp for log link)
-9. **Check influential observations**: Use Cook's distance
-10. **Validate predictions**: Use cross-validation or holdout set
+1. **檢查分布假設**：繪製反應變數的直方圖和 Q-Q 圖
+2. **驗證連結函數**：除非有理由否則使用正則連結
+3. **檢查殘差**：離差殘差應約為常態
+4. **檢定過度離散**：特別是 Poisson 模型
+5. **適當使用偏移量**：用於具有不同暴露量的率建模
+6. **考慮穩健標準誤**：當變異數假設有疑問時
+7. **比較模型**：非巢狀使用 AIC/BIC，巢狀使用 LR 檢定
+8. **在原始尺度上解釋**：轉換係數（例如 log 連結用 exp）
+9. **檢查影響觀測值**：使用 Cook's distance
+10. **驗證預測**：使用交叉驗證或保留集
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Forgetting to add constant**: No intercept term
-2. **Using wrong family**: Check distribution of response
-3. **Ignoring overdispersion**: Use Negative Binomial instead of Poisson
-4. **Misinterpreting coefficients**: Remember link function transformation
-5. **Not checking convergence**: IRLS may not converge; check warnings
-6. **Complete separation in logistic**: Some categories perfectly predict outcome
-7. **Using identity link with bounded outcomes**: May predict outside valid range
-8. **Comparing models with different samples**: Use same observations
-9. **Forgetting offset in rate models**: Must use log(exposure) as offset
-10. **Not considering alternatives**: Mixed models, zero-inflation for complex data
+1. **忘記添加常數**：無截距項
+2. **使用錯誤族**：檢查反應變數的分布
+3. **忽略過度離散**：改用負二項而非 Poisson
+4. **誤解係數**：記住連結函數轉換
+5. **未檢查收斂**：IRLS 可能不收斂；檢查警告
+6. **邏輯斯中的完全分離**：某些類別完美預測結果
+7. **有界結果使用 identity 連結**：可能預測超出有效範圍
+8. **使用不同樣本比較模型**：使用相同觀測值
+9. **率模型忘記偏移量**：必須使用 log(exposure) 作為偏移量
+10. **未考慮替代方案**：複雜資料考慮混合模型、零膨脹

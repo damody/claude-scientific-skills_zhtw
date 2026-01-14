@@ -1,541 +1,541 @@
-# Models and Architectures
-
-## Overview
-
-TorchDrug provides a comprehensive collection of pre-built model architectures for various graph-based learning tasks. This reference catalogs all available models with their characteristics, use cases, and implementation details.
-
-## Graph Neural Networks
-
-### GCN (Graph Convolutional Network)
-
-**Type:** Spatial message passing
-**Paper:** Semi-Supervised Classification with Graph Convolutional Networks (Kipf & Welling, 2017)
-
-**Characteristics:**
-- Simple and efficient aggregation
-- Normalized adjacency matrix convolution
-- Works well for homophilic graphs
-- Good baseline for many tasks
-
-**Best For:**
-- Initial experiments and baselines
-- When computational efficiency is important
-- Graphs with clear local structure
-
-**Parameters:**
-- `input_dim`: Node feature dimension
-- `hidden_dims`: List of hidden layer dimensions
-- `edge_input_dim`: Edge feature dimension (optional)
-- `batch_norm`: Apply batch normalization
-- `activation`: Activation function (relu, elu, etc.)
-- `dropout`: Dropout rate
-
-**Use Cases:**
-- Molecular property prediction
-- Citation network classification
-- Social network analysis
-
-### GAT (Graph Attention Network)
-
-**Type:** Attention-based message passing
-**Paper:** Graph Attention Networks (Veličković et al., 2018)
-
-**Characteristics:**
-- Learns attention weights for neighbors
-- Different importance for different neighbors
-- Multi-head attention for robustness
-- Handles varying node degrees naturally
-
-**Best For:**
-- When neighbor importance varies
-- Heterogeneous graphs
-- Interpretable predictions
-
-**Parameters:**
-- `input_dim`, `hidden_dims`: Standard dimensions
-- `num_heads`: Number of attention heads
-- `negative_slope`: LeakyReLU slope
-- `concat`: Concatenate or average multi-head outputs
-
-**Use Cases:**
-- Protein-protein interaction prediction
-- Molecule generation with attention to reactive sites
-- Knowledge graph reasoning with relation importance
-
-### GIN (Graph Isomorphism Network)
-
-**Type:** Maximally powerful message passing
-**Paper:** How Powerful are Graph Neural Networks? (Xu et al., 2019)
-
-**Characteristics:**
-- Theoretically most expressive GNN architecture
-- Injective aggregation function
-- Can distinguish graph structures GCN cannot
-- Often best performance on molecular tasks
-
-**Best For:**
-- Molecular property prediction (state-of-the-art)
-- Tasks requiring structural discrimination
-- Graph classification
-
-**Parameters:**
-- `input_dim`, `hidden_dims`: Standard dimensions
-- `edge_input_dim`: Include edge features
-- `batch_norm`: Typically use true
-- `readout`: Graph pooling ("sum", "mean", "max")
-- `eps`: Learnable or fixed epsilon
-
-**Use Cases:**
-- Drug property prediction (BBBP, HIV, etc.)
-- Molecular generation
-- Reaction prediction
-
-### RGCN (Relational Graph Convolutional Network)
-
-**Type:** Multi-relational message passing
-**Paper:** Modeling Relational Data with Graph Convolutional Networks (Schlichtkrull et al., 2018)
-
-**Characteristics:**
-- Handles multiple edge/relation types
-- Relation-specific weight matrices
-- Basis decomposition for parameter efficiency
-- Essential for knowledge graphs
-
-**Best For:**
-- Knowledge graph reasoning
-- Heterogeneous molecular graphs
-- Multi-relational data
-
-**Parameters:**
-- `num_relation`: Number of relation types
-- `hidden_dims`: Layer dimensions
-- `num_bases`: Basis decomposition (reduce parameters)
-
-**Use Cases:**
-- Knowledge graph completion
-- Retrosynthesis (different bond types)
-- Protein interaction networks
-
-### MPNN (Message Passing Neural Network)
-
-**Type:** General message passing framework
-**Paper:** Neural Message Passing for Quantum Chemistry (Gilmer et al., 2017)
-
-**Characteristics:**
-- Flexible message and update functions
-- Edge features in message computation
-- GRU updates for node hidden states
-- Set2Set readout for graph representation
-
-**Best For:**
-- Quantum chemistry predictions
-- Tasks with important edge information
-- When node states evolve over multiple iterations
-
-**Parameters:**
-- `input_dim`, `hidden_dim`: Feature dimensions
-- `edge_input_dim`: Edge feature dimension
-- `num_layer`: Message passing iterations
-- `num_mlp_layer`: MLP layers in message function
-
-**Use Cases:**
-- QM9 quantum property prediction
-- Molecular dynamics
-- 3D conformation-aware tasks
-
-### SchNet (Continuous-Filter Convolutional Network)
-
-**Type:** 3D geometry-aware convolution
-**Paper:** SchNet: A continuous-filter convolutional neural network (Schütt et al., 2017)
-
-**Characteristics:**
-- Operates on 3D atomic coordinates
-- Continuous filter convolutions
-- Rotation and translation invariant
-- Excellent for quantum chemistry
-
-**Best For:**
-- 3D molecular structure tasks
-- Quantum property prediction
-- Protein structure analysis
-- Energy and force prediction
-
-**Parameters:**
-- `input_dim`: Atom features
-- `hidden_dims`: Layer dimensions
-- `num_gaussian`: RBF basis functions for distances
-- `cutoff`: Interaction cutoff distance
-
-**Use Cases:**
-- QM9 property prediction
-- Molecular dynamics simulations
-- Protein-ligand binding with structures
-- Crystal property prediction
-
-### ChebNet (Chebyshev Spectral CNN)
-
-**Type:** Spectral convolution
-**Paper:** Convolutional Neural Networks on Graphs (Defferrard et al., 2016)
-
-**Characteristics:**
-- Spectral graph convolution
-- Chebyshev polynomial approximation
-- Captures global graph structure
-- Computationally efficient
-
-**Best For:**
-- Tasks requiring global information
-- When graph Laplacian is informative
-- Theoretical analysis
-
-**Parameters:**
-- `input_dim`, `hidden_dims`: Dimensions
-- `num_cheb`: Order of Chebyshev polynomial
-
-**Use Cases:**
-- Citation network classification
-- Brain network analysis
-- Signal processing on graphs
-
-### NFP (Neural Fingerprint)
-
-**Type:** Molecular fingerprint learning
-**Paper:** Convolutional Networks on Graphs for Learning Molecular Fingerprints (Duvenaud et al., 2015)
-
-**Characteristics:**
-- Learns differentiable molecular fingerprints
-- Alternative to hand-crafted fingerprints (ECFP)
-- Circular convolutions like ECFP
-- Interpretable learned features
-
-**Best For:**
-- Molecular similarity learning
-- Property prediction with limited data
-- When interpretability is important
-
-**Parameters:**
-- `input_dim`, `output_dim`: Feature dimensions
-- `hidden_dims`: Layer dimensions
-- `num_layer`: Circular convolution depth
-
-**Use Cases:**
-- Virtual screening
-- Molecular similarity search
-- QSAR modeling
-
-## Protein-Specific Models
-
-### GearNet (Geometry-Aware Relational Graph Network)
-
-**Type:** Protein structure encoder
-**Paper:** Protein Representation Learning by Geometric Structure Pretraining (Zhang et al., 2023)
-
-**Characteristics:**
-- Incorporates 3D geometric information
-- Multiple edge types (sequential, spatial, KNN)
-- Designed specifically for proteins
-- State-of-the-art on protein tasks
-
-**Best For:**
-- Protein structure prediction
-- Protein function prediction
-- Protein-protein interaction
-- Any task with protein 3D structures
-
-**Parameters:**
-- `input_dim`: Residue features
-- `hidden_dims`: Layer dimensions
-- `num_relation`: Edge types (sequence, radius, KNN)
-- `edge_input_dim`: Geometric features (distances, angles)
-- `batch_norm`: Typically true
-
-**Use Cases:**
-- Enzyme function prediction (EnzymeCommission)
-- Protein fold recognition
-- Contact prediction
-- Binding site identification
-
-### ESM (Evolutionary Scale Modeling)
-
-**Type:** Protein language model (transformer)
-**Paper:** Biological structure and function emerge from scaling unsupervised learning (Rives et al., 2021)
-
-**Characteristics:**
-- Pre-trained on 250M+ protein sequences
-- Captures evolutionary and structural information
-- Transformer architecture
-- Transfer learning for downstream tasks
-
-**Best For:**
-- Any sequence-based protein task
-- When no structure available
-- Transfer learning with limited data
-
-**Variants:**
-- ESM-1b: 650M parameters
-- ESM-2: Multiple sizes (8M to 15B parameters)
-
-**Use Cases:**
-- Protein function prediction
-- Variant effect prediction
-- Protein design
-- Structure prediction (ESMFold)
+# 模型和架構
+
+## 概述
+
+TorchDrug 提供各種基於圖的學習任務的綜合預建模型架構集合。本參考文件列出所有可用模型及其特徵、使用案例和實作細節。
+
+## 圖神經網路
+
+### GCN（圖卷積網路）
+
+**類型：**空間訊息傳遞
+**論文：**Semi-Supervised Classification with Graph Convolutional Networks（Kipf & Welling, 2017）
+
+**特徵：**
+- 簡單高效的聚合
+- 正規化鄰接矩陣卷積
+- 對同質圖效果好
+- 許多任務的良好基線
+
+**最適合：**
+- 初始實驗和基線
+- 計算效率重要時
+- 具有清晰局部結構的圖
+
+**參數：**
+- `input_dim`：節點特徵維度
+- `hidden_dims`：隱藏層維度列表
+- `edge_input_dim`：邊特徵維度（可選）
+- `batch_norm`：應用批次正規化
+- `activation`：激活函數（relu、elu 等）
+- `dropout`：Dropout 率
+
+**使用案例：**
+- 分子性質預測
+- 引用網路分類
+- 社群網路分析
+
+### GAT（圖注意力網路）
+
+**類型：**基於注意力的訊息傳遞
+**論文：**Graph Attention Networks（Veličković et al., 2018）
+
+**特徵：**
+- 學習鄰居的注意力權重
+- 不同鄰居有不同重要性
+- 多頭注意力增強穩健性
+- 自然處理不同節點度數
+
+**最適合：**
+- 鄰居重要性變化時
+- 異質圖
+- 可解釋的預測
+
+**參數：**
+- `input_dim`、`hidden_dims`：標準維度
+- `num_heads`：注意力頭數
+- `negative_slope`：LeakyReLU 斜率
+- `concat`：連接或平均多頭輸出
+
+**使用案例：**
+- 蛋白質-蛋白質交互作用預測
+- 關注反應位點的分子生成
+- 具有關係重要性的知識圖譜推理
+
+### GIN（圖同構網路）
+
+**類型：**最大表達力訊息傳遞
+**論文：**How Powerful are Graph Neural Networks?（Xu et al., 2019）
+
+**特徵：**
+- 理論上最具表達力的 GNN 架構
+- 單射聚合函數
+- 可以區分 GCN 無法區分的圖結構
+- 分子任務上通常表現最佳
+
+**最適合：**
+- 分子性質預測（最先進）
+- 需要結構辨別的任務
+- 圖分類
+
+**參數：**
+- `input_dim`、`hidden_dims`：標準維度
+- `edge_input_dim`：包含邊特徵
+- `batch_norm`：通常使用 true
+- `readout`：圖池化（"sum"、"mean"、"max"）
+- `eps`：可學習或固定的 epsilon
+
+**使用案例：**
+- 藥物性質預測（BBBP、HIV 等）
+- 分子生成
+- 反應預測
+
+### RGCN（關係圖卷積網路）
+
+**類型：**多關係訊息傳遞
+**論文：**Modeling Relational Data with Graph Convolutional Networks（Schlichtkrull et al., 2018）
+
+**特徵：**
+- 處理多種邊/關係類型
+- 關係特定的權重矩陣
+- 基底分解提高參數效率
+- 對知識圖譜至關重要
+
+**最適合：**
+- 知識圖譜推理
+- 異質分子圖
+- 多關係資料
+
+**參數：**
+- `num_relation`：關係類型數量
+- `hidden_dims`：層維度
+- `num_bases`：基底分解（減少參數）
+
+**使用案例：**
+- 知識圖譜補全
+- 逆合成（不同鍵類型）
+- 蛋白質交互作用網路
+
+### MPNN（訊息傳遞神經網路）
+
+**類型：**通用訊息傳遞框架
+**論文：**Neural Message Passing for Quantum Chemistry（Gilmer et al., 2017）
+
+**特徵：**
+- 靈活的訊息和更新函數
+- 訊息計算中的邊特徵
+- 用於節點隱藏狀態的 GRU 更新
+- 用於圖表示的 Set2Set 讀出
+
+**最適合：**
+- 量子化學預測
+- 邊資訊重要的任務
+- 節點狀態在多次迭代中演化時
+
+**參數：**
+- `input_dim`、`hidden_dim`：特徵維度
+- `edge_input_dim`：邊特徵維度
+- `num_layer`：訊息傳遞迭代次數
+- `num_mlp_layer`：訊息函數中的 MLP 層數
+
+**使用案例：**
+- QM9 量子性質預測
+- 分子動力學
+- 3D 構象感知任務
+
+### SchNet（連續濾波卷積網路）
+
+**類型：**3D 幾何感知卷積
+**論文：**SchNet: A continuous-filter convolutional neural network（Schütt et al., 2017）
+
+**特徵：**
+- 在 3D 原子座標上操作
+- 連續濾波卷積
+- 旋轉和平移不變
+- 量子化學表現優異
+
+**最適合：**
+- 3D 分子結構任務
+- 量子性質預測
+- 蛋白質結構分析
+- 能量和力預測
+
+**參數：**
+- `input_dim`：原子特徵
+- `hidden_dims`：層維度
+- `num_gaussian`：距離的 RBF 基函數
+- `cutoff`：交互作用截斷距離
+
+**使用案例：**
+- QM9 性質預測
+- 分子動力學模擬
+- 帶結構的蛋白質-配體結合
+- 晶體性質預測
+
+### ChebNet（Chebyshev 譜 CNN）
+
+**類型：**譜卷積
+**論文：**Convolutional Neural Networks on Graphs（Defferrard et al., 2016）
+
+**特徵：**
+- 譜圖卷積
+- Chebyshev 多項式近似
+- 捕捉全局圖結構
+- 計算效率高
+
+**最適合：**
+- 需要全局資訊的任務
+- 圖拉普拉斯資訊豐富時
+- 理論分析
+
+**參數：**
+- `input_dim`、`hidden_dims`：維度
+- `num_cheb`：Chebyshev 多項式階數
+
+**使用案例：**
+- 引用網路分類
+- 腦網路分析
+- 圖上的訊號處理
+
+### NFP（神經指紋）
+
+**類型：**分子指紋學習
+**論文：**Convolutional Networks on Graphs for Learning Molecular Fingerprints（Duvenaud et al., 2015）
+
+**特徵：**
+- 學習可微分的分子指紋
+- 手工指紋（ECFP）的替代方案
+- 類似 ECFP 的圓形卷積
+- 可解釋的學習特徵
+
+**最適合：**
+- 分子相似性學習
+- 有限資料的性質預測
+- 可解釋性重要時
+
+**參數：**
+- `input_dim`、`output_dim`：特徵維度
+- `hidden_dims`：層維度
+- `num_layer`：圓形卷積深度
+
+**使用案例：**
+- 虛擬篩選
+- 分子相似性搜尋
+- QSAR 建模
+
+## 蛋白質專用模型
+
+### GearNet（幾何感知關係圖網路）
+
+**類型：**蛋白質結構編碼器
+**論文：**Protein Representation Learning by Geometric Structure Pretraining（Zhang et al., 2023）
+
+**特徵：**
+- 整合 3D 幾何資訊
+- 多種邊類型（序列、空間、KNN）
+- 專為蛋白質設計
+- 蛋白質任務達到最先進水準
+
+**最適合：**
+- 蛋白質結構預測
+- 蛋白質功能預測
+- 蛋白質-蛋白質交互作用
+- 任何有蛋白質 3D 結構的任務
+
+**參數：**
+- `input_dim`：殘基特徵
+- `hidden_dims`：層維度
+- `num_relation`：邊類型（序列、半徑、KNN）
+- `edge_input_dim`：幾何特徵（距離、角度）
+- `batch_norm`：通常使用 true
+
+**使用案例：**
+- 酵素功能預測（EnzymeCommission）
+- 蛋白質摺疊識別
+- 接觸預測
+- 結合位點識別
+
+### ESM（演化規模建模）
+
+**類型：**蛋白質語言模型（transformer）
+**論文：**Biological structure and function emerge from scaling unsupervised learning（Rives et al., 2021）
+
+**特徵：**
+- 在 2.5 億+ 蛋白質序列上預訓練
+- 捕捉演化和結構資訊
+- Transformer 架構
+- 下游任務的遷移學習
+
+**最適合：**
+- 任何基於序列的蛋白質任務
+- 沒有結構可用時
+- 有限資料的遷移學習
+
+**變體：**
+- ESM-1b：6.5 億參數
+- ESM-2：多種大小（8M 到 15B 參數）
+
+**使用案例：**
+- 蛋白質功能預測
+- 變異效果預測
+- 蛋白質設計
+- 結構預測（ESMFold）
 
 ### ProteinBERT
 
-**Type:** Masked language model for proteins
+**類型：**蛋白質的遮罩語言模型
 
-**Characteristics:**
-- BERT-style pre-training
-- Masked amino acid prediction
-- Bidirectional context
-- Good for sequence-based tasks
+**特徵：**
+- BERT 風格預訓練
+- 遮罩胺基酸預測
+- 雙向上下文
+- 適合基於序列的任務
 
-**Use Cases:**
-- Function annotation
-- Subcellular localization
-- Stability prediction
+**使用案例：**
+- 功能註釋
+- 亞細胞定位
+- 穩定性預測
 
 ### ProteinCNN / ProteinResNet
 
-**Type:** Convolutional networks for sequences
+**類型：**序列的卷積網路
 
-**Characteristics:**
-- 1D convolutions on sequences
-- Local pattern recognition
-- Faster than transformers
-- Good for motif detection
+**特徵：**
+- 序列上的 1D 卷積
+- 局部模式識別
+- 比 transformer 更快
+- 適合基序檢測
 
-**Use Cases:**
-- Binding site prediction
-- Secondary structure prediction
-- Domain identification
+**使用案例：**
+- 結合位點預測
+- 二級結構預測
+- 結構域識別
 
 ### ProteinLSTM
 
-**Type:** Recurrent network for sequences
+**類型：**序列的循環網路
 
-**Characteristics:**
-- Bidirectional LSTM
-- Captures long-range dependencies
-- Sequential processing
-- Good baseline for sequence tasks
+**特徵：**
+- 雙向 LSTM
+- 捕捉長距離依賴性
+- 序列處理
+- 序列任務的良好基線
 
-**Use Cases:**
-- Order prediction
-- Sequential annotation
-- Time-series protein data
+**使用案例：**
+- 順序預測
+- 序列註釋
+- 時間序列蛋白質資料
 
-## Knowledge Graph Models
+## 知識圖譜模型
 
-### TransE (Translation Embedding)
+### TransE（平移嵌入）
 
-**Type:** Translation-based embedding
-**Paper:** Translating Embeddings for Modeling Multi-relational Data (Bordes et al., 2013)
+**類型：**基於平移的嵌入
+**論文：**Translating Embeddings for Modeling Multi-relational Data（Bordes et al., 2013）
 
-**Characteristics:**
-- h + r ≈ t (head + relation ≈ tail)
-- Simple and interpretable
-- Works well for 1-to-1 relations
-- Memory efficient
+**特徵：**
+- h + r ≈ t（頭 + 關係 ≈ 尾）
+- 簡單且可解釋
+- 對 1 對 1 關係效果好
+- 記憶體效率高
 
-**Best For:**
-- Large knowledge graphs
-- Initial experiments
-- Interpretable embeddings
+**最適合：**
+- 大型知識圖譜
+- 初始實驗
+- 可解釋嵌入
 
-**Parameters:**
-- `num_entity`, `num_relation`: Graph size
-- `embedding_dim`: Embedding dimensions (typically 50-500)
+**參數：**
+- `num_entity`、`num_relation`：圖大小
+- `embedding_dim`：嵌入維度（通常 50-500）
 
-### RotatE (Rotation Embedding)
+### RotatE（旋轉嵌入）
 
-**Type:** Rotation in complex space
-**Paper:** RotatE: Knowledge Graph Embedding by Relational Rotation in Complex Space (Sun et al., 2019)
+**類型：**複數空間中的旋轉
+**論文：**RotatE: Knowledge Graph Embedding by Relational Rotation in Complex Space（Sun et al., 2019）
 
-**Characteristics:**
-- Relations as rotations in complex space
-- Handles symmetric, antisymmetric, inverse, composition
-- State-of-the-art on many benchmarks
+**特徵：**
+- 關係作為複數空間中的旋轉
+- 處理對稱、反對稱、逆向、組合
+- 在許多基準上達到最先進水準
 
-**Best For:**
-- Most knowledge graph tasks
-- Complex relation patterns
-- When accuracy is critical
+**最適合：**
+- 大多數知識圖譜任務
+- 複雜關係模式
+- 準確度關鍵時
 
-**Parameters:**
-- `num_entity`, `num_relation`: Graph size
-- `embedding_dim`: Must be even (complex embeddings)
-- `max_score`: Score clipping value
+**參數：**
+- `num_entity`、`num_relation`：圖大小
+- `embedding_dim`：必須為偶數（複數嵌入）
+- `max_score`：分數裁剪值
 
 ### DistMult
 
-**Type:** Bilinear model
+**類型：**雙線性模型
 
-**Characteristics:**
-- Symmetric relation modeling
-- Fast and efficient
-- Cannot model antisymmetric relations
+**特徵：**
+- 對稱關係建模
+- 快速高效
+- 無法建模非對稱關係
 
-**Best For:**
-- Symmetric relations (e.g., "similar to")
-- When speed is critical
-- Large-scale graphs
+**最適合：**
+- 對稱關係（如「相似於」）
+- 速度關鍵時
+- 大規模圖
 
 ### ComplEx
 
-**Type:** Complex-valued embeddings
+**類型：**複數值嵌入
 
-**Characteristics:**
-- Handles asymmetric and symmetric relations
-- Better than DistMult for most graphs
-- Good balance of expressiveness and efficiency
+**特徵：**
+- 處理非對稱和對稱關係
+- 對大多數圖比 DistMult 更好
+- 表達能力和效率的良好平衡
 
-**Best For:**
-- General knowledge graph completion
-- Mixed relation types
-- When RotatE is too complex
+**最適合：**
+- 通用知識圖譜補全
+- 混合關係類型
+- 當 RotatE 太複雜時
 
 ### SimplE
 
-**Type:** Enhanced embedding model
+**類型：**增強嵌入模型
 
-**Characteristics:**
-- Two embeddings per entity (canonical + inverse)
-- Fully expressive
-- Slightly more parameters than ComplEx
+**特徵：**
+- 每個實體有兩個嵌入（規範 + 逆向）
+- 完全表達性
+- 比 ComplEx 參數略多
 
-**Best For:**
-- When full expressiveness needed
-- Inverse relations are important
+**最適合：**
+- 需要完全表達性時
+- 逆向關係重要時
 
-## Generative Models
+## 生成模型
 
 ### GraphAutoregressiveFlow
 
-**Type:** Normalizing flow for molecules
+**類型：**分子的正規化流
 
-**Characteristics:**
-- Exact likelihood computation
-- Invertible transformations
-- Stable training (no adversarial)
-- Conditional generation support
+**特徵：**
+- 精確似然計算
+- 可逆變換
+- 穩定訓練（無對抗）
+- 支援條件生成
 
-**Best For:**
-- Molecular generation
-- Density estimation
-- Interpolation between molecules
+**最適合：**
+- 分子生成
+- 密度估計
+- 分子間插值
 
-**Parameters:**
-- `input_dim`: Atom features
-- `hidden_dims`: Coupling layers
-- `num_flow`: Number of flow transformations
+**參數：**
+- `input_dim`：原子特徵
+- `hidden_dims`：耦合層
+- `num_flow`：流變換數量
 
-**Use Cases:**
-- De novo drug design
-- Chemical space exploration
-- Property-targeted generation
+**使用案例：**
+- 從頭藥物設計
+- 化學空間探索
+- 性質目標生成
 
-## Pre-training Models
+## 預訓練模型
 
 ### InfoGraph
 
-**Type:** Contrastive learning
+**類型：**對比學習
 
-**Characteristics:**
-- Maximizes mutual information
-- Graph-level and node-level contrast
-- Unsupervised pre-training
-- Good for small datasets
+**特徵：**
+- 最大化互資訊
+- 圖級和節點級對比
+- 無監督預訓練
+- 對小型資料集效果好
 
-**Use Cases:**
-- Pre-train molecular encoders
-- Few-shot learning
-- Transfer learning
+**使用案例：**
+- 預訓練分子編碼器
+- 少樣本學習
+- 遷移學習
 
 ### MultiviewContrast
 
-**Type:** Multi-view contrastive learning for proteins
+**類型：**蛋白質的多視角對比學習
 
-**Characteristics:**
-- Contrasts different views of proteins
-- Geometric pre-training
-- Uses 3D structure information
-- Excellent for protein models
+**特徵：**
+- 對比蛋白質的不同視角
+- 幾何預訓練
+- 使用 3D 結構資訊
+- 對蛋白質模型表現優異
 
-**Use Cases:**
-- Pre-train GearNet on protein structures
-- Transfer to property prediction
-- Limited labeled data scenarios
+**使用案例：**
+- 在蛋白質結構上預訓練 GearNet
+- 遷移到性質預測
+- 有限標註資料場景
 
-## Model Selection Guide
+## 模型選擇指南
 
-### By Task Type
+### 按任務類型
 
-**Molecular Property Prediction:**
-1. GIN (first choice)
-2. GAT (interpretability)
-3. SchNet (3D available)
+**分子性質預測：**
+1. GIN（首選）
+2. GAT（可解釋性）
+3. SchNet（3D 可用）
 
-**Protein Tasks:**
-1. ESM (sequence only)
-2. GearNet (structure available)
-3. ProteinBERT (sequence, lighter than ESM)
+**蛋白質任務：**
+1. ESM（僅序列）
+2. GearNet（結構可用）
+3. ProteinBERT（序列，比 ESM 輕量）
 
-**Knowledge Graphs:**
-1. RotatE (best performance)
-2. ComplEx (good balance)
-3. TransE (large graphs, efficiency)
+**知識圖譜：**
+1. RotatE（最佳效能）
+2. ComplEx（良好平衡）
+3. TransE（大型圖、效率）
 
-**Molecular Generation:**
-1. GraphAutoregressiveFlow (exact likelihood)
-2. GCPN with GIN backbone (property optimization)
+**分子生成：**
+1. GraphAutoregressiveFlow（精確似然）
+2. 帶 GIN 骨幹的 GCPN（性質最佳化）
 
-**Retrosynthesis:**
-1. GIN (synthon completion)
-2. RGCN (center identification with bond types)
+**逆合成：**
+1. GIN（合成子完成）
+2. RGCN（帶鍵類型的中心識別）
 
-### By Dataset Size
+### 按資料集大小
 
-**Small (< 1k):**
-- Use pre-trained models (ESM for proteins)
-- Simpler architectures (GCN, ProteinCNN)
-- Heavy regularization
+**小型（< 1k）：**
+- 使用預訓練模型（蛋白質用 ESM）
+- 更簡單的架構（GCN、ProteinCNN）
+- 強正則化
 
-**Medium (1k-100k):**
-- GIN for molecules
-- GAT for interpretability
-- Standard training
+**中型（1k-100k）：**
+- 分子用 GIN
+- 可解釋性用 GAT
+- 標準訓練
 
-**Large (> 100k):**
-- Any model works
-- Deeper architectures
-- Can train from scratch
+**大型（> 100k）：**
+- 任何模型都可以
+- 更深的架構
+- 可以從頭訓練
 
-### By Computational Budget
+### 按計算預算
 
-**Low:**
-- GCN (simplest)
-- DistMult (KG)
+**低：**
+- GCN（最簡單）
+- DistMult（KG）
 - ProteinLSTM
 
-**Medium:**
+**中：**
 - GIN
 - GAT
 - ComplEx
 
-**High:**
-- ESM (large)
-- SchNet (3D)
-- RotatE with high dim
+**高：**
+- ESM（大型）
+- SchNet（3D）
+- 高維 RotatE
 
-## Implementation Tips
+## 實作技巧
 
-1. **Start Simple**: Begin with GCN or GIN baseline
-2. **Use Pre-trained**: ESM for proteins, InfoGraph for molecules
-3. **Tune Depth**: 3-5 layers typically sufficient
-4. **Batch Normalization**: Usually helps (except KG embeddings)
-5. **Residual Connections**: Important for deep networks
-6. **Readout Function**: "mean" usually works well
-7. **Edge Features**: Include when available (bonds, distances)
-8. **Regularization**: Dropout, weight decay, early stopping
+1. **從簡單開始**：以 GCN 或 GIN 作為基線
+2. **使用預訓練**：蛋白質用 ESM，分子用 InfoGraph
+3. **調整深度**：通常 3-5 層就足夠
+4. **批次正規化**：通常有幫助（除了 KG 嵌入）
+5. **殘差連接**：對深層網路重要
+6. **讀出函數**：「mean」通常效果好
+7. **邊特徵**：可用時包含（鍵、距離）
+8. **正則化**：Dropout、權重衰減、早停

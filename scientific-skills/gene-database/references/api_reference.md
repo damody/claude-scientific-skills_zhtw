@@ -1,61 +1,61 @@
-# NCBI Gene API Reference
+# NCBI Gene API 參考
 
-This document provides detailed API documentation for accessing NCBI Gene database programmatically.
+本文件提供程式化存取 NCBI Gene 資料庫的詳細 API 文件。
 
-## Table of Contents
+## 目錄
 
 1. [E-utilities API](#e-utilities-api)
 2. [NCBI Datasets API](#ncbi-datasets-api)
-3. [Authentication and Rate Limits](#authentication-and-rate-limits)
-4. [Error Handling](#error-handling)
+3. [認證和速率限制](#認證和速率限制)
+4. [錯誤處理](#錯誤處理)
 
 ---
 
 ## E-utilities API
 
-E-utilities (Entrez Programming Utilities) provide a stable interface to NCBI's Entrez databases.
+E-utilities（Entrez Programming Utilities）為 NCBI 的 Entrez 資料庫提供穩定的介面。
 
-### Base URL
+### 基礎 URL
 
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/
 ```
 
-### Common Parameters
+### 通用參數
 
-- `db` - Database name (use `gene` for Gene database)
-- `api_key` - API key for higher rate limits
-- `retmode` - Return format (json, xml, text)
-- `retmax` - Maximum number of records to return
+- `db` - 資料庫名稱（使用 `gene` 表示 Gene 資料庫）
+- `api_key` - 用於更高速率限制的 API 金鑰
+- `retmode` - 回傳格式（json、xml、text）
+- `retmax` - 最大回傳記錄數
 
-### ESearch - Search Database
+### ESearch - 搜尋資料庫
 
-Search for genes matching a text query.
+搜尋符合文字查詢的基因。
 
-**Endpoint:** `esearch.fcgi`
+**端點：** `esearch.fcgi`
 
-**Parameters:**
-- `db=gene` (required) - Database to search
-- `term` (required) - Search query
-- `retmax` - Maximum results (default: 20)
-- `retmode` - json or xml (default: xml)
-- `usehistory=y` - Store results on history server for large result sets
+**參數：**
+- `db=gene`（必要）- 要搜尋的資料庫
+- `term`（必要）- 搜尋查詢
+- `retmax` - 最大結果數（預設：20）
+- `retmode` - json 或 xml（預設：xml）
+- `usehistory=y` - 將結果儲存在歷史伺服器上用於大型結果集
 
-**Query Syntax:**
-- Gene symbol: `BRCA1[gene]` or `BRCA1[gene name]`
-- Organism: `human[organism]` or `9606[taxid]`
-- Combine terms: `BRCA1[gene] AND human[organism]`
-- Disease: `muscular dystrophy[disease]`
-- Chromosome: `17q21[chromosome]`
-- GO terms: `GO:0006915[biological process]`
+**查詢語法：**
+- 基因符號：`BRCA1[gene]` 或 `BRCA1[gene name]`
+- 生物體：`human[organism]` 或 `9606[taxid]`
+- 組合詞彙：`BRCA1[gene] AND human[organism]`
+- 疾病：`muscular dystrophy[disease]`
+- 染色體：`17q21[chromosome]`
+- GO 術語：`GO:0006915[biological process]`
 
-**Example Request:**
+**範例請求：**
 
 ```bash
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=BRCA1[gene]+AND+human[organism]&retmode=json"
 ```
 
-**Response Format (JSON):**
+**回應格式（JSON）：**
 
 ```json
 {
@@ -70,24 +70,24 @@ curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=BR
 }
 ```
 
-### ESummary - Document Summaries
+### ESummary - 文件摘要
 
-Retrieve document summaries for Gene IDs.
+擷取 Gene ID 的文件摘要。
 
-**Endpoint:** `esummary.fcgi`
+**端點：** `esummary.fcgi`
 
-**Parameters:**
-- `db=gene` (required) - Database
-- `id` (required) - Comma-separated Gene IDs (up to 500)
-- `retmode` - json or xml (default: xml)
+**參數：**
+- `db=gene`（必要）- 資料庫
+- `id`（必要）- 逗號分隔的 Gene ID（最多 500 個）
+- `retmode` - json 或 xml（預設：xml）
 
-**Example Request:**
+**範例請求：**
 
 ```bash
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=672&retmode=json"
 ```
 
-**Response Format (JSON):**
+**回應格式（JSON）：**
 
 ```json
 {
@@ -111,61 +111,61 @@ curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=672
 }
 ```
 
-### EFetch - Full Records
+### EFetch - 完整記錄
 
-Fetch detailed gene records in various formats.
+以各種格式取得詳細的基因記錄。
 
-**Endpoint:** `efetch.fcgi`
+**端點：** `efetch.fcgi`
 
-**Parameters:**
-- `db=gene` (required) - Database
-- `id` (required) - Comma-separated Gene IDs
-- `retmode` - xml, text, asn.1 (default: xml)
-- `rettype` - gene_table, docsum
+**參數：**
+- `db=gene`（必要）- 資料庫
+- `id`（必要）- 逗號分隔的 Gene ID
+- `retmode` - xml、text、asn.1（預設：xml）
+- `rettype` - gene_table、docsum
 
-**Example Request:**
+**範例請求：**
 
 ```bash
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=gene&id=672&retmode=xml"
 ```
 
-**XML Response:** Contains detailed gene information including:
-- Gene nomenclature
-- Sequence locations
-- Transcript variants
-- Protein products
-- Gene Ontology annotations
-- Cross-references
-- Publications
+**XML 回應：** 包含詳細的基因資訊，包括：
+- 基因命名法
+- 序列位置
+- 轉錄本變體
+- 蛋白質產物
+- 基因本體註解
+- 交叉參考
+- 出版物
 
-### ELink - Related Records
+### ELink - 相關記錄
 
-Find related records in Gene or other databases.
+在 Gene 或其他資料庫中查找相關記錄。
 
-**Endpoint:** `elink.fcgi`
+**端點：** `elink.fcgi`
 
-**Parameters:**
-- `dbfrom=gene` (required) - Source database
-- `db` (required) - Target database (gene, nuccore, protein, pubmed, etc.)
-- `id` (required) - Gene ID(s)
+**參數：**
+- `dbfrom=gene`（必要）- 來源資料庫
+- `db`（必要）- 目標資料庫（gene、nuccore、protein、pubmed 等）
+- `id`（必要）- Gene ID
 
-**Example Request:**
+**範例請求：**
 
 ```bash
-# Get related PubMed articles
+# 取得相關的 PubMed 文章
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=gene&db=pubmed&id=672&retmode=json"
 ```
 
-### EInfo - Database Information
+### EInfo - 資料庫資訊
 
-Get information about the Gene database.
+取得關於 Gene 資料庫的資訊。
 
-**Endpoint:** `einfo.fcgi`
+**端點：** `einfo.fcgi`
 
-**Parameters:**
-- `db=gene` - Database to query
+**參數：**
+- `db=gene` - 要查詢的資料庫
 
-**Example Request:**
+**範例請求：**
 
 ```bash
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi?db=gene&retmode=json"
@@ -175,35 +175,35 @@ curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi?db=gene&retmode=j
 
 ## NCBI Datasets API
 
-The Datasets API provides streamlined access to gene data with metadata and sequences.
+Datasets API 提供簡化的基因資料存取，包含元資料和序列。
 
-### Base URL
+### 基礎 URL
 
 ```
 https://api.ncbi.nlm.nih.gov/datasets/v2alpha/gene
 ```
 
-### Authentication
+### 認證
 
-Include API key in request headers:
+在請求標頭中包含 API 金鑰：
 
 ```
 api-key: YOUR_API_KEY
 ```
 
-### Get Gene by ID
+### 按 ID 取得基因
 
-Retrieve gene data by Gene ID.
+透過 Gene ID 擷取基因資料。
 
-**Endpoint:** `GET /gene/id/{gene_id}`
+**端點：** `GET /gene/id/{gene_id}`
 
-**Example Request:**
+**範例請求：**
 
 ```bash
 curl "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/gene/id/672"
 ```
 
-**Response Format (JSON):**
+**回應格式（JSON）：**
 
 ```json
 {
@@ -246,29 +246,29 @@ curl "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/gene/id/672"
 }
 ```
 
-### Get Gene by Symbol
+### 按符號取得基因
 
-Retrieve gene data by symbol and organism.
+透過符號和生物體擷取基因資料。
 
-**Endpoint:** `GET /gene/symbol/{symbol}/taxon/{taxon}`
+**端點：** `GET /gene/symbol/{symbol}/taxon/{taxon}`
 
-**Parameters:**
-- `{symbol}` - Gene symbol (e.g., BRCA1)
-- `{taxon}` - Taxon ID (e.g., 9606 for human)
+**參數：**
+- `{symbol}` - 基因符號（例如：BRCA1）
+- `{taxon}` - 分類 ID（例如：9606 表示人類）
 
-**Example Request:**
+**範例請求：**
 
 ```bash
 curl "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/gene/symbol/BRCA1/taxon/9606"
 ```
 
-### Get Multiple Genes
+### 取得多個基因
 
-Retrieve data for multiple genes.
+擷取多個基因的資料。
 
-**Endpoint:** `POST /gene/id`
+**端點：** `POST /gene/id`
 
-**Request Body:**
+**請求主體：**
 
 ```json
 {
@@ -276,7 +276,7 @@ Retrieve data for multiple genes.
 }
 ```
 
-**Example Request:**
+**範例請求：**
 
 ```bash
 curl -X POST "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/gene/id" \
@@ -286,82 +286,82 @@ curl -X POST "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/gene/id" \
 
 ---
 
-## Authentication and Rate Limits
+## 認證和速率限制
 
-### Obtaining an API Key
+### 取得 API 金鑰
 
-1. Create an NCBI account at https://www.ncbi.nlm.nih.gov/account/
-2. Navigate to Settings → API Key Management
-3. Generate a new API key
-4. Include the key in requests
+1. 在 https://www.ncbi.nlm.nih.gov/account/ 建立 NCBI 帳戶
+2. 導航至設定 → API 金鑰管理
+3. 產生新的 API 金鑰
+4. 在請求中包含金鑰
 
-### Rate Limits
+### 速率限制
 
-**E-utilities:**
-- Without API key: 3 requests/second
-- With API key: 10 requests/second
+**E-utilities：**
+- 無 API 金鑰：每秒 3 個請求
+- 有 API 金鑰：每秒 10 個請求
 
-**Datasets API:**
-- Without API key: 5 requests/second
-- With API key: 10 requests/second
+**Datasets API：**
+- 無 API 金鑰：每秒 5 個請求
+- 有 API 金鑰：每秒 10 個請求
 
-### Usage Guidelines
+### 使用指南
 
-1. **Include email in requests:** Add `&email=your@email.com` to E-utilities requests
-2. **Implement rate limiting:** Use delays between requests
-3. **Use POST for large queries:** When working with many IDs
-4. **Cache results:** Store frequently accessed data locally
-5. **Handle errors gracefully:** Implement retry logic with exponential backoff
+1. **在請求中包含電子郵件：** 在 E-utilities 請求中添加 `&email=your@email.com`
+2. **實作速率限制：** 在請求之間使用延遲
+3. **對大型查詢使用 POST：** 處理多個 ID 時
+4. **快取結果：** 在本地儲存經常存取的資料
+5. **優雅地處理錯誤：** 實作帶有指數退避的重試邏輯
 
 ---
 
-## Error Handling
+## 錯誤處理
 
-### HTTP Status Codes
+### HTTP 狀態碼
 
-- `200 OK` - Successful request
-- `400 Bad Request` - Invalid parameters or malformed query
-- `404 Not Found` - Gene ID or symbol not found
-- `429 Too Many Requests` - Rate limit exceeded
-- `500 Internal Server Error` - Server error (retry with backoff)
+- `200 OK` - 請求成功
+- `400 Bad Request` - 無效的參數或格式錯誤的查詢
+- `404 Not Found` - 找不到 Gene ID 或符號
+- `429 Too Many Requests` - 超過速率限制
+- `500 Internal Server Error` - 伺服器錯誤（帶退避重試）
 
-### E-utilities Error Messages
+### E-utilities 錯誤訊息
 
-E-utilities return errors in the response body:
+E-utilities 在回應主體中回傳錯誤：
 
-**XML format:**
+**XML 格式：**
 ```xml
 <ERROR>Empty id list - nothing to do</ERROR>
 ```
 
-**JSON format:**
+**JSON 格式：**
 ```json
 {
   "error": "Invalid db name"
 }
 ```
 
-### Common Errors
+### 常見錯誤
 
-1. **Empty Result Set**
-   - Cause: Gene symbol or ID not found
-   - Solution: Verify spelling, check organism filter
+1. **空結果集**
+   - 原因：找不到基因符號或 ID
+   - 解決方案：驗證拼寫，檢查生物體過濾器
 
-2. **Rate Limit Exceeded**
-   - Cause: Too many requests
-   - Solution: Add delays, use API key
+2. **超過速率限制**
+   - 原因：請求過多
+   - 解決方案：添加延遲，使用 API 金鑰
 
-3. **Invalid Query Syntax**
-   - Cause: Malformed search term
-   - Solution: Use proper field tags (e.g., `[gene]`, `[organism]`)
+3. **無效的查詢語法**
+   - 原因：格式錯誤的搜尋詞彙
+   - 解決方案：使用正確的欄位標籤（例如：`[gene]`、`[organism]`）
 
-4. **Timeout**
-   - Cause: Large result set or slow connection
-   - Solution: Use History Server, reduce result size
+4. **逾時**
+   - 原因：大型結果集或連線緩慢
+   - 解決方案：使用 History Server，減少結果大小
 
-### Retry Strategy
+### 重試策略
 
-Implement exponential backoff for failed requests:
+對失敗的請求實作指數退避：
 
 ```python
 import time
@@ -380,25 +380,25 @@ def retry_request(func, max_attempts=3):
 
 ---
 
-## Common Taxon IDs
+## 常見分類 ID
 
-| Organism | Scientific Name | Taxon ID |
-|----------|----------------|----------|
-| Human | Homo sapiens | 9606 |
-| Mouse | Mus musculus | 10090 |
-| Rat | Rattus norvegicus | 10116 |
-| Zebrafish | Danio rerio | 7955 |
-| Fruit fly | Drosophila melanogaster | 7227 |
-| C. elegans | Caenorhabditis elegans | 6239 |
-| Yeast | Saccharomyces cerevisiae | 4932 |
-| Arabidopsis | Arabidopsis thaliana | 3702 |
-| E. coli | Escherichia coli | 562 |
+| 生物體 | 學名 | 分類 ID |
+|--------|------|---------|
+| 人類 | Homo sapiens | 9606 |
+| 小鼠 | Mus musculus | 10090 |
+| 大鼠 | Rattus norvegicus | 10116 |
+| 斑馬魚 | Danio rerio | 7955 |
+| 果蠅 | Drosophila melanogaster | 7227 |
+| 線蟲 | Caenorhabditis elegans | 6239 |
+| 酵母 | Saccharomyces cerevisiae | 4932 |
+| 擬南芥 | Arabidopsis thaliana | 3702 |
+| 大腸桿菌 | Escherichia coli | 562 |
 
 ---
 
-## Additional Resources
+## 其他資源
 
-- **E-utilities Documentation:** https://www.ncbi.nlm.nih.gov/books/NBK25501/
-- **Datasets API Documentation:** https://www.ncbi.nlm.nih.gov/datasets/docs/v2/
-- **Gene Database Help:** https://www.ncbi.nlm.nih.gov/gene/
-- **API Key Registration:** https://www.ncbi.nlm.nih.gov/account/
+- **E-utilities 文件：** https://www.ncbi.nlm.nih.gov/books/NBK25501/
+- **Datasets API 文件：** https://www.ncbi.nlm.nih.gov/datasets/docs/v2/
+- **Gene 資料庫說明：** https://www.ncbi.nlm.nih.gov/gene/
+- **API 金鑰註冊：** https://www.ncbi.nlm.nih.gov/account/

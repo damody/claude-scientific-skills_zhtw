@@ -1,182 +1,182 @@
-# CZ CELLxGENE Census Data Schema Reference
+# CZ CELLxGENE Census 資料結構描述參考
 
-## Overview
+## 概述
 
-The CZ CELLxGENE Census is a versioned collection of single-cell data built on the TileDB-SOMA framework. This reference documents the data structure, available metadata fields, and query syntax.
+CZ CELLxGENE Census 是建立在 TileDB-SOMA 框架上的單細胞資料版本化集合。本參考文件記錄資料結構、可用的元資料欄位和查詢語法。
 
-## High-Level Structure
+## 高階結構
 
-The Census is organized as a `SOMACollection` with two main components:
+Census 組織為一個 `SOMACollection`，包含兩個主要組件：
 
 ### 1. census_info
-Summary information including:
-- **summary**: Build date, cell counts, dataset statistics
-- **datasets**: All datasets from CELLxGENE Discover with metadata
-- **summary_cell_counts**: Cell counts stratified by metadata categories
+摘要資訊包含：
+- **summary**：建置日期、細胞計數、資料集統計
+- **datasets**：來自 CELLxGENE Discover 的所有資料集及其元資料
+- **summary_cell_counts**：按元資料類別分層的細胞計數
 
 ### 2. census_data
-Organism-specific `SOMAExperiment` objects:
-- **"homo_sapiens"**: Human single-cell data
-- **"mus_musculus"**: Mouse single-cell data
+物種特定的 `SOMAExperiment` 物件：
+- **"homo_sapiens"**：人類單細胞資料
+- **"mus_musculus"**：小鼠單細胞資料
 
-## Data Structure Per Organism
+## 每個物種的資料結構
 
-Each organism experiment contains:
+每個物種實驗包含：
 
-### obs (Cell Metadata)
-Cell-level annotations stored as a `SOMADataFrame`. Access via:
+### obs（細胞元資料）
+儲存為 `SOMADataFrame` 的細胞層級註釋。存取方式：
 ```python
 census["census_data"]["homo_sapiens"].obs
 ```
 
-### ms["RNA"] (Measurement)
-RNA measurement data including:
-- **X**: Data matrices with layers:
-  - `raw`: Raw count data
-  - `normalized`: (if available) Normalized counts
-- **var**: Gene metadata
-- **feature_dataset_presence_matrix**: Sparse boolean array showing which genes were measured in each dataset
+### ms["RNA"]（測量）
+RNA 測量資料包含：
+- **X**：具有層級的資料矩陣：
+  - `raw`：原始計數資料
+  - `normalized`：（如果可用）標準化計數
+- **var**：基因元資料
+- **feature_dataset_presence_matrix**：稀疏布林陣列，顯示每個資料集中測量了哪些基因
 
-## Cell Metadata Fields (obs)
+## 細胞元資料欄位（obs）
 
-### Required/Core Fields
+### 必要/核心欄位
 
-**Identity & Dataset:**
-- `soma_joinid`: Unique integer identifier for joins
-- `dataset_id`: Source dataset identifier
-- `is_primary_data`: Boolean flag (True = unique cell, False = duplicate across datasets)
+**身份與資料集：**
+- `soma_joinid`：用於連接的唯一整數識別碼
+- `dataset_id`：來源資料集識別碼
+- `is_primary_data`：布林標誌（True = 唯一細胞，False = 跨資料集重複）
 
-**Cell Type:**
-- `cell_type`: Human-readable cell type name
-- `cell_type_ontology_term_id`: Standardized ontology term (e.g., "CL:0000236")
+**細胞類型：**
+- `cell_type`：人類可讀的細胞類型名稱
+- `cell_type_ontology_term_id`：標準化本體論術語（例如 "CL:0000236"）
 
-**Tissue:**
-- `tissue`: Specific tissue name
-- `tissue_general`: Broader tissue category (useful for grouping)
-- `tissue_ontology_term_id`: Standardized ontology term
+**組織：**
+- `tissue`：特定組織名稱
+- `tissue_general`：更廣泛的組織類別（適用於分組）
+- `tissue_ontology_term_id`：標準化本體論術語
 
-**Assay:**
-- `assay`: Sequencing technology used
-- `assay_ontology_term_id`: Standardized ontology term
+**測序技術：**
+- `assay`：使用的定序技術
+- `assay_ontology_term_id`：標準化本體論術語
 
-**Disease:**
-- `disease`: Disease status or condition
-- `disease_ontology_term_id`: Standardized ontology term
+**疾病：**
+- `disease`：疾病狀態或病況
+- `disease_ontology_term_id`：標準化本體論術語
 
-**Donor:**
-- `donor_id`: Unique donor identifier
-- `sex`: Biological sex (male, female, unknown)
-- `self_reported_ethnicity`: Ethnicity information
-- `development_stage`: Life stage (adult, child, embryonic, etc.)
-- `development_stage_ontology_term_id`: Standardized ontology term
+**捐贈者：**
+- `donor_id`：唯一捐贈者識別碼
+- `sex`：生物性別（male、female、unknown）
+- `self_reported_ethnicity`：族裔資訊
+- `development_stage`：生命階段（adult、child、embryonic 等）
+- `development_stage_ontology_term_id`：標準化本體論術語
 
-**Organism:**
-- `organism`: Scientific name (Homo sapiens, Mus musculus)
-- `organism_ontology_term_id`: Standardized ontology term
+**生物體：**
+- `organism`：學名（Homo sapiens、Mus musculus）
+- `organism_ontology_term_id`：標準化本體論術語
 
-**Technical:**
-- `suspension_type`: Sample preparation type (cell, nucleus, na)
+**技術：**
+- `suspension_type`：樣品製備類型（cell、nucleus、na）
 
-## Gene Metadata Fields (var)
+## 基因元資料欄位（var）
 
-Access via:
+存取方式：
 ```python
 census["census_data"]["homo_sapiens"].ms["RNA"].var
 ```
 
-**Available Fields:**
-- `soma_joinid`: Unique integer identifier for joins
-- `feature_id`: Ensembl gene ID (e.g., "ENSG00000161798")
-- `feature_name`: Gene symbol (e.g., "FOXP2")
-- `feature_length`: Gene length in base pairs
+**可用欄位：**
+- `soma_joinid`：用於連接的唯一整數識別碼
+- `feature_id`：Ensembl 基因 ID（例如 "ENSG00000161798"）
+- `feature_name`：基因符號（例如 "FOXP2"）
+- `feature_length`：基因長度，以鹼基對為單位
 
-## Value Filter Syntax
+## 值篩選語法
 
-Queries use Python-like expressions for filtering. The syntax is processed by TileDB-SOMA.
+查詢使用類似 Python 的表達式進行篩選。語法由 TileDB-SOMA 處理。
 
-### Comparison Operators
-- `==`: Equal to
-- `!=`: Not equal to
-- `<`, `>`, `<=`, `>=`: Numeric comparisons
-- `in`: Membership test (e.g., `feature_id in ['ENSG00000161798', 'ENSG00000188229']`)
+### 比較運算子
+- `==`：等於
+- `!=`：不等於
+- `<`、`>`、`<=`、`>=`：數值比較
+- `in`：成員資格測試（例如 `feature_id in ['ENSG00000161798', 'ENSG00000188229']`）
 
-### Logical Operators
-- `and`, `&`: Logical AND
-- `or`, `|`: Logical OR
+### 邏輯運算子
+- `and`、`&`：邏輯 AND
+- `or`、`|`：邏輯 OR
 
-### Examples
+### 範例
 
-**Single condition:**
+**單一條件：**
 ```python
 value_filter="cell_type == 'B cell'"
 ```
 
-**Multiple conditions with AND:**
+**使用 AND 的多個條件：**
 ```python
 value_filter="cell_type == 'B cell' and tissue_general == 'lung' and is_primary_data == True"
 ```
 
-**Using IN for multiple values:**
+**使用 IN 匹配多個值：**
 ```python
 value_filter="tissue in ['lung', 'liver', 'kidney']"
 ```
 
-**Complex condition:**
+**複雜條件：**
 ```python
 value_filter="(cell_type == 'neuron' or cell_type == 'astrocyte') and disease != 'normal'"
 ```
 
-**Filtering genes:**
+**篩選基因：**
 ```python
 var_value_filter="feature_name in ['CD4', 'CD8A', 'CD19']"
 ```
 
-## Data Inclusion Criteria
+## 資料納入標準
 
-The Census includes all data from CZ CELLxGENE Discover meeting:
+Census 包含來自 CZ CELLxGENE Discover 符合以下條件的所有資料：
 
-1. **Species**: Human (*Homo sapiens*) or mouse (*Mus musculus*)
-2. **Technology**: Approved sequencing technologies for RNA
-3. **Count Type**: Raw counts only (no processed/normalized-only data)
-4. **Metadata**: Standardized following CELLxGENE schema
-5. **Both spatial and non-spatial data**: Includes traditional and spatial transcriptomics
+1. **物種**：人類（*Homo sapiens*）或小鼠（*Mus musculus*）
+2. **技術**：經批准的 RNA 定序技術
+3. **計數類型**：僅原始計數（無處理過/僅標準化的資料）
+4. **元資料**：遵循 CELLxGENE 結構描述進行標準化
+5. **空間和非空間資料**：包含傳統和空間轉錄組學
 
-## Important Data Characteristics
+## 重要資料特性
 
-### Duplicate Cells
-Cells may appear across multiple datasets. Use `is_primary_data == True` to filter for unique cells in most analyses.
+### 重複細胞
+細胞可能出現在多個資料集中。在大多數分析中使用 `is_primary_data == True` 篩選唯一細胞。
 
-### Count Types
-The Census includes:
-- **Molecule counts**: From UMI-based methods
-- **Full-gene sequencing read counts**: From non-UMI methods
-These may need different normalization approaches.
+### 計數類型
+Census 包含：
+- **分子計數**：來自基於 UMI 的方法
+- **全基因定序讀數計數**：來自非 UMI 方法
+這些可能需要不同的標準化方法。
 
-### Versioning
-Census releases are versioned (e.g., "2023-07-25", "stable"). Always specify version for reproducible analysis:
+### 版本控制
+Census 版本有版本編號（例如 "2023-07-25"、"stable"）。始終指定版本以進行可重現的分析：
 ```python
 census = cellxgene_census.open_soma(census_version="2023-07-25")
 ```
 
-## Dataset Presence Matrix
+## 資料集存在矩陣
 
-Access which genes were measured in each dataset:
+存取每個資料集中測量了哪些基因：
 ```python
 presence_matrix = census["census_data"]["homo_sapiens"].ms["RNA"]["feature_dataset_presence_matrix"]
 ```
 
-This sparse boolean matrix helps understand:
-- Gene coverage across datasets
-- Which datasets to include for specific gene analyses
-- Technical batch effects related to gene coverage
+這個稀疏布林矩陣有助於了解：
+- 跨資料集的基因覆蓋率
+- 特定基因分析應包含哪些資料集
+- 與基因覆蓋率相關的技術批次效應
 
-## SOMA Object Types
+## SOMA 物件類型
 
-Core TileDB-SOMA objects used:
-- **DataFrame**: Tabular data (obs, var)
-- **SparseNDArray**: Sparse matrices (X layers, presence matrix)
-- **DenseNDArray**: Dense arrays (less common)
-- **Collection**: Container for related objects
-- **Experiment**: Top-level container for measurements
-- **SOMAScene**: Spatial transcriptomics scenes
-- **obs_spatial_presence**: Spatial data availability
+使用的核心 TileDB-SOMA 物件：
+- **DataFrame**：表格資料（obs、var）
+- **SparseNDArray**：稀疏矩陣（X 層、存在矩陣）
+- **DenseNDArray**：密集陣列（較不常見）
+- **Collection**：相關物件的容器
+- **Experiment**：測量的頂層容器
+- **SOMAScene**：空間轉錄組學場景
+- **obs_spatial_presence**：空間資料可用性

@@ -1,20 +1,20 @@
-# SimPy Monitoring and Data Collection
+# SimPy 監控與資料收集
 
-This guide covers techniques for collecting data and monitoring simulation behavior in SimPy.
+本指南涵蓋在 SimPy 中收集資料和監控模擬行為的技術。
 
-## Monitoring Strategy
+## 監控策略
 
-Before implementing monitoring, define three things:
+在實施監控之前，定義三件事：
 
-1. **What to monitor**: Processes, resources, events, or system state
-2. **When to monitor**: On change, at intervals, or at specific events
-3. **How to store data**: Lists, files, databases, or real-time output
+1. **監控什麼**：流程、資源、事件或系統狀態
+2. **何時監控**：在變更時、定期間隔或特定事件時
+3. **如何儲存資料**：列表、檔案、資料庫或即時輸出
 
-## 1. Process Monitoring
+## 1. 流程監控
 
-### State Variable Tracking
+### 狀態變數追蹤
 
-Track process state by recording variables when they change.
+透過在變數變更時記錄來追蹤流程狀態。
 
 ```python
 import simpy
@@ -43,7 +43,7 @@ for entry in log:
     print(entry)
 ```
 
-### Time-Series Data Collection
+### 時間序列資料收集
 
 ```python
 import simpy
@@ -74,7 +74,7 @@ for time, queue, util in data_log:
     print(f'Time {time}: Queue={queue}, Utilization={util:.2f}')
 ```
 
-### Multiple Variable Tracking
+### 多變數追蹤
 
 ```python
 import simpy
@@ -113,11 +113,11 @@ env.run()
 print(f'Collected {len(data.timestamps)} data points')
 ```
 
-## 2. Resource Monitoring
+## 2. 資源監控
 
-### Monkey-Patching Resources
+### 猴子補丁資源
 
-Patch resource methods to intercept and log operations.
+對資源方法進行補丁以攔截和記錄操作。
 
 ```python
 import simpy
@@ -167,9 +167,9 @@ for entry in log:
     print(entry)
 ```
 
-### Resource Subclassing
+### 資源子類別化
 
-Create custom resource classes with built-in monitoring.
+建立具有內建監控的自訂資源類別。
 
 ```python
 import simpy
@@ -219,7 +219,7 @@ print(f'\nAverage utilization: {resource.average_utilization():.2%}')
 print(f'Total operations: {len(resource.data)}')
 ```
 
-### Container Level Monitoring
+### 容器水位監控
 
 ```python
 import simpy
@@ -263,11 +263,11 @@ for time, level in container.level_data:
     print(f'Time {time}: Level={level}')
 ```
 
-## 3. Event Tracing
+## 3. 事件追蹤
 
-### Environment Step Monitoring
+### 環境步驟監控
 
-Monitor all events by patching the environment's step function.
+透過對環境的步驟函式進行補丁來監控所有事件。
 
 ```python
 import simpy
@@ -303,9 +303,9 @@ env.process(process(env, 'Process 2'))
 env.run()
 ```
 
-### Event Scheduling Monitor
+### 事件排程監控
 
-Track when events are scheduled.
+追蹤事件何時被排程。
 
 ```python
 import simpy
@@ -335,9 +335,9 @@ for time, priority, event_type in env.scheduled_events:
     print(f'Time {time}, Priority {priority}, Type {event_type}')
 ```
 
-## 4. Statistical Monitoring
+## 4. 統計監控
 
-### Queue Statistics
+### 佇列統計
 
 ```python
 import simpy
@@ -386,9 +386,9 @@ print(f'Average wait time: {stats.average_wait_time():.2f}')
 print(f'Average queue length: {stats.average_queue_length():.2f}')
 ```
 
-## 5. Data Export
+## 5. 資料匯出
 
-### CSV Export
+### CSV 匯出
 
 ```python
 import simpy
@@ -415,7 +415,7 @@ export_to_csv(data, 'simulation_data.csv')
 print('Data exported to simulation_data.csv')
 ```
 
-### Real-time Plotting (requires matplotlib)
+### 即時繪圖（需要 matplotlib）
 
 ```python
 import simpy
@@ -454,22 +454,22 @@ env.run()
 plotter.plot('Process Value Over Time')
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Minimize overhead**: Only monitor what's necessary; excessive logging can slow simulations
+1. **最小化開銷**：只監控必要的內容；過度記錄可能會減慢模擬速度
 
-2. **Structured data**: Use classes or named tuples for complex data points
+2. **結構化資料**：對複雜資料點使用類別或具名元組
 
-3. **Time-stamping**: Always include timestamps with monitored data
+3. **時間戳記**：監控資料始終包含時間戳記
 
-4. **Aggregation**: For long simulations, aggregate data rather than storing every event
+4. **聚合**：對於長時間模擬，聚合資料而不是儲存每個事件
 
-5. **Lazy evaluation**: Consider collecting raw data and computing statistics after simulation
+5. **延遲評估**：考慮收集原始資料並在模擬後計算統計
 
-6. **Memory management**: For very long simulations, periodically flush data to disk
+6. **記憶體管理**：對於非常長的模擬，定期將資料刷新到磁碟
 
-7. **Validation**: Verify monitoring code doesn't affect simulation behavior
+7. **驗證**：確認監控程式碼不會影響模擬行為
 
-8. **Separation of concerns**: Keep monitoring code separate from simulation logic
+8. **關注點分離**：將監控程式碼與模擬邏輯分開
 
-9. **Reusable components**: Create generic monitoring classes that can be reused across simulations
+9. **可重用元件**：建立可在各模擬中重用的通用監控類別

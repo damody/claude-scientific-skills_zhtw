@@ -1,345 +1,345 @@
-# Complexity and Entropy Analysis
+# 複雜度和熵分析
 
-## Overview
+## 概述
 
-Complexity measures quantify the irregularity, unpredictability, and multiscale structure of time series signals. NeuroKit2 provides comprehensive entropy, fractal dimension, and nonlinear dynamics measures for assessing physiological signal complexity.
+複雜度測量量化時間序列訊號的不規則性、不可預測性和多尺度結構。NeuroKit2 提供全面的熵、碎形維度和非線性動力學測量，用於評估生理訊號複雜度。
 
-## Main Function
+## 主要函數
 
 ### complexity()
 
-Compute multiple complexity metrics simultaneously for exploratory analysis.
+同時計算多個複雜度指標用於探索性分析。
 
 ```python
 complexity_indices = nk.complexity(signal, sampling_rate=1000, show=False)
 ```
 
-**Returns:**
-- DataFrame with numerous complexity measures across categories:
-  - Entropy indices
-  - Fractal dimensions
-  - Nonlinear dynamics measures
-  - Information-theoretic metrics
+**返回：**
+- 包含各類別眾多複雜度測量的 DataFrame：
+  - 熵指標
+  - 碎形維度
+  - 非線性動力學測量
+  - 資訊理論指標
 
-**Use case:**
-- Exploratory analysis to identify relevant measures
-- Comprehensive signal characterization
-- Comparative studies across signals
+**使用情境：**
+- 識別相關測量的探索性分析
+- 全面的訊號特徵化
+- 跨訊號比較研究
 
-## Parameter Optimization
+## 參數最佳化
 
-Before computing complexity measures, optimal embedding parameters should be determined:
+在計算複雜度測量之前，應確定最佳嵌入參數：
 
 ### complexity_delay()
 
-Determine optimal time delay (τ) for phase space reconstruction.
+確定相空間重建的最佳時間延遲（τ）。
 
 ```python
 optimal_tau = nk.complexity_delay(signal, delay_max=100, method='fraser1986', show=False)
 ```
 
-**Methods:**
-- `'fraser1986'`: Mutual information first minimum
-- `'theiler1990'`: Autocorrelation first zero crossing
-- `'casdagli1991'`: Cao's method
+**方法：**
+- `'fraser1986'`：互資訊第一最小值
+- `'theiler1990'`：自相關第一零交叉
+- `'casdagli1991'`：Cao 方法
 
-**Use for:** Embedding delay in entropy, attractor reconstruction
+**用途：**熵計算中的嵌入延遲、吸引子重建
 
 ### complexity_dimension()
 
-Determine optimal embedding dimension (m).
+確定最佳嵌入維度（m）。
 
 ```python
 optimal_m = nk.complexity_dimension(signal, delay=None, dimension_max=20,
                                     method='afn', show=False)
 ```
 
-**Methods:**
-- `'afn'`: Average False Nearest Neighbors
-- `'fnn'`: False Nearest Neighbors
-- `'correlation'`: Correlation dimension saturation
+**方法：**
+- `'afn'`：平均偽最近鄰
+- `'fnn'`：偽最近鄰
+- `'correlation'`：相關維度飽和
 
-**Use for:** Entropy calculations, phase space reconstruction
+**用途：**熵計算、相空間重建
 
 ### complexity_tolerance()
 
-Determine optimal tolerance (r) for entropy measures.
+確定熵測量的最佳容差（r）。
 
 ```python
 optimal_r = nk.complexity_tolerance(signal, method='sd', show=False)
 ```
 
-**Methods:**
-- `'sd'`: Standard deviation-based (0.1-0.25 × SD typical)
-- `'maxApEn'`: Maximize ApEn
-- `'recurrence'`: Based on recurrence rate
+**方法：**
+- `'sd'`：基於標準差（典型為 0.1-0.25 × SD）
+- `'maxApEn'`：最大化 ApEn
+- `'recurrence'`：基於遞迴率
 
-**Use for:** Approximate entropy, sample entropy
+**用途：**近似熵、樣本熵
 
 ### complexity_k()
 
-Determine optimal k parameter for Higuchi fractal dimension.
+確定 Higuchi 碎形維度的最佳 k 參數。
 
 ```python
 optimal_k = nk.complexity_k(signal, k_max=20, show=False)
 ```
 
-**Use for:** Higuchi fractal dimension calculation
+**用途：**Higuchi 碎形維度計算
 
-## Entropy Measures
+## 熵測量
 
-Entropy quantifies randomness, unpredictability, and information content.
+熵量化隨機性、不可預測性和資訊含量。
 
 ### entropy_shannon()
 
-Shannon entropy - classical information-theoretic measure.
+Shannon 熵 - 經典資訊理論測量。
 
 ```python
 shannon_entropy = nk.entropy_shannon(signal)
 ```
 
-**Interpretation:**
-- Higher: more random, less predictable
-- Lower: more regular, predictable
-- Units: bits (information)
+**解讀：**
+- 較高：更隨機、較不可預測
+- 較低：更規則、可預測
+- 單位：位元（資訊）
 
-**Use cases:**
-- General randomness assessment
-- Information content
-- Signal irregularity
+**使用情境：**
+- 一般隨機性評估
+- 資訊含量
+- 訊號不規則性
 
 ### entropy_approximate()
 
-Approximate Entropy (ApEn) - regularity of patterns.
+近似熵（ApEn）- 模式的規則性。
 
 ```python
 apen = nk.entropy_approximate(signal, delay=1, dimension=2, tolerance='sd')
 ```
 
-**Parameters:**
-- `delay`: Time delay (τ)
-- `dimension`: Embedding dimension (m)
-- `tolerance`: Similarity threshold (r)
+**參數：**
+- `delay`：時間延遲（τ）
+- `dimension`：嵌入維度（m）
+- `tolerance`：相似性閾值（r）
 
-**Interpretation:**
-- Lower ApEn: more regular, self-similar patterns
-- Higher ApEn: more complex, irregular
-- Sensitive to signal length (≥100-300 points recommended)
+**解讀：**
+- 較低的 ApEn：更規則、自相似的模式
+- 較高的 ApEn：更複雜、不規則
+- 對訊號長度敏感（建議 ≥100-300 點）
 
-**Physiological applications:**
-- HRV: reduced ApEn in heart disease
-- EEG: altered ApEn in neurological disorders
+**生理應用：**
+- HRV：心臟疾病時 ApEn 降低
+- EEG：神經系統疾病時 ApEn 改變
 
 ### entropy_sample()
 
-Sample Entropy (SampEn) - improved ApEn.
+樣本熵（SampEn）- 改進的 ApEn。
 
 ```python
 sampen = nk.entropy_sample(signal, delay=1, dimension=2, tolerance='sd')
 ```
 
-**Advantages over ApEn:**
-- Less dependent on signal length
-- More consistent across recordings
-- No self-matching bias
+**相對 ApEn 的優點：**
+- 較不依賴訊號長度
+- 跨記錄更一致
+- 無自我匹配偏差
 
-**Interpretation:**
-- Same as ApEn but more reliable
-- Preferred in most applications
+**解讀：**
+- 與 ApEn 相同但更可靠
+- 在大多數應用中更受青睞
 
-**Typical values:**
-- HRV: 0.5-2.5 (context-dependent)
-- EEG: 0.3-1.5
+**典型值：**
+- HRV：0.5-2.5（依情境而定）
+- EEG：0.3-1.5
 
 ### entropy_multiscale()
 
-Multiscale Entropy (MSE) - complexity across temporal scales.
+多尺度熵（MSE）- 跨時間尺度的複雜度。
 
 ```python
 mse = nk.entropy_multiscale(signal, scale=20, dimension=2, tolerance='sd',
                             method='MSEn', show=False)
 ```
 
-**Methods:**
-- `'MSEn'`: Multiscale Sample Entropy
-- `'MSApEn'`: Multiscale Approximate Entropy
-- `'CMSE'`: Composite Multiscale Entropy
-- `'RCMSE'`: Refined Composite Multiscale Entropy
+**方法：**
+- `'MSEn'`：多尺度樣本熵
+- `'MSApEn'`：多尺度近似熵
+- `'CMSE'`：複合多尺度熵
+- `'RCMSE'`：精煉複合多尺度熵
 
-**Interpretation:**
-- Entropy at different coarse-graining scales
-- Healthy/complex systems: high entropy across multiple scales
-- Diseased/simpler systems: reduced entropy, especially at larger scales
+**解讀：**
+- 不同粗粒化尺度的熵
+- 健康/複雜系統：多個尺度上的高熵
+- 疾病/簡單系統：熵降低，特別是在較大尺度
 
-**Use cases:**
-- Distinguish true complexity from randomness
-- White noise: constant across scales
-- Pink noise/complexity: structured variation across scales
+**使用情境：**
+- 區分真正的複雜度和隨機性
+- 白噪音：跨尺度恆定
+- 粉紅噪音/複雜度：跨尺度的結構化變異
 
 ### entropy_fuzzy()
 
-Fuzzy Entropy - uses fuzzy membership functions.
+模糊熵 - 使用模糊隸屬函數。
 
 ```python
 fuzzen = nk.entropy_fuzzy(signal, delay=1, dimension=2, tolerance='sd', r=0.2)
 ```
 
-**Advantages:**
-- More stable with noisy signals
-- Fuzzy boundaries for pattern matching
-- Better performance with short signals
+**優點：**
+- 對雜訊訊號更穩定
+- 模式匹配的模糊邊界
+- 對短訊號表現更好
 
 ### entropy_permutation()
 
-Permutation Entropy - based on ordinal patterns.
+排列熵 - 基於序數模式。
 
 ```python
 perment = nk.entropy_permutation(signal, delay=1, dimension=3)
 ```
 
-**Method:**
-- Encodes signal into ordinal patterns (permutations)
-- Counts pattern frequencies
-- Robust to noise and non-stationarity
+**方法：**
+- 將訊號編碼為序數模式（排列）
+- 計算模式頻率
+- 對雜訊和非平穩性穩健
 
-**Interpretation:**
-- Lower: more regular ordinal structure
-- Higher: more random ordering
+**解讀：**
+- 較低：更規則的序數結構
+- 較高：更隨機的排序
 
-**Use cases:**
-- EEG analysis
-- Anesthesia depth monitoring
-- Fast computation
+**使用情境：**
+- EEG 分析
+- 麻醉深度監測
+- 快速計算
 
 ### entropy_spectral()
 
-Spectral Entropy - based on power spectrum.
+頻譜熵 - 基於功率譜。
 
 ```python
 spec_ent = nk.entropy_spectral(signal, sampling_rate=1000, bands=None)
 ```
 
-**Method:**
-- Normalized Shannon entropy of power spectrum
-- Quantifies frequency distribution regularity
+**方法：**
+- 功率譜的正規化 Shannon 熵
+- 量化頻率分佈的規則性
 
-**Interpretation:**
-- 0: Single frequency (pure tone)
-- 1: White noise (flat spectrum)
+**解讀：**
+- 0：單一頻率（純音）
+- 1：白噪音（平坦頻譜）
 
-**Use cases:**
-- EEG: spectral distribution changes with states
-- Anesthesia monitoring
+**使用情境：**
+- EEG：頻譜分佈隨狀態變化
+- 麻醉監測
 
 ### entropy_svd()
 
-Singular Value Decomposition Entropy.
+奇異值分解熵。
 
 ```python
 svd_ent = nk.entropy_svd(signal, delay=1, dimension=2)
 ```
 
-**Method:**
-- SVD on trajectory matrix
-- Entropy of singular value distribution
+**方法：**
+- 對軌跡矩陣進行 SVD
+- 奇異值分佈的熵
 
-**Use cases:**
-- Attractor complexity
-- Deterministic vs. stochastic dynamics
+**使用情境：**
+- 吸引子複雜度
+- 確定性與隨機動力學
 
 ### entropy_differential()
 
-Differential Entropy - continuous analog of Shannon entropy.
+微分熵 - Shannon 熵的連續類比。
 
 ```python
 diff_ent = nk.entropy_differential(signal)
 ```
 
-**Use for:** Continuous probability distributions
+**用途：**連續機率分佈
 
-### Other Entropy Measures
+### 其他熵測量
 
-**Tsallis Entropy:**
+**Tsallis 熵：**
 ```python
 tsallis = nk.entropy_tsallis(signal, q=2)
 ```
-- Generalized entropy with parameter q
-- q=1 reduces to Shannon entropy
+- 帶參數 q 的廣義熵
+- q=1 還原為 Shannon 熵
 
-**Rényi Entropy:**
+**Rényi 熵：**
 ```python
 renyi = nk.entropy_renyi(signal, alpha=2)
 ```
-- Generalized entropy with parameter α
+- 帶參數 α 的廣義熵
 
-**Additional specialized entropies:**
-- `entropy_attention()`: Attention entropy
-- `entropy_grid()`: Grid-based entropy
-- `entropy_increment()`: Increment entropy
-- `entropy_slope()`: Slope entropy
-- `entropy_dispersion()`: Dispersion entropy
-- `entropy_symbolicdynamic()`: Symbolic dynamics entropy
-- `entropy_range()`: Range entropy
-- `entropy_phase()`: Phase entropy
-- `entropy_quadratic()`, `entropy_cumulative_residual()`, `entropy_rate()`: Specialized variants
+**其他專門熵：**
+- `entropy_attention()`：注意力熵
+- `entropy_grid()`：網格熵
+- `entropy_increment()`：增量熵
+- `entropy_slope()`：斜率熵
+- `entropy_dispersion()`：離散熵
+- `entropy_symbolicdynamic()`：符號動力學熵
+- `entropy_range()`：範圍熵
+- `entropy_phase()`：相位熵
+- `entropy_quadratic()`、`entropy_cumulative_residual()`、`entropy_rate()`：專門變體
 
-## Fractal Dimension Measures
+## 碎形維度測量
 
-Fractal dimensions characterize self-similarity and roughness.
+碎形維度描述自相似性和粗糙度特徵。
 
 ### fractal_katz()
 
-Katz Fractal Dimension - waveform complexity.
+Katz 碎形維度 - 波形複雜度。
 
 ```python
 kfd = nk.fractal_katz(signal)
 ```
 
-**Interpretation:**
-- 1: straight line
-- >1: increasing roughness and complexity
-- Typical range: 1.0-2.0
+**解讀：**
+- 1：直線
+- >1：粗糙度和複雜度增加
+- 典型範圍：1.0-2.0
 
-**Advantages:**
-- Simple, fast computation
-- No parameter tuning
+**優點：**
+- 簡單、快速計算
+- 無需參數調整
 
 ### fractal_higuchi()
 
-Higuchi Fractal Dimension - self-similarity.
+Higuchi 碎形維度 - 自相似性。
 
 ```python
 hfd = nk.fractal_higuchi(signal, k_max=10)
 ```
 
-**Method:**
-- Constructs k new time series from original
-- Estimates dimension from length-scale relationship
+**方法：**
+- 從原始訊號構建 k 個新時間序列
+- 從長度-尺度關係估計維度
 
-**Interpretation:**
-- Higher HFD: more complex, irregular
-- Lower HFD: smoother, more regular
+**解讀：**
+- 較高的 HFD：更複雜、不規則
+- 較低的 HFD：更平滑、規則
 
-**Use cases:**
-- EEG complexity
-- HRV analysis
-- Epilepsy detection
+**使用情境：**
+- EEG 複雜度
+- HRV 分析
+- 癲癇檢測
 
 ### fractal_petrosian()
 
-Petrosian Fractal Dimension - rapid estimation.
+Petrosian 碎形維度 - 快速估計。
 
 ```python
 pfd = nk.fractal_petrosian(signal)
 ```
 
-**Advantages:**
-- Fast computation
-- Direct calculation (no curve fitting)
+**優點：**
+- 快速計算
+- 直接計算（無需曲線擬合）
 
 ### fractal_sevcik()
 
-Sevcik Fractal Dimension - normalized waveform complexity.
+Sevcik 碎形維度 - 正規化波形複雜度。
 
 ```python
 sfd = nk.fractal_sevcik(signal)
@@ -347,7 +347,7 @@ sfd = nk.fractal_sevcik(signal)
 
 ### fractal_nld()
 
-Normalized Length Density - curve length-based measure.
+正規化長度密度 - 基於曲線長度的測量。
 
 ```python
 nld = nk.fractal_nld(signal)
@@ -355,112 +355,112 @@ nld = nk.fractal_nld(signal)
 
 ### fractal_psdslope()
 
-Power Spectral Density Slope - frequency-domain fractal measure.
+功率譜密度斜率 - 頻域碎形測量。
 
 ```python
 slope = nk.fractal_psdslope(signal, sampling_rate=1000)
 ```
 
-**Method:**
-- Linear fit to log-log power spectrum
-- Slope β relates to fractal dimension
+**方法：**
+- 對數-對數功率譜的線性擬合
+- 斜率 β 與碎形維度相關
 
-**Interpretation:**
-- β ≈ 0: White noise (random)
-- β ≈ -1: Pink noise (1/f, complex)
-- β ≈ -2: Brown noise (Brownian motion)
+**解讀：**
+- β ≈ 0：白噪音（隨機）
+- β ≈ -1：粉紅噪音（1/f，複雜）
+- β ≈ -2：棕噪音（布朗運動）
 
 ### fractal_hurst()
 
-Hurst Exponent - long-range dependence.
+Hurst 指數 - 長程相依性。
 
 ```python
 hurst = nk.fractal_hurst(signal, show=False)
 ```
 
-**Interpretation:**
-- H < 0.5: Anti-persistent (mean-reverting)
-- H = 0.5: Random walk (white noise)
-- H > 0.5: Persistent (trending, long-memory)
+**解讀：**
+- H < 0.5：反持續性（均值回歸）
+- H = 0.5：隨機遊走（白噪音）
+- H > 0.5：持續性（趨勢、長記憶）
 
-**Use cases:**
-- Assess long-term correlations
-- Financial time series
-- HRV analysis
+**使用情境：**
+- 評估長期相關性
+- 金融時間序列
+- HRV 分析
 
 ### fractal_correlation()
 
-Correlation Dimension - attractor dimensionality.
+相關維度 - 吸引子維度。
 
 ```python
 corr_dim = nk.fractal_correlation(signal, delay=1, dimension=10, radius=64)
 ```
 
-**Method:**
-- Grassberger-Procaccia algorithm
-- Estimates dimension of attractor in phase space
+**方法：**
+- Grassberger-Procaccia 演算法
+- 估計相空間中吸引子的維度
 
-**Interpretation:**
-- Low dimension: deterministic, low-dimensional chaos
-- High dimension: high-dimensional chaos or noise
+**解讀：**
+- 低維度：確定性、低維混沌
+- 高維度：高維混沌或雜訊
 
 ### fractal_dfa()
 
-Detrended Fluctuation Analysis - scaling exponent.
+去趨勢波動分析 - 尺度指數。
 
 ```python
 dfa_alpha = nk.fractal_dfa(signal, multifractal=False, q=2, show=False)
 ```
 
-**Interpretation:**
-- α < 0.5: Anti-correlated
-- α = 0.5: Uncorrelated (white noise)
-- α = 1.0: 1/f noise (pink noise, healthy complexity)
-- α = 1.5: Brownian noise
-- α > 1.0: Persistent long-range correlations
+**解讀：**
+- α < 0.5：反相關
+- α = 0.5：不相關（白噪音）
+- α = 1.0：1/f 噪音（粉紅噪音，健康複雜度）
+- α = 1.5：布朗噪音
+- α > 1.0：持續長程相關
 
-**HRV applications:**
-- α1 (short-term, 4-11 beats): Reflects autonomic regulation
-- α2 (long-term, >11 beats): Long-range correlations
-- Reduced α1: Cardiac pathology
+**HRV 應用：**
+- α1（短期，4-11 拍）：反映自主神經調節
+- α2（長期，>11 拍）：長程相關
+- α1 降低：心臟病理
 
 ### fractal_mfdfa()
 
-Multifractal DFA - multiscale fractal properties.
+多重碎形 DFA - 多尺度碎形屬性。
 
 ```python
 mfdfa_results = nk.fractal_mfdfa(signal, q=None, show=False)
 ```
 
-**Method:**
-- Extends DFA to multiple q-orders
-- Characterizes multifractal spectrum
+**方法：**
+- 將 DFA 擴展到多個 q 階
+- 描述多重碎形頻譜特徵
 
-**Returns:**
-- Generalized Hurst exponents h(q)
-- Multifractal spectrum f(α)
-- Width indicates multifractality strength
+**返回：**
+- 廣義 Hurst 指數 h(q)
+- 多重碎形頻譜 f(α)
+- 寬度表示多重碎形強度
 
-**Use cases:**
-- Detect multifractal structure
-- HRV multifractality in health vs. disease
-- EEG multiscale dynamics
+**使用情境：**
+- 檢測多重碎形結構
+- 健康與疾病的 HRV 多重碎形性
+- EEG 多尺度動力學
 
 ### fractal_tmf()
 
-Multifractal Nonlinearity - deviation from monofractal.
+多重碎形非線性 - 偏離單碎形。
 
 ```python
 tmf = nk.fractal_tmf(signal)
 ```
 
-**Interpretation:**
-- Quantifies departure from simple scaling
-- Higher: more multifractal structure
+**解讀：**
+- 量化偏離簡單尺度的程度
+- 較高：更多多重碎形結構
 
 ### fractal_density()
 
-Density Fractal Dimension.
+密度碎形維度。
 
 ```python
 density_fd = nk.fractal_density(signal)
@@ -468,245 +468,245 @@ density_fd = nk.fractal_density(signal)
 
 ### fractal_linelength()
 
-Line Length - total variation measure.
+線長度 - 總變異測量。
 
 ```python
 linelength = nk.fractal_linelength(signal)
 ```
 
-**Use case:**
-- Simple complexity proxy
-- EEG seizure detection
+**使用情境：**
+- 簡單的複雜度代理
+- EEG 癲癇發作檢測
 
-## Nonlinear Dynamics
+## 非線性動力學
 
 ### complexity_lyapunov()
 
-Largest Lyapunov Exponent - chaos and divergence.
+最大 Lyapunov 指數 - 混沌和發散。
 
 ```python
 lyap = nk.complexity_lyapunov(signal, delay=None, dimension=None,
                               sampling_rate=1000, show=False)
 ```
 
-**Interpretation:**
-- λ < 0: Stable fixed point
-- λ = 0: Periodic orbit
-- λ > 0: Chaotic (nearby trajectories diverge exponentially)
+**解讀：**
+- λ < 0：穩定不動點
+- λ = 0：週期軌道
+- λ > 0：混沌（鄰近軌跡指數發散）
 
-**Use cases:**
-- Detect chaos in physiological signals
-- HRV: positive Lyapunov suggests nonlinear dynamics
-- EEG: epilepsy detection (decreased λ before seizure)
+**使用情境：**
+- 檢測生理訊號中的混沌
+- HRV：正 Lyapunov 表明非線性動力學
+- EEG：癲癇檢測（發作前 λ 降低）
 
 ### complexity_lempelziv()
 
-Lempel-Ziv Complexity - algorithmic complexity.
+Lempel-Ziv 複雜度 - 演算法複雜度。
 
 ```python
 lz = nk.complexity_lempelziv(signal, symbolize='median')
 ```
 
-**Method:**
-- Counts number of distinct patterns
-- Coarse-grained measure of randomness
+**方法：**
+- 計算不同模式的數量
+- 粗粒化隨機性測量
 
-**Interpretation:**
-- Lower: repetitive, predictable patterns
-- Higher: diverse, unpredictable patterns
+**解讀：**
+- 較低：重複、可預測的模式
+- 較高：多樣、不可預測的模式
 
-**Use cases:**
-- EEG: consciousness levels, anesthesia
-- HRV: autonomic complexity
+**使用情境：**
+- EEG：意識水準、麻醉
+- HRV：自主神經複雜度
 
 ### complexity_rqa()
 
-Recurrence Quantification Analysis - phase space recurrences.
+遞迴量化分析 - 相空間遞迴。
 
 ```python
 rqa_indices = nk.complexity_rqa(signal, delay=1, dimension=3, tolerance='sd')
 ```
 
-**Metrics:**
-- **Recurrence Rate (RR)**: Percentage of recurrent states
-- **Determinism (DET)**: Percentage of recurrent points in lines
-- **Laminarity (LAM)**: Percentage in vertical structures (laminar states)
-- **Trapping Time (TT)**: Average vertical line length
-- **Longest diagonal/vertical**: System predictability
-- **Entropy (ENTR)**: Shannon entropy of line length distribution
+**指標：**
+- **遞迴率（RR）**：遞迴狀態的百分比
+- **確定性（DET）**：線上遞迴點的百分比
+- **層疊性（LAM）**：垂直結構中的百分比（層流狀態）
+- **捕捉時間（TT）**：平均垂直線長度
+- **最長對角線/垂直線**：系統可預測性
+- **熵（ENTR）**：線長度分佈的 Shannon 熵
 
-**Interpretation:**
-- High DET: deterministic dynamics
-- High LAM: system trapped in specific states
-- Low RR: random, non-recurrent dynamics
+**解讀：**
+- 高 DET：確定性動力學
+- 高 LAM：系統困在特定狀態
+- 低 RR：隨機、非遞迴動力學
 
-**Use cases:**
-- Detect transitions in system dynamics
-- Physiological state changes
-- Nonlinear time series analysis
+**使用情境：**
+- 檢測系統動力學中的轉換
+- 生理狀態變化
+- 非線性時間序列分析
 
 ### complexity_hjorth()
 
-Hjorth Parameters - time-domain complexity.
+Hjorth 參數 - 時域複雜度。
 
 ```python
 hjorth = nk.complexity_hjorth(signal)
 ```
 
-**Metrics:**
-- **Activity**: Variance of signal
-- **Mobility**: Proportion of standard deviation of derivative to signal
-- **Complexity**: Change in mobility with derivative
+**指標：**
+- **活動**：訊號的變異數
+- **移動性**：導數標準差與訊號的比例
+- **複雜度**：導數移動性的變化
 
-**Use cases:**
-- EEG feature extraction
-- Seizure detection
-- Signal characterization
+**使用情境：**
+- EEG 特徵提取
+- 癲癇發作檢測
+- 訊號特徵化
 
 ### complexity_decorrelation()
 
-Decorrelation Time - memory duration.
+去相關時間 - 記憶持續時間。
 
 ```python
 decorr_time = nk.complexity_decorrelation(signal, show=False)
 ```
 
-**Interpretation:**
-- Time lag where autocorrelation drops below threshold
-- Shorter: rapid fluctuations, short memory
-- Longer: slow fluctuations, long memory
+**解讀：**
+- 自相關降到閾值以下的時間延遲
+- 較短：快速波動、短記憶
+- 較長：慢波動、長記憶
 
 ### complexity_relativeroughness()
 
-Relative Roughness - smoothness measure.
+相對粗糙度 - 平滑度測量。
 
 ```python
 roughness = nk.complexity_relativeroughness(signal)
 ```
 
-## Information Theory
+## 資訊理論
 
 ### fisher_information()
 
-Fisher Information - measure of order.
+Fisher 資訊 - 秩序測量。
 
 ```python
 fisher = nk.fisher_information(signal, delay=1, dimension=2)
 ```
 
-**Interpretation:**
-- High: ordered, structured
-- Low: disordered, random
+**解讀：**
+- 高：有序、有結構
+- 低：無序、隨機
 
-**Use cases:**
-- Combine with Shannon entropy (Fisher-Shannon plane)
-- Characterize system complexity
+**使用情境：**
+- 與 Shannon 熵結合（Fisher-Shannon 平面）
+- 描述系統複雜度特徵
 
 ### fishershannon_information()
 
-Fisher-Shannon Information Product.
+Fisher-Shannon 資訊乘積。
 
 ```python
 fs = nk.fishershannon_information(signal)
 ```
 
-**Method:**
-- Product of Fisher information and Shannon entropy
-- Characterizes order-disorder balance
+**方法：**
+- Fisher 資訊和 Shannon 熵的乘積
+- 描述秩序-無序平衡特徵
 
 ### mutual_information()
 
-Mutual Information - shared information between variables.
+互資訊 - 變數間的共享資訊。
 
 ```python
 mi = nk.mutual_information(signal1, signal2, method='knn')
 ```
 
-**Methods:**
-- `'knn'`: k-nearest neighbors (nonparametric)
-- `'kernel'`: Kernel density estimation
-- `'binning'`: Histogram-based
+**方法：**
+- `'knn'`：k 最近鄰（非參數）
+- `'kernel'`：核密度估計
+- `'binning'`：基於直方圖
 
-**Use cases:**
-- Coupling between signals
-- Feature selection
-- Nonlinear dependence
+**使用情境：**
+- 訊號間耦合
+- 特徵選擇
+- 非線性相依性
 
-## Practical Considerations
+## 實務考量
 
-### Signal Length Requirements
+### 訊號長度要求
 
-| Measure | Minimum Length | Optimal Length |
+| 測量 | 最小長度 | 最佳長度 |
 |---------|---------------|----------------|
-| Shannon entropy | 50 | 200+ |
-| ApEn, SampEn | 100-300 | 500-1000 |
-| Multiscale entropy | 500 | 1000+ per scale |
+| Shannon 熵 | 50 | 200+ |
+| ApEn、SampEn | 100-300 | 500-1000 |
+| 多尺度熵 | 500 | 每尺度 1000+ |
 | DFA | 500 | 1000+ |
 | Lyapunov | 1000 | 5000+ |
-| Correlation dimension | 1000 | 5000+ |
+| 相關維度 | 1000 | 5000+ |
 
-### Parameter Selection
+### 參數選擇
 
-**General guidelines:**
-- Use parameter optimization functions first
-- Or use conventional defaults:
-  - Delay (τ): 1 for HRV, autocorrelation first minimum for EEG
-  - Dimension (m): 2-3 typical
-  - Tolerance (r): 0.2 × SD common
+**一般準則：**
+- 首先使用參數最佳化函數
+- 或使用傳統預設值：
+  - 延遲（τ）：HRV 為 1，EEG 為自相關第一最小值
+  - 維度（m）：典型為 2-3
+  - 容差（r）：常見為 0.2 × SD
 
-**Sensitivity:**
-- Results can be parameter-sensitive
-- Report parameters used
-- Consider sensitivity analysis
+**敏感性：**
+- 結果可能對參數敏感
+- 報告使用的參數
+- 考慮敏感性分析
 
-### Normalization and Preprocessing
+### 正規化和預處理
 
-**Standardization:**
-- Many measures sensitive to signal amplitude
-- Z-score normalization often recommended
-- Detrending may be necessary
+**標準化：**
+- 許多測量對訊號振幅敏感
+- 通常建議 Z 分數正規化
+- 可能需要去趨勢
 
-**Stationarity:**
-- Some measures assume stationarity
-- Check with statistical tests (e.g., ADF test)
-- Segment non-stationary signals
+**平穩性：**
+- 某些測量假設平穩性
+- 使用統計檢定檢查（例如 ADF 檢定）
+- 分割非平穩訊號
 
-### Interpretation
+### 解讀
 
-**Context-dependent:**
-- No universal "good" or "bad" complexity
-- Compare within-subject or between groups
-- Consider physiological context
+**依情境而定：**
+- 沒有普遍「好」或「壞」的複雜度
+- 在受試者內或群組間比較
+- 考慮生理情境
 
-**Complexity vs. randomness:**
-- Maximum entropy ≠ maximum complexity
-- True complexity: structured variability
-- White noise: high entropy but low complexity (MSE distinguishes)
+**複雜度與隨機性：**
+- 最大熵 ≠ 最大複雜度
+- 真正的複雜度：結構化變異性
+- 白噪音：高熵但低複雜度（MSE 可區分）
 
-## Applications
+## 應用
 
-**Cardiovascular:**
-- HRV complexity: reduced in heart disease, aging
-- DFA α1: prognostic marker post-MI
+**心血管：**
+- HRV 複雜度：心臟病、老化時降低
+- DFA α1：心肌梗塞後的預後標記
 
-**Neuroscience:**
-- EEG complexity: consciousness, anesthesia depth
-- Entropy: Alzheimer's, epilepsy, sleep stages
-- Permutation entropy: anesthesia monitoring
+**神經科學：**
+- EEG 複雜度：意識、麻醉深度
+- 熵：阿茲海默症、癲癇、睡眠階段
+- 排列熵：麻醉監測
 
-**Psychology:**
-- Complexity loss in depression, anxiety
-- Increased regularity under stress
+**心理學：**
+- 憂鬱、焦慮時複雜度喪失
+- 壓力下規則性增加
 
-**Aging:**
-- "Complexity loss" with aging across systems
-- Reduced multiscale complexity
+**老化：**
+- 跨系統老化時「複雜度喪失」
+- 多尺度複雜度降低
 
-**Critical transitions:**
-- Complexity changes before state transitions
-- Early warning signals (critical slowing down)
+**臨界轉換：**
+- 狀態轉換前複雜度變化
+- 早期預警訊號（臨界減速）
 
-## References
+## 參考文獻
 
 - Pincus, S. M. (1991). Approximate entropy as a measure of system complexity. Proceedings of the National Academy of Sciences, 88(6), 2297-2301.
 - Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using approximate entropy and sample entropy. American Journal of Physiology-Heart and Circulatory Physiology, 278(6), H2039-H2049.

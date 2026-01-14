@@ -1,67 +1,67 @@
-# Experiment Types and Workflows
+# 實驗類型與工作流程
 
-## Overview
+## 概述
 
-Adaptyv provides multiple experimental assay types for comprehensive protein characterization. Each experiment type has specific applications, workflows, and data outputs.
+Adaptyv 提供多種實驗檢測類型，用於全面的蛋白質表徵。每種實驗類型都有特定的應用、工作流程和資料輸出。
 
-## Binding Assays
+## 結合檢測
 
-### Description
+### 描述
 
-Measure protein-target interactions using biolayer interferometry (BLI), a label-free technique that monitors biomolecular binding in real-time.
+使用生物層干涉術（BLI）測量蛋白質-標靶交互作用，這是一種無標記技術，可即時監測生物分子結合。
 
-### Use Cases
+### 使用案例
 
-- Antibody-antigen binding characterization
-- Receptor-ligand interaction analysis
-- Protein-protein interaction studies
-- Affinity maturation screening
-- Epitope binning experiments
+- 抗體-抗原結合表徵
+- 受體-配體交互作用分析
+- 蛋白質-蛋白質交互作用研究
+- 親和力成熟篩選
+- 表位分類實驗
 
-### Technology: Biolayer Interferometry (BLI)
+### 技術：生物層干涉術（BLI）
 
-BLI measures the interference pattern of reflected light from two surfaces:
-- **Reference layer** - Biosensor tip surface
-- **Biological layer** - Accumulated bound molecules
+BLI 測量兩個表面反射光的干涉圖案：
+- **參考層** - 生物感測器尖端表面
+- **生物層** - 累積結合的分子
 
-As molecules bind, the optical thickness increases, causing a wavelength shift proportional to binding.
+當分子結合時，光學厚度增加，導致與結合成正比的波長位移。
 
-**Advantages:**
-- Label-free detection
-- Real-time kinetics
-- High-throughput compatible
-- Works in crude samples
-- Minimal sample consumption
+**優點：**
+- 無標記檢測
+- 即時動力學
+- 高通量相容
+- 可在粗製樣品中運作
+- 樣品消耗量最小
 
-### Measured Parameters
+### 測量參數
 
-**Kinetic constants:**
-- **KD** - Equilibrium dissociation constant (binding affinity)
-- **kon** - Association rate constant (binding speed)
-- **koff** - Dissociation rate constant (unbinding speed)
+**動力學常數：**
+- **KD** - 平衡解離常數（結合親和力）
+- **kon** - 結合速率常數（結合速度）
+- **koff** - 解離速率常數（解離速度）
 
-**Typical ranges:**
-- Strong binders: KD < 1 nM
-- Moderate binders: KD = 1-100 nM
-- Weak binders: KD > 100 nM
+**典型範圍：**
+- 強結合者：KD < 1 nM
+- 中等結合者：KD = 1-100 nM
+- 弱結合者：KD > 100 nM
 
-### Workflow
+### 工作流程
 
-1. **Sequence submission** - Provide protein sequences in FASTA format
-2. **Expression** - Proteins expressed in appropriate host system
-3. **Purification** - Automated purification protocols
-4. **BLI assay** - Real-time binding measurements against specified targets
-5. **Analysis** - Kinetic curve fitting and quality assessment
-6. **Results delivery** - Binding parameters with confidence metrics
+1. **序列提交** - 提供 FASTA 格式的蛋白質序列
+2. **表現** - 在適當的宿主系統中表現蛋白質
+3. **純化** - 自動化純化流程
+4. **BLI 檢測** - 針對指定標靶進行即時結合測量
+5. **分析** - 動力學曲線擬合和品質評估
+6. **結果交付** - 結合參數與信賴度指標
 
-### Sample Requirements
+### 樣品需求
 
-- Protein sequence (standard amino acid codes)
-- Target specification (from catalog or custom request)
-- Buffer conditions (standard or custom)
-- Expected concentration range (optional, improves assay design)
+- 蛋白質序列（標準胺基酸代碼）
+- 標靶規格（來自目錄或自訂請求）
+- 緩衝液條件（標準或自訂）
+- 預期濃度範圍（可選，可改善檢測設計）
 
-### Results Format
+### 結果格式
 
 ```json
 {
@@ -85,45 +85,45 @@ As molecules bind, the optical thickness increases, causing a wavelength shift p
 }
 ```
 
-## Expression Testing
+## 表現測試
 
-### Description
+### 描述
 
-Quantify protein expression levels in various host systems to assess producibility and optimize sequences for manufacturing.
+量化各種宿主系統中的蛋白質表現量，以評估可生產性並優化序列以進行製造。
 
-### Use Cases
+### 使用案例
 
-- Screening variants for high expression
-- Optimizing codon usage
-- Identifying expression bottlenecks
-- Selecting candidates for scale-up
-- Comparing expression systems
+- 篩選高表現變體
+- 優化密碼子使用
+- 識別表現瓶頸
+- 選擇放大生產的候選者
+- 比較表現系統
 
-### Host Systems
+### 宿主系統
 
-Available expression platforms:
-- **E. coli** - Rapid, cost-effective, prokaryotic system
-- **Mammalian cells** - Native post-translational modifications
-- **Yeast** - Eukaryotic system with simpler growth requirements
-- **Insect cells** - Alternative eukaryotic platform
+可用的表現平台：
+- **大腸桿菌** - 快速、成本效益高的原核系統
+- **哺乳動物細胞** - 原生轉譯後修飾
+- **酵母** - 具有較簡單生長需求的真核系統
+- **昆蟲細胞** - 替代真核平台
 
-### Measured Parameters
+### 測量參數
 
-- **Total protein yield** (mg/L culture)
-- **Soluble fraction** (percentage)
-- **Purity** (after initial purification)
-- **Expression time course** (optional)
+- **總蛋白質產量**（mg/L 培養液）
+- **可溶性部分**（百分比）
+- **純度**（初始純化後）
+- **表現時程**（可選）
 
-### Workflow
+### 工作流程
 
-1. **Sequence submission** - Provide protein sequences
-2. **Construct generation** - Cloning into expression vectors
-3. **Expression** - Culture in specified host system
-4. **Quantification** - Protein measurement via multiple methods
-5. **Analysis** - Expression level comparison and ranking
-6. **Results delivery** - Yield data and recommendations
+1. **序列提交** - 提供蛋白質序列
+2. **構建體生成** - 克隆至表現載體
+3. **表現** - 在指定宿主系統中培養
+4. **量化** - 透過多種方法進行蛋白質測量
+5. **分析** - 表現量比較和排名
+6. **結果交付** - 產量資料和建議
 
-### Results Format
+### 結果格式
 
 ```json
 {
@@ -141,48 +141,48 @@ Available expression platforms:
 }
 ```
 
-## Thermostability Testing
+## 熱穩定性測試
 
-### Description
+### 描述
 
-Measure protein thermal stability to assess structural integrity, predict shelf-life, and identify stabilizing mutations.
+測量蛋白質熱穩定性以評估結構完整性、預測保存期限並識別穩定化突變。
 
-### Use Cases
+### 使用案例
 
-- Selecting thermally stable variants
-- Formulation development
-- Shelf-life prediction
-- Stability-driven protein engineering
-- Quality control screening
+- 選擇熱穩定變體
+- 配方開發
+- 保存期限預測
+- 穩定性驅動的蛋白質工程
+- 品質控制篩選
 
-### Measurement Techniques
+### 測量技術
 
-**Differential Scanning Fluorimetry (DSF):**
-- Monitors protein unfolding via fluorescent dye binding
-- Determines melting temperature (Tm)
-- High-throughput capable
+**差示掃描螢光法（DSF）：**
+- 透過螢光染料結合監測蛋白質展開
+- 測定熔點溫度（Tm）
+- 高通量能力
 
-**Circular Dichroism (CD):**
-- Secondary structure analysis
-- Thermal unfolding curves
-- Reversibility assessment
+**圓二色光譜（CD）：**
+- 二級結構分析
+- 熱展開曲線
+- 可逆性評估
 
-### Measured Parameters
+### 測量參數
 
-- **Tm** - Melting temperature (midpoint of unfolding)
-- **ΔH** - Enthalpy of unfolding
-- **Aggregation temperature** (Tagg)
-- **Reversibility** - Refolding after heating
+- **Tm** - 熔點溫度（展開中點）
+- **ΔH** - 展開焓
+- **聚集溫度**（Tagg）
+- **可逆性** - 加熱後的重摺疊
 
-### Workflow
+### 工作流程
 
-1. **Sequence submission** - Provide protein sequences
-2. **Expression and purification** - Standard protocols
-3. **Thermostability assay** - Temperature gradient analysis
-4. **Data analysis** - Curve fitting and parameter extraction
-5. **Results delivery** - Stability metrics with ranking
+1. **序列提交** - 提供蛋白質序列
+2. **表現和純化** - 標準流程
+3. **熱穩定性檢測** - 溫度梯度分析
+4. **資料分析** - 曲線擬合和參數擷取
+5. **結果交付** - 穩定性指標與排名
 
-### Results Format
+### 結果格式
 
 ```json
 {
@@ -200,54 +200,54 @@ Measure protein thermal stability to assess structural integrity, predict shelf-
 }
 ```
 
-## Enzyme Activity Assays
+## 酶活性檢測
 
-### Description
+### 描述
 
-Measure enzymatic function including substrate turnover, catalytic efficiency, and inhibitor sensitivity.
+測量酶功能，包括受質轉換、催化效率和抑制劑敏感性。
 
-### Use Cases
+### 使用案例
 
-- Screening enzyme variants for improved activity
-- Substrate specificity profiling
-- Inhibitor testing
-- pH and temperature optimization
-- Mechanistic studies
+- 篩選具有改進活性的酶變體
+- 受質特異性分析
+- 抑制劑測試
+- pH 和溫度優化
+- 機制研究
 
-### Assay Types
+### 檢測類型
 
-**Continuous assays:**
-- Chromogenic substrates
-- Fluorogenic substrates
-- Real-time monitoring
+**連續檢測：**
+- 顯色受質
+- 螢光受質
+- 即時監測
 
-**Endpoint assays:**
-- HPLC quantification
-- Mass spectrometry
-- Colorimetric detection
+**終點檢測：**
+- HPLC 定量
+- 質譜
+- 比色檢測
 
-### Measured Parameters
+### 測量參數
 
-**Kinetic parameters:**
-- **kcat** - Turnover number (catalytic rate constant)
-- **KM** - Michaelis constant (substrate affinity)
-- **kcat/KM** - Catalytic efficiency
-- **IC50** - Inhibitor concentration for 50% inhibition
+**動力學參數：**
+- **kcat** - 轉換數（催化速率常數）
+- **KM** - 米氏常數（受質親和力）
+- **kcat/KM** - 催化效率
+- **IC50** - 50% 抑制的抑制劑濃度
 
-**Activity metrics:**
-- Specific activity (units/mg protein)
-- Relative activity vs. reference
-- Substrate specificity profile
+**活性指標：**
+- 比活性（單位/mg 蛋白質）
+- 相對於參考的相對活性
+- 受質特異性圖譜
 
-### Workflow
+### 工作流程
 
-1. **Sequence submission** - Provide enzyme sequences
-2. **Expression and purification** - Optimized for activity retention
-3. **Activity assay** - Substrate turnover measurements
-4. **Kinetic analysis** - Michaelis-Menten fitting
-5. **Results delivery** - Kinetic parameters and rankings
+1. **序列提交** - 提供酶序列
+2. **表現和純化** - 針對活性保留進行優化
+3. **活性檢測** - 受質轉換測量
+4. **動力學分析** - 米氏-曼頓擬合
+5. **結果交付** - 動力學參數和排名
 
-### Results Format
+### 結果格式
 
 ```json
 {
@@ -270,91 +270,91 @@ Measure enzymatic function including substrate turnover, catalytic efficiency, a
 }
 ```
 
-## Experiment Design Best Practices
+## 實驗設計最佳實務
 
-### Sequence Submission
+### 序列提交
 
-1. **Use clear identifiers** - Name sequences descriptively
-2. **Include controls** - Submit wild-type or reference sequences
-3. **Batch similar variants** - Group related sequences in single submission
-4. **Validate sequences** - Check for errors before submission
+1. **使用清晰的識別碼** - 以描述性方式命名序列
+2. **包含對照組** - 提交野生型或參考序列
+3. **批次處理相似變體** - 將相關序列分組在單一提交中
+4. **驗證序列** - 在提交前檢查錯誤
 
-### Sample Size
+### 樣品數量
 
-- **Pilot studies** - 5-10 sequences to test feasibility
-- **Library screening** - 50-500 sequences for variant exploration
-- **Focused optimization** - 10-50 sequences for fine-tuning
-- **Large-scale campaigns** - 500+ sequences for ML-driven design
+- **先導研究** - 5-10 個序列以測試可行性
+- **文庫篩選** - 50-500 個序列用於變體探索
+- **專注優化** - 10-50 個序列用於微調
+- **大規模活動** - 500+ 個序列用於 ML 驅動的設計
 
-### Quality Control
+### 品質控制
 
-Adaptyv includes automated QC steps:
-- Expression verification before assay
-- Replicate measurements for reliability
-- Positive/negative controls in each batch
-- Statistical validation of results
+Adaptyv 包含自動化 QC 步驟：
+- 檢測前的表現驗證
+- 重複測量以確保可靠性
+- 每批次的正/負對照
+- 結果的統計驗證
 
-### Timeline Expectations
+### 時程預期
 
-**Standard turnaround:** ~21 days from submission to results
+**標準週轉時間：** 從提交到結果約 21 天
 
-**Timeline breakdown:**
-- Construct generation: 3-5 days
-- Expression: 5-7 days
-- Purification: 2-3 days
-- Assay execution: 3-5 days
-- Analysis and QC: 2-3 days
+**時程細分：**
+- 構建體生成：3-5 天
+- 表現：5-7 天
+- 純化：2-3 天
+- 檢測執行：3-5 天
+- 分析和 QC：2-3 天
 
-**Factors affecting timeline:**
-- Custom targets (add 1-2 weeks)
-- Novel assay development (add 2-4 weeks)
-- Large batch sizes (may add 1 week)
+**影響時程的因素：**
+- 自訂標靶（增加 1-2 週）
+- 新型檢測開發（增加 2-4 週）
+- 大批次量（可能增加 1 週）
 
-### Cost Optimization
+### 成本優化
 
-1. **Batch submissions** - Lower per-sequence cost
-2. **Standard targets** - Catalog antigens are faster/cheaper
-3. **Standard conditions** - Custom buffers add cost
-4. **Computational pre-filtering** - Submit only promising candidates
+1. **批次提交** - 降低每序列成本
+2. **標準標靶** - 目錄抗原更快/更便宜
+3. **標準條件** - 自訂緩衝液會增加成本
+4. **計算預篩選** - 僅提交有前景的候選者
 
-## Combining Experiment Types
+## 結合實驗類型
 
-For comprehensive protein characterization, combine multiple assays:
+為了全面的蛋白質表徵，結合多種檢測：
 
-**Therapeutic antibody development:**
-1. Binding assay → Identify high-affinity binders
-2. Expression testing → Select manufacturable candidates
-3. Thermostability → Ensure formulation stability
+**治療性抗體開發：**
+1. 結合檢測 → 識別高親和力結合者
+2. 表現測試 → 選擇可製造的候選者
+3. 熱穩定性 → 確保配方穩定性
 
-**Enzyme engineering:**
-1. Activity assay → Screen for improved catalysis
-2. Expression testing → Ensure producibility
-3. Thermostability → Validate industrial robustness
+**酶工程：**
+1. 活性檢測 → 篩選改進的催化
+2. 表現測試 → 確保可生產性
+3. 熱穩定性 → 驗證工業穩健性
 
-**Sequential vs. Parallel:**
-- **Sequential** - Use results from early assays to filter candidates
-- **Parallel** - Run all assays simultaneously for faster results
+**順序 vs 並行：**
+- **順序** - 使用早期檢測的結果篩選候選者
+- **並行** - 同時執行所有檢測以獲得更快的結果
 
-## Data Integration
+## 資料整合
 
-Results integrate with computational workflows:
+結果與計算工作流程整合：
 
-1. **Download raw data** via API
-2. **Parse results** into standardized format
-3. **Feed into ML models** for next-round design
-4. **Track experiments** with metadata tags
-5. **Visualize trends** across design iterations
+1. **下載原始資料** 透過 API
+2. **解析結果** 為標準化格式
+3. **輸入 ML 模型** 進行下一輪設計
+4. **追蹤實驗** 使用 metadata 標籤
+5. **視覺化趨勢** 跨設計迭代
 
-## Support and Troubleshooting
+## 支援與故障排除
 
-**Common issues:**
-- Low expression → Consider sequence optimization (see protein_optimization.md)
-- Poor binding → Verify target specification and expected range
-- Variable results → Check sequence quality and controls
-- Incomplete data → Contact support with experiment ID
+**常見問題：**
+- 低表現 → 考慮序列優化（請參閱 protein_optimization.md）
+- 結合不佳 → 驗證標靶規格和預期範圍
+- 結果變異 → 檢查序列品質和對照組
+- 資料不完整 → 請聯繫支援並提供實驗 ID
 
-**Getting help:**
-- Email: support@adaptyvbio.com
-- Include experiment ID and specific question
-- Provide context (design goals, expected results)
-- Response time: <24 hours for active experiments
+**獲取協助：**
+- 電子郵件：support@adaptyvbio.com
+- 包含實驗 ID 和具體問題
+- 提供背景（設計目標、預期結果）
+- 回應時間：活動實驗 <24 小時

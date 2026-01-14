@@ -1,114 +1,114 @@
-# Analytical Equipment in PyLabRobot
+# PyLabRobot 分析設備
 
-## Overview
+## 概述
 
-PyLabRobot integrates with analytical equipment including plate readers, scales, and other measurement devices. This allows automated workflows that combine liquid handling with analytical measurements.
+PyLabRobot 整合分析設備，包括微孔盤讀取器、天平和其他測量裝置。這使得結合液體處理與分析測量的自動化工作流程成為可能。
 
-## Plate Readers
+## 微孔盤讀取器
 
 ### BMG CLARIOstar (Plus)
 
-The BMG Labtech CLARIOstar and CLARIOstar Plus are microplate readers that measure absorbance, luminescence, and fluorescence.
+BMG Labtech CLARIOstar 和 CLARIOstar Plus 是可測量吸光度、發光度和螢光的微孔盤讀取器。
 
-#### Hardware Setup
+#### 硬體設置
 
-**Physical Connections:**
-1. IEC C13 power cord to mains power
-2. USB-B cable to computer (with security screws on device end)
-3. Optional: RS-232 port for plate stacking units
+**實體連接：**
+1. IEC C13 電源線連接到主電源
+2. USB-B 傳輸線連接到電腦（設備端有安全螺絲）
+3. 選配：RS-232 連接埠用於微孔盤堆疊單元
 
-**Communication:**
-- Serial connection through FTDI/USB-A at firmware level
-- Cross-platform support (Windows, macOS, Linux)
+**通訊：**
+- 通過 FTDI/USB-A 在韌體層級進行串列連接
+- 跨平台支援（Windows、macOS、Linux）
 
-#### Software Setup
+#### 軟體設置
 
 ```python
 from pylabrobot.plate_reading import PlateReader
 from pylabrobot.plate_reading.clario_star_backend import CLARIOstarBackend
 
-# Create backend
+# 建立後端
 backend = CLARIOstarBackend()
 
-# Initialize plate reader
+# 初始化微孔盤讀取器
 pr = PlateReader(
     name="CLARIOstar",
     backend=backend,
-    size_x=0.0,    # Physical dimensions not critical for plate readers
+    size_x=0.0,    # 微孔盤讀取器的物理尺寸不重要
     size_y=0.0,
     size_z=0.0
 )
 
-# Setup (initializes device)
+# 設置（初始化設備）
 await pr.setup()
 
-# When done
+# 完成時
 await pr.stop()
 ```
 
-#### Basic Operations
+#### 基本操作
 
-**Opening and Closing:**
+**開啟和關閉：**
 
 ```python
-# Open loading tray
+# 開啟載入托盤
 await pr.open()
 
-# (Load plate manually or robotically)
+# （手動或機器人載入微孔盤）
 
-# Close loading tray
+# 關閉載入托盤
 await pr.close()
 ```
 
-**Temperature Control:**
+**溫度控制：**
 
 ```python
-# Set temperature (in Celsius)
+# 設定溫度（攝氏度）
 await pr.set_temperature(37)
 
-# Note: Reaching temperature is slow
-# Set temperature early in protocol
+# 注意：達到溫度較慢
+# 在協定早期設定溫度
 ```
 
-**Reading Measurements:**
+**讀取測量：**
 
 ```python
-# Absorbance reading
+# 吸光度讀取
 data = await pr.read_absorbance(wavelength=450)  # nm
 
-# Luminescence reading
+# 發光度讀取
 data = await pr.read_luminescence()
 
-# Fluorescence reading
+# 螢光讀取
 data = await pr.read_fluorescence(
     excitation_wavelength=485,  # nm
     emission_wavelength=535     # nm
 )
 ```
 
-#### Data Format
+#### 資料格式
 
-Plate reader methods return array data:
+微孔盤讀取器方法回傳陣列資料：
 
 ```python
 import numpy as np
 
-# Read absorbance
+# 讀取吸光度
 data = await pr.read_absorbance(wavelength=450)
 
-# data is typically a 2D array (8x12 for 96-well plate)
-print(f"Data shape: {data.shape}")
-print(f"Well A1: {data[0][0]}")
-print(f"Well H12: {data[7][11]}")
+# data 通常是 2D 陣列（96 孔盤為 8x12）
+print(f"資料形狀：{data.shape}")
+print(f"孔 A1：{data[0][0]}")
+print(f"孔 H12：{data[7][11]}")
 
-# Convert to DataFrame for easier handling
+# 轉換為 DataFrame 以便更容易處理
 import pandas as pd
 df = pd.DataFrame(data)
 ```
 
-#### Integration with Liquid Handler
+#### 與液體處理器整合
 
-Combine plate reading with liquid handling:
+結合微孔盤讀取與液體處理：
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -117,19 +117,19 @@ from pylabrobot.resources import STARLetDeck
 from pylabrobot.plate_reading import PlateReader
 from pylabrobot.plate_reading.clario_star_backend import CLARIOstarBackend
 
-# Initialize liquid handler
+# 初始化液體處理器
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 await lh.setup()
 
-# Initialize plate reader
+# 初始化微孔盤讀取器
 pr = PlateReader(name="CLARIOstar", backend=CLARIOstarBackend())
 await pr.setup()
 
-# Set temperature early
+# 提早設定溫度
 await pr.set_temperature(37)
 
 try:
-    # Prepare samples with liquid handler
+    # 使用液體處理器準備樣品
     tip_rack = TIP_CAR_480_A00(name="tips")
     reagent_plate = Cos_96_DW_1mL(name="reagents")
     assay_plate = Cos_96_DW_1mL(name="assay")
@@ -138,7 +138,7 @@ try:
     lh.deck.assign_child_resource(reagent_plate, rails=10)
     lh.deck.assign_child_resource(assay_plate, rails=15)
 
-    # Transfer samples
+    # 轉移樣品
     await lh.pick_up_tips(tip_rack["A1:H1"])
     await lh.transfer(
         reagent_plate["A1:H12"],
@@ -147,62 +147,62 @@ try:
     )
     await lh.drop_tips()
 
-    # Move plate to reader (manual or robotic arm)
-    print("Move assay plate to plate reader")
-    input("Press Enter when plate is loaded...")
+    # 將微孔盤移到讀取器（手動或機械手臂）
+    print("將分析微孔盤移到微孔盤讀取器")
+    input("微孔盤載入後按 Enter...")
 
-    # Read plate
+    # 讀取微孔盤
     await pr.open()
-    # (plate loaded here)
+    # （此處載入微孔盤）
     await pr.close()
 
     data = await pr.read_absorbance(wavelength=450)
-    print(f"Absorbance data: {data}")
+    print(f"吸光度資料：{data}")
 
 finally:
     await lh.stop()
     await pr.stop()
 ```
 
-#### Advanced Features
+#### 進階功能
 
-**Development Status:**
+**開發狀態：**
 
-Some CLARIOstar features are under development:
-- Spectral scanning
-- Injector needle control
-- Detailed measurement parameter configuration
-- Well-specific reading patterns
+部分 CLARIOstar 功能正在開發中：
+- 光譜掃描
+- 注射器針頭控制
+- 詳細測量參數配置
+- 特定孔讀取模式
 
-Check current documentation for latest feature support.
+請查看目前文件以了解最新功能支援。
 
-#### Best Practices
+#### 最佳實務
 
-1. **Temperature Control**: Set temperature early as heating is slow
-2. **Plate Loading**: Ensure plate is properly seated before closing
-3. **Measurement Selection**: Choose appropriate wavelengths for your assay
-4. **Data Validation**: Check measurement quality and expected ranges
-5. **Error Handling**: Handle timeout and communication errors
-6. **Maintenance**: Keep optics clean per manufacturer guidelines
+1. **溫度控制**：提早設定溫度，因為加熱較慢
+2. **微孔盤載入**：確保微孔盤在關閉前正確就位
+3. **測量選擇**：為您的分析選擇適當的波長
+4. **資料驗證**：檢查測量品質和預期範圍
+5. **錯誤處理**：處理逾時和通訊錯誤
+6. **維護**：依據製造商指南保持光學元件清潔
 
-#### Example: Complete Plate Reading Workflow
+#### 範例：完整的微孔盤讀取工作流程
 
 ```python
 async def run_plate_reading_assay():
-    """Complete workflow with sample prep and reading"""
+    """包含樣品準備和讀取的完整工作流程"""
 
-    # Initialize equipment
+    # 初始化設備
     lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
     pr = PlateReader(name="CLARIOstar", backend=CLARIOstarBackend())
 
     await lh.setup()
     await pr.setup()
 
-    # Set plate reader temperature
+    # 設定微孔盤讀取器溫度
     await pr.set_temperature(37)
 
     try:
-        # Define resources
+        # 定義資源
         tip_rack = TIP_CAR_480_A00(name="tips")
         samples = Cos_96_DW_1mL(name="samples")
         assay_plate = Cos_96_DW_1mL(name="assay")
@@ -213,7 +213,7 @@ async def run_plate_reading_assay():
         lh.deck.assign_child_resource(samples, rails=10)
         lh.deck.assign_child_resource(assay_plate, rails=15)
 
-        # Transfer samples
+        # 轉移樣品
         await lh.pick_up_tips(tip_rack["A1:H1"])
         await lh.transfer(
             samples["A1:H12"],
@@ -222,7 +222,7 @@ async def run_plate_reading_assay():
         )
         await lh.drop_tips()
 
-        # Add substrate
+        # 添加底物
         await lh.pick_up_tips(tip_rack["A2:H2"])
         for col in range(1, 13):
             await lh.transfer(
@@ -232,21 +232,21 @@ async def run_plate_reading_assay():
             )
         await lh.drop_tips()
 
-        # Incubate (if needed)
-        # await asyncio.sleep(300)  # 5 minutes
+        # 培養（如需要）
+        # await asyncio.sleep(300)  # 5 分鐘
 
-        # Move to plate reader
-        print("Transfer assay plate to CLARIOstar")
-        input("Press Enter when ready...")
+        # 移至微孔盤讀取器
+        print("將分析微孔盤轉移到 CLARIOstar")
+        input("準備好後按 Enter...")
 
         await pr.open()
-        input("Press Enter when plate is loaded...")
+        input("微孔盤載入後按 Enter...")
         await pr.close()
 
-        # Read absorbance
+        # 讀取吸光度
         data = await pr.read_absorbance(wavelength=450)
 
-        # Process results
+        # 處理結果
         import pandas as pd
         df = pd.DataFrame(
             data,
@@ -254,10 +254,10 @@ async def run_plate_reading_assay():
             columns=[f"{c}" for c in range(1, 13)]
         )
 
-        print("Absorbance Results:")
+        print("吸光度結果：")
         print(df)
 
-        # Save results
+        # 儲存結果
         df.to_csv("plate_reading_results.csv")
 
         return df
@@ -266,23 +266,23 @@ async def run_plate_reading_assay():
         await lh.stop()
         await pr.stop()
 
-# Run assay
+# 執行分析
 results = await run_plate_reading_assay()
 ```
 
-## Scales
+## 天平
 
-### Mettler Toledo Scales
+### Mettler Toledo 天平
 
-PyLabRobot supports Mettler Toledo scales for mass measurements.
+PyLabRobot 支援 Mettler Toledo 天平進行質量測量。
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.scales import Scale
 from pylabrobot.scales.mettler_toledo_backend import MettlerToledoBackend
 
-# Create scale
+# 建立天平
 scale = Scale(
     name="analytical_scale",
     backend=MettlerToledoBackend()
@@ -291,17 +291,17 @@ scale = Scale(
 await scale.setup()
 ```
 
-#### Operations
+#### 操作
 
 ```python
-# Get weight measurement
-weight = await scale.get_weight()  # Returns weight in grams
-print(f"Weight: {weight} g")
+# 取得重量測量
+weight = await scale.get_weight()  # 回傳以公克為單位的重量
+print(f"重量：{weight} g")
 
-# Tare (zero) the scale
+# 歸零（扣重）天平
 await scale.tare()
 
-# Get multiple measurements
+# 取得多次測量
 weights = []
 for i in range(5):
     w = await scale.get_weight()
@@ -309,13 +309,13 @@ for i in range(5):
     await asyncio.sleep(1)
 
 average_weight = sum(weights) / len(weights)
-print(f"Average weight: {average_weight} g")
+print(f"平均重量：{average_weight} g")
 ```
 
-#### Integration with Liquid Handler
+#### 與液體處理器整合
 
 ```python
-# Weigh samples during protocol
+# 在協定期間稱量樣品
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 scale = Scale(name="scale", backend=MettlerToledoBackend())
 
@@ -323,24 +323,24 @@ await lh.setup()
 await scale.setup()
 
 try:
-    # Tare scale
+    # 歸零天平
     await scale.tare()
 
-    # Dispense liquid
+    # 分配液體
     await lh.pick_up_tips(tip_rack["A1"])
     await lh.aspirate(reagent["A1"], vols=1000)
 
-    # (Move to scale position)
+    # （移動到天平位置）
 
-    # Dispense and weigh
+    # 分配並稱重
     await lh.dispense(container, vols=1000)
     weight = await scale.get_weight()
 
-    print(f"Dispensed weight: {weight} g")
+    print(f"分配重量：{weight} g")
 
-    # Calculate actual volume (assuming density = 1 g/mL for water)
-    actual_volume = weight * 1000  # Convert g to µL
-    print(f"Actual volume: {actual_volume} µL")
+    # 計算實際體積（假設水的密度 = 1 g/mL）
+    actual_volume = weight * 1000  # 將 g 轉換為 µL
+    print(f"實際體積：{actual_volume} µL")
 
     await lh.drop_tips()
 
@@ -349,25 +349,25 @@ finally:
     await scale.stop()
 ```
 
-## Other Analytical Devices
+## 其他分析設備
 
-### Flow Cytometers
+### 流式細胞儀
 
-Some flow cytometer integrations are in development. Check current documentation for support status.
+部分流式細胞儀整合正在開發中。請查看目前文件以了解支援狀態。
 
-### Spectrophotometers
+### 分光光度計
 
-Additional spectrophotometer models may be supported. Check documentation for current device compatibility.
+可能支援其他分光光度計型號。請查看文件以了解目前設備相容性。
 
-## Multi-Device Workflows
+## 多設備工作流程
 
-### Coordinating Multiple Devices
+### 協調多個設備
 
 ```python
 async def multi_device_workflow():
-    """Coordinate liquid handler, plate reader, and scale"""
+    """協調液體處理器、微孔盤讀取器和天平"""
 
-    # Initialize all devices
+    # 初始化所有設備
     lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
     pr = PlateReader(name="CLARIOstar", backend=CLARIOstarBackend())
     scale = Scale(name="scale", backend=MettlerToledoBackend())
@@ -377,19 +377,19 @@ async def multi_device_workflow():
     await scale.setup()
 
     try:
-        # 1. Weigh reagent
+        # 1. 稱量試劑
         await scale.tare()
-        # (place container on scale)
+        # （將容器放在天平上）
         reagent_weight = await scale.get_weight()
 
-        # 2. Prepare samples with liquid handler
+        # 2. 使用液體處理器準備樣品
         await lh.pick_up_tips(tip_rack["A1:H1"])
         await lh.transfer(source["A1:H12"], dest["A1:H12"], vols=100)
         await lh.drop_tips()
 
-        # 3. Read plate
+        # 3. 讀取微孔盤
         await pr.open()
-        # (load plate)
+        # （載入微孔盤）
         await pr.close()
         data = await pr.read_absorbance(wavelength=450)
 
@@ -404,26 +404,26 @@ async def multi_device_workflow():
         await scale.stop()
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Device Initialization**: Setup all devices at start of protocol
-2. **Error Handling**: Handle communication errors gracefully
-3. **Cleanup**: Always call `stop()` on all devices
-4. **Timing**: Account for device-specific timing (temperature equilibration, measurement time)
-5. **Calibration**: Follow manufacturer calibration procedures
-6. **Data Validation**: Verify measurements are within expected ranges
-7. **Documentation**: Record device settings and parameters
-8. **Integration Testing**: Test multi-device workflows thoroughly
-9. **Concurrent Operations**: Use async to overlap operations when possible
-10. **Data Storage**: Save raw data with metadata (timestamps, settings)
+1. **設備初始化**：在協定開始時設置所有設備
+2. **錯誤處理**：優雅地處理通訊錯誤
+3. **清理**：始終對所有設備呼叫 `stop()`
+4. **時間控制**：考慮設備特定的時間（溫度平衡、測量時間）
+5. **校準**：遵循製造商的校準程序
+6. **資料驗證**：驗證測量值在預期範圍內
+7. **文件**：記錄設備設定和參數
+8. **整合測試**：徹底測試多設備工作流程
+9. **並行操作**：使用 async 在可能時重疊操作
+10. **資料儲存**：儲存帶有後設資料（時間戳記、設定）的原始資料
 
-## Common Patterns
+## 常見模式
 
-### Kinetic Plate Reading
+### 動力學微孔盤讀取
 
 ```python
 async def kinetic_reading(num_reads: int, interval: int):
-    """Perform kinetic plate reading"""
+    """執行動力學微孔盤讀取"""
 
     pr = PlateReader(name="CLARIOstar", backend=CLARIOstarBackend())
     await pr.setup()
@@ -431,7 +431,7 @@ async def kinetic_reading(num_reads: int, interval: int):
     try:
         await pr.set_temperature(37)
         await pr.open()
-        # (load plate)
+        # （載入微孔盤）
         await pr.close()
 
         results = []
@@ -452,13 +452,13 @@ async def kinetic_reading(num_reads: int, interval: int):
     finally:
         await pr.stop()
 
-# Read every 30 seconds for 10 minutes
+# 每 30 秒讀取一次，持續 10 分鐘
 results = await kinetic_reading(num_reads=20, interval=30)
 ```
 
-## Additional Resources
+## 其他資源
 
-- Plate Reading Documentation: https://docs.pylabrobot.org/user_guide/02_analytical/
-- BMG CLARIOstar Guide: https://docs.pylabrobot.org/user_guide/02_analytical/plate-reading/bmg-clariostar.html
-- API Reference: https://docs.pylabrobot.org/api/pylabrobot.plate_reading.html
-- Supported Equipment: https://docs.pylabrobot.org/user_guide/machines.html
+- 微孔盤讀取文件：https://docs.pylabrobot.org/user_guide/02_analytical/
+- BMG CLARIOstar 指南：https://docs.pylabrobot.org/user_guide/02_analytical/plate-reading/bmg-clariostar.html
+- API 參考：https://docs.pylabrobot.org/api/pylabrobot.plate_reading.html
+- 支援的設備：https://docs.pylabrobot.org/user_guide/machines.html

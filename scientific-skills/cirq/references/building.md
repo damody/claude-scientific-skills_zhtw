@@ -1,23 +1,23 @@
-# Building Quantum Circuits
+# 建構量子電路
 
-This guide covers circuit construction in Cirq, including qubits, gates, operations, and circuit patterns.
+本指南涵蓋 Cirq 中的電路建構，包括量子位元、閘、操作和電路模式。
 
-## Basic Circuit Construction
+## 基本電路建構
 
-### Creating Circuits
+### 建立電路
 
 ```python
 import cirq
 
-# Create a circuit
+# 建立電路
 circuit = cirq.Circuit()
 
-# Create qubits
+# 建立量子位元
 q0 = cirq.GridQubit(0, 0)
 q1 = cirq.GridQubit(0, 1)
 q2 = cirq.LineQubit(0)
 
-# Add gates to circuit
+# 將閘加入電路
 circuit.append([
     cirq.H(q0),
     cirq.CNOT(q0, q1),
@@ -25,56 +25,56 @@ circuit.append([
 ])
 ```
 
-### Qubit Types
+### 量子位元類型
 
-**GridQubit**: 2D grid topology for hardware-like layouts
+**GridQubit**：適用於硬體拓撲的 2D 網格
 ```python
-qubits = cirq.GridQubit.square(2)  # 2x2 grid
+qubits = cirq.GridQubit.square(2)  # 2x2 網格
 qubit = cirq.GridQubit(row=0, col=1)
 ```
 
-**LineQubit**: 1D linear topology
+**LineQubit**：1D 線性拓撲
 ```python
-qubits = cirq.LineQubit.range(5)  # 5 qubits in a line
+qubits = cirq.LineQubit.range(5)  # 一列 5 個量子位元
 qubit = cirq.LineQubit(3)
 ```
 
-**NamedQubit**: Custom-named qubits
+**NamedQubit**：自訂命名的量子位元
 ```python
 qubit = cirq.NamedQubit('my_qubit')
 ```
 
-## Common Gates and Operations
+## 常見閘和操作
 
-### Single-Qubit Gates
+### 單量子位元閘
 
 ```python
-# Pauli gates
-cirq.X(qubit)  # NOT gate
+# Pauli 閘
+cirq.X(qubit)  # NOT 閘
 cirq.Y(qubit)
 cirq.Z(qubit)
 
 # Hadamard
 cirq.H(qubit)
 
-# Rotation gates
-cirq.rx(angle)(qubit)  # Rotation around X-axis
-cirq.ry(angle)(qubit)  # Rotation around Y-axis
-cirq.rz(angle)(qubit)  # Rotation around Z-axis
+# 旋轉閘
+cirq.rx(angle)(qubit)  # 繞 X 軸旋轉
+cirq.ry(angle)(qubit)  # 繞 Y 軸旋轉
+cirq.rz(angle)(qubit)  # 繞 Z 軸旋轉
 
-# Phase gates
-cirq.S(qubit)  # √Z gate
-cirq.T(qubit)  # ⁴√Z gate
+# 相位閘
+cirq.S(qubit)  # √Z 閘
+cirq.T(qubit)  # ⁴√Z 閘
 ```
 
-### Two-Qubit Gates
+### 雙量子位元閘
 
 ```python
-# CNOT (Controlled-NOT)
+# CNOT（受控 NOT）
 cirq.CNOT(control, target)
-cirq.CX(control, target)  # Alias
+cirq.CX(control, target)  # 別名
 
-# CZ (Controlled-Z)
+# CZ（受控 Z）
 cirq.CZ(q0, q1)
 
 # SWAP
@@ -83,51 +83,51 @@ cirq.SWAP(q0, q1)
 # iSWAP
 cirq.ISWAP(q0, q1)
 
-# Controlled rotations
+# 受控旋轉
 cirq.CZPowGate(exponent=0.5)(q0, q1)
 ```
 
-### Measurement Operations
+### 測量操作
 
 ```python
-# Measure single qubit
+# 測量單一量子位元
 cirq.measure(qubit, key='m')
 
-# Measure multiple qubits
+# 測量多個量子位元
 cirq.measure(q0, q1, q2, key='result')
 
-# Measure all qubits in circuit
+# 測量電路中的所有量子位元
 circuit.append(cirq.measure(*qubits, key='final'))
 ```
 
-## Advanced Circuit Construction
+## 進階電路建構
 
-### Parameterized Gates
+### 參數化閘
 
 ```python
 import sympy
 
-# Create symbolic parameters
+# 建立符號參數
 theta = sympy.Symbol('theta')
 phi = sympy.Symbol('phi')
 
-# Use in gates
+# 在閘中使用
 circuit = cirq.Circuit(
     cirq.rx(theta)(q0),
     cirq.ry(phi)(q1),
     cirq.CNOT(q0, q1)
 )
 
-# Resolve parameters later
+# 稍後解析參數
 resolved = cirq.resolve_parameters(circuit, {'theta': 0.5, 'phi': 1.2})
 ```
 
-### Custom Gates via Unitaries
+### 透過么正矩陣自訂閘
 
 ```python
 import numpy as np
 
-# Define unitary matrix
+# 定義么正矩陣
 unitary = np.array([
     [1, 0, 0, 0],
     [0, 1, 0, 0],
@@ -135,15 +135,15 @@ unitary = np.array([
     [0, 0, 1, 0]
 ]) / np.sqrt(2)
 
-# Create gate from unitary
+# 從么正矩陣建立閘
 gate = cirq.MatrixGate(unitary)
 operation = gate(q0, q1)
 ```
 
-### Gate Decomposition
+### 閘分解
 
 ```python
-# Define custom gate with decomposition
+# 定義帶分解的自訂閘
 class MyGate(cirq.Gate):
     def _num_qubits_(self):
         return 1
@@ -155,46 +155,46 @@ class MyGate(cirq.Gate):
     def _circuit_diagram_info_(self, args):
         return 'MyGate'
 
-# Use the custom gate
+# 使用自訂閘
 my_gate = MyGate()
 circuit.append(my_gate(q0))
 ```
 
-## Circuit Organization
+## 電路組織
 
 ### Moments
 
-Circuits are organized into moments (parallel operations):
+電路被組織成 moments（平行操作）：
 
 ```python
-# Explicit moment construction
+# 明確的 moment 建構
 circuit = cirq.Circuit(
     cirq.Moment([cirq.H(q0), cirq.H(q1)]),
     cirq.Moment([cirq.CNOT(q0, q1)]),
     cirq.Moment([cirq.measure(q0, key='m0'), cirq.measure(q1, key='m1')])
 )
 
-# Access moments
+# 存取 moments
 for i, moment in enumerate(circuit):
     print(f"Moment {i}: {moment}")
 ```
 
-### Circuit Operations
+### 電路操作
 
 ```python
-# Concatenate circuits
+# 連接電路
 circuit3 = circuit1 + circuit2
 
-# Insert operations
+# 插入操作
 circuit.insert(index, operation)
 
-# Append with strategy
+# 使用策略附加
 circuit.append(operations, strategy=cirq.InsertStrategy.NEW_THEN_INLINE)
 ```
 
-## Circuit Patterns
+## 電路模式
 
-### Bell State Preparation
+### Bell 態製備
 
 ```python
 def bell_state_circuit():
@@ -205,7 +205,7 @@ def bell_state_circuit():
     )
 ```
 
-### GHZ State
+### GHZ 態
 
 ```python
 def ghz_circuit(qubits):
@@ -216,7 +216,7 @@ def ghz_circuit(qubits):
     return circuit
 ```
 
-### Quantum Fourier Transform
+### 量子傅立葉轉換
 
 ```python
 def qft_circuit(qubits):
@@ -226,47 +226,47 @@ def qft_circuit(qubits):
         for j in range(i + 1, len(qubits)):
             circuit.append(cirq.CZPowGate(exponent=1/2**(j-i))(qubits[j], q))
 
-    # Reverse qubit order
+    # 反轉量子位元順序
     for i in range(len(qubits) // 2):
         circuit.append(cirq.SWAP(qubits[i], qubits[len(qubits) - i - 1]))
 
     return circuit
 ```
 
-## Circuit Import/Export
+## 電路匯入/匯出
 
 ### OpenQASM
 
 ```python
-# Export to QASM
+# 匯出為 QASM
 qasm_str = circuit.to_qasm()
 
-# Import from QASM
+# 從 QASM 匯入
 from cirq.contrib.qasm_import import circuit_from_qasm
 circuit = circuit_from_qasm(qasm_str)
 ```
 
-### Circuit JSON
+### 電路 JSON
 
 ```python
 import json
 
-# Serialize
+# 序列化
 json_str = cirq.to_json(circuit)
 
-# Deserialize
+# 反序列化
 circuit = cirq.read_json(json_text=json_str)
 ```
 
-## Working with Qudits
+## 使用 Qudits
 
-Qudits are higher-dimensional quantum systems (qutrits, ququarts, etc.):
+Qudits 是高維量子系統（qutrits、ququarts 等）：
 
 ```python
-# Create qutrit (3-level system)
+# 建立 qutrit（3 能級系統）
 qutrit = cirq.LineQid(0, dimension=3)
 
-# Custom qutrit gate
+# 自訂 qutrit 閘
 class QutritXGate(cirq.Gate):
     def _qid_shape_(self):
         return (3,)
@@ -282,26 +282,26 @@ gate = QutritXGate()
 circuit = cirq.Circuit(gate(qutrit))
 ```
 
-## Observables
+## 可觀測量
 
-Create observables from Pauli operators:
+從 Pauli 運算子建立可觀測量：
 
 ```python
-# Single Pauli observable
+# 單一 Pauli 可觀測量
 obs = cirq.Z(q0)
 
-# Pauli string
+# Pauli 字串
 obs = cirq.X(q0) * cirq.Y(q1) * cirq.Z(q2)
 
-# Linear combination
+# 線性組合
 from cirq import PauliSum
 obs = 0.5 * cirq.X(q0) + 0.3 * cirq.Z(q1)
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use appropriate qubit types**: GridQubit for hardware-like topologies, LineQubit for 1D problems
-2. **Keep circuits modular**: Build reusable circuit functions
-3. **Use symbolic parameters**: For parameter sweeps and optimization
-4. **Label measurements clearly**: Use descriptive keys for measurement results
-5. **Document custom gates**: Include circuit diagram information for visualization
+1. **使用適當的量子位元類型**：GridQubit 用於硬體拓撲，LineQubit 用於 1D 問題
+2. **保持電路模組化**：建構可重用的電路函數
+3. **使用符號參數**：用於參數掃描和優化
+4. **清楚標記測量**：使用描述性鍵標記測量結果
+5. **記錄自訂閘**：包含電路圖資訊以便視覺化

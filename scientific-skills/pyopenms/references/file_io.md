@@ -1,99 +1,99 @@
-# File I/O and Data Formats
+# 檔案 I/O 和資料格式
 
-## Overview
+## 概述
 
-PyOpenMS supports multiple mass spectrometry file formats for reading and writing. This guide covers file handling strategies and format-specific operations.
+PyOpenMS 支援多種質譜檔案格式的讀取和寫入。本指南涵蓋檔案處理策略和格式特定的操作。
 
-## Supported Formats
+## 支援的格式
 
-### Spectrum Data Formats
+### 光譜資料格式
 
-- **mzML**: Standard XML-based format for mass spectrometry data
-- **mzXML**: Earlier XML-based format
-- **mzData**: XML format (deprecated but supported)
+- **mzML**：標準的 XML 質譜資料格式
+- **mzXML**：較早期的 XML 格式
+- **mzData**：XML 格式（已棄用但仍支援）
 
-### Identification Formats
+### 鑑定格式
 
-- **idXML**: OpenMS native identification format
-- **mzIdentML**: Standard XML format for identification data
-- **pepXML**: X! Tandem format
-- **protXML**: Protein identification format
+- **idXML**：OpenMS 原生鑑定格式
+- **mzIdentML**：標準的鑑定資料 XML 格式
+- **pepXML**：X! Tandem 格式
+- **protXML**：蛋白質鑑定格式
 
-### Feature and Quantitation Formats
+### 特徵和定量格式
 
-- **featureXML**: OpenMS format for detected features
-- **consensusXML**: Format for consensus features across samples
-- **mzTab**: Tab-delimited format for reporting
+- **featureXML**：偵測到的特徵的 OpenMS 格式
+- **consensusXML**：跨樣本共識特徵的格式
+- **mzTab**：報告用的 Tab 分隔格式
 
-### Sequence and Library Formats
+### 序列和資料庫格式
 
-- **FASTA**: Protein/peptide sequences
-- **TraML**: Transition lists for targeted experiments
+- **FASTA**：蛋白質/肽段序列
+- **TraML**：標靶實驗的轉換列表
 
-## Reading mzML Files
+## 讀取 mzML 檔案
 
-### In-Memory Loading
+### 記憶體內載入
 
-Load entire file into memory (suitable for smaller files):
+將整個檔案載入記憶體（適合較小的檔案）：
 
 ```python
 import pyopenms as ms
 
-# Create experiment container
+# 建立實驗容器
 exp = ms.MSExperiment()
 
-# Load file
+# 載入檔案
 ms.MzMLFile().load("sample.mzML", exp)
 
-# Access data
+# 存取資料
 print(f"Spectra: {exp.getNrSpectra()}")
 print(f"Chromatograms: {exp.getNrChromatograms()}")
 ```
 
-### Indexed Access
+### 索引存取
 
-Efficient random access for large files:
+大型檔案的高效隨機存取：
 
 ```python
-# Create indexed access
+# 建立索引存取
 indexed_mzml = ms.IndexedMzMLFileLoader()
 indexed_mzml.load("large_file.mzML")
 
-# Get specific spectrum by index
+# 按索引取得特定光譜
 spec = indexed_mzml.getSpectrumById(100)
 
-# Access by native ID
+# 按原生 ID 存取
 spec = indexed_mzml.getSpectrumByNativeId("scan=5000")
 ```
 
-### Streaming Access
+### 串流存取
 
-Memory-efficient processing for very large files:
+非常大型檔案的記憶體高效處理：
 
 ```python
-# Define consumer function
+# 定義消費者函數
 class SpectrumProcessor(ms.MSExperimentConsumer):
     def __init__(self):
         super().__init__()
         self.count = 0
 
     def consumeSpectrum(self, spec):
-        # Process spectrum
+        # 處理光譜
         if spec.getMSLevel() == 2:
             self.count += 1
 
-# Stream file
+# 串流檔案
 consumer = SpectrumProcessor()
 ms.MzMLFile().transform("large.mzML", consumer)
 print(f"Processed {consumer.count} MS2 spectra")
 ```
 
-### Cached Access
+### 快取存取
 
-Balance between memory usage and speed:
+記憶體使用和速度之間的平衡：
 
 ```python
-# Use on-disk caching
+# 使用磁碟快取
 options = ms.CachedmzML()
 options.setMetaDataOnly(False)
 
@@ -101,85 +101,85 @@ exp = ms.MSExperiment()
 ms.CachedmzMLHandler().load("sample.mzML", exp, options)
 ```
 
-## Writing mzML Files
+## 寫入 mzML 檔案
 
-### Basic Writing
+### 基本寫入
 
 ```python
-# Create or modify experiment
+# 建立或修改實驗
 exp = ms.MSExperiment()
-# ... add spectra ...
+# ... 添加光譜 ...
 
-# Write to file
+# 寫入檔案
 ms.MzMLFile().store("output.mzML", exp)
 ```
 
-### Compression Options
+### 壓縮選項
 
 ```python
-# Configure compression
+# 設定壓縮
 file_handler = ms.MzMLFile()
 
 options = ms.PeakFileOptions()
-options.setCompression(True)  # Enable compression
+options.setCompression(True)  # 啟用壓縮
 file_handler.setOptions(options)
 
 file_handler.store("compressed.mzML", exp)
 ```
 
-## Reading Identification Data
+## 讀取鑑定資料
 
-### idXML Format
+### idXML 格式
 
 ```python
-# Load identification results
+# 載入鑑定結果
 protein_ids = []
 peptide_ids = []
 
 ms.IdXMLFile().load("identifications.idXML", protein_ids, peptide_ids)
 
-# Access peptide identifications
+# 存取肽段鑑定
 for peptide_id in peptide_ids:
     print(f"RT: {peptide_id.getRT()}")
     print(f"MZ: {peptide_id.getMZ()}")
 
-    # Get peptide hits
+    # 取得肽段命中
     for hit in peptide_id.getHits():
         print(f"  Sequence: {hit.getSequence().toString()}")
         print(f"  Score: {hit.getScore()}")
         print(f"  Charge: {hit.getCharge()}")
 ```
 
-### mzIdentML Format
+### mzIdentML 格式
 
 ```python
-# Read mzIdentML
+# 讀取 mzIdentML
 protein_ids = []
 peptide_ids = []
 
 ms.MzIdentMLFile().load("results.mzid", protein_ids, peptide_ids)
 ```
 
-### pepXML Format
+### pepXML 格式
 
 ```python
-# Load pepXML
+# 載入 pepXML
 protein_ids = []
 peptide_ids = []
 
 ms.PepXMLFile().load("results.pep.xml", protein_ids, peptide_ids)
 ```
 
-## Reading Feature Data
+## 讀取特徵資料
 
 ### featureXML
 
 ```python
-# Load features
+# 載入特徵
 feature_map = ms.FeatureMap()
 ms.FeatureXMLFile().load("features.featureXML", feature_map)
 
-# Access features
+# 存取特徵
 for feature in feature_map:
     print(f"RT: {feature.getRT()}")
     print(f"MZ: {feature.getMZ()}")
@@ -190,26 +190,26 @@ for feature in feature_map:
 ### consensusXML
 
 ```python
-# Load consensus features
+# 載入共識特徵
 consensus_map = ms.ConsensusMap()
 ms.ConsensusXMLFile().load("consensus.consensusXML", consensus_map)
 
-# Access consensus features
+# 存取共識特徵
 for consensus_feature in consensus_map:
     print(f"RT: {consensus_feature.getRT()}")
     print(f"MZ: {consensus_feature.getMZ()}")
 
-    # Get feature handles (sub-features from different maps)
+    # 取得特徵控制代碼（來自不同圖的子特徵）
     for handle in consensus_feature.getFeatureList():
         map_index = handle.getMapIndex()
         intensity = handle.getIntensity()
         print(f"  Map {map_index}: {intensity}")
 ```
 
-## Reading FASTA Files
+## 讀取 FASTA 檔案
 
 ```python
-# Load protein sequences
+# 載入蛋白質序列
 fasta_entries = []
 ms.FASTAFile().load("database.fasta", fasta_entries)
 
@@ -219,113 +219,113 @@ for entry in fasta_entries:
     print(f"Sequence: {entry.sequence}")
 ```
 
-## Reading TraML Files
+## 讀取 TraML 檔案
 
 ```python
-# Load transition lists for targeted experiments
+# 載入標靶實驗的轉換列表
 targeted_exp = ms.TargetedExperiment()
 ms.TraMLFile().load("transitions.TraML", targeted_exp)
 
-# Access transitions
+# 存取轉換
 for transition in targeted_exp.getTransitions():
     print(f"Precursor MZ: {transition.getPrecursorMZ()}")
     print(f"Product MZ: {transition.getProductMZ()}")
 ```
 
-## Writing mzTab Files
+## 寫入 mzTab 檔案
 
 ```python
-# Create mzTab for reporting
+# 建立 mzTab 用於報告
 mztab = ms.MzTab()
 
-# Add metadata
+# 添加中繼資料
 metadata = mztab.getMetaData()
 metadata.mz_tab_version.set("1.0.0")
 metadata.title.set("Proteomics Analysis Results")
 
-# Add protein data
+# 添加蛋白質資料
 protein_section = mztab.getProteinSectionRows()
-# ... populate protein data ...
+# ... 填入蛋白質資料 ...
 
-# Write to file
+# 寫入檔案
 ms.MzTabFile().store("report.mzTab", mztab)
 ```
 
-## Format Conversion
+## 格式轉換
 
-### mzXML to mzML
+### mzXML 到 mzML
 
 ```python
-# Read mzXML
+# 讀取 mzXML
 exp = ms.MSExperiment()
 ms.MzXMLFile().load("data.mzXML", exp)
 
-# Write as mzML
+# 寫入為 mzML
 ms.MzMLFile().store("data.mzML", exp)
 ```
 
-### Extract Chromatograms from mzML
+### 從 mzML 提取層析圖
 
 ```python
-# Load experiment
+# 載入實驗
 exp = ms.MSExperiment()
 ms.MzMLFile().load("data.mzML", exp)
 
-# Extract specific chromatogram
+# 提取特定層析圖
 for chrom in exp.getChromatograms():
     if chrom.getNativeID() == "TIC":
         rt, intensity = chrom.get_peaks()
         print(f"TIC has {len(rt)} data points")
 ```
 
-## File Metadata
+## 檔案中繼資料
 
-### Access mzML Metadata
+### 存取 mzML 中繼資料
 
 ```python
-# Load file
+# 載入檔案
 exp = ms.MSExperiment()
 ms.MzMLFile().load("sample.mzML", exp)
 
-# Get experimental settings
+# 取得實驗設定
 exp_settings = exp.getExperimentalSettings()
 
-# Instrument info
+# 儀器資訊
 instrument = exp_settings.getInstrument()
 print(f"Instrument: {instrument.getName()}")
 print(f"Model: {instrument.getModel()}")
 
-# Sample info
+# 樣本資訊
 sample = exp_settings.getSample()
 print(f"Sample name: {sample.getName()}")
 
-# Source files
+# 來源檔案
 for source_file in exp_settings.getSourceFiles():
     print(f"Source: {source_file.getNameOfFile()}")
 ```
 
-## Best Practices
+## 最佳實務
 
-### Memory Management
+### 記憶體管理
 
-For large files:
-1. Use indexed or streaming access instead of full in-memory loading
-2. Process data in chunks
-3. Clear data structures when no longer needed
+對於大型檔案：
+1. 使用索引或串流存取而非完整記憶體內載入
+2. 分塊處理資料
+3. 不再需要時清除資料結構
 
 ```python
-# Good for large files
+# 適合大型檔案
 indexed_mzml = ms.IndexedMzMLFileLoader()
 indexed_mzml.load("huge_file.mzML")
 
-# Process spectra one at a time
+# 一次處理一個光譜
 for i in range(indexed_mzml.getNrSpectra()):
     spec = indexed_mzml.getSpectrumById(i)
-    # Process spectrum
-    # Spectrum automatically cleaned up after processing
+    # 處理光譜
+    # 處理後光譜自動清理
 ```
 
-### Error Handling
+### 錯誤處理
 
 ```python
 try:
@@ -335,10 +335,10 @@ except Exception as e:
     print(f"Failed to load file: {e}")
 ```
 
-### File Validation
+### 檔案驗證
 
 ```python
-# Check if file exists and is readable
+# 檢查檔案是否存在且可讀取
 import os
 
 if os.path.exists("data.mzML") and os.path.isfile("data.mzML"):

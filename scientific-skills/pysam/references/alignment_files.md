@@ -1,49 +1,49 @@
-# Working with Alignment Files (SAM/BAM/CRAM)
+# 處理比對檔案（SAM/BAM/CRAM）
 
-## Overview
+## 概述
 
-Pysam provides the `AlignmentFile` class for reading and writing SAM/BAM/CRAM formatted files containing aligned sequence data. BAM/CRAM files support compression and random access through indexing.
+Pysam 提供 `AlignmentFile` 類別用於讀取和寫入包含比對序列資料的 SAM/BAM/CRAM 格式檔案。BAM/CRAM 檔案透過索引支援壓縮和隨機存取。
 
-## Opening Alignment Files
+## 開啟比對檔案
 
-Specify format via mode qualifier:
-- `"rb"` - Read BAM (binary)
-- `"r"` - Read SAM (text)
-- `"rc"` - Read CRAM (compressed)
-- `"wb"` - Write BAM
-- `"w"` - Write SAM
-- `"wc"` - Write CRAM
+透過模式限定符指定格式：
+- `"rb"` - 讀取 BAM（二進位）
+- `"r"` - 讀取 SAM（文字）
+- `"rc"` - 讀取 CRAM（壓縮）
+- `"wb"` - 寫入 BAM
+- `"w"` - 寫入 SAM
+- `"wc"` - 寫入 CRAM
 
 ```python
 import pysam
 
-# Reading
+# 讀取
 samfile = pysam.AlignmentFile("example.bam", "rb")
 
-# Writing (requires template or header)
+# 寫入（需要模板或標頭）
 outfile = pysam.AlignmentFile("output.bam", "wb", template=samfile)
 ```
 
-### Stream Processing
+### 串流處理
 
-Use `"-"` as filename for stdin/stdout operations:
+使用 `"-"` 作為檔名進行 stdin/stdout 操作：
 
 ```python
-# Read from stdin
+# 從 stdin 讀取
 infile = pysam.AlignmentFile('-', 'rb')
 
-# Write to stdout
+# 寫入 stdout
 outfile = pysam.AlignmentFile('-', 'w', template=infile)
 ```
 
-**Important:** Pysam does not support reading/writing from true Python file objects—only stdin/stdout streams are supported.
+**重要：** Pysam 不支援從真正的 Python 檔案物件讀取/寫入—僅支援 stdin/stdout 串流。
 
-## AlignmentFile Properties
+## AlignmentFile 屬性
 
-**Header Information:**
-- `references` - List of chromosome/contig names
-- `lengths` - Corresponding lengths for each reference
-- `header` - Complete header as dictionary
+**標頭資訊：**
+- `references` - 染色體/contig 名稱列表
+- `lengths` - 每個參考序列的對應長度
+- `header` - 完整標頭作為字典
 
 ```python
 samfile = pysam.AlignmentFile("example.bam", "rb")
@@ -51,36 +51,36 @@ print(f"References: {samfile.references}")
 print(f"Lengths: {samfile.lengths}")
 ```
 
-## Reading Reads
+## 讀取讀取（Reads）
 
-### fetch() - Region-Based Retrieval
+### fetch() - 基於區域的擷取
 
-Retrieves reads overlapping specified genomic regions using **0-based coordinates**.
+使用 **0-based 座標** 擷取與指定基因體區域重疊的讀取。
 
 ```python
-# Fetch specific region
+# 取得特定區域
 for read in samfile.fetch("chr1", 1000, 2000):
     print(read.query_name, read.reference_start)
 
-# Fetch entire contig
+# 取得整個 contig
 for read in samfile.fetch("chr1"):
     print(read.query_name)
 
-# Fetch without index (sequential read)
+# 無索引取得（循序讀取）
 for read in samfile.fetch(until_eof=True):
     print(read.query_name)
 ```
 
-**Important Notes:**
-- Requires index (.bai/.crai) for random access
-- Returns reads that **overlap** the region (may extend beyond boundaries)
-- Use `until_eof=True` for non-indexed files or sequential reading
-- By default, only returns mapped reads
-- For unmapped reads, use `fetch("*")` or `until_eof=True`
+**重要注意事項：**
+- 隨機存取需要索引（.bai/.crai）
+- 回傳**重疊**區域的讀取（可能延伸超出邊界）
+- 對非索引檔案或循序讀取使用 `until_eof=True`
+- 預設只回傳已比對的讀取
+- 對於未比對的讀取，使用 `fetch("*")` 或 `until_eof=True`
 
-### Multiple Iterators
+### 多個迭代器
 
-When using multiple iterators on the same file:
+在同一檔案上使用多個迭代器時：
 
 ```python
 samfile = pysam.AlignmentFile("example.bam", "rb", multiple_iterators=True)
@@ -88,76 +88,76 @@ iter1 = samfile.fetch("chr1", 1000, 2000)
 iter2 = samfile.fetch("chr2", 5000, 6000)
 ```
 
-Without `multiple_iterators=True`, a new fetch() call repositions the file pointer and breaks existing iterators.
+沒有 `multiple_iterators=True`，新的 fetch() 呼叫會重新定位檔案指標並破壞現有迭代器。
 
-### count() - Count Reads in Region
+### count() - 計算區域內的讀取數
 
 ```python
-# Count all reads
+# 計算所有讀取
 num_reads = samfile.count("chr1", 1000, 2000)
 
-# Count with quality filter
+# 帶品質過濾的計數
 num_quality_reads = samfile.count("chr1", 1000, 2000, quality=20)
 ```
 
-### count_coverage() - Per-Base Coverage
+### count_coverage() - 逐鹼基覆蓋度
 
-Returns four arrays (A, C, G, T) with per-base coverage:
+回傳四個陣列（A、C、G、T）包含逐鹼基覆蓋度：
 
 ```python
 coverage = samfile.count_coverage("chr1", 1000, 2000)
 a_counts, c_counts, g_counts, t_counts = coverage
 ```
 
-## AlignedSegment Objects
+## AlignedSegment 物件
 
-Each read is represented as an `AlignedSegment` object with these key attributes:
+每個讀取表示為具有以下關鍵屬性的 `AlignedSegment` 物件：
 
-### Read Information
-- `query_name` - Read name/ID
-- `query_sequence` - Read sequence (bases)
-- `query_qualities` - Base quality scores (ASCII-encoded)
-- `query_length` - Length of the read
+### 讀取資訊
+- `query_name` - 讀取名稱/ID
+- `query_sequence` - 讀取序列（鹼基）
+- `query_qualities` - 鹼基品質分數（ASCII 編碼）
+- `query_length` - 讀取的長度
 
-### Mapping Information
-- `reference_name` - Chromosome/contig name
-- `reference_start` - Start position (0-based, inclusive)
-- `reference_end` - End position (0-based, exclusive)
-- `mapping_quality` - MAPQ score
-- `cigarstring` - CIGAR string (e.g., "100M")
-- `cigartuples` - CIGAR as list of (operation, length) tuples
+### 比對資訊
+- `reference_name` - 染色體/contig 名稱
+- `reference_start` - 起始位置（0-based，包含）
+- `reference_end` - 結束位置（0-based，排除）
+- `mapping_quality` - MAPQ 分數
+- `cigarstring` - CIGAR 字串（例如 "100M"）
+- `cigartuples` - CIGAR 作為（操作，長度）元組列表
 
-**Important:** `cigartuples` format differs from SAM specification. Operations are integers:
-- 0 = M (match/mismatch)
-- 1 = I (insertion)
-- 2 = D (deletion)
-- 3 = N (skipped reference)
-- 4 = S (soft clipping)
-- 5 = H (hard clipping)
-- 6 = P (padding)
-- 7 = = (sequence match)
-- 8 = X (sequence mismatch)
+**重要：** `cigartuples` 格式與 SAM 規範不同。操作是整數：
+- 0 = M（比對/錯配）
+- 1 = I（插入）
+- 2 = D（刪除）
+- 3 = N（跳過參考）
+- 4 = S（軟裁剪）
+- 5 = H（硬裁剪）
+- 6 = P（填充）
+- 7 = =（序列比對）
+- 8 = X（序列錯配）
 
-### Flags and Status
-- `flag` - SAM flag as integer
-- `is_paired` - Is read paired?
-- `is_proper_pair` - Is read in a proper pair?
-- `is_unmapped` - Is read unmapped?
-- `mate_is_unmapped` - Is mate unmapped?
-- `is_reverse` - Is read on reverse strand?
-- `mate_is_reverse` - Is mate on reverse strand?
-- `is_read1` - Is this read1?
-- `is_read2` - Is this read2?
-- `is_secondary` - Is secondary alignment?
-- `is_qcfail` - Did read fail QC?
-- `is_duplicate` - Is read a duplicate?
-- `is_supplementary` - Is supplementary alignment?
+### 旗標和狀態
+- `flag` - SAM 旗標作為整數
+- `is_paired` - 讀取是否配對？
+- `is_proper_pair` - 讀取是否在正確配對中？
+- `is_unmapped` - 讀取是否未比對？
+- `mate_is_unmapped` - 配對是否未比對？
+- `is_reverse` - 讀取是否在反向股？
+- `mate_is_reverse` - 配對是否在反向股？
+- `is_read1` - 這是 read1 嗎？
+- `is_read2` - 這是 read2 嗎？
+- `is_secondary` - 是次要比對嗎？
+- `is_qcfail` - 讀取是否未通過 QC？
+- `is_duplicate` - 讀取是否為重複？
+- `is_supplementary` - 是補充比對嗎？
 
-### Tags and Optional Fields
-- `get_tag(tag)` - Get value of optional field
-- `set_tag(tag, value)` - Set optional field
-- `has_tag(tag)` - Check if tag exists
-- `get_tags()` - Get all tags as list of tuples
+### 標籤和可選欄位
+- `get_tag(tag)` - 取得可選欄位的值
+- `set_tag(tag, value)` - 設定可選欄位
+- `has_tag(tag)` - 檢查標籤是否存在
+- `get_tags()` - 取得所有標籤作為元組列表
 
 ```python
 for read in samfile.fetch("chr1", 1000, 2000):
@@ -166,9 +166,9 @@ for read in samfile.fetch("chr1", 1000, 2000):
         print(f"{read.query_name}: NM={edit_distance}")
 ```
 
-## Writing Alignment Files
+## 寫入比對檔案
 
-### Creating Header
+### 建立標頭
 
 ```python
 header = {
@@ -182,28 +182,28 @@ header = {
 outfile = pysam.AlignmentFile("output.bam", "wb", header=header)
 ```
 
-### Creating AlignedSegment Objects
+### 建立 AlignedSegment 物件
 
 ```python
-# Create new read
+# 建立新讀取
 a = pysam.AlignedSegment()
 a.query_name = "read001"
 a.query_sequence = "AGCTTAGCTAGCTACCTATATCTTGGTCTTGGCCG"
 a.flag = 0
-a.reference_id = 0  # Index into header['SQ']
+a.reference_id = 0  # header['SQ'] 的索引
 a.reference_start = 100
 a.mapping_quality = 20
 a.cigar = [(0, 35)]  # 35M
 a.query_qualities = pysam.qualitystring_to_array("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
 
-# Write to file
+# 寫入檔案
 outfile.write(a)
 ```
 
-### Converting Between Formats
+### 格式之間的轉換
 
 ```python
-# BAM to SAM
+# BAM 轉 SAM
 infile = pysam.AlignmentFile("input.bam", "rb")
 outfile = pysam.AlignmentFile("output.sam", "w", template=infile)
 for read in infile:
@@ -212,9 +212,9 @@ infile.close()
 outfile.close()
 ```
 
-## Pileup Analysis
+## 堆疊分析
 
-The `pileup()` method provides **column-wise** (position-by-position) analysis across a region:
+`pileup()` 方法提供跨區域的**列式**（逐位置）分析：
 
 ```python
 for pileupcolumn in samfile.pileup("chr1", 1000, 2000):
@@ -222,59 +222,59 @@ for pileupcolumn in samfile.pileup("chr1", 1000, 2000):
 
     for pileupread in pileupcolumn.pileups:
         if not pileupread.is_del and not pileupread.is_refskip:
-            # Query position is the position in the read
+            # 查詢位置是讀取中的位置
             base = pileupread.alignment.query_sequence[pileupread.query_position]
             print(f"  {pileupread.alignment.query_name}: {base}")
 ```
 
-**Key attributes:**
-- `pileupcolumn.pos` - 0-based reference position
-- `pileupcolumn.nsegments` - Number of reads covering position
-- `pileupread.alignment` - The AlignedSegment object
-- `pileupread.query_position` - Position in the read (None for deletions)
-- `pileupread.is_del` - Is this a deletion?
-- `pileupread.is_refskip` - Is this a reference skip (N in CIGAR)?
+**關鍵屬性：**
+- `pileupcolumn.pos` - 0-based 參考位置
+- `pileupcolumn.nsegments` - 覆蓋該位置的讀取數
+- `pileupread.alignment` - AlignedSegment 物件
+- `pileupread.query_position` - 讀取中的位置（刪除時為 None）
+- `pileupread.is_del` - 這是刪除嗎？
+- `pileupread.is_refskip` - 這是參考跳過（CIGAR 中的 N）嗎？
 
-**Important:** Keep iterator references alive. The error "PileupProxy accessed after iterator finished" occurs when iterators go out of scope prematurely.
+**重要：** 保持迭代器參考活躍。當迭代器過早離開作用域時會發生「PileupProxy accessed after iterator finished」錯誤。
 
-## Coordinate System
+## 座標系統
 
-**Critical:** Pysam uses **0-based, half-open** coordinates (Python convention):
-- `reference_start` is 0-based (first base is 0)
-- `reference_end` is exclusive (not included in range)
-- Region from 1000-2000 includes bases 1000-1999
+**關鍵：** Pysam 使用 **0-based、半開區間** 座標（Python 慣例）：
+- `reference_start` 是 0-based（第一個鹼基是 0）
+- `reference_end` 是排除的（不包含在範圍內）
+- 區域 1000-2000 包含鹼基 1000-1999
 
-**Exception:** Region strings in `fetch()` and `pileup()` follow samtools conventions (1-based):
+**例外：** `fetch()` 和 `pileup()` 中的區域字串遵循 samtools 慣例（1-based）：
 ```python
-# These are equivalent:
-samfile.fetch("chr1", 999, 2000)  # Python style: 0-based
-samfile.fetch("chr1:1000-2000")   # samtools style: 1-based
+# 這些是等價的：
+samfile.fetch("chr1", 999, 2000)  # Python 風格：0-based
+samfile.fetch("chr1:1000-2000")   # samtools 風格：1-based
 ```
 
-## Indexing
+## 索引
 
-Create BAM index:
+建立 BAM 索引：
 ```python
 pysam.index("example.bam")
 ```
 
-Or use command-line interface:
+或使用命令列介面：
 ```python
 pysam.samtools.index("example.bam")
 ```
 
-## Performance Tips
+## 效能提示
 
-1. **Use indexed access** when querying specific regions repeatedly
-2. **Use `pileup()` for column-wise analysis** instead of repeated fetch operations
-3. **Use `fetch(until_eof=True)` for sequential reading** of non-indexed files
-4. **Avoid multiple iterators** unless necessary (performance cost)
-5. **Use `count()` for simple counting** instead of iterating and counting manually
+1. **使用索引存取** 當重複查詢特定區域時
+2. **使用 `pileup()` 進行列式分析** 而非重複的 fetch 操作
+3. **使用 `fetch(until_eof=True)` 循序讀取** 非索引檔案
+4. **避免多個迭代器** 除非必要（有效能成本）
+5. **使用 `count()` 進行簡單計數** 而非迭代並手動計數
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Partial overlaps:** `fetch()` returns reads that overlap region boundaries—implement explicit filtering if exact boundaries are needed
-2. **Quality score editing:** Cannot edit `query_qualities` in place after modifying `query_sequence`. Create a copy first: `quals = read.query_qualities`
-3. **Missing index:** `fetch()` without `until_eof=True` requires an index file
-4. **Thread safety:** While pysam releases GIL during I/O, comprehensive thread-safety hasn't been fully validated
-5. **Iterator scope:** Keep pileup iterator references alive to avoid "PileupProxy accessed after iterator finished" errors
+1. **部分重疊：** `fetch()` 回傳與區域邊界重疊的讀取—如需精確邊界則實作明確過濾
+2. **品質分數編輯：** 修改 `query_sequence` 後無法就地編輯 `query_qualities`。先建立副本：`quals = read.query_qualities`
+3. **缺少索引：** 沒有 `until_eof=True` 的 `fetch()` 需要索引檔案
+4. **執行緒安全：** 雖然 pysam 在 I/O 期間釋放 GIL，但全面的執行緒安全性尚未完全驗證
+5. **迭代器作用域：** 保持堆疊迭代器參考活躍以避免「PileupProxy accessed after iterator finished」錯誤

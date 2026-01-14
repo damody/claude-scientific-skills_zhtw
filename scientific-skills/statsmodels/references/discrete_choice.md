@@ -1,123 +1,123 @@
-# Discrete Choice Models Reference
+# 離散選擇模型參考
 
-This document provides comprehensive guidance on discrete choice models in statsmodels, including binary, multinomial, count, and ordinal models.
+本文件提供 statsmodels 中離散選擇模型的完整指引，包括二元、多項、計數和序數模型。
 
-## Overview
+## 概述
 
-Discrete choice models handle outcomes that are:
-- **Binary**: 0/1, success/failure
-- **Multinomial**: Multiple unordered categories
-- **Ordinal**: Ordered categories
-- **Count**: Non-negative integers
+離散選擇模型處理以下類型的結果：
+- **二元（Binary）**：0/1、成功/失敗
+- **多項（Multinomial）**：多個無序類別
+- **序數（Ordinal）**：有序類別
+- **計數（Count）**：非負整數
 
-All models use maximum likelihood estimation and assume i.i.d. errors.
+所有模型使用最大概似估計，並假設 i.i.d. 誤差。
 
-## Binary Models
+## 二元模型
 
-### Logit (Logistic Regression)
+### Logit（邏輯斯迴歸）
 
-Uses logistic distribution for binary outcomes.
+使用邏輯斯分布處理二元結果。
 
-**When to use:**
-- Binary classification (yes/no, success/failure)
-- Probability estimation for binary outcomes
-- Interpretable odds ratios
+**使用時機：**
+- 二元分類（是/否、成功/失敗）
+- 二元結果的機率估計
+- 可解釋的勝算比
 
-**Model**: P(Y=1|X) = 1 / (1 + exp(-Xβ))
+**模型**：P(Y=1|X) = 1 / (1 + exp(-Xβ))
 
 ```python
 import statsmodels.api as sm
 from statsmodels.discrete.discrete_model import Logit
 
-# Prepare data
+# 準備資料
 X = sm.add_constant(X_data)
 
-# Fit model
+# 配適模型
 model = Logit(y, X)
 results = model.fit()
 
 print(results.summary())
 ```
 
-**Interpretation:**
+**解釋：**
 ```python
 import numpy as np
 
-# Odds ratios
+# 勝算比
 odds_ratios = np.exp(results.params)
 print("Odds ratios:", odds_ratios)
 
-# For 1-unit increase in X, odds multiply by exp(β)
-# OR > 1: increases odds of success
-# OR < 1: decreases odds of success
-# OR = 1: no effect
+# X 每增加 1 單位，勝算乘以 exp(β)
+# OR > 1：增加成功的勝算
+# OR < 1：減少成功的勝算
+# OR = 1：無效果
 
-# Confidence intervals for odds ratios
+# 勝算比的信賴區間
 odds_ci = np.exp(results.conf_int())
 print("Odds ratio 95% CI:")
 print(odds_ci)
 ```
 
-**Marginal effects:**
+**邊際效應：**
 ```python
-# Average marginal effects (AME)
+# 平均邊際效應（AME）
 marginal_effects = results.get_margeff(at='mean')
 print(marginal_effects.summary())
 
-# Marginal effects at means (MEM)
+# 均值處的邊際效應（MEM）
 marginal_effects_mem = results.get_margeff(at='mean', method='dydx')
 
-# Marginal effects at representative values
+# 特定值處的邊際效應
 marginal_effects_custom = results.get_margeff(at='mean',
                                               atexog={'x1': 1, 'x2': 5})
 ```
 
-**Predictions:**
+**預測：**
 ```python
-# Predicted probabilities
+# 預測機率
 probs = results.predict(X)
 
-# Binary predictions (0.5 threshold)
+# 二元預測（0.5 閾值）
 predictions = (probs > 0.5).astype(int)
 
-# Custom threshold
+# 自訂閾值
 threshold = 0.3
 predictions_custom = (probs > threshold).astype(int)
 
-# For new data
+# 新資料
 X_new = sm.add_constant(X_new_data)
 new_probs = results.predict(X_new)
 ```
 
-**Model evaluation:**
+**模型評估：**
 ```python
 from sklearn.metrics import (classification_report, confusion_matrix,
                              roc_auc_score, roc_curve)
 
-# Classification report
+# 分類報告
 print(classification_report(y, predictions))
 
-# Confusion matrix
+# 混淆矩陣
 print(confusion_matrix(y, predictions))
 
 # AUC-ROC
 auc = roc_auc_score(y, probs)
 print(f"AUC: {auc:.4f}")
 
-# Pseudo R-squared
+# 虛擬 R 平方
 print(f"McFadden's Pseudo R²: {results.prsquared:.4f}")
 ```
 
 ### Probit
 
-Uses normal distribution for binary outcomes.
+使用常態分布處理二元結果。
 
-**When to use:**
-- Binary outcomes
-- Prefer normal distribution assumption
-- Field convention (econometrics often uses probit)
+**使用時機：**
+- 二元結果
+- 偏好常態分布假設
+- 領域慣例（計量經濟學常用 probit）
 
-**Model**: P(Y=1|X) = Φ(Xβ), where Φ is standard normal CDF
+**模型**：P(Y=1|X) = Φ(Xβ)，其中 Φ 是標準常態累積分布函數
 
 ```python
 from statsmodels.discrete.discrete_model import Probit
@@ -128,14 +128,14 @@ results = model.fit()
 print(results.summary())
 ```
 
-**Comparison with Logit:**
-- Probit and Logit usually give similar results
-- Probit: symmetric, based on normal distribution
-- Logit: slightly heavier tails, easier interpretation (odds ratios)
-- Coefficients not directly comparable (scale difference)
+**與 Logit 的比較：**
+- Probit 和 Logit 通常給出類似結果
+- Probit：對稱，基於常態分布
+- Logit：尾部稍重，解釋較容易（勝算比）
+- 係數不可直接比較（尺度差異）
 
 ```python
-# Marginal effects are comparable
+# 邊際效應可比較
 logit_me = logit_results.get_margeff().margeff
 probit_me = probit_results.get_margeff().margeff
 
@@ -143,51 +143,51 @@ print("Logit marginal effects:", logit_me)
 print("Probit marginal effects:", probit_me)
 ```
 
-## Multinomial Models
+## 多項模型
 
-### MNLogit (Multinomial Logit)
+### MNLogit（多項邏輯斯迴歸）
 
-For unordered categorical outcomes with 3+ categories.
+用於 3 個以上類別的無序類別結果。
 
-**When to use:**
-- Multiple unordered categories (e.g., transportation mode, brand choice)
-- No natural ordering among categories
-- Need probabilities for each category
+**使用時機：**
+- 多個無序類別（例如交通方式、品牌選擇）
+- 類別間無自然順序
+- 需要每個類別的機率
 
-**Model**: P(Y=j|X) = exp(Xβⱼ) / Σₖ exp(Xβₖ)
+**模型**：P(Y=j|X) = exp(Xβⱼ) / Σₖ exp(Xβₖ)
 
 ```python
 from statsmodels.discrete.discrete_model import MNLogit
 
-# y should be integers 0, 1, 2, ... for categories
+# y 應為類別的整數 0, 1, 2, ...
 model = MNLogit(y, X)
 results = model.fit()
 
 print(results.summary())
 ```
 
-**Interpretation:**
+**解釋：**
 ```python
-# One category is reference (usually category 0)
-# Coefficients represent log-odds relative to reference
+# 一個類別為參考（通常是類別 0）
+# 係數表示相對於參考的對數勝算
 
-# For category j vs reference:
-# exp(β_j) = odds ratio of category j vs reference
+# 對於類別 j 對參考：
+# exp(β_j) = 類別 j 對參考的勝算比
 
-# Predicted probabilities for each category
-probs = results.predict(X)  # Shape: (n_samples, n_categories)
+# 每個類別的預測機率
+probs = results.predict(X)  # 形狀：(n_samples, n_categories)
 
-# Most likely category
+# 最可能的類別
 predicted_categories = probs.argmax(axis=1)
 ```
 
-**Relative risk ratios:**
+**相對風險比：**
 ```python
-# Exponentiate coefficients for relative risk ratios
+# 對係數取指數得到相對風險比
 import numpy as np
 import pandas as pd
 
-# Get parameter names and values
+# 取得參數名稱和值
 params_df = pd.DataFrame({
     'coef': results.params,
     'RRR': np.exp(results.params)
@@ -195,35 +195,35 @@ params_df = pd.DataFrame({
 print(params_df)
 ```
 
-### Conditional Logit
+### 條件 Logit
 
-For choice models where alternatives have characteristics.
+用於替代品具有特徵的選擇模型。
 
-**When to use:**
-- Alternative-specific regressors (vary across choices)
-- Panel data with choices
-- Discrete choice experiments
+**使用時機：**
+- 替代品特定回歸變數（跨選擇變化）
+- 含選擇的追蹤資料
+- 離散選擇實驗
 
 ```python
 from statsmodels.discrete.conditional_models import ConditionalLogit
 
-# Data structure: long format with choice indicator
+# 資料結構：長格式，含選擇指標
 model = ConditionalLogit(y_choice, X_alternatives, groups=individual_id)
 results = model.fit()
 ```
 
-## Count Models
+## 計數模型
 
 ### Poisson
 
-Standard model for count data.
+計數資料的標準模型。
 
-**When to use:**
-- Count outcomes (events, occurrences)
-- Rare events
-- Mean ≈ variance
+**使用時機：**
+- 計數結果（事件、發生次數）
+- 稀有事件
+- 均值 ≈ 變異數
 
-**Model**: P(Y=k|X) = exp(-λ) λᵏ / k!, where log(λ) = Xβ
+**模型**：P(Y=k|X) = exp(-λ) λᵏ / k!，其中 log(λ) = Xβ
 
 ```python
 from statsmodels.discrete.count_model import Poisson
@@ -234,26 +234,26 @@ results = model.fit()
 print(results.summary())
 ```
 
-**Interpretation:**
+**解釋：**
 ```python
-# Rate ratios (incident rate ratios)
+# 率比（發生率比）
 rate_ratios = np.exp(results.params)
 print("Rate ratios:", rate_ratios)
 
-# For 1-unit increase in X, expected count multiplies by exp(β)
+# X 每增加 1 單位，期望計數乘以 exp(β)
 ```
 
-**Check overdispersion:**
+**檢查過度離散：**
 ```python
-# Mean and variance should be similar for Poisson
+# Poisson 的均值和變異數應相似
 print(f"Mean: {y_counts.mean():.2f}")
 print(f"Variance: {y_counts.var():.2f}")
 
-# Formal test
+# 正式檢定
 from statsmodels.stats.stattools import durbin_watson
 
-# Overdispersion if variance >> mean
-# Rule of thumb: variance/mean > 1.5 suggests overdispersion
+# 若變異數 >> 均值則過度離散
+# 經驗法則：變異數/均值 > 1.5 表示過度離散
 overdispersion_ratio = y_counts.var() / y_counts.mean()
 print(f"Variance/Mean: {overdispersion_ratio:.2f}")
 
@@ -261,25 +261,25 @@ if overdispersion_ratio > 1.5:
     print("Consider Negative Binomial model")
 ```
 
-**With offset (for rates):**
+**含偏移量（用於率）：**
 ```python
-# When modeling rates with varying exposure
+# 當建模具有不同暴露量的率時
 # log(λ) = log(exposure) + Xβ
 
 model = Poisson(y_counts, X, offset=np.log(exposure))
 results = model.fit()
 ```
 
-### Negative Binomial
+### 負二項（Negative Binomial）
 
-For overdispersed count data (variance > mean).
+用於過度離散的計數資料（變異數 > 均值）。
 
-**When to use:**
-- Count data with overdispersion
-- Excess variance not explained by Poisson
-- Heterogeneity in counts
+**使用時機：**
+- 具過度離散的計數資料
+- Poisson 無法解釋的過多變異數
+- 計數中的異質性
 
-**Model**: Adds dispersion parameter α to account for overdispersion
+**模型**：添加離散參數 α 以解釋過度離散
 
 ```python
 from statsmodels.discrete.count_model import NegativeBinomial
@@ -291,168 +291,168 @@ print(results.summary())
 print(f"Dispersion parameter alpha: {results.params['alpha']:.4f}")
 ```
 
-**Compare with Poisson:**
+**與 Poisson 比較：**
 ```python
-# Fit both models
+# 配適兩個模型
 poisson_results = Poisson(y_counts, X).fit()
 nb_results = NegativeBinomial(y_counts, X).fit()
 
-# AIC comparison (lower is better)
+# AIC 比較（較低較佳）
 print(f"Poisson AIC: {poisson_results.aic:.2f}")
 print(f"Negative Binomial AIC: {nb_results.aic:.2f}")
 
-# Likelihood ratio test (if NB is better)
+# 概似比檢定（若 NB 較佳）
 from scipy import stats
 lr_stat = 2 * (nb_results.llf - poisson_results.llf)
-lr_pval = 1 - stats.chi2.cdf(lr_stat, df=1)  # 1 extra parameter (alpha)
+lr_pval = 1 - stats.chi2.cdf(lr_stat, df=1)  # 1 個額外參數（alpha）
 print(f"LR test p-value: {lr_pval:.4f}")
 
 if lr_pval < 0.05:
     print("Negative Binomial significantly better")
 ```
 
-### Zero-Inflated Models
+### 零膨脹模型
 
-For count data with excess zeros.
+用於具有過多零值的計數資料。
 
-**When to use:**
-- More zeros than expected from Poisson/NB
-- Two processes: one for zeros, one for counts
-- Examples: number of doctor visits, insurance claims
+**使用時機：**
+- 比 Poisson/NB 預期更多的零值
+- 兩個過程：一個產生零值，一個產生計數
+- 範例：就醫次數、保險理賠
 
-**Models:**
-- ZeroInflatedPoisson (ZIP)
-- ZeroInflatedNegativeBinomialP (ZINB)
+**模型：**
+- ZeroInflatedPoisson（ZIP）
+- ZeroInflatedNegativeBinomialP（ZINB）
 
 ```python
 from statsmodels.discrete.count_model import (ZeroInflatedPoisson,
                                                ZeroInflatedNegativeBinomialP)
 
-# ZIP model
+# ZIP 模型
 zip_model = ZeroInflatedPoisson(y_counts, X, exog_infl=X_inflation)
 zip_results = zip_model.fit()
 
-# ZINB model (for overdispersion + excess zeros)
+# ZINB 模型（用於過度離散 + 過多零值）
 zinb_model = ZeroInflatedNegativeBinomialP(y_counts, X, exog_infl=X_inflation)
 zinb_results = zinb_model.fit()
 
 print(zip_results.summary())
 ```
 
-**Two parts of the model:**
+**模型的兩個部分：**
 ```python
-# 1. Inflation model: P(Y=0 due to inflation)
-# 2. Count model: distribution of counts
+# 1. 膨脹模型：P(Y=0 由於膨脹)
+# 2. 計數模型：計數的分布
 
-# Predicted probabilities of inflation
+# 膨脹的預測機率
 inflation_probs = zip_results.predict(X, which='prob')
 
-# Predicted counts
+# 預測計數
 predicted_counts = zip_results.predict(X, which='mean')
 ```
 
-### Hurdle Models
+### 障礙模型（Hurdle Models）
 
-Two-stage model: whether any counts, then how many.
+兩階段模型：是否有任何計數，然後有多少。
 
-**When to use:**
-- Excess zeros
-- Different processes for zero vs positive counts
-- Zeros structurally different from positive values
+**使用時機：**
+- 過多零值
+- 零值與正計數有不同過程
+- 零值在結構上與正值不同
 
 ```python
 from statsmodels.discrete.count_model import HurdleCountModel
 
-# Specify count distribution and zero inflation
+# 指定計數分布和零膨脹
 model = HurdleCountModel(y_counts, X,
                          exog_infl=X_hurdle,
-                         dist='poisson')  # or 'negbin'
+                         dist='poisson')  # 或 'negbin'
 results = model.fit()
 
 print(results.summary())
 ```
 
-## Ordinal Models
+## 序數模型
 
-### Ordered Logit/Probit
+### 有序 Logit/Probit
 
-For ordered categorical outcomes.
+用於有序類別結果。
 
-**When to use:**
-- Ordered categories (e.g., low/medium/high, ratings 1-5)
-- Natural ordering matters
-- Want to respect ordinal structure
+**使用時機：**
+- 有序類別（例如低/中/高、評分 1-5）
+- 自然順序很重要
+- 想尊重序數結構
 
-**Model**: Cumulative probability model with cutpoints
+**模型**：具有截點的累積機率模型
 
 ```python
 from statsmodels.miscmodels.ordinal_model import OrderedModel
 
-# y should be ordered integers: 0, 1, 2, ...
-model = OrderedModel(y_ordered, X, distr='logit')  # or 'probit'
+# y 應為有序整數：0, 1, 2, ...
+model = OrderedModel(y_ordered, X, distr='logit')  # 或 'probit'
 results = model.fit(method='bfgs')
 
 print(results.summary())
 ```
 
-**Interpretation:**
+**解釋：**
 ```python
-# Cutpoints (thresholds between categories)
+# 截點（類別間的閾值）
 cutpoints = results.params[-n_categories+1:]
 print("Cutpoints:", cutpoints)
 
-# Coefficients
+# 係數
 coefficients = results.params[:-n_categories+1]
 print("Coefficients:", coefficients)
 
-# Predicted probabilities for each category
-probs = results.predict(X)  # Shape: (n_samples, n_categories)
+# 每個類別的預測機率
+probs = results.predict(X)  # 形狀：(n_samples, n_categories)
 
-# Most likely category
+# 最可能的類別
 predicted_categories = probs.argmax(axis=1)
 ```
 
-**Proportional odds assumption:**
+**比例勝算假設：**
 ```python
-# Test if coefficients are same across cutpoints
-# (Brant test - implement manually or check residuals)
+# 檢定係數在截點間是否相同
+# （Brant 檢定 - 手動實作或檢查殘差）
 
-# Check: model each cutpoint separately and compare coefficients
+# 檢查：分別建模每個截點並比較係數
 ```
 
-## Model Diagnostics
+## 模型診斷
 
-### Goodness of Fit
+### 配適度
 
 ```python
-# Pseudo R-squared (McFadden)
+# 虛擬 R 平方（McFadden）
 print(f"Pseudo R²: {results.prsquared:.4f}")
 
-# AIC/BIC for model comparison
+# 模型比較的 AIC/BIC
 print(f"AIC: {results.aic:.2f}")
 print(f"BIC: {results.bic:.2f}")
 
-# Log-likelihood
+# 對數概似
 print(f"Log-likelihood: {results.llf:.2f}")
 
-# Likelihood ratio test vs null model
+# 對虛無模型的概似比檢定
 lr_stat = 2 * (results.llf - results.llnull)
 from scipy import stats
 lr_pval = 1 - stats.chi2.cdf(lr_stat, results.df_model)
 print(f"LR test p-value: {lr_pval}")
 ```
 
-### Classification Metrics (Binary)
+### 分類指標（二元）
 
 ```python
 from sklearn.metrics import (accuracy_score, precision_score, recall_score,
                              f1_score, roc_auc_score)
 
-# Predictions
+# 預測
 probs = results.predict(X)
 predictions = (probs > 0.5).astype(int)
 
-# Metrics
+# 指標
 print(f"Accuracy: {accuracy_score(y, predictions):.4f}")
 print(f"Precision: {precision_score(y, predictions):.4f}")
 print(f"Recall: {recall_score(y, predictions):.4f}")
@@ -460,36 +460,36 @@ print(f"F1: {f1_score(y, predictions):.4f}")
 print(f"AUC: {roc_auc_score(y, probs):.4f}")
 ```
 
-### Classification Metrics (Multinomial)
+### 分類指標（多項）
 
 ```python
 from sklearn.metrics import accuracy_score, classification_report, log_loss
 
-# Predicted categories
+# 預測類別
 probs = results.predict(X)
 predictions = probs.argmax(axis=1)
 
-# Accuracy
+# 準確率
 accuracy = accuracy_score(y, predictions)
 print(f"Accuracy: {accuracy:.4f}")
 
-# Classification report
+# 分類報告
 print(classification_report(y, predictions))
 
-# Log loss
+# 對數損失
 logloss = log_loss(y, probs)
 print(f"Log Loss: {logloss:.4f}")
 ```
 
-### Count Model Diagnostics
+### 計數模型診斷
 
 ```python
-# Observed vs predicted frequencies
+# 觀察與預測頻率
 observed = pd.Series(y_counts).value_counts().sort_index()
 predicted = results.predict(X)
 predicted_counts = pd.Series(np.round(predicted)).value_counts().sort_index()
 
-# Compare distributions
+# 比較分布
 import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
 observed.plot(kind='bar', alpha=0.5, label='Observed', ax=ax)
@@ -499,37 +499,37 @@ ax.set_xlabel('Count')
 ax.set_ylabel('Frequency')
 plt.show()
 
-# Rootogram (better visualization)
+# 根圖（Rootogram）（更好的視覺化）
 from statsmodels.graphics.agreement import mean_diff_plot
-# Custom rootogram implementation needed
+# 需要自訂根圖實作
 ```
 
-### Influence and Outliers
+### 影響和離群值
 
 ```python
-# Standardized residuals
+# 標準化殘差
 std_resid = (y - results.predict(X)) / np.sqrt(results.predict(X))
 
-# Check for outliers (|std_resid| > 2)
+# 檢查離群值（|std_resid| > 2）
 outliers = np.where(np.abs(std_resid) > 2)[0]
 print(f"Number of outliers: {len(outliers)}")
 
-# Leverage (hat values) - for logit/probit
+# 槓桿（hat 值）- 用於 logit/probit
 # from statsmodels.stats.outliers_influence
 ```
 
-## Hypothesis Testing
+## 假設檢定
 
 ```python
-# Single parameter test (automatic in summary)
+# 單參數檢定（摘要中自動顯示）
 
-# Multiple parameters: Wald test
-# Test H0: β₁ = β₂ = 0
+# 多參數：Wald 檢定
+# 檢定 H0: β₁ = β₂ = 0
 R = [[0, 1, 0, 0], [0, 0, 1, 0]]
 wald_test = results.wald_test(R)
 print(wald_test)
 
-# Likelihood ratio test for nested models
+# 巢狀模型的概似比檢定
 model_reduced = Logit(y, X_reduced).fit()
 model_full = Logit(y, X_full).fit()
 
@@ -540,17 +540,17 @@ lr_pval = 1 - stats.chi2.cdf(lr_stat, df)
 print(f"LR test p-value: {lr_pval:.4f}")
 ```
 
-## Model Selection and Comparison
+## 模型選擇與比較
 
 ```python
-# Fit multiple models
+# 配適多個模型
 models = {
     'Logit': Logit(y, X).fit(),
     'Probit': Probit(y, X).fit(),
-    # Add more models
+    # 添加更多模型
 }
 
-# Compare AIC/BIC
+# 比較 AIC/BIC
 comparison = pd.DataFrame({
     'AIC': {name: model.aic for name, model in models.items()},
     'BIC': {name: model.bic for name, model in models.items()},
@@ -558,112 +558,112 @@ comparison = pd.DataFrame({
 })
 print(comparison.sort_values('AIC'))
 
-# Cross-validation for predictive performance
+# 預測表現的交叉驗證
 from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LogisticRegression
 
-# Use sklearn wrapper or manual CV
+# 使用 sklearn 包裝器或手動交叉驗證
 ```
 
-## Formula API
+## 公式 API
 
-Use R-style formulas for easier specification.
+使用 R 風格公式以更容易的規格。
 
 ```python
 import statsmodels.formula.api as smf
 
-# Logit with formula
+# 使用公式的 Logit
 formula = 'y ~ x1 + x2 + C(category) + x1:x2'
 results = smf.logit(formula, data=df).fit()
 
-# MNLogit with formula
+# 使用公式的 MNLogit
 results = smf.mnlogit(formula, data=df).fit()
 
-# Poisson with formula
+# 使用公式的 Poisson
 results = smf.poisson(formula, data=df).fit()
 
-# Negative Binomial with formula
+# 使用公式的負二項
 results = smf.negativebinomial(formula, data=df).fit()
 ```
 
-## Common Applications
+## 常見應用
 
-### Binary Classification (Marketing Response)
+### 二元分類（行銷回應）
 
 ```python
-# Predict customer purchase probability
+# 預測客戶購買機率
 X = sm.add_constant(customer_features)
 model = Logit(purchased, X)
 results = model.fit()
 
-# Targeting: select top 20% likely to purchase
+# 目標定位：選擇最可能購買的前 20%
 probs = results.predict(X)
 top_20_pct_idx = np.argsort(probs)[-int(0.2*len(probs)):]
 ```
 
-### Multinomial Choice (Transportation Mode)
+### 多項選擇（交通方式）
 
 ```python
-# Predict transportation mode choice
+# 預測交通方式選擇
 model = MNLogit(mode_choice, X)
 results = model.fit()
 
-# Predicted mode for new commuter
+# 新通勤者的預測方式
 new_commuter = sm.add_constant(new_features)
 mode_probs = results.predict(new_commuter)
 predicted_mode = mode_probs.argmax(axis=1)
 ```
 
-### Count Data (Number of Doctor Visits)
+### 計數資料（就醫次數）
 
 ```python
-# Model healthcare utilization
+# 建模醫療利用
 model = NegativeBinomial(num_visits, X)
 results = model.fit()
 
-# Expected visits for new patient
+# 新病患的預期就診次數
 expected_visits = results.predict(new_patient_X)
 ```
 
-### Zero-Inflated (Insurance Claims)
+### 零膨脹（保險理賠）
 
 ```python
-# Many people have zero claims
-# Zero-inflation: some never claim
-# Count process: those who might claim
+# 許多人有零理賠
+# 零膨脹：有些人永不理賠
+# 計數過程：可能理賠的人
 
 zip_model = ZeroInflatedPoisson(claims, X_count, exog_infl=X_inflation)
 results = zip_model.fit()
 
-# P(never file claim)
+# P(永不提出理賠)
 never_claim_prob = results.predict(X, which='prob-zero')
 
-# Expected claims
+# 預期理賠
 expected_claims = results.predict(X, which='mean')
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Check data type**: Ensure response matches model (binary, counts, categories)
-2. **Add constant**: Always use `sm.add_constant()` unless no intercept desired
-3. **Scale continuous predictors**: For better convergence and interpretation
-4. **Check convergence**: Look for convergence warnings
-5. **Use formula API**: For categorical variables and interactions
-6. **Marginal effects**: Report marginal effects, not just coefficients
-7. **Model comparison**: Use AIC/BIC and cross-validation
-8. **Validate**: Holdout set or cross-validation for predictive models
-9. **Check overdispersion**: For count models, test Poisson assumption
-10. **Consider alternatives**: Zero-inflation, hurdle models for excess zeros
+1. **檢查資料類型**：確保反應變數符合模型（二元、計數、類別）
+2. **添加常數**：務必使用 `sm.add_constant()` 除非不要截距
+3. **縮放連續預測變數**：改善收斂和解釋
+4. **檢查收斂**：注意收斂警告
+5. **使用公式 API**：處理類別變數和交互作用
+6. **邊際效應**：報告邊際效應，不只是係數
+7. **模型比較**：使用 AIC/BIC 和交叉驗證
+8. **驗證**：預測模型使用保留集或交叉驗證
+9. **檢查過度離散**：計數模型檢定 Poisson 假設
+10. **考慮替代方案**：過多零值使用零膨脹、障礙模型
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Forgetting constant**: No intercept term
-2. **Perfect separation**: Logit/probit may not converge
-3. **Using Poisson with overdispersion**: Check and use Negative Binomial
-4. **Misinterpreting coefficients**: Remember they're on log-odds/log scale
-5. **Not checking convergence**: Optimization may fail silently
-6. **Wrong distribution**: Match model to data type (binary/count/categorical)
-7. **Ignoring excess zeros**: Use ZIP/ZINB when appropriate
-8. **Not validating predictions**: Always check out-of-sample performance
-9. **Comparing non-nested models**: Use AIC/BIC, not likelihood ratio test
-10. **Ordinal as nominal**: Use OrderedModel for ordered categories
+1. **忘記常數**：無截距項
+2. **完美分離**：Logit/probit 可能不收斂
+3. **過度離散使用 Poisson**：檢查並使用負二項
+4. **誤解係數**：記住它們在對數勝算/對數尺度上
+5. **未檢查收斂**：最佳化可能靜默失敗
+6. **錯誤分布**：配合資料類型（二元/計數/類別）
+7. **忽略過多零值**：適當時使用 ZIP/ZINB
+8. **未驗證預測**：始終檢查樣本外表現
+9. **比較非巢狀模型**：使用 AIC/BIC，不是概似比檢定
+10. **序數當名義**：有序類別使用 OrderedModel

@@ -1,42 +1,42 @@
-# Visualization & Simulation in PyLabRobot
+# PyLabRobot 視覺化與模擬
 
-## Overview
+## 概述
 
-PyLabRobot provides visualization and simulation tools for developing, testing, and validating laboratory protocols without physical hardware. The visualizer offers real-time 3D visualization of deck state, while simulation backends enable protocol testing and validation.
+PyLabRobot 提供視覺化和模擬工具，用於在沒有實體硬體的情況下開發、測試和驗證實驗室協定。視覺化器提供工作台狀態的即時 3D 視覺化，而模擬後端則實現協定測試和驗證。
 
-## The Visualizer
+## 視覺化器
 
-### What is the Visualizer?
+### 什麼是視覺化器？
 
-The PyLabRobot Visualizer is a browser-based tool that:
-- Displays 3D visualization of the deck layout
-- Shows real-time tip presence and liquid volumes
-- Works with both simulated and physical robots
-- Provides interactive deck state inspection
-- Enables visual protocol validation
+PyLabRobot 視覺化器是一個基於瀏覽器的工具，它：
+- 顯示工作台布局的 3D 視覺化
+- 顯示即時吸頭存在和液體體積
+- 與模擬和實體機器人配合使用
+- 提供互動式工作台狀態檢視
+- 實現視覺化協定驗證
 
-### Starting the Visualizer
+### 啟動視覺化器
 
-The visualizer runs as a web server and displays in your browser:
+視覺化器作為網路伺服器運行並在瀏覽器中顯示：
 
 ```python
 from pylabrobot.visualizer import Visualizer
 
-# Create visualizer
+# 建立視覺化器
 vis = Visualizer()
 
-# Start web server (opens browser automatically)
+# 啟動網路伺服器（自動開啟瀏覽器）
 await vis.start()
 
-# Stop visualizer
+# 停止視覺化器
 await vis.stop()
 ```
 
-**Default Settings:**
-- Port: 1234 (http://localhost:1234)
-- Opens browser automatically when started
+**預設設定：**
+- 連接埠：1234 (http://localhost:1234)
+- 啟動時自動開啟瀏覽器
 
-### Connecting Liquid Handler to Visualizer
+### 將液體處理器連接到視覺化器
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -44,76 +44,76 @@ from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
 from pylabrobot.resources import STARLetDeck
 from pylabrobot.visualizer import Visualizer
 
-# Create visualizer
+# 建立視覺化器
 vis = Visualizer()
 await vis.start()
 
-# Create liquid handler with simulation backend
+# 建立使用模擬後端的液體處理器
 lh = LiquidHandler(
     backend=ChatterboxBackend(num_channels=8),
     deck=STARLetDeck()
 )
 
-# Connect liquid handler to visualizer
+# 將液體處理器連接到視覺化器
 lh.visualizer = vis
 
 await lh.setup()
 
-# Now all operations are visualized in real-time
+# 現在所有操作都會即時視覺化
 await lh.pick_up_tips(tip_rack["A1:H1"])
 await lh.aspirate(plate["A1:H1"], vols=100)
 await lh.dispense(plate["A2:H2"], vols=100)
 await lh.drop_tips()
 ```
 
-### Tracking Features
+### 追蹤功能
 
-#### Enable Tracking
+#### 啟用追蹤
 
-For the visualizer to display tips and liquids, enable tracking:
+要讓視覺化器顯示吸頭和液體，請啟用追蹤：
 
 ```python
 from pylabrobot.resources import set_tip_tracking, set_volume_tracking
 
-# Enable globally (before creating resources)
+# 全域啟用（在建立資源之前）
 set_tip_tracking(True)
 set_volume_tracking(True)
 ```
 
-#### Setting Initial Liquids
+#### 設定初始液體
 
-Define initial liquid contents for visualization:
+定義初始液體內容以供視覺化：
 
 ```python
-# Set liquid in a single well
+# 在單個孔中設定液體
 plate["A1"].tracker.set_liquids([
-    (None, 200)  # (liquid_type, volume_in_µL)
+    (None, 200)  # (液體類型, 體積_µL)
 ])
 
-# Set multiple liquids in one well
+# 在一個孔中設定多種液體
 plate["A2"].tracker.set_liquids([
     ("water", 100),
     ("ethanol", 50)
 ])
 
-# Set liquids in multiple wells
+# 在多個孔中設定液體
 for well in plate["A1:H1"]:
     well.tracker.set_liquids([(None, 200)])
 
-# Set liquids in entire plate
+# 在整個微孔盤中設定液體
 for well in plate.children:
     well.tracker.set_liquids([("sample", 150)])
 ```
 
-#### Visualizing Tip Presence
+#### 視覺化吸頭存在
 
 ```python
-# Tips are automatically tracked when using pick_up/drop operations
-await lh.pick_up_tips(tip_rack["A1:H1"])  # Tips shown as absent in visualizer
-await lh.return_tips()                     # Tips shown as present in visualizer
+# 使用拾取/丟棄操作時自動追蹤吸頭
+await lh.pick_up_tips(tip_rack["A1:H1"])  # 視覺化器中顯示吸頭不存在
+await lh.return_tips()                     # 視覺化器中顯示吸頭存在
 ```
 
-### Complete Visualizer Example
+### 完整視覺化器範例
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -127,15 +127,15 @@ from pylabrobot.resources import (
 )
 from pylabrobot.visualizer import Visualizer
 
-# Enable tracking
+# 啟用追蹤
 set_tip_tracking(True)
 set_volume_tracking(True)
 
-# Create visualizer
+# 建立視覺化器
 vis = Visualizer()
 await vis.start()
 
-# Create liquid handler
+# 建立液體處理器
 lh = LiquidHandler(
     backend=ChatterboxBackend(num_channels=8),
     deck=STARLetDeck()
@@ -143,21 +143,21 @@ lh = LiquidHandler(
 lh.visualizer = vis
 await lh.setup()
 
-# Define resources
+# 定義資源
 tip_rack = TIP_CAR_480_A00(name="tips")
 source_plate = Cos_96_DW_1mL(name="source")
 dest_plate = Cos_96_DW_1mL(name="dest")
 
-# Assign to deck
+# 分配到工作台
 lh.deck.assign_child_resource(tip_rack, rails=1)
 lh.deck.assign_child_resource(source_plate, rails=10)
 lh.deck.assign_child_resource(dest_plate, rails=15)
 
-# Set initial volumes
+# 設定初始體積
 for well in source_plate.children:
     well.tracker.set_liquids([("sample", 200)])
 
-# Execute protocol with visualization
+# 執行帶有視覺化的協定
 await lh.pick_up_tips(tip_rack["A1:H1"])
 await lh.transfer(
     source_plate["A1:H12"],
@@ -166,92 +166,92 @@ await lh.transfer(
 )
 await lh.drop_tips()
 
-# Keep visualizer open to inspect final state
-input("Press Enter to close visualizer...")
+# 保持視覺化器開啟以檢視最終狀態
+input("按 Enter 關閉視覺化器...")
 
-# Cleanup
+# 清理
 await lh.stop()
 await vis.stop()
 ```
 
-## Deck Layout Editor
+## 工作台布局編輯器
 
-### Using the Deck Editor
+### 使用工作台編輯器
 
-PyLabRobot includes a graphical deck layout editor:
+PyLabRobot 包含圖形化工作台布局編輯器：
 
-**Features:**
-- Visual deck design interface
-- Drag-and-drop resource placement
-- Edit initial liquid states
-- Set tip presence
-- Save/load layouts as JSON
+**功能：**
+- 視覺化工作台設計介面
+- 拖放資源放置
+- 編輯初始液體狀態
+- 設定吸頭存在
+- 以 JSON 儲存/載入布局
 
-**Usage:**
-- Accessed through the visualizer interface
-- Create layouts graphically instead of code
-- Export to JSON for use in protocols
+**使用方式：**
+- 通過視覺化器介面存取
+- 以圖形方式建立布局而非程式碼
+- 匯出為 JSON 以供協定使用
 
-### Loading Deck Layouts
+### 載入工作台布局
 
 ```python
 from pylabrobot.resources import Deck
 
-# Load deck from JSON file
+# 從 JSON 檔案載入工作台
 deck = Deck.load_from_json_file("my_deck_layout.json")
 
-# Use with liquid handler
+# 與液體處理器一起使用
 lh = LiquidHandler(backend=backend, deck=deck)
 await lh.setup()
 
-# Resources are already assigned
+# 資源已經分配
 source = deck.get_resource("source")
 dest = deck.get_resource("dest")
 tip_rack = deck.get_resource("tips")
 ```
 
-## Simulation
+## 模擬
 
 ### ChatterboxBackend
 
-The ChatterboxBackend simulates liquid handling operations:
+ChatterboxBackend 模擬液體處理操作：
 
-**Features:**
-- No hardware required
-- Validates protocol logic
-- Tracks tips and volumes
-- Supports all liquid handling operations
-- Works with visualizer
+**功能：**
+- 不需要硬體
+- 驗證協定邏輯
+- 追蹤吸頭和體積
+- 支援所有液體處理操作
+- 與視覺化器配合使用
 
-**Setup:**
+**設置：**
 
 ```python
 from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
 
-# Create simulation backend
+# 建立模擬後端
 backend = ChatterboxBackend(
-    num_channels=8  # Simulate 8-channel pipette
+    num_channels=8  # 模擬 8 通道移液器
 )
 
-# Use with liquid handler
+# 與液體處理器一起使用
 lh = LiquidHandler(backend=backend, deck=STARLetDeck())
 ```
 
-### Simulation Use Cases
+### 模擬使用情境
 
-#### Protocol Development
+#### 協定開發
 
 ```python
 async def develop_protocol():
-    """Develop protocol using simulation"""
+    """使用模擬開發協定"""
 
-    # Use simulation for development
+    # 使用模擬進行開發
     lh = LiquidHandler(
         backend=ChatterboxBackend(),
         deck=STARLetDeck()
     )
 
-    # Connect visualizer
+    # 連接視覺化器
     vis = Visualizer()
     await vis.start()
     lh.visualizer = vis
@@ -259,23 +259,23 @@ async def develop_protocol():
     await lh.setup()
 
     try:
-        # Develop and test protocol
+        # 開發和測試協定
         await lh.pick_up_tips(tip_rack["A1"])
         await lh.transfer(plate["A1"], plate["A2"], vols=100)
         await lh.drop_tips()
 
-        print("Protocol development complete!")
+        print("協定開發完成！")
 
     finally:
         await lh.stop()
         await vis.stop()
 ```
 
-#### Protocol Validation
+#### 協定驗證
 
 ```python
 async def validate_protocol():
-    """Validate protocol logic without hardware"""
+    """不使用硬體驗證協定邏輯"""
 
     set_tip_tracking(True)
     set_volume_tracking(True)
@@ -287,21 +287,21 @@ async def validate_protocol():
     await lh.setup()
 
     try:
-        # Setup resources
+        # 設置資源
         tip_rack = TIP_CAR_480_A00(name="tips")
         plate = Cos_96_DW_1mL(name="plate")
 
         lh.deck.assign_child_resource(tip_rack, rails=1)
         lh.deck.assign_child_resource(plate, rails=10)
 
-        # Set initial state
+        # 設定初始狀態
         for well in plate.children:
             well.tracker.set_liquids([(None, 200)])
 
-        # Execute protocol
+        # 執行協定
         await lh.pick_up_tips(tip_rack["A1:H1"])
 
-        # Test different volumes
+        # 測試不同體積
         test_volumes = [50, 100, 150]
         for i, vol in enumerate(test_volumes):
             await lh.transfer(
@@ -312,24 +312,24 @@ async def validate_protocol():
 
         await lh.drop_tips()
 
-        # Validate volumes
+        # 驗證體積
         for i, vol in enumerate(test_volumes):
             for row in "ABCDEFGH":
                 well = plate[f"{row}{i+4}"]
                 actual_vol = well.tracker.get_volume()
-                assert actual_vol == vol, f"Volume mismatch in {well.name}"
+                assert actual_vol == vol, f"{well.name} 中體積不匹配"
 
-        print("✓ Protocol validation passed!")
+        print("協定驗證通過！")
 
     finally:
         await lh.stop()
 ```
 
-#### Testing Edge Cases
+#### 測試邊緣情況
 
 ```python
 async def test_edge_cases():
-    """Test protocol edge cases in simulation"""
+    """在模擬中測試協定邊緣情況"""
 
     lh = LiquidHandler(
         backend=ChatterboxBackend(),
@@ -338,34 +338,34 @@ async def test_edge_cases():
     await lh.setup()
 
     try:
-        # Test 1: Empty well aspiration
+        # 測試 1：從空孔吸取
         try:
             await lh.aspirate(empty_plate["A1"], vols=100)
-            print("✗ Should have raised error for empty well")
+            print("X 應該對空孔拋出錯誤")
         except Exception as e:
-            print(f"✓ Correctly raised error: {e}")
+            print(f"正確拋出錯誤：{e}")
 
-        # Test 2: Overfilling well
+        # 測試 2：孔溢出
         try:
-            await lh.dispense(small_well, vols=1000)  # Too much
-            print("✗ Should have raised error for overfilling")
+            await lh.dispense(small_well, vols=1000)  # 太多
+            print("X 應該對溢出拋出錯誤")
         except Exception as e:
-            print(f"✓ Correctly raised error: {e}")
+            print(f"正確拋出錯誤：{e}")
 
-        # Test 3: Tip capacity
+        # 測試 3：吸頭容量
         try:
-            await lh.aspirate(large_volume_well, vols=2000)  # Exceeds tip capacity
-            print("✗ Should have raised error for tip capacity")
+            await lh.aspirate(large_volume_well, vols=2000)  # 超過吸頭容量
+            print("X 應該對吸頭容量拋出錯誤")
         except Exception as e:
-            print(f"✓ Correctly raised error: {e}")
+            print(f"正確拋出錯誤：{e}")
 
     finally:
         await lh.stop()
 ```
 
-### CI/CD Integration
+### CI/CD 整合
 
-Use simulation for automated testing:
+使用模擬進行自動化測試：
 
 ```python
 # test_protocols.py
@@ -375,7 +375,7 @@ from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
 
 @pytest.mark.asyncio
 async def test_transfer_protocol():
-    """Test liquid transfer protocol"""
+    """測試液體轉移協定"""
 
     lh = LiquidHandler(
         backend=ChatterboxBackend(),
@@ -384,22 +384,22 @@ async def test_transfer_protocol():
     await lh.setup()
 
     try:
-        # Setup
+        # 設置
         tip_rack = TIP_CAR_480_A00(name="tips")
         plate = Cos_96_DW_1mL(name="plate")
 
         lh.deck.assign_child_resource(tip_rack, rails=1)
         lh.deck.assign_child_resource(plate, rails=10)
 
-        # Set initial volumes
+        # 設定初始體積
         plate["A1"].tracker.set_liquids([(None, 200)])
 
-        # Execute
+        # 執行
         await lh.pick_up_tips(tip_rack["A1"])
         await lh.transfer(plate["A1"], plate["A2"], vols=100)
         await lh.drop_tips()
 
-        # Assert
+        # 斷言
         assert plate["A1"].tracker.get_volume() == 100
         assert plate["A2"].tracker.get_volume() == 100
 
@@ -407,62 +407,62 @@ async def test_transfer_protocol():
         await lh.stop()
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Always Use Simulation First**: Develop and test protocols in simulation before running on hardware
-2. **Enable Tracking**: Turn on tip and volume tracking for accurate visualization
-3. **Set Initial States**: Define initial liquid volumes for realistic simulation
-4. **Visual Inspection**: Use visualizer to verify deck layout and protocol execution
-5. **Validate Logic**: Test edge cases and error conditions in simulation
-6. **Automated Testing**: Integrate simulation into CI/CD pipelines
-7. **Save Layouts**: Use JSON to save and share deck layouts
-8. **Document States**: Record initial states for reproducibility
-9. **Interactive Development**: Keep visualizer open during development
-10. **Protocol Refinement**: Iterate in simulation before hardware runs
+1. **始終先使用模擬**：在硬體上運行前在模擬中開發和測試協定
+2. **啟用追蹤**：開啟吸頭和體積追蹤以實現準確的視覺化
+3. **設定初始狀態**：定義初始液體體積以進行真實的模擬
+4. **視覺檢查**：使用視覺化器驗證工作台布局和協定執行
+5. **驗證邏輯**：在模擬中測試邊緣情況和錯誤條件
+6. **自動化測試**：將模擬整合到 CI/CD 管線
+7. **儲存布局**：使用 JSON 儲存和共享工作台布局
+8. **記錄狀態**：記錄初始狀態以實現可重現性
+9. **互動式開發**：開發期間保持視覺化器開啟
+10. **協定改進**：在硬體運行前在模擬中迭代
 
-## Common Patterns
+## 常見模式
 
-### Development to Production Workflow
+### 開發到正式環境工作流程
 
 ```python
 import os
 
-# Configuration
+# 配置
 USE_HARDWARE = os.getenv("USE_HARDWARE", "false").lower() == "true"
 
-# Create appropriate backend
+# 建立適當的後端
 if USE_HARDWARE:
     from pylabrobot.liquid_handling.backends import STAR
     backend = STAR()
-    print("Running on Hamilton STAR hardware")
+    print("在 Hamilton STAR 硬體上運行")
 else:
     from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
     backend = ChatterboxBackend()
-    print("Running in simulation mode")
+    print("在模擬模式下運行")
 
-# Rest of protocol is identical
+# 協定的其餘部分相同
 lh = LiquidHandler(backend=backend, deck=STARLetDeck())
 
 if not USE_HARDWARE:
-    # Enable visualizer for simulation
+    # 為模擬啟用視覺化器
     vis = Visualizer()
     await vis.start()
     lh.visualizer = vis
 
 await lh.setup()
 
-# Protocol execution
-# ... (same code for hardware and simulation)
+# 協定執行
+# ...（硬體和模擬的相同程式碼）
 
-# Run with: USE_HARDWARE=false python protocol.py  # Simulation
-# Run with: USE_HARDWARE=true python protocol.py   # Hardware
+# 執行方式：USE_HARDWARE=false python protocol.py  # 模擬
+# 執行方式：USE_HARDWARE=true python protocol.py   # 硬體
 ```
 
-### Visual Protocol Verification
+### 視覺化協定驗證
 
 ```python
 async def visual_verification():
-    """Run protocol with visual verification pauses"""
+    """使用視覺化驗證暫停運行協定"""
 
     vis = Visualizer()
     await vis.start()
@@ -475,58 +475,58 @@ async def visual_verification():
     await lh.setup()
 
     try:
-        # Step 1
+        # 步驟 1
         await lh.pick_up_tips(tip_rack["A1:H1"])
-        input("Press Enter to continue...")
+        input("按 Enter 繼續...")
 
-        # Step 2
+        # 步驟 2
         await lh.aspirate(source["A1:H1"], vols=100)
-        input("Press Enter to continue...")
+        input("按 Enter 繼續...")
 
-        # Step 3
+        # 步驟 3
         await lh.dispense(dest["A1:H1"], vols=100)
-        input("Press Enter to continue...")
+        input("按 Enter 繼續...")
 
-        # Step 4
+        # 步驟 4
         await lh.drop_tips()
-        input("Press Enter to finish...")
+        input("按 Enter 完成...")
 
     finally:
         await lh.stop()
         await vis.stop()
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Visualizer Not Updating
+### 視覺化器不更新
 
-- Ensure `lh.visualizer = vis` is set before operations
-- Check that tracking is enabled globally
-- Verify visualizer is running (`vis.start()`)
-- Refresh browser if connection is lost
+- 確保在操作前設定了 `lh.visualizer = vis`
+- 檢查是否已全域啟用追蹤
+- 驗證視覺化器正在運行（`vis.start()`）
+- 如果連接中斷，請重新整理瀏覽器
 
-### Tracking Not Working
+### 追蹤不運作
 
 ```python
-# Must enable tracking BEFORE creating resources
+# 必須在建立資源之前啟用追蹤
 set_tip_tracking(True)
 set_volume_tracking(True)
 
-# Then create resources
+# 然後建立資源
 tip_rack = TIP_CAR_480_A00(name="tips")
 plate = Cos_96_DW_1mL(name="plate")
 ```
 
-### Simulation Errors
+### 模擬錯誤
 
-- Simulation validates operations (e.g., can't aspirate from empty well)
-- Use try/except to handle validation errors
-- Check initial states are set correctly
-- Verify volumes don't exceed capacities
+- 模擬會驗證操作（例如，不能從空孔吸取）
+- 使用 try/except 處理驗證錯誤
+- 檢查初始狀態是否正確設定
+- 驗證體積不超過容量
 
-## Additional Resources
+## 其他資源
 
-- Visualizer Documentation: https://docs.pylabrobot.org/user_guide/using-the-visualizer.html (if available)
-- Simulation Guide: https://docs.pylabrobot.org/user_guide/simulation.html (if available)
-- API Reference: https://docs.pylabrobot.org/api/pylabrobot.visualizer.html
-- GitHub Examples: https://github.com/PyLabRobot/pylabrobot/tree/main/examples
+- 視覺化器文件：https://docs.pylabrobot.org/user_guide/using-the-visualizer.html（如有）
+- 模擬指南：https://docs.pylabrobot.org/user_guide/simulation.html（如有）
+- API 參考：https://docs.pylabrobot.org/api/pylabrobot.visualizer.html
+- GitHub 範例：https://github.com/PyLabRobot/pylabrobot/tree/main/examples

@@ -1,29 +1,29 @@
-# Seaborn Common Use Cases and Examples
+# Seaborn 常見用例和範例
 
-This document provides practical examples for common data visualization scenarios using seaborn.
+本文件提供使用 seaborn 進行常見資料視覺化場景的實用範例。
 
-## Exploratory Data Analysis
+## 探索性資料分析
 
-### Quick Dataset Overview
+### 快速資料集概覽
 
 ```python
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Load data
+# 載入資料
 df = pd.read_csv('data.csv')
 
-# Pairwise relationships for all numeric variables
+# 所有數值變數的成對關係
 sns.pairplot(df, hue='target_variable', corner=True, diag_kind='kde')
 plt.suptitle('Dataset Overview', y=1.01)
 plt.savefig('overview.png', dpi=300, bbox_inches='tight')
 ```
 
-### Distribution Exploration
+### 分布探索
 
 ```python
-# Multiple distributions across categories
+# 跨類別的多重分布
 g = sns.displot(
     data=df,
     x='measurement',
@@ -40,16 +40,16 @@ g.set_axis_labels('Measurement Value', 'Density')
 g.set_titles('{col_name}')
 ```
 
-### Correlation Analysis
+### 相關性分析
 
 ```python
-# Compute correlation matrix
+# 計算相關矩陣
 corr = df.select_dtypes(include='number').corr()
 
-# Create mask for upper triangle
+# 建立上三角遮罩
 mask = np.triu(np.ones_like(corr, dtype=bool))
 
-# Plot heatmap
+# 繪製熱圖
 fig, ax = plt.subplots(figsize=(10, 8))
 sns.heatmap(
     corr,
@@ -66,20 +66,20 @@ plt.title('Correlation Matrix')
 plt.tight_layout()
 ```
 
-## Scientific Publications
+## 科學出版品
 
-### Multi-Panel Figure with Different Plot Types
+### 多面板圖形與不同圖形類型
 
 ```python
-# Set publication style
+# 設定出版品樣式
 sns.set_theme(style='ticks', context='paper', font_scale=1.1)
 sns.set_palette('colorblind')
 
-# Create figure with custom layout
+# 建立具有自訂版面的圖形
 fig = plt.figure(figsize=(12, 8))
 gs = fig.add_gridspec(2, 3, hspace=0.3, wspace=0.3)
 
-# Panel A: Time series
+# 面板 A：時間序列
 ax1 = fig.add_subplot(gs[0, :2])
 sns.lineplot(
     data=timeseries_df,
@@ -95,7 +95,7 @@ ax1.set_title('A. Gene Expression Over Time', loc='left', fontweight='bold')
 ax1.set_xlabel('Time (hours)')
 ax1.set_ylabel('Expression Level (AU)')
 
-# Panel B: Distribution comparison
+# 面板 B：分布比較
 ax2 = fig.add_subplot(gs[0, 2])
 sns.violinplot(
     data=expression_df,
@@ -108,7 +108,7 @@ ax2.set_title('B. Expression Distribution', loc='left', fontweight='bold')
 ax2.set_xlabel('Treatment')
 ax2.set_ylabel('')
 
-# Panel C: Correlation
+# 面板 C：相關性
 ax3 = fig.add_subplot(gs[1, 0])
 sns.scatterplot(
     data=correlation_df,
@@ -130,7 +130,7 @@ ax3.set_title('C. Gene Correlation', loc='left', fontweight='bold')
 ax3.set_xlabel('Gene 1 Expression')
 ax3.set_ylabel('Gene 2 Expression')
 
-# Panel D: Heatmap
+# 面板 D：熱圖
 ax4 = fig.add_subplot(gs[1, 1:])
 sns.heatmap(
     sample_matrix,
@@ -145,19 +145,19 @@ ax4.set_title('D. Treatment Effects', loc='left', fontweight='bold')
 ax4.set_xlabel('Sample')
 ax4.set_ylabel('Gene')
 
-# Clean up
+# 清理
 sns.despine()
 plt.savefig('figure.pdf', dpi=300, bbox_inches='tight')
 plt.savefig('figure.png', dpi=300, bbox_inches='tight')
 ```
 
-### Box Plot with Significance Annotations
+### 帶有顯著性標註的箱形圖
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Create plot
+# 建立圖形
 fig, ax = plt.subplots(figsize=(8, 6))
 sns.boxplot(
     data=df,
@@ -168,7 +168,7 @@ sns.boxplot(
     ax=ax
 )
 
-# Add individual points
+# 添加個別點
 sns.stripplot(
     data=df,
     x='treatment',
@@ -180,7 +180,7 @@ sns.stripplot(
     ax=ax
 )
 
-# Add significance bars
+# 添加顯著性標記線
 def add_significance_bar(ax, x1, x2, y, h, text):
     ax.plot([x1, x1, x2, x2], [y, y+h, y+h, y], 'k-', lw=1.5)
     ax.text((x1+x2)/2, y+h, text, ha='center', va='bottom')
@@ -195,12 +195,12 @@ ax.set_title('Treatment Response Analysis')
 sns.despine()
 ```
 
-## Time Series Analysis
+## 時間序列分析
 
-### Multiple Time Series with Confidence Bands
+### 多重時間序列與信賴帶
 
 ```python
-# Plot with automatic aggregation
+# 帶有自動聚合的繪圖
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.lineplot(
     data=timeseries_df,
@@ -214,13 +214,13 @@ sns.lineplot(
     ax=ax
 )
 
-# Customize
+# 自訂
 ax.set_xlabel('Date')
 ax.set_ylabel('Measurement (units)')
 ax.set_title('Sensor Measurements Over Time')
 ax.legend(title='Sensor & Location', bbox_to_anchor=(1.05, 1), loc='upper left')
 
-# Format x-axis for dates
+# 格式化日期 x 軸
 import matplotlib.dates as mdates
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 ax.xaxis.set_major_locator(mdates.DayLocator(interval=7))
@@ -229,10 +229,10 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 ```
 
-### Faceted Time Series
+### 分面時間序列
 
 ```python
-# Create faceted time series
+# 建立分面時間序列
 g = sns.relplot(
     data=long_timeseries,
     x='date',
@@ -247,26 +247,26 @@ g = sns.relplot(
     facet_kws={'sharex': True, 'sharey': False}
 )
 
-# Customize facet titles
+# 自訂分面標題
 g.set_titles('{row_name} - {col_name}')
 g.set_axis_labels('Date', 'Value')
 
-# Rotate x-axis labels
+# 旋轉 x 軸標籤
 for ax in g.axes.flat:
     ax.tick_params(axis='x', rotation=45)
 
 g.tight_layout()
 ```
 
-## Categorical Comparisons
+## 類別比較
 
-### Nested Categorical Variables
+### 巢狀類別變數
 
 ```python
-# Create figure
+# 建立圖形
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
-# Left panel: Grouped bar plot
+# 左側面板：分組長條圖
 sns.barplot(
     data=df,
     x='category',
@@ -280,7 +280,7 @@ axes[0].set_title('Mean Values with 95% CI')
 axes[0].set_ylabel('Value (units)')
 axes[0].legend(title='Subcategory')
 
-# Right panel: Strip + violin plot
+# 右側面板：條狀圖 + 小提琴圖
 sns.violinplot(
     data=df,
     x='category',
@@ -307,10 +307,10 @@ axes[1].get_legend().remove()
 plt.tight_layout()
 ```
 
-### Point Plot for Trends
+### 趨勢點圖
 
 ```python
-# Show how values change across categories
+# 顯示數值如何隨類別變化
 sns.pointplot(
     data=df,
     x='timepoint',
@@ -331,12 +331,12 @@ sns.despine()
 plt.tight_layout()
 ```
 
-## Regression and Relationships
+## 迴歸與關係
 
-### Linear Regression with Facets
+### 帶有分面的線性迴歸
 
 ```python
-# Fit separate regressions for each category
+# 為每個類別擬合獨立的迴歸
 g = sns.lmplot(
     data=df,
     x='predictor',
@@ -355,7 +355,7 @@ g.set_titles('{col_name}')
 g.tight_layout()
 ```
 
-### Polynomial Regression
+### 多項式迴歸
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
@@ -378,16 +378,16 @@ for idx, order in enumerate([1, 2, 3]):
 plt.tight_layout()
 ```
 
-### Residual Analysis
+### 殘差分析
 
 ```python
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-# Main regression
+# 主要迴歸
 sns.regplot(data=df, x='x', y='y', ax=axes[0, 0])
 axes[0, 0].set_title('Regression Fit')
 
-# Residuals vs fitted
+# 殘差 vs 擬合值
 sns.residplot(data=df, x='x', y='y', lowess=True,
               scatter_kws={'alpha': 0.5},
               line_kws={'color': 'red', 'lw': 2},
@@ -395,13 +395,13 @@ sns.residplot(data=df, x='x', y='y', lowess=True,
 axes[0, 1].set_title('Residuals vs Fitted')
 axes[0, 1].axhline(0, ls='--', color='gray')
 
-# Q-Q plot (using scipy)
+# Q-Q 圖（使用 scipy）
 from scipy import stats as sp_stats
 residuals = df['y'] - np.poly1d(np.polyfit(df['x'], df['y'], 1))(df['x'])
 sp_stats.probplot(residuals, dist="norm", plot=axes[1, 0])
 axes[1, 0].set_title('Q-Q Plot')
 
-# Histogram of residuals
+# 殘差直方圖
 sns.histplot(residuals, kde=True, ax=axes[1, 1])
 axes[1, 1].set_title('Residual Distribution')
 axes[1, 1].set_xlabel('Residuals')
@@ -409,12 +409,12 @@ axes[1, 1].set_xlabel('Residuals')
 plt.tight_layout()
 ```
 
-## Bivariate and Joint Distributions
+## 雙變量和聯合分布
 
-### Joint Plot with Multiple Representations
+### 多重呈現方式的聯合圖
 
 ```python
-# Scatter with marginals
+# 帶有邊際分布的散點圖
 g = sns.jointplot(
     data=df,
     x='var1',
@@ -428,19 +428,19 @@ g = sns.jointplot(
     marginal_kws={'kde': True, 'bins': 30}
 )
 
-# Add reference lines
+# 添加參考線
 g.ax_joint.axline((0, 0), slope=1, color='r', ls='--', alpha=0.5, label='y=x')
 g.ax_joint.legend()
 
 g.set_axis_labels('Variable 1', 'Variable 2', fontsize=12)
 ```
 
-### KDE Contour Plot
+### KDE 等高線圖
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 8))
 
-# Bivariate KDE with filled contours
+# 帶有填充等高線的雙變量 KDE
 sns.kdeplot(
     data=df,
     x='x',
@@ -452,7 +452,7 @@ sns.kdeplot(
     ax=ax
 )
 
-# Overlay scatter
+# 疊加散點圖
 sns.scatterplot(
     data=df,
     x='x',
@@ -469,10 +469,10 @@ ax.set_ylabel('Y Variable')
 ax.set_title('Bivariate Distribution')
 ```
 
-### Hexbin with Marginals
+### 帶有邊際分布的六邊形圖
 
 ```python
-# For large datasets
+# 用於大型資料集
 g = sns.jointplot(
     data=large_df,
     x='x',
@@ -488,15 +488,15 @@ g = sns.jointplot(
 g.set_axis_labels('X Variable', 'Y Variable')
 ```
 
-## Matrix and Heatmap Visualizations
+## 矩陣和熱圖視覺化
 
-### Hierarchical Clustering Heatmap
+### 階層式聚類熱圖
 
 ```python
-# Prepare data (samples x features)
+# 準備資料（樣本 x 特徵）
 data_matrix = df.set_index('sample_id')[feature_columns]
 
-# Create color annotations
+# 建立顏色註解
 row_colors = df.set_index('sample_id')['condition'].map({
     'control': '#1f77b4',
     'treatment': '#ff7f0e'
@@ -505,12 +505,12 @@ row_colors = df.set_index('sample_id')['condition'].map({
 col_colors = pd.Series(['#2ca02c' if 'gene' in col else '#d62728'
                         for col in data_matrix.columns])
 
-# Plot
+# 繪圖
 g = sns.clustermap(
     data_matrix,
     method='ward',
     metric='euclidean',
-    z_score=0,  # Normalize rows
+    z_score=0,  # 正規化列
     cmap='RdBu_r',
     center=0,
     row_colors=row_colors,
@@ -526,13 +526,13 @@ g.ax_heatmap.set_ylabel('Samples')
 plt.savefig('clustermap.png', dpi=300, bbox_inches='tight')
 ```
 
-### Annotated Heatmap with Custom Colorbar
+### 帶有自訂色彩條的註解熱圖
 
 ```python
-# Pivot data for heatmap
+# 將資料轉換為熱圖格式
 pivot_data = df.pivot(index='row_var', columns='col_var', values='value')
 
-# Create heatmap
+# 建立熱圖
 fig, ax = plt.subplots(figsize=(10, 8))
 sns.heatmap(
     pivot_data,
@@ -562,12 +562,12 @@ plt.yticks(rotation=0)
 plt.tight_layout()
 ```
 
-## Statistical Comparisons
+## 統計比較
 
-### Before/After Comparison
+### 前後比較
 
 ```python
-# Reshape data for paired comparison
+# 重塑資料以進行配對比較
 df_paired = df.melt(
     id_vars='subject',
     value_vars=['before', 'after'],
@@ -577,7 +577,7 @@ df_paired = df.melt(
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-# Left: Individual trajectories
+# 左側：個別軌跡
 for subject in df_paired['subject'].unique():
     subject_data = df_paired[df_paired['subject'] == subject]
     axes[0].plot(subject_data['timepoint'], subject_data['measurement'],
@@ -597,7 +597,7 @@ sns.pointplot(
 axes[0].set_title('Individual Changes')
 axes[0].set_ylabel('Measurement')
 
-# Right: Distribution comparison
+# 右側：分布比較
 sns.violinplot(
     data=df_paired,
     x='timepoint',
@@ -620,13 +620,13 @@ axes[1].set_ylabel('')
 plt.tight_layout()
 ```
 
-### Dose-Response Curve
+### 劑量反應曲線
 
 ```python
-# Create dose-response plot
+# 建立劑量反應圖
 fig, ax = plt.subplots(figsize=(8, 6))
 
-# Plot individual points
+# 繪製個別點
 sns.stripplot(
     data=dose_df,
     x='dose',
@@ -638,7 +638,7 @@ sns.stripplot(
     ax=ax
 )
 
-# Overlay mean with CI
+# 疊加平均值與信賴區間
 sns.pointplot(
     data=dose_df,
     x='dose',
@@ -652,7 +652,7 @@ sns.pointplot(
     ax=ax
 )
 
-# Fit sigmoid curve
+# 擬合 S 型曲線
 from scipy.optimize import curve_fit
 
 def sigmoid(x, bottom, top, ec50, hill):
@@ -676,16 +676,16 @@ ax.legend()
 sns.despine()
 ```
 
-## Custom Styling
+## 自訂樣式
 
-### Custom Color Palette from Hex Codes
+### 從十六進位碼自訂調色盤
 
 ```python
-# Define custom palette
+# 定義自訂調色盤
 custom_palette = ['#E64B35', '#4DBBD5', '#00A087', '#3C5488', '#F39B7F']
 sns.set_palette(custom_palette)
 
-# Or use for specific plot
+# 或用於特定圖形
 sns.scatterplot(
     data=df,
     x='x',
@@ -695,10 +695,10 @@ sns.scatterplot(
 )
 ```
 
-### Publication-Ready Theme
+### 出版品質主題
 
 ```python
-# Set comprehensive theme
+# 設定完整主題
 sns.set_theme(
     context='paper',
     style='ticks',
@@ -716,25 +716,25 @@ sns.set_theme(
         'xtick.direction': 'out',
         'ytick.direction': 'out',
         'legend.frameon': False,
-        'pdf.fonttype': 42,  # True Type fonts for PDFs
+        'pdf.fonttype': 42,  # PDF 用 True Type 字型
     }
 )
 ```
 
-### Diverging Colormap Centered on Zero
+### 以零為中心的發散色彩映射
 
 ```python
-# For data with meaningful zero point (e.g., log fold change)
+# 用於具有有意義零點的資料（例如 log fold change）
 from matplotlib.colors import TwoSlopeNorm
 
-# Find data range
+# 找出資料範圍
 vmin, vmax = df['value'].min(), df['value'].max()
 vcenter = 0
 
-# Create norm
+# 建立正規化
 norm = TwoSlopeNorm(vmin=vmin, vcenter=vcenter, vmax=vmax)
 
-# Plot
+# 繪圖
 sns.heatmap(
     pivot_data,
     cmap='RdBu_r',
@@ -745,42 +745,42 @@ sns.heatmap(
 )
 ```
 
-## Large Datasets
+## 大型資料集
 
-### Downsampling Strategy
+### 降採樣策略
 
 ```python
-# For very large datasets, sample intelligently
+# 對於非常大的資料集，智慧採樣
 def smart_sample(df, target_size=10000, category_col=None):
     if len(df) <= target_size:
         return df
 
     if category_col:
-        # Stratified sampling
+        # 分層採樣
         return df.groupby(category_col, group_keys=False).apply(
             lambda x: x.sample(min(len(x), target_size // df[category_col].nunique()))
         )
     else:
-        # Simple random sampling
+        # 簡單隨機採樣
         return df.sample(target_size)
 
-# Use sampled data for visualization
+# 使用採樣資料進行視覺化
 df_sampled = smart_sample(large_df, target_size=5000, category_col='category')
 
 sns.scatterplot(data=df_sampled, x='x', y='y', hue='category', alpha=0.5)
 ```
 
-### Hexbin for Dense Scatter Plots
+### 密集散點圖的六邊形圖
 
 ```python
-# For millions of points
+# 用於數百萬個點
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
-# Regular scatter (slow)
+# 常規散點圖（慢）
 axes[0].scatter(df['x'], df['y'], alpha=0.1, s=1)
 axes[0].set_title('Scatter (all points)')
 
-# Hexbin (fast)
+# 六邊形圖（快）
 hb = axes[1].hexbin(df['x'], df['y'], gridsize=50, cmap='viridis', mincnt=1)
 axes[1].set_title('Hexbin Aggregation')
 plt.colorbar(hb, ax=axes[1], label='Count')
@@ -788,9 +788,9 @@ plt.colorbar(hb, ax=axes[1], label='Count')
 plt.tight_layout()
 ```
 
-## Interactive Elements for Notebooks
+## 筆記本的互動元素
 
-### Adjustable Parameters
+### 可調整參數
 
 ```python
 from ipywidgets import interact, FloatSlider
@@ -804,7 +804,7 @@ def plot_kde(bandwidth):
     plt.show()
 ```
 
-### Dynamic Filtering
+### 動態篩選
 
 ```python
 from ipywidgets import interact, SelectMultiple

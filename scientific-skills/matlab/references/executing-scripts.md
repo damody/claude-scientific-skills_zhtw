@@ -1,170 +1,170 @@
 ````md
-# Running MATLAB and GNU Octave Scripts from Bash
+# 從 Bash 執行 MATLAB 和 GNU Octave 腳本
 
-This document shows common ways to execute MATLAB-style `.m` scripts from a Bash environment using both MATLAB (MathWorks) and GNU Octave. It covers interactive use, non-interactive batch runs, passing arguments, capturing output, and practical patterns for automation and CI.
+本文件展示從 Bash 環境使用 MATLAB（MathWorks）和 GNU Octave 執行 MATLAB 風格 `.m` 腳本的常見方法。涵蓋互動式使用、非互動式批次執行、傳遞參數、擷取輸出，以及自動化和 CI 的實用模式。
 
-## Contents
+## 內容
 
-- Requirements
-- Quick comparisons
-- Running MATLAB scripts from Bash
-  - Interactive mode
-  - Run a script non-interactively
-  - Run a function with arguments
-  - Run one-liners
-  - Working directory and path handling
-  - Capturing output and exit codes
-  - Common MATLAB flags for scripting
-- Running Octave scripts from Bash
-  - Interactive mode
-  - Run a script non-interactively
-  - Run a function with arguments
-  - Run one-liners
-  - Making `.m` files executable (shebang)
-  - Working directory and path handling
-  - Capturing output and exit codes
-  - Common Octave flags for scripting
-- Cross-compatibility tips (MATLAB + Octave)
-- Example: a portable runner script
-- Troubleshooting
+- 需求
+- 快速比較
+- 從 Bash 執行 MATLAB 腳本
+  - 互動模式
+  - 非互動式執行腳本
+  - 執行帶參數的函數
+  - 執行單行指令
+  - 工作目錄和路徑處理
+  - 擷取輸出和退出碼
+  - 常用的 MATLAB 腳本標誌
+- 從 Bash 執行 Octave 腳本
+  - 互動模式
+  - 非互動式執行腳本
+  - 執行帶參數的函數
+  - 執行單行指令
+  - 使 `.m` 檔案可執行（shebang）
+  - 工作目錄和路徑處理
+  - 擷取輸出和退出碼
+  - 常用的 Octave 腳本標誌
+- 跨平台相容性技巧（MATLAB + Octave）
+- 範例：可攜式執行腳本
+- 疑難排解
 
-## Requirements
+## 需求
 
 ### MATLAB
-- MATLAB must be installed.
-- The `matlab` executable must be on your PATH, or you must reference it by full path.
-- A valid license is required to run MATLAB.
+- 必須安裝 MATLAB。
+- `matlab` 可執行檔必須在您的 PATH 中，或者您必須使用完整路徑引用它。
+- 執行 MATLAB 需要有效的授權。
 
-Check:
+檢查：
 ```bash
 matlab -help | head
 ````
 
 ### GNU Octave
 
-* Octave must be installed.
-* The `octave` executable must be on your PATH.
+* 必須安裝 Octave。
+* `octave` 可執行檔必須在您的 PATH 中。
 
-Check:
+檢查：
 
 ```bash
 octave --version
 ```
 
-## Quick comparison
+## 快速比較
 
-| Task                          | MATLAB                            | Octave                   |
+| 任務                          | MATLAB                            | Octave                   |
 | ----------------------------- | --------------------------------- | ------------------------ |
-| Interactive shell             | `matlab` (GUI by default)         | `octave`                 |
-| Headless run (CI)             | `matlab -batch "cmd"` (preferred) | `octave --eval "cmd"`    |
-| Run script file               | `matlab -batch "run('file.m')"`   | `octave --no-gui file.m` |
-| Exit with code                | `exit(n)`                         | `exit(n)`                |
-| Make `.m` directly executable | uncommon                          | common via shebang       |
+| 互動式 shell                  | `matlab`（預設 GUI）              | `octave`                 |
+| 無頭執行（CI）                | `matlab -batch "cmd"`（建議）     | `octave --eval "cmd"`    |
+| 執行腳本檔案                  | `matlab -batch "run('file.m')"`   | `octave --no-gui file.m` |
+| 帶退出碼退出                  | `exit(n)`                         | `exit(n)`                |
+| 使 `.m` 直接可執行            | 不常見                            | 常見（透過 shebang）     |
 
-## Running MATLAB scripts from Bash
+## 從 Bash 執行 MATLAB 腳本
 
-### 1) Interactive mode
+### 1) 互動模式
 
-Starts MATLAB. Depending on your platform and install, this may launch a GUI.
+啟動 MATLAB。根據您的平台和安裝方式，這可能會啟動 GUI。
 
 ```bash
 matlab
 ```
 
-For terminal-only use, prefer `-nodesktop` and optionally `-nosplash`:
+對於僅終端機使用，建議使用 `-nodesktop`，可選 `-nosplash`：
 
 ```bash
 matlab -nodesktop -nosplash
 ```
 
-### 2) Run a script non-interactively
+### 2) 非互動式執行腳本
 
-Recommended modern approach: `-batch`. It runs the command and exits when finished.
+建議的現代方法：`-batch`。它執行命令並在完成時退出。
 
-Run a script with `run()`:
+使用 `run()` 執行腳本：
 
 ```bash
 matlab -batch "run('myscript.m')"
 ```
 
-If the script relies on being run from its directory, set the working directory first:
+如果腳本依賴從其目錄執行，請先設定工作目錄：
 
 ```bash
 matlab -batch "cd('/path/to/project'); run('myscript.m')"
 ```
 
-Alternative older pattern: `-r` (less robust for automation because you must ensure MATLAB exits):
+較舊的替代模式：`-r`（對自動化較不穩健，因為您必須確保 MATLAB 退出）：
 
 ```bash
 matlab -nodisplay -nosplash -r "run('myscript.m'); exit"
 ```
 
-### 3) Run a function with arguments
+### 3) 執行帶參數的函數
 
-If your file defines a function, call it directly. Prefer `-batch`:
+如果您的檔案定義了一個函數，直接呼叫它。建議使用 `-batch`：
 
 ```bash
 matlab -batch "myfunc(123, 'abc')"
 ```
 
-To pass values from Bash variables:
+從 Bash 變數傳遞值：
 
 ```bash
 matlab -batch "myfunc(${N}, '${NAME}')"
 ```
 
-If arguments may contain quotes or spaces, consider writing a small MATLAB wrapper function that reads environment variables.
+如果參數可能包含引號或空格，考慮撰寫一個小型 MATLAB 包裝函數來讀取環境變數。
 
-### 4) Run one-liners
+### 4) 執行單行指令
 
 ```bash
 matlab -batch "disp(2+2)"
 ```
 
-Multiple statements:
+多個語句：
 
 ```bash
 matlab -batch "a=1; b=2; fprintf('%d\n', a+b)"
 ```
 
-### 5) Working directory and path handling
+### 5) 工作目錄和路徑處理
 
-Common options:
+常見選項：
 
-* Change directory at startup:
+* 啟動時變更目錄：
 
 ```bash
 matlab -batch "cd('/path/to/project'); myfunc()"
 ```
 
-* Add code directories to MATLAB path:
+* 將程式碼目錄加入 MATLAB 路徑：
 
 ```bash
 matlab -batch "addpath('/path/to/lib'); myfunc()"
 ```
 
-To include subfolders:
+包含子資料夾：
 
 ```bash
 matlab -batch "addpath(genpath('/path/to/project')); myfunc()"
 ```
 
-### 6) Capturing output and exit codes
+### 6) 擷取輸出和退出碼
 
-Capture stdout/stderr:
+擷取 stdout/stderr：
 
 ```bash
 matlab -batch "run('myscript.m')" > matlab.out 2>&1
 ```
 
-Check exit code:
+檢查退出碼：
 
 ```bash
 matlab -batch "run('myscript.m')"
 echo $?
 ```
 
-To explicitly fail a pipeline, use `exit(1)` on error. Example pattern:
+要明確讓流程失敗，在錯誤時使用 `exit(1)`。範例模式：
 
 ```matlab
 try
@@ -176,146 +176,146 @@ end
 exit(0);
 ```
 
-Run it:
+執行它：
 
 ```bash
 matlab -batch "try, run('myscript.m'); catch ME, disp(getReport(ME)); exit(1); end; exit(0);"
 ```
 
-### 7) Common MATLAB flags for scripting
+### 7) 常用的 MATLAB 腳本標誌
 
-Commonly useful options:
+常用選項：
 
-* `-batch "cmd"`: run command, return a process exit code, then exit
-* `-nodisplay`: no display (useful on headless systems)
-* `-nodesktop`: no desktop GUI
-* `-nosplash`: no startup splash
-* `-r "cmd"`: run command; must include `exit` if you want it to terminate
+* `-batch "cmd"`：執行命令，返回程序退出碼，然後退出
+* `-nodisplay`：無顯示（對無頭系統有用）
+* `-nodesktop`：無桌面 GUI
+* `-nosplash`：無啟動畫面
+* `-r "cmd"`：執行命令；如果要終止必須包含 `exit`
 
-Exact availability varies by MATLAB release, so use `matlab -help` for your version.
+確切的可用性因 MATLAB 版本而異，因此請使用 `matlab -help` 查看您的版本。
 
-## Running GNU Octave scripts from Bash
+## 從 Bash 執行 GNU Octave 腳本
 
-### 1) Interactive mode
+### 1) 互動模式
 
 ```bash
 octave
 ```
 
-Quieter:
+較安靜：
 
 ```bash
 octave --quiet
 ```
 
-### 2) Run a script non-interactively
+### 2) 非互動式執行腳本
 
-Run a file and exit:
+執行檔案並退出：
 
 ```bash
 octave --no-gui myscript.m
 ```
 
-Quieter:
+較安靜：
 
 ```bash
 octave --quiet --no-gui myscript.m
 ```
 
-Some environments use:
+某些環境使用：
 
 ```bash
 octave --no-window-system myscript.m
 ```
 
-### 3) Run a function with arguments
+### 3) 執行帶參數的函數
 
-If `myfunc.m` defines a function `myfunc`, call it via `--eval`:
+如果 `myfunc.m` 定義了函數 `myfunc`，透過 `--eval` 呼叫它：
 
 ```bash
 octave --quiet --eval "myfunc(123, 'abc')"
 ```
 
-If your function is not on the Octave path, add paths first:
+如果您的函數不在 Octave 路徑中，先加入路徑：
 
 ```bash
 octave --quiet --eval "addpath('/path/to/project'); myfunc()"
 ```
 
-### 4) Run one-liners
+### 4) 執行單行指令
 
 ```bash
 octave --quiet --eval "disp(2+2)"
 ```
 
-Multiple statements:
+多個語句：
 
 ```bash
 octave --quiet --eval "a=1; b=2; printf('%d\n', a+b);"
 ```
 
-### 5) Making `.m` files executable (shebang)
+### 5) 使 `.m` 檔案可執行（shebang）
 
-This is a common "standalone script" pattern in Octave.
+這是 Octave 中常見的「獨立腳本」模式。
 
-Create `myscript.m`:
+建立 `myscript.m`：
 
 ```matlab
 #!/usr/bin/env octave
 disp("Hello from Octave");
 ```
 
-Make executable:
+使其可執行：
 
 ```bash
 chmod +x myscript.m
 ```
 
-Run:
+執行：
 
 ```bash
 ./myscript.m
 ```
 
-If you need flags (quiet, no GUI), use a wrapper script instead, because the shebang line typically supports limited arguments across platforms.
+如果需要標誌（quiet、no GUI），請改用包裝腳本，因為 shebang 行在不同平台上通常只支援有限的參數。
 
-### 6) Working directory and path handling
+### 6) 工作目錄和路徑處理
 
-Change directory from the shell before running:
+執行前從 shell 變更目錄：
 
 ```bash
 cd /path/to/project
 octave --quiet --no-gui myscript.m
 ```
 
-Or change directory within Octave:
+或在 Octave 內變更目錄：
 
 ```bash
 octave --quiet --eval "cd('/path/to/project'); run('myscript.m');"
 ```
 
-Add paths:
+加入路徑：
 
 ```bash
 octave --quiet --eval "addpath('/path/to/lib'); run('myscript.m');"
 ```
 
-### 7) Capturing output and exit codes
+### 7) 擷取輸出和退出碼
 
-Capture stdout/stderr:
+擷取 stdout/stderr：
 
 ```bash
 octave --quiet --no-gui myscript.m > octave.out 2>&1
 ```
 
-Exit code:
+退出碼：
 
 ```bash
 octave --quiet --no-gui myscript.m
 echo $?
 ```
 
-To force non-zero exit on error, wrap execution:
+要在錯誤時強制非零退出，包裝執行：
 
 ```matlab
 try
@@ -327,57 +327,57 @@ end
 exit(0);
 ```
 
-Run it:
+執行它：
 
 ```bash
 octave --quiet --eval "try, run('myscript.m'); catch err, disp(err.message); exit(1); end; exit(0);"
 ```
 
-### 8) Common Octave flags for scripting
+### 8) 常用的 Octave 腳本標誌
 
-Useful options:
+有用的選項：
 
-* `--eval "cmd"`: run a command string
-* `--quiet`: suppress startup messages
-* `--no-gui`: disable GUI
-* `--no-window-system`: similar headless mode on some installs
-* `--persist`: keep Octave open after running commands (opposite of batch behavior)
+* `--eval "cmd"`：執行命令字串
+* `--quiet`：抑制啟動訊息
+* `--no-gui`：停用 GUI
+* `--no-window-system`：某些安裝上類似的無頭模式
+* `--persist`：執行命令後保持 Octave 開啟（與批次行為相反）
 
-Check:
+檢查：
 
 ```bash
 octave --help | head -n 50
 ```
 
-## Cross-compatibility tips (MATLAB and Octave)
+## 跨平台相容性技巧（MATLAB 和 Octave）
 
-1. Prefer functions over scripts for automation
-   Functions give cleaner parameter passing and namespace handling.
+1. 建議使用函數而非腳本進行自動化
+   函數提供更清晰的參數傳遞和命名空間處理。
 
-2. Avoid toolbox-specific calls if you need portability
-   Many MATLAB toolboxes have no Octave equivalent.
+2. 如果需要可攜性，避免工具箱特定的呼叫
+   許多 MATLAB 工具箱沒有 Octave 等效物。
 
-3. Be careful with strings and quoting
-   MATLAB and Octave both support `'single quotes'`, and newer MATLAB supports `"double quotes"` strings. For maximum compatibility, prefer single quotes unless you know your Octave version supports double quotes the way you need.
+3. 小心字串和引號
+   MATLAB 和 Octave 都支援 `'單引號'`，而較新的 MATLAB 支援 `"雙引號"` 字串。為了最大相容性，除非您知道您的 Octave 版本以您需要的方式支援雙引號，否則建議使用單引號。
 
-4. Use `fprintf` or `disp` for output
-   For CI logs, keep output simple and deterministic.
+4. 使用 `fprintf` 或 `disp` 輸出
+   對於 CI 日誌，保持輸出簡單且確定性。
 
-5. Ensure exit codes reflect success or failure
-   In both environments, `exit(0)` indicates success, `exit(1)` indicates failure.
+5. 確保退出碼反映成功或失敗
+   在兩個環境中，`exit(0)` 表示成功，`exit(1)` 表示失敗。
 
-## Example: a portable Bash runner
+## 範例：可攜式 Bash 執行器
 
-This script tries MATLAB first if available, otherwise Octave.
+此腳本如果可用會先嘗試 MATLAB，否則使用 Octave。
 
-Create `run_mfile.sh`:
+建立 `run_mfile.sh`：
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 
-FILE="${1:?Usage: run_mfile.sh path/to/script_or_function.m}"
-CMD="${2:-}"  # optional command override
+FILE="${1:?用法: run_mfile.sh path/to/script_or_function.m}"
+CMD="${2:-}"  # 可選命令覆寫
 
 if command -v matlab >/dev/null 2>&1; then
   if [[ -n "$CMD" ]]; then
@@ -392,53 +392,53 @@ elif command -v octave >/dev/null 2>&1; then
     octave --quiet --no-gui "$FILE"
   fi
 else
-  echo "Neither matlab nor octave found on PATH" >&2
+  echo "在 PATH 中找不到 matlab 或 octave" >&2
   exit 127
 fi
 ```
 
-Make executable:
+使其可執行：
 
 ```bash
 chmod +x run_mfile.sh
 ```
 
-Run:
+執行：
 
 ```bash
 ./run_mfile.sh myscript.m
 ```
 
-Or run a function call:
+或執行函數呼叫：
 
 ```bash
 ./run_mfile.sh myfunc.m "myfunc(1, 'abc')"
 ```
 
-## Troubleshooting
+## 疑難排解
 
 ### MATLAB: command not found
 
-* Add MATLAB to PATH, or invoke it by full path, for example:
+* 將 MATLAB 加入 PATH，或使用完整路徑呼叫它，例如：
 
 ```bash
 /Applications/MATLAB_R202x?.app/bin/matlab -batch "disp('ok')"
 ```
 
-### Octave: GUI issues on servers
+### Octave: 伺服器上的 GUI 問題
 
-* Use `--no-gui` or `--no-window-system`.
+* 使用 `--no-gui` 或 `--no-window-system`。
 
-### Scripts depend on relative paths
+### 腳本依賴相對路徑
 
-* `cd` into the script directory before launching, or do `cd()` within MATLAB/Octave before calling `run()`.
+* 啟動前 `cd` 到腳本目錄，或在呼叫 `run()` 前在 MATLAB/Octave 內執行 `cd()`。
 
-### Quoting problems when passing strings
+### 傳遞字串時的引號問題
 
-* Avoid complex quoting in `--eval` or `-batch`.
-* Use environment variables and read them inside MATLAB/Octave when inputs are complicated.
+* 避免在 `--eval` 或 `-batch` 中使用複雜引號。
+* 當輸入複雜時，使用環境變數並在 MATLAB/Octave 內讀取它們。
 
-### Different behavior between MATLAB and Octave
+### MATLAB 和 Octave 之間的不同行為
 
-* Check for unsupported functions or toolbox calls.
-* Run minimal repro steps using `--eval` or `-batch` to isolate incompatibilities.
+* 檢查不支援的函數或工具箱呼叫。
+* 使用 `--eval` 或 `-batch` 執行最小重現步驟以隔離不相容性。

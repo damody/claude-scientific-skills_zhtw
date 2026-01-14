@@ -1,34 +1,34 @@
-# Paper2Web: Academic Homepage Generation
+# Paper2Web：學術首頁生成
 
-## Overview
+## 概述
 
-Paper2Web converts academic papers into interactive, explorable academic homepages. Unlike traditional approaches (direct generation, template-based, or HTML conversion), Paper2Web creates layout-aware, interactive websites through an iterative refinement process.
+Paper2Web 將學術論文轉換為互動式、可探索的學術首頁。與傳統方法（直接生成、基於模板或 HTML 轉換）不同，Paper2Web 通過迭代精煉流程創建具有版面感知的互動式網站。
 
-## Core Capabilities
+## 核心功能
 
-### 1. Layout-Aware Generation
-- Analyzes paper structure and content organization
-- Creates responsive, multi-section layouts
-- Adapts design based on paper type (research article, review, preprint, etc.)
+### 1. 版面感知生成
+- 分析論文結構和內容組織
+- 創建響應式、多區塊版面
+- 根據論文類型（研究文章、綜述、預印本等）調整設計
 
-### 2. Interactive Elements
-- Expandable sections for detailed content
-- Interactive figures and tables
-- Embedded citations and references
-- Navigation menu for easy browsing
-- Mobile-responsive design
+### 2. 互動元素
+- 可展開的詳細內容區塊
+- 互動式圖表和表格
+- 嵌入式引用和參考文獻
+- 便於瀏覽的導航選單
+- 移動設備響應式設計
 
-### 3. Content Refinement
-The system uses an iterative pipeline:
-1. Initial content extraction and structuring
-2. Layout generation with visual hierarchy
-3. Interactive element integration
-4. Aesthetic refinement
-5. Quality assessment and validation
+### 3. 內容精煉
+系統使用迭代管道：
+1. 初始內容提取和結構化
+2. 具有視覺層次的版面生成
+3. 互動元素整合
+4. 美學精煉
+5. 品質評估和驗證
 
-## Usage
+## 使用方法
 
-### Basic Website Generation
+### 基本網站生成
 
 ```bash
 python pipeline_all.py \
@@ -37,151 +37,151 @@ python pipeline_all.py \
   --model-choice 1
 ```
 
-### Parameters
+### 參數
 
-- `--input-dir`: Directory containing paper files (PDF or LaTeX)
-- `--output-dir`: Directory for generated website files
-- `--model-choice`: LLM model selection (1=GPT-4, 2=GPT-4.1)
-- `--enable-logo-search`: Use Google Search API to find institution logos (optional)
+- `--input-dir`：包含論文檔案（PDF 或 LaTeX）的目錄
+- `--output-dir`：生成網站檔案的目錄
+- `--model-choice`：LLM 模型選擇（1=GPT-4，2=GPT-4.1）
+- `--enable-logo-search`：使用 Google Search API 查找機構標誌（可選）
 
-### Input Format Requirements
+### 輸入格式要求
 
-**Supported Input Formats:**
-1. **LaTeX source** (preferred for best results)
-   - Main file: `main.tex`
-   - Include all referenced figures, tables, and bibliography files
-   - Organize in a single directory per paper
+**支援的輸入格式：**
+1. **LaTeX 源檔案**（首選以獲得最佳結果）
+   - 主檔案：`main.tex`
+   - 包含所有引用的圖像、表格和參考文獻檔案
+   - 每篇論文組織在單一目錄中
 
-2. **PDF files**
-   - High-quality PDF with selectable text
-   - Embedded figures should be high resolution
-   - Proper section headers and structure
+2. **PDF 檔案**
+   - 具有可選取文字的高品質 PDF
+   - 嵌入的圖像應為高解析度
+   - 正確的章節標題和結構
 
-**Directory Structure:**
+**目錄結構：**
 ```
 input/
 └── paper_name/
-    ├── main.tex           # LaTeX source
-    ├── bibliography.bib   # References
-    ├── figures/           # Figure files
+    ├── main.tex           # LaTeX 源檔案
+    ├── bibliography.bib   # 參考文獻
+    ├── figures/           # 圖像檔案
     │   ├── fig1.png
     │   └── fig2.pdf
-    └── tables/            # Table files
+    └── tables/            # 表格檔案
 ```
 
-## Output Structure
+## 輸出結構
 
-Generated websites include:
+生成的網站包含：
 
 ```
 output/paper_name/website/
-├── index.html          # Main webpage
-├── styles.css          # Styling
-├── script.js           # Interactive features
-├── assets/             # Images and media
+├── index.html          # 主網頁
+├── styles.css          # 樣式表
+├── script.js           # 互動功能
+├── assets/             # 圖像和媒體
 │   ├── figures/
 │   └── logos/
-└── data/               # Structured data (optional)
+└── data/               # 結構化資料（可選）
 ```
 
-## Customization Options
+## 自定義選項
 
-### Visual Design
-The generated websites automatically include:
-- Professional color schemes based on paper content
-- Typography optimized for readability
-- Consistent spacing and visual hierarchy
-- Dark mode support (optional)
+### 視覺設計
+生成的網站自動包含：
+- 根據論文內容的專業配色方案
+- 針對可讀性最佳化的排版
+- 一致的間距和視覺層次
+- 深色模式支援（可選）
 
-### Content Sections
-Standard sections include:
-- Abstract
-- Key findings/contributions
-- Methodology overview
-- Results and visualizations
-- Discussion and implications
-- References and citations
-- Author information and affiliations
+### 內容區塊
+標準區塊包括：
+- 摘要
+- 關鍵發現/貢獻
+- 方法論概述
+- 結果和視覺化
+- 討論和影響
+- 參考文獻和引用
+- 作者資訊和機構
 
-Additional sections are automatically added based on paper content:
-- Code repositories
-- Dataset links
-- Supplementary materials
-- Related publications
+根據論文內容自動添加的額外區塊：
+- 程式碼儲存庫
+- 資料集連結
+- 補充材料
+- 相關出版物
 
-## Quality Assessment
+## 品質評估
 
-Paper2Web includes built-in evaluation:
+Paper2Web 包含內建評估：
 
-### Aesthetic Metrics
-- Layout balance and spacing
-- Color harmony
-- Typography consistency
-- Visual hierarchy effectiveness
+### 美學指標
+- 版面平衡和間距
+- 色彩和諧
+- 排版一致性
+- 視覺層次效果
 
-### Informativeness Metrics
-- Content completeness
-- Key finding clarity
-- Method explanation adequacy
-- Results presentation quality
+### 資訊性指標
+- 內容完整性
+- 關鍵發現清晰度
+- 方法解釋充分性
+- 結果呈現品質
 
-### Technical Metrics
-- Page load time
-- Mobile responsiveness
-- Browser compatibility
-- Accessibility compliance
+### 技術指標
+- 頁面載入時間
+- 移動設備響應性
+- 瀏覽器相容性
+- 無障礙設計合規性
 
-## Advanced Features
+## 進階功能
 
-### Logo Discovery
-When enabled with Google Search API:
-- Automatically finds institution logos
-- Matches author affiliations
-- Downloads and optimizes logo images
-- Integrates into website header
+### 標誌發現
+使用 Google Search API 啟用時：
+- 自動查找機構標誌
+- 匹配作者所屬機構
+- 下載並最佳化標誌圖像
+- 整合到網站標題
 
-### Citation Integration
-- Interactive reference list
-- Hover previews for citations
-- Links to DOI and external sources
-- Citation count tracking (if available)
+### 引用整合
+- 互動式參考文獻列表
+- 引用懸停預覽
+- 連結到 DOI 和外部來源
+- 引用次數追蹤（如可用）
 
-### Figure Enhancement
-- High-resolution figure rendering
-- Zoom and pan functionality
-- Caption and description integration
-- Multi-panel figure navigation
+### 圖像增強
+- 高解析度圖像渲染
+- 縮放和平移功能
+- 圖說和描述整合
+- 多面板圖像導航
 
-## Best Practices
+## 最佳實踐
 
-### Input Preparation
-1. **Use LaTeX when possible**: Provides best structure extraction
-2. **Include all assets**: Figures, tables, and bibliography files
-3. **Clean formatting**: Remove compilation artifacts and temporary files
-4. **High-quality figures**: Use vector formats (PDF, SVG) when available
+### 輸入準備
+1. **盡可能使用 LaTeX**：提供最佳的結構提取
+2. **包含所有資源**：圖像、表格和參考文獻檔案
+3. **乾淨格式**：移除編譯產物和暫存檔案
+4. **高品質圖像**：如可用，使用向量格式（PDF、SVG）
 
-### Model Selection
-- **GPT-4**: Best balance of quality and cost
-- **GPT-4.1**: Latest features, higher cost
-- **GPT-3.5-turbo**: Faster processing, acceptable for simple papers
+### 模型選擇
+- **GPT-4**：品質和成本的最佳平衡
+- **GPT-4.1**：最新功能，成本較高
+- **GPT-3.5-turbo**：更快處理，適合簡單論文
 
-### Output Optimization
-1. Review generated content for accuracy
-2. Check that all figures render correctly
-3. Test interactive elements functionality
-4. Verify mobile responsiveness
-5. Validate external links
+### 輸出最佳化
+1. 審核生成內容的準確性
+2. 檢查所有圖像是否正確渲染
+3. 測試互動元素功能
+4. 驗證移動設備響應性
+5. 驗證外部連結
 
-## Limitations
+## 限制
 
-- Complex mathematical equations may require manual review
-- Multi-column layouts in PDF may affect extraction quality
-- Large papers (>50 pages) may require extended processing time
-- Some specialized figure types may need manual adjustment
+- 複雜數學方程式可能需要手動審核
+- PDF 中的多欄版面可能影響提取品質
+- 大型論文（>50 頁）可能需要延長處理時間
+- 某些專門的圖像類型可能需要手動調整
 
-## Integration with Other Components
+## 與其他組件的整合
 
-Paper2Web can be combined with:
-- **Paper2Video**: Generate companion video for the website
-- **Paper2Poster**: Create matching poster design
-- **AutoPR**: Generate promotional content linking to website
+Paper2Web 可結合：
+- **Paper2Video**：為網站生成配套影片
+- **Paper2Poster**：創建匹配的海報設計
+- **AutoPR**：生成連結到網站的推廣內容

@@ -1,339 +1,339 @@
-# SHAP Explainers Reference
+# SHAP 解釋器參考
 
-This document provides comprehensive information about all SHAP explainer classes, their parameters, methods, and when to use each type.
+本文件提供所有 SHAP 解釋器類別、其參數、方法以及何時使用每種類型的完整資訊。
 
-## Overview
+## 概述
 
-SHAP provides specialized explainers for different model types, each optimized for specific architectures. The general `shap.Explainer` class automatically selects the appropriate algorithm based on the model type.
+SHAP 為不同模型類型提供專門的解釋器，每個都針對特定架構進行優化。通用的 `shap.Explainer` 類別會根據模型類型自動選擇適當的演算法。
 
-## Core Explainer Classes
+## 核心解釋器類別
 
-### shap.Explainer (Auto-selector)
+### shap.Explainer（自動選擇器）
 
-**Purpose**: Automatically uses Shapley values to explain any machine learning model or Python function by selecting the most appropriate explainer algorithm.
+**用途**：透過選擇最適當的解釋器演算法，自動使用 Shapley 值來解釋任何機器學習模型或 Python 函數。
 
-**Constructor Parameters**:
-- `model`: The model to explain (function or model object)
-- `masker`: Background data or masker object for feature manipulation
-- `algorithm`: Optional override to force specific explainer type
-- `output_names`: Names for model outputs
-- `feature_names`: Names for input features
+**建構函數參數**：
+- `model`：要解釋的模型（函數或模型物件）
+- `masker`：用於特徵操作的背景資料或遮罩器物件
+- `algorithm`：可選覆寫以強制使用特定解釋器類型
+- `output_names`：模型輸出的名稱
+- `feature_names`：輸入特徵的名稱
 
-**When to Use**: Default choice when unsure which explainer to use; automatically selects the best algorithm based on model type.
+**何時使用**：當不確定使用哪個解釋器時的預設選擇；根據模型類型自動選擇最佳演算法。
 
 ### TreeExplainer
 
-**Purpose**: Fast and exact SHAP value computation for tree-based ensemble models using the Tree SHAP algorithm.
+**用途**：使用 Tree SHAP 演算法為基於樹的集成模型進行快速且精確的 SHAP 值計算。
 
-**Constructor Parameters**:
-- `model`: Tree-based model (XGBoost, LightGBM, CatBoost, PySpark, or scikit-learn trees)
-- `data`: Background dataset for feature integration (optional with tree_path_dependent)
-- `feature_perturbation`: How to handle dependent features
-  - `"interventional"`: Requires background data; follows causal inference rules
-  - `"tree_path_dependent"`: No background data needed; uses training examples per leaf
-  - `"auto"`: Defaults to interventional if data provided, otherwise tree_path_dependent
-- `model_output`: What model output to explain
-  - `"raw"`: Standard model output (default)
-  - `"probability"`: Probability-transformed output
-  - `"log_loss"`: Natural log of loss function
-  - Custom method names like `"predict_proba"`
-- `feature_names`: Optional feature naming
+**建構函數參數**：
+- `model`：基於樹的模型（XGBoost、LightGBM、CatBoost、PySpark 或 scikit-learn 樹）
+- `data`：用於特徵整合的背景資料集（使用 tree_path_dependent 時為可選）
+- `feature_perturbation`：如何處理依賴特徵
+  - `"interventional"`：需要背景資料；遵循因果推論規則
+  - `"tree_path_dependent"`：不需要背景資料；使用每個葉節點的訓練樣本
+  - `"auto"`：如果提供資料則預設為 interventional，否則為 tree_path_dependent
+- `model_output`：要解釋的模型輸出
+  - `"raw"`：標準模型輸出（預設）
+  - `"probability"`：機率轉換輸出
+  - `"log_loss"`：損失函數的自然對數
+  - 自訂方法名稱如 `"predict_proba"`
+- `feature_names`：可選的特徵命名
 
-**Supported Models**:
-- XGBoost (xgboost.XGBClassifier, xgboost.XGBRegressor, xgboost.Booster)
-- LightGBM (lightgbm.LGBMClassifier, lightgbm.LGBMRegressor, lightgbm.Booster)
-- CatBoost (catboost.CatBoostClassifier, catboost.CatBoostRegressor)
-- PySpark MLlib tree models
-- scikit-learn (DecisionTreeClassifier, DecisionTreeRegressor, RandomForestClassifier, RandomForestRegressor, ExtraTreesClassifier, ExtraTreesRegressor, GradientBoostingClassifier, GradientBoostingRegressor)
+**支援的模型**：
+- XGBoost（xgboost.XGBClassifier、xgboost.XGBRegressor、xgboost.Booster）
+- LightGBM（lightgbm.LGBMClassifier、lightgbm.LGBMRegressor、lightgbm.Booster）
+- CatBoost（catboost.CatBoostClassifier、catboost.CatBoostRegressor）
+- PySpark MLlib 樹模型
+- scikit-learn（DecisionTreeClassifier、DecisionTreeRegressor、RandomForestClassifier、RandomForestRegressor、ExtraTreesClassifier、ExtraTreesRegressor、GradientBoostingClassifier、GradientBoostingRegressor）
 
-**Key Methods**:
-- `shap_values(X)`: Computes SHAP values for samples; returns arrays where each row represents feature attribution
-- `shap_interaction_values(X)`: Estimates interaction effects between feature pairs; provides matrices with main effects and pairwise interactions
-- `explain_row(row)`: Explains individual rows with detailed attribution information
+**關鍵方法**：
+- `shap_values(X)`：計算樣本的 SHAP 值；返回每行代表特徵歸因的陣列
+- `shap_interaction_values(X)`：估計特徵對之間的互動效應；提供具有主效應和成對互動的矩陣
+- `explain_row(row)`：解釋單行並提供詳細的歸因資訊
 
-**When to Use**:
-- Primary choice for all tree-based models
-- When exact SHAP values are needed (not approximations)
-- When computational speed is important for large datasets
-- For models like random forests, gradient boosting, or XGBoost
+**何時使用**：
+- 所有基於樹模型的首選
+- 當需要精確 SHAP 值（非近似值）時
+- 當大型資料集的計算速度很重要時
+- 對於隨機森林、梯度提升或 XGBoost 等模型
 
-**Example**:
+**範例**：
 ```python
 import shap
 import xgboost
 
-# Train model
+# 訓練模型
 model = xgboost.XGBClassifier().fit(X_train, y_train)
 
-# Create explainer
+# 建立解釋器
 explainer = shap.TreeExplainer(model)
 
-# Compute SHAP values
+# 計算 SHAP 值
 shap_values = explainer.shap_values(X_test)
 
-# Compute interaction values
+# 計算互動值
 shap_interaction = explainer.shap_interaction_values(X_test)
 ```
 
 ### DeepExplainer
 
-**Purpose**: Approximates SHAP values for deep learning models using an enhanced version of the DeepLIFT algorithm.
+**用途**：使用增強版 DeepLIFT 演算法為深度學習模型近似 SHAP 值。
 
-**Constructor Parameters**:
-- `model`: Framework-dependent specification
-  - **TensorFlow**: Tuple of (input_tensor, output_tensor) where output is single-dimensional
-  - **PyTorch**: `nn.Module` object or tuple of `(model, layer)` for layer-specific explanations
-- `data`: Background dataset for feature integration
-  - **TensorFlow**: numpy arrays or pandas DataFrames
-  - **PyTorch**: torch tensors
-  - **Recommended size**: 100-1000 samples (not full training set) to balance accuracy and computational cost
-- `session` (TensorFlow only): Optional session object; auto-detected if None
-- `learning_phase_flags`: Custom learning phase tensors for handling batch norm/dropout during inference
+**建構函數參數**：
+- `model`：依框架而定的規格
+  - **TensorFlow**：(input_tensor, output_tensor) 的元組，其中輸出為單維
+  - **PyTorch**：`nn.Module` 物件或 `(model, layer)` 的元組用於特定層的解釋
+- `data`：用於特徵整合的背景資料集
+  - **TensorFlow**：numpy 陣列或 pandas DataFrames
+  - **PyTorch**：torch tensors
+  - **建議大小**：100-1000 個樣本（非完整訓練集）以平衡準確性和計算成本
+- `session`（僅限 TensorFlow）：可選的會話物件；如果為 None 則自動檢測
+- `learning_phase_flags`：用於處理推論期間 batch norm/dropout 的自訂學習階段張量
 
-**Supported Frameworks**:
-- **TensorFlow**: Full support including Keras models
-- **PyTorch**: Complete integration with nn.Module architecture
+**支援的框架**：
+- **TensorFlow**：完整支援包括 Keras 模型
+- **PyTorch**：與 nn.Module 架構完整整合
 
-**Key Methods**:
-- `shap_values(X)`: Returns approximate SHAP values for the model applied to data X
-- `explain_row(row)`: Explains single rows with attribution values and expected outputs
-- `save(file)` / `load(file)`: Serialization support for explainer objects
-- `supports_model_with_masker(model, masker)`: Compatibility checker for model types
+**關鍵方法**：
+- `shap_values(X)`：返回應用於資料 X 的模型的近似 SHAP 值
+- `explain_row(row)`：解釋單行並提供歸因值和期望輸出
+- `save(file)` / `load(file)`：解釋器物件的序列化支援
+- `supports_model_with_masker(model, masker)`：模型類型的相容性檢查器
 
-**When to Use**:
-- For deep neural networks in TensorFlow or PyTorch
-- When working with convolutional neural networks (CNNs)
-- For recurrent neural networks (RNNs) and transformers
-- When model-specific explanation is needed for deep learning architectures
+**何時使用**：
+- 用於 TensorFlow 或 PyTorch 中的深度神經網路
+- 處理卷積神經網路（CNNs）時
+- 用於循環神經網路（RNNs）和 transformers
+- 當深度學習架構需要模型特定解釋時
 
-**Key Design Feature**:
-Variance of expectation estimates scales approximately as 1/√N, where N is the number of background samples, enabling accuracy-efficiency trade-offs.
+**關鍵設計特徵**：
+期望估計的變異數大約以 1/√N 的比例縮放，其中 N 是背景樣本數量，實現準確性-效率的權衡。
 
-**Example**:
+**範例**：
 ```python
 import shap
 import tensorflow as tf
 
-# Assume model is a Keras model
+# 假設 model 是一個 Keras 模型
 model = tf.keras.models.load_model('my_model.h5')
 
-# Select background samples (subset of training data)
+# 選擇背景樣本（訓練資料的子集）
 background = X_train[:100]
 
-# Create explainer
+# 建立解釋器
 explainer = shap.DeepExplainer(model, background)
 
-# Compute SHAP values
+# 計算 SHAP 值
 shap_values = explainer.shap_values(X_test[:10])
 ```
 
 ### KernelExplainer
 
-**Purpose**: Model-agnostic SHAP value computation using the Kernel SHAP method with weighted linear regression.
+**用途**：使用 Kernel SHAP 方法與加權線性迴歸進行模型無關的 SHAP 值計算。
 
-**Constructor Parameters**:
-- `model`: Function or model object that takes a matrix of samples and returns model outputs
-- `data`: Background dataset (numpy array, pandas DataFrame, or sparse matrix) used to simulate missing features
-- `feature_names`: Optional list of feature names; automatically derived from DataFrame column names if available
-- `link`: Connection function between feature importance and model output
-  - `"identity"`: Direct relationship (default)
-  - `"logit"`: For probability outputs
+**建構函數參數**：
+- `model`：接受樣本矩陣並返回模型輸出的函數或模型物件
+- `data`：用於模擬缺失特徵的背景資料集（numpy 陣列、pandas DataFrame 或稀疏矩陣）
+- `feature_names`：可選的特徵名稱列表；如果可用則自動從 DataFrame 欄位名稱衍生
+- `link`：特徵重要性和模型輸出之間的連接函數
+  - `"identity"`：直接關係（預設）
+  - `"logit"`：用於機率輸出
 
-**Key Methods**:
-- `shap_values(X, **kwargs)`: Calculates SHAP values for sample predictions
-  - `nsamples`: Evaluation count per prediction ("auto" or integer); higher values reduce variance
-  - `l1_reg`: Feature selection regularization ("num_features(int)", "aic", "bic", or float)
-  - Returns arrays where each row sums to the difference between model output and expected value
-- `explain_row(row)`: Explains individual predictions with attribution values and expected values
-- `save(file)` / `load(file)`: Persist and restore explainer objects
+**關鍵方法**：
+- `shap_values(X, **kwargs)`：計算樣本預測的 SHAP 值
+  - `nsamples`：每個預測的評估計數（"auto" 或整數）；較高的值可減少變異
+  - `l1_reg`：特徵選擇正則化（"num_features(int)"、"aic"、"bic" 或浮點數）
+  - 返回每行總和等於模型輸出與期望值之差的陣列
+- `explain_row(row)`：解釋個別預測並提供歸因值和期望值
+- `save(file)` / `load(file)`：持久化和恢復解釋器物件
 
-**When to Use**:
-- For black-box models where specialized explainers aren't available
-- When working with custom prediction functions
-- For any model type (neural networks, SVMs, ensemble methods, etc.)
-- When model-agnostic explanations are needed
-- **Note**: Slower than specialized explainers; use only when no specialized option exists
+**何時使用**：
+- 用於沒有專門解釋器可用的黑盒模型
+- 處理自訂預測函數時
+- 用於任何模型類型（神經網路、SVMs、集成方法等）
+- 當需要模型無關的解釋時
+- **注意**：比專門的解釋器慢；僅在沒有專門選項存在時使用
 
-**Example**:
+**範例**：
 ```python
 import shap
 from sklearn.svm import SVC
 
-# Train model
+# 訓練模型
 model = SVC(probability=True).fit(X_train, y_train)
 
-# Create prediction function
+# 建立預測函數
 predict_fn = lambda x: model.predict_proba(x)[:, 1]
 
-# Select background samples
+# 選擇背景樣本
 background = shap.sample(X_train, 100)
 
-# Create explainer
+# 建立解釋器
 explainer = shap.KernelExplainer(predict_fn, background)
 
-# Compute SHAP values (may be slow)
+# 計算 SHAP 值（可能較慢）
 shap_values = explainer.shap_values(X_test[:10])
 ```
 
 ### LinearExplainer
 
-**Purpose**: Specialized explainer for linear models that accounts for feature correlations.
+**用途**：用於線性模型的專門解釋器，考慮特徵相關性。
 
-**Constructor Parameters**:
-- `model`: Linear model or tuple of (coefficients, intercept)
-- `masker`: Background data for feature correlation
-- `feature_perturbation`: How to handle feature correlations
-  - `"interventional"`: Assumes feature independence
-  - `"correlation_dependent"`: Accounts for feature correlations
+**建構函數參數**：
+- `model`：線性模型或（係數、截距）的元組
+- `masker`：用於特徵相關性的背景資料
+- `feature_perturbation`：如何處理特徵相關性
+  - `"interventional"`：假設特徵獨立
+  - `"correlation_dependent"`：考慮特徵相關性
 
-**Supported Models**:
-- scikit-learn linear models (LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet)
-- Custom linear models with coefficients and intercept
+**支援的模型**：
+- scikit-learn 線性模型（LinearRegression、LogisticRegression、Ridge、Lasso、ElasticNet）
+- 具有係數和截距的自訂線性模型
 
-**When to Use**:
-- For linear regression and logistic regression models
-- When feature correlations are important to explanation accuracy
-- When extremely fast explanations are needed
-- For GLMs and other linear model types
+**何時使用**：
+- 用於線性迴歸和邏輯迴歸模型
+- 當特徵相關性對解釋準確性很重要時
+- 當需要極快速度的解釋時
+- 用於 GLMs 和其他線性模型類型
 
-**Example**:
+**範例**：
 ```python
 import shap
 from sklearn.linear_model import LogisticRegression
 
-# Train model
+# 訓練模型
 model = LogisticRegression().fit(X_train, y_train)
 
-# Create explainer
+# 建立解釋器
 explainer = shap.LinearExplainer(model, X_train)
 
-# Compute SHAP values
+# 計算 SHAP 值
 shap_values = explainer.shap_values(X_test)
 ```
 
 ### GradientExplainer
 
-**Purpose**: Uses expected gradients to approximate SHAP values for neural networks.
+**用途**：使用期望梯度來近似神經網路的 SHAP 值。
 
-**Constructor Parameters**:
-- `model`: Deep learning model (TensorFlow or PyTorch)
-- `data`: Background samples for integration
-- `batch_size`: Batch size for gradient computation
-- `local_smoothing`: Amount of noise to add for smoothing (default 0)
+**建構函數參數**：
+- `model`：深度學習模型（TensorFlow 或 PyTorch）
+- `data`：用於整合的背景樣本
+- `batch_size`：梯度計算的批次大小
+- `local_smoothing`：要添加用於平滑的雜訊量（預設 0）
 
-**When to Use**:
-- As an alternative to DeepExplainer for neural networks
-- When gradient-based explanations are preferred
-- For differentiable models where gradient information is available
+**何時使用**：
+- 作為神經網路 DeepExplainer 的替代方案
+- 當偏好基於梯度的解釋時
+- 用於梯度資訊可用的可微分模型
 
-**Example**:
+**範例**：
 ```python
 import shap
 import torch
 
-# Assume model is a PyTorch model
+# 假設 model 是一個 PyTorch 模型
 model = torch.load('model.pt')
 
-# Select background samples
+# 選擇背景樣本
 background = X_train[:100]
 
-# Create explainer
+# 建立解釋器
 explainer = shap.GradientExplainer(model, background)
 
-# Compute SHAP values
+# 計算 SHAP 值
 shap_values = explainer.shap_values(X_test[:10])
 ```
 
 ### PermutationExplainer
 
-**Purpose**: Approximates Shapley values by iterating through permutations of inputs.
+**用途**：透過迭代輸入的排列來近似 Shapley 值。
 
-**Constructor Parameters**:
-- `model`: Prediction function
-- `masker`: Background data or masker object
-- `max_evals`: Maximum number of model evaluations per sample
+**建構函數參數**：
+- `model`：預測函數
+- `masker`：背景資料或遮罩器物件
+- `max_evals`：每個樣本的最大模型評估次數
 
-**When to Use**:
-- When exact Shapley values are needed but specialized explainers aren't available
-- For small feature sets where permutation is tractable
-- As a more accurate alternative to KernelExplainer (but slower)
+**何時使用**：
+- 當需要精確 Shapley 值但沒有專門的解釋器可用時
+- 對於排列可處理的小特徵集
+- 作為 KernelExplainer 更準確但更慢的替代方案
 
-**Example**:
+**範例**：
 ```python
 import shap
 
-# Create explainer
+# 建立解釋器
 explainer = shap.PermutationExplainer(model.predict, X_train)
 
-# Compute SHAP values
+# 計算 SHAP 值
 shap_values = explainer.shap_values(X_test[:10])
 ```
 
-## Explainer Selection Guide
+## 解釋器選擇指南
 
-**Decision Tree for Choosing an Explainer**:
+**選擇解釋器的決策樹**：
 
-1. **Is your model tree-based?** (XGBoost, LightGBM, CatBoost, Random Forest, etc.)
-   - Yes → Use `TreeExplainer` (fast and exact)
-   - No → Continue to step 2
+1. **您的模型是基於樹的嗎？**（XGBoost、LightGBM、CatBoost、隨機森林等）
+   - 是 → 使用 `TreeExplainer`（快速且精確）
+   - 否 → 繼續步驟 2
 
-2. **Is your model a deep neural network?** (TensorFlow, PyTorch, Keras)
-   - Yes → Use `DeepExplainer` or `GradientExplainer`
-   - No → Continue to step 3
+2. **您的模型是深度神經網路嗎？**（TensorFlow、PyTorch、Keras）
+   - 是 → 使用 `DeepExplainer` 或 `GradientExplainer`
+   - 否 → 繼續步驟 3
 
-3. **Is your model linear?** (Linear/Logistic Regression, GLMs)
-   - Yes → Use `LinearExplainer` (extremely fast)
-   - No → Continue to step 4
+3. **您的模型是線性的嗎？**（線性/邏輯迴歸、GLMs）
+   - 是 → 使用 `LinearExplainer`（極快）
+   - 否 → 繼續步驟 4
 
-4. **Do you need model-agnostic explanations?**
-   - Yes → Use `KernelExplainer` (slower but works with any model)
-   - If computational budget allows and high accuracy is needed → Use `PermutationExplainer`
+4. **您需要模型無關的解釋嗎？**
+   - 是 → 使用 `KernelExplainer`（較慢但適用於任何模型）
+   - 如果計算預算允許且需要高準確性 → 使用 `PermutationExplainer`
 
-5. **Unsure or want automatic selection?**
-   - Use `shap.Explainer` (auto-selects best algorithm)
+5. **不確定或想要自動選擇？**
+   - 使用 `shap.Explainer`（自動選擇最佳演算法）
 
-## Common Parameters Across Explainers
+## 解釋器間的通用參數
 
-**Background Data / Masker**:
-- Purpose: Represents the "typical" input to establish baseline expectations
-- Size recommendations: 50-1000 samples (more for complex models)
-- Selection: Random sample from training data or kmeans-selected representatives
+**背景資料 / 遮罩器**：
+- 用途：代表「典型」輸入以建立基準期望
+- 大小建議：50-1000 個樣本（複雜模型需要更多）
+- 選擇：從訓練資料隨機取樣或 kmeans 選擇的代表
 
-**Feature Names**:
-- Automatically extracted from pandas DataFrames
-- Can be manually specified for numpy arrays
-- Important for plot interpretability
+**特徵名稱**：
+- 自動從 pandas DataFrames 提取
+- 可以為 numpy 陣列手動指定
+- 對繪圖可解釋性很重要
 
-**Model Output Specification**:
-- Raw model output vs. transformed output (probabilities, log-odds)
-- Critical for correct interpretation of SHAP values
-- Example: For XGBoost classifiers, SHAP explains margin output (log-odds) before logistic transformation
+**模型輸出規格**：
+- 原始模型輸出 vs. 轉換輸出（機率、對數賠率）
+- 對正確解釋 SHAP 值至關重要
+- 範例：對於 XGBoost 分類器，SHAP 解釋 logistic 轉換前的邊際輸出（對數賠率）
 
-## Performance Considerations
+## 效能考量
 
-**Speed Ranking** (fastest to slowest):
-1. `LinearExplainer` - Nearly instantaneous
-2. `TreeExplainer` - Very fast, scales well
-3. `DeepExplainer` - Fast for neural networks
-4. `GradientExplainer` - Fast for neural networks
-5. `KernelExplainer` - Slow, use only when necessary
-6. `PermutationExplainer` - Very slow but most accurate for small feature sets
+**速度排名**（從最快到最慢）：
+1. `LinearExplainer` - 幾乎瞬間完成
+2. `TreeExplainer` - 非常快，擴展性好
+3. `DeepExplainer` - 對神經網路快速
+4. `GradientExplainer` - 對神經網路快速
+5. `KernelExplainer` - 慢，僅在必要時使用
+6. `PermutationExplainer` - 非常慢但對小特徵集最準確
 
-**Memory Considerations**:
-- `TreeExplainer`: Low memory overhead
-- `DeepExplainer`: Memory proportional to background sample size
-- `KernelExplainer`: Can be memory-intensive for large background datasets
-- For large datasets: Use batching or sample subsets
+**記憶體考量**：
+- `TreeExplainer`：低記憶體開銷
+- `DeepExplainer`：記憶體與背景樣本大小成正比
+- `KernelExplainer`：大型背景資料集可能佔用大量記憶體
+- 對於大型資料集：使用批次處理或樣本子集
 
-## Explainer Output: The Explanation Object
+## 解釋器輸出：解釋物件
 
-All explainers return `shap.Explanation` objects containing:
-- `values`: SHAP values (numpy array)
-- `base_values`: Expected model output (baseline)
-- `data`: Original feature values
-- `feature_names`: Names of features
+所有解釋器返回包含以下內容的 `shap.Explanation` 物件：
+- `values`：SHAP 值（numpy 陣列）
+- `base_values`：期望模型輸出（基準值）
+- `data`：原始特徵值
+- `feature_names`：特徵名稱
 
-The Explanation object supports:
-- Slicing: `explanation[0]` for first sample
-- Array operations: Compatible with numpy operations
-- Direct plotting: Can be passed to plot functions
+解釋物件支援：
+- 切片：`explanation[0]` 取得第一個樣本
+- 陣列操作：與 numpy 操作相容
+- 直接繪圖：可以傳遞給繪圖函數

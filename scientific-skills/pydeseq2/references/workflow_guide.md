@@ -1,54 +1,54 @@
-# PyDESeq2 Workflow Guide
+# PyDESeq2 工作流程指南
 
-This document provides detailed step-by-step workflows for common PyDESeq2 analysis patterns.
+本文件提供常見 PyDESeq2 分析模式的詳細逐步工作流程。
 
-## Table of Contents
-1. [Complete Differential Expression Analysis](#complete-differential-expression-analysis)
-2. [Data Loading and Preparation](#data-loading-and-preparation)
-3. [Single-Factor Analysis](#single-factor-analysis)
-4. [Multi-Factor Analysis](#multi-factor-analysis)
-5. [Result Export and Visualization](#result-export-and-visualization)
-6. [Common Patterns and Best Practices](#common-patterns-and-best-practices)
-7. [Troubleshooting](#troubleshooting)
+## 目錄
+1. [完整差異表現分析](#完整差異表現分析)
+2. [資料載入與準備](#資料載入與準備)
+3. [單因子分析](#單因子分析)
+4. [多因子分析](#多因子分析)
+5. [結果匯出與視覺化](#結果匯出與視覺化)
+6. [常見模式與最佳實務](#常見模式與最佳實務)
+7. [疑難排解](#疑難排解)
 
 ---
 
-## Complete Differential Expression Analysis
+## 完整差異表現分析
 
-### Overview
-A standard PyDESeq2 analysis consists of 12 main steps across two phases:
+### 概述
+標準 PyDESeq2 分析包含兩個階段共 12 個主要步驟：
 
-**Phase 1: Read Counts Modeling (Steps 1-7)**
-- Normalization and dispersion estimation
-- Log fold-change fitting
-- Outlier detection
+**第一階段：讀取計數建模（步驟 1-7）**
+- 標準化和離散度估計
+- 對數倍數變化擬合
+- 離群值偵測
 
-**Phase 2: Statistical Analysis (Steps 8-12)**
-- Wald testing
-- Multiple testing correction
-- Optional LFC shrinkage
+**第二階段：統計分析（步驟 8-12）**
+- Wald 檢定
+- 多重檢定校正
+- 可選的 LFC 收縮
 
-### Full Workflow Code
+### 完整工作流程程式碼
 
 ```python
 import pandas as pd
 from pydeseq2.dds import DeseqDataSet
 from pydeseq2.ds import DeseqStats
 
-# Load data
-counts_df = pd.read_csv("counts.csv", index_col=0).T  # Transpose if needed
+# 載入資料
+counts_df = pd.read_csv("counts.csv", index_col=0).T  # 如需要則轉置
 metadata = pd.read_csv("metadata.csv", index_col=0)
 
-# Filter low-count genes
+# 過濾低計數基因
 genes_to_keep = counts_df.columns[counts_df.sum(axis=0) >= 10]
 counts_df = counts_df[genes_to_keep]
 
-# Remove samples with missing metadata
+# 移除缺少詮釋資料的樣本
 samples_to_keep = ~metadata.condition.isna()
 counts_df = counts_df.loc[samples_to_keep]
 metadata = metadata.loc[samples_to_keep]
 
-# Initialize DeseqDataSet
+# 初始化 DeseqDataSet
 dds = DeseqDataSet(
     counts=counts_df,
     metadata=metadata,
@@ -56,10 +56,10 @@ dds = DeseqDataSet(
     refit_cooks=True
 )
 
-# Run normalization and fitting
+# 執行標準化和擬合
 dds.deseq2()
 
-# Perform statistical testing
+# 執行統計檢定
 ds = DeseqStats(
     dds,
     contrast=["condition", "treated", "control"],
@@ -69,44 +69,44 @@ ds = DeseqStats(
 )
 ds.summary()
 
-# Optional: Apply LFC shrinkage for visualization
+# 可選：應用 LFC 收縮以進行視覺化
 ds.lfc_shrink()
 
-# Access results
+# 存取結果
 results = ds.results_df
 print(results.head())
 ```
 
 ---
 
-## Data Loading and Preparation
+## 資料載入與準備
 
-### Loading CSV Files
+### 載入 CSV 檔案
 
-Count data typically comes in genes × samples format but needs to be transposed:
+計數資料通常以基因 × 樣本格式呈現，但需要轉置：
 
 ```python
 import pandas as pd
 
-# Load count matrix (genes × samples)
+# 載入計數矩陣（基因 × 樣本）
 counts_df = pd.read_csv("counts.csv", index_col=0)
 
-# Transpose to samples × genes
+# 轉置為樣本 × 基因
 counts_df = counts_df.T
 
-# Load metadata (already in samples × variables format)
+# 載入詮釋資料（已為樣本 × 變數格式）
 metadata = pd.read_csv("metadata.csv", index_col=0)
 ```
 
-### Loading from Other Formats
+### 從其他格式載入
 
-**From TSV:**
+**從 TSV：**
 ```python
 counts_df = pd.read_csv("counts.tsv", sep="\t", index_col=0).T
 metadata = pd.read_csv("metadata.tsv", sep="\t", index_col=0)
 ```
 
-**From saved pickle:**
+**從儲存的 pickle：**
 ```python
 import pickle
 
@@ -117,7 +117,7 @@ with open("metadata.pkl", "rb") as f:
     metadata = pickle.load(f)
 ```
 
-**From AnnData:**
+**從 AnnData：**
 ```python
 import anndata as ad
 
@@ -130,26 +130,26 @@ counts_df = pd.DataFrame(
 metadata = adata.obs
 ```
 
-### Data Filtering
+### 資料過濾
 
-**Filter genes with low counts:**
+**過濾低計數基因：**
 ```python
-# Remove genes with fewer than 10 total reads
+# 移除總讀取數少於 10 的基因
 genes_to_keep = counts_df.columns[counts_df.sum(axis=0) >= 10]
 counts_df = counts_df[genes_to_keep]
 ```
 
-**Filter samples with missing metadata:**
+**過濾缺少詮釋資料的樣本：**
 ```python
-# Remove samples where 'condition' column is NA
+# 移除 'condition' 欄位為 NA 的樣本
 samples_to_keep = ~metadata.condition.isna()
 counts_df = counts_df.loc[samples_to_keep]
 metadata = metadata.loc[samples_to_keep]
 ```
 
-**Filter by multiple criteria:**
+**根據多個條件過濾：**
 ```python
-# Keep only samples that meet all criteria
+# 僅保留符合所有條件的樣本
 mask = (
     ~metadata.condition.isna() &
     (metadata.batch.isin(["batch1", "batch2"])) &
@@ -159,34 +159,34 @@ counts_df = counts_df.loc[mask]
 metadata = metadata.loc[mask]
 ```
 
-### Data Validation
+### 資料驗證
 
-**Check data structure:**
+**檢查資料結構：**
 ```python
-print(f"Counts shape: {counts_df.shape}")  # Should be (samples, genes)
-print(f"Metadata shape: {metadata.shape}")  # Should be (samples, variables)
-print(f"Indices match: {all(counts_df.index == metadata.index)}")
+print(f"計數形狀：{counts_df.shape}")  # 應為（樣本, 基因）
+print(f"詮釋資料形狀：{metadata.shape}")  # 應為（樣本, 變數）
+print(f"索引匹配：{all(counts_df.index == metadata.index)}")
 
-# Check for negative values
-assert (counts_df >= 0).all().all(), "Counts must be non-negative"
+# 檢查負值
+assert (counts_df >= 0).all().all(), "計數必須為非負"
 
-# Check for non-integer values
-assert counts_df.applymap(lambda x: x == int(x)).all().all(), "Counts must be integers"
+# 檢查非整數值
+assert counts_df.applymap(lambda x: x == int(x)).all().all(), "計數必須為整數"
 ```
 
 ---
 
-## Single-Factor Analysis
+## 單因子分析
 
-### Simple Two-Group Comparison
+### 簡單雙組比較
 
-Compare treated vs control samples:
+比較處理組與對照組樣本：
 
 ```python
 from pydeseq2.dds import DeseqDataSet
 from pydeseq2.ds import DeseqStats
 
-# Design: model expression as a function of condition
+# 設計：將表現建模為條件的函數
 dds = DeseqDataSet(
     counts=counts_df,
     metadata=metadata,
@@ -195,25 +195,25 @@ dds = DeseqDataSet(
 
 dds.deseq2()
 
-# Test treated vs control
+# 檢定處理組 vs 對照組
 ds = DeseqStats(
     dds,
     contrast=["condition", "treated", "control"]
 )
 ds.summary()
 
-# Results
+# 結果
 results = ds.results_df
 significant = results[results.padj < 0.05]
-print(f"Found {len(significant)} significant genes")
+print(f"發現 {len(significant)} 個顯著基因")
 ```
 
-### Multiple Pairwise Comparisons
+### 多重配對比較
 
-When comparing multiple groups:
+比較多個組別時：
 
 ```python
-# Test each treatment vs control
+# 針對對照組檢定每個處理
 treatments = ["treated_A", "treated_B", "treated_C"]
 all_results = {}
 
@@ -225,22 +225,22 @@ for treatment in treatments:
     ds.summary()
     all_results[treatment] = ds.results_df
 
-# Compare results across treatments
+# 比較各處理的結果
 for name, results in all_results.items():
     sig = results[results.padj < 0.05]
-    print(f"{name}: {len(sig)} significant genes")
+    print(f"{name}：{len(sig)} 個顯著基因")
 ```
 
 ---
 
-## Multi-Factor Analysis
+## 多因子分析
 
-### Two-Factor Design
+### 雙因子設計
 
-Account for batch effects while testing condition:
+在檢定條件時考慮批次效應：
 
 ```python
-# Design includes both batch and condition
+# 設計包含批次和條件
 dds = DeseqDataSet(
     counts=counts_df,
     metadata=metadata,
@@ -249,7 +249,7 @@ dds = DeseqDataSet(
 
 dds.deseq2()
 
-# Test condition effect while controlling for batch
+# 在控制批次的同時檢定條件效應
 ds = DeseqStats(
     dds,
     contrast=["condition", "treated", "control"]
@@ -257,12 +257,12 @@ ds = DeseqStats(
 ds.summary()
 ```
 
-### Interaction Effects
+### 交互作用效應
 
-Test whether treatment effect differs between groups:
+檢定處理效應是否在不同組別間有差異：
 
 ```python
-# Design includes interaction term
+# 設計包含交互作用項
 dds = DeseqDataSet(
     counts=counts_df,
     metadata=metadata,
@@ -271,17 +271,17 @@ dds = DeseqDataSet(
 
 dds.deseq2()
 
-# Test the interaction term
+# 檢定交互作用項
 ds = DeseqStats(dds, contrast=["group:condition", ...])
 ds.summary()
 ```
 
-### Continuous Covariates
+### 連續型共變數
 
-Include continuous variables like age:
+包含連續變數如年齡：
 
 ```python
-# Ensure age is numeric in metadata
+# 確保年齡在詮釋資料中為數值型
 metadata["age"] = pd.to_numeric(metadata["age"])
 
 dds = DeseqDataSet(
@@ -295,46 +295,46 @@ dds.deseq2()
 
 ---
 
-## Result Export and Visualization
+## 結果匯出與視覺化
 
-### Saving Results
+### 儲存結果
 
-**Export as CSV:**
+**匯出為 CSV：**
 ```python
-# Save statistical results
+# 儲存統計結果
 ds.results_df.to_csv("deseq2_results.csv")
 
-# Save significant genes only
+# 僅儲存顯著基因
 significant = ds.results_df[ds.results_df.padj < 0.05]
 significant.to_csv("significant_genes.csv")
 
-# Save with sorted results
+# 儲存排序後的結果
 sorted_results = ds.results_df.sort_values("padj")
 sorted_results.to_csv("sorted_results.csv")
 ```
 
-**Save DeseqDataSet:**
+**儲存 DeseqDataSet：**
 ```python
 import pickle
 
-# Save as AnnData for later use
+# 儲存為 AnnData 以供後續使用
 with open("dds_result.pkl", "wb") as f:
     pickle.dump(dds.to_picklable_anndata(), f)
 ```
 
-**Load saved results:**
+**載入已儲存的結果：**
 ```python
-# Load results
+# 載入結果
 results = pd.read_csv("deseq2_results.csv", index_col=0)
 
-# Load AnnData
+# 載入 AnnData
 with open("dds_result.pkl", "rb") as f:
     adata = pickle.load(f)
 ```
 
-### Basic Visualization
+### 基本視覺化
 
-**Volcano plot:**
+**火山圖：**
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -342,7 +342,7 @@ import numpy as np
 results = ds.results_df.copy()
 results["-log10(padj)"] = -np.log10(results.padj)
 
-# Plot
+# 繪圖
 plt.figure(figsize=(10, 6))
 plt.scatter(
     results.log2FoldChange,
@@ -353,14 +353,14 @@ plt.scatter(
 plt.axhline(-np.log10(0.05), color='red', linestyle='--', label='padj=0.05')
 plt.axvline(1, color='gray', linestyle='--')
 plt.axvline(-1, color='gray', linestyle='--')
-plt.xlabel("Log2 Fold Change")
-plt.ylabel("-Log10(Adjusted P-value)")
-plt.title("Volcano Plot")
+plt.xlabel("Log2 倍數變化")
+plt.ylabel("-Log10(校正後 P 值)")
+plt.title("火山圖")
 plt.legend()
 plt.savefig("volcano_plot.png", dpi=300)
 ```
 
-**MA plot:**
+**MA 圖：**
 ```python
 plt.figure(figsize=(10, 6))
 plt.scatter(
@@ -371,212 +371,212 @@ plt.scatter(
     c=(results.padj < 0.05),
     cmap='bwr'
 )
-plt.xlabel("Log10(Base Mean + 1)")
-plt.ylabel("Log2 Fold Change")
-plt.title("MA Plot")
+plt.xlabel("Log10(基礎平均值 + 1)")
+plt.ylabel("Log2 倍數變化")
+plt.title("MA 圖")
 plt.savefig("ma_plot.png", dpi=300)
 ```
 
 ---
 
-## Common Patterns and Best Practices
+## 常見模式與最佳實務
 
-### 1. Data Preprocessing Checklist
+### 1. 資料預處理檢查清單
 
-Before running PyDESeq2:
-- ✓ Ensure counts are non-negative integers
-- ✓ Verify samples × genes orientation
-- ✓ Check that sample names match between counts and metadata
-- ✓ Remove or handle missing metadata values
-- ✓ Filter low-count genes (typically < 10 total reads)
-- ✓ Verify experimental factors are properly encoded
+執行 PyDESeq2 前：
+- 確保計數為非負整數
+- 驗證樣本 × 基因的方向
+- 檢查計數和詮釋資料之間的樣本名稱是否匹配
+- 移除或處理缺失的詮釋資料值
+- 過濾低計數基因（通常 < 10 總讀取數）
+- 驗證實驗因子已正確編碼
 
-### 2. Design Formula Best Practices
+### 2. 設計公式最佳實務
 
-**Order matters:** Put adjustment variables before the variable of interest
+**順序很重要：** 將調整變數放在感興趣變數之前
 ```python
-# Correct: control for batch, test condition
+# 正確：控制批次，檢定條件
 design = "~batch + condition"
 
-# Less ideal: condition listed first
+# 較不理想：條件列在前面
 design = "~condition + batch"
 ```
 
-**Use categorical for discrete variables:**
+**離散變數使用類別型：**
 ```python
-# Ensure proper data types
+# 確保正確的資料類型
 metadata["condition"] = metadata["condition"].astype("category")
 metadata["batch"] = metadata["batch"].astype("category")
 ```
 
-### 3. Statistical Testing Guidelines
+### 3. 統計檢定指南
 
-**Set appropriate alpha:**
+**設定適當的 alpha：**
 ```python
-# Standard significance threshold
+# 標準顯著性閾值
 ds = DeseqStats(dds, alpha=0.05)
 
-# More stringent for exploratory analysis
+# 探索性分析使用更嚴格的閾值
 ds = DeseqStats(dds, alpha=0.01)
 ```
 
-**Use independent filtering:**
+**使用獨立過濾：**
 ```python
-# Recommended: filter low-power tests
+# 建議：過濾低統計檢定力的檢定
 ds = DeseqStats(dds, independent_filter=True)
 
-# Only disable if you have specific reasons
+# 僅在有特定原因時停用
 ds = DeseqStats(dds, independent_filter=False)
 ```
 
-### 4. LFC Shrinkage
+### 4. LFC 收縮
 
-**When to use:**
-- For visualization (volcano plots, heatmaps)
-- For ranking genes by effect size
-- When prioritizing genes for follow-up
+**何時使用：**
+- 用於視覺化（火山圖、熱圖）
+- 用於根據效應大小對基因進行排名
+- 用於優先選擇後續研究的基因
 
-**When NOT to use:**
-- For reporting statistical significance (use unshrunken p-values)
-- For gene set enrichment analysis (typically uses unshrunken values)
+**何時不使用：**
+- 報告統計顯著性（使用未收縮的 p 值）
+- 基因集富集分析（通常使用未收縮的值）
 
 ```python
-# Save both versions
+# 儲存兩個版本
 ds.results_df.to_csv("results_unshrunken.csv")
 ds.lfc_shrink()
 ds.results_df.to_csv("results_shrunken.csv")
 ```
 
-### 5. Memory Management
+### 5. 記憶體管理
 
-For large datasets:
+對於大型資料集：
 ```python
-# Use parallel processing
+# 使用平行處理
 dds = DeseqDataSet(
     counts=counts_df,
     metadata=metadata,
     design="~condition",
-    n_cpus=4  # Adjust based on available cores
+    n_cpus=4  # 根據可用核心數調整
 )
 
-# Process in batches if needed
-# (split genes into chunks, analyze separately, combine results)
+# 如需要可分批處理
+# （將基因分成區塊，分別分析，合併結果）
 ```
 
 ---
 
-## Troubleshooting
+## 疑難排解
 
-### Error: Index mismatch between counts and metadata
+### 錯誤：計數和詮釋資料之間的索引不匹配
 
-**Problem:** Sample names don't match
+**問題：** 樣本名稱不匹配
 ```
 KeyError: Sample names in counts and metadata don't match
 ```
 
-**Solution:**
+**解決方案：**
 ```python
-# Check indices
-print("Counts samples:", counts_df.index.tolist())
-print("Metadata samples:", metadata.index.tolist())
+# 檢查索引
+print("計數樣本：", counts_df.index.tolist())
+print("詮釋資料樣本：", metadata.index.tolist())
 
-# Align if needed
+# 如需要則對齊
 common_samples = counts_df.index.intersection(metadata.index)
 counts_df = counts_df.loc[common_samples]
 metadata = metadata.loc[common_samples]
 ```
 
-### Error: All genes have zero counts
+### 錯誤：所有基因計數都為零
 
-**Problem:** Data might need transposition
+**問題：** 資料可能需要轉置
 ```
 ValueError: All genes have zero total counts
 ```
 
-**Solution:**
+**解決方案：**
 ```python
-# Check data orientation
-print(f"Counts shape: {counts_df.shape}")
+# 檢查資料方向
+print(f"計數形狀：{counts_df.shape}")
 
-# If genes > samples, likely needs transpose
+# 如果基因數 > 樣本數，可能需要轉置
 if counts_df.shape[1] < counts_df.shape[0]:
     counts_df = counts_df.T
 ```
 
-### Warning: Many genes filtered out
+### 警告：許多基因被過濾掉
 
-**Problem:** Too many low-count genes removed
+**問題：** 太多低計數基因被移除
 
-**Check:**
+**檢查：**
 ```python
-# See distribution of gene counts
+# 查看基因計數的分佈
 print(counts_df.sum(axis=0).describe())
 
-# Visualize
+# 視覺化
 import matplotlib.pyplot as plt
 plt.hist(counts_df.sum(axis=0), bins=50, log=True)
-plt.xlabel("Total counts per gene")
-plt.ylabel("Frequency")
+plt.xlabel("每個基因的總計數")
+plt.ylabel("頻率")
 plt.show()
 ```
 
-**Adjust filtering if needed:**
+**如需要調整過濾：**
 ```python
-# Try lower threshold
+# 嘗試較低的閾值
 genes_to_keep = counts_df.columns[counts_df.sum(axis=0) >= 5]
 ```
 
-### Error: Design matrix is not full rank
+### 錯誤：設計矩陣不是滿秩的
 
-**Problem:** Confounded design (e.g., all treated samples in one batch)
+**問題：** 混淆的設計（例如，所有處理樣本都在同一批次中）
 
-**Solution:**
+**解決方案：**
 ```python
-# Check design confounding
+# 檢查設計混淆
 print(pd.crosstab(metadata.condition, metadata.batch))
 
-# Either remove confounded variable or add interaction term
-design = "~condition"  # Drop batch
-# OR
-design = "~condition + batch + condition:batch"  # Add interaction
+# 移除混淆變數或新增交互作用項
+design = "~condition"  # 移除批次
+# 或
+design = "~condition + batch + condition:batch"  # 新增交互作用
 ```
 
-### Issue: No significant genes found
+### 問題：沒有發現顯著基因
 
-**Possible causes:**
-1. Small effect sizes
-2. High biological variability
-3. Insufficient sample size
-4. Technical issues (batch effects, outliers)
+**可能原因：**
+1. 效應大小較小
+2. 生物學變異性高
+3. 樣本量不足
+4. 技術問題（批次效應、離群值）
 
-**Diagnostics:**
+**診斷：**
 ```python
-# Check dispersion estimates
+# 檢查離散度估計
 import matplotlib.pyplot as plt
 dispersions = dds.varm["dispersions"]
 plt.hist(dispersions, bins=50)
-plt.xlabel("Dispersion")
-plt.ylabel("Frequency")
+plt.xlabel("離散度")
+plt.ylabel("頻率")
 plt.show()
 
-# Check size factors (should be close to 1)
-print("Size factors:", dds.obsm["size_factors"])
+# 檢查大小因子（應接近 1）
+print("大小因子：", dds.obsm["size_factors"])
 
-# Look at top genes even if not significant
+# 即使不顯著也查看最佳基因
 top_genes = ds.results_df.nsmallest(20, "pvalue")
 print(top_genes)
 ```
 
-### Memory errors on large datasets
+### 大型資料集的記憶體錯誤
 
-**Solutions:**
+**解決方案：**
 ```python
-# 1. Use fewer CPUs (paradoxically can help)
+# 1. 使用較少的 CPU（矛盾的是可能有幫助）
 dds = DeseqDataSet(..., n_cpus=1)
 
-# 2. Filter more aggressively
+# 2. 更積極地過濾
 genes_to_keep = counts_df.columns[counts_df.sum(axis=0) >= 20]
 
-# 3. Process in batches
-# Split analysis by gene subsets and combine results
+# 3. 分批處理
+# 按基因子集分割分析並合併結果
 ```

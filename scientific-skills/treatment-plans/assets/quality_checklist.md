@@ -1,461 +1,461 @@
-# Treatment Plan Quality Assurance Checklist
+# 治療計畫品質保證檢查清單
 
-## Overview
+## 概述
 
-Use this checklist to ensure treatment plans meet professional standards for completeness, quality, safety, and regulatory compliance. Review each section before finalizing the plan.
-
----
-
-## Section 1: Completeness - Required Components
-
-### ☐ Patient Information
-- [ ] Patient identifier (de-identified if sharing)
-- [ ] Age range (not exact date of birth)
-- [ ] Sex and relevant demographics
-- [ ] Date of plan creation
-- [ ] Provider name and credentials
-- [ ] Facility/practice name
-- [ ] HIPAA de-identification notice included
-
-### ☐ Diagnosis and Assessment
-- [ ] Primary diagnosis clearly stated
-- [ ] ICD-10 code(s) included
-- [ ] Secondary diagnoses and comorbidities listed
-- [ ] Disease severity/staging documented
-- [ ] Baseline functional status assessed
-- [ ] Risk stratification performed (if applicable)
-
-### ☐ Treatment Goals
-- [ ] Short-term goals present (1-3 months)
-- [ ] Long-term goals present (6-12 months)
-- [ ] Goals meet SMART criteria (see Section 2)
-- [ ] Patient-centered goals included
-- [ ] Goals are prioritized or organized
-
-### ☐ Interventions
-- [ ] Pharmacological interventions specified
-- [ ] Non-pharmacological interventions included
-- [ ] Procedural interventions or referrals noted
-- [ ] Each intervention has clear rationale
-- [ ] Evidence-based or guideline-concordant
-
-### ☐ Timeline and Schedule
-- [ ] Treatment phases with durations defined
-- [ ] Appointment frequency specified
-- [ ] Milestone assessments scheduled
-- [ ] Expected total treatment duration stated
-
-### ☐ Monitoring Parameters
-- [ ] Clinical outcomes to track identified
-- [ ] Baseline values documented
-- [ ] Target values specified
-- [ ] Monitoring frequency defined
-- [ ] Assessment tools/scales named
-
-### ☐ Expected Outcomes
-- [ ] Primary outcome measures stated
-- [ ] Success criteria defined
-- [ ] Timeline for improvement indicated
-- [ ] Criteria for treatment modification noted
-
-### ☐ Follow-up Plan
-- [ ] Next appointment scheduled
-- [ ] Follow-up frequency specified
-- [ ] Communication plan outlined
-- [ ] Emergency contact procedures included
-
-### ☐ Patient Education
-- [ ] Condition education documented
-- [ ] Self-management skills training noted
-- [ ] Warning signs communicated
-- [ ] Resources and support listed
-
-### ☐ Risk Mitigation and Safety
-- [ ] Potential adverse effects identified
-- [ ] Safety monitoring plan included
-- [ ] Emergency procedures outlined
-- [ ] Complication prevention addressed
-
-### ☐ Signature and Date
-- [ ] Provider signature line
-- [ ] Provider name and credentials
-- [ ] Date of plan
-- [ ] Patient acknowledgment (if applicable)
+使用此檢查清單確保治療計畫符合完整性、品質、安全和法規遵循的專業標準。在完成計畫之前審查每個區段。
 
 ---
 
-## Section 2: SMART Goals Quality
+## 第 1 節：完整性 - 必要組成部分
 
-For each treatment goal, verify it meets SMART criteria:
+### ☐ 病患資訊
+- [ ] 病患識別碼（如共享則去識別化）
+- [ ] 年齡範圍（非確切出生日期）
+- [ ] 性別和相關人口統計
+- [ ] 計畫建立日期
+- [ ] 提供者姓名和資格
+- [ ] 機構/診所名稱
+- [ ] 包含 HIPAA 去識別化聲明
 
-### ☐ Specific
-- [ ] Goal clearly defines what will be accomplished
-- [ ] No vague language (e.g., "improve", "better")
-- [ ] Specific outcome stated
+### ☐ 診斷和評估
+- [ ] 清楚陳述主要診斷
+- [ ] 包含 ICD-10 代碼
+- [ ] 列出次要診斷和共病
+- [ ] 記錄疾病嚴重度/分期
+- [ ] 評估基線功能狀態
+- [ ] 執行風險分層（如適用）
 
-**Example**: "Reduce HbA1c from 8.5% to <7%" ✓  
-**Not**: "Improve diabetes control" ✗
+### ☐ 治療目標
+- [ ] 存在短期目標（1-3 個月）
+- [ ] 存在長期目標（6-12 個月）
+- [ ] 目標符合 SMART 準則（見第 2 節）
+- [ ] 包含以病患為中心的目標
+- [ ] 目標已排列優先順序或組織
 
-### ☐ Measurable
-- [ ] Quantifiable metric or observable criterion included
-- [ ] Baseline value documented
-- [ ] Target value specified
+### ☐ 介入措施
+- [ ] 指定藥物介入
+- [ ] 包含非藥物介入
+- [ ] 註明程序介入或轉介
+- [ ] 每項介入有明確理由
+- [ ] 基於實證或符合指引
 
-**Example**: "Walk 300 feet with walker independently" ✓  
-**Not**: "Walk further" ✗
+### ☐ 時程和排程
+- [ ] 定義具有持續時間的治療階段
+- [ ] 指定就診頻率
+- [ ] 排程里程碑評估
+- [ ] 陳述預期總治療持續時間
 
-### ☐ Achievable
-- [ ] Realistic given patient's condition and capabilities
-- [ ] Resources available to support goal
-- [ ] Timeframe is reasonable
-- [ ] Treatment efficacy supports goal
+### ☐ 監測參數
+- [ ] 識別要追蹤的臨床結果
+- [ ] 記錄基線值
+- [ ] 指定目標值
+- [ ] 定義監測頻率
+- [ ] 列出評估工具/量表
 
-**Example**: "Reduce pain from 7/10 to 4/10 in 6 weeks" ✓  
-**Not**: "Eliminate all pain in 1 week" ✗
+### ☐ 預期結果
+- [ ] 陳述主要結果指標
+- [ ] 定義成功標準
+- [ ] 指出改善時程
+- [ ] 註明治療修改標準
 
-### ☐ Relevant
-- [ ] Aligned with patient values and priorities
-- [ ] Clinically meaningful
-- [ ] Addresses patient's functional limitations
-- [ ] Integrated with overall treatment objectives
+### ☐ 追蹤計畫
+- [ ] 排程下次就診
+- [ ] 指定追蹤頻率
+- [ ] 概述溝通計畫
+- [ ] 包含緊急聯絡程序
 
-**Example**: "Return to work with modifications within 3 months" ✓  
-**Not**: "Lab value improvement" (if patient doesn't care about it) ✗
+### ☐ 病患教育
+- [ ] 記錄病症教育
+- [ ] 註明自我管理技能訓練
+- [ ] 溝通警告徵兆
+- [ ] 列出資源和支持
 
-### ☐ Time-bound
-- [ ] Specific deadline or timeframe stated
-- [ ] Reassessment interval defined
-- [ ] Action frequency specified (if applicable)
+### ☐ 風險緩解和安全
+- [ ] 識別潛在不良反應
+- [ ] 包含安全監測計畫
+- [ ] 概述緊急程序
+- [ ] 處理併發症預防
 
-**Example**: "Within 8 weeks" or "By month 3" ✓  
-**Not**: "Eventually" or "Soon" ✗
-
----
-
-## Section 3: Clinical Quality
-
-### ☐ Evidence-Based Practice
-- [ ] Interventions based on current evidence
-- [ ] Clinical practice guidelines followed
-- [ ] Guideline deviations explained and justified
-- [ ] Literature or evidence cited (if formal plan)
-
-### ☐ Medication Documentation (if applicable)
-- [ ] Generic drug names used
-- [ ] Specific dose, route, frequency documented
-- [ ] Indication/rationale provided for each medication
-- [ ] Adverse effects to monitor noted
-- [ ] Drug interactions considered
-- [ ] Titration plan included if applicable
-
-### ☐ Assessment Tools
-- [ ] Validated assessment tools used when available
-- [ ] Tools appropriate for condition (PHQ-9, FIM, Berg, etc.)
-- [ ] Baseline scores documented
-- [ ] Target scores specified
-- [ ] Reassessment schedule defined
-
-### ☐ Multidisciplinary Coordination (if applicable)
-- [ ] Roles of team members defined
-- [ ] Communication plan among providers specified
-- [ ] Care transitions addressed
-- [ ] Specialist recommendations integrated
-
-### ☐ Preventive Care Integration
-- [ ] Age-appropriate screening included
-- [ ] Vaccination schedule noted
-- [ ] Lifestyle counseling documented
-- [ ] Health maintenance addressed
+### ☐ 簽名和日期
+- [ ] 提供者簽名行
+- [ ] 提供者姓名和資格
+- [ ] 計畫日期
+- [ ] 病患確認（如適用）
 
 ---
 
-## Section 4: Patient-Centered Care
+## 第 2 節：SMART 目標品質
 
-### ☐ Shared Decision-Making
-- [ ] Patient preferences documented
-- [ ] Treatment options discussed
-- [ ] Risks and benefits explained
-- [ ] Patient values incorporated into goals
-- [ ] Alternative treatments considered
+對於每個治療目標，驗證其符合 SMART 準則：
 
-### ☐ Health Literacy
-- [ ] Language appropriate for patient understanding
-- [ ] Medical jargon explained or avoided
-- [ ] Teach-back method used or planned
-- [ ] Written materials at appropriate reading level
+### ☐ 具體（Specific）
+- [ ] 目標清楚定義將達成什麼
+- [ ] 沒有模糊語言（例如"改善"、"更好"）
+- [ ] 陳述具體結果
 
-### ☐ Cultural Competence
-- [ ] Cultural beliefs and practices considered
-- [ ] Language barriers addressed (interpreter if needed)
-- [ ] Cultural adaptations made when appropriate
-- [ ] Religious/spiritual preferences respected
+**範例**："將 HbA1c 從 8.5% 降至 <7%" ✓
+**非範例**："改善糖尿病控制" ✗
 
-### ☐ Social Determinants of Health
-- [ ] Social needs screened (food, housing, transportation)
-- [ ] Barriers to care identified
-- [ ] Community resources provided
-- [ ] Financial concerns addressed (medication costs, etc.)
+### ☐ 可測量（Measurable）
+- [ ] 包含可量化指標或可觀察標準
+- [ ] 記錄基線值
+- [ ] 指定目標值
 
-### ☐ Patient Engagement
-- [ ] Patient actively involved in goal-setting
-- [ ] Self-management support provided
-- [ ] Patient education tailored to individual
-- [ ] Follow-up preferences considered
+**範例**："使用助行器獨立行走 300 英尺" ✓
+**非範例**："走得更遠" ✗
 
----
+### ☐ 可達成（Achievable）
+- [ ] 考慮病患狀況和能力是現實的
+- [ ] 有可用資源支持目標
+- [ ] 時間框架合理
+- [ ] 治療效果支持目標
 
-## Section 5: Safety and Risk Management
+**範例**："6 週內將疼痛從 7/10 降至 4/10" ✓
+**非範例**："1 週內消除所有疼痛" ✗
 
-### ☐ Medication Safety
-- [ ] Allergy history documented
-- [ ] Polypharmacy reviewed (deprescribing considered)
-- [ ] High-risk medications monitored appropriately
-- [ ] Drug-drug interactions checked
-- [ ] Renal/hepatic dosing adjustments made if needed
+### ☐ 相關（Relevant）
+- [ ] 與病患價值觀和優先順序一致
+- [ ] 臨床有意義
+- [ ] 處理病患的功能限制
+- [ ] 與整體治療目標整合
 
-### ☐ Fall Prevention (if relevant)
-- [ ] Fall risk assessed
-- [ ] Fall prevention strategies included
-- [ ] Environmental modifications recommended
-- [ ] Assistive devices prescribed
+**範例**："3 個月內經修正返回工作" ✓
+**非範例**："實驗室數值改善"（如果病患不關心）✗
 
-### ☐ Infection Prevention (if relevant)
-- [ ] Immunizations up to date
-- [ ] Prophylactic antibiotics if indicated
-- [ ] Infection signs and symptoms patient education
+### ☐ 有時限（Time-bound）
+- [ ] 陳述具體截止日期或時間框架
+- [ ] 定義進度審查的檢查點日期
+- [ ] 指定行動頻率（如適用）
 
-### ☐ Emergency Preparedness
-- [ ] Emergency warning signs clearly listed
-- [ ] When to call 911 specified
-- [ ] When to call provider defined
-- [ ] Emergency contact numbers provided
-
-### ☐ Suicide/Violence Risk (mental health plans)
-- [ ] Risk assessment documented
-- [ ] Safety plan created if ideation present
-- [ ] Means restriction addressed
-- [ ] Crisis resources provided (988 lifeline)
-- [ ] Follow-up frequency appropriate for risk level
-
-### ☐ Opioid Safety (pain management plans)
-- [ ] Opioid risk assessment completed (ORT, SOAPP)
-- [ ] Informed consent discussion documented
-- [ ] Treatment agreement signed
-- [ ] PDMP checked
-- [ ] Naloxone co-prescribed
-- [ ] UDS plan included
+**範例**："在 8 週內"或"到第 3 個月" ✓
+**非範例**："最終"或"很快" ✗
 
 ---
 
-## Section 6: Regulatory Compliance
+## 第 3 節：臨床品質
 
-### ☐ HIPAA Compliance
-- [ ] Protected health information (PHI) safeguarded
-- [ ] De-identification per Safe Harbor method (if sharing)
-- [ ] All 18 HIPAA identifiers removed (if de-identified)
-- [ ] Minimum necessary principle followed
+### ☐ 實證實踐
+- [ ] 介入基於當前證據
+- [ ] 遵循臨床實踐指引
+- [ ] 解釋並說明指引偏離的理由
+- [ ] 引用文獻或證據（如正式計畫）
 
-### ☐ Informed Consent
-- [ ] Consent discussion documented
-- [ ] Patient understanding verified
-- [ ] Risks and benefits explained
-- [ ] Alternative treatments discussed
-- [ ] Patient agreement documented
+### ☐ 藥物文件（如適用）
+- [ ] 使用通用藥名
+- [ ] 記錄具體劑量、途徑、頻率
+- [ ] 為每種藥物提供適應症/理由
+- [ ] 註明要監測的不良反應
+- [ ] 考慮藥物交互作用
+- [ ] 包含滴定計畫（如適用）
 
-### ☐ Medical Necessity
-- [ ] Treatment medically necessary for diagnosis
-- [ ] Interventions appropriate for severity
-- [ ] Evidence supports treatment choices
-- [ ] Frequency and duration justified
+### ☐ 評估工具
+- [ ] 可用時使用經驗證的評估工具
+- [ ] 工具適合病症（PHQ-9、FIM、Berg 等）
+- [ ] 記錄基線分數
+- [ ] 指定目標分數
+- [ ] 定義重新評估排程
 
-### ☐ Billing and Coding
-- [ ] ICD-10 diagnosis codes included
-- [ ] CPT procedure codes (if procedures planned)
-- [ ] Documentation supports billing level
-- [ ] Medical necessity for services demonstrated
+### ☐ 多專科協調（如適用）
+- [ ] 定義團隊成員角色
+- [ ] 指定提供者間的溝通計畫
+- [ ] 處理照護轉銜
+- [ ] 整合專科建議
 
-### ☐ Quality Measure Support
-- [ ] Elements support quality reporting (HEDIS, MIPS)
-- [ ] Chronic disease management protocols followed
-- [ ] Preventive care documented
-- [ ] Patient safety indicators addressed
-
-### ☐ Specialty-Specific Regulations
-- [ ] 42 CFR Part 2 compliance (if substance use disorder treatment)
-- [ ] CDC opioid guidelines followed (if opioid prescription)
-- [ ] Joint Commission standards met (if applicable)
-- [ ] State-specific requirements addressed
+### ☐ 預防照護整合
+- [ ] 包含年齡適當的篩檢
+- [ ] 註明疫苗接種排程
+- [ ] 記錄生活方式諮詢
+- [ ] 處理健康維護
 
 ---
 
-## Section 7: Documentation Standards
+## 第 4 節：以病患為中心的照護
 
-### ☐ Clarity and Precision
-- [ ] Professional medical terminology used appropriately
-- [ ] Abbreviations defined on first use
-- [ ] No ambiguous language
-- [ ] Specific rather than vague descriptions
+### ☐ 共享決策
+- [ ] 記錄病患偏好
+- [ ] 討論治療選項
+- [ ] 解釋風險和效益
+- [ ] 將病患價值觀納入目標
+- [ ] 考慮替代治療
 
-### ☐ Accuracy
-- [ ] Factually correct information
-- [ ] Current evidence-based recommendations
-- [ ] Correct medication dosing and frequencies
-- [ ] Proper ICD-10 and CPT coding
+### ☐ 健康素養
+- [ ] 語言適合病患理解
+- [ ] 解釋或避免醫學術語
+- [ ] 使用或計畫回授教學法
+- [ ] 書面材料在適當閱讀水平
 
-### ☐ Organization
-- [ ] Logical flow and structure
-- [ ] Consistent formatting
-- [ ] Easy to locate key information
-- [ ] Headings and sections clearly labeled
+### ☐ 文化能力
+- [ ] 考慮文化信仰和實踐
+- [ ] 處理語言障礙（如需要則使用口譯員）
+- [ ] 在適當時進行文化調適
+- [ ] 尊重宗教/靈性偏好
 
-### ☐ Legibility (if handwritten or hybrid)
-- [ ] Handwriting legible
-- [ ] No unclear abbreviations
-- [ ] Typed portions clear
-- [ ] Signatures legible with printed name
+### ☐ 健康的社會決定因素
+- [ ] 篩檢社會需求（食物、住房、交通）
+- [ ] 識別照護障礙
+- [ ] 提供社區資源
+- [ ] 處理財務問題（藥物費用等）
 
-### ☐ Authentication
-- [ ] Provider name clearly stated
-- [ ] Credentials included
-- [ ] Date of plan present
-- [ ] Signature obtained (electronic or handwritten)
-
----
-
-## Section 8: Special Considerations by Plan Type
-
-### For General Medical Plans:
-- [ ] Chronic disease management protocols followed
-- [ ] Guideline-based targets used (HbA1c, BP, lipids)
-- [ ] Medication regimen optimized
-- [ ] Comorbidities addressed
-- [ ] Preventive care integrated
-
-### For Rehabilitation Plans:
-- [ ] Functional assessments with validated tools (FIM, Berg)
-- [ ] Impairment, activity, and participation goals included
-- [ ] Therapy frequency and duration specified
-- [ ] Home exercise program documented
-- [ ] DME and environmental modifications listed
-- [ ] Discharge criteria defined
-
-### For Mental Health Plans:
-- [ ] DSM-5 diagnostic criteria met
-- [ ] Symptom severity assessed (PHQ-9, GAD-7, etc.)
-- [ ] Suicide/violence risk assessed
-- [ ] Safety plan created (if indicated)
-- [ ] Evidence-based psychotherapy specified
-- [ ] Medication trials and responses documented
-- [ ] Functional and recovery-oriented goals included
-
-### For Chronic Disease Management Plans:
-- [ ] All active conditions prioritized
-- [ ] Medication synergies identified
-- [ ] Polypharmacy addressed
-- [ ] Care coordination plan clear
-- [ ] Registry/population health integration noted
-- [ ] Transition management included
-
-### For Perioperative Plans:
-- [ ] Preoperative risk assessment (RCRI, ASA, Caprini)
-- [ ] Medical optimization documented
-- [ ] ERAS elements included (if applicable)
-- [ ] Postoperative milestones defined
-- [ ] Discharge criteria specified
-- [ ] VTE prophylaxis plan included
-
-### For Pain Management Plans:
-- [ ] Comprehensive pain assessment (location, quality, intensity, impact)
-- [ ] Pain type classified (nociceptive, neuropathic, nociplastic)
-- [ ] Multimodal analgesia approach
-- [ ] Opioid risk assessment (if opioids considered)
-- [ ] Functional goals emphasized (not just pain scores)
-- [ ] Psychological screening and intervention included
-- [ ] CDC opioid guidelines followed (if prescribing)
+### ☐ 病患參與
+- [ ] 病患積極參與目標設定
+- [ ] 提供自我管理支持
+- [ ] 病患教育針對個人調整
+- [ ] 考慮追蹤偏好
 
 ---
 
-## Section 9: Final Review
+## 第 5 節：安全和風險管理
 
-### ☐ Proofreading
-- [ ] Spelling and grammar checked
-- [ ] No typos or errors
-- [ ] Consistent terminology throughout
-- [ ] Patient name correct throughout (if not de-identified)
+### ☐ 藥物安全
+- [ ] 記錄過敏史
+- [ ] 審查多重用藥（考慮減藥）
+- [ ] 適當監測高風險藥物
+- [ ] 檢查藥物-藥物交互作用
+- [ ] 如需要進行腎臟/肝臟劑量調整
 
-### ☐ Completeness Verification
-- [ ] All placeholder text replaced with patient-specific information
-- [ ] All bracketed [fields] customized
-- [ ] No "TBD" or "to be completed" items remaining
-- [ ] All required sections complete
+### ☐ 跌倒預防（如相關）
+- [ ] 評估跌倒風險
+- [ ] 包含跌倒預防策略
+- [ ] 建議環境修正
+- [ ] 處方輔助設備
 
-### ☐ Quality Assurance
-- [ ] Plan reviewed by provider
-- [ ] Peer review completed (if applicable)
-- [ ] Compliance verification done
-- [ ] Automated checks run (if available scripts used)
+### ☐ 感染預防（如相關）
+- [ ] 疫苗接種已更新
+- [ ] 如指示則預防性抗生素
+- [ ] 感染徵兆和症狀病患教育
 
-### ☐ Patient Review Preparation
-- [ ] Patient-friendly summary prepared (if needed)
-- [ ] Patient education materials gathered
-- [ ] Consent forms ready for signature
-- [ ] Questions anticipated and prepared to address
+### ☐ 緊急準備
+- [ ] 清楚列出緊急警告徵兆
+- [ ] 指定何時撥打 911
+- [ ] 定義何時聯絡提供者
+- [ ] 提供緊急聯絡電話
 
----
+### ☐ 自殺/暴力風險（心理健康計畫）
+- [ ] 記錄風險評估
+- [ ] 如有意念則建立安全計畫
+- [ ] 處理手段限制
+- [ ] 提供危機資源（988 生命線）
+- [ ] 追蹤頻率適合風險等級
 
-## Scoring and Interpretation
-
-**Total Items**: ~150 (varies by plan type)
-
-### Scoring:
-- Count number of checked items
-- Calculate percentage: (Checked / Total) × 100
-
-### Interpretation:
-- **95-100%**: Excellent - Plan meets highest quality standards
-- **85-94%**: Good - Plan is high quality with minor gaps
-- **70-84%**: Acceptable - Plan is adequate but has areas needing improvement
-- **<70%**: Needs Improvement - Significant gaps in quality or compliance
-
-### Critical Items (Must Have):
-The following items are critical and must be present:
-- ✓ Patient identifier and de-identification notice
-- ✓ Primary diagnosis with ICD-10 code
-- ✓ At least 3 SMART goals
-- ✓ Interventions with rationales
-- ✓ Monitoring plan
-- ✓ Follow-up plan
-- ✓ Patient education
-- ✓ Safety/risk mitigation
-- ✓ Emergency procedures
-- ✓ Provider signature
-
-If any critical item is missing, plan should not be finalized until corrected.
+### ☐ 鴉片類藥物安全（疼痛管理計畫）
+- [ ] 完成鴉片類藥物風險評估（ORT、SOAPP）
+- [ ] 記錄知情同意討論
+- [ ] 簽署治療協議
+- [ ] 檢查 PDMP
+- [ ] 共同處方納洛酮
+- [ ] 包含 UDS 計畫
 
 ---
 
-## Usage Instructions
+## 第 6 節：法規遵循
 
-1. **Review each section** systematically
-2. **Check boxes** as criteria are met
-3. **Note deficiencies** for correction
-4. **Calculate score** to assess overall quality
-5. **Address gaps** before finalizing
-6. **Document review** with reviewer name and date
+### ☐ HIPAA 遵循
+- [ ] 保護受保護健康資訊（PHI）
+- [ ] 依 Safe Harbor 方法去識別化（如共享）
+- [ ] 移除所有 18 項 HIPAA 識別碼（如去識別化）
+- [ ] 遵循最少必要原則
 
-**Reviewer**: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+### ☐ 知情同意
+- [ ] 記錄同意討論
+- [ ] 驗證病患理解
+- [ ] 解釋風險和效益
+- [ ] 討論替代治療
+- [ ] 記錄病患同意
 
-**Date Reviewed**: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+### ☐ 醫療必要性
+- [ ] 治療對診斷是醫療必要的
+- [ ] 介入適合嚴重度
+- [ ] 證據支持治療選擇
+- [ ] 頻率和持續時間有正當理由
 
-**Score**: \_\_\_\_\_% (\_\_\_\_ items checked / \_\_\_\_ total items)
+### ☐ 帳務和編碼
+- [ ] 包含 ICD-10 診斷代碼
+- [ ] CPT 程序代碼（如計畫程序）
+- [ ] 文件支持帳務等級
+- [ ] 證明服務的醫療必要性
 
-**Status**:
-- [ ] Approved for use
-- [ ] Approved with minor revisions
-- [ ] Requires significant revision
-- [ ] Not approved
+### ☐ 品質指標支持
+- [ ] 元素支持品質報告（HEDIS、MIPS）
+- [ ] 遵循慢性病管理協定
+- [ ] 記錄預防照護
+- [ ] 處理病患安全指標
 
-**Comments/Recommendations**:
+### ☐ 專科特定法規
+- [ ] 42 CFR Part 2 遵循（如物質使用障礙治療）
+- [ ] 遵循 CDC 鴉片類藥物指引（如鴉片類藥物處方）
+- [ ] 符合聯合委員會標準（如適用）
+- [ ] 處理州特定要求
+
+---
+
+## 第 7 節：文件標準
+
+### ☐ 清晰和精確
+- [ ] 適當使用專業醫學術語
+- [ ] 首次使用時定義縮寫
+- [ ] 無模糊語言
+- [ ] 具體而非模糊的描述
+
+### ☐ 準確性
+- [ ] 事實正確的資訊
+- [ ] 當前實證建議
+- [ ] 正確的藥物劑量和頻率
+- [ ] 正確的 ICD-10 和 CPT 編碼
+
+### ☐ 組織
+- [ ] 邏輯流程和結構
+- [ ] 一致的格式
+- [ ] 易於找到關鍵資訊
+- [ ] 清楚標記標題和區段
+
+### ☐ 清晰度（如手寫或混合）
+- [ ] 手寫清晰
+- [ ] 無不清楚的縮寫
+- [ ] 打字部分清晰
+- [ ] 簽名清晰並附印刷姓名
+
+### ☐ 認證
+- [ ] 清楚陳述提供者姓名
+- [ ] 包含資格
+- [ ] 存在計畫日期
+- [ ] 取得簽名（電子或手寫）
+
+---
+
+## 第 8 節：按計畫類型的特殊考量
+
+### 一般醫療計畫：
+- [ ] 遵循慢性病管理協定
+- [ ] 使用基於指引的目標（HbA1c、BP、血脂）
+- [ ] 最佳化藥物方案
+- [ ] 處理共病
+- [ ] 整合預防照護
+
+### 復健計畫：
+- [ ] 使用經驗證工具進行功能評估（FIM、Berg）
+- [ ] 包含損傷、活動和參與目標
+- [ ] 指定治療頻率和持續時間
+- [ ] 記錄居家運動計畫
+- [ ] 列出 DME 和環境修正
+- [ ] 定義出院標準
+
+### 心理健康計畫：
+- [ ] 符合 DSM-5 診斷準則
+- [ ] 評估症狀嚴重度（PHQ-9、GAD-7 等）
+- [ ] 評估自殺/暴力風險
+- [ ] 建立安全計畫（如指示）
+- [ ] 指定實證心理治療
+- [ ] 記錄藥物試驗和反應
+- [ ] 包含功能和復原導向目標
+
+### 慢性病管理計畫：
+- [ ] 所有現行病症已排列優先順序
+- [ ] 識別藥物協同效應
+- [ ] 處理多重用藥
+- [ ] 明確照護協調計畫
+- [ ] 註明登錄/族群健康整合
+- [ ] 包含轉銜管理
+
+### 圍手術期計畫：
+- [ ] 術前風險評估（RCRI、ASA、Caprini）
+- [ ] 記錄醫療最佳化
+- [ ] 包含 ERAS 元素（如適用）
+- [ ] 定義術後里程碑
+- [ ] 指定出院標準
+- [ ] 包含 VTE 預防計畫
+
+### 疼痛管理計畫：
+- [ ] 全面疼痛評估（位置、性質、強度、影響）
+- [ ] 疼痛類型分類（傷害感受性、神經病變性、中樞敏感化）
+- [ ] 多模式止痛方法
+- [ ] 鴉片類藥物風險評估（如考慮鴉片類藥物）
+- [ ] 強調功能目標（不僅是疼痛分數）
+- [ ] 包含心理篩檢和介入
+- [ ] 遵循 CDC 鴉片類藥物指引（如處方）
+
+---
+
+## 第 9 節：最終審查
+
+### ☐ 校對
+- [ ] 檢查拼寫和語法
+- [ ] 無錯字或錯誤
+- [ ] 全文術語一致
+- [ ] 病患姓名全文正確（如未去識別化）
+
+### ☐ 完整性驗證
+- [ ] 所有佔位文字已替換為病患特定資訊
+- [ ] 所有括號 [欄位] 已自訂
+- [ ] 無剩餘的「待定」或「待完成」項目
+- [ ] 所有必要區段完整
+
+### ☐ 品質保證
+- [ ] 提供者已審查計畫
+- [ ] 已完成同儕審查（如適用）
+- [ ] 已完成遵循驗證
+- [ ] 已執行自動檢查（如使用可用腳本）
+
+### ☐ 病患審查準備
+- [ ] 準備病患友好摘要（如需要）
+- [ ] 收集病患教育材料
+- [ ] 準備簽名同意書
+- [ ] 預期並準備處理問題
+
+---
+
+## 評分和解釋
+
+**總項目**：約 150 項（因計畫類型而異）
+
+### 評分：
+- 計算勾選項目數量
+- 計算百分比：（勾選 / 總數）× 100
+
+### 解釋：
+- **95-100%**：優秀 - 計畫符合最高品質標準
+- **85-94%**：良好 - 計畫高品質，有小缺口
+- **70-84%**：可接受 - 計畫適當但有需要改進的領域
+- **<70%**：需要改進 - 品質或遵循有重大缺口
+
+### 關鍵項目（必須有）：
+以下項目為關鍵項目，必須存在：
+- ✓ 病患識別碼和去識別化聲明
+- ✓ 主要診斷及 ICD-10 代碼
+- ✓ 至少 3 個 SMART 目標
+- ✓ 具有理由的介入措施
+- ✓ 監測計畫
+- ✓ 追蹤計畫
+- ✓ 病患教育
+- ✓ 安全/風險緩解
+- ✓ 緊急程序
+- ✓ 提供者簽名
+
+如任何關鍵項目缺失，計畫在更正前不應完成。
+
+---
+
+## 使用說明
+
+1. **系統性審查每個區段**
+2. **勾選符合標準的框**
+3. **註記缺失以便更正**
+4. **計算分數**以評估整體品質
+5. **處理缺口**後再完成
+6. **記錄審查**，包含審查者姓名和日期
+
+**審查者**：\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+**審查日期**：\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+**分數**：\_\_\_\_\_%（\_\_\_\_ 項已勾選 / \_\_\_\_ 總項）
+
+**狀態**：
+- [ ] 批准使用
+- [ ] 經小修後批准
+- [ ] 需要重大修訂
+- [ ] 不批准
+
+**評論/建議**：
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
@@ -465,7 +465,6 @@ If any critical item is missing, plan should not be finalized until corrected.
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: January 2025  
-**Next Review**: Annually or with guideline updates
-
+**文件版本**：1.0
+**最後更新**：2025 年 1 月
+**下次審查**：每年或指引更新時

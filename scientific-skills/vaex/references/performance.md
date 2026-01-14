@@ -1,74 +1,74 @@
-# Performance and Optimization
+# 效能和最佳化
 
-This reference covers Vaex's performance features including lazy evaluation, caching, memory management, async operations, and optimization strategies for processing massive datasets.
+本參考文件涵蓋 Vaex 的效能功能，包括惰性求值、快取、記憶體管理、非同步操作，以及處理海量資料集的最佳化策略。
 
-## Understanding Lazy Evaluation
+## 理解惰性求值
 
-Lazy evaluation is the foundation of Vaex's performance:
+惰性求值（lazy evaluation）是 Vaex 效能的基礎：
 
-### How Lazy Evaluation Works
+### 惰性求值的運作方式
 
 ```python
 import vaex
 
 df = vaex.open('large_file.hdf5')
 
-# No computation happens here - just defines what to compute
+# 這裡不會發生計算 - 只是定義要計算什麼
 df['total'] = df.price * df.quantity
 df['log_price'] = df.price.log()
 mean_expr = df.total.mean()
 
-# Computation happens here (when result is needed)
-result = mean_expr  # Now the mean is actually calculated
+# 這裡才發生計算（當需要結果時）
+result = mean_expr  # 現在才實際計算平均值
 ```
 
-**Key concepts:**
-- **Expressions** are lazy - they define computations without executing them
-- **Materialization** happens when you access the result
-- **Query optimization** happens automatically before execution
+**關鍵概念：**
+- **表達式**是惰性的 - 它們定義計算但不執行
+- **實體化（materialization）**發生在存取結果時
+- **查詢最佳化**在執行前自動進行
 
-### When Does Evaluation Happen?
+### 何時觸發求值？
 
 ```python
-# These trigger evaluation:
-print(df.x.mean())                    # Accessing value
-array = df.x.values                   # Getting NumPy array
-pdf = df.to_pandas_df()              # Converting to pandas
-df.export_hdf5('output.hdf5')       # Exporting
+# 這些會觸發求值：
+print(df.x.mean())                    # 存取值
+array = df.x.values                   # 取得 NumPy 陣列
+pdf = df.to_pandas_df()              # 轉換為 pandas
+df.export_hdf5('output.hdf5')       # 匯出
 
-# These do NOT trigger evaluation:
-df['new_col'] = df.x + df.y          # Creating virtual column
-expr = df.x.mean()                    # Creating expression
-df_filtered = df[df.x > 10]          # Creating filtered view
+# 這些不會觸發求值：
+df['new_col'] = df.x + df.y          # 建立虛擬欄
+expr = df.x.mean()                    # 建立表達式
+df_filtered = df[df.x > 10]          # 建立篩選視圖
 ```
 
-## Batching Operations with delay=True
+## 使用 delay=True 批次操作
 
-Execute multiple operations together for better performance:
+將多個操作一起執行以獲得更好的效能：
 
-### Basic Delayed Execution
+### 基本延遲執行
 
 ```python
-# Without delay - each operation processes entire dataset
-mean_x = df.x.mean()      # Pass 1 through data
-std_x = df.x.std()        # Pass 2 through data
-max_x = df.x.max()        # Pass 3 through data
+# 不使用 delay - 每個操作都處理整個資料集
+mean_x = df.x.mean()      # 第 1 次遍歷資料
+std_x = df.x.std()        # 第 2 次遍歷資料
+max_x = df.x.max()        # 第 3 次遍歷資料
 
-# With delay - single pass through dataset
+# 使用 delay - 單次遍歷資料集
 mean_x = df.x.mean(delay=True)
 std_x = df.x.std(delay=True)
 max_x = df.x.max(delay=True)
-results = vaex.execute([mean_x, std_x, max_x])  # Single pass!
+results = vaex.execute([mean_x, std_x, max_x])  # 單次遍歷！
 
-print(results[0])  # mean
-print(results[1])  # std
-print(results[2])  # max
+print(results[0])  # 平均值
+print(results[1])  # 標準差
+print(results[2])  # 最大值
 ```
 
-### Delayed Execution with Multiple Columns
+### 多欄位的延遲執行
 
 ```python
-# Compute statistics for many columns efficiently
+# 高效計算多個欄位的統計
 stats = {}
 delayed_results = []
 
@@ -77,10 +77,10 @@ for column in ['sales', 'quantity', 'profit', 'cost']:
     std = df[column].std(delay=True)
     delayed_results.extend([mean, std])
 
-# Execute all at once
+# 一次執行全部
 results = vaex.execute(delayed_results)
 
-# Process results
+# 處理結果
 for i, column in enumerate(['sales', 'quantity', 'profit', 'cost']):
     stats[column] = {
         'mean': results[i*2],
@@ -88,22 +88,22 @@ for i, column in enumerate(['sales', 'quantity', 'profit', 'cost']):
     }
 ```
 
-### When to Use delay=True
+### 何時使用 delay=True
 
-Use `delay=True` when:
-- Computing multiple aggregations
-- Computing statistics on many columns
-- Building dashboards or reports
-- Any scenario requiring multiple passes through data
+在以下情況使用 `delay=True`：
+- 計算多個聚合
+- 計算多個欄位的統計
+- 建構儀表板或報告
+- 任何需要多次遍歷資料的場景
 
 ```python
-# Bad: 4 passes through dataset
+# 不好：4 次遍歷資料集
 mean1 = df.col1.mean()
 mean2 = df.col2.mean()
 mean3 = df.col3.mean()
 mean4 = df.col4.mean()
 
-# Good: 1 pass through dataset
+# 好：1 次遍歷資料集
 results = vaex.execute([
     df.col1.mean(delay=True),
     df.col2.mean(delay=True),
@@ -112,27 +112,27 @@ results = vaex.execute([
 ])
 ```
 
-## Asynchronous Operations
+## 非同步操作
 
-Process data asynchronously using async/await:
+使用 async/await 非同步處理資料：
 
-### Async with async/await
+### 使用 async/await 的非同步
 
 ```python
 import vaex
 import asyncio
 
 async def compute_statistics(df):
-    # Create async tasks
+    # 建立非同步任務
     mean_task = df.x.mean(delay=True)
     std_task = df.x.std(delay=True)
 
-    # Execute asynchronously
+    # 非同步執行
     results = await vaex.async_execute([mean_task, std_task])
 
     return {'mean': results[0], 'std': results[1]}
 
-# Run async function
+# 執行非同步函數
 async def main():
     df = vaex.open('large_file.hdf5')
     stats = await compute_statistics(df)
@@ -141,270 +141,270 @@ async def main():
 asyncio.run(main())
 ```
 
-### Using Promises/Futures
+### 使用 Promise/Future
 
 ```python
-# Get future object
+# 取得 future 物件
 future = df.x.mean(delay=True)
 
-# Do other work...
+# 做其他工作...
 
-# Get result when ready
-result = future.get()  # Blocks until complete
+# 準備好時取得結果
+result = future.get()  # 阻塞直到完成
 ```
 
-## Virtual Columns vs Materialized Columns
+## 虛擬欄 vs 實體化欄
 
-Understanding the difference is crucial for performance:
+理解差異對效能至關重要：
 
-### Virtual Columns (Preferred)
+### 虛擬欄（偏好使用）
 
 ```python
-# Virtual column - computed on-the-fly, zero memory
+# 虛擬欄 - 即時計算，零記憶體
 df['total'] = df.price * df.quantity
 df['log_sales'] = df.sales.log()
 df['full_name'] = df.first_name + ' ' + df.last_name
 
-# Check if virtual
-print(df.is_local('total'))  # False = virtual
+# 檢查是否為虛擬
+print(df.is_local('total'))  # False = 虛擬
 
-# Benefits:
-# - Zero memory overhead
-# - Always up-to-date if source data changes
-# - Fast to create
+# 優點：
+# - 零記憶體開銷
+# - 如果來源資料變更，總是最新的
+# - 建立速度快
 ```
 
-### Materialized Columns
+### 實體化欄
 
 ```python
-# Materialize a virtual column
+# 實體化虛擬欄
 df['total_materialized'] = df['total'].values
 
-# Or use materialize method
+# 或使用 materialize 方法
 df = df.materialize(df['total'], inplace=True)
 
-# Check if materialized
-print(df.is_local('total_materialized'))  # True = materialized
+# 檢查是否已實體化
+print(df.is_local('total_materialized'))  # True = 已實體化
 
-# When to materialize:
-# - Column computed repeatedly (amortize cost)
-# - Complex expression used in many operations
-# - Need to export data
+# 何時實體化：
+# - 欄位被重複計算（分攤成本）
+# - 複雜表達式用於多個操作
+# - 需要匯出資料
 ```
 
-### Deciding: Virtual vs Materialized
+### 決定：虛擬 vs 實體化
 
 ```python
-# Virtual is better when:
-# - Column is simple (x + y, x * 2, etc.)
-# - Column used infrequently
-# - Memory is limited
+# 虛擬較好的情況：
+# - 欄位很簡單（x + y、x * 2 等）
+# - 欄位很少使用
+# - 記憶體有限
 
-# Materialize when:
-# - Complex computation (multiple operations)
-# - Used repeatedly in aggregations
-# - Slows down other operations
+# 實體化的情況：
+# - 複雜計算（多個操作）
+# - 重複用於聚合
+# - 拖慢其他操作
 
-# Example: Complex calculation used many times
-df['complex'] = (df.x.log() * df.y.sqrt() + df.z ** 2).values  # Materialize
+# 範例：複雜計算使用多次
+df['complex'] = (df.x.log() * df.y.sqrt() + df.z ** 2).values  # 實體化
 ```
 
-## Caching Strategies
+## 快取策略
 
-Vaex automatically caches some operations, but you can optimize further:
+Vaex 自動快取某些操作，但您可以進一步最佳化：
 
-### Automatic Caching
+### 自動快取
 
 ```python
-# First call computes and caches
-mean1 = df.x.mean()  # Computes
+# 第一次呼叫計算並快取
+mean1 = df.x.mean()  # 計算
 
-# Second call uses cache
-mean2 = df.x.mean()  # From cache (instant)
+# 第二次呼叫使用快取
+mean2 = df.x.mean()  # 從快取（即時）
 
-# Cache invalidated if DataFrame changes
+# 如果 DataFrame 變更，快取失效
 df['new_col'] = df.x + 1
-mean3 = df.x.mean()  # Recomputes
+mean3 = df.x.mean()  # 重新計算
 ```
 
-### State Management
+### 狀態管理
 
 ```python
-# Save DataFrame state (includes virtual columns)
+# 儲存 DataFrame 狀態（包括虛擬欄）
 df.state_write('state.json')
 
-# Load state later
+# 稍後載入狀態
 df_new = vaex.open('data.hdf5')
-df_new.state_load('state.json')  # Restores virtual columns, selections
+df_new.state_load('state.json')  # 還原虛擬欄、選擇
 ```
 
-### Checkpoint Pattern
+### 檢查點模式
 
 ```python
-# Export intermediate results for complex pipelines
+# 匯出複雜管線的中間結果
 df['processed'] = complex_calculation(df)
 
-# Save checkpoint
+# 儲存檢查點
 df.export_hdf5('checkpoint.hdf5')
 
-# Resume from checkpoint
+# 從檢查點繼續
 df = vaex.open('checkpoint.hdf5')
-# Continue processing...
+# 繼續處理...
 ```
 
-## Memory Management
+## 記憶體管理
 
-Optimize memory usage for very large datasets:
+最佳化非常大型資料集的記憶體使用：
 
-### Memory-Mapped Files
+### 記憶體映射檔案
 
 ```python
-# HDF5 and Arrow are memory-mapped (optimal)
-df = vaex.open('data.hdf5')  # No memory used until accessed
+# HDF5 和 Arrow 是記憶體映射的（最佳）
+df = vaex.open('data.hdf5')  # 存取前不使用記憶體
 
-# File stays on disk, only accessed portions loaded to RAM
-mean = df.x.mean()  # Streams through data, minimal memory
+# 檔案保留在磁碟，只有存取的部分載入 RAM
+mean = df.x.mean()  # 串流處理資料，最小記憶體
 ```
 
-### Chunked Processing
+### 分塊處理
 
 ```python
-# Process large DataFrame in chunks
+# 分塊處理大型 DataFrame
 chunk_size = 1_000_000
 
 for i1, i2, chunk in df.to_pandas_df(chunk_size=chunk_size):
-    # Process chunk (careful: defeats Vaex's purpose)
+    # 處理分塊（注意：這違背了 Vaex 的目的）
     process_chunk(chunk)
 
-# Better: Use Vaex operations directly (no chunking needed)
-result = df.x.mean()  # Handles large data automatically
+# 更好：直接使用 Vaex 操作（不需要分塊）
+result = df.x.mean()  # 自動處理大型資料
 ```
 
-### Monitoring Memory Usage
+### 監控記憶體使用
 
 ```python
-# Check DataFrame memory footprint
-print(df.byte_size())  # Bytes used by materialized columns
+# 檢查 DataFrame 記憶體佔用
+print(df.byte_size())  # 實體化欄使用的位元組
 
-# Check column memory
+# 檢查欄位記憶體
 for col in df.get_column_names():
     if df.is_local(col):
         print(f"{col}: {df[col].nbytes / 1e9:.2f} GB")
 
-# Profile operations
+# 分析操作
 import vaex.profiler
 with vaex.profiler():
     result = df.x.mean()
 ```
 
-## Parallel Computation
+## 平行計算
 
-Vaex automatically parallelizes operations:
+Vaex 自動平行化操作：
 
-### Multithreading
+### 多執行緒
 
 ```python
-# Vaex uses all CPU cores by default
+# Vaex 預設使用所有 CPU 核心
 import vaex
 
-# Check/set thread count
+# 檢查/設定執行緒數
 print(vaex.multithreading.thread_count_default)
-vaex.multithreading.thread_count_default = 8  # Use 8 threads
+vaex.multithreading.thread_count_default = 8  # 使用 8 個執行緒
 
-# Operations automatically parallelize
-mean = df.x.mean()  # Uses all threads
+# 操作自動平行化
+mean = df.x.mean()  # 使用所有執行緒
 ```
 
-### Distributed Computing with Dask
+### 使用 Dask 的分散式計算
 
 ```python
-# Convert to Dask for distributed processing
+# 轉換為 Dask 進行分散式處理
 import vaex
 import dask.dataframe as dd
 
-# Create Vaex DataFrame
+# 建立 Vaex DataFrame
 df_vaex = vaex.open('large_file.hdf5')
 
-# Convert to Dask
+# 轉換為 Dask
 df_dask = df_vaex.to_dask_dataframe()
 
-# Process with Dask
+# 使用 Dask 處理
 result = df_dask.groupby('category')['value'].sum().compute()
 ```
 
-## JIT Compilation
+## JIT 編譯
 
-Vaex can use Just-In-Time compilation for custom operations:
+Vaex 可以對自訂操作使用即時（Just-In-Time）編譯：
 
-### Using Numba
+### 使用 Numba
 
 ```python
 import vaex
 import numba
 
-# Define JIT-compiled function
+# 定義 JIT 編譯函數
 @numba.jit
 def custom_calculation(x, y):
     return x ** 2 + y ** 2
 
-# Apply to DataFrame
+# 套用到 DataFrame
 df['custom'] = df.apply(custom_calculation,
                         arguments=[df.x, df.y],
                         vectorize=True)
 ```
 
-### Custom Aggregations
+### 自訂聚合
 
 ```python
 @numba.jit
 def custom_sum(a):
     total = 0
     for val in a:
-        total += val * 2  # Custom logic
+        total += val * 2  # 自訂邏輯
     return total
 
-# Use in aggregation
+# 在聚合中使用
 result = df.x.custom_agg(custom_sum)
 ```
 
-## Optimization Strategies
+## 最佳化策略
 
-### Strategy 1: Minimize Materializations
+### 策略 1：最小化實體化
 
 ```python
-# Bad: Creates many materialized columns
+# 不好：建立許多實體化欄
 df['a'] = (df.x + df.y).values
 df['b'] = (df.a * 2).values
 df['c'] = (df.b + df.z).values
 
-# Good: Keep virtual until final export
+# 好：保持虛擬直到最終匯出
 df['a'] = df.x + df.y
 df['b'] = df.a * 2
 df['c'] = df.b + df.z
-# Only materialize if exporting:
+# 只在匯出時實體化：
 # df.export_hdf5('output.hdf5')
 ```
 
-### Strategy 2: Use Selections Instead of Filtering
+### 策略 2：使用選擇而非篩選
 
 ```python
-# Less efficient: Creates new DataFrames
+# 效率較低：建立新 DataFrame
 df_high = df[df.value > 100]
 df_low = df[df.value <= 100]
 mean_high = df_high.value.mean()
 mean_low = df_low.value.mean()
 
-# More efficient: Use selections
+# 更高效：使用選擇
 df.select(df.value > 100, name='high')
 df.select(df.value <= 100, name='low')
 mean_high = df.value.mean(selection='high')
 mean_low = df.value.mean(selection='low')
 ```
 
-### Strategy 3: Batch Aggregations
+### 策略 3：批次聚合
 
 ```python
-# Less efficient: Multiple passes
+# 效率較低：多次遍歷
 stats = {
     'mean': df.x.mean(),
     'std': df.x.std(),
@@ -412,7 +412,7 @@ stats = {
     'max': df.x.max()
 }
 
-# More efficient: Single pass
+# 更高效：單次遍歷
 delayed = [
     df.x.mean(delay=True),
     df.x.std(delay=True),
@@ -423,38 +423,38 @@ results = vaex.execute(delayed)
 stats = dict(zip(['mean', 'std', 'min', 'max'], results))
 ```
 
-### Strategy 4: Choose Optimal File Formats
+### 策略 4：選擇最佳檔案格式
 
 ```python
-# Slow: Large CSV
-df = vaex.from_csv('huge.csv')  # Can take minutes
+# 慢：大型 CSV
+df = vaex.from_csv('huge.csv')  # 可能需要幾分鐘
 
-# Fast: HDF5 or Arrow
-df = vaex.open('huge.hdf5')     # Instant
-df = vaex.open('huge.arrow')    # Instant
+# 快：HDF5 或 Arrow
+df = vaex.open('huge.hdf5')     # 即時
+df = vaex.open('huge.arrow')    # 即時
 
-# One-time conversion
+# 一次性轉換
 df = vaex.from_csv('huge.csv', convert='huge.hdf5')
-# Future loads: vaex.open('huge.hdf5')
+# 未來載入：vaex.open('huge.hdf5')
 ```
 
-### Strategy 5: Optimize Expressions
+### 策略 5：最佳化表達式
 
 ```python
-# Less efficient: Repeated calculations
+# 效率較低：重複計算
 df['result'] = df.x.log() + df.x.log() * 2
 
-# More efficient: Reuse calculations
+# 更高效：重用計算
 df['log_x'] = df.x.log()
 df['result'] = df.log_x + df.log_x * 2
 
-# Even better: Combine operations
-df['result'] = df.x.log() * 3  # Simplified math
+# 更好：合併操作
+df['result'] = df.x.log() * 3  # 簡化數學
 ```
 
-## Performance Profiling
+## 效能分析
 
-### Basic Profiling
+### 基本分析
 
 ```python
 import time
@@ -462,26 +462,26 @@ import vaex
 
 df = vaex.open('large_file.hdf5')
 
-# Time operations
+# 計時操作
 start = time.time()
 result = df.x.mean()
 elapsed = time.time() - start
-print(f"Computed in {elapsed:.2f} seconds")
+print(f"計算耗時 {elapsed:.2f} 秒")
 ```
 
-### Detailed Profiling
+### 詳細分析
 
 ```python
-# Profile with context manager
+# 使用上下文管理器分析
 with vaex.profiler():
     result = df.groupby('category').agg({'value': 'sum'})
-# Prints detailed timing information
+# 列印詳細計時資訊
 ```
 
-### Benchmarking Patterns
+### 基準測試模式
 
 ```python
-# Compare strategies
+# 比較策略
 def benchmark_operation(operation, name):
     start = time.time()
     result = operation()
@@ -489,83 +489,83 @@ def benchmark_operation(operation, name):
     print(f"{name}: {elapsed:.3f}s")
     return result
 
-# Test different approaches
-benchmark_operation(lambda: df.x.mean(), "Direct mean")
-benchmark_operation(lambda: df[df.x > 0].x.mean(), "Filtered mean")
-benchmark_operation(lambda: df.x.mean(selection='positive'), "Selection mean")
+# 測試不同方法
+benchmark_operation(lambda: df.x.mean(), "直接平均")
+benchmark_operation(lambda: df[df.x > 0].x.mean(), "篩選平均")
+benchmark_operation(lambda: df.x.mean(selection='positive'), "選擇平均")
 ```
 
-## Common Performance Issues and Solutions
+## 常見效能問題和解決方案
 
-### Issue: Slow Aggregations
+### 問題：聚合緩慢
 
 ```python
-# Problem: Multiple separate aggregations
+# 問題：多個分開的聚合
 for col in df.column_names:
     print(f"{col}: {df[col].mean()}")
 
-# Solution: Batch with delay=True
+# 解決方案：使用 delay=True 批次處理
 delayed = [df[col].mean(delay=True) for col in df.column_names]
 results = vaex.execute(delayed)
 for col, result in zip(df.column_names, results):
     print(f"{col}: {result}")
 ```
 
-### Issue: High Memory Usage
+### 問題：高記憶體使用
 
 ```python
-# Problem: Materializing large virtual columns
+# 問題：實體化大型虛擬欄
 df['large_col'] = (complex_expression).values
 
-# Solution: Keep virtual, or materialize and export
-df['large_col'] = complex_expression  # Virtual
-# Or: df.export_hdf5('with_new_col.hdf5')
+# 解決方案：保持虛擬，或實體化並匯出
+df['large_col'] = complex_expression  # 虛擬
+# 或：df.export_hdf5('with_new_col.hdf5')
 ```
 
-### Issue: Slow Exports
+### 問題：匯出緩慢
 
 ```python
-# Problem: Exporting with many virtual columns
-df.export_csv('output.csv')  # Slow if many virtual columns
+# 問題：匯出時有許多虛擬欄
+df.export_csv('output.csv')  # 如果有許多虛擬欄會很慢
 
-# Solution: Export to HDF5 or Arrow (faster)
+# 解決方案：匯出為 HDF5 或 Arrow（更快）
 df.export_hdf5('output.hdf5')
 df.export_arrow('output.arrow')
 
-# Or materialize first for CSV
+# 或先實體化再匯出 CSV
 df_materialized = df.materialize()
 df_materialized.export_csv('output.csv')
 ```
 
-### Issue: Repeated Complex Calculations
+### 問題：重複複雜計算
 
 ```python
-# Problem: Complex virtual column used repeatedly
+# 問題：複雜虛擬欄重複使用
 df['complex'] = df.x.log() * df.y.sqrt() + df.z ** 3
 result1 = df.groupby('cat1').agg({'complex': 'mean'})
 result2 = df.groupby('cat2').agg({'complex': 'sum'})
 result3 = df.complex.std()
 
-# Solution: Materialize once
+# 解決方案：實體化一次
 df['complex'] = (df.x.log() * df.y.sqrt() + df.z ** 3).values
-# Or: df = df.materialize('complex')
+# 或：df = df.materialize('complex')
 ```
 
-## Performance Best Practices Summary
+## 效能最佳實務總結
 
-1. **Use HDF5 or Arrow formats** - Orders of magnitude faster than CSV
-2. **Leverage lazy evaluation** - Don't force computation until necessary
-3. **Batch operations with delay=True** - Minimize passes through data
-4. **Keep columns virtual** - Materialize only when beneficial
-5. **Use selections not filters** - More efficient for multiple segments
-6. **Profile your code** - Identify bottlenecks before optimizing
-7. **Avoid `.values` and `.to_pandas_df()`** - Keep operations in Vaex
-8. **Parallelize naturally** - Vaex uses all cores automatically
-9. **Export to efficient formats** - Checkpoint complex pipelines
-10. **Optimize expressions** - Simplify math and reuse calculations
+1. **使用 HDF5 或 Arrow 格式** - 比 CSV 快數個數量級
+2. **利用惰性求值** - 除非必要，不要強制計算
+3. **使用 delay=True 批次操作** - 最小化資料遍歷次數
+4. **保持欄位為虛擬** - 只在有益時才實體化
+5. **使用選擇而非篩選** - 對多個區段更高效
+6. **分析您的程式碼** - 最佳化前先識別瓶頸
+7. **避免 `.values` 和 `.to_pandas_df()`** - 將操作保持在 Vaex 中
+8. **自然平行化** - Vaex 自動使用所有核心
+9. **匯出為高效格式** - 為複雜管線建立檢查點
+10. **最佳化表達式** - 簡化數學並重用計算
 
-## Related Resources
+## 相關資源
 
-- For DataFrame basics: See `core_dataframes.md`
-- For data operations: See `data_processing.md`
-- For file I/O optimization: See `io_operations.md`
+- DataFrame 基礎：參見 `core_dataframes.md`
+- 資料操作：參見 `data_processing.md`
+- 檔案 I/O 最佳化：參見 `io_operations.md`

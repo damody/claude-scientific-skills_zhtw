@@ -1,94 +1,94 @@
-# FluidSim Solvers
+# FluidSim 求解器
 
-FluidSim provides multiple solvers for different fluid dynamics equations. All solvers work on periodic domains using pseudospectral methods with FFT.
+FluidSim 為不同的流體動力學方程式提供多種求解器。所有求解器都在週期性域上使用基於 FFT 的擬譜方法。
 
-## Available Solvers
+## 可用求解器
 
-### 2D Incompressible Navier-Stokes
+### 2D 不可壓縮 Navier-Stokes
 
-**Solver key**: `ns2d`
+**求解器鍵值**：`ns2d`
 
-**Import**:
+**匯入**：
 ```python
 from fluidsim.solvers.ns2d.solver import Simul
-# or dynamically
+# 或動態匯入
 Simul = fluidsim.import_simul_class_from_key("ns2d")
 ```
 
-**Use for**: 2D turbulence studies, vortex dynamics, fundamental fluid flow simulations
+**用途**：2D 紊流研究、渦流動力學、基礎流體流動模擬
 
-**Key features**: Energy and enstrophy cascades, vorticity dynamics
+**主要特徵**：能量和渦度級聯、渦度動力學
 
-### 3D Incompressible Navier-Stokes
+### 3D 不可壓縮 Navier-Stokes
 
-**Solver key**: `ns3d`
+**求解器鍵值**：`ns3d`
 
-**Import**:
+**匯入**：
 ```python
 from fluidsim.solvers.ns3d.solver import Simul
 ```
 
-**Use for**: 3D turbulence, realistic fluid flow simulations, high-resolution DNS
+**用途**：3D 紊流、真實流體流動模擬、高解析度 DNS
 
-**Key features**: Full 3D turbulence dynamics, parallel computing support
+**主要特徵**：完整 3D 紊流動力學、平行計算支援
 
-### Stratified Flows (2D/3D)
+### 分層流（2D/3D）
 
-**Solver keys**: `ns2d.strat`, `ns3d.strat`
+**求解器鍵值**：`ns2d.strat`、`ns3d.strat`
 
-**Import**:
+**匯入**：
 ```python
 from fluidsim.solvers.ns2d.strat.solver import Simul  # 2D
 from fluidsim.solvers.ns3d.strat.solver import Simul  # 3D
 ```
 
-**Use for**: Oceanic and atmospheric flows, density-driven flows
+**用途**：海洋和大氣流、密度驅動流
 
-**Key features**: Boussinesq approximation, buoyancy effects, constant Brunt-Väisälä frequency
+**主要特徵**：Boussinesq 近似、浮力效應、恆定 Brunt-Väisälä 頻率
 
-**Parameters**: Set stratification via `params.N` (Brunt-Väisälä frequency)
+**參數**：透過 `params.N`（Brunt-Väisälä 頻率）設定分層
 
-### Shallow Water Equations
+### 淺水方程式
 
-**Solver key**: `sw1l` (one-layer)
+**求解器鍵值**：`sw1l`（單層）
 
-**Import**:
+**匯入**：
 ```python
 from fluidsim.solvers.sw1l.solver import Simul
 ```
 
-**Use for**: Geophysical flows, tsunami modeling, rotating flows
+**用途**：地球物理流、海嘯模擬、旋轉流
 
-**Key features**: Rotating frame support, geostrophic balance
+**主要特徵**：旋轉座標系支援、地轉平衡
 
-**Parameters**: Set rotation via `params.f` (Coriolis parameter)
+**參數**：透過 `params.f`（科里奧利參數）設定旋轉
 
-### Föppl-von Kármán Equations
+### Föppl-von Kármán 方程式
 
-**Solver key**: `fvk` (elastic plate equations)
+**求解器鍵值**：`fvk`（彈性板方程式）
 
-**Import**:
+**匯入**：
 ```python
 from fluidsim.solvers.fvk.solver import Simul
 ```
 
-**Use for**: Elastic plate dynamics, fluid-structure interaction studies
+**用途**：彈性板動力學、流固交互作用研究
 
-## Solver Selection Guide
+## 求解器選擇指南
 
-Choose a solver based on the physical problem:
+根據物理問題選擇求解器：
 
-1. **2D turbulence, quick testing**: Use `ns2d`
-2. **3D flows, realistic simulations**: Use `ns3d`
-3. **Density-stratified flows**: Use `ns2d.strat` or `ns3d.strat`
-4. **Geophysical flows, rotating systems**: Use `sw1l`
-5. **Elastic plates**: Use `fvk`
+1. **2D 紊流、快速測試**：使用 `ns2d`
+2. **3D 流場、真實模擬**：使用 `ns3d`
+3. **密度分層流**：使用 `ns2d.strat` 或 `ns3d.strat`
+4. **地球物理流、旋轉系統**：使用 `sw1l`
+5. **彈性板**：使用 `fvk`
 
-## Modified Versions
+## 修改版本
 
-Many solvers have modified versions with additional physics:
-- Forcing terms
-- Different boundary conditions
-- Additional scalar fields
+許多求解器有具有額外物理的修改版本：
+- 強制項
+- 不同邊界條件
+- 額外純量場
 
-Check `fluidsim.solvers` module for complete list.
+檢查 `fluidsim.solvers` 模組以獲取完整列表。

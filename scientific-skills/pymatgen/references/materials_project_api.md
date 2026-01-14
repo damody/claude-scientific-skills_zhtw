@@ -1,335 +1,335 @@
-# Materials Project API Reference
+# Materials Project API 參考
 
-This reference documents how to access and use the Materials Project database through pymatgen's API integration.
+本參考記錄如何透過 pymatgen 的 API 整合存取和使用 Materials Project 資料庫。
 
-## Overview
+## 概述
 
-The Materials Project is a comprehensive database of computed materials properties, containing data on hundreds of thousands of inorganic crystals and molecules. The API provides programmatic access to this data through the `MPRester` client.
+Materials Project 是一個全面的計算材料性質資料庫，包含數十萬種無機晶體和分子的資料。API 透過 `MPRester` 客戶端提供程式化存取這些資料。
 
-## Installation and Setup
+## 安裝和設置
 
-The Materials Project API client is now in a separate package:
+Materials Project API 客戶端現在在獨立套件中：
 
 ```bash
 pip install mp-api
 ```
 
-### Getting an API Key
+### 取得 API 金鑰
 
-1. Visit https://next-gen.materialsproject.org/
-2. Create an account or log in
-3. Navigate to your dashboard/settings
-4. Generate an API key
-5. Store it as an environment variable:
+1. 訪問 https://next-gen.materialsproject.org/
+2. 創建帳戶或登入
+3. 導航到您的儀表板/設定
+4. 生成 API 金鑰
+5. 將其儲存為環境變數：
 
 ```bash
 export MP_API_KEY="your_api_key_here"
 ```
 
-Or add to your shell configuration file (~/.bashrc, ~/.zshrc, etc.)
+或添加到您的 shell 配置檔案（~/.bashrc、~/.zshrc 等）
 
-## Basic Usage
+## 基本用法
 
-### Initialization
+### 初始化
 
 ```python
 from mp_api.client import MPRester
 
-# Using environment variable (recommended)
+# 使用環境變數（推薦）
 with MPRester() as mpr:
-    # Perform queries
+    # 執行查詢
     pass
 
-# Or explicitly pass API key
+# 或明確傳遞 API 金鑰
 with MPRester("your_api_key_here") as mpr:
-    # Perform queries
+    # 執行查詢
     pass
 ```
 
-**Important**: Always use the `with` context manager to ensure sessions are properly closed.
+**重要**：始終使用 `with` 上下文管理器以確保會話正確關閉。
 
-## Querying Materials Data
+## 查詢材料資料
 
-### Search by Formula
+### 按化學式搜尋
 
 ```python
 with MPRester() as mpr:
-    # Get all materials with formula
+    # 取得具有該化學式的所有材料
     materials = mpr.materials.summary.search(formula="Fe2O3")
 
     for mat in materials:
-        print(f"Material ID: {mat.material_id}")
-        print(f"Formula: {mat.formula_pretty}")
-        print(f"Energy above hull: {mat.energy_above_hull} eV/atom")
-        print(f"Band gap: {mat.band_gap} eV")
+        print(f"材料 ID：{mat.material_id}")
+        print(f"化學式：{mat.formula_pretty}")
+        print(f"高於凸包的能量：{mat.energy_above_hull} eV/atom")
+        print(f"能隙：{mat.band_gap} eV")
         print()
 ```
 
-### Search by Material ID
+### 按材料 ID 搜尋
 
 ```python
 with MPRester() as mpr:
-    # Get specific material
+    # 取得特定材料
     material = mpr.materials.summary.search(material_ids=["mp-149"])[0]
 
-    print(f"Formula: {material.formula_pretty}")
-    print(f"Space group: {material.symmetry.symbol}")
-    print(f"Density: {material.density} g/cm³")
+    print(f"化學式：{material.formula_pretty}")
+    print(f"空間群：{material.symmetry.symbol}")
+    print(f"密度：{material.density} g/cm³")
 ```
 
-### Search by Chemical System
+### 按化學系統搜尋
 
 ```python
 with MPRester() as mpr:
-    # Get all materials in Fe-O system
+    # 取得 Fe-O 系統中的所有材料
     materials = mpr.materials.summary.search(chemsys="Fe-O")
 
-    # Get materials in ternary system
+    # 取得三元系統中的材料
     materials = mpr.materials.summary.search(chemsys="Li-Fe-O")
 ```
 
-### Search by Elements
+### 按元素搜尋
 
 ```python
 with MPRester() as mpr:
-    # Materials containing Fe and O
+    # 包含 Fe 和 O 的材料
     materials = mpr.materials.summary.search(elements=["Fe", "O"])
 
-    # Materials containing ONLY Fe and O (excluding others)
+    # 僅包含 Fe 和 O 的材料（排除其他）
     materials = mpr.materials.summary.search(
         elements=["Fe", "O"],
         exclude_elements=True
     )
 ```
 
-## Getting Structures
+## 取得結構
 
-### Structure from Material ID
+### 從材料 ID 取得結構
 
 ```python
 with MPRester() as mpr:
-    # Get structure
+    # 取得結構
     structure = mpr.get_structure_by_material_id("mp-149")
 
-    # Get multiple structures
+    # 取得多個結構
     structures = mpr.get_structures(["mp-149", "mp-510", "mp-19017"])
 ```
 
-### All Structures for a Formula
+### 某化學式的所有結構
 
 ```python
 with MPRester() as mpr:
-    # Get all Fe2O3 structures
+    # 取得所有 Fe2O3 結構
     materials = mpr.materials.summary.search(formula="Fe2O3")
 
     for mat in materials:
         structure = mpr.get_structure_by_material_id(mat.material_id)
-        print(f"{mat.material_id}: {structure.get_space_group_info()}")
+        print(f"{mat.material_id}：{structure.get_space_group_info()}")
 ```
 
-## Advanced Queries
+## 進階查詢
 
-### Property Filtering
+### 屬性過濾
 
 ```python
 with MPRester() as mpr:
-    # Materials with specific property ranges
+    # 具有特定屬性範圍的材料
     materials = mpr.materials.summary.search(
         chemsys="Li-Fe-O",
-        energy_above_hull=(0, 0.05),  # Stable or near-stable
-        band_gap=(1.0, 3.0),           # Semiconducting
+        energy_above_hull=(0, 0.05),  # 穩定或近穩定
+        band_gap=(1.0, 3.0),           # 半導體
     )
 
-    # Magnetic materials
+    # 磁性材料
     materials = mpr.materials.summary.search(
         elements=["Fe"],
         is_magnetic=True
     )
 
-    # Metals only
+    # 僅金屬
     materials = mpr.materials.summary.search(
         chemsys="Fe-Ni",
         is_metal=True
     )
 ```
 
-### Sorting and Limiting
+### 排序和限制
 
 ```python
 with MPRester() as mpr:
-    # Get most stable materials
+    # 取得最穩定的材料
     materials = mpr.materials.summary.search(
         chemsys="Li-Fe-O",
         sort_fields=["energy_above_hull"],
         num_chunks=1,
-        chunk_size=10  # Limit to 10 results
+        chunk_size=10  # 限制為 10 個結果
     )
 ```
 
-## Electronic Structure Data
+## 電子結構資料
 
-### Band Structure
+### 能帶結構
 
 ```python
 with MPRester() as mpr:
-    # Get band structure
+    # 取得能帶結構
     bs = mpr.get_bandstructure_by_material_id("mp-149")
 
-    # Analyze band structure
+    # 分析能帶結構
     if bs:
-        print(f"Band gap: {bs.get_band_gap()}")
-        print(f"Is metal: {bs.is_metal()}")
-        print(f"Direct gap: {bs.get_band_gap()['direct']}")
+        print(f"能隙：{bs.get_band_gap()}")
+        print(f"是否為金屬：{bs.is_metal()}")
+        print(f"直接能隙：{bs.get_band_gap()['direct']}")
 
-        # Plot
+        # 繪圖
         from pymatgen.electronic_structure.plotter import BSPlotter
         plotter = BSPlotter(bs)
         plotter.show()
 ```
 
-### Density of States
+### 態密度
 
 ```python
 with MPRester() as mpr:
-    # Get DOS
+    # 取得 DOS
     dos = mpr.get_dos_by_material_id("mp-149")
 
     if dos:
-        # Get band gap from DOS
+        # 從 DOS 取得能隙
         gap = dos.get_gap()
-        print(f"Band gap from DOS: {gap} eV")
+        print(f"從 DOS 得到的能隙：{gap} eV")
 
-        # Plot DOS
+        # 繪製 DOS
         from pymatgen.electronic_structure.plotter import DosPlotter
         plotter = DosPlotter()
         plotter.add_dos("Total DOS", dos)
         plotter.show()
 ```
 
-### Fermi Surface
+### 費米面
 
 ```python
 with MPRester() as mpr:
-    # Get electronic structure data for Fermi surface
+    # 取得費米面的電子結構資料
     bs = mpr.get_bandstructure_by_material_id("mp-149", line_mode=False)
 ```
 
-## Thermodynamic Data
+## 熱力學資料
 
-### Phase Diagram Construction
+### 相圖建構
 
 ```python
 from pymatgen.analysis.phase_diagram import PhaseDiagram, PDPlotter
 
 with MPRester() as mpr:
-    # Get entries for phase diagram
+    # 取得相圖條目
     entries = mpr.get_entries_in_chemsys("Li-Fe-O")
 
-    # Build phase diagram
+    # 建構相圖
     pd = PhaseDiagram(entries)
 
-    # Plot
+    # 繪圖
     plotter = PDPlotter(pd)
     plotter.show()
 ```
 
-### Pourbaix Diagram
+### Pourbaix 圖
 
 ```python
 from pymatgen.analysis.pourbaix_diagram import PourbaixDiagram, PourbaixPlotter
 
 with MPRester() as mpr:
-    # Get entries for Pourbaix diagram
+    # 取得 Pourbaix 圖條目
     entries = mpr.get_pourbaix_entries(["Fe"])
 
-    # Build Pourbaix diagram
+    # 建構 Pourbaix 圖
     pb = PourbaixDiagram(entries)
 
-    # Plot
+    # 繪圖
     plotter = PourbaixPlotter(pb)
     plotter.show()
 ```
 
-### Formation Energy
+### 形成能
 
 ```python
 with MPRester() as mpr:
     materials = mpr.materials.summary.search(material_ids=["mp-149"])
 
     for mat in materials:
-        print(f"Formation energy: {mat.formation_energy_per_atom} eV/atom")
-        print(f"Energy above hull: {mat.energy_above_hull} eV/atom")
+        print(f"形成能：{mat.formation_energy_per_atom} eV/atom")
+        print(f"高於凸包的能量：{mat.energy_above_hull} eV/atom")
 ```
 
-## Elasticity and Mechanical Properties
+## 彈性和機械性質
 
 ```python
 with MPRester() as mpr:
-    # Search for materials with elastic data
+    # 搜尋具有彈性資料的材料
     materials = mpr.materials.elasticity.search(
         chemsys="Fe-O",
         bulk_modulus_vrh=(100, 300)  # GPa
     )
 
     for mat in materials:
-        print(f"{mat.material_id}: K = {mat.bulk_modulus_vrh} GPa")
+        print(f"{mat.material_id}：K = {mat.bulk_modulus_vrh} GPa")
 ```
 
-## Dielectric Properties
+## 介電性質
 
 ```python
 with MPRester() as mpr:
-    # Get dielectric data
+    # 取得介電資料
     materials = mpr.materials.dielectric.search(
         material_ids=["mp-149"]
     )
 
     for mat in materials:
-        print(f"Dielectric constant: {mat.e_electronic}")
-        print(f"Refractive index: {mat.n}")
+        print(f"介電常數：{mat.e_electronic}")
+        print(f"折射率：{mat.n}")
 ```
 
-## Piezoelectric Properties
+## 壓電性質
 
 ```python
 with MPRester() as mpr:
-    # Get piezoelectric materials
+    # 取得壓電材料
     materials = mpr.materials.piezoelectric.search(
         piezoelectric_modulus=(1, 100)
     )
 ```
 
-## Surface Properties
+## 表面性質
 
 ```python
 with MPRester() as mpr:
-    # Get surface data
+    # 取得表面資料
     surfaces = mpr.materials.surface_properties.search(
         material_ids=["mp-149"]
     )
 ```
 
-## Molecule Data (For Molecular Materials)
+## 分子資料（用於分子材料）
 
 ```python
 with MPRester() as mpr:
-    # Search molecules
+    # 搜尋分子
     molecules = mpr.molecules.summary.search(
         formula="H2O"
     )
 
     for mol in molecules:
-        print(f"Molecule ID: {mol.molecule_id}")
-        print(f"Formula: {mol.formula_pretty}")
+        print(f"分子 ID：{mol.molecule_id}")
+        print(f"化學式：{mol.formula_pretty}")
 ```
 
-## Bulk Data Download
+## 批次資料下載
 
-### Download All Data for Materials
+### 下載材料的所有資料
 
 ```python
 with MPRester() as mpr:
-    # Get comprehensive data
+    # 取得全面資料
     materials = mpr.materials.summary.search(
         material_ids=["mp-149"],
         fields=[
@@ -346,80 +346,80 @@ with MPRester() as mpr:
     )
 ```
 
-## Provenance and Calculation Details
+## 來源和計算詳情
 
 ```python
 with MPRester() as mpr:
-    # Get calculation details
+    # 取得計算詳情
     materials = mpr.materials.summary.search(
         material_ids=["mp-149"],
         fields=["material_id", "origins"]
     )
 
     for mat in materials:
-        print(f"Origins: {mat.origins}")
+        print(f"來源：{mat.origins}")
 ```
 
-## Working with Entries
+## 處理條目
 
-### ComputedEntry for Thermodynamic Analysis
+### 用於熱力學分析的 ComputedEntry
 
 ```python
 with MPRester() as mpr:
-    # Get entries (includes energy and composition)
+    # 取得條目（包括能量和組成）
     entries = mpr.get_entries_in_chemsys("Li-Fe-O")
 
-    # Entries can be used directly in phase diagram analysis
+    # 條目可直接用於相圖分析
     from pymatgen.analysis.phase_diagram import PhaseDiagram
     pd = PhaseDiagram(entries)
 
-    # Check stability
+    # 檢查穩定性
     for entry in entries[:5]:
         e_above_hull = pd.get_e_above_hull(entry)
-        print(f"{entry.composition.reduced_formula}: {e_above_hull:.3f} eV/atom")
+        print(f"{entry.composition.reduced_formula}：{e_above_hull:.3f} eV/atom")
 ```
 
-## Rate Limiting and Best Practices
+## 速率限制和最佳實務
 
-### Rate Limits
+### 速率限制
 
-The Materials Project API has rate limits to ensure fair usage:
-- Be mindful of request frequency
-- Use batch queries when possible
-- Cache results locally for repeated analysis
+Materials Project API 有速率限制以確保公平使用：
+- 注意請求頻率
+- 盡可能使用批次查詢
+- 將結果快取到本地以進行重複分析
 
-### Efficient Querying
+### 高效查詢
 
 ```python
-# Bad: Multiple separate queries
+# 差：多個單獨查詢
 with MPRester() as mpr:
     for mp_id in ["mp-149", "mp-510", "mp-19017"]:
-        struct = mpr.get_structure_by_material_id(mp_id)  # 3 API calls
+        struct = mpr.get_structure_by_material_id(mp_id)  # 3 次 API 呼叫
 
-# Good: Single batch query
+# 好：單次批次查詢
 with MPRester() as mpr:
-    structs = mpr.get_structures(["mp-149", "mp-510", "mp-19017"])  # 1 API call
+    structs = mpr.get_structures(["mp-149", "mp-510", "mp-19017"])  # 1 次 API 呼叫
 ```
 
-### Caching Results
+### 快取結果
 
 ```python
 import json
 
-# Save results for later use
+# 儲存結果供以後使用
 with MPRester() as mpr:
     materials = mpr.materials.summary.search(chemsys="Li-Fe-O")
 
-    # Save to file
+    # 儲存到檔案
     with open("li_fe_o_materials.json", "w") as f:
         json.dump([mat.dict() for mat in materials], f)
 
-# Load cached results
+# 載入快取結果
 with open("li_fe_o_materials.json", "r") as f:
     cached_data = json.load(f)
 ```
 
-## Error Handling
+## 錯誤處理
 
 ```python
 from mp_api.client.core.client import MPRestError
@@ -428,90 +428,90 @@ try:
     with MPRester() as mpr:
         materials = mpr.materials.summary.search(material_ids=["invalid-id"])
 except MPRestError as e:
-    print(f"API Error: {e}")
+    print(f"API 錯誤：{e}")
 except Exception as e:
-    print(f"Unexpected error: {e}")
+    print(f"意外錯誤：{e}")
 ```
 
-## Common Use Cases
+## 常見使用情境
 
-### Finding Stable Compounds
+### 尋找穩定化合物
 
 ```python
 with MPRester() as mpr:
-    # Get all stable compounds in a chemical system
+    # 取得化學系統中所有穩定化合物
     materials = mpr.materials.summary.search(
         chemsys="Li-Fe-O",
-        energy_above_hull=(0, 0.001)  # Essentially on convex hull
+        energy_above_hull=(0, 0.001)  # 基本上在凸包上
     )
 
-    print(f"Found {len(materials)} stable compounds")
+    print(f"找到 {len(materials)} 個穩定化合物")
     for mat in materials:
-        print(f"  {mat.formula_pretty} ({mat.material_id})")
+        print(f"  {mat.formula_pretty}（{mat.material_id}）")
 ```
 
-### Battery Material Screening
+### 電池材料篩選
 
 ```python
 with MPRester() as mpr:
-    # Screen for potential cathode materials
+    # 篩選潛在的正極材料
     materials = mpr.materials.summary.search(
-        elements=["Li"],  # Must contain Li
-        energy_above_hull=(0, 0.05),  # Near stable
-        band_gap=(0, 0.5),  # Metallic or small gap
+        elements=["Li"],  # 必須包含 Li
+        energy_above_hull=(0, 0.05),  # 近穩定
+        band_gap=(0, 0.5),  # 金屬或小能隙
     )
 
-    print(f"Found {len(materials)} potential cathode materials")
+    print(f"找到 {len(materials)} 個潛在正極材料")
 ```
 
-### Finding Materials with Specific Crystal Structure
+### 尋找具有特定晶體結構的材料
 
 ```python
 with MPRester() as mpr:
-    # Find materials with specific space group
+    # 尋找具有特定空間群的材料
     materials = mpr.materials.summary.search(
         chemsys="Fe-O",
-        spacegroup_number=167  # R-3c (corundum structure)
+        spacegroup_number=167  # R-3c（剛玉結構）
     )
 ```
 
-## Integration with Other Pymatgen Features
+## 與其他 Pymatgen 功能整合
 
-All data retrieved from the Materials Project can be directly used with pymatgen's analysis tools:
+從 Materials Project 檢索的所有資料都可以直接用於 pymatgen 的分析工具：
 
 ```python
 with MPRester() as mpr:
-    # Get structure
+    # 取得結構
     struct = mpr.get_structure_by_material_id("mp-149")
 
-    # Use with pymatgen analysis
+    # 使用 pymatgen 分析
     from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
     sga = SpacegroupAnalyzer(struct)
 
-    # Generate surfaces
+    # 生成表面
     from pymatgen.core.surface import SlabGenerator
     slabgen = SlabGenerator(struct, (1,0,0), 10, 10)
     slabs = slabgen.get_slabs()
 
-    # Phase diagram analysis
+    # 相圖分析
     entries = mpr.get_entries_in_chemsys(struct.composition.chemical_system)
     from pymatgen.analysis.phase_diagram import PhaseDiagram
     pd = PhaseDiagram(entries)
 ```
 
-## Additional Resources
+## 其他資源
 
-- **API Documentation**: https://docs.materialsproject.org/
-- **Materials Project Website**: https://next-gen.materialsproject.org/
-- **GitHub**: https://github.com/materialsproject/api
-- **Forum**: https://matsci.org/
+- **API 文件**：https://docs.materialsproject.org/
+- **Materials Project 網站**：https://next-gen.materialsproject.org/
+- **GitHub**：https://github.com/materialsproject/api
+- **論壇**：https://matsci.org/
 
-## Best Practices Summary
+## 最佳實務摘要
 
-1. **Always use context manager**: Use `with MPRester() as mpr:`
-2. **Store API key as environment variable**: Never hardcode API keys
-3. **Batch queries**: Request multiple items at once when possible
-4. **Cache results**: Save frequently used data locally
-5. **Handle errors**: Wrap API calls in try-except blocks
-6. **Be specific**: Use filters to limit results and reduce data transfer
-7. **Check data availability**: Not all properties are available for all materials
+1. **始終使用上下文管理器**：使用 `with MPRester() as mpr:`
+2. **將 API 金鑰儲存為環境變數**：切勿硬編碼 API 金鑰
+3. **批次查詢**：盡可能一次請求多個項目
+4. **快取結果**：將常用資料儲存在本地
+5. **處理錯誤**：將 API 呼叫包裝在 try-except 區塊中
+6. **具體化**：使用過濾器限制結果並減少資料傳輸
+7. **檢查資料可用性**：並非所有材料都有所有屬性

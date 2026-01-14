@@ -1,90 +1,90 @@
-# Distance Metrics
+# 距離度量
 
-Aeon provides specialized distance functions for measuring similarity between time series, compatible with both aeon and scikit-learn estimators.
+Aeon 提供專門的距離函數用於測量時間序列之間的相似性，與 aeon 和 scikit-learn 估計器相容。
 
-## Distance Categories
+## 距離類別
 
-### Elastic Distances
+### 彈性距離
 
-Allow flexible temporal alignment between series:
+允許序列之間靈活的時間對齊：
 
-**Dynamic Time Warping Family:**
-- `dtw` - Classic Dynamic Time Warping
-- `ddtw` - Derivative DTW (compares derivatives)
-- `wdtw` - Weighted DTW (penalizes warping by location)
-- `wddtw` - Weighted Derivative DTW
-- `shape_dtw` - Shape-based DTW
+**動態時間扭曲系列：**
+- `dtw` - 經典動態時間扭曲
+- `ddtw` - 導數 DTW（比較導數）
+- `wdtw` - 加權 DTW（按位置懲罰扭曲）
+- `wddtw` - 加權導數 DTW
+- `shape_dtw` - 基於形狀的 DTW
 
-**Edit-Based:**
-- `erp` - Edit distance with Real Penalty
-- `edr` - Edit Distance on Real sequences
-- `lcss` - Longest Common SubSequence
-- `twe` - Time Warp Edit distance
+**基於編輯：**
+- `erp` - 帶實數懲罰的編輯距離
+- `edr` - 實數序列上的編輯距離
+- `lcss` - 最長公共子序列
+- `twe` - 時間扭曲編輯距離
 
-**Specialized:**
-- `msm` - Move-Split-Merge distance
-- `adtw` - Amerced DTW
-- `sbd` - Shape-Based Distance
+**專門的：**
+- `msm` - 移動-分割-合併距離
+- `adtw` - 罰款 DTW
+- `sbd` - 基於形狀的距離
 
-**Use when**: Time series may have temporal shifts, speed variations, or phase differences.
+**使用時機**：時間序列可能具有時間偏移、速度變化或相位差異。
 
-### Lock-Step Distances
+### 同步距離
 
-Compare time series point-by-point without alignment:
+逐點比較時間序列，不進行對齊：
 
-- `euclidean` - Euclidean distance (L2 norm)
-- `manhattan` - Manhattan distance (L1 norm)
-- `minkowski` - Generalized Minkowski distance (Lp norm)
-- `squared` - Squared Euclidean distance
+- `euclidean` - 歐幾里德距離（L2 範數）
+- `manhattan` - 曼哈頓距離（L1 範數）
+- `minkowski` - 廣義 Minkowski 距離（Lp 範數）
+- `squared` - 平方歐幾里德距離
 
-**Use when**: Series already aligned, need computational speed, or no temporal warping expected.
+**使用時機**：序列已對齊，需要計算速度，或不預期時間扭曲。
 
-## Usage Patterns
+## 使用模式
 
-### Computing Single Distance
+### 計算單一距離
 
 ```python
 from aeon.distances import dtw_distance
 
-# Distance between two time series
+# 兩個時間序列之間的距離
 distance = dtw_distance(x, y)
 
-# With window constraint (Sakoe-Chiba band)
+# 帶視窗約束（Sakoe-Chiba 帶）
 distance = dtw_distance(x, y, window=0.1)
 ```
 
-### Pairwise Distance Matrix
+### 成對距離矩陣
 
 ```python
 from aeon.distances import dtw_pairwise_distance
 
-# All pairwise distances in collection
+# 集合中的所有成對距離
 X = [series1, series2, series3, series4]
 distance_matrix = dtw_pairwise_distance(X)
 
-# Cross-collection distances
+# 跨集合距離
 distance_matrix = dtw_pairwise_distance(X_train, X_test)
 ```
 
-### Cost Matrix and Alignment Path
+### 成本矩陣和對齊路徑
 
 ```python
 from aeon.distances import dtw_cost_matrix, dtw_alignment_path
 
-# Get full cost matrix
+# 取得完整成本矩陣
 cost_matrix = dtw_cost_matrix(x, y)
 
-# Get optimal alignment path
+# 取得最佳對齊路徑
 path = dtw_alignment_path(x, y)
-# Returns indices: [(0,0), (1,1), (2,1), (2,2), ...]
+# 回傳索引：[(0,0), (1,1), (2,1), (2,2), ...]
 ```
 
-### Using with Estimators
+### 搭配估計器使用
 
 ```python
 from aeon.classification.distance_based import KNeighborsTimeSeriesClassifier
 
-# Use DTW distance in classifier
+# 在分類器中使用 DTW 距離
 clf = KNeighborsTimeSeriesClassifier(
     n_neighbors=5,
     distance="dtw",
@@ -93,78 +93,78 @@ clf = KNeighborsTimeSeriesClassifier(
 clf.fit(X_train, y_train)
 ```
 
-## Distance Parameters
+## 距離參數
 
-### Window Constraints
+### 視窗約束
 
-Limit warping path deviation (improves speed and prevents pathological warping):
+限制扭曲路徑偏差（提高速度並防止病態扭曲）：
 
 ```python
-# Sakoe-Chiba band: window as fraction of series length
-dtw_distance(x, y, window=0.1)  # Allow 10% deviation
+# Sakoe-Chiba 帶：視窗作為序列長度的比例
+dtw_distance(x, y, window=0.1)  # 允許 10% 偏差
 
-# Itakura parallelogram: slopes constrain path
+# Itakura 平行四邊形：斜率約束路徑
 dtw_distance(x, y, itakura_max_slope=2.0)
 ```
 
-### Normalization
+### 標準化
 
-Control whether to z-normalize series before distance computation:
+控制在計算距離前是否進行 z 標準化：
 
 ```python
-# Most elastic distances support normalization
+# 大多數彈性距離支援標準化
 distance = dtw_distance(x, y, normalize=True)
 ```
 
-### Distance-Specific Parameters
+### 距離特定參數
 
 ```python
-# ERP: penalty for gaps
+# ERP：間隙懲罰
 distance = erp_distance(x, y, g=0.5)
 
-# TWE: stiffness and penalty parameters
+# TWE：剛性和懲罰參數
 distance = twe_distance(x, y, nu=0.001, lmbda=1.0)
 
-# LCSS: epsilon threshold for matching
+# LCSS：匹配的 epsilon 閾值
 distance = lcss_distance(x, y, epsilon=0.5)
 ```
 
-## Algorithm Selection
+## 演算法選擇
 
-### By Use Case:
+### 按使用案例：
 
-**Temporal misalignment**: DTW, DDTW, WDTW
-**Speed variations**: DTW with window constraint
-**Shape similarity**: Shape DTW, SBD
-**Edit operations**: ERP, EDR, LCSS
-**Derivative matching**: DDTW
-**Computational speed**: Euclidean, Manhattan
-**Outlier robustness**: Manhattan, LCSS
+**時間錯位**：DTW、DDTW、WDTW
+**速度變化**：帶視窗約束的 DTW
+**形狀相似性**：Shape DTW、SBD
+**編輯操作**：ERP、EDR、LCSS
+**導數匹配**：DDTW
+**計算速度**：Euclidean、Manhattan
+**離群值穩健性**：Manhattan、LCSS
 
-### By Computational Cost:
+### 按計算成本：
 
-**Fastest**: Euclidean (O(n))
-**Fast**: Constrained DTW (O(nw) where w is window)
-**Medium**: Full DTW (O(n²))
-**Slower**: Complex elastic distances (ERP, TWE, MSM)
+**最快**：Euclidean（O(n)）
+**快速**：受約束的 DTW（O(nw)，其中 w 是視窗）
+**中等**：完整 DTW（O(n²)）
+**較慢**：複雜彈性距離（ERP、TWE、MSM）
 
-## Quick Reference Table
+## 快速參考表
 
-| Distance | Alignment | Speed | Robustness | Interpretability |
+| 距離 | 對齊 | 速度 | 穩健性 | 可解釋性 |
 |----------|-----------|-------|------------|------------------|
-| Euclidean | Lock-step | Very Fast | Low | High |
-| DTW | Elastic | Medium | Medium | Medium |
-| DDTW | Elastic | Medium | High | Medium |
-| WDTW | Elastic | Medium | Medium | Medium |
-| ERP | Edit-based | Slow | High | Low |
-| LCSS | Edit-based | Slow | Very High | Low |
-| Shape DTW | Elastic | Medium | Medium | High |
+| Euclidean | 同步 | 非常快 | 低 | 高 |
+| DTW | 彈性 | 中等 | 中等 | 中等 |
+| DDTW | 彈性 | 中等 | 高 | 中等 |
+| WDTW | 彈性 | 中等 | 中等 | 中等 |
+| ERP | 基於編輯 | 慢 | 高 | 低 |
+| LCSS | 基於編輯 | 慢 | 非常高 | 低 |
+| Shape DTW | 彈性 | 中等 | 中等 | 高 |
 
-## Best Practices
+## 最佳實務
 
-### 1. Normalization
+### 1. 標準化
 
-Most distances sensitive to scale; normalize when appropriate:
+大多數距離對尺度敏感；適當時進行標準化：
 
 ```python
 from aeon.transformations.collection import Normalizer
@@ -173,44 +173,44 @@ normalizer = Normalizer()
 X_normalized = normalizer.fit_transform(X)
 ```
 
-### 2. Window Constraints
+### 2. 視窗約束
 
-For DTW variants, use window constraints for speed and better generalization:
+對於 DTW 變體，使用視窗約束以提高速度和更好的泛化：
 
 ```python
-# Start with 10-20% window
+# 從 10-20% 視窗開始
 distance = dtw_distance(x, y, window=0.1)
 ```
 
-### 3. Series Length
+### 3. 序列長度
 
-- Equal-length required: Most lock-step distances
-- Unequal-length supported: Elastic distances (DTW, ERP, etc.)
+- 需要等長：大多數同步距離
+- 支援不等長：彈性距離（DTW、ERP 等）
 
-### 4. Multivariate Series
+### 4. 多變量序列
 
-Most distances support multivariate time series:
+大多數距離支援多變量時間序列：
 
 ```python
 # x.shape = (n_channels, n_timepoints)
 distance = dtw_distance(x_multivariate, y_multivariate)
 ```
 
-### 5. Performance Optimization
+### 5. 效能優化
 
-- Use numba-compiled implementations (default in aeon)
-- Consider lock-step distances if alignment not needed
-- Use windowed DTW instead of full DTW
-- Precompute distance matrices for repeated use
+- 使用 numba 編譯的實作（aeon 中的預設）
+- 如果不需要對齊，考慮同步距離
+- 使用視窗 DTW 而非完整 DTW
+- 預先計算距離矩陣以供重複使用
 
-### 6. Choosing the Right Distance
+### 6. 選擇正確的距離
 
 ```python
-# Quick decision tree:
+# 快速決策樹：
 if series_aligned:
     use_distance = "euclidean"
 elif need_speed:
-    use_distance = "dtw"  # with window constraint
+    use_distance = "dtw"  # 帶視窗約束
 elif temporal_shifts_expected:
     use_distance = "dtw" or "shape_dtw"
 elif outliers_present:
@@ -219,25 +219,25 @@ elif derivatives_matter:
     use_distance = "ddtw" or "wddtw"
 ```
 
-## Integration with scikit-learn
+## 與 scikit-learn 整合
 
-Aeon distances work with sklearn estimators:
+Aeon 距離可與 sklearn 估計器配合使用：
 
 ```python
 from sklearn.neighbors import KNeighborsClassifier
 from aeon.distances import dtw_pairwise_distance
 
-# Precompute distance matrix
+# 預先計算距離矩陣
 X_train_distances = dtw_pairwise_distance(X_train)
 
-# Use with sklearn
+# 搭配 sklearn 使用
 clf = KNeighborsClassifier(metric='precomputed')
 clf.fit(X_train_distances, y_train)
 ```
 
-## Available Distance Functions
+## 可用的距離函數
 
-Get list of all available distances:
+取得所有可用距離的列表：
 
 ```python
 from aeon.distances import get_distance_function_names
@@ -246,7 +246,7 @@ print(get_distance_function_names())
 # ['dtw', 'ddtw', 'wdtw', 'euclidean', 'erp', 'edr', ...]
 ```
 
-Retrieve specific distance function:
+擷取特定距離函數：
 
 ```python
 from aeon.distances import get_distance_function

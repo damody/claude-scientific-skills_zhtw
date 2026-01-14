@@ -1,218 +1,218 @@
-# Pymoo Test Problems Reference
+# Pymoo 測試問題參考
 
-Comprehensive reference for benchmark optimization problems in pymoo.
+pymoo 中基準最佳化問題的完整參考。
 
-## Single-Objective Test Problems
+## 單目標測試問題
 
-### Ackley Function
-**Characteristics:**
-- Highly multimodal
-- Many local optima
-- Tests algorithm's ability to escape local minima
-- Continuous variables
+### Ackley 函數
+**特徵：**
+- 高度多模態
+- 許多局部最優
+- 測試演算法逃離局部最小值的能力
+- 連續變數
 
-### Griewank Function
-**Characteristics:**
-- Multimodal with regularly distributed local minima
-- Product term introduces interdependencies between variables
-- Global minimum at origin
+### Griewank 函數
+**特徵：**
+- 具有規則分布局部最小值的多模態
+- 乘積項在變數之間引入相依性
+- 全域最小值在原點
 
-### Rastrigin Function
-**Characteristics:**
-- Highly multimodal with regularly spaced local minima
-- Challenging for gradient-based methods
-- Tests global search capability
+### Rastrigin 函數
+**特徵：**
+- 具有規則間隔局部最小值的高度多模態
+- 對基於梯度的方法具有挑戰性
+- 測試全域搜尋能力
 
-### Rosenbrock Function
-**Characteristics:**
-- Unimodal but narrow valley to global optimum
-- Tests algorithm's convergence in difficult landscape
-- Classic benchmark for continuous optimization
+### Rosenbrock 函數
+**特徵：**
+- 單模態但到全域最優的山谷狹窄
+- 測試演算法在困難地形中的收斂性
+- 連續最佳化的經典基準
 
-### Zakharov Function
-**Characteristics:**
-- Unimodal
-- Single global minimum
-- Tests basic convergence capability
+### Zakharov 函數
+**特徵：**
+- 單模態
+- 單一全域最小值
+- 測試基本收斂能力
 
-## Multi-Objective Test Problems (2-3 objectives)
+## 多目標測試問題（2-3 個目標）
 
-### ZDT Test Suite
-**Purpose:** Standard benchmark for bi-objective optimization
-**Construction:** f₂(x) = g(x) · h(f₁(x), g(x)) where g(x) = 1 at Pareto-optimal solutions
+### ZDT 測試套件
+**用途：** 雙目標最佳化的標準基準
+**構造：** f₂(x) = g(x) · h(f₁(x), g(x))，其中 Pareto 最優解時 g(x) = 1
 
 #### ZDT1
-- **Variables:** 30 continuous
-- **Bounds:** [0, 1]
-- **Pareto front:** Convex
-- **Purpose:** Basic convergence and diversity test
+- **變數：** 30 個連續
+- **邊界：** [0, 1]
+- **Pareto 前沿：** 凸
+- **用途：** 基本收斂和多樣性測試
 
 #### ZDT2
-- **Variables:** 30 continuous
-- **Bounds:** [0, 1]
-- **Pareto front:** Non-convex (concave)
-- **Purpose:** Tests handling of non-convex fronts
+- **變數：** 30 個連續
+- **邊界：** [0, 1]
+- **Pareto 前沿：** 非凸（凹）
+- **用途：** 測試處理非凸前沿
 
 #### ZDT3
-- **Variables:** 30 continuous
-- **Bounds:** [0, 1]
-- **Pareto front:** Disconnected (5 separate regions)
-- **Purpose:** Tests diversity maintenance across discontinuous front
+- **變數：** 30 個連續
+- **邊界：** [0, 1]
+- **Pareto 前沿：** 不連續（5 個分離區域）
+- **用途：** 測試跨不連續前沿的多樣性維持
 
 #### ZDT4
-- **Variables:** 10 continuous (x₁ ∈ [0,1], x₂₋₁₀ ∈ [-10,10])
-- **Pareto front:** Convex
-- **Difficulty:** 21⁹ local Pareto fronts
-- **Purpose:** Tests global search with many local optima
+- **變數：** 10 個連續（x₁ ∈ [0,1]，x₂₋₁₀ ∈ [-10,10]）
+- **Pareto 前沿：** 凸
+- **難度：** 21⁹ 個局部 Pareto 前沿
+- **用途：** 測試具有許多局部最優的全域搜尋
 
 #### ZDT5
-- **Variables:** 11 discrete (bitstring)
-- **Encoding:** x₁ uses 30 bits, x₂₋₁₁ use 5 bits each
-- **Pareto front:** Convex
-- **Purpose:** Tests discrete optimization and deceptive landscapes
+- **變數：** 11 個離散（位元串）
+- **編碼：** x₁ 使用 30 位元，x₂₋₁₁ 各使用 5 位元
+- **Pareto 前沿：** 凸
+- **用途：** 測試離散最佳化和欺騙性地形
 
 #### ZDT6
-- **Variables:** 10 continuous
-- **Bounds:** [0, 1]
-- **Pareto front:** Non-convex with non-uniform density
-- **Purpose:** Tests handling of biased solution distributions
+- **變數：** 10 個連續
+- **邊界：** [0, 1]
+- **Pareto 前沿：** 非凸且密度不均勻
+- **用途：** 測試處理有偏差的解分布
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.problems.multi import ZDT1, ZDT2, ZDT3, ZDT4, ZDT5, ZDT6
-problem = ZDT1()  # or ZDT2(), ZDT3(), etc.
+problem = ZDT1()  # 或 ZDT2()、ZDT3() 等
 ```
 
-### BNH (Binh and Korn)
-**Characteristics:**
-- 2 objectives
-- 2 variables
-- Constrained problem
-- Tests constraint handling in multi-objective context
+### BNH（Binh and Korn）
+**特徵：**
+- 2 個目標
+- 2 個變數
+- 約束問題
+- 測試多目標環境中的約束處理
 
-### OSY (Osyczka and Kundu)
-**Characteristics:**
-- 6 objectives
-- 6 variables
-- Multiple constraints
-- Real-world inspired
+### OSY（Osyczka and Kundu）
+**特徵：**
+- 6 個目標
+- 6 個變數
+- 多個約束
+- 受真實世界啟發
 
-### TNK (Tanaka)
-**Characteristics:**
-- 2 objectives
-- 2 variables
-- Disconnected feasible region
-- Tests handling of disjoint search spaces
+### TNK（Tanaka）
+**特徵：**
+- 2 個目標
+- 2 個變數
+- 不連續的可行區域
+- 測試處理分離的搜尋空間
 
 ### Truss2D
-**Characteristics:**
-- Structural engineering problem
-- Bi-objective (weight vs displacement)
-- Practical application test
+**特徵：**
+- 結構工程問題
+- 雙目標（重量 vs 位移）
+- 實際應用測試
 
 ### Welded Beam
-**Characteristics:**
-- Engineering design problem
-- Multiple constraints
-- Practical optimization scenario
+**特徵：**
+- 工程設計問題
+- 多個約束
+- 實際最佳化情境
 
 ### Omni-test
-**Characteristics:**
-- Configurable test problem
-- Various difficulty levels
-- Systematic testing
+**特徵：**
+- 可設定的測試問題
+- 各種難度級別
+- 系統性測試
 
 ### SYM-PART
-**Characteristics:**
-- Symmetric problem structure
-- Tests specific algorithmic behaviors
+**特徵：**
+- 對稱問題結構
+- 測試特定演算法行為
 
-## Many-Objective Test Problems (4+ objectives)
+## 高維目標測試問題（4+ 個目標）
 
-### DTLZ Test Suite
-**Purpose:** Scalable many-objective benchmarks
-**Objectives:** Configurable (typically 3-15)
-**Variables:** Scalable
+### DTLZ 測試套件
+**用途：** 可擴展的高維目標基準
+**目標：** 可設定（通常 3-15）
+**變數：** 可擴展
 
 #### DTLZ1
-- **Pareto front:** Linear (hyperplane)
-- **Difficulty:** 11^k local Pareto fronts
-- **Purpose:** Tests convergence with many local optima
+- **Pareto 前沿：** 線性（超平面）
+- **難度：** 11^k 個局部 Pareto 前沿
+- **用途：** 測試具有許多局部最優的收斂
 
 #### DTLZ2
-- **Pareto front:** Spherical (concave)
-- **Difficulty:** Straightforward convergence
-- **Purpose:** Basic many-objective diversity test
+- **Pareto 前沿：** 球形（凹）
+- **難度：** 直接的收斂
+- **用途：** 基本高維目標多樣性測試
 
 #### DTLZ3
-- **Pareto front:** Spherical
-- **Difficulty:** 3^k local Pareto fronts
-- **Purpose:** Combines DTLZ1's multimodality with DTLZ2's geometry
+- **Pareto 前沿：** 球形
+- **難度：** 3^k 個局部 Pareto 前沿
+- **用途：** 結合 DTLZ1 的多模態和 DTLZ2 的幾何
 
 #### DTLZ4
-- **Pareto front:** Spherical with biased density
-- **Difficulty:** Non-uniform solution distribution
-- **Purpose:** Tests diversity maintenance with bias
+- **Pareto 前沿：** 球形且密度有偏差
+- **難度：** 不均勻的解分布
+- **用途：** 測試有偏差的多樣性維持
 
 #### DTLZ5
-- **Pareto front:** Degenerate (curve in M-dimensional space)
-- **Purpose:** Tests handling of degenerate fronts
+- **Pareto 前沿：** 退化（M 維空間中的曲線）
+- **用途：** 測試處理退化前沿
 
 #### DTLZ6
-- **Pareto front:** Degenerate curve
-- **Difficulty:** Harder convergence than DTLZ5
-- **Purpose:** Challenging degenerate front
+- **Pareto 前沿：** 退化曲線
+- **難度：** 比 DTLZ5 更難收斂
+- **用途：** 有挑戰性的退化前沿
 
 #### DTLZ7
-- **Pareto front:** Disconnected regions
-- **Difficulty:** 2^(M-1) disconnected regions
-- **Purpose:** Tests diversity across disconnected fronts
+- **Pareto 前沿：** 不連續區域
+- **難度：** 2^(M-1) 個不連續區域
+- **用途：** 測試跨不連續前沿的多樣性
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.problems.many import DTLZ1, DTLZ2
-problem = DTLZ1(n_var=7, n_obj=3)  # 7 variables, 3 objectives
+problem = DTLZ1(n_var=7, n_obj=3)  # 7 個變數，3 個目標
 ```
 
-### WFG Test Suite
-**Purpose:** Walking Fish Group scalable benchmarks
-**Features:** More complex than DTLZ, various front shapes and difficulties
+### WFG 測試套件
+**用途：** Walking Fish Group 可擴展基準
+**特徵：** 比 DTLZ 更複雜，各種前沿形狀和難度
 
-**Variants:** WFG1-WFG9 with different characteristics
-- Non-separable
-- Deceptive
-- Multimodal
-- Biased
-- Scaled fronts
+**變體：** WFG1-WFG9 具有不同特徵
+- 不可分離
+- 欺騙性
+- 多模態
+- 有偏差
+- 縮放的前沿
 
-## Constrained Multi-Objective Problems
+## 約束多目標問題
 
-### MW Test Suite
-**Purpose:** Multi-objective problems with various constraint types
-**Features:** Different constraint difficulty levels
+### MW 測試套件
+**用途：** 具有各種約束類型的多目標問題
+**特徵：** 不同的約束難度級別
 
 ### DAS-CMOP
-**Purpose:** Difficulty-adjustable and scalable constrained multi-objective problems
-**Features:** Tunable constraint difficulty
+**用途：** 難度可調整和可擴展的約束多目標問題
+**特徵：** 可調整的約束難度
 
 ### MODAct
-**Purpose:** Multi-objective optimization with active constraints
-**Features:** Realistic constraint scenarios
+**用途：** 具有主動約束的多目標最佳化
+**特徵：** 真實的約束情境
 
-## Dynamic Multi-Objective Problems
+## 動態多目標問題
 
-### DF Test Suite
-**Purpose:** CEC2018 Competition dynamic multi-objective benchmarks
-**Features:**
-- Time-varying objectives
-- Changing Pareto fronts
-- Tests algorithm adaptability
+### DF 測試套件
+**用途：** CEC2018 競賽動態多目標基準
+**特徵：**
+- 隨時間變化的目標
+- 變化的 Pareto 前沿
+- 測試演算法適應性
 
-**Variants:** DF1-DF14 with different dynamics
+**變體：** DF1-DF14 具有不同動態
 
-## Custom Problem Definition
+## 自訂問題定義
 
-Define custom problems by extending base classes:
+透過繼承基礎類別定義自訂問題：
 
 ```python
 from pymoo.core.problem import ElementwiseProblem
@@ -221,45 +221,45 @@ import numpy as np
 class MyProblem(ElementwiseProblem):
     def __init__(self):
         super().__init__(
-            n_var=2,           # number of variables
-            n_obj=2,           # number of objectives
-            n_ieq_constr=0,    # inequality constraints
-            n_eq_constr=0,     # equality constraints
-            xl=np.array([0, 0]),   # lower bounds
-            xu=np.array([1, 1])    # upper bounds
+            n_var=2,           # 變數數量
+            n_obj=2,           # 目標數量
+            n_ieq_constr=0,    # 不等式約束
+            n_eq_constr=0,     # 等式約束
+            xl=np.array([0, 0]),   # 下界
+            xu=np.array([1, 1])    # 上界
         )
 
     def _evaluate(self, x, out, *args, **kwargs):
-        # Define objectives
+        # 定義目標
         f1 = x[0]**2 + x[1]**2
         f2 = (x[0]-1)**2 + x[1]**2
 
         out["F"] = [f1, f2]
 
-        # Optional: constraints
+        # 可選：約束
         # out["G"] = constraint_values  # <= 0
         # out["H"] = equality_constraints  # == 0
 ```
 
-## Problem Selection Guidelines
+## 問題選擇指南
 
-**For algorithm development:**
-- Simple convergence: DTLZ2, ZDT1
-- Multimodal: ZDT4, DTLZ1, DTLZ3
-- Non-convex: ZDT2
-- Disconnected: ZDT3, DTLZ7
+**演算法開發：**
+- 簡單收斂：DTLZ2、ZDT1
+- 多模態：ZDT4、DTLZ1、DTLZ3
+- 非凸：ZDT2
+- 不連續：ZDT3、DTLZ7
 
-**For comprehensive testing:**
-- ZDT suite for bi-objective
-- DTLZ suite for many-objective
-- WFG for complex landscapes
-- MW/DAS-CMOP for constraints
+**全面測試：**
+- 雙目標用 ZDT 套件
+- 高維目標用 DTLZ 套件
+- 複雜地形用 WFG
+- 約束用 MW/DAS-CMOP
 
-**For real-world validation:**
-- Engineering problems (Truss2D, Welded Beam)
-- Match problem characteristics to application domain
+**真實世界驗證：**
+- 工程問題（Truss2D、Welded Beam）
+- 將問題特徵與應用領域匹配
 
-**Variable types:**
-- Continuous: Most problems
-- Discrete: ZDT5
-- Mixed: Define custom problem
+**變數類型：**
+- 連續：大多數問題
+- 離散：ZDT5
+- 混合：定義自訂問題

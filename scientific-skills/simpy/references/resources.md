@@ -1,22 +1,22 @@
-# SimPy Shared Resources
+# SimPy 共享資源
 
-This guide covers all resource types in SimPy for modeling congestion points and resource allocation.
+本指南涵蓋 SimPy 中用於建模擁塞點和資源配置的所有資源類型。
 
-## Resource Types Overview
+## 資源類型概述
 
-SimPy provides three main categories of shared resources:
+SimPy 提供三大類共享資源：
 
-1. **Resources** - Limited capacity resources (e.g., gas pumps, servers)
-2. **Containers** - Homogeneous bulk materials (e.g., fuel tanks, silos)
-3. **Stores** - Python object storage (e.g., item queues, warehouses)
+1. **Resources** - 有限容量資源（例如加油機、伺服器）
+2. **Containers** - 同質批量材料（例如燃料槽、筒倉）
+3. **Stores** - Python 物件儲存（例如項目佇列、倉庫）
 
 ## 1. Resources
 
-Model resources that can be used by a limited number of processes at a time.
+建模一次只能由有限數量的流程使用的資源。
 
-### Resource (Basic)
+### Resource（基本）
 
-The basic resource is a semaphore with specified capacity.
+基本資源是具有指定容量的信號量。
 
 ```python
 import simpy
@@ -37,14 +37,14 @@ env.process(process(env, resource, 'Process 3'))
 env.run()
 ```
 
-**Key properties:**
-- `capacity` - Maximum number of concurrent users (default: 1)
-- `count` - Current number of users
-- `queue` - List of queued requests
+**關鍵屬性：**
+- `capacity` - 最大並行使用者數量（預設：1）
+- `count` - 當前使用者數量
+- `queue` - 排隊請求的列表
 
 ### PriorityResource
 
-Extends basic resource with priority levels (lower numbers = higher priority).
+擴展基本資源，增加優先順序層級（數字越小 = 優先順序越高）。
 
 ```python
 import simpy
@@ -63,14 +63,14 @@ env.process(process(env, resource, 'High priority', priority=1))
 env.run()
 ```
 
-**Use cases:**
-- Emergency services (ambulances before regular vehicles)
-- VIP customer queues
-- Job scheduling with priorities
+**使用情境：**
+- 緊急服務（救護車優先於一般車輛）
+- VIP 客戶佇列
+- 帶優先順序的任務排程
 
 ### PreemptiveResource
 
-Allows high-priority requests to interrupt lower-priority users.
+允許高優先順序請求中斷低優先順序使用者。
 
 ```python
 import simpy
@@ -93,14 +93,14 @@ env.process(process(env, resource, 'High priority', priority=1))
 env.run()
 ```
 
-**Use cases:**
-- Operating system CPU scheduling
-- Emergency room triage
-- Network packet prioritization
+**使用情境：**
+- 作業系統 CPU 排程
+- 急診室分流
+- 網路封包優先順序
 
 ## 2. Containers
 
-Model production and consumption of homogeneous bulk materials (continuous or discrete).
+建模同質批量材料（連續或離散）的生產和消費。
 
 ```python
 import simpy
@@ -125,28 +125,28 @@ env.process(consumer(env, container))
 env.run(until=50)
 ```
 
-**Key properties:**
-- `capacity` - Maximum amount (default: float('inf'))
-- `level` - Current amount
-- `init` - Initial amount (default: 0)
+**關鍵屬性：**
+- `capacity` - 最大數量（預設：float('inf')）
+- `level` - 當前數量
+- `init` - 初始數量（預設：0）
 
-**Operations:**
-- `put(amount)` - Add to container (blocks if full)
-- `get(amount)` - Remove from container (blocks if insufficient)
+**操作：**
+- `put(amount)` - 添加到容器（滿時阻塞）
+- `get(amount)` - 從容器移除（不足時阻塞）
 
-**Use cases:**
-- Gas station fuel tanks
-- Buffer storage in manufacturing
-- Water reservoirs
-- Battery charge levels
+**使用情境：**
+- 加油站燃料槽
+- 製造業中的緩衝儲存
+- 水庫
+- 電池電量水準
 
 ## 3. Stores
 
-Model production and consumption of Python objects.
+建模 Python 物件的生產和消費。
 
-### Store (Basic)
+### Store（基本）
 
-Generic FIFO object storage.
+通用 FIFO 物件儲存。
 
 ```python
 import simpy
@@ -172,17 +172,17 @@ env.process(consumer(env, store))
 env.run()
 ```
 
-**Key properties:**
-- `capacity` - Maximum number of items (default: float('inf'))
-- `items` - List of stored items
+**關鍵屬性：**
+- `capacity` - 最大項目數量（預設：float('inf')）
+- `items` - 已儲存項目的列表
 
-**Operations:**
-- `put(item)` - Add item to store (blocks if full)
-- `get()` - Remove and return item (blocks if empty)
+**操作：**
+- `put(item)` - 將項目添加到儲存庫（滿時阻塞）
+- `get()` - 移除並返回項目（空時阻塞）
 
 ### FilterStore
 
-Allows retrieval of specific objects based on filter functions.
+允許根據過濾函式檢索特定物件。
 
 ```python
 import simpy
@@ -208,14 +208,14 @@ env.process(consumer(env, store, 'blue'))
 env.run(until=15)
 ```
 
-**Use cases:**
-- Warehouse item picking (specific SKUs)
-- Job queues with skill matching
-- Packet routing by destination
+**使用情境：**
+- 倉庫項目揀選（特定 SKU）
+- 具有技能匹配的工作佇列
+- 按目的地的封包路由
 
 ### PriorityStore
 
-Items retrieved in priority order (lowest first).
+項目按優先順序檢索（最低優先）。
 
 ```python
 import simpy
@@ -249,27 +249,27 @@ env.process(consumer(env, store))
 env.run()
 ```
 
-**Use cases:**
-- Task scheduling
-- Print job queues
-- Message prioritization
+**使用情境：**
+- 任務排程
+- 列印工作佇列
+- 訊息優先順序
 
-## Choosing the Right Resource Type
+## 選擇正確的資源類型
 
-| Scenario | Resource Type |
-|----------|---------------|
-| Limited servers/machines | Resource |
-| Priority-based queuing | PriorityResource |
-| Preemptive scheduling | PreemptiveResource |
-| Fuel, water, bulk materials | Container |
-| Generic item queue (FIFO) | Store |
-| Selective item retrieval | FilterStore |
-| Priority-ordered items | PriorityStore |
+| 情境 | 資源類型 |
+|------|---------|
+| 有限伺服器/機器 | Resource |
+| 基於優先順序的佇列 | PriorityResource |
+| 搶占式排程 | PreemptiveResource |
+| 燃料、水、批量材料 | Container |
+| 通用項目佇列（FIFO） | Store |
+| 選擇性項目檢索 | FilterStore |
+| 優先順序排序的項目 | PriorityStore |
 
-## Best Practices
+## 最佳實踐
 
-1. **Capacity planning**: Set realistic capacities based on system constraints
-2. **Request patterns**: Use context managers (`with resource.request()`) for automatic cleanup
-3. **Error handling**: Wrap preemptive resources in try-except for Interrupt handling
-4. **Monitoring**: Track queue lengths and utilization (see monitoring.md)
-5. **Performance**: FilterStore and PriorityStore have O(n) retrieval time; use wisely for large stores
+1. **容量規劃**：根據系統限制設定實際容量
+2. **請求模式**：使用上下文管理器（`with resource.request()`）以自動清理
+3. **錯誤處理**：將搶占式資源包裝在 try-except 中以處理 Interrupt
+4. **監控**：追蹤佇列長度和利用率（參見 monitoring.md）
+5. **效能**：FilterStore 和 PriorityStore 的檢索時間為 O(n)；對於大型儲存庫請謹慎使用

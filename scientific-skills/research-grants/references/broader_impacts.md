@@ -1,392 +1,391 @@
-# Broader Impacts: Strategies and Best Practices
+# 廣泛影響力：策略與最佳實踐
 
-## Overview
+## 概述
 
-**Broader Impacts** are one of two review criteria for NSF proposals, carrying equal weight with Intellectual Merit. Despite this, broader impacts are often treated as an afterthought—a critical mistake that costs otherwise strong proposals their funding.
+**廣泛影響力（Broader Impacts）**是 NSF 計畫書的兩項審查標準之一，與智識貢獻（Intellectual Merit）權重相等。然而，廣泛影響力常被視為事後補充——這是一個關鍵錯誤，可能使原本優秀的計畫書失去經費。
 
-**NSF Definition**: "The potential to benefit society and contribute to the achievement of specific, desired societal outcomes"
+**NSF 定義**：「造福社會並有助於實現特定所需社會成果的潛力」
 
-**Key Principle**: Broader impacts must be **specific, measurable, and integrated** with your research plan—not vague aspirations tacked onto the end.
+**關鍵原則**：廣泛影響力必須是**具體、可衡量且與研究計畫整合**——而非附加在最後的模糊願望。
 
-## The Five Pillars of Broader Impacts
+## 廣泛影響力的五大支柱
 
-NSF evaluates broader impacts across five main areas. **You don't need to address all five**, but you should address at least one substantively with concrete activities, timelines, and assessment plans.
+NSF 從五個主要領域評估廣泛影響力。**您不需要涵蓋全部五項**，但應該至少針對其中一項提出具體活動、時程和評估計畫的實質內容。
 
-### 1. Advance Discovery While Promoting Teaching, Training, and Learning
+### 1. 推進發現的同時促進教學、培訓和學習
 
-**What This Means**: Integrate research and education to inspire the next generation of scientists and enhance scientific literacy.
+**含義**：整合研究與教育，激發下一代科學家並提升科學素養。
 
-**Effective Strategies**:
+**有效策略**：
 
-**Curriculum Development**:
-- Create new courses incorporating research findings
-- Develop course modules or laboratory exercises
-- Design online learning materials (MOOCs, videos, interactive tools)
-- Contribute to textbooks or educational resources
+**課程開發**：
+- 建立融入研究成果的新課程
+- 開發課程模組或實驗練習
+- 設計線上學習材料（MOOCs、影片、互動工具）
+- 撰寫教科書或教育資源
 
-*Example*: "We will develop a 10-week computational biology module for undergraduate education, incorporating real datasets from this project. The module will include Jupyter notebooks with guided analysis, video tutorials, and assessment tools. Materials will be piloted at our institution (reaching 50 students annually) and made freely available through CourseSource for national adoption."
+*範例*：「我們將開發一個 10 週的大學部計算生物學模組，融入本計畫的真實資料集。模組將包含含指導分析的 Jupyter notebooks、教學影片和評量工具。教材將在本校試辦（每年觸及 50 位學生），並透過 CourseSource 免費提供供全國採用。」
 
-**Student Training**:
-- Undergraduate research experiences
-- Graduate student mentoring
-- Postdoctoral training
-- High school intern programs
-- Research experiences for teachers (RET)
+**學生培訓**：
+- 大學部研究經驗
+- 研究生指導
+- 博士後培訓
+- 高中實習計畫
+- 教師研究經驗（RET）
 
-*Example*: "The project will support 3 PhD students and 6 undergraduate researchers over 5 years. Undergraduates will participate through our existing summer research program (10 weeks, $5,000 stipends) and will present findings at the annual undergraduate research symposium and regional conferences."
+*範例*：「本計畫將在 5 年內支持 3 位博士生和 6 位大學部研究者。大學部學生將透過本校現有暑期研究計畫參與（10 週，5,000 美元獎學金），並在年度大學部研究研討會和區域會議發表研究成果。」
 
-**Pedagogical Innovation**:
-- Problem-based learning modules
-- Active learning strategies
-- Research-intensive courses
-- Service learning projects
-- Maker spaces or hands-on workshops
+**教學創新**：
+- 問題導向學習模組
+- 主動學習策略
+- 研究密集型課程
+- 服務學習專案
+- 創客空間或動手實作工作坊
 
-*Example*: "We will transform our introductory physics course (250 students/year) by implementing studio-style physics instruction based on results from this research. The new curriculum will include 3D visualization tools for electromagnetic fields, inquiry-based problem sets, and peer instruction protocols."
+*範例*：「我們將根據本研究結果，透過實施工作室風格的物理教學來改革本校入門物理課程（每年 250 位學生）。新課程將包含電磁場 3D 視覺化工具、探究式問題集和同儕教學方案。」
 
-**Professional Development**:
-- Workshops for faculty or teachers
-- Training programs for early-career researchers
-- Mentoring programs
-- Career development resources
+**專業發展**：
+- 教師或教師工作坊
+- 早期職涯研究者培訓計畫
+- 導師計畫
+- 職涯發展資源
 
-*Example*: "We will host annual 3-day workshops for 25 community college faculty, providing training in genome editing techniques. Participants will receive hands-on experience with CRISPR methods developed in this project, complete teaching modules for their courses, and ongoing support through a virtual learning community."
+*範例*：「我們將為 25 位社區學院教師舉辦年度 3 天工作坊，提供基因編輯技術培訓。參與者將獲得本計畫開發的 CRISPR 方法的實作經驗，完成可用於課程的教學模組，並透過虛擬學習社群獲得持續支持。」
 
-### 2. Broaden Participation of Underrepresented Groups
+### 2. 擴大弱勢群體的參與
 
-**What This Means**: Increase participation of groups underrepresented in STEM, including women, racial/ethnic minorities, persons with disabilities, and those from economically disadvantaged backgrounds.
+**含義**：增加 STEM 領域中弱勢群體的參與，包括女性、少數族裔、身心障礙者和經濟弱勢背景者。
 
-**Effective Strategies**:
+**有效策略**：
 
-**Partnerships with Minority-Serving Institutions**:
-- Collaborate with HBCUs (Historically Black Colleges and Universities)
-- Partner with HSIs (Hispanic-Serving Institutions)
-- Work with TCUs (Tribal Colleges and Universities)
-- Engage with community colleges
+**與少數族裔服務機構的夥伴關係**：
+- 與 HBCUs（歷史上的黑人學院和大學）合作
+- 與 HSIs（拉丁裔服務機構）合作
+- 與 TCUs（部落學院和大學）合作
+- 與社區學院互動
 
-*Example*: "We will establish formal research partnerships with 4 regional HBCUs (North Carolina A&T, Howard University, Morehouse College, and Spelman College). Each summer, 2 students from partner institutions will participate in 10-week research internships, including stipends ($6,000), housing, travel to field sites, and participation in our weekly research seminar series. A faculty liaison from each partner institution will co-mentor students and facilitate year-round engagement."
+*範例*：「我們將與 4 所區域 HBCUs（North Carolina A&T、Howard University、Morehouse College 和 Spelman College）建立正式研究夥伴關係。每年暑假，2 位來自夥伴機構的學生將參加 10 週研究實習，包括獎學金（6,000 美元）、住宿、前往田野調查點的交通費用，以及參加我們每週的研究研討會系列。每所夥伴機構將有一位教師聯絡人共同指導學生並促進全年互動。」
 
-**Recruitment and Retention**:
-- Targeted recruitment at conferences (SACNAS, ABRCMS, NSBE, SWE)
-- Scholarship programs for underrepresented students
-- Bridge programs for community college transfers
-- Retention support (mentoring, peer networks, professional development)
+**招募和留任**：
+- 在會議（SACNAS、ABRCMS、NSBE、SWE）進行定向招募
+- 為弱勢學生提供獎學金計畫
+- 為社區學院轉學生設立銜接計畫
+- 留任支持（導師、同儕網絡、專業發展）
 
-*Example*: "We will recruit 50% of summer undergraduate researchers from groups underrepresented in computer science through partnerships with SACNAS and the National Society of Black Engineers. Participants will receive mentoring from graduate students with similar backgrounds, attend professional development workshops, and join our diversity-in-computing learning community that provides year-round support and networking."
+*範例*：「我們將透過與 SACNAS 和美國黑人工程師學會的合作，從電腦科學領域的弱勢群體招募 50% 的暑期大學部研究者。參與者將獲得具有相似背景的研究生的指導，參加專業發展工作坊，並加入我們的電腦多元化學習社群，該社群提供全年支持和人脈網絡。」
 
-**Culturally Relevant Engagement**:
-- Research addressing community-identified needs
-- Community-based participatory research
-- Engagement with indigenous communities
-- Bilingual materials and outreach
+**具文化相關性的參與**：
+- 解決社區確認需求的研究
+- 社區參與式研究
+- 與原住民社區互動
+- 雙語材料和外展
 
-*Example*: "In partnership with the Navajo Nation, we will conduct participatory research on water quality in reservation communities. Community members will co-design the research questions, participate in data collection, and contribute indigenous knowledge about local hydrology. Results will be shared through community presentations in both English and Navajo, and will inform tribal water management policies."
+*範例*：「與納瓦霍族合作，我們將對保留區社區的水質進行參與式研究。社區成員將共同設計研究問題、參與數據收集，並貢獻關於當地水文學的原住民知識。結果將透過英語和納瓦霍語的社區簡報分享，並為部落水資源管理政策提供資訊。」
 
-**Addressing Systemic Barriers**:
-- Flexible schedules for non-traditional students
-- Childcare support for participants
-- Accessible facilities and materials
-- Financial support (stipends, travel, equipment)
-- Mentoring networks and affinity groups
+**解決系統性障礙**：
+- 為非傳統學生提供彈性時間表
+- 為參與者提供托兒支持
+- 無障礙設施和材料
+- 財務支持（獎學金、差旅費、設備）
+- 導師網絡和親和團體
 
-*Example*: "To support participation of students from low-income backgrounds, we will provide laptop computers, software licenses, and internet hotspots to all research participants. We will also offer flexible work schedules, remote participation options, and supplemental funding for students with childcare or eldercare responsibilities."
+*範例*：「為支持低收入背景學生的參與，我們將為所有研究參與者提供筆記型電腦、軟體授權和網路熱點。我們還將提供彈性工作時間、遠距參與選項，以及為有托兒或照護老人責任的學生提供補充資金。」
 
-### 3. Enhance Infrastructure for Research and Education
+### 3. 加強研究和教育基礎設施
 
-**What This Means**: Build facilities, tools, databases, or networks that enable future research and education across the broader community.
+**含義**：建立設施、工具、資料庫或網絡，使更廣泛社群的未來研究和教育成為可能。
 
-**Effective Strategies**:
+**有效策略**：
 
-**Shared Research Infrastructure**:
-- Multi-user instrumentation
-- Core facilities
-- Field stations or observatories
-- Computational resources
-- Cyberinfrastructure
-
-*Example*: "We will establish a regional Cryo-Electron Microscopy facility serving 15 institutions in the Southwest. The facility will provide training and access to state-of-the-art imaging capabilities currently unavailable in the region. We will operate a user program with subsidized rates for academic users and offer annual training workshops for 50 researchers."
+**共享研究基礎設施**：
+- 多使用者儀器
+- 核心設施
+- 田野站或觀測站
+- 計算資源
+- 網路基礎設施
+
+*範例*：「我們將建立服務西南部 15 所機構的區域冷凍電子顯微鏡設施。該設施將提供培訓和目前該地區無法獲得的最先進成像能力的使用權。我們將運營一個使用者計畫，為學術使用者提供優惠費率，並為 50 位研究者提供年度培訓工作坊。」
 
-**Data and Software Resources**:
-- Open-access databases
-- Software tools and platforms
-- Analysis pipelines
-- Standardized protocols
-- Data repositories
-
-*Example*: "We will develop and maintain EcoDataHub, an open-source platform for ecological time-series analysis. The platform will include automated data cleaning, standardized analysis workflows, interactive visualization tools, and cloud computing integration. Software will be documented, version-controlled on GitHub, and supported through user forums and quarterly webinars. We expect 1,000+ users within 3 years based on community surveys."
+**數據和軟體資源**：
+- 開放存取資料庫
+- 軟體工具和平台
+- 分析流程
+- 標準化方案
+- 數據儲存庫
+
+*範例*：「我們將開發和維護 EcoDataHub，一個用於生態時間序列分析的開源平台。該平台將包含自動數據清理、標準化分析工作流程、互動式視覺化工具和雲端運算整合。軟體將有文件記錄、在 GitHub 進行版本控制，並透過使用者論壇和季度網路研討會提供支持。根據社群調查，我們預期 3 年內將有 1,000 位以上使用者。」
 
-**Biological or Physical Resources**:
-- Living stock centers (model organisms, cell lines)
-- Specimen collections
-- Reagent repositories
-- Seed banks or tissue collections
-
-*Example*: "We will establish a publicly accessible repository of 500 sequenced bacterial strains isolated from extreme environments. Each strain will include full genome sequence, phenotypic characterization, and growth protocols. Materials will be available through the ATCC with metadata deposited in NCBI BioProject."
+**生物或物理資源**：
+- 活體儲存中心（模式生物、細胞株）
+- 標本收藏
+- 試劑儲存庫
+- 種子庫或組織收藏
+
+*範例*：「我們將建立一個可公開存取的儲存庫，收錄從極端環境中分離的 500 個已定序細菌菌株。每個菌株將包含完整基因組序列、表型特徵描述和生長方案。材料將透過 ATCC 提供，元數據存放於 NCBI BioProject。」
 
-**Standards and Protocols**:
-- Community standards
-- Best practices guides
-- Benchmarking datasets
-- Quality control metrics
-- Interoperability frameworks
-
-*Example*: "Working with 20 international laboratories, we will develop and validate standardized protocols for single-cell RNA sequencing analysis. The resulting guidelines will address batch effects, quality control, normalization methods, and statistical best practices. Protocols will be published in peer-reviewed literature and deposited in protocols.io."
-
-### 4. Broadly Disseminate to Enhance Scientific and Technological Understanding
+**標準和方案**：
+- 社群標準
+- 最佳實踐指南
+- 基準測試資料集
+- 品質控制指標
+- 互操作性框架
+
+*範例*：「與 20 個國際實驗室合作，我們將開發和驗證單細胞 RNA 定序分析的標準化方案。最終指南將涵蓋批次效應、品質控制、正規化方法和統計最佳實踐。方案將發表於同儕審查期刊並存放於 protocols.io。」
+
+### 4. 廣泛傳播以增進科學和技術理解
 
-**What This Means**: Communicate research to broader audiences including the public, K-12 students, policymakers, and stakeholders to enhance scientific literacy and informed decision-making.
+**含義**：向更廣泛的受眾傳達研究，包括公眾、K-12 學生、決策者和利害關係人，以提升科學素養和知情決策。
 
-**Effective Strategies**:
+**有效策略**：
 
-**K-12 Education Outreach**:
-- School visits and science demonstrations
-- After-school programs
-- Science fairs and competitions
-- Teacher professional development
-- Classroom resources and lesson plans
+**K-12 教育外展**：
+- 學校參訪和科學示範
+- 課後計畫
+- 科學展覽和競賽
+- 教師專業發展
+- 教室資源和課程計畫
 
-*Example*: "We will partner with 10 local middle schools (serving 75% students from low-income families) to deliver hands-on robotics workshops. Each school will receive robot kits, and we will train teachers to lead a 12-week after-school robotics club. Students will apply concepts from this research (sensor fusion, autonomous navigation) to design robots for real-world challenges. The program will reach 200 students annually."
+*範例*：「我們將與 10 所當地中學（75% 學生來自低收入家庭）合作，提供動手實作的機器人工作坊。每所學校將收到機器人套件，我們將培訓教師帶領 12 週的課後機器人社團。學生將應用本研究的概念（感測器融合、自主導航）來設計解決實際挑戰的機器人。該計畫每年將觸及 200 位學生。」
 
-**Public Engagement**:
-- Museum partnerships and exhibits
-- Science cafés and public lectures
-- Science festivals
-- Citizen science projects
-- Community workshops
+**公眾參與**：
+- 博物館合作和展覽
+- 科學咖啡和公眾講座
+- 科學節
+- 公民科學專案
+- 社區工作坊
 
-*Example*: "We will collaborate with the Museum of Science and Industry to create a permanent interactive exhibit on climate modeling. The exhibit will allow visitors to manipulate climate variables and observe predicted outcomes using simplified versions of our models. We anticipate 500,000 annual visitors. We will also host quarterly 'Climate Science Saturday' public lectures reaching 2,000 community members annually."
+*範例*：「我們將與科學與工業博物館合作，創建關於氣候模型的常設互動展覽。展覽將允許訪客操作氣候變數，並使用我們模型的簡化版本觀察預測結果。我們預計每年有 50 萬名訪客。我們還將每季舉辦「氣候科學週六」公眾講座，每年觸及 2,000 名社區成員。」
 
-**Media and Communications**:
-- Blog posts and articles
-- Podcasts or videos
-- Social media engagement
-- Press releases for major findings
-- Popular science writing
+**媒體和傳播**：
+- 部落格文章和文章
+- 播客或影片
+- 社交媒體互動
+- 重大發現的新聞稿
+- 科普寫作
 
-*Example*: "We will produce a 6-episode podcast series exploring the intersection of artificial intelligence and creativity, featuring interviews with artists, musicians, and computer scientists. Episodes will be freely available on major platforms, with transcripts and educational materials on our website. Based on our existing podcast (15,000 downloads/episode), we expect to reach 100,000+ listeners."
+*範例*：「我們將製作一個 6 集播客系列，探索人工智慧與創意的交會點，包含對藝術家、音樂家和電腦科學家的採訪。節目將在主要平台免費提供，我們網站上有逐字稿和教育材料。根據我們現有播客（每集 15,000 次下載），我們預期觸及 100,000 位以上聽眾。」
 
-**Policy Engagement**:
-- Science policy fellowships
-- Congressional briefings
-- White papers for decision-makers
-- Stakeholder workshops
-- Regulatory science contributions
+**政策參與**：
+- 科學政策研究員
+- 國會簡報
+- 決策者白皮書
+- 利害關係人工作坊
+- 監管科學貢獻
 
-*Example*: "We will organize annual workshops bringing together researchers, water utilities, environmental regulators, and community advocates to discuss implications of our research for drinking water policy. Findings will be synthesized into policy briefs distributed to state and federal agencies. PI will participate in the AAAS Science and Technology Policy Fellowship to engage directly with EPA rulemaking."
+*範例*：「我們將組織年度工作坊，匯集研究人員、自來水公司、環境監管機構和社區倡導者，討論我們研究對飲用水政策的影響。研究發現將被綜合成政策簡報，分發給州和聯邦機構。計畫主持人將參加 AAAS 科學與技術政策研究員計畫，直接參與 EPA 法規制定。」
 
-**Citizen Science**:
-- Community-based data collection
-- Participatory research design
-- Volunteer monitoring programs
-- Crowdsourcing platforms
+**公民科學**：
+- 社區數據收集
+- 參與式研究設計
+- 志工監測計畫
+- 群眾外包平台
 
-*Example*: "We will launch a citizen science program enlisting 500 volunteers across the Midwest to monitor pollinator populations using our smartphone app. Participants will receive training materials, identification guides, and regular feedback on their observations. Data will contribute directly to our research while building public understanding of pollinator ecology. Results will be visualized on an interactive public dashboard."
+*範例*：「我們將啟動一項公民科學計畫，招募中西部 500 名志工使用我們的智慧手機應用程式監測授粉者族群。參與者將收到培訓材料、辨識指南，並定期收到關於其觀察的回饋。數據將直接貢獻於我們的研究，同時建立公眾對授粉者生態學的理解。結果將在互動式公開儀表板上視覺化。」
 
-### 5. Benefit Society
+### 5. 造福社會
 
-**What This Means**: Apply research to address societal needs, improve quality of life, strengthen national security, or enhance economic competitiveness.
+**含義**：應用研究來解決社會需求、改善生活品質、加強國家安全或提升經濟競爭力。
 
-**Effective Strategies**:
+**有效策略**：
 
-**Health and Well-Being**:
-- Clinical applications
-- Public health improvements
-- Healthcare accessibility
-- Mental health resources
-- Environmental health
+**健康和福祉**：
+- 臨床應用
+- 公共衛生改善
+- 醫療保健可及性
+- 心理健康資源
+- 環境健康
 
-*Example*: "Our diagnostic tool will reduce costs of malaria diagnosis from $10 to $0.50 per test, enabling deployment in resource-limited settings. We will partner with PATH and Médecins Sans Frontières to conduct field trials in 3 African countries and develop manufacturing partnerships for at-scale production. We project this technology could reach 10 million patients annually within 5 years."
+*範例*：「我們的診斷工具將把瘧疾診斷成本從每次測試 10 美元降低到 0.50 美元，使其能夠在資源有限的環境中部署。我們將與 PATH 和無國界醫生合作，在 3 個非洲國家進行田野試驗，並建立大規模生產的製造夥伴關係。我們預計這項技術在 5 年內每年可觸及 1,000 萬名患者。」
 
-**Economic Development**:
-- Technology commercialization
-- Job creation
-- Industry partnerships
-- Workforce development
-- Startup formation
+**經濟發展**：
+- 技術商業化
+- 創造就業機會
+- 產業夥伴關係
+- 勞動力發展
+- 新創公司成立
 
-*Example*: "We will establish an industry partnership program with 5 regional manufacturing companies to transfer our advanced materials synthesis methods. Through quarterly technical workshops and on-site consultations, we will help companies integrate these processes into production lines, potentially creating 50-100 high-skill jobs over 5 years. Two graduate students will complete internships at partner companies."
+*範例*：「我們將與 5 家區域製造公司建立產業夥伴計畫，轉移我們的先進材料合成方法。透過季度技術工作坊和現場諮詢，我們將幫助公司將這些流程整合到生產線中，有可能在 5 年內創造 50-100 個高技能工作。兩名研究生將在合作公司完成實習。」
 
-**Environmental Sustainability**:
-- Climate change mitigation or adaptation
-- Conservation and biodiversity
-- Pollution reduction
-- Sustainable agriculture
-- Renewable energy
+**環境永續性**：
+- 氣候變遷減緩或調適
+- 保育和生物多樣性
+- 污染減少
+- 永續農業
+- 再生能源
 
-*Example*: "Our soil carbon sequestration practices will be implemented on 1,000 acres of working farmland in partnership with 15 Iowa farmers. We will provide training, monitoring support, and carbon credit market access. If successful, practices could sequester 100,000 tons of CO2 equivalent annually if adopted across 10% of Midwest cropland, while increasing farmer income by $50-100/acre through carbon credits."
+*範例*：「我們的土壤碳封存做法將與 15 位愛荷華州農民合作，在 1,000 英畝的農田上實施。我們將提供培訓、監測支持和碳信用市場准入。如果成功，若在中西部 10% 的農地上採用，這些做法每年可封存 100,000 噸二氧化碳當量，同時透過碳信用為農民增加每英畝 50-100 美元的收入。」
 
-**National and Homeland Security**:
-- Defense applications
-- Cybersecurity
-- Critical infrastructure protection
-- Emergency response
-- Intelligence capabilities
+**國家和國土安全**：
+- 國防應用
+- 網路安全
+- 關鍵基礎設施保護
+- 緊急應變
+- 情報能力
 
-*Example*: "We will work with the Department of Homeland Security to adapt our threat detection algorithms for transportation security screening. Technology will be piloted at 3 major airports, with the goal of reducing false-positive rates by 40% while maintaining security effectiveness, decreasing passenger wait times and improving screening efficiency."
+*範例*：「我們將與國土安全部合作，將我們的威脅偵測演算法調適用於交通安全檢查。技術將在 3 個主要機場試行，目標是在維持安全效能的同時，將誤報率降低 40%，減少乘客等待時間並提高檢查效率。」
 
-**Social and Cultural Benefits**:
-- Preservation of cultural heritage
-- Accessibility and inclusion
-- Social justice
-- Arts and humanities
-- Quality of life improvements
+**社會和文化效益**：
+- 文化遺產保存
+- 無障礙和包容
+- 社會正義
+- 藝術和人文
+- 生活品質改善
 
-*Example*: "Our 3D scanning and virtual reality platform will be used to digitally preserve 20 culturally significant sites threatened by climate change and development. Virtual reconstructions will be made freely available to descendant communities, schools, and the public through a web-based interface and VR experiences. We will partner with indigenous groups to ensure culturally appropriate representation."
+*範例*：「我們的 3D 掃描和虛擬實境平台將用於數位保存 20 處受氣候變遷和開發威脅的具重要文化意義的遺址。虛擬重建將透過網頁介面和 VR 體驗免費提供給後代社區、學校和公眾。我們將與原住民群體合作，確保具文化適當性的呈現。」
 
-## Best Practices for Broader Impacts
+## 廣泛影響力最佳實踐
 
-### Be Specific and Concrete
+### 具體且實際
 
-**Vague** ❌:
-"This research will train the next generation of scientists."
+**模糊** ❌：
+「這項研究將培訓下一代科學家。」
 
-**Specific** ✅:
-"This project will support 3 PhD students, 2 postdocs, and 12 undergraduate researchers over 5 years. Undergraduates will be recruited through our partnership with the Louis Stokes Alliance for Minority Participation, with a goal of 50% participation from underrepresented groups. Students will receive training in advanced microscopy, data analysis, and scientific communication, and will present their research at the annual Emerging Researchers National Conference."
+**具體** ✅：
+「本計畫將在 5 年內支持 3 位博士生、2 位博士後和 12 位大學部研究者。大學部生將透過我們與路易斯·斯托克斯少數族裔參與聯盟的合作招募，目標是 50% 來自弱勢群體的參與。學生將接受先進顯微鏡、數據分析和科學傳播培訓，並在年度新興研究者全國會議發表研究成果。」
 
-### Include Timelines and Milestones
+### 包含時程和里程碑
 
-**Vague** ❌:
-"We will develop educational materials."
+**模糊** ❌：
+「我們將開發教育材料。」
 
-**Specific** ✅:
-"Year 1: Develop draft curriculum modules and pilot with 50 students
-Year 2: Revise based on assessment data and expand to 150 students across 3 institutions
-Years 3-5: National dissemination through CourseSource, workshops at 2 professional conferences, and online repository. Target: Adoption by 20 institutions reaching 1,000 students annually by Year 5."
+**具體** ✅：
+「第 1 年：開發課程模組草案並與 50 位學生試行
+第 2 年：根據評估數據修訂，並擴展到 3 所機構的 150 位學生
+第 3-5 年：透過 CourseSource、2 個專業會議的工作坊和線上儲存庫進行全國傳播。目標：第 5 年被 20 所機構採用，每年觸及 1,000 位學生。」
 
-### Measure and Assess Impact
+### 衡量和評估影響
 
-**Include**:
-- Quantitative metrics (number of participants, downloads, users)
-- Qualitative assessment (surveys, interviews, focus groups)
-- Learning outcomes or behavioral changes
-- Longitudinal tracking
-- Comparison to baseline or control groups
+**包含**：
+- 定量指標（參與者人數、下載次數、使用者數）
+- 定性評估（問卷調查、訪談、焦點團體）
+- 學習成果或行為改變
+- 長期追蹤
+- 與基線或對照組比較
 
-**Example**:
-"We will assess program effectiveness through: (1) Pre/post surveys measuring science self-efficacy using validated instruments, (2) Tracking participant persistence in STEM majors through institutional records, (3) Focus groups with participants and teachers, (4) Analysis of student work products. We expect to see a 30% increase in science self-efficacy scores and 90% retention in STEM majors among participants compared to 65% institutional baseline."
+**範例**：
+「我們將透過以下方式評估計畫效能：(1) 使用驗證工具的前/後測科學自我效能調查，(2) 透過機構記錄追蹤參與者在 STEM 主修的持續性，(3) 與參與者和教師的焦點團體，(4) 學生作品分析。我們預期與 65% 的機構基線相比，參與者的科學自我效能分數將提高 30%，STEM 主修的留任率達 90%。」
 
-### Leverage Existing Infrastructure
+### 利用現有基礎設施
 
-**Don't reinvent the wheel**—build on existing programs and partnerships:
-- Institutional programs (REU sites, AGEP, LSAMP, etc.)
-- Community partnerships already established
-- Shared facilities or resources
-- Professional societies and organizations
+**不要從頭開始**——建立在現有計畫和夥伴關係之上：
+- 機構計畫（REU 站點、AGEP、LSAMP 等）
+- 已建立的社區夥伴關係
+- 共享設施或資源
+- 專業學會和組織
 
-**Example**:
-"We will integrate with our institution's existing NSF REU site in Materials Science, adding 2 additional positions focused on our research area. This leverages established recruitment pipelines with 15 partner institutions, professional development programming, and assessment infrastructure while expanding opportunities for undergraduate researchers."
+**範例**：
+「我們將與本機構現有的 NSF 材料科學 REU 站點整合，增加 2 個專注於我們研究領域的名額。這利用了與 15 所夥伴機構建立的招募管道、專業發展計畫和評估基礎設施，同時擴大大學部研究者的機會。」
 
-### Demonstrate Institutional Commitment
+### 展示機構承諾
 
-**Show that broader impacts will continue beyond grant period**:
-- Institutional cost-sharing or support
-- Integration into ongoing programs
-- Sustainability plan
-- Letters of commitment from partners
+**顯示廣泛影響力將持續到計畫期限之後**：
+- 機構成本分攤或支持
+- 整合到現有計畫中
+- 永續性計畫
+- 合作夥伴承諾函
 
-**Example**:
-"The university has committed $50,000 annually in cost-share to sustain the high school outreach program beyond the grant period. The program will be integrated into our Center for STEM Education, ensuring administrative support, space, and continuity. Our partner school districts have committed teacher time and classroom access (see letters of commitment in supplementary documents)."
+**範例**：
+「大學已承諾每年 50,000 美元的成本分攤，以在計畫期限後維持高中外展計畫。該計畫將整合到我們的 STEM 教育中心，確保行政支援、空間和持續性。我們的合作學區已承諾教師時間和教室使用權（見補充文件中的承諾函）。」
 
-### Align with Research Plan
+### 與研究計畫一致
 
-**Integration examples**:
-- Students work on research questions from the proposal
-- Educational materials use data generated by the research
-- Outreach communicates research findings
-- Community needs inform research questions
+**整合範例**：
+- 學生處理計畫書中的研究問題
+- 教育材料使用研究產生的數據
+- 外展活動傳播研究發現
+- 社區需求引導研究問題
 
-**Poor Integration** ❌:
-Research on quantum computing + Unrelated marine biology outreach for middle schoolers
+**整合不佳** ❌：
+量子計算研究 + 與之無關的中學生海洋生物學外展
 
-**Good Integration** ✅:
-Research on quantum computing + Develop quantum computing curriculum modules + Summer program where students program quantum simulators + Public lectures on quantum technologies
+**良好整合** ✅：
+量子計算研究 + 開發量子計算課程模組 + 學生編程量子模擬器的暑期計畫 + 量子技術公眾講座
 
-## Common Broader Impacts Mistakes
+## 常見廣泛影響力錯誤
 
-### Mistake 1: Generic and Vague Statements
+### 錯誤 1：通用和模糊的陳述
 
-❌ "This project will train graduate students and postdocs."
-❌ "Results will be broadly disseminated through publications and conferences."
-❌ "We will engage in outreach activities."
+❌ 「本計畫將培訓研究生和博士後。」
+❌ 「結果將透過出版和會議廣泛傳播。」
+❌ 「我們將參與外展活動。」
 
-These are baseline expectations, not broader impacts.
+這些是基本期望，不是廣泛影響力。
 
-### Mistake 2: No Plan or Timeline
+### 錯誤 2：沒有計畫或時程
 
-❌ "We hope to develop educational materials that could be used nationally."
+❌ 「我們希望開發可全國使用的教育材料。」
 
-✅ "Year 1: Develop and pilot 5 teaching modules. Year 2: Assess effectiveness and refine. Year 3: Publish in Journal of Chemical Education. Years 4-5: Disseminate through workshops at 3 national conferences and online repository. Target: Adoption by 30 institutions by Year 5."
+✅ 「第 1 年：開發和試行 5 個教學模組。第 2 年：評估效果並修訂。第 3 年：發表於《化學教育期刊》。第 4-5 年：透過 3 個全國會議的工作坊和線上儲存庫傳播。目標：第 5 年被 30 所機構採用。」
 
-### Mistake 3: No Assessment
+### 錯誤 3：沒有評估
 
-❌ "We will run a summer camp for underrepresented students."
+❌ 「我們將為弱勢學生舉辦暑期營。」
 
-✅ "We will run a 4-week summer camp for 30 students (60% from underrepresented groups). We will assess impact through pre/post content knowledge tests, science identity surveys, and tracking of STEM course enrollment. We expect 80% of participants to enroll in advanced science courses the following year."
+✅ 「我們將為 30 位學生（60% 來自弱勢群體）舉辦 4 週暑期營。我們將透過前/後測知識測驗、科學認同調查和 STEM 課程註冊追蹤來評估影響。我們預期 80% 的參與者將在次年註冊進階科學課程。」
 
-### Mistake 4: Unrealistic Scope
+### 錯誤 4：範圍不切實際
 
-❌ "We will establish a national network of 100 schools, develop a comprehensive K-12 curriculum, create a museum exhibit, launch a nationwide citizen science program, and commercialize our technology" (with no budget or personnel allocated).
+❌ 「我們將建立由 100 所學校組成的全國網絡、開發全面的 K-12 課程、創建博物館展覽、啟動全國公民科學計畫，並將我們的技術商業化」（沒有分配預算或人員）。
 
-Be realistic about what you can accomplish with the resources and time available.
+對於可用的資源和時間，要實際評估可以完成什麼。
 
-### Mistake 5: Poor Integration
+### 錯誤 5：整合不佳
 
-❌ Research on plant genomics + Unrelated robotics outreach
+❌ 植物基因組學研究 + 無關的機器人外展
 
-✅ Research on plant genomics + Develop plant biology curriculum + Engage community gardens in phenotyping citizen science
+✅ 植物基因組學研究 + 開發植物生物學課程 + 讓社區菜園參與表型公民科學
 
-### Mistake 6: Treating as Afterthought
+### 錯誤 6：視為事後補充
 
-❌ Half-page generic statement at end of proposal with no budget allocation
+❌ 計畫書結尾的半頁通用陳述，沒有預算分配
 
-✅ Integrated throughout proposal, dedicated personnel (0.5 month PI time, 10% grad student, summer coordinator), allocated budget ($15K/year), detailed plan, and assessment strategy
+✅ 貫穿計畫書、專門人員（PI 0.5 個月時間、研究生 10%、暑期協調員）、分配預算（每年 15,000 美元）、詳細計畫和評估策略
 
-### Mistake 7: No Track Record
+### 錯誤 7：沒有過往記錄
 
-If proposing extensive broader impacts activities but have no history of such work, reviewers will be skeptical.
+如果提出廣泛的廣泛影響力活動，但沒有這類工作的歷史，審查員會持懷疑態度。
 
-✅ Show preliminary efforts, leverage existing programs, include collaborators with relevant expertise, cite successful prior broader impacts work
+✅ 展示初步努力，利用現有計畫，包含具相關專業知識的合作者，引用成功的先前廣泛影響力工作
 
-## Budgeting for Broader Impacts
+## 廣泛影響力預算編列
 
-**NSF expects resources allocated to broader impacts activities.**
+**NSF 期望分配資源給廣泛影響力活動。**
 
-**Typical Budget Items**:
-- **Personnel**: Program coordinator, graduate students, undergraduate assistants
-- **Participant support**: Stipends, travel, housing for students/teachers
-- **Materials and supplies**: Educational materials, outreach equipment, workshop supplies
-- **Travel**: Conference presentations of broader impacts work, site visits to partners
-- **Subawards**: Payments to partnering institutions or organizations
-- **Evaluation**: External evaluator for assessment
+**典型預算項目**：
+- **人員**：計畫協調員、研究生、大學部助理
+- **參與者支持**：學生/教師的獎學金、差旅費、住宿
+- **材料和用品**：教育材料、外展設備、工作坊用品
+- **差旅費**：廣泛影響力工作的會議簡報、夥伴機構訪問
+- **分包**：支付給夥伴機構或組織的費用
+- **評估**：評估的外部評估者
 
-**Example Budget**:
-- Summer program coordinator (2 months/year): $15,000/year
-- Undergraduate stipends (10 students × $5,000): $50,000/year
-- Materials and supplies for workshops: $5,000/year
-- Travel for recruitment and partner meetings: $3,000/year
-- External evaluator: $8,000/year
-- **Total: $81,000/year (16% of $500K budget)**
+**預算範例**：
+- 暑期計畫協調員（每年 2 個月）：每年 15,000 美元
+- 大學部獎學金（10 位學生 × 5,000 美元）：每年 50,000 美元
+- 工作坊材料和用品：每年 5,000 美元
+- 招募和夥伴會議差旅：每年 3,000 美元
+- 外部評估者：每年 8,000 美元
+- **總計：每年 81,000 美元（50 萬美元預算的 16%）**
 
-## Resources for Broader Impacts
+## 廣泛影響力資源
 
-### NSF Resources
-- **NSF Broader Impacts Website**: https://www.nsf.gov/od/oia/special/broaderimpacts/
-- **BI Examples Repository**: https://www.cmu.edu/uro/resources for undergraduate research/best practices/broader-impacts.html
-- **Broader Impacts Toolkit**: Many universities provide institutional resources
+### NSF 資源
+- **NSF 廣泛影響力網站**：https://www.nsf.gov/od/oia/special/broaderimpacts/
+- **BI 範例儲存庫**：https://www.cmu.edu/uro/resources for undergraduate research/best practices/broader-impacts.html
+- **廣泛影響力工具包**：許多大學提供機構資源
 
-### Assessment Tools
-- **STEM-OP (STEM Outreach Program)**: Survey instruments for outreach assessment
-- **STELAR Network**: Resources for informal STEM education
-- **Evaluation frameworks**: Logic models, theory of change
+### 評估工具
+- **STEM-OP（STEM 外展計畫）**：外展評估的調查工具
+- **STELAR 網絡**：非正式 STEM 教育資源
+- **評估框架**：邏輯模型、變革理論
 
-### Partner Organizations
-- **SACNAS**: Society for Advancement of Chicanos/Hispanics and Native Americans in Science
-- **ABRCMS**: Annual Biomedical Research Conference for Minority Students
-- **NSBE, SWE, AISES**: Professional societies for underrepresented groups
-- **Science museums and centers**: Partner for public engagement
-- **School districts and community organizations**: For K-12 outreach
+### 夥伴組織
+- **SACNAS**：推進奇卡諾/拉丁裔和美洲原住民科學學會
+- **ABRCMS**：少數族裔學生年度生物醫學研究會議
+- **NSBE、SWE、AISES**：弱勢群體的專業學會
+- **科學博物館和中心**：公眾參與的合作夥伴
+- **學區和社區組織**：K-12 外展
 
 ---
 
-**Key Takeaway**: Effective broader impacts are specific, measurable, assessed, integrated with the research plan, and demonstrate institutional commitment. They should be planned with the same rigor as the research itself, with dedicated resources, timelines, milestones, and evaluation strategies. Generic statements about "training students" or "disseminating results" are insufficient—NSF expects concrete plans that demonstrably benefit society.
-
+**關鍵要點**：有效的廣泛影響力是具體、可衡量、有評估、與研究計畫整合，並展示機構承諾的。它們應該像研究本身一樣嚴謹地規劃，包含專門的資源、時程、里程碑和評估策略。關於「培訓學生」或「傳播結果」的通用陳述是不夠的——NSF 期望具體的計畫，能明確地造福社會。

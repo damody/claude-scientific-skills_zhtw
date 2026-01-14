@@ -1,8 +1,8 @@
-# Web Endpoints
+# Web 端點
 
-## Quick Start
+## 快速開始
 
-Create web endpoint with single decorator:
+使用單一裝飾器建立 web 端點：
 
 ```python
 image = modal.Image.debian_slim().pip_install("fastapi[standard]")
@@ -13,27 +13,27 @@ def hello():
     return "Hello world!"
 ```
 
-## Development and Deployment
+## 開發和部署
 
-### Development with `modal serve`
+### 使用 `modal serve` 開發
 
 ```bash
 modal serve server.py
 ```
 
-Creates ephemeral app with live-reloading. Changes to endpoints appear almost immediately.
+建立具有即時重新載入的臨時應用程式。端點的變更幾乎立即出現。
 
-### Deployment with `modal deploy`
+### 使用 `modal deploy` 部署
 
 ```bash
 modal deploy server.py
 ```
 
-Creates persistent endpoint with stable URL.
+建立具有穩定 URL 的持久端點。
 
-## Simple Endpoints
+## 簡單端點
 
-### Query Parameters
+### 查詢參數
 
 ```python
 @app.function(image=image)
@@ -42,12 +42,12 @@ def square(x: int):
     return {"square": x**2}
 ```
 
-Call with:
+呼叫：
 ```bash
 curl "https://workspace--app-square.modal.run?x=42"
 ```
 
-### POST Requests
+### POST 請求
 
 ```python
 @app.function(image=image)
@@ -56,14 +56,14 @@ def square(item: dict):
     return {"square": item['x']**2}
 ```
 
-Call with:
+呼叫：
 ```bash
 curl -X POST -H 'Content-Type: application/json' \
   --data '{"x": 42}' \
   https://workspace--app-square.modal.run
 ```
 
-### Pydantic Models
+### Pydantic 模型
 
 ```python
 from pydantic import BaseModel
@@ -78,9 +78,9 @@ def process(item: Item):
     return {"processed": item.name, "quantity": item.qty}
 ```
 
-## ASGI Apps (FastAPI, Starlette, FastHTML)
+## ASGI 應用程式（FastAPI、Starlette、FastHTML）
 
-Serve full ASGI applications:
+服務完整的 ASGI 應用程式：
 
 ```python
 image = modal.Image.debian_slim().pip_install("fastapi[standard]")
@@ -105,9 +105,9 @@ def fastapi_app():
     return web_app
 ```
 
-## WSGI Apps (Flask, Django)
+## WSGI 應用程式（Flask、Django）
 
-Serve synchronous web frameworks:
+服務同步 web 框架：
 
 ```python
 image = modal.Image.debian_slim().pip_install("flask")
@@ -127,9 +127,9 @@ def flask_app():
     return web_app
 ```
 
-## Non-ASGI Web Servers
+## 非 ASGI Web 伺服器
 
-For frameworks with custom network binding:
+對於具有自訂網路綁定的框架：
 
 ```python
 @app.function()
@@ -137,13 +137,13 @@ For frameworks with custom network binding:
 @modal.web_server(8000)
 def my_server():
     import subprocess
-    # Must bind to 0.0.0.0, not 127.0.0.1
+    # 必須綁定到 0.0.0.0，而非 127.0.0.1
     subprocess.Popen("python -m http.server -d / 8000", shell=True)
 ```
 
-## Streaming Responses
+## 串流回應
 
-Use FastAPI's `StreamingResponse`:
+使用 FastAPI 的 `StreamingResponse`：
 
 ```python
 import time
@@ -163,7 +163,7 @@ def stream():
     )
 ```
 
-### Streaming from Modal Functions
+### 從 Modal 函數串流
 
 ```python
 @app.function(gpu="any")
@@ -182,7 +182,7 @@ def hook():
     )
 ```
 
-### With .map()
+### 使用 .map()
 
 ```python
 @app.function()
@@ -201,15 +201,15 @@ def stream_parallel():
 
 ## WebSockets
 
-Supported with `@web_server`, `@asgi_app`, and `@wsgi_app`. Maintains single function call per connection. Use with `@modal.concurrent` for multiple simultaneous connections.
+`@web_server`、`@asgi_app` 和 `@wsgi_app` 都支援。每個連線維持單一函數呼叫。使用 `@modal.concurrent` 進行多個同時連線。
 
-Full WebSocket protocol (RFC 6455) supported. Messages up to 2 MiB each.
+支援完整的 WebSocket 協定（RFC 6455）。每條訊息最多 2 MiB。
 
-## Authentication
+## 驗證
 
-### Proxy Auth Tokens
+### 代理驗證權杖
 
-First-class authentication via Modal:
+透過 Modal 的一級驗證：
 
 ```python
 @app.function()
@@ -218,11 +218,11 @@ def protected():
     return "authenticated!"
 ```
 
-Protect with tokens in settings, pass in headers:
+在設定中使用權杖保護，在標頭中傳遞：
 - `Modal-Key`
 - `Modal-Secret`
 
-### Bearer Token Authentication
+### Bearer Token 驗證
 
 ```python
 from fastapi import Depends, HTTPException, status
@@ -242,7 +242,7 @@ async def protected(token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     return "success!"
 ```
 
-### Client IP Address
+### 客戶端 IP 位址
 
 ```python
 from fastapi import Request
@@ -253,15 +253,15 @@ def get_ip(request: Request):
     return f"Your IP: {request.client.host}"
 ```
 
-## Web Endpoint URLs
+## Web 端點 URL
 
-### Auto-Generated URLs
+### 自動生成的 URL
 
-Format: `https://<workspace>--<app>-<function>.modal.run`
+格式：`https://<workspace>--<app>-<function>.modal.run`
 
-With environment suffix: `https://<workspace>-<suffix>--<app>-<function>.modal.run`
+帶環境後綴：`https://<workspace>-<suffix>--<app>-<function>.modal.run`
 
-### Custom Labels
+### 自訂標籤
 
 ```python
 @app.function()
@@ -271,7 +271,7 @@ def handler():
 # URL: https://workspace--api.modal.run
 ```
 
-### Programmatic URL Retrieval
+### 程式化 URL 檢索
 
 ```python
 @app.function()
@@ -280,14 +280,14 @@ def my_endpoint():
     url = my_endpoint.get_web_url()
     return {"url": url}
 
-# From deployed function
+# 從已部署的函數
 f = modal.Function.from_name("app-name", "my_endpoint")
 url = f.get_web_url()
 ```
 
-### Custom Domains
+### 自訂網域
 
-Available on Team and Enterprise plans:
+Team 和 Enterprise 方案可用：
 
 ```python
 @app.function()
@@ -296,39 +296,39 @@ def hello(message: str):
     return {"message": f"hello {message}"}
 ```
 
-Multiple domains:
+多個網域：
 ```python
 @modal.fastapi_endpoint(custom_domains=["api.example.com", "api.example.net"])
 ```
 
-Wildcard domains:
+萬用字元網域：
 ```python
 @modal.fastapi_endpoint(custom_domains=["*.example.com"])
 ```
 
-TLS certificates automatically generated and renewed.
+TLS 憑證自動生成和更新。
 
-## Performance
+## 效能
 
-### Cold Starts
+### 冷啟動
 
-First request may experience cold start (few seconds). Modal keeps containers alive for subsequent requests.
+第一個請求可能會經歷冷啟動（幾秒鐘）。Modal 為後續請求保持容器活躍。
 
-### Scaling
+### 擴展
 
-- Autoscaling based on traffic
-- Use `@modal.concurrent` for multiple requests per container
-- Beyond concurrency limit, additional containers spin up
-- Requests queue when at max containers
+- 基於流量自動擴展
+- 使用 `@modal.concurrent` 每個容器處理多個請求
+- 超過並行限制時，啟動額外容器
+- 達到最大容器數時請求排隊
 
-### Rate Limits
+### 速率限制
 
-Default: 200 requests/second with 5-second burst multiplier
-- Excess returns 429 status code
-- Contact support to increase limits
+預設：每秒 200 個請求，5 秒突發倍數
+- 超出返回 429 狀態碼
+- 聯繫支援以增加限制
 
-### Size Limits
+### 大小限制
 
-- Request body: up to 4 GiB
-- Response body: unlimited
-- WebSocket messages: up to 2 MiB
+- 請求本體：最多 4 GiB
+- 回應本體：無限制
+- WebSocket 訊息：最多 2 MiB

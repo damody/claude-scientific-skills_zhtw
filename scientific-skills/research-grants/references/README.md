@@ -1,285 +1,285 @@
-# Research Grants Skill
+# 研究計畫技能
 
-## Overview
+## 概述
 
-Comprehensive skill for writing competitive research grant proposals focused on four major U.S. funding agencies:
-- **NSF** (National Science Foundation)
-- **NIH** (National Institutes of Health)
-- **DOE** (Department of Energy)
-- **DARPA** (Defense Advanced Research Projects Agency)
+專注於四大美國經費機構撰寫具競爭力研究計畫書的完整技能：
+- **NSF**（美國國家科學基金會）
+- **NIH**（美國國家衛生研究院）
+- **DOE**（美國能源部）
+- **DARPA**（美國國防高等研究計劃署）
 
-## What This Skill Provides
+## 此技能提供內容
 
-### Agency-Specific Guidance
+### 機構特定指導
 
-Detailed reference materials for each funding agency including:
-- Mission and priorities
-- Review criteria and scoring
-- Proposal structure and page limits
-- Budget requirements
-- Submission processes
-- Tips for competitive applications
+每個經費機構的詳細參考資料，包括：
+- 使命和優先事項
+- 審查標準和評分
+- 計畫書結構和頁數限制
+- 預算要求
+- 提交流程
+- 具競爭力申請的技巧
 
-### Core Components
+### 核心組成部分
 
-- **Specific Aims Pages** (NIH): Template and detailed guide for the critical 1-page aims page
-- **Project Summaries** (NSF): Template for the required Overview, Intellectual Merit, and Broader Impacts
-- **Broader Impacts**: Comprehensive strategies for NSF's equally-weighted review criterion
-- **Budget Justification**: Templates and examples for personnel, equipment, travel, and supplies
-- **Review Criteria**: Understanding what reviewers look for at each agency
+- **具體目標頁**（NIH）：關鍵 1 頁目標頁的範本和詳細指南
+- **專案摘要**（NSF）：必要的概述、智識貢獻和廣泛影響力範本
+- **廣泛影響力**：NSF 同等權重審查標準的完整策略
+- **預算說明**：人員、設備、差旅和用品的範本和範例
+- **審查標準**：了解各機構審查員的評估重點
 
-### Templates
+### 範本
 
-Ready-to-use templates for:
-- NSF Project Summary
-- NIH Specific Aims Page
-- Budget Justifications
-- (Additional templates in development)
+現成可用的範本：
+- NSF 專案摘要
+- NIH 具體目標頁
+- 預算說明
+- （更多範本開發中）
 
-## How to Use This Skill
+## 如何使用此技能
 
-### Quick Start
+### 快速開始
 
-When writing a grant proposal, specify the agency and grant type:
-
-```
-> Help me write an NSF proposal for computational biology research
-> I need to draft NIH R01 Specific Aims for my cancer research project
-> What should I include in a DOE ARPA-E concept paper?
-> I'm applying for a DARPA program - help me structure the proposal
-```
-
-### Detailed Guidance
-
-For in-depth help on specific components:
+撰寫計畫書時，請指定機構和計畫類型：
 
 ```
-> Help me write compelling broader impacts for my NSF proposal
-> Review my NIH Specific Aims page
-> What should I include in my budget justification?
-> How do I respond to reviewer comments in an NIH resubmission?
+> 幫我撰寫計算生物學研究的 NSF 計畫書
+> 我需要為癌症研究專案起草 NIH R01 具體目標
+> DOE ARPA-E 概念書應包含什麼內容？
+> 我正在申請 DARPA 計畫 - 幫我組織計畫書結構
 ```
 
-### Agency Comparison
+### 詳細指導
+
+針對特定組成部分的深入協助：
 
 ```
-> What are the key differences between NSF and NIH proposals?
-> Should I apply to DOE or DARPA for my energy technology project?
+> 幫我撰寫引人入勝的 NSF 計畫書廣泛影響力
+> 審查我的 NIH 具體目標頁
+> 預算說明應包含什麼內容？
+> 如何在 NIH 重新提交中回應審查意見？
 ```
 
-## Key Features
+### 機構比較
 
-### NSF Proposals
+```
+> NSF 和 NIH 計畫書的主要差異是什麼？
+> 我的能源技術專案應該申請 DOE 還是 DARPA？
+```
 
-- **Intellectual Merit + Broader Impacts** (equally weighted)
-- Strategies for substantive, measurable broader impacts
-- Integration of research and education
-- Broadening participation in STEM
-- 15-page project description limits (most programs)
+## 主要特點
 
-### NIH Proposals
+### NSF 計畫書
 
-- **Specific Aims Page**: The most critical page (detailed 1-page guide included)
-- **Research Strategy**: Significance, Innovation, Approach sections
-- **Preliminary Data**: Essential for R01 applications
-- Rigor and reproducibility requirements
-- Modular vs. detailed budgets
-- Resubmission strategies (A1 applications)
+- **智識貢獻 + 廣泛影響力**（權重相等）
+- 實質、可衡量的廣泛影響力策略
+- 研究與教育的整合
+- 擴大 STEM 參與
+- 計畫描述 15 頁限制（大多數計畫）
 
-### DOE Proposals
+### NIH 計畫書
 
-- **Energy relevance** and alignment with DOE mission
-- **Technology readiness levels** (TRLs)
-- National laboratory collaborations
-- Cost sharing requirements (especially ARPA-E)
-- Commercialization pathways
-- User facilities access
+- **具體目標頁**：最關鍵的一頁（包含詳細的 1 頁指南）
+- **研究策略**：重要性、創新性、研究方法章節
+- **初步數據**：R01 申請必備
+- 嚴謹性和可重複性要求
+- 模組化與詳細預算
+- 重新提交策略（A1 申請）
 
-### DARPA Proposals
+### DOE 計畫書
 
-- **DARPA-hard problems**: High-risk, high-reward
-- **Heilmeier Catechism**: The 8 critical questions
-- Program Manager engagement (critical!)
-- Phase-based structure with milestones
-- Technology transition planning
-- Demonstration and prototypes
+- **能源相關性**和與 DOE 使命一致
+- **技術成熟度等級**（TRL）
+- 國家實驗室合作
+- 成本分攤要求（特別是 ARPA-E）
+- 商業化路徑
+- 使用者設施存取
 
-## Reference Materials
+### DARPA 計畫書
 
-### Agency Guidelines
-- `references/nsf_guidelines.md` - Comprehensive NSF guidance
-- `references/nih_guidelines.md` - NIH mechanisms and review criteria
-- `references/doe_guidelines.md` - DOE offices and programs
-- `references/darpa_guidelines.md` - DARPA structure and strategy
+- **DARPA 難題**：高風險、高回報
+- **Heilmeier 問題集**：8 個關鍵問題
+- 計畫經理互動（至關重要！）
+- 含里程碑的分階段結構
+- 技術轉化規劃
+- 示範和原型
 
-### Specialized Guides
-- `references/broader_impacts.md` - NSF broader impacts strategies
-- `references/specific_aims_guide.md` - NIH Specific Aims page mastery
-- `references/budget_preparation.md` - Budget development (coming soon)
-- `references/review_criteria.md` - Comparative review criteria (coming soon)
-- `references/timeline_planning.md` - Project management (coming soon)
+## 參考資料
 
-### Templates
+### 機構指南
+- `references/nsf_guidelines.md` - 完整 NSF 指導
+- `references/nih_guidelines.md` - NIH 機制和審查標準
+- `references/doe_guidelines.md` - DOE 辦公室和計畫
+- `references/darpa_guidelines.md` - DARPA 結構和策略
+
+### 專門指南
+- `references/broader_impacts.md` - NSF 廣泛影響力策略
+- `references/specific_aims_guide.md` - NIH 具體目標頁精通
+- `references/budget_preparation.md` - 預算開發（即將推出）
+- `references/review_criteria.md` - 比較審查標準（即將推出）
+- `references/timeline_planning.md` - 專案管理（即將推出）
+
+### 範本
 - `assets/nsf_project_summary_template.md`
 - `assets/nih_specific_aims_template.md`
 - `assets/budget_justification_template.md`
 
-## Success Metrics
+## 成功指標
 
-Typical success rates by agency:
-- **NSF**: 15-30% (varies by program)
-- **NIH R01**: ~20% overall (~27% for Early Stage Investigators)
-- **DOE Office of Science**: 20-40% (varies by program)
-- **ARPA-E**: 2-5% (concept papers to awards)
-- **DARPA**: Highly variable by program
+各機構典型成功率：
+- **NSF**：15-30%（因計畫而異）
+- **NIH R01**：整體約 20%（早期研究者約 27%）
+- **DOE 科學辦公室**：20-40%（因計畫而異）
+- **ARPA-E**：2-5%（概念書至獲獎）
+- **DARPA**：因計畫而異很大
 
-## Common Use Cases
+## 常見使用情境
 
-### First-Time Applicants
+### 首次申請者
 ```
-> I've never written a grant before. Help me understand NSF proposal structure.
-> What are the most common mistakes in first NIH R01 applications?
-```
-
-### Experienced Investigators
-```
-> Help me strengthen the innovation section for my NIH resubmission
-> I need to address broader impacts more substantively for NSF
-> What's the best way to show technology transition for DARPA?
+> 我從未寫過計畫書。幫我了解 NSF 計畫書結構。
+> 首次 NIH R01 申請最常見的錯誤是什麼？
 ```
 
-### Career Development
+### 資深研究者
 ```
-> Help me write a competitive NSF CAREER proposal
-> What should I emphasize in an NIH K99/R00 application?
-```
-
-### Multi-Agency Strategy
-```
-> Should I submit this to NSF or NIH?
-> Can I submit similar proposals to DOE and DARPA?
+> 幫我加強 NIH 重新提交的創新性章節
+> 我需要更實質地處理 NSF 的廣泛影響力
+> 展示 DARPA 技術轉化的最佳方式是什麼？
 ```
 
-## Best Practices
+### 職涯發展
+```
+> 幫我撰寫具競爭力的 NSF CAREER 計畫書
+> NIH K99/R00 申請應強調什麼？
+```
 
-### Start Early
-- NSF/NIH proposals: Start 3-6 months before deadline
-- DOE/DARPA proposals: 4-6 months (especially if involving national labs)
+### 多機構策略
+```
+> 這個應該提交給 NSF 還是 NIH？
+> 我可以向 DOE 和 DARPA 提交類似的計畫書嗎？
+```
 
-### Get Feedback
-- Mock review sessions
-- Colleagues in and outside your field
-- Institutional grant support offices
-- Program officers (when appropriate)
+## 最佳實踐
 
-### Understand Review Criteria
-- NSF: Intellectual Merit + Broader Impacts (equal weight)
-- NIH: Significance, Investigator, Innovation, Approach, Environment (scored 1-9)
-- DOE: Technical merit, qualifications, budget, relevance
-- DARPA: Innovation, impact, team, feasibility, transition
+### 提早開始
+- NSF/NIH 計畫書：截止日期前 3-6 個月開始
+- DOE/DARPA 計畫書：4-6 個月（特別是涉及國家實驗室時）
 
-### Common Success Factors
+### 獲取回饋
+- 模擬審查會議
+- 領域內外的同事
+- 機構計畫支援辦公室
+- 計畫官員（適當時）
 
-✅ Clear, compelling significance and innovation
-✅ Strong preliminary data (NIH, DOE)
-✅ Detailed, rigorous methodology
-✅ Realistic timeline and budget
-✅ Specific, measurable outcomes
-✅ Strong team with relevant expertise
-✅ Integration of broader impacts (NSF)
-✅ Technology transition plan (DOE, DARPA)
+### 了解審查標準
+- NSF：智識貢獻 + 廣泛影響力（權重相等）
+- NIH：重要性、研究者、創新性、研究方法、環境（評分 1-9）
+- DOE：技術價值、資格、預算、相關性
+- DARPA：創新、影響、團隊、可行性、轉化
 
-## Integration with Other Skills
+### 常見成功因素
 
-This skill works well with:
-- **Scientific Writing**: For clear, compelling prose
-- **Literature Review**: For background sections
-- **Research Lookup**: For finding relevant citations
-- **Peer Review**: For self-assessment before submission
+✅ 清晰、引人入勝的重要性和創新性
+✅ 強力初步數據（NIH、DOE）
+✅ 詳細、嚴謹的方法論
+✅ 實際的時程和預算
+✅ 具體、可衡量的成果
+✅ 具相關專業知識的強力團隊
+✅ 整合廣泛影響力（NSF）
+✅ 技術轉化計畫（DOE、DARPA）
 
-## Updates and Additions
+## 與其他技能整合
 
-This skill is continuously updated with:
-- Current agency priorities
-- Recent policy changes
-- New funding mechanisms
-- Additional templates and examples
+此技能可與以下配合：
+- **Scientific Writing**：用於清晰、引人入勝的散文
+- **Literature Review**：用於背景章節
+- **Research Lookup**：用於尋找相關引用
+- **Peer Review**：用於提交前的自我評估
 
-### Coming Soon
-- More budget examples
-- Timeline templates
-- Collaboration letter templates
-- Data management plan templates
-- Facilities and equipment description templates
+## 更新和新增
 
-## Tips for Maximum Effectiveness
+此技能持續更新：
+- 當前機構優先事項
+- 近期政策變更
+- 新經費機制
+- 額外範本和範例
 
-### For NSF Proposals
-1. Start with Specific Aims/Objectives (even though not required)
-2. Develop broader impacts with same rigor as research plan
-3. Use figures and diagrams liberally (make it skimmable)
-4. Address both review criteria explicitly
-5. Get feedback from outside your immediate field
+### 即將推出
+- 更多預算範例
+- 時程範本
+- 合作確認函範本
+- 數據管理計畫範本
+- 設施和設備說明範本
 
-### For NIH Proposals
-1. Perfect your Specific Aims page first (10+ drafts)
-2. Include substantial preliminary data
-3. Address rigor and reproducibility explicitly
-4. Identify potential problems proactively with alternatives
-5. Make sure your aims are independent but synergistic
+## 最大效益技巧
 
-### For DOE Proposals
-1. Emphasize energy relevance and impact
-2. Include quantitative metrics (cost, efficiency, emissions)
-3. Develop pathway to deployment or commercialization
-4. Consider national laboratory partnerships
-5. Address technology readiness levels
+### NSF 計畫書
+1. 從具體目標開始（即使非必要）
+2. 以與研究計畫相同的嚴謹性開發廣泛影響力
+3. 大量使用圖表（使其可快速瀏覽）
+4. 明確處理兩個審查標準
+5. 向您的直接領域外人士獲取回饋
 
-### For DARPA Proposals
-1. Contact the Program Manager early (essential!)
-2. Attend Proposers Day events
-3. Focus on breakthrough innovation (10x, not 10%)
-4. Answer the Heilmeier Catechism explicitly
-5. Develop clear transition strategy
+### NIH 計畫書
+1. 先完善您的具體目標頁（10+ 草稿）
+2. 包含充分的初步數據
+3. 明確處理嚴謹性和可重複性
+4. 主動識別潛在問題並提供替代方案
+5. 確保您的目標獨立但具協同效應
 
-## Resources Beyond This Skill
+### DOE 計畫書
+1. 強調能源相關性和影響
+2. 包含量化指標（成本、效率、排放）
+3. 開發部署或商業化路徑
+4. 考慮國家實驗室合作夥伴關係
+5. 處理技術成熟度等級
 
-### Official Resources
-- NSF: https://www.nsf.gov/funding/
-- NIH: https://grants.nih.gov/
-- DOE: https://science.osti.gov/grants/
-- DARPA: https://www.darpa.mil/work-with-us/opportunities
+### DARPA 計畫書
+1. 儘早聯繫計畫經理（必要！）
+2. 參加提案者日活動
+3. 專注於突破性創新（10 倍，非 10%）
+4. 明確回答 Heilmeier 問題集
+5. 開發清晰的轉化策略
 
-### Institutional Resources
-- Your institution's Office of Sponsored Research
-- Grant writing workshops
-- Internal review programs
-- Successful proposal archives
+## 此技能以外的資源
 
-### Professional Development
-- Grant writing courses and webinars
-- Agency-specific guidance documents
-- Professional society resources
-- Mentoring networks
+### 官方資源
+- NSF：https://www.nsf.gov/funding/
+- NIH：https://grants.nih.gov/
+- DOE：https://science.osti.gov/grants/
+- DARPA：https://www.darpa.mil/work-with-us/opportunities
 
-## Questions or Issues?
+### 機構資源
+- 您機構的研究資助辦公室
+- 計畫書撰寫工作坊
+- 內部審查計畫
+- 成功計畫書檔案
 
-This skill is designed to be comprehensive but may not cover every specific situation. When using this skill:
+### 專業發展
+- 計畫書撰寫課程和網路研討會
+- 機構特定指導文件
+- 專業學會資源
+- 導師網絡
 
-1. **Be specific** about your agency, program, and grant type
-2. **Provide context** about your research area and career stage
-3. **Ask follow-up questions** for clarification
-4. **Request examples** for specific sections you're working on
+## 問題或議題？
 
-## Version History
+此技能設計為全面性，但可能無法涵蓋每個特定情況。使用此技能時：
 
-- **v1.0** (January 2025): Initial release with NSF, NIH, DOE, DARPA guidance
-- Comprehensive reference materials for all four agencies
-- Templates for key proposal components
-- Specific Aims and Broader Impacts detailed guides
+1. **具體說明**您的機構、計畫和補助類型
+2. **提供脈絡**關於您的研究領域和職涯階段
+3. **提出後續問題**以獲得釐清
+4. **請求範例**針對您正在撰寫的特定章節
+
+## 版本歷史
+
+- **v1.0**（2025 年 1 月）：初版發布，含 NSF、NIH、DOE、DARPA 指導
+- 四個機構的完整參考資料
+- 關鍵計畫書組成部分的範本
+- 具體目標和廣泛影響力詳細指南
 
 ---
 
-**Remember**: Grant writing is both an art and a science. This skill provides the frameworks, strategies, and best practices—but your unique research vision, preliminary data, and team expertise are what will ultimately win funding. Start early, seek feedback, revise extensively, and don't be discouraged by rejection. Even the most successful scientists face many declined proposals before achieving funding success.
+**記住**：計畫書撰寫既是藝術也是科學。此技能提供框架、策略和最佳實踐——但您獨特的研究願景、初步數據和團隊專業知識才是最終贏得經費的關鍵。提早開始，尋求回饋，大量修訂，不要因拒絕而氣餒。即使是最成功的科學家也會在獲得經費成功之前面對許多被拒的計畫書。
 
-Good luck with your proposals! 🎯
+祝您的計畫書順利！

@@ -1,22 +1,22 @@
-# Scripts & Batch Operations
+# 腳本與批次操作
 
-This reference covers creating OMERO.scripts for server-side processing and batch operations.
+此參考涵蓋建立用於伺服器端處理和批次操作的 OMERO.scripts。
 
-## OMERO.scripts Overview
+## OMERO.scripts 概述
 
-OMERO.scripts are Python scripts that run on the OMERO server and can be called from OMERO clients (web, insight, CLI). They function as plugins that extend OMERO functionality.
+OMERO.scripts 是在 OMERO 伺服器上執行的 Python 腳本，可從 OMERO 用戶端（web、insight、CLI）呼叫。它們作為擴展 OMERO 功能的外掛程式運作。
 
-### Key Features
+### 主要功能
 
-- **Server-Side Execution**: Scripts run on the server, avoiding data transfer
-- **Client Integration**: Callable from any OMERO client with auto-generated UI
-- **Parameter Handling**: Define input parameters with validation
-- **Result Reporting**: Return images, files, or messages to clients
-- **Batch Processing**: Process multiple images or datasets efficiently
+- **伺服器端執行**：腳本在伺服器上執行，避免資料傳輸
+- **用戶端整合**：可從任何 OMERO 用戶端呼叫，具有自動生成的 UI
+- **參數處理**：定義具有驗證的輸入參數
+- **結果回報**：將影像、檔案或訊息傳回用戶端
+- **批次處理**：高效處理多張影像或資料集
 
-## Basic Script Structure
+## 基本腳本結構
 
-### Minimal Script Template
+### 最小腳本範本
 
 ```python
 #!/usr/bin/env python
@@ -29,42 +29,42 @@ from omero.rtypes import rlong, rstring, robject
 
 def run_script():
     """
-    Main script function.
+    主腳本函數。
     """
-    # Script definition
+    # 腳本定義
     client = scripts.client(
         'Script_Name.py',
         """
-        Description of what this script does.
+        描述此腳本的功能。
         """,
 
-        # Input parameters
+        # 輸入參數
         scripts.String("Data_Type", optional=False, grouping="1",
-                      description="Choose source of images",
+                      description="選擇影像來源",
                       values=[rstring('Dataset'), rstring('Image')],
                       default=rstring('Dataset')),
 
         scripts.Long("IDs", optional=False, grouping="2",
-                    description="Dataset or Image ID(s)").ofType(rlong(0)),
+                    description="資料集或影像 ID").ofType(rlong(0)),
 
-        # Outputs
+        # 輸出
         namespaces=[omero.constants.namespaces.NSDYNAMIC],
         version="1.0"
     )
 
     try:
-        # Get connection
+        # 取得連線
         conn = BlitzGateway(client_obj=client)
 
-        # Get script parameters
+        # 取得腳本參數
         script_params = client.getInputs(unwrap=True)
         data_type = script_params["Data_Type"]
         ids = script_params["IDs"]
 
-        # Process data
+        # 處理資料
         message = process_data(conn, data_type, ids)
 
-        # Return results
+        # 傳回結果
         client.setOutput("Message", rstring(message))
 
     finally:
@@ -72,87 +72,87 @@ def run_script():
 
 def process_data(conn, data_type, ids):
     """
-    Process images based on parameters.
+    根據參數處理影像。
     """
-    # Implementation here
+    # 在此實作
     return "Processing complete"
 
 if __name__ == "__main__":
     run_script()
 ```
 
-## Script Parameters
+## 腳本參數
 
-### Parameter Types
+### 參數類型
 
 ```python
-# String parameter
+# 字串參數
 scripts.String("Name", optional=False,
-              description="Enter a name")
+              description="輸入名稱")
 
-# String with choices
+# 具有選項的字串
 scripts.String("Mode", optional=False,
               values=[rstring('Fast'), rstring('Accurate')],
               default=rstring('Fast'))
 
-# Integer parameter
+# 整數參數
 scripts.Long("ImageID", optional=False,
-            description="Image to process").ofType(rlong(0))
+            description="要處理的影像").ofType(rlong(0))
 
-# List of integers
+# 整數列表
 scripts.List("ImageIDs", optional=False,
-            description="Multiple images").ofType(rlong(0))
+            description="多張影像").ofType(rlong(0))
 
-# Float parameter
+# 浮點數參數
 scripts.Float("Threshold", optional=True,
-             description="Threshold value",
+             description="閾值",
              min=0.0, max=1.0, default=0.5)
 
-# Boolean parameter
+# 布林參數
 scripts.Bool("SaveResults", optional=True,
-            description="Save results to OMERO",
+            description="將結果儲存到 OMERO",
             default=True)
 ```
 
-### Parameter Grouping
+### 參數分組
 
 ```python
-# Group related parameters
+# 將相關參數分組
 scripts.String("Data_Type", grouping="1",
-              description="Source type",
+              description="來源類型",
               values=[rstring('Dataset'), rstring('Image')])
 
 scripts.Long("Dataset_ID", grouping="1.1",
-            description="Dataset ID").ofType(rlong(0))
+            description="資料集 ID").ofType(rlong(0))
 
 scripts.List("Image_IDs", grouping="1.2",
-            description="Image IDs").ofType(rlong(0))
+            description="影像 ID").ofType(rlong(0))
 ```
 
-## Accessing Input Data
+## 存取輸入資料
 
-### Get Script Parameters
+### 取得腳本參數
 
 ```python
-# Inside run_script()
+# 在 run_script() 內部
 client = scripts.client(...)
 
-# Get parameters as Python objects
+# 以 Python 物件取得參數
 script_params = client.getInputs(unwrap=True)
 
-# Access individual parameters
+# 存取個別參數
 data_type = script_params.get("Data_Type", "Image")
 image_ids = script_params.get("Image_IDs", [])
 threshold = script_params.get("Threshold", 0.5)
 save_results = script_params.get("SaveResults", True)
 ```
 
-### Get Images from Parameters
+### 從參數取得影像
 
 ```python
 def get_images_from_params(conn, script_params):
     """
-    Get image objects based on script parameters.
+    根據腳本參數取得影像物件。
     """
     images = []
 
@@ -174,36 +174,36 @@ def get_images_from_params(conn, script_params):
     return images
 ```
 
-## Processing Images
+## 處理影像
 
-### Batch Image Processing
+### 批次影像處理
 
 ```python
 def process_images(conn, images, threshold):
     """
-    Process multiple images.
+    處理多張影像。
     """
     results = []
 
     for image in images:
         print(f"Processing: {image.getName()}")
 
-        # Get pixel data
+        # 取得像素資料
         pixels = image.getPrimaryPixels()
         size_z = image.getSizeZ()
         size_c = image.getSizeC()
         size_t = image.getSizeT()
 
-        # Process each plane
+        # 處理每個平面
         for z in range(size_z):
             for c in range(size_c):
                 for t in range(size_t):
                     plane = pixels.getPlane(z, c, t)
 
-                    # Apply threshold
+                    # 套用閾值
                     binary = (plane > threshold).astype(np.uint8)
 
-                    # Count features
+                    # 計算特徵
                     feature_count = count_features(binary)
 
                     results.append({
@@ -216,34 +216,34 @@ def process_images(conn, images, threshold):
     return results
 ```
 
-## Generating Outputs
+## 生成輸出
 
-### Return Messages
+### 傳回訊息
 
 ```python
-# Simple message
+# 簡單訊息
 message = "Processed 10 images successfully"
 client.setOutput("Message", rstring(message))
 
-# Detailed message
+# 詳細訊息
 message = "Results:\n"
 for result in results:
     message += f"Image {result['image_id']}: {result['count']} cells\n"
 client.setOutput("Message", rstring(message))
 ```
 
-### Return Images
+### 傳回影像
 
 ```python
-# Return newly created image
+# 傳回新建立的影像
 new_image = conn.createImageFromNumpySeq(...)
 client.setOutput("New_Image", robject(new_image._obj))
 ```
 
-### Return Files
+### 傳回檔案
 
 ```python
-# Create and return file annotation
+# 建立並傳回檔案註解
 file_ann = conn.createFileAnnfromLocalFile(
     output_file_path,
     mimetype="text/csv",
@@ -253,16 +253,16 @@ file_ann = conn.createFileAnnfromLocalFile(
 client.setOutput("Result_File", robject(file_ann._obj))
 ```
 
-### Return Tables
+### 傳回表格
 
 ```python
-# Create OMERO table and return
+# 建立 OMERO 表格並傳回
 resources = conn.c.sf.sharedResources()
 table = create_results_table(resources, results)
 orig_file = table.getOriginalFile()
 table.close()
 
-# Create file annotation
+# 建立檔案註解
 file_ann = omero.model.FileAnnotationI()
 file_ann.setFile(orig_file)
 file_ann = conn.getUpdateService().saveAndReturnObject(file_ann)
@@ -270,9 +270,9 @@ file_ann = conn.getUpdateService().saveAndReturnObject(file_ann)
 client.setOutput("Results_Table", robject(file_ann._obj))
 ```
 
-## Complete Example Scripts
+## 完整範例腳本
 
-### Example 1: Maximum Intensity Projection
+### 範例 1：最大強度投影
 
 ```python
 #!/usr/bin/env python
@@ -288,19 +288,19 @@ def run_script():
     client = scripts.client(
         'Maximum_Intensity_Projection.py',
         """
-        Creates maximum intensity projection from Z-stack images.
+        從 Z 堆疊影像建立最大強度投影。
         """,
 
         scripts.String("Data_Type", optional=False, grouping="1",
-                      description="Process images from",
+                      description="處理影像來源",
                       values=[rstring('Dataset'), rstring('Image')],
                       default=rstring('Image')),
 
         scripts.List("IDs", optional=False, grouping="2",
-                    description="Dataset or Image ID(s)").ofType(rlong(0)),
+                    description="資料集或影像 ID").ofType(rlong(0)),
 
         scripts.Bool("Link_to_Source", optional=True, grouping="3",
-                    description="Link results to source dataset",
+                    description="將結果連結到來源資料集",
                     default=True),
 
         version="1.0"
@@ -310,22 +310,22 @@ def run_script():
         conn = BlitzGateway(client_obj=client)
         script_params = client.getInputs(unwrap=True)
 
-        # Get images
+        # 取得影像
         images = get_images(conn, script_params)
         created_images = []
 
         for image in images:
             print(f"Processing: {image.getName()}")
 
-            # Create MIP
+            # 建立 MIP
             mip_image = create_mip(conn, image)
             if mip_image:
                 created_images.append(mip_image)
 
-        # Report results
+        # 回報結果
         if created_images:
             message = f"Created {len(created_images)} MIP images"
-            # Return first image for display
+            # 傳回第一張影像以供顯示
             client.setOutput("Message", rstring(message))
             client.setOutput("Result", robject(created_images[0]._obj))
         else:
@@ -335,7 +335,7 @@ def run_script():
         client.closeSession()
 
 def get_images(conn, script_params):
-    """Get images from script parameters."""
+    """從腳本參數取得影像。"""
     images = []
     data_type = script_params["Data_Type"]
     ids = script_params["IDs"]
@@ -354,7 +354,7 @@ def get_images(conn, script_params):
     return images
 
 def create_mip(conn, source_image):
-    """Create maximum intensity projection."""
+    """建立最大強度投影。"""
     pixels = source_image.getPrimaryPixels()
     size_z = source_image.getSizeZ()
     size_c = source_image.getSizeC()
@@ -367,17 +367,17 @@ def create_mip(conn, source_image):
     def plane_gen():
         for c in range(size_c):
             for t in range(size_t):
-                # Get Z-stack
+                # 取得 Z 堆疊
                 z_stack = []
                 for z in range(size_z):
                     plane = pixels.getPlane(z, c, t)
                     z_stack.append(plane)
 
-                # Maximum projection
+                # 最大投影
                 max_proj = np.max(z_stack, axis=0)
                 yield max_proj
 
-    # Create new image
+    # 建立新影像
     new_image = conn.createImageFromNumpySeq(
         plane_gen(),
         f"{source_image.getName()}_MIP",
@@ -392,7 +392,7 @@ if __name__ == "__main__":
     run_script()
 ```
 
-### Example 2: Batch ROI Analysis
+### 範例 2：批次 ROI 分析
 
 ```python
 #!/usr/bin/env python
@@ -408,14 +408,14 @@ def run_script():
     client = scripts.client(
         'Batch_ROI_Analysis.py',
         """
-        Analyzes ROIs across multiple images and creates results table.
+        分析多張影像的 ROI 並建立結果表格。
         """,
 
         scripts.Long("Dataset_ID", optional=False,
-                    description="Dataset with images and ROIs").ofType(rlong(0)),
+                    description="具有影像和 ROI 的資料集").ofType(rlong(0)),
 
         scripts.Long("Channel_Index", optional=True,
-                    description="Channel to analyze (0-indexed)",
+                    description="要分析的通道（0 索引）",
                     default=0, min=0),
 
         version="1.0"
@@ -428,19 +428,19 @@ def run_script():
         dataset_id = script_params["Dataset_ID"]
         channel_index = script_params["Channel_Index"]
 
-        # Get dataset
+        # 取得資料集
         dataset = conn.getObject("Dataset", dataset_id)
         if not dataset:
             client.setOutput("Message", rstring("Dataset not found"))
             return
 
-        # Analyze ROIs
+        # 分析 ROI
         results = analyze_rois(conn, dataset, channel_index)
 
-        # Create table
+        # 建立表格
         table_file = create_results_table(conn, dataset, results)
 
-        # Report
+        # 回報
         message = f"Analyzed {len(results)} ROIs from {dataset.getName()}"
         client.setOutput("Message", rstring(message))
         client.setOutput("Results_Table", robject(table_file._obj))
@@ -449,7 +449,7 @@ def run_script():
         client.closeSession()
 
 def analyze_rois(conn, dataset, channel_index):
-    """Analyze all ROIs in dataset images."""
+    """分析資料集影像中的所有 ROI。"""
     roi_service = conn.getRoiService()
     results = []
 
@@ -459,18 +459,18 @@ def analyze_rois(conn, dataset, channel_index):
         if not result.rois:
             continue
 
-        # Get shape IDs
+        # 取得形狀 ID
         shape_ids = []
         for roi in result.rois:
             for shape in roi.copyShapes():
                 shape_ids.append(shape.id.val)
 
-        # Get statistics
+        # 取得統計資料
         stats = roi_service.getShapeStatsRestricted(
             shape_ids, 0, 0, [channel_index]
         )
 
-        # Store results
+        # 儲存結果
         for i, stat in enumerate(stats):
             results.append({
                 'image_id': image.getId(),
@@ -486,8 +486,8 @@ def analyze_rois(conn, dataset, channel_index):
     return results
 
 def create_results_table(conn, dataset, results):
-    """Create OMERO table from results."""
-    # Prepare data
+    """從結果建立 OMERO 表格。"""
+    # 準備資料
     image_ids = [r['image_id'] for r in results]
     shape_ids = [r['shape_id'] for r in results]
     means = [r['mean'] for r in results]
@@ -496,12 +496,12 @@ def create_results_table(conn, dataset, results):
     sums = [r['sum'] for r in results]
     areas = [r['area'] for r in results]
 
-    # Create table
+    # 建立表格
     resources = conn.c.sf.sharedResources()
     repository_id = resources.repositories().descriptions[0].getId().getValue()
     table = resources.newTable(repository_id, f"ROI_Analysis_{dataset.getId()}")
 
-    # Define columns
+    # 定義欄位
     columns = [
         omero.grid.ImageColumn('Image', 'Source image', []),
         omero.grid.LongColumn('ShapeID', 'ROI shape ID', []),
@@ -513,7 +513,7 @@ def create_results_table(conn, dataset, results):
     ]
     table.initialize(columns)
 
-    # Add data
+    # 新增資料
     data = [
         omero.grid.ImageColumn('Image', 'Source image', image_ids),
         omero.grid.LongColumn('ShapeID', 'ROI shape ID', shape_ids),
@@ -528,7 +528,7 @@ def create_results_table(conn, dataset, results):
     orig_file = table.getOriginalFile()
     table.close()
 
-    # Link to dataset
+    # 連結到資料集
     file_ann = omero.model.FileAnnotationI()
     file_ann.setFile(orig_file)
     file_ann = conn.getUpdateService().saveAndReturnObject(file_ann)
@@ -544,16 +544,16 @@ if __name__ == "__main__":
     run_script()
 ```
 
-## Script Deployment
+## 腳本部署
 
-### Installation Location
+### 安裝位置
 
-Scripts should be placed in the OMERO server scripts directory:
+腳本應放置在 OMERO 伺服器腳本目錄中：
 ```
 OMERO_DIR/lib/scripts/
 ```
 
-### Recommended Structure
+### 建議結構
 
 ```
 lib/scripts/
@@ -567,47 +567,47 @@ lib/scripts/
     └── Helper_Functions.py
 ```
 
-### Testing Scripts
+### 測試腳本
 
 ```bash
-# Test script syntax
+# 測試腳本語法
 python Script_Name.py
 
-# Upload to OMERO
+# 上傳到 OMERO
 omero script upload Script_Name.py
 
-# List scripts
+# 列出腳本
 omero script list
 
-# Run script from CLI
+# 從 CLI 執行腳本
 omero script launch Script_ID Dataset_ID=123
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Error Handling**: Always use try-finally to close session
-2. **Progress Updates**: Print status messages for long operations
-3. **Parameter Validation**: Check parameters before processing
-4. **Memory Management**: Process large datasets in batches
-5. **Documentation**: Include clear description and parameter docs
-6. **Versioning**: Include version number in script
-7. **Namespaces**: Use appropriate namespaces for outputs
-8. **Return Objects**: Return created objects for client display
-9. **Logging**: Use print() for server logs
-10. **Testing**: Test with various input combinations
+1. **錯誤處理**：務必使用 try-finally 關閉會話
+2. **進度更新**：為長時間操作列印狀態訊息
+3. **參數驗證**：在處理前檢查參數
+4. **記憶體管理**：以批次處理大型資料集
+5. **文件記錄**：包含清晰的描述和參數文件
+6. **版本控制**：在腳本中包含版本號
+7. **命名空間**：為輸出使用適當的命名空間
+8. **傳回物件**：傳回建立的物件以供用戶端顯示
+9. **日誌記錄**：使用 print() 記錄到伺服器日誌
+10. **測試**：使用各種輸入組合進行測試
 
-## Common Patterns
+## 常見模式
 
-### Progress Reporting
+### 進度回報
 
 ```python
 total = len(images)
 for idx, image in enumerate(images):
     print(f"Processing {idx + 1}/{total}: {image.getName()}")
-    # Process image
+    # 處理影像
 ```
 
-### Error Collection
+### 錯誤收集
 
 ```python
 errors = []
@@ -623,14 +623,14 @@ else:
     message = "All images processed successfully"
 ```
 
-### Resource Cleanup
+### 資源清理
 
 ```python
 try:
-    # Script processing
+    # 腳本處理
     pass
 finally:
-    # Clean up temporary files
+    # 清理臨時檔案
     if os.path.exists(temp_file):
         os.remove(temp_file)
     client.closeSession()

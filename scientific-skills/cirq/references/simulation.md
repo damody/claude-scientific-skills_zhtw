@@ -1,16 +1,16 @@
-# Simulation in Cirq
+# Cirq 中的模擬
 
-This guide covers quantum circuit simulation, including exact and noisy simulations, parameter sweeps, and the Quantum Virtual Machine (QVM).
+本指南涵蓋量子電路模擬，包括精確和雜訊模擬、參數掃描和量子虛擬機（QVM）。
 
-## Exact Simulation
+## 精確模擬
 
-### Basic Simulation
+### 基本模擬
 
 ```python
 import cirq
 import numpy as np
 
-# Create circuit
+# 建立電路
 q0, q1 = cirq.LineQubit.range(2)
 circuit = cirq.Circuit(
     cirq.H(q0),
@@ -18,72 +18,72 @@ circuit = cirq.Circuit(
     cirq.measure(q0, q1, key='result')
 )
 
-# Simulate
+# 模擬
 simulator = cirq.Simulator()
 result = simulator.run(circuit, repetitions=1000)
 
-# Get measurement results
+# 取得測量結果
 print(result.histogram(key='result'))
 ```
 
-### State Vector Simulation
+### 狀態向量模擬
 
 ```python
-# Simulate without measurement to get final state
+# 不帶測量的模擬以取得最終態
 simulator = cirq.Simulator()
 result = simulator.simulate(circuit_without_measurement)
 
-# Access state vector
+# 存取狀態向量
 state_vector = result.final_state_vector
-print(f"State vector: {state_vector}")
+print(f"狀態向量：{state_vector}")
 
-# Get amplitudes
-print(f"Amplitude of |00⟩: {state_vector[0]}")
-print(f"Amplitude of |11⟩: {state_vector[3]}")
+# 取得振幅
+print(f"|00⟩ 的振幅：{state_vector[0]}")
+print(f"|11⟩ 的振幅：{state_vector[3]}")
 ```
 
-### Density Matrix Simulation
+### 密度矩陣模擬
 
 ```python
-# Use density matrix simulator for mixed states
+# 對混合態使用密度矩陣模擬器
 simulator = cirq.DensityMatrixSimulator()
 result = simulator.simulate(circuit)
 
-# Access density matrix
+# 存取密度矩陣
 density_matrix = result.final_density_matrix
-print(f"Density matrix shape: {density_matrix.shape}")
+print(f"密度矩陣形狀：{density_matrix.shape}")
 ```
 
-### Step-by-Step Simulation
+### 逐步模擬
 
 ```python
-# Simulate moment-by-moment
+# 逐 moment 模擬
 simulator = cirq.Simulator()
 for step in simulator.simulate_moment_steps(circuit):
-    print(f"State after moment {step.moment}: {step.state_vector()}")
+    print(f"moment {step.moment} 後的狀態：{step.state_vector()}")
 ```
 
-## Sampling and Measurements
+## 取樣和測量
 
-### Run Multiple Shots
+### 執行多次取樣
 
 ```python
-# Run circuit multiple times
+# 執行電路多次
 result = simulator.run(circuit, repetitions=10000)
 
-# Access measurement counts
+# 存取測量計數
 counts = result.histogram(key='result')
-print(f"Measurement counts: {counts}")
+print(f"測量計數：{counts}")
 
-# Get raw measurements
+# 取得原始測量資料
 measurements = result.measurements['result']
-print(f"Shape: {measurements.shape}")  # (repetitions, num_qubits)
+print(f"形狀：{measurements.shape}")  # (repetitions, num_qubits)
 ```
 
-### Expectation Values
+### 期望值
 
 ```python
-# Measure observable expectation value
+# 測量可觀測量期望值
 from cirq import PauliString
 
 observable = PauliString({q0: cirq.Z, q1: cirq.Z})
@@ -94,14 +94,14 @@ result = simulator.simulate_expectation_values(
 print(f"⟨ZZ⟩ = {result[0]}")
 ```
 
-## Parameter Sweeps
+## 參數掃描
 
-### Sweep Over Parameters
+### 參數掃描
 
 ```python
 import sympy
 
-# Create parameterized circuit
+# 建立參數化電路
 theta = sympy.Symbol('theta')
 q = cirq.LineQubit(0)
 circuit = cirq.Circuit(
@@ -109,24 +109,24 @@ circuit = cirq.Circuit(
     cirq.measure(q, key='m')
 )
 
-# Define parameter sweep
+# 定義參數掃描
 sweep = cirq.Linspace(key='theta', start=0, stop=2*np.pi, length=50)
 
-# Run sweep
+# 執行掃描
 simulator = cirq.Simulator()
 results = simulator.run_sweep(circuit, params=sweep, repetitions=1000)
 
-# Process results
+# 處理結果
 for params, result in zip(sweep, results):
     theta_val = params['theta']
     counts = result.histogram(key='m')
     print(f"θ={theta_val:.2f}: {counts}")
 ```
 
-### Multiple Parameters
+### 多參數
 
 ```python
-# Sweep over multiple parameters
+# 掃描多個參數
 theta = sympy.Symbol('theta')
 phi = sympy.Symbol('phi')
 
@@ -135,7 +135,7 @@ circuit = cirq.Circuit(
     cirq.rz(phi)(q1)
 )
 
-# Product sweep (all combinations)
+# 乘積掃描（所有組合）
 sweep = cirq.Product(
     cirq.Linspace('theta', 0, np.pi, 10),
     cirq.Linspace('phi', 0, 2*np.pi, 10)
@@ -144,10 +144,10 @@ sweep = cirq.Product(
 results = simulator.run_sweep(circuit, params=sweep, repetitions=100)
 ```
 
-### Zip Sweep (Paired Parameters)
+### Zip 掃描（配對參數）
 
 ```python
-# Sweep parameters together
+# 一起掃描參數
 sweep = cirq.Zip(
     cirq.Linspace('theta', 0, np.pi, 20),
     cirq.Linspace('phi', 0, 2*np.pi, 20)
@@ -156,103 +156,103 @@ sweep = cirq.Zip(
 results = simulator.run_sweep(circuit, params=sweep, repetitions=100)
 ```
 
-## Noisy Simulation
+## 雜訊模擬
 
-### Adding Noise Channels
+### 加入雜訊通道
 
 ```python
-# Create noisy circuit
+# 建立雜訊電路
 noisy_circuit = circuit.with_noise(cirq.depolarize(p=0.01))
 
-# Simulate noisy circuit
+# 模擬雜訊電路
 simulator = cirq.DensityMatrixSimulator()
 result = simulator.run(noisy_circuit, repetitions=1000)
 ```
 
-### Custom Noise Models
+### 自訂雜訊模型
 
 ```python
-# Apply different noise to different gates
+# 對不同閘應用不同雜訊
 noise_model = cirq.NoiseModel.from_noise_model_like(
     cirq.ConstantQubitNoiseModel(cirq.depolarize(0.01))
 )
 
-# Simulate with noise model
+# 使用雜訊模型模擬
 result = cirq.DensityMatrixSimulator(noise=noise_model).run(
     circuit, repetitions=1000
 )
 ```
 
-See `noise.md` for comprehensive noise modeling details.
+詳細的雜訊建模請參閱 `noise.md`。
 
-## State Histograms
+## 狀態直方圖
 
-### Visualize Results
+### 視覺化結果
 
 ```python
 import matplotlib.pyplot as plt
 
-# Get histogram
+# 取得直方圖
 result = simulator.run(circuit, repetitions=1000)
 counts = result.histogram(key='result')
 
-# Plot
+# 繪圖
 plt.bar(counts.keys(), counts.values())
-plt.xlabel('State')
-plt.ylabel('Counts')
-plt.title('Measurement Results')
+plt.xlabel('狀態')
+plt.ylabel('計數')
+plt.title('測量結果')
 plt.show()
 ```
 
-### State Probability Distribution
+### 狀態機率分佈
 
 ```python
-# Get state vector
+# 取得狀態向量
 result = simulator.simulate(circuit_without_measurement)
 state_vector = result.final_state_vector
 
-# Compute probabilities
+# 計算機率
 probabilities = np.abs(state_vector) ** 2
 
-# Plot
+# 繪圖
 plt.bar(range(len(probabilities)), probabilities)
-plt.xlabel('Basis State Index')
-plt.ylabel('Probability')
+plt.xlabel('基態索引')
+plt.ylabel('機率')
 plt.show()
 ```
 
-## Quantum Virtual Machine (QVM)
+## 量子虛擬機（QVM）
 
-QVM simulates realistic quantum hardware with device-specific constraints and noise.
+QVM 使用裝置特定的約束和雜訊模擬真實量子硬體。
 
-### Using Virtual Devices
+### 使用虛擬裝置
 
 ```python
-# Use a virtual Google device
+# 使用虛擬 Google 裝置
 import cirq_google
 
-# Get virtual device
+# 取得虛擬裝置
 device = cirq_google.Sycamore
 
-# Create circuit on device
+# 在裝置上建立電路
 qubits = device.metadata.qubit_set
 circuit = cirq.Circuit(device=device)
 
-# Add operations respecting device constraints
+# 加入符合裝置約束的操作
 circuit.append(cirq.CZ(qubits[0], qubits[1]))
 
-# Validate circuit against device
+# 根據裝置驗證電路
 device.validate_circuit(circuit)
 ```
 
-### Noisy Virtual Hardware
+### 雜訊虛擬硬體
 
 ```python
-# Simulate with device noise
+# 使用裝置雜訊模擬
 processor = cirq_google.get_engine().get_processor('weber')
 noise_props = processor.get_device_specification()
 
-# Create realistic noisy simulator
+# 建立真實雜訊模擬器
 noisy_sim = cirq.DensityMatrixSimulator(
     noise=cirq_google.NoiseModelFromGoogleNoiseProperties(noise_props)
 )
@@ -260,91 +260,91 @@ noisy_sim = cirq.DensityMatrixSimulator(
 result = noisy_sim.run(circuit, repetitions=1000)
 ```
 
-## Advanced Simulation Techniques
+## 進階模擬技術
 
-### Custom Initial State
+### 自訂初始態
 
 ```python
-# Start from custom state
+# 從自訂狀態開始
 initial_state = np.array([1, 0, 0, 1]) / np.sqrt(2)  # |00⟩ + |11⟩
 
 simulator = cirq.Simulator()
 result = simulator.simulate(circuit, initial_state=initial_state)
 ```
 
-### Partial Trace
+### 部分跡
 
 ```python
-# Trace out subsystems
+# 對子系統取跡
 result = simulator.simulate(circuit)
 full_state = result.final_state_vector
 
-# Compute reduced density matrix for first qubit
+# 計算第一個量子位元的約化密度矩陣
 from cirq import partial_trace
 reduced_dm = partial_trace(result.final_density_matrix, keep_indices=[0])
 ```
 
-### Intermediate State Access
+### 中間狀態存取
 
 ```python
-# Get state at specific moment
+# 取得特定 moment 的狀態
 simulator = cirq.Simulator()
 for i, step in enumerate(simulator.simulate_moment_steps(circuit)):
-    if i == 5:  # After 5th moment
+    if i == 5:  # 第 5 個 moment 之後
         state = step.state_vector()
-        print(f"State after moment 5: {state}")
+        print(f"moment 5 後的狀態：{state}")
         break
 ```
 
-## Simulation Performance
+## 模擬效能
 
-### Optimizing Large Simulations
+### 優化大型模擬
 
-1. **Use state vector for pure states**: Faster than density matrix
-2. **Avoid density matrix when possible**: Exponentially more expensive
-3. **Batch parameter sweeps**: More efficient than individual runs
-4. **Use appropriate repetitions**: Balance accuracy vs computation time
+1. **對純態使用狀態向量**：比密度矩陣更快
+2. **盡可能避免密度矩陣**：指數級更昂貴
+3. **批次參數掃描**：比個別執行更有效率
+4. **使用適當的重複次數**：平衡準確性與計算時間
 
 ```python
-# Efficient: Single sweep
+# 有效率：單一掃描
 results = simulator.run_sweep(circuit, params=sweep, repetitions=100)
 
-# Inefficient: Multiple individual runs
+# 低效率：多個個別執行
 results = [simulator.run(circuit, param_resolver=p, repetitions=100)
            for p in sweep]
 ```
 
-### Memory Considerations
+### 記憶體考量
 
 ```python
-# For large systems, monitor state vector size
+# 對大型系統，監控狀態向量大小
 n_qubits = 20
-state_size = 2**n_qubits * 16  # bytes (complex128)
-print(f"State vector size: {state_size / 1e9:.2f} GB")
+state_size = 2**n_qubits * 16  # 位元組（complex128）
+print(f"狀態向量大小：{state_size / 1e9:.2f} GB")
 ```
 
-## Stabilizer Simulation
+## 穩定器模擬
 
-For circuits with only Clifford gates, use efficient stabilizer simulation:
+對於只有 Clifford 閘的電路，使用有效率的穩定器模擬：
 
 ```python
-# Clifford circuit (H, S, CNOT)
+# Clifford 電路（H、S、CNOT）
 circuit = cirq.Circuit(
     cirq.H(q0),
     cirq.S(q1),
     cirq.CNOT(q0, q1)
 )
 
-# Use stabilizer simulator (exponentially faster)
+# 使用穩定器模擬器（指數級更快）
 simulator = cirq.CliffordSimulator()
 result = simulator.run(circuit, repetitions=1000)
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Choose appropriate simulator**: Use Simulator for pure states, DensityMatrixSimulator for mixed states
-2. **Use parameter sweeps**: More efficient than running individual circuits
-3. **Validate circuits**: Check circuit validity before long simulations
-4. **Monitor resource usage**: Track memory for large-scale simulations
-5. **Use stabilizer simulation**: When circuits contain only Clifford gates
-6. **Save intermediate results**: For long parameter sweeps or optimization runs
+1. **選擇適當的模擬器**：對純態使用 Simulator，對混合態使用 DensityMatrixSimulator
+2. **使用參數掃描**：比執行個別電路更有效率
+3. **驗證電路**：長時間模擬前檢查電路有效性
+4. **監控資源使用**：追蹤大規模模擬的記憶體
+5. **使用穩定器模擬**：當電路只包含 Clifford 閘時
+6. **儲存中間結果**：用於長時間參數掃描或優化執行

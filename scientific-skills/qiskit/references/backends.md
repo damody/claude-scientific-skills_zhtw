@@ -1,86 +1,86 @@
-# Hardware Backends and Execution
+# 硬體後端和執行
 
-Qiskit is backend-agnostic and supports execution on simulators and real quantum hardware from multiple providers.
+Qiskit 是後端無關的，支援在模擬器和來自多個供應商的真實量子硬體上執行。
 
-## Backend Types
+## 後端類型
 
-### Local Simulators
-- Run on your machine
-- No account required
-- Perfect for development and testing
+### 本地模擬器
+- 在您的機器上執行
+- 不需要帳戶
+- 非常適合開發和測試
 
-### Cloud-Based Hardware
-- IBM Quantum (100+ qubit systems)
-- IonQ (trapped ion)
-- Amazon Braket (Rigetti, IonQ, Oxford Quantum Circuits)
-- Other providers via plugins
+### 雲端硬體
+- IBM Quantum（100+ 量子位元系統）
+- IonQ（離子阱）
+- Amazon Braket（Rigetti、IonQ、Oxford Quantum Circuits）
+- 其他供應商透過外掛程式支援
 
-## IBM Quantum Backends
+## IBM Quantum 後端
 
-### Connecting to IBM Quantum
+### 連接到 IBM Quantum
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
 
-# First time: save credentials
+# 首次：儲存憑證
 QiskitRuntimeService.save_account(
     channel="ibm_quantum",
     token="YOUR_IBM_QUANTUM_TOKEN"
 )
 
-# Subsequent sessions: load credentials
+# 後續會話：載入憑證
 service = QiskitRuntimeService()
 ```
 
-### Listing Available Backends
+### 列出可用後端
 
 ```python
-# List all available backends
+# 列出所有可用後端
 backends = service.backends()
 for backend in backends:
-    print(f"{backend.name}: {backend.num_qubits} qubits")
+    print(f"{backend.name}: {backend.num_qubits} 量子位元")
 
-# Filter by minimum qubits
+# 按最小量子位元數篩選
 backends_127q = service.backends(min_num_qubits=127)
 
-# Get specific backend
+# 取得特定後端
 backend = service.backend("ibm_brisbane")
-backend = service.least_busy()  # Get least busy backend
+backend = service.least_busy()  # 取得最空閒的後端
 ```
 
-### Backend Properties
+### 後端屬性
 
 ```python
 backend = service.backend("ibm_brisbane")
 
-# Basic info
-print(f"Name: {backend.name}")
-print(f"Qubits: {backend.num_qubits}")
-print(f"Version: {backend.version}")
-print(f"Status: {backend.status()}")
+# 基本資訊
+print(f"名稱: {backend.name}")
+print(f"量子位元: {backend.num_qubits}")
+print(f"版本: {backend.version}")
+print(f"狀態: {backend.status()}")
 
-# Coupling map (qubit connectivity)
+# 耦合圖（量子位元連接性）
 print(backend.coupling_map)
 
-# Basis gates
+# 基礎閘
 print(backend.configuration().basis_gates)
 
-# Qubit properties
-print(backend.qubit_properties(0))  # Properties of qubit 0
+# 量子位元屬性
+print(backend.qubit_properties(0))  # 量子位元 0 的屬性
 ```
 
-### Checking Backend Status
+### 檢查後端狀態
 
 ```python
 status = backend.status()
-print(f"Operational: {status.operational}")
-print(f"Pending jobs: {status.pending_jobs}")
-print(f"Status message: {status.status_msg}")
+print(f"運作中: {status.operational}")
+print(f"待處理工作: {status.pending_jobs}")
+print(f"狀態訊息: {status.status_msg}")
 ```
 
-## Running on IBM Quantum Hardware
+## 在 IBM Quantum 硬體上執行
 
-### Using Runtime Primitives
+### 使用 Runtime 基元
 
 ```python
 from qiskit import QuantumCircuit, transpile
@@ -89,61 +89,61 @@ from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 service = QiskitRuntimeService()
 backend = service.backend("ibm_brisbane")
 
-# Create and transpile circuit
+# 建立並轉譯電路
 qc = QuantumCircuit(2)
 qc.h(0)
 qc.cx(0, 1)
 qc.measure_all()
 
-# Transpile for backend
+# 為後端轉譯
 transpiled_qc = transpile(qc, backend=backend, optimization_level=3)
 
-# Run with Sampler
+# 使用 Sampler 執行
 sampler = Sampler(backend)
 job = sampler.run([transpiled_qc], shots=1024)
 
-# Retrieve results
+# 取得結果
 result = job.result()
 counts = result[0].data.meas.get_counts()
 print(counts)
 ```
 
-### Job Management
+### 工作管理
 
 ```python
-# Submit job
+# 提交工作
 job = sampler.run([qc], shots=1024)
 
-# Get job ID (save for later retrieval)
+# 取得工作 ID（儲存以便稍後檢索）
 job_id = job.job_id()
-print(f"Job ID: {job_id}")
+print(f"工作 ID: {job_id}")
 
-# Check job status
+# 檢查工作狀態
 print(job.status())
 
-# Wait for completion
+# 等待完成
 result = job.result()
 
-# Retrieve job later
+# 稍後檢索工作
 service = QiskitRuntimeService()
 retrieved_job = service.job(job_id)
 result = retrieved_job.result()
 ```
 
-### Job Queuing
+### 工作佇列
 
 ```python
-# Check queue position
+# 檢查佇列位置
 job_status = job.status()
-print(f"Queue position: {job.queue_position()}")
+print(f"佇列位置: {job.queue_position()}")
 
-# Cancel job if needed
+# 如需要可取消工作
 job.cancel()
 ```
 
-## Session Mode
+## Session 模式
 
-Use sessions for iterative algorithms (VQE, QAOA) to reduce queue time:
+使用 session 進行迭代演算法（VQE、QAOA）以減少佇列時間：
 
 ```python
 from qiskit_ibm_runtime import Session, SamplerV2 as Sampler
@@ -154,25 +154,25 @@ backend = service.backend("ibm_brisbane")
 with Session(backend=backend) as session:
     sampler = Sampler(session=session)
 
-    # Multiple iterations in same session
+    # 同一 session 中的多次迭代
     for iteration in range(10):
-        # Parameterized circuit
+        # 參數化電路
         qc = create_parameterized_circuit(params[iteration])
         job = sampler.run([qc], shots=1024)
         result = job.result()
 
-        # Update parameters based on results
+        # 根據結果更新參數
         params[iteration + 1] = optimize(result)
 ```
 
-Session benefits:
-- Reduced queue waiting between iterations
-- Guaranteed backend availability during session
-- Better for variational algorithms
+Session 的優點：
+- 減少迭代之間的佇列等待時間
+- 保證 session 期間後端可用性
+- 更適合變分演算法
 
-## Batch Mode
+## Batch 模式
 
-Use batch mode for independent parallel jobs:
+使用 batch 模式進行獨立的平行工作：
 
 ```python
 from qiskit_ibm_runtime import Batch, SamplerV2 as Sampler
@@ -183,19 +183,19 @@ backend = service.backend("ibm_brisbane")
 with Batch(backend=backend) as batch:
     sampler = Sampler(session=batch)
 
-    # Submit multiple independent jobs
+    # 提交多個獨立工作
     jobs = []
     for qc in circuit_list:
         job = sampler.run([qc], shots=1024)
         jobs.append(job)
 
-    # Collect all results
+    # 收集所有結果
     results = [job.result() for job in jobs]
 ```
 
-## Local Simulators
+## 本地模擬器
 
-### StatevectorSampler (Ideal Simulation)
+### StatevectorSampler（理想模擬）
 
 ```python
 from qiskit.primitives import StatevectorSampler
@@ -205,49 +205,49 @@ result = sampler.run([qc], shots=1024).result()
 counts = result[0].data.meas.get_counts()
 ```
 
-### Aer Simulator (Realistic Noise)
+### Aer 模擬器（真實雜訊）
 
 ```python
 from qiskit_aer import AerSimulator
 from qiskit_ibm_runtime import SamplerV2 as Sampler
 
-# Ideal simulation
+# 理想模擬
 simulator = AerSimulator()
 
-# Simulate with backend noise model
+# 使用後端雜訊模型模擬
 backend = service.backend("ibm_brisbane")
 noisy_simulator = AerSimulator.from_backend(backend)
 
-# Run simulation
+# 執行模擬
 transpiled_qc = transpile(qc, simulator)
 sampler = Sampler(simulator)
 job = sampler.run([transpiled_qc], shots=1024)
 result = job.result()
 ```
 
-### Aer GPU Acceleration
+### Aer GPU 加速
 
 ```python
-# Use GPU for faster simulation
+# 使用 GPU 加速模擬
 simulator = AerSimulator(method='statevector', device='GPU')
 ```
 
-## Third-Party Providers
+## 第三方供應商
 
 ### IonQ
 
-IonQ offers trapped-ion quantum computers with all-to-all connectivity:
+IonQ 提供具有全對全連接性的離子阱量子電腦：
 
 ```python
 from qiskit_ionq import IonQProvider
 
 provider = IonQProvider("YOUR_IONQ_API_TOKEN")
 
-# List IonQ backends
+# 列出 IonQ 後端
 backends = provider.backends()
 backend = provider.get_backend("ionq_qpu")
 
-# Run circuit
+# 執行電路
 job = backend.run(qc, shots=1024)
 result = job.result()
 ```
@@ -259,41 +259,41 @@ from qiskit_braket_provider import BraketProvider
 
 provider = BraketProvider()
 
-# List available devices
+# 列出可用裝置
 backends = provider.backends()
 
-# Use specific device
+# 使用特定裝置
 backend = provider.get_backend("Rigetti")
 job = backend.run(qc, shots=1024)
 result = job.result()
 ```
 
-## Error Mitigation
+## 錯誤緩解
 
-### Measurement Error Mitigation
+### 測量錯誤緩解
 
 ```python
 from qiskit_ibm_runtime import SamplerV2 as Sampler, Options
 
-# Configure error mitigation
+# 配置錯誤緩解
 options = Options()
-options.resilience_level = 1  # 0=none, 1=minimal, 2=moderate, 3=heavy
+options.resilience_level = 1  # 0=無, 1=最小, 2=中等, 3=重度
 
 sampler = Sampler(backend, options=options)
 job = sampler.run([qc], shots=1024)
 result = job.result()
 ```
 
-### Error Mitigation Levels
+### 錯誤緩解等級
 
-- **Level 0**: No mitigation
-- **Level 1**: Readout error mitigation
-- **Level 2**: Level 1 + gate error mitigation
-- **Level 3**: Level 2 + advanced techniques
+- **等級 0**：無緩解
+- **等級 1**：讀出錯誤緩解
+- **等級 2**：等級 1 + 閘錯誤緩解
+- **等級 3**：等級 2 + 進階技術
 
-**Qiskit's Samplomatic package** can reduce sampling overhead by up to 100x with probabilistic error cancellation.
+**Qiskit 的 Samplomatic 套件**可透過機率性錯誤消除將取樣開銷減少高達 100 倍。
 
-### Zero Noise Extrapolation (ZNE)
+### 零雜訊外推（ZNE）
 
 ```python
 options = Options()
@@ -303,80 +303,80 @@ options.resilience.zne_mitigation = True
 sampler = Sampler(backend, options=options)
 ```
 
-## Monitoring Usage and Costs
+## 監控使用量和成本
 
-### Check Account Usage
+### 檢查帳戶使用量
 
 ```python
-# For IBM Quantum
+# 對於 IBM Quantum
 service = QiskitRuntimeService()
 
-# Check remaining credits
+# 檢查剩餘額度
 print(service.usage())
 ```
 
-### Estimate Job Cost
+### 估算工作成本
 
 ```python
 from qiskit_ibm_runtime import EstimatorV2 as Estimator
 
 backend = service.backend("ibm_brisbane")
 
-# Estimate job cost
+# 估算工作成本
 estimator = Estimator(backend)
-# Cost depends on circuit complexity and shots
+# 成本取決於電路複雜度和 shots
 ```
 
-## Best Practices
+## 最佳實踐
 
-### 1. Always Transpile Before Running
+### 1. 始終在執行前轉譯
 
 ```python
-# Bad: Run without transpilation
+# 不好：不轉譯就執行
 job = sampler.run([qc], shots=1024)
 
-# Good: Transpile first
+# 好：先轉譯
 qc_transpiled = transpile(qc, backend=backend, optimization_level=3)
 job = sampler.run([qc_transpiled], shots=1024)
 ```
 
-### 2. Test with Simulators First
+### 2. 先用模擬器測試
 
 ```python
-# Test with noisy simulator before hardware
+# 在使用硬體前用雜訊模擬器測試
 noisy_sim = AerSimulator.from_backend(backend)
 qc_test = transpile(qc, noisy_sim, optimization_level=3)
 
-# Verify results look reasonable
-# Then run on hardware
+# 驗證結果看起來合理
+# 然後在硬體上執行
 ```
 
-### 3. Use Appropriate Shot Counts
+### 3. 使用適當的 Shot 數量
 
 ```python
-# For optimization algorithms: fewer shots (100-1000)
-# For final measurements: more shots (10000+)
+# 對於最佳化演算法：較少 shots（100-1000）
+# 對於最終測量：較多 shots（10000+）
 
-# Adaptive shots based on stage
+# 根據階段調整 shots
 shots_optimization = 500
 shots_final = 10000
 ```
 
-### 4. Choose Backend Strategically
+### 4. 策略性地選擇後端
 
 ```python
-# For testing: Use least busy backend
+# 測試：使用最空閒的後端
 backend = service.least_busy(min_num_qubits=5)
 
-# For production: Use backend matching requirements
-backend = service.backend("ibm_brisbane")  # 127 qubits
+# 生產：使用符合需求的後端
+backend = service.backend("ibm_brisbane")  # 127 量子位元
 ```
 
-### 5. Use Sessions for Variational Algorithms
+### 5. 對變分演算法使用 Sessions
 
-Sessions are ideal for VQE, QAOA, and other iterative algorithms.
+Sessions 非常適合 VQE、QAOA 和其他迭代演算法。
 
-### 6. Monitor Job Status
+### 6. 監控工作狀態
 
 ```python
 import time
@@ -384,23 +384,23 @@ import time
 job = sampler.run([qc], shots=1024)
 
 while job.status().name not in ['DONE', 'ERROR', 'CANCELLED']:
-    print(f"Status: {job.status().name}")
+    print(f"狀態: {job.status().name}")
     time.sleep(10)
 
 result = job.result()
 ```
 
-## Troubleshooting
+## 疑難排解
 
-### Issue: "Backend not found"
+### 問題："Backend not found"
 ```python
-# List available backends
+# 列出可用後端
 print([b.name for b in service.backends()])
 ```
 
-### Issue: "Invalid credentials"
+### 問題："Invalid credentials"
 ```python
-# Re-save credentials
+# 重新儲存憑證
 QiskitRuntimeService.save_account(
     channel="ibm_quantum",
     token="YOUR_TOKEN",
@@ -408,26 +408,26 @@ QiskitRuntimeService.save_account(
 )
 ```
 
-### Issue: Long queue times
+### 問題：長佇列時間
 ```python
-# Use least busy backend
+# 使用最空閒的後端
 backend = service.least_busy(min_num_qubits=5)
 
-# Or use batch mode for multiple independent jobs
+# 或對多個獨立工作使用 batch 模式
 ```
 
-### Issue: Job fails with "Circuit too large"
+### 問題：工作因 "Circuit too large" 失敗
 ```python
-# Reduce circuit complexity
-# Use higher transpilation optimization
+# 降低電路複雜度
+# 使用更高的轉譯最佳化
 qc_opt = transpile(qc, backend=backend, optimization_level=3)
 ```
 
-## Backend Comparison
+## 後端比較
 
-| Provider | Connectivity | Gate Set | Notes |
-|----------|-------------|----------|--------|
-| IBM Quantum | Limited | CX, RZ, SX, X | 100+ qubit systems, high quality |
-| IonQ | All-to-all | GPI, GPI2, MS | Trapped ion, low error rates |
-| Rigetti | Limited | CZ, RZ, RX | Superconducting qubits |
-| Oxford Quantum Circuits | Limited | ECR, RZ, SX | Coaxmon technology |
+| 供應商 | 連接性 | 閘集 | 備註 |
+|--------|--------|------|------|
+| IBM Quantum | 有限 | CX, RZ, SX, X | 100+ 量子位元系統，高品質 |
+| IonQ | 全對全 | GPI, GPI2, MS | 離子阱，低錯誤率 |
+| Rigetti | 有限 | CZ, RZ, RX | 超導量子位元 |
+| Oxford Quantum Circuits | 有限 | ECR, RZ, SX | Coaxmon 技術 |

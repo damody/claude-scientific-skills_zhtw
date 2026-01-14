@@ -1,93 +1,93 @@
-# Metadata & Annotations
+# 中繼資料與註解
 
-This reference covers creating and managing annotations in OMERO, including tags, key-value pairs, file attachments, and comments.
+此參考涵蓋在 OMERO 中建立和管理註解，包括標籤、鍵值對、檔案附件和評論。
 
-## Annotation Types
+## 註解類型
 
-OMERO supports several annotation types:
+OMERO 支援多種註解類型：
 
-- **TagAnnotation**: Text labels for categorization
-- **MapAnnotation**: Key-value pairs for structured metadata
-- **FileAnnotation**: File attachments (PDFs, CSVs, analysis results, etc.)
-- **CommentAnnotation**: Free-text comments
-- **LongAnnotation**: Integer values
-- **DoubleAnnotation**: Floating-point values
-- **BooleanAnnotation**: Boolean values
-- **TimestampAnnotation**: Date/time stamps
-- **TermAnnotation**: Ontology terms
+- **TagAnnotation**：用於分類的文字標籤
+- **MapAnnotation**：結構化中繼資料的鍵值對
+- **FileAnnotation**：檔案附件（PDF、CSV、分析結果等）
+- **CommentAnnotation**：自由格式文字評論
+- **LongAnnotation**：整數值
+- **DoubleAnnotation**：浮點數值
+- **BooleanAnnotation**：布林值
+- **TimestampAnnotation**：日期/時間戳記
+- **TermAnnotation**：本體論術語
 
-## Tag Annotations
+## 標籤註解
 
-### Create and Link Tag
+### 建立並連結標籤
 
 ```python
 import omero.gateway
 
-# Create new tag
+# 建立新標籤
 tag_ann = omero.gateway.TagAnnotationWrapper(conn)
 tag_ann.setValue("Experiment 2024")
 tag_ann.setDescription("Optional description of this tag")
 tag_ann.save()
 
-# Link tag to an object
+# 將標籤連結到物件
 project = conn.getObject("Project", project_id)
 project.linkAnnotation(tag_ann)
 ```
 
-### Create Tag with Namespace
+### 建立具有命名空間的標籤
 
 ```python
-# Create tag with custom namespace
+# 建立具有自訂命名空間的標籤
 tag_ann = omero.gateway.TagAnnotationWrapper(conn)
 tag_ann.setValue("Quality Control")
 tag_ann.setNs("mylab.qc.tags")
 tag_ann.save()
 
-# Link to image
+# 連結到影像
 image = conn.getObject("Image", image_id)
 image.linkAnnotation(tag_ann)
 ```
 
-### Reuse Existing Tag
+### 重用現有標籤
 
 ```python
-# Find existing tag
+# 尋找現有標籤
 tag_id = 123
 tag_ann = conn.getObject("TagAnnotation", tag_id)
 
-# Link to multiple images
+# 連結到多張影像
 for image in conn.getObjects("Image", [img1, img2, img3]):
     image.linkAnnotation(tag_ann)
 ```
 
-### Create Tag Set (Tag with Children)
+### 建立標籤集（具有子標籤的標籤）
 
 ```python
-# Create tag set (parent tag)
+# 建立標籤集（父標籤）
 tag_set = omero.gateway.TagAnnotationWrapper(conn)
 tag_set.setValue("Cell Types")
 tag_set.save()
 
-# Create child tags
+# 建立子標籤
 tags = ["HeLa", "U2OS", "HEK293"]
 for tag_value in tags:
     tag = omero.gateway.TagAnnotationWrapper(conn)
     tag.setValue(tag_value)
     tag.save()
 
-    # Link child to parent
+    # 將子標籤連結到父標籤
     tag_set.linkAnnotation(tag)
 ```
 
-## Map Annotations (Key-Value Pairs)
+## 對應註解（鍵值對）
 
-### Create Map Annotation
+### 建立對應註解
 
 ```python
 import omero.gateway
 import omero.constants.metadata
 
-# Prepare key-value data
+# 準備鍵值資料
 key_value_data = [
     ["Drug Name", "Monastrol"],
     ["Concentration", "5 mg/ml"],
@@ -95,26 +95,26 @@ key_value_data = [
     ["Temperature", "37C"]
 ]
 
-# Create map annotation
+# 建立對應註解
 map_ann = omero.gateway.MapAnnotationWrapper(conn)
 
-# Use standard client namespace
+# 使用標準用戶端命名空間
 namespace = omero.constants.metadata.NSCLIENTMAPANNOTATION
 map_ann.setNs(namespace)
 
-# Set data
+# 設定資料
 map_ann.setValue(key_value_data)
 map_ann.save()
 
-# Link to dataset
+# 連結到資料集
 dataset = conn.getObject("Dataset", dataset_id)
 dataset.linkAnnotation(map_ann)
 ```
 
-### Custom Namespace for Map Annotations
+### 對應註解的自訂命名空間
 
 ```python
-# Use custom namespace for organization-specific metadata
+# 使用自訂命名空間用於組織特定的中繼資料
 key_value_data = [
     ["Microscope", "Zeiss LSM 880"],
     ["Objective", "63x Oil"],
@@ -130,10 +130,10 @@ image = conn.getObject("Image", image_id)
 image.linkAnnotation(map_ann)
 ```
 
-### Read Map Annotation
+### 讀取對應註解
 
 ```python
-# Get map annotation
+# 取得對應註解
 image = conn.getObject("Image", image_id)
 
 for ann in image.listAnnotations():
@@ -141,22 +141,22 @@ for ann in image.listAnnotations():
         print(f"Map Annotation (ID: {ann.getId()}):")
         print(f"Namespace: {ann.getNs()}")
 
-        # Get key-value pairs
+        # 取得鍵值對
         for key, value in ann.getValue():
             print(f"  {key}: {value}")
 ```
 
-## File Annotations
+## 檔案註解
 
-### Upload and Attach File
+### 上傳並附加檔案
 
 ```python
 import os
 
-# Prepare file
+# 準備檔案
 file_path = "analysis_results.csv"
 
-# Create file annotation
+# 建立檔案註解
 namespace = "mylab.analysis.results"
 file_ann = conn.createFileAnnfromLocalFile(
     file_path,
@@ -165,21 +165,21 @@ file_ann = conn.createFileAnnfromLocalFile(
     desc="Cell segmentation results"
 )
 
-# Link to dataset
+# 連結到資料集
 dataset = conn.getObject("Dataset", dataset_id)
 dataset.linkAnnotation(file_ann)
 ```
 
-### Supported MIME Types
+### 支援的 MIME 類型
 
-Common MIME types:
-- Text: `"text/plain"`, `"text/csv"`, `"text/tab-separated-values"`
-- Documents: `"application/pdf"`, `"application/vnd.ms-excel"`
-- Images: `"image/png"`, `"image/jpeg"`
-- Data: `"application/json"`, `"application/xml"`
-- Archives: `"application/zip"`, `"application/gzip"`
+常見 MIME 類型：
+- 文字：`"text/plain"`、`"text/csv"`、`"text/tab-separated-values"`
+- 文件：`"application/pdf"`、`"application/vnd.ms-excel"`
+- 影像：`"image/png"`、`"image/jpeg"`
+- 資料：`"application/json"`、`"application/xml"`
+- 壓縮檔：`"application/zip"`、`"application/gzip"`
 
-### Upload Multiple Files
+### 上傳多個檔案
 
 ```python
 files = ["figure1.pdf", "figure2.pdf", "table1.csv"]
@@ -197,19 +197,19 @@ for file_path in files:
     dataset.linkAnnotation(file_ann)
 ```
 
-### Download File Annotation
+### 下載檔案註解
 
 ```python
 import os
 
-# Get object with file annotation
+# 取得具有檔案註解的物件
 image = conn.getObject("Image", image_id)
 
-# Download directory
+# 下載目錄
 download_path = "./downloads"
 os.makedirs(download_path, exist_ok=True)
 
-# Filter by namespace
+# 按命名空間篩選
 namespace = "mylab.analysis.results"
 
 for ann in image.listAnnotations(ns=namespace):
@@ -219,7 +219,7 @@ for ann in image.listAnnotations(ns=namespace):
 
         print(f"Downloading: {file_name}")
 
-        # Download file in chunks
+        # 分塊下載檔案
         with open(file_path, 'wb') as f:
             for chunk in ann.getFileInChunks():
                 f.write(chunk)
@@ -227,7 +227,7 @@ for ann in image.listAnnotations(ns=namespace):
         print(f"Saved to: {file_path}")
 ```
 
-### Get File Annotation Metadata
+### 取得檔案註解中繼資料
 
 ```python
 for ann in dataset.listAnnotations():
@@ -242,22 +242,22 @@ for ann in dataset.listAnnotations():
         print(f"  Description: {ann.getDescription()}")
 ```
 
-## Comment Annotations
+## 評論註解
 
-### Add Comment
+### 新增評論
 
 ```python
-# Create comment
+# 建立評論
 comment = omero.gateway.CommentAnnotationWrapper(conn)
 comment.setValue("This image shows excellent staining quality")
 comment.save()
 
-# Link to image
+# 連結到影像
 image = conn.getObject("Image", image_id)
 image.linkAnnotation(comment)
 ```
 
-### Add Comment with Namespace
+### 新增具有命名空間的評論
 
 ```python
 comment = omero.gateway.CommentAnnotationWrapper(conn)
@@ -269,12 +269,12 @@ dataset = conn.getObject("Dataset", dataset_id)
 dataset.linkAnnotation(comment)
 ```
 
-## Numeric Annotations
+## 數值註解
 
-### Long Annotation (Integer)
+### Long 註解（整數）
 
 ```python
-# Create long annotation
+# 建立 long 註解
 long_ann = omero.gateway.LongAnnotationWrapper(conn)
 long_ann.setValue(42)
 long_ann.setNs("mylab.cell.count")
@@ -284,10 +284,10 @@ image = conn.getObject("Image", image_id)
 image.linkAnnotation(long_ann)
 ```
 
-### Double Annotation (Float)
+### Double 註解（浮點數）
 
 ```python
-# Create double annotation
+# 建立 double 註解
 double_ann = omero.gateway.DoubleAnnotationWrapper(conn)
 double_ann.setValue(3.14159)
 double_ann.setNs("mylab.fluorescence.intensity")
@@ -297,23 +297,23 @@ image = conn.getObject("Image", image_id)
 image.linkAnnotation(double_ann)
 ```
 
-## Listing Annotations
+## 列出註解
 
-### List All Annotations on Object
+### 列出物件上的所有註解
 
 ```python
 import omero.model
 
-# Get object
+# 取得物件
 project = conn.getObject("Project", project_id)
 
-# List all annotations
+# 列出所有註解
 for ann in project.listAnnotations():
     print(f"Annotation ID: {ann.getId()}")
     print(f"  Type: {ann.OMERO_TYPE}")
     print(f"  Added by: {ann.link.getDetails().getOwner().getOmeName()}")
 
-    # Type-specific handling
+    # 類型特定處理
     if ann.OMERO_TYPE == omero.model.TagAnnotationI:
         print(f"  Tag value: {ann.getTextValue()}")
 
@@ -329,10 +329,10 @@ for ann in project.listAnnotations():
     print()
 ```
 
-### Filter Annotations by Namespace
+### 按命名空間篩選註解
 
 ```python
-# Get annotations with specific namespace
+# 取得具有特定命名空間的註解
 namespace = "mylab.qc.tags"
 
 for ann in image.listAnnotations(ns=namespace):
@@ -343,10 +343,10 @@ for ann in image.listAnnotations(ns=namespace):
             print(f"  {key}: {value}")
 ```
 
-### Get First Annotation with Namespace
+### 取得具有命名空間的第一個註解
 
 ```python
-# Get single annotation by namespace
+# 透過命名空間取得單一註解
 namespace = "mylab.analysis.results"
 ann = dataset.getAnnotation(namespace)
 
@@ -356,10 +356,10 @@ else:
     print("No annotation found with that namespace")
 ```
 
-### Query Annotations Across Multiple Objects
+### 跨多個物件查詢註解
 
 ```python
-# Get all tag annotations linked to image IDs
+# 取得連結到影像 ID 的所有標籤註解
 image_ids = [1, 2, 3, 4, 5]
 
 for link in conn.getAnnotationLinks('Image', parent_ids=image_ids):
@@ -369,15 +369,15 @@ for link in conn.getAnnotationLinks('Image', parent_ids=image_ids):
         print(f"Image {link.getParent().getId()}: Tag '{ann.getTextValue()}'")
 ```
 
-## Counting Annotations
+## 計算註解
 
 ```python
-# Count annotations on project
+# 計算專案上的註解
 project_id = 123
 count = conn.countAnnotations('Project', [project_id])
 print(f"Project has {count[project_id]} annotations")
 
-# Count annotations on multiple images
+# 計算多張影像上的註解
 image_ids = [1, 2, 3]
 counts = conn.countAnnotations('Image', image_ids)
 
@@ -385,85 +385,85 @@ for image_id, count in counts.items():
     print(f"Image {image_id}: {count} annotations")
 ```
 
-## Annotation Links
+## 註解連結
 
-### Create Annotation Link Manually
+### 手動建立註解連結
 
 ```python
-# Get annotation and image
+# 取得註解和影像
 tag = conn.getObject("TagAnnotation", tag_id)
 image = conn.getObject("Image", image_id)
 
-# Create link
+# 建立連結
 link = omero.model.ImageAnnotationLinkI()
 link.setParent(omero.model.ImageI(image.getId(), False))
 link.setChild(omero.model.TagAnnotationI(tag.getId(), False))
 
-# Save link
+# 儲存連結
 conn.getUpdateService().saveAndReturnObject(link)
 ```
 
-### Update Annotation Links
+### 更新註解連結
 
 ```python
-# Get existing links
+# 取得現有連結
 annotation_ids = [1, 2, 3]
 new_tag_id = 5
 
 for link in conn.getAnnotationLinks('Image', ann_ids=annotation_ids):
     print(f"Image ID: {link.getParent().id}")
 
-    # Change linked annotation
+    # 變更連結的註解
     link._obj.child = omero.model.TagAnnotationI(new_tag_id, False)
     link.save()
 ```
 
-## Removing Annotations
+## 移除註解
 
-### Delete Annotations
+### 刪除註解
 
 ```python
-# Get image
+# 取得影像
 image = conn.getObject("Image", image_id)
 
-# Collect annotation IDs to delete
+# 收集要刪除的註解 ID
 to_delete = []
 namespace = "mylab.temp.annotations"
 
 for ann in image.listAnnotations(ns=namespace):
     to_delete.append(ann.getId())
 
-# Delete annotations
+# 刪除註解
 if to_delete:
     conn.deleteObjects('Annotation', to_delete, wait=True)
     print(f"Deleted {len(to_delete)} annotations")
 ```
 
-### Unlink Annotations (Keep Annotation, Remove Link)
+### 取消連結註解（保留註解，移除連結）
 
 ```python
-# Get image
+# 取得影像
 image = conn.getObject("Image", image_id)
 
-# Collect link IDs to delete
+# 收集要刪除的連結 ID
 to_delete = []
 
 for ann in image.listAnnotations():
     if isinstance(ann, omero.gateway.TagAnnotationWrapper):
         to_delete.append(ann.link.getId())
 
-# Delete links (annotations remain in database)
+# 刪除連結（註解保留在資料庫中）
 if to_delete:
     conn.deleteObjects("ImageAnnotationLink", to_delete, wait=True)
     print(f"Unlinked {len(to_delete)} annotations")
 ```
 
-### Delete Specific Annotation Types
+### 刪除特定註解類型
 
 ```python
 import omero.gateway
 
-# Delete only map annotations
+# 只刪除對應註解
 image = conn.getObject("Image", image_id)
 to_delete = []
 
@@ -474,82 +474,82 @@ for ann in image.listAnnotations():
 conn.deleteObjects('Annotation', to_delete, wait=True)
 ```
 
-## Annotation Ownership
+## 註解所有權
 
-### Set Annotation Owner (Admin Only)
+### 設定註解所有者（僅限管理員）
 
 ```python
 import omero.model
 
-# Create tag with specific owner
+# 建立具有特定所有者的標籤
 tag_ann = omero.gateway.TagAnnotationWrapper(conn)
 tag_ann.setValue("Admin Tag")
 
-# Set owner (requires admin privileges)
+# 設定所有者（需要管理員權限）
 user_id = 5
 tag_ann._obj.details.owner = omero.model.ExperimenterI(user_id, False)
 tag_ann.save()
 ```
 
-### Create Annotation as Another User (Admin Only)
+### 以另一使用者建立註解（僅限管理員）
 
 ```python
-# Admin connection
+# 管理員連線
 admin_conn = BlitzGateway(admin_user, admin_pass, host=host, port=4064)
 admin_conn.connect()
 
-# Get target user
+# 取得目標使用者
 user_id = 10
 user = admin_conn.getObject("Experimenter", user_id).getName()
 
-# Create connection as user
+# 建立該使用者的連線
 user_conn = admin_conn.suConn(user)
 
-# Create annotation as that user
+# 以該使用者建立註解
 map_ann = omero.gateway.MapAnnotationWrapper(user_conn)
 map_ann.setNs("mylab.metadata")
 map_ann.setValue([["key", "value"]])
 map_ann.save()
 
-# Link to project
+# 連結到專案
 project = admin_conn.getObject("Project", project_id)
 project.linkAnnotation(map_ann)
 
-# Close connections
+# 關閉連線
 user_conn.close()
 admin_conn.close()
 ```
 
-## Bulk Annotation Operations
+## 批次註解操作
 
-### Tag Multiple Images
+### 為多張影像加標籤
 
 ```python
-# Create or get tag
+# 建立或取得標籤
 tag = omero.gateway.TagAnnotationWrapper(conn)
 tag.setValue("Validated")
 tag.save()
 
-# Get images to tag
+# 取得要加標籤的影像
 dataset = conn.getObject("Dataset", dataset_id)
 
-# Tag all images in dataset
+# 為資料集中的所有影像加標籤
 for image in dataset.listChildren():
     image.linkAnnotation(tag)
     print(f"Tagged image: {image.getName()}")
 ```
 
-### Batch Add Map Annotations
+### 批次新增對應註解
 
 ```python
-# Prepare metadata for multiple images
+# 為多張影像準備中繼資料
 image_metadata = {
     101: [["Quality", "Good"], ["Reviewed", "Yes"]],
     102: [["Quality", "Excellent"], ["Reviewed", "Yes"]],
     103: [["Quality", "Poor"], ["Reviewed", "No"]]
 }
 
-# Add annotations
+# 新增註解
 for image_id, kv_data in image_metadata.items():
     image = conn.getObject("Image", image_id)
 
@@ -563,52 +563,52 @@ for image_id, kv_data in image_metadata.items():
         print(f"Annotated image {image_id}")
 ```
 
-## Namespaces
+## 命名空間
 
-### Standard OMERO Namespaces
+### 標準 OMERO 命名空間
 
 ```python
 import omero.constants.metadata as omero_ns
 
-# Client map annotation namespace
+# 用戶端對應註解命名空間
 omero_ns.NSCLIENTMAPANNOTATION
 # "openmicroscopy.org/omero/client/mapAnnotation"
 
-# Bulk annotations namespace
+# 批量註解命名空間
 omero_ns.NSBULKANNOTATIONS
 # "openmicroscopy.org/omero/bulk_annotations"
 ```
 
-### Custom Namespaces
+### 自訂命名空間
 
-Best practices for custom namespaces:
-- Use reverse domain notation: `"org.mylab.category.subcategory"`
-- Be specific: `"com.company.project.analysis.v1"`
-- Include version if schema may change: `"mylab.metadata.v2"`
+自訂命名空間的最佳實務：
+- 使用反向網域名稱：`"org.mylab.category.subcategory"`
+- 具體明確：`"com.company.project.analysis.v1"`
+- 如果架構可能變更則包含版本：`"mylab.metadata.v2"`
 
 ```python
-# Define namespaces
+# 定義命名空間
 NS_QC = "org.mylab.quality_control"
 NS_ANALYSIS = "org.mylab.image_analysis.v1"
 NS_PUBLICATION = "org.mylab.publication.2024"
 
-# Use in annotations
+# 在註解中使用
 map_ann.setNs(NS_ANALYSIS)
 ```
 
-## Load All Annotations by Type
+## 按類型載入所有註解
 
-### Load All File Annotations
+### 載入所有檔案註解
 
 ```python
-# Define namespaces to include/exclude
+# 定義要包含/排除的命名空間
 ns_to_include = ["mylab.analysis.results"]
 ns_to_exclude = []
 
-# Get metadata service
+# 取得中繼資料服務
 metadataService = conn.getMetadataService()
 
-# Load all file annotations with namespace
+# 載入具有命名空間的所有檔案註解
 annotations = metadataService.loadSpecifiedAnnotations(
     'omero.model.FileAnnotation',
     ns_to_include,
@@ -622,7 +622,7 @@ for ann in annotations:
     print(f"  Size: {ann.getFile().getSize().getValue()} bytes")
 ```
 
-## Complete Example
+## 完整範例
 
 ```python
 from omero.gateway import BlitzGateway
@@ -635,16 +635,16 @@ USERNAME = 'user'
 PASSWORD = 'pass'
 
 with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
-    # Get dataset
+    # 取得資料集
     dataset = conn.getObject("Dataset", dataset_id)
 
-    # Add tag
+    # 新增標籤
     tag = omero.gateway.TagAnnotationWrapper(conn)
     tag.setValue("Analysis Complete")
     tag.save()
     dataset.linkAnnotation(tag)
 
-    # Add map annotation with metadata
+    # 新增具有中繼資料的對應註解
     metadata = [
         ["Analysis Date", "2024-10-20"],
         ["Software", "CellProfiler 4.2"],
@@ -656,7 +656,7 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
     map_ann.save()
     dataset.linkAnnotation(map_ann)
 
-    # Add file annotation
+    # 新增檔案註解
     file_ann = conn.createFileAnnfromLocalFile(
         "analysis_summary.pdf",
         mimetype="application/pdf",
@@ -665,7 +665,7 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
     )
     dataset.linkAnnotation(file_ann)
 
-    # Add comment
+    # 新增評論
     comment = omero.gateway.CommentAnnotationWrapper(conn)
     comment.setValue("Dataset ready for review")
     comment.save()
@@ -674,15 +674,15 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
     print(f"Added 4 annotations to dataset {dataset.getName()}")
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use Namespaces**: Always use namespaces to organize annotations
-2. **Descriptive Tags**: Use clear, consistent tag names
-3. **Structured Metadata**: Prefer map annotations over comments for structured data
-4. **File Organization**: Use descriptive filenames and MIME types
-5. **Link Reuse**: Reuse existing tags instead of creating duplicates
-6. **Batch Operations**: Process multiple objects in loops for efficiency
-7. **Error Handling**: Check for successful saves before linking
-8. **Cleanup**: Remove temporary annotations when no longer needed
-9. **Documentation**: Document custom namespace meanings
-10. **Permissions**: Consider annotation ownership for collaborative workflows
+1. **使用命名空間**：務必使用命名空間來組織註解
+2. **描述性標籤**：使用清晰、一致的標籤名稱
+3. **結構化中繼資料**：對結構化資料優先使用對應註解而非評論
+4. **檔案組織**：使用描述性檔案名稱和 MIME 類型
+5. **連結重用**：重用現有標籤而非建立重複項
+6. **批次操作**：在迴圈中處理多個物件以提高效率
+7. **錯誤處理**：在連結前檢查儲存是否成功
+8. **清理**：不再需要時移除臨時註解
+9. **文件記錄**：記錄自訂命名空間的含義
+10. **權限**：考慮協作工作流程中的註解所有權

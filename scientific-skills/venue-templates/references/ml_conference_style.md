@@ -1,215 +1,215 @@
-# ML Conference Writing Style Guide
+# 機器學習會議寫作風格指南
 
-Comprehensive writing guide for NeurIPS, ICML, ICLR, CVPR, ECCV, ICCV, and other major machine learning and computer vision conferences.
+NeurIPS、ICML、ICLR、CVPR、ECCV、ICCV 及其他主要機器學習和電腦視覺會議的完整寫作指南。
 
-**Last Updated**: 2024
-
----
-
-## Overview
-
-ML conferences prioritize **novelty**, **rigorous empirical evaluation**, and **reproducibility**. Papers are evaluated on clear contribution, strong baselines, comprehensive ablations, and honest discussion of limitations.
-
-### Key Philosophy
-
-> "Show don't tell—your experiments should demonstrate your claims, not just your prose."
-
-**Primary Goal**: Advance the state of the art with novel methods validated through rigorous experimentation.
+**最後更新**：2024
 
 ---
 
-## Audience and Tone
+## 概述
 
-### Target Reader
+ML 會議優先考慮**新穎性（novelty）**、**嚴謹的實驗評估（rigorous empirical evaluation）**和**可重現性（reproducibility）**。論文依據清晰的貢獻、強基準線（baselines）、全面的消融實驗（ablations）和誠實的限制討論來評估。
 
-- ML researchers and practitioners
-- Experts in the specific subfield
-- Familiar with recent literature
-- Expect technical depth and precision
+### 核心理念
 
-### Tone Characteristics
+> 「用展示取代陳述——您的實驗應該證明您的聲稱，而不僅是您的文字。」
 
-| Characteristic | Description |
+**主要目標**：透過新穎的方法和嚴謹的實驗驗證來推進技術水準。
+
+---
+
+## 讀者與語氣
+
+### 目標讀者
+
+- ML 研究人員和實務者
+- 特定子領域的專家
+- 熟悉近期文獻
+- 期待技術深度和精確性
+
+### 語氣特徵
+
+| 特徵 | 說明 |
 |---------------|-------------|
-| **Technical** | Dense with methodology details |
-| **Precise** | Exact terminology, no ambiguity |
-| **Empirical** | Claims backed by experiments |
-| **Direct** | State contributions clearly |
-| **Honest** | Acknowledge limitations |
+| **技術性** | 密集的方法論細節 |
+| **精確** | 精確術語，無歧義 |
+| **實證性** | 聲稱有實驗支持 |
+| **直接** | 清楚陳述貢獻 |
+| **誠實** | 承認限制 |
 
-### Voice
+### 語態
 
-- **First person plural ("we")**: "We propose..." "Our method..."
-- **Active voice**: "We introduce a novel architecture..."
-- **Confident but measured**: Strong claims require strong evidence
+- **第一人稱複數（「we」）**：「We propose...」「Our method...」
+- **主動語態**：「We introduce a novel architecture...」
+- **自信但審慎**：強烈聲稱需要強力證據
 
 ---
 
-## Abstract
+## 摘要
 
-### Style Requirements
+### 風格要求
 
-- **Dense and numbers-focused**
-- **150-250 words** (varies by venue)
-- **Key results upfront**: Include specific metrics
-- **Flowing paragraph** (not structured)
+- **密集且聚焦數字**
+- **150-250 字**（依場所而異）
+- **關鍵結果放前面**：包含具體指標
+- **流暢段落**（非結構化）
 
-### Abstract Structure
+### 摘要結構
 
-1. **Problem** (1 sentence): What problem are you solving?
-2. **Limitation of existing work** (1 sentence): Why current methods fall short
-3. **Your approach** (1-2 sentences): What's your method?
-4. **Key results** (2-3 sentences): Specific numbers on benchmarks
-5. **Significance** (optional, 1 sentence): Why this matters
+1. **問題**（1 句）：您要解決什麼問題？
+2. **現有工作的限制**（1 句）：為何目前方法不足
+3. **您的方法**（1-2 句）：您的方法是什麼？
+4. **關鍵結果**（2-3 句）：基準測試上的具體數字
+5. **重要性**（可選，1 句）：為何這很重要
 
-### Example Abstract (NeurIPS Style)
+### 範例摘要（NeurIPS 格式）
 
 ```
-Transformers have achieved remarkable success in sequence modeling but 
-suffer from quadratic computational complexity, limiting their application 
-to long sequences. We introduce FlashAttention-2, an IO-aware exact 
-attention algorithm that achieves 2x speedup over FlashAttention and up 
-to 9x speedup over standard attention on sequences up to 16K tokens. Our 
-key insight is to reduce memory reads/writes by tiling and recomputation, 
-achieving optimal IO complexity. On the Long Range Arena benchmark, 
-FlashAttention-2 enables training with 8x longer sequences while matching 
-standard attention accuracy. Combined with sequence parallelism, we train 
-GPT-style models on sequences of 64K tokens at near-linear cost. We 
-release optimized CUDA kernels achieving 80% of theoretical peak FLOPS 
+Transformers have achieved remarkable success in sequence modeling but
+suffer from quadratic computational complexity, limiting their application
+to long sequences. We introduce FlashAttention-2, an IO-aware exact
+attention algorithm that achieves 2x speedup over FlashAttention and up
+to 9x speedup over standard attention on sequences up to 16K tokens. Our
+key insight is to reduce memory reads/writes by tiling and recomputation,
+achieving optimal IO complexity. On the Long Range Arena benchmark,
+FlashAttention-2 enables training with 8x longer sequences while matching
+standard attention accuracy. Combined with sequence parallelism, we train
+GPT-style models on sequences of 64K tokens at near-linear cost. We
+release optimized CUDA kernels achieving 80% of theoretical peak FLOPS
 on A100 GPUs. Code is available at [anonymous URL].
 ```
 
-### Abstract Don'ts
+### 摘要禁忌
 
-❌ "We propose a novel method for X" (vague, no results)
-❌ "Our method outperforms baselines" (no specific numbers)
-❌ "This is an important problem" (self-evident claims)
+❌ 「We propose a novel method for X」（模糊，無結果）
+❌ 「Our method outperforms baselines」（無具體數字）
+❌ 「This is an important problem」（不言自明的聲稱）
 
-✅ Include specific metrics: "achieves 94.5% accuracy, 3.2% improvement"
-✅ Include scale: "on 1M samples" or "16K token sequences"
-✅ Include comparison: "2x faster than previous SOTA"
+✅ 包含具體指標：「achieves 94.5% accuracy, 3.2% improvement」
+✅ 包含規模：「on 1M samples」或「16K token sequences」
+✅ 包含比較：「2x faster than previous SOTA」
 
 ---
 
-## Introduction
+## 引言
 
-### Structure (2-3 pages)
+### 結構（2-3 頁）
 
-ML introductions have a distinctive structure with **numbered contributions**.
+ML 引言有獨特結構，包含**編號貢獻（numbered contributions）**。
 
-### Paragraph-by-Paragraph Guide
+### 逐段指南
 
-**Paragraph 1: Problem Motivation**
-- Why is this problem important?
-- What are the applications?
-- Set up the technical challenge
-
-```
-"Large language models have demonstrated remarkable capabilities in 
-natural language understanding and generation. However, their quadratic 
-attention complexity presents a fundamental bottleneck for processing 
-long documents, multi-turn conversations, and reasoning over extended 
-contexts. As models scale to billions of parameters and context lengths 
-extend to tens of thousands of tokens, efficient attention mechanisms 
-become critical for practical deployment."
-```
-
-**Paragraph 2: Limitations of Existing Approaches**
-- What methods exist?
-- Why are they insufficient?
-- Technical analysis of limitations
+**第 1 段：問題動機**
+- 為何這個問題重要？
+- 有哪些應用？
+- 建立技術挑戰
 
 ```
-"Prior work has addressed this through sparse attention patterns, 
-linear attention approximations, and low-rank factorizations. While 
-these methods reduce theoretical complexity, they often sacrifice 
-accuracy, require specialized hardware, or introduce approximation 
-errors that compound in deep networks. Exact attention remains 
-preferable when computational resources permit."
+「Large language models have demonstrated remarkable capabilities in
+natural language understanding and generation. However, their quadratic
+attention complexity presents a fundamental bottleneck for processing
+long documents, multi-turn conversations, and reasoning over extended
+contexts. As models scale to billions of parameters and context lengths
+extend to tens of thousands of tokens, efficient attention mechanisms
+become critical for practical deployment.」
 ```
 
-**Paragraph 3: Your Approach (High-Level)**
-- What's your key insight?
-- How does your method work conceptually?
-- Why should it succeed?
+**第 2 段：現有方法的限制**
+- 存在哪些方法？
+- 為何它們不足？
+- 限制的技術分析
 
 ```
-"We observe that the primary bottleneck in attention is not computation 
-but rather memory bandwidth—reading and writing the large N×N attention 
-matrix dominates runtime on modern GPUs. We propose FlashAttention-2, 
-which eliminates this bottleneck through a novel tiling strategy that 
-computes attention block-by-block without materializing the full matrix."
+「Prior work has addressed this through sparse attention patterns,
+linear attention approximations, and low-rank factorizations. While
+these methods reduce theoretical complexity, they often sacrifice
+accuracy, require specialized hardware, or introduce approximation
+errors that compound in deep networks. Exact attention remains
+preferable when computational resources permit.」
 ```
 
-**Paragraph 4: Contribution List (CRITICAL)**
+**第 3 段：您的方法（概要）**
+- 您的關鍵洞察是什麼？
+- 您的方法概念上如何運作？
+- 為何它應該成功？
 
-This is **mandatory and distinctive** for ML conferences:
+```
+「We observe that the primary bottleneck in attention is not computation
+but rather memory bandwidth—reading and writing the large N×N attention
+matrix dominates runtime on modern GPUs. We propose FlashAttention-2,
+which eliminates this bottleneck through a novel tiling strategy that
+computes attention block-by-block without materializing the full matrix.」
+```
+
+**第 4 段：貢獻列表（關鍵）**
+
+這在 ML 會議是**必須且獨特**的：
 
 ```
 Our contributions are as follows:
 
-• We propose FlashAttention-2, an IO-aware exact attention algorithm 
-  that achieves optimal memory complexity O(N²d/M) where M is GPU 
+• We propose FlashAttention-2, an IO-aware exact attention algorithm
+  that achieves optimal memory complexity O(N²d/M) where M is GPU
   SRAM size.
 
-• We provide theoretical analysis showing that our algorithm achieves 
-  2-4x fewer HBM accesses than FlashAttention on typical GPU 
+• We provide theoretical analysis showing that our algorithm achieves
+  2-4x fewer HBM accesses than FlashAttention on typical GPU
   configurations.
 
-• We demonstrate 2x speedup over FlashAttention and up to 9x over 
-  standard PyTorch attention across sequence lengths from 256 to 64K 
+• We demonstrate 2x speedup over FlashAttention and up to 9x over
+  standard PyTorch attention across sequence lengths from 256 to 64K
   tokens.
 
-• We show that FlashAttention-2 enables training with 8x longer 
-  contexts on the same hardware, unlocking new capabilities for 
+• We show that FlashAttention-2 enables training with 8x longer
+  contexts on the same hardware, unlocking new capabilities for
   long-range modeling.
 
-• We release optimized CUDA kernels and PyTorch bindings at 
+• We release optimized CUDA kernels and PyTorch bindings at
   [anonymous URL].
 ```
 
-### Contribution Bullet Guidelines
+### 貢獻條目指南
 
-| Good Contribution Bullets | Bad Contribution Bullets |
+| 好的貢獻條目 | 差的貢獻條目 |
 |--------------------------|-------------------------|
-| Specific, quantifiable | Vague claims |
-| Self-contained | Requires reading paper to understand |
-| Distinct from each other | Overlapping bullets |
-| Emphasize novelty | State obvious facts |
+| 具體、可量化 | 模糊的聲稱 |
+| 自我完整 | 需要閱讀論文才能理解 |
+| 彼此不同 | 重疊的條目 |
+| 強調新穎性 | 陳述顯而易見的事實 |
 
-### Related Work Placement
+### 相關工作的位置
 
-- **In introduction**: Brief positioning (1-2 paragraphs)
-- **Separate section**: Detailed comparison (at end or before conclusion)
-- **Appendix**: Extended discussion if space-limited
+- **在引言中**：簡短定位（1-2 段）
+- **獨立章節**：詳細比較（在結尾或結論前）
+- **附錄**：如空間有限則放置延伸討論
 
 ---
 
-## Method
+## 方法
 
-### Structure (2-3 pages)
+### 結構（2-3 頁）
 
 ```
 METHOD
 ├── Problem Formulation
 ├── Method Overview / Architecture
 ├── Key Technical Components
-│   ├── Component 1 (with equations)
-│   ├── Component 2 (with equations)
-│   └── Component 3 (with equations)
-├── Theoretical Analysis (if applicable)
+│   ├── Component 1（含方程式）
+│   ├── Component 2（含方程式）
+│   └── Component 3（含方程式）
+├── Theoretical Analysis（如適用）
 └── Implementation Details
 ```
 
-### Mathematical Notation
+### 數學符號
 
-- **Define all notation**: "Let X ∈ ℝ^{N×d} denote the input sequence..."
-- **Consistent symbols**: Same symbol means same thing throughout
-- **Number important equations**: Reference by number later
+- **定義所有符號**：「Let X ∈ ℝ^{N×d} denote the input sequence...」
+- **一致的符號**：同一符號在全文代表同一事物
+- **為重要方程式編號**：稍後以編號引用
 
-### Algorithm Pseudocode
+### 演算法虛擬碼
 
-Include clear pseudocode for reproducibility:
+包含清晰的虛擬碼以確保可重現性：
 
 ```
 Algorithm 1: FlashAttention-2 Forward Pass
@@ -233,18 +233,18 @@ Output: O ∈ ℝ^{N×d}
 14: return O
 ```
 
-### Architecture Diagrams
+### 架構圖
 
-- **Clear, publication-quality figures**
-- **Label all components**
-- **Show data flow with arrows**
-- **Use consistent visual language**
+- **清晰、出版品質的圖片**
+- **標註所有元件**
+- **用箭頭顯示資料流**
+- **使用一致的視覺語言**
 
 ---
 
-## Experiments
+## 實驗
 
-### Structure (2-3 pages)
+### 結構（2-3 頁）
 
 ```
 EXPERIMENTS
@@ -254,9 +254,9 @@ EXPERIMENTS
 │   ├── Implementation Details
 │   └── Evaluation Metrics
 ├── Main Results
-│   └── Table/Figure with primary comparisons
+│   └── 主要比較的表格/圖片
 ├── Ablation Studies
-│   └── Component-wise analysis
+│   └── 元件分析
 ├── Analysis
 │   ├── Scaling behavior
 │   ├── Qualitative examples
@@ -264,23 +264,23 @@ EXPERIMENTS
 └── Computational Efficiency
 ```
 
-### Datasets and Benchmarks
+### 資料集和基準測試
 
-- **Use standard benchmarks**: Establish comparability
-- **Report dataset statistics**: Size, splits, preprocessing
-- **Justify non-standard choices**: If using custom data, explain why
+- **使用標準基準測試**：建立可比較性
+- **報告資料集統計**：大小、分割、前處理
+- **說明非標準選擇**：如使用自訂資料，解釋原因
 
-### Baselines
+### 基準線
 
-**Critical for acceptance.** Include:
-- **Recent SOTA**: Not just old methods
-- **Fair comparisons**: Same compute budget, hyperparameter tuning
-- **Ablated versions**: Your method without key components
-- **Strong baselines**: Don't cherry-pick weak competitors
+**對於接受至關重要。** 包含：
+- **近期 SOTA**：不僅是舊方法
+- **公平比較**：相同計算預算、超參數調整
+- **消融版本**：您的方法去除關鍵元件
+- **強基準線**：不要挑選弱競爭者
 
-### Main Results Table
+### 主要結果表格
 
-Clear, comprehensive formatting:
+清晰、全面的格式：
 
 ```
 Table 1: Results on Long Range Arena Benchmark (accuracy %)
@@ -295,9 +295,9 @@ FlashAttn-2     |  37.4   | 64.7  |   58.2    | 42.9  | 71.8  | 55.0
 ──────────────────────────────────────────────────────────
 ```
 
-### Ablation Studies (MANDATORY)
+### 消融研究（必須）
 
-Show what matters in your method:
+展示您的方法中什麼是重要的：
 
 ```
 Table 2: Ablation Study on FlashAttention-2 Components
@@ -312,245 +312,244 @@ FlashAttention-1 (baseline)          |   1.0x  |  1.0x
 ──────────────────────────────────────────────────────
 ```
 
-### What Ablations Should Show
+### 消融實驗應展示什麼
 
-- **Each component matters**: Removing it hurts performance
-- **Design choices justified**: Why this architecture/hyperparameter?
-- **Failure modes**: When does method not work?
-- **Sensitivity analysis**: Robustness to hyperparameters
+- **每個元件都重要**：移除它會損害性能
+- **設計選擇有理由**：為何選擇這個架構/超參數？
+- **失敗模式**：方法何時不起作用？
+- **敏感度分析**：對超參數的穩健性
 
 ---
 
-## Related Work
+## 相關工作
 
-### Placement Options
+### 位置選項
 
-1. **After Introduction**: Common in CV papers
-2. **Before Conclusion**: Common in NeurIPS/ICML
-3. **Appendix**: When space is tight
+1. **引言之後**：CV 論文常見
+2. **結論之前**：NeurIPS/ICML 常見
+3. **附錄**：空間緊張時
 
-### Writing Style
+### 寫作風格
 
-- **Organized by theme**: Not chronological
-- **Position your work**: How you differ from each line of work
-- **Fair characterization**: Don't misrepresent prior work
-- **Recent citations**: Include 2023-2024 papers
+- **按主題組織**：非按時間順序
+- **定位您的工作**：與每條研究線的不同之處
+- **公平描述**：不要誤解先前工作
+- **近期引用**：包含 2023-2024 論文
 
-### Example Structure
+### 範例結構
 
 ```
-**Efficient Attention Mechanisms.** Prior work on efficient attention 
-falls into three categories: sparse patterns (Beltagy et al., 2020; 
-Zaheer et al., 2020), linear approximations (Katharopoulos et al., 2020; 
-Choromanski et al., 2021), and low-rank factorizations (Wang et al., 
-2020). Our work differs in that we focus on IO-efficient exact 
+**Efficient Attention Mechanisms.** Prior work on efficient attention
+falls into three categories: sparse patterns (Beltagy et al., 2020;
+Zaheer et al., 2020), linear approximations (Katharopoulos et al., 2020;
+Choromanski et al., 2021), and low-rank factorizations (Wang et al.,
+2020). Our work differs in that we focus on IO-efficient exact
 attention rather than approximations.
 
-**Memory-Efficient Training.** Gradient checkpointing (Chen et al., 2016) 
-and activation recomputation (Korthikanti et al., 2022) reduce memory 
-by trading compute. We adopt similar ideas but apply them within the 
+**Memory-Efficient Training.** Gradient checkpointing (Chen et al., 2016)
+and activation recomputation (Korthikanti et al., 2022) reduce memory
+by trading compute. We adopt similar ideas but apply them within the
 attention operator itself.
 ```
 
 ---
 
-## Limitations Section
+## 限制章節
 
-### Why It Matters
+### 為何重要
 
-**Increasingly required** at NeurIPS, ICML, ICLR. Honest limitations:
-- Show scientific maturity
-- Guide future work
-- Prevent overselling
+**在 NeurIPS、ICML、ICLR 越來越需要。** 誠實的限制：
+- 展示科學成熟度
+- 指導未來工作
+- 防止過度宣傳
 
-### What to Include
+### 應包含什麼
 
-1. **Method limitations**: When does it fail?
-2. **Experimental limitations**: What wasn't tested?
-3. **Scope limitations**: What's out of scope?
-4. **Computational limitations**: Resource requirements
+1. **方法限制**：何時會失敗？
+2. **實驗限制**：什麼沒有測試？
+3. **範圍限制**：什麼在範圍之外？
+4. **計算限制**：資源需求
 
-### Example Limitations Section
+### 範例限制章節
 
 ```
-**Limitations.** While FlashAttention-2 provides substantial speedups, 
-several limitations remain. First, our implementation is optimized for 
-NVIDIA GPUs and does not support AMD or other hardware. Second, the 
-speedup is most pronounced for medium to long sequences; for very short 
-sequences (<256 tokens), the overhead of our kernel launch dominates. 
-Third, we focus on dense attention; extending our approach to sparse 
-attention patterns remains future work. Finally, our theoretical 
-analysis assumes specific GPU memory hierarchy parameters that may not 
+**Limitations.** While FlashAttention-2 provides substantial speedups,
+several limitations remain. First, our implementation is optimized for
+NVIDIA GPUs and does not support AMD or other hardware. Second, the
+speedup is most pronounced for medium to long sequences; for very short
+sequences (<256 tokens), the overhead of our kernel launch dominates.
+Third, we focus on dense attention; extending our approach to sparse
+attention patterns remains future work. Finally, our theoretical
+analysis assumes specific GPU memory hierarchy parameters that may not
 hold for future hardware generations.
 ```
 
 ---
 
-## Reproducibility
+## 可重現性
 
-### Reproducibility Checklist (NeurIPS/ICML)
+### 可重現性檢核表（NeurIPS/ICML）
 
-Most ML conferences require a reproducibility checklist covering:
+大多數 ML 會議要求可重現性檢核表涵蓋：
 
-- [ ] Code availability
-- [ ] Dataset availability
-- [ ] Hyperparameters specified
-- [ ] Random seeds reported
-- [ ] Compute requirements stated
-- [ ] Number of runs and variance reported
-- [ ] Statistical significance tests
+- [ ] 程式碼可用性
+- [ ] 資料集可用性
+- [ ] 超參數已指定
+- [ ] 隨機種子已報告
+- [ ] 計算需求已說明
+- [ ] 執行次數和變異已報告
+- [ ] 統計顯著性檢定
 
-### What to Report
+### 應報告什麼
 
-**Hyperparameters**:
+**超參數**：
 ```
-"We train with Adam (β₁=0.9, β₂=0.999, ε=1e-8) and learning rate 3e-4 
-with linear warmup over 1000 steps and cosine decay. Batch size is 256 
-across 8 A100 GPUs. We train for 100K steps (approximately 24 hours)."
-```
-
-**Random Seeds**:
-```
-"All experiments are averaged over 3 random seeds (0, 1, 2) with 
-standard deviation reported in parentheses."
+「We train with Adam (β₁=0.9, β₂=0.999, ε=1e-8) and learning rate 3e-4
+with linear warmup over 1000 steps and cosine decay. Batch size is 256
+across 8 A100 GPUs. We train for 100K steps (approximately 24 hours).」
 ```
 
-**Compute**:
+**隨機種子**：
 ```
-"Experiments were conducted on 8 NVIDIA A100-80GB GPUs. Total training 
-time was approximately 500 GPU-hours."
+「All experiments are averaged over 3 random seeds (0, 1, 2) with
+standard deviation reported in parentheses.」
+```
+
+**計算資源**：
+```
+「Experiments were conducted on 8 NVIDIA A100-80GB GPUs. Total training
+time was approximately 500 GPU-hours.」
 ```
 
 ---
 
-## Figures
+## 圖片
 
-### Figure Quality
+### 圖片品質
 
-- **Vector graphics preferred**: PDF, SVG
-- **High resolution for rasters**: 300+ dpi
-- **Readable at publication size**: Test at actual column width
-- **Colorblind-accessible**: Use patterns in addition to color
+- **向量圖優先**：PDF、SVG
+- **點陣圖高解析度**：300+ dpi
+- **出版尺寸可讀**：以實際欄寬測試
+- **色盲友善**：除顏色外也使用圖案
 
-### Common Figure Types
+### 常見圖片類型
 
-1. **Architecture diagram**: Show your method visually
-2. **Performance plots**: Learning curves, scaling behavior
-3. **Comparison tables**: Main results
-4. **Ablation figures**: Component contributions
-5. **Qualitative examples**: Input/output samples
+1. **架構圖**：視覺化展示您的方法
+2. **性能圖**：學習曲線、縮放行為
+3. **比較表格**：主要結果
+4. **消融圖片**：元件貢獻
+5. **定性範例**：輸入/輸出樣本
 
-### Figure Captions
+### 圖說
 
-Self-contained captions that explain:
-- What is shown
-- How to read the figure
-- Key takeaway
-
----
-
-## References
-
-### Citation Style
-
-- **Numbered [1]** or **author-year (Smith et al., 2023)**
-- Check venue-specific requirements
-- Be consistent throughout
-
-### Reference Guidelines
-
-- **Cite recent work**: 2022-2024 papers expected
-- **Don't over-cite yourself**: Raises bias concerns
-- **Cite arxiv appropriately**: Use published version when available
-- **Include all relevant prior work**: Missing citations hurt review
+自我完整的圖說應解釋：
+- 展示什麼
+- 如何閱讀圖片
+- 關鍵要點
 
 ---
 
-## Venue-Specific Notes
+## 參考文獻
+
+### 引用格式
+
+- **數字標註 [1]** 或 **作者-年份 (Smith et al., 2023)**
+- 查閱場所特定要求
+- 全文一致
+
+### 參考文獻指南
+
+- **引用近期工作**：預期有 2022-2024 論文
+- **不要過度引用自己**：引發偏見疑慮
+- **適當引用 arxiv**：有發表版本時使用發表版本
+- **包含所有相關先前工作**：缺少引用會損害審查
+
+---
+
+## 場所特定說明
 
 ### NeurIPS
 
-- **8 pages** main + unlimited appendix/references
-- **Broader Impact** section sometimes required
-- **Reproducibility checklist** mandatory
-- OpenReview submission, public reviews
+- **8 頁**正文 + 無限附錄/參考文獻
+- **Broader Impact** 章節有時需要
+- **可重現性檢核表**必須
+- OpenReview 投稿，公開審查
 
 ### ICML
 
-- **8 pages** main + unlimited appendix/references
-- Strong emphasis on **theory + experiments**
-- Reproducibility statement encouraged
+- **8 頁**正文 + 無限附錄/參考文獻
+- 強調**理論 + 實驗**
+- 鼓勵可重現性聲明
 
 ### ICLR
 
-- **8 pages** main (camera-ready can exceed)
-- OpenReview with **public reviews and discussion**
-- Author response period is interactive
-- Strong emphasis on **novelty and insight**
+- **8 頁**正文（camera-ready 可超過）
+- OpenReview 有**公開審查和討論**
+- 作者回應期是互動式的
+- 強調**新穎性和洞察**
 
 ### CVPR/ICCV/ECCV
 
-- **8 pages** main including references
-- **Supplementary video** encouraged
-- Heavy emphasis on **visual results**
-- Benchmark performance critical
+- **8 頁**正文含參考文獻
+- 鼓勵**補充影片**
+- 重度強調**視覺結果**
+- 基準測試性能至關重要
 
 ---
 
-## Common Mistakes
+## 常見錯誤
 
-1. **Weak baselines**: Not comparing to recent SOTA
-2. **Missing ablations**: Not showing component contributions
-3. **Overclaiming**: "We solve X" when you partially address X
-4. **Vague contributions**: "We propose a novel method"
-5. **Poor reproducibility**: Missing hyperparameters, seeds
-6. **Wrong template**: Using last year's style file
-7. **Anonymous violations**: Revealing identity in blind review
-8. **Missing limitations**: Not acknowledging failure modes
-
----
-
-## Rebuttal Tips
-
-ML conferences have author response periods. Tips:
-- **Address key concerns first**: Prioritize critical issues
-- **Run requested experiments**: When feasible in time
-- **Be concise**: Reviewers read many rebuttals
-- **Stay professional**: Even with unfair reviews
-- **Reference specific lines**: "As stated in L127..."
+1. **弱基準線**：未與近期 SOTA 比較
+2. **缺少消融實驗**：未展示元件貢獻
+3. **過度聲稱**：「We solve X」而實際只是部分解決 X
+4. **模糊的貢獻**：「We propose a novel method」
+5. **可重現性差**：缺少超參數、種子
+6. **錯誤模板**：使用去年的樣式檔案
+7. **匿名違規**：在盲審中透露身份
+8. **缺少限制**：未承認失敗模式
 
 ---
 
-## Pre-Submission Checklist
+## 回覆審稿意見的技巧
 
-### Content
-- [ ] Clear problem motivation
-- [ ] Explicit contribution list
-- [ ] Complete method description
-- [ ] Comprehensive experiments
-- [ ] Strong baselines included
-- [ ] Ablation studies present
-- [ ] Limitations acknowledged
-
-### Technical
-- [ ] Correct venue style file (current year)
-- [ ] Anonymized (no author names, no identifiable URLs)
-- [ ] Page limit respected
-- [ ] References complete
-- [ ] Supplementary organized
-
-### Reproducibility
-- [ ] Hyperparameters listed
-- [ ] Random seeds specified
-- [ ] Compute requirements stated
-- [ ] Code/data availability noted
-- [ ] Reproducibility checklist completed
+ML 會議有作者回應期。技巧：
+- **首先處理關鍵問題**：優先處理重要問題
+- **執行要求的實驗**：在時間內可行時
+- **簡潔**：審稿人閱讀很多回覆
+- **保持專業**：即使面對不公平的審查
+- **引用具體行數**：「As stated in L127...」
 
 ---
 
-## See Also
+## 投稿前檢核表
 
-- `venue_writing_styles.md` - Master style overview
-- `conferences_formatting.md` - Technical formatting requirements
-- `reviewer_expectations.md` - What ML reviewers seek
+### 內容
+- [ ] 清晰的問題動機
+- [ ] 明確的貢獻列表
+- [ ] 完整的方法描述
+- [ ] 全面的實驗
+- [ ] 包含強基準線
+- [ ] 有消融研究
+- [ ] 承認限制
 
+### 技術
+- [ ] 正確的場所樣式檔案（當年）
+- [ ] 匿名化（無作者姓名、無可識別 URL）
+- [ ] 遵守頁數限制
+- [ ] 參考文獻完整
+- [ ] 補充材料組織良好
+
+### 可重現性
+- [ ] 列出超參數
+- [ ] 指定隨機種子
+- [ ] 說明計算需求
+- [ ] 註明程式碼/資料可用性
+- [ ] 完成可重現性檢核表
+
+---
+
+## 另請參閱
+
+- `venue_writing_styles.md` - 主要風格概述
+- `conferences_formatting.md` - 技術格式要求
+- `reviewer_expectations.md` - ML 審稿人的期望

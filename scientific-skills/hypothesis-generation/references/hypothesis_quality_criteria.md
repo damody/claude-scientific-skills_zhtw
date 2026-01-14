@@ -1,198 +1,198 @@
-# Hypothesis Quality Criteria
+# 假說品質標準
 
-## Framework for Evaluating Scientific Hypotheses
+## 評估科學假說的框架
 
-Use these criteria to assess the quality and rigor of generated hypotheses. A robust hypothesis should score well across multiple dimensions.
+使用這些標準來評估生成假說的品質和嚴謹性。穩健的假說應該在多個維度上得分良好。
 
-**Note on Report Structure:** When generating hypothesis reports, provide a brief quality assessment summary in the main text (comparative table with ratings), and include detailed evaluation with strengths, weaknesses, and comprehensive analysis in **Appendix C: Quality Assessment**.
+**關於報告結構的說明：** 在生成假說報告時，在主文中提供簡要的品質評估摘要（帶評級的比較表），並在 **附錄 C：品質評估** 中包含詳細評估，包含優勢、劣勢和全面分析。
 
-## Core Criteria
+## 核心標準
 
-### 1. Testability
+### 1. 可測試性
 
-**Definition:** The hypothesis can be empirically tested through observation or experimentation.
+**定義：** 假說可以通過觀察或實驗進行經驗測試。
 
-**Evaluation questions:**
-- Can specific experiments or observations test this hypothesis?
-- Are the predicted outcomes measurable?
-- Can the hypothesis be tested with current or near-future methods?
-- Are there multiple independent ways to test it?
+**評估問題：**
+- 特定的實驗或觀察可以測試這個假說嗎？
+- 預測的結果是可測量的嗎？
+- 假說可以用當前或近期未來的方法測試嗎？
+- 有多種獨立的方法來測試它嗎？
 
-**Strong testability examples:**
-- "Increased expression of protein X will reduce cell proliferation rate by >30%"
-- "Patients receiving treatment Y will show 50% reduction in symptom Z within 4 weeks"
+**強可測試性範例：**
+- 「蛋白質 X 表達增加將使細胞增殖率降低 >30%」
+- 「接受處理 Y 的患者將在 4 週內症狀 Z 減少 50%」
 
-**Weak testability examples:**
-- "This process is influenced by complex interactions" (vague, no specific prediction)
-- "The mechanism involves quantum effects" (if no method to test quantum effects exists)
+**弱可測試性範例：**
+- 「這個過程受複雜交互作用影響」（模糊，無具體預測）
+- 「機制涉及量子效應」（如果不存在測試量子效應的方法）
 
-### 2. Falsifiability
+### 2. 可證偽性
 
-**Definition:** Clear conditions or observations would disprove the hypothesis (Popperian criterion).
+**定義：** 明確的條件或觀察將推翻假說（波普爾標準）。
 
-**Evaluation questions:**
-- What specific observations would prove this hypothesis wrong?
-- Are the falsifying conditions realistic to observe?
-- Is the hypothesis stated clearly enough to be disproven?
-- Can null results meaningfully falsify the hypothesis?
+**評估問題：**
+- 什麼具體觀察會證明這個假說錯誤？
+- 證偽條件是否現實可觀察？
+- 假說陳述是否足夠清晰以被推翻？
+- 空結果能有意義地證偽假說嗎？
 
-**Strong falsifiability examples:**
-- "If we knock out gene X, phenotype Y will disappear" (can be falsified if phenotype persists)
-- "Drug A will outperform placebo in 80% of patients" (clear falsification threshold)
+**強可證偽性範例：**
+- 「如果我們剔除基因 X，表型 Y 將消失」（如果表型持續存在則可證偽）
+- 「藥物 A 將在 80% 的患者中優於安慰劑」（明確的證偽閾值）
 
-**Weak falsifiability examples:**
-- "Multiple factors contribute to the outcome" (too vague to falsify)
-- "The effect may vary depending on context" (built-in escape clauses)
+**弱可證偽性範例：**
+- 「多種因素對結果有貢獻」（太模糊無法證偽）
+- 「效應可能因情境而異」（內建的逃避條款）
 
-### 3. Parsimony (Occam's Razor)
+### 3. 簡約性（奧卡姆剃刀）
 
-**Definition:** Among competing hypotheses with equal explanatory power, prefer the simpler explanation.
+**定義：** 在解釋力相等的競爭假說中，優先選擇更簡單的解釋。
 
-**Evaluation questions:**
-- Does the hypothesis invoke the minimum number of entities/mechanisms needed?
-- Are all proposed elements necessary to explain the phenomenon?
-- Could a simpler mechanism account for the observations?
-- Does it avoid unnecessary assumptions?
+**評估問題：**
+- 假說是否調用了所需的最少實體/機制？
+- 所有提出的元素對於解釋現象都是必要的嗎？
+- 更簡單的機制能解釋這些觀察嗎？
+- 它是否避免了不必要的假設？
 
-**Parsimony considerations:**
-- Simple ≠ simplistic; complexity is justified when evidence demands it
-- Established mechanisms are "simpler" than novel, unproven ones
-- Direct mechanisms are simpler than elaborate multi-step pathways
-- One well-supported mechanism beats multiple speculative ones
+**簡約性考量：**
+- 簡單 ≠ 簡化；當證據需要時，複雜性是合理的
+- 已建立的機制比新穎的、未經證實的機制「更簡單」
+- 直接機制比複雜的多步驟途徑更簡單
+- 一個有充分支持的機制優於多個推測性機制
 
-### 4. Explanatory Power
+### 4. 解釋力
 
-**Definition:** The hypothesis accounts for a substantial portion of the observed phenomenon.
+**定義：** 假說解釋了觀察到的現象的很大一部分。
 
-**Evaluation questions:**
-- How much of the observed data does this hypothesis explain?
-- Does it account for both typical and atypical observations?
-- Can it explain related phenomena beyond the immediate observation?
-- Does it resolve apparent contradictions in existing data?
+**評估問題：**
+- 這個假說解釋了多少觀察到的資料？
+- 它是否解釋了典型和非典型的觀察？
+- 它能解釋直接觀察之外的相關現象嗎？
+- 它是否解決了現有資料中的明顯矛盾？
 
-**Strong explanatory power indicators:**
-- Explains multiple independent observations
-- Accounts for quantitative relationships, not just qualitative patterns
-- Resolves previously puzzling findings
-- Makes sense of seemingly contradictory results
+**強解釋力指標：**
+- 解釋多個獨立的觀察
+- 解釋量化關係，而不僅僅是定性模式
+- 解決先前令人困惑的發現
+- 使看似矛盾的結果合理化
 
-**Limited explanatory power indicators:**
-- Only explains part of the phenomenon
-- Requires additional hypotheses for complete explanation
-- Leaves major observations unexplained
+**有限解釋力指標：**
+- 只解釋現象的一部分
+- 需要額外假說才能完整解釋
+- 留下主要觀察未被解釋
 
-### 5. Scope
+### 5. 範圍
 
-**Definition:** The range of phenomena and contexts the hypothesis can address.
+**定義：** 假說可以處理的現象和情境範圍。
 
-**Evaluation questions:**
-- Does it apply only to the specific case or to broader situations?
-- Can it generalize across conditions, species, or systems?
-- Does it connect to larger theoretical frameworks?
-- What are its boundaries and limitations?
+**評估問題：**
+- 它只適用於特定案例還是更廣泛的情況？
+- 它可以跨條件、物種或系統推廣嗎？
+- 它是否與更大的理論框架連接？
+- 它的邊界和限制是什麼？
 
-**Broader scope (generally preferable):**
-- Applies across multiple experimental conditions
-- Generalizes to related systems or species
-- Connects phenomenon to established principles
+**更廣泛的範圍（通常更可取）：**
+- 適用於多種實驗條件
+- 推廣到相關系統或物種
+- 將現象與既定原則連接
 
-**Narrower scope (acceptable if explicitly defined):**
-- Limited to specific conditions or contexts
-- Requires different mechanisms in different settings
-- Context-dependent with clear boundaries
+**較窄的範圍（如果明確定義則可接受）：**
+- 限於特定條件或情境
+- 在不同設置中需要不同機制
+- 依賴情境但有明確邊界
 
-### 6. Consistency with Established Knowledge
+### 6. 與既定知識的一致性
 
-**Definition:** Alignment with well-supported theories, principles, and empirical findings.
+**定義：** 與充分支持的理論、原則和經驗發現的一致性。
 
-**Evaluation questions:**
-- Is it consistent with established physical, chemical, or biological principles?
-- Does it align with or reasonably extend current theories?
-- If contradicting established knowledge, is there strong justification?
-- Does it require violating well-supported laws or findings?
+**評估問題：**
+- 它是否與既定的物理、化學或生物原則一致？
+- 它是否與當前理論一致或合理地擴展它們？
+- 如果與既定知識矛盾，是否有充分的理由？
+- 它是否需要違反充分支持的定律或發現？
 
-**Levels of consistency:**
-- **Fully consistent:** Applies established mechanisms in new context
-- **Mostly consistent:** Extends current understanding in plausible ways
-- **Partially inconsistent:** Contradicts some findings but has explanatory value
-- **Highly inconsistent:** Requires rejecting well-established principles (requires exceptional evidence)
+**一致性層級：**
+- **完全一致：** 在新情境中應用既定機制
+- **大部分一致：** 以合理的方式擴展當前理解
+- **部分不一致：** 與某些發現矛盾但具有解釋價值
+- **高度不一致：** 需要拒絕充分建立的原則（需要非凡的證據）
 
-### 7. Novelty and Insight
+### 7. 新穎性和洞察力
 
-**Definition:** The hypothesis offers new understanding beyond merely restating known facts.
+**定義：** 假說提供超越僅僅重述已知事實的新理解。
 
-**Evaluation questions:**
-- Does it provide new mechanistic insight?
-- Does it challenge assumptions or conventional wisdom?
-- Does it suggest unexpected connections or relationships?
-- Does it open new research directions?
+**評估問題：**
+- 它是否提供新的機制洞察？
+- 它是否挑戰假設或傳統智慧？
+- 它是否建議意想不到的連接或關係？
+- 它是否開啟新的研究方向？
 
-**Novel contributions:**
-- Proposes previously unconsidered mechanisms
-- Reframes the problem in a productive way
-- Connects disparate observations
-- Suggests non-obvious testable predictions
+**新穎貢獻：**
+- 提出先前未考慮的機制
+- 以有成效的方式重新框架問題
+- 連接不同的觀察
+- 建議非顯而易見的可測試預測
 
-**Note:** Novelty alone doesn't make a hypothesis valuable; it must also be testable, parsimonious, and explanatory.
+**注意：** 僅有新穎性並不能使假說有價值；它還必須是可測試的、簡約的和有解釋力的。
 
-## Comparative Evaluation
+## 比較評估
 
-When evaluating multiple competing hypotheses:
+在評估多個競爭假說時：
 
-### Trade-offs and Balancing
+### 權衡和平衡
 
-Hypotheses often involve trade-offs:
-- More parsimonious but less explanatory power
-- Broader scope but less testable with current methods
-- Novel insights but less consistent with current knowledge
+假說通常涉及權衡：
+- 更簡約但解釋力較低
+- 範圍更廣但用當前方法較難測試
+- 新穎洞察但與當前知識一致性較低
 
-**Evaluation approach:**
-- No hypothesis needs to be perfect on all dimensions
-- Identify each hypothesis's strengths and weaknesses
-- Consider which criteria are most important for the specific phenomenon
-- Note which hypotheses are most immediately testable
-- Identify which would be most informative if supported
+**評估方法：**
+- 沒有假說需要在所有維度上完美
+- 識別每個假說的優勢和劣勢
+- 考慮哪些標準對特定現象最重要
+- 注意哪些假說最直接可測試
+- 識別如果得到支持哪個最有資訊價值
 
-### Distinguishability
+### 可區分性
 
-**Key question:** Can experiments distinguish between competing hypotheses?
+**關鍵問題：** 實驗能區分競爭假說嗎？
 
-- Identify predictions that differ between hypotheses
-- Prioritize hypotheses that make distinct predictions
-- Note which experiments would most efficiently narrow the field
-- Consider whether hypotheses could all be partially correct
+- 識別假說之間不同的預測
+- 優先考慮做出不同預測的假說
+- 注意哪些實驗最有效地縮小範圍
+- 考慮假說是否可能都部分正確
 
-## Common Pitfalls
+## 常見陷阱
 
-### Untestable Hypotheses
-- Too vague to generate specific predictions
-- Invoke unobservable or unmeasurable entities
-- Require technology that doesn't exist
+### 不可測試的假說
+- 太模糊無法生成具體預測
+- 調用不可觀察或不可測量的實體
+- 需要不存在的技術
 
-### Unfalsifiable Hypotheses
-- Built-in escape clauses ("may or may not occur")
-- Post-hoc explanations that fit any outcome
-- No specification of what would disprove them
+### 不可證偽的假說
+- 內建的逃避條款（「可能發生或可能不發生」）
+- 適合任何結果的事後解釋
+- 沒有指定什麼會推翻它們
 
-### Overly Complex Hypotheses
-- Invoke multiple unproven mechanisms
-- Add unnecessary steps or entities
-- Complexity not justified by explanatory gains
+### 過度複雜的假說
+- 調用多個未經證實的機制
+- 添加不必要的步驟或實體
+- 複雜性沒有被解釋收益所證明
 
-### Just-So Stories
-- Plausible narratives without testable predictions
-- Explain observations but don't predict new ones
-- Impossible to distinguish from alternative stories
+### 牽強附會的故事
+- 沒有可測試預測的合理敘述
+- 解釋觀察但不預測新的觀察
+- 無法與替代故事區分
 
-## Practical Application
+## 實際應用
 
-When generating hypotheses:
+在生成假說時：
 
-1. **Draft initial hypotheses** focusing on mechanistic explanations
-2. **Apply quality criteria** to identify weaknesses
-3. **Refine hypotheses** to improve testability and clarity
-4. **Develop specific predictions** to enhance testability and falsifiability
-5. **Compare systematically** across all criteria
-6. **Prioritize for testing** based on distinguishability and feasibility
+1. **起草初始假說** 聚焦於機制性解釋
+2. **應用品質標準** 識別弱點
+3. **精煉假說** 以提高可測試性和清晰度
+4. **發展具體預測** 以增強可測試性和可證偽性
+5. **系統性比較** 所有標準
+6. **優先進行測試** 基於可區分性和可行性
 
-Remember: The goal is not a perfect hypothesis, but a set of testable, falsifiable, informative hypotheses that advance understanding of the phenomenon.
+記住：目標不是完美的假說，而是一組可測試的、可證偽的、有資訊價值的假說，這些假說能推進對現象的理解。

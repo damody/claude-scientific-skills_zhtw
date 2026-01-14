@@ -1,51 +1,51 @@
-# CPU, Memory, and Disk Resources
+# CPU、記憶體和磁碟資源
 
-## Default Resources
+## 預設資源
 
-Each Modal container has default reservations:
-- **CPU**: 0.125 cores
-- **Memory**: 128 MiB
+每個 Modal 容器有預設配置：
+- **CPU**：0.125 核心
+- **記憶體**：128 MiB
 
-Containers can exceed minimum if worker has available resources.
+如果工作節點有可用資源，容器可以超出最低配置。
 
-## CPU Cores
+## CPU 核心
 
-Request CPU cores as floating-point number:
+以浮點數請求 CPU 核心：
 
 ```python
 @app.function(cpu=8.0)
 def my_function():
-    # Guaranteed access to at least 8 physical cores
+    # 保證至少存取 8 個實體核心
     ...
 ```
 
-Values correspond to physical cores, not vCPUs.
+值對應實體核心，而非 vCPU。
 
-Modal sets multi-threading environment variables based on CPU reservation:
+Modal 根據 CPU 配置設定多執行緒環境變數：
 - `OPENBLAS_NUM_THREADS`
 - `OMP_NUM_THREADS`
 - `MKL_NUM_THREADS`
 
-## Memory
+## 記憶體
 
-Request memory in megabytes (integer):
+以整數（兆位元組）請求記憶體：
 
 ```python
 @app.function(memory=32768)
 def my_function():
-    # Guaranteed access to at least 32 GiB RAM
+    # 保證至少存取 32 GiB RAM
     ...
 ```
 
-## Resource Limits
+## 資源限制
 
-### CPU Limits
+### CPU 限制
 
-Default soft CPU limit: request + 16 cores
-- Default request: 0.125 cores → default limit: 16.125 cores
-- Above limit, host throttles CPU usage
+預設軟性 CPU 限制：請求 + 16 核心
+- 預設請求：0.125 核心 → 預設限制：16.125 核心
+- 超過限制時，主機會節流 CPU 使用
 
-Set explicit CPU limit:
+設定明確的 CPU 限制：
 
 ```python
 cpu_request = 1.0
@@ -56,9 +56,9 @@ def f():
     ...
 ```
 
-### Memory Limits
+### 記憶體限制
 
-Set hard memory limit to OOM kill containers at threshold:
+設定硬性記憶體限制，在達到閾值時 OOM 終止容器：
 
 ```python
 mem_request = 1024  # MB
@@ -66,21 +66,21 @@ mem_limit = 2048    # MB
 
 @app.function(memory=(mem_request, mem_limit))
 def f():
-    # Container killed if exceeds 2048 MB
+    # 超過 2048 MB 時容器被終止
     ...
 ```
 
-Useful for catching memory leaks early.
+用於及早發現記憶體洩漏。
 
-### Disk Limits
+### 磁碟限制
 
-Running containers have access to many GBs of SSD disk, limited by:
-1. Underlying worker's SSD capacity
-2. Per-container disk quota (100s of GBs)
+執行中的容器可存取許多 GB 的 SSD 磁碟，受以下限制：
+1. 底層工作節點的 SSD 容量
+2. 每容器磁碟配額（數百 GB）
 
-Hitting limits causes `OSError` on disk writes.
+達到限制會在磁碟寫入時導致 `OSError`。
 
-Request larger disk with `ephemeral_disk`:
+使用 `ephemeral_disk` 請求更大的磁碟：
 
 ```python
 @app.function(ephemeral_disk=10240)  # 10 GiB
@@ -88,42 +88,42 @@ def process_large_files():
     ...
 ```
 
-Maximum disk size: 3.0 TiB (3,145,728 MiB)
-Intended use: dataset processing
+最大磁碟大小：3.0 TiB（3,145,728 MiB）
+預期用途：資料集處理
 
-## Billing
+## 計費
 
-Charged based on whichever is higher: reservation or actual usage.
+根據較高者計費：保留量或實際用量。
 
-Disk requests increase memory request at 20:1 ratio:
-- Requesting 500 GiB disk → increases memory request to 25 GiB (if not already higher)
+磁碟請求以 20:1 的比率增加記憶體請求：
+- 請求 500 GiB 磁碟 → 將記憶體請求增加到 25 GiB（如果還沒有更高的話）
 
-## Maximum Requests
+## 最大請求
 
-Modal enforces maximums at Function creation time. Requests exceeding maximum will be rejected with `InvalidError`.
+Modal 在建立函數時強制執行最大值。超過最大值的請求會被拒絕並顯示 `InvalidError`。
 
-Contact support if you need higher limits.
+如果您需要更高的限制，請聯繫支援。
 
-## Example: Resource Configuration
+## 範例：資源配置
 
 ```python
 @app.function(
-    cpu=4.0,              # 4 physical cores
+    cpu=4.0,              # 4 個實體核心
     memory=16384,         # 16 GiB RAM
-    ephemeral_disk=51200, # 50 GiB disk
-    timeout=3600,         # 1 hour timeout
+    ephemeral_disk=51200, # 50 GiB 磁碟
+    timeout=3600,         # 1 小時超時
 )
 def process_data():
-    # Heavy processing with large files
+    # 處理大型檔案的繁重處理
     ...
 ```
 
-## Monitoring Resource Usage
+## 監控資源使用
 
-View resource usage in Modal dashboard:
-- CPU utilization
-- Memory usage
-- Disk usage
-- GPU metrics (if applicable)
+在 Modal 儀表板檢視資源使用：
+- CPU 使用率
+- 記憶體使用量
+- 磁碟使用量
+- GPU 指標（如適用）
 
-Access via https://modal.com/apps
+透過 https://modal.com/apps 存取

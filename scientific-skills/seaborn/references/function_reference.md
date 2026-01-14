@@ -1,31 +1,31 @@
-# Seaborn Function Reference
+# Seaborn 函數參考
 
-This document provides a comprehensive reference for all major seaborn functions, organized by category.
+本文件提供所有主要 seaborn 函數的完整參考，按類別組織。
 
-## Relational Plots
+## 關聯圖
 
 ### scatterplot()
 
-**Purpose:** Create a scatter plot with points representing individual observations.
+**用途：** 建立散點圖，以點表示個別觀測值。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict of arrays
-- `x, y` - Variables for x and y axes
-- `hue` - Grouping variable for color encoding
-- `size` - Grouping variable for size encoding
-- `style` - Grouping variable for marker style
-- `palette` - Color palette name or list
-- `hue_order` - Order for categorical hue levels
-- `hue_norm` - Normalization for numeric hue (tuple or Normalize object)
-- `sizes` - Size range for size encoding (tuple or dict)
-- `size_order` - Order for categorical size levels
-- `size_norm` - Normalization for numeric size
-- `markers` - Marker style(s) (string, list, or dict)
-- `style_order` - Order for categorical style levels
-- `legend` - How to draw legend: "auto", "brief", "full", or False
-- `ax` - Matplotlib axes to plot on
+**關鍵參數：**
+- `data` - DataFrame、陣列或陣列字典
+- `x, y` - x 和 y 軸的變數
+- `hue` - 用於顏色編碼的分組變數
+- `size` - 用於大小編碼的分組變數
+- `style` - 用於標記樣式的分組變數
+- `palette` - 調色盤名稱或列表
+- `hue_order` - 類別 hue 層級的順序
+- `hue_norm` - 數值 hue 的正規化（元組或 Normalize 物件）
+- `sizes` - 大小編碼的範圍（元組或字典）
+- `size_order` - 類別 size 層級的順序
+- `size_norm` - 數值 size 的正規化
+- `markers` - 標記樣式（字串、列表或字典）
+- `style_order` - 類別 style 層級的順序
+- `legend` - 如何繪製圖例："auto"、"brief"、"full" 或 False
+- `ax` - 要繪製的 Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.scatterplot(data=df, x='height', y='weight',
                 hue='gender', size='age', style='smoker',
@@ -34,28 +34,28 @@ sns.scatterplot(data=df, x='height', y='weight',
 
 ### lineplot()
 
-**Purpose:** Draw a line plot with automatic aggregation and confidence intervals for repeated measures.
+**用途：** 繪製折線圖，對重複測量自動聚合並計算信賴區間。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict of arrays
-- `x, y` - Variables for x and y axes
-- `hue` - Grouping variable for color encoding
-- `size` - Grouping variable for line width
-- `style` - Grouping variable for line style (dashes)
-- `units` - Grouping variable for sampling units (no aggregation within units)
-- `estimator` - Function for aggregating across observations (default: mean)
-- `errorbar` - Method for error bars: "sd", "se", "pi", ("ci", level), ("pi", level), or None
-- `n_boot` - Number of bootstrap iterations for CI computation
-- `seed` - Random seed for reproducible bootstrapping
-- `sort` - Sort data before plotting
-- `err_style` - "band" or "bars" for error representation
-- `err_kws` - Additional parameters for error representation
-- `markers` - Marker style(s) for emphasizing data points
-- `dashes` - Dash style(s) for lines
-- `legend` - How to draw legend
-- `ax` - Matplotlib axes to plot on
+**關鍵參數：**
+- `data` - DataFrame、陣列或陣列字典
+- `x, y` - x 和 y 軸的變數
+- `hue` - 用於顏色編碼的分組變數
+- `size` - 用於線寬的分組變數
+- `style` - 用於線條樣式（虛線）的分組變數
+- `units` - 取樣單位的分組變數（單位內不聚合）
+- `estimator` - 跨觀測值聚合的函數（預設：mean）
+- `errorbar` - 誤差棒方法："sd"、"se"、"pi"、("ci", level)、("pi", level) 或 None
+- `n_boot` - 計算信賴區間的自助法迭代次數
+- `seed` - 可重複自助法的隨機種子
+- `sort` - 繪圖前排序資料
+- `err_style` - "band" 或 "bars" 表示誤差
+- `err_kws` - 誤差表示的額外參數
+- `markers` - 強調資料點的標記樣式
+- `dashes` - 線條的虛線樣式
+- `legend` - 如何繪製圖例
+- `ax` - 要繪製的 Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.lineplot(data=timeseries, x='time', y='signal',
              hue='condition', style='subject',
@@ -64,21 +64,21 @@ sns.lineplot(data=timeseries, x='time', y='signal',
 
 ### relplot()
 
-**Purpose:** Figure-level interface for drawing relational plots (scatter or line) onto a FacetGrid.
+**用途：** 在 FacetGrid 上繪製關聯圖（散點或折線）的圖形層級介面。
 
-**Key Parameters:**
-All parameters from `scatterplot()` and `lineplot()`, plus:
-- `kind` - "scatter" or "line"
-- `col` - Categorical variable for column facets
-- `row` - Categorical variable for row facets
-- `col_wrap` - Wrap columns after this many columns
-- `col_order` - Order for column facet levels
-- `row_order` - Order for row facet levels
-- `height` - Height of each facet in inches
-- `aspect` - Aspect ratio (width = height * aspect)
-- `facet_kws` - Additional parameters for FacetGrid
+**關鍵參數：**
+`scatterplot()` 和 `lineplot()` 的所有參數，加上：
+- `kind` - "scatter" 或 "line"
+- `col` - 欄分面的類別變數
+- `row` - 列分面的類別變數
+- `col_wrap` - 此數量欄位後換行
+- `col_order` - 欄分面層級的順序
+- `row_order` - 列分面層級的順序
+- `height` - 每個分面的高度（英寸）
+- `aspect` - 長寬比（寬度 = 高度 * aspect）
+- `facet_kws` - FacetGrid 的額外參數
 
-**Example:**
+**範例：**
 ```python
 sns.relplot(data=df, x='time', y='measurement',
             hue='treatment', style='batch',
@@ -86,40 +86,40 @@ sns.relplot(data=df, x='time', y='measurement',
             kind='line', height=3, aspect=1.5)
 ```
 
-## Distribution Plots
+## 分布圖
 
 ### histplot()
 
-**Purpose:** Plot univariate or bivariate histograms with flexible binning.
+**用途：** 繪製單變量或雙變量直方圖，支援靈活的分箱。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict
-- `x, y` - Variables (y optional for bivariate)
-- `hue` - Grouping variable
-- `weights` - Variable for weighting observations
-- `stat` - Aggregate statistic: "count", "frequency", "probability", "percent", "density"
-- `bins` - Number of bins, bin edges, or method ("auto", "fd", "doane", "scott", "stone", "rice", "sturges", "sqrt")
-- `binwidth` - Width of bins (overrides bins)
-- `binrange` - Range for binning (tuple)
-- `discrete` - Treat x as discrete (centers bars on values)
-- `cumulative` - Compute cumulative distribution
-- `common_bins` - Use same bins for all hue levels
-- `common_norm` - Normalize across hue levels
-- `multiple` - How to handle hue: "layer", "dodge", "stack", "fill"
-- `element` - Visual element: "bars", "step", "poly"
-- `fill` - Fill bars/elements
-- `shrink` - Scale bar width (for multiple="dodge")
-- `kde` - Overlay KDE estimate
-- `kde_kws` - Parameters for KDE
-- `line_kws` - Parameters for step/poly elements
-- `thresh` - Minimum count threshold for bins
-- `pthresh` - Minimum probability threshold
-- `pmax` - Maximum probability for color scaling
-- `log_scale` - Log scale for axis (bool or base)
-- `legend` - Whether to show legend
+**關鍵參數：**
+- `data` - DataFrame、陣列或字典
+- `x, y` - 變數（雙變量時 y 為可選）
+- `hue` - 分組變數
+- `weights` - 用於加權觀測值的變數
+- `stat` - 聚合統計量："count"、"frequency"、"probability"、"percent"、"density"
+- `bins` - 分箱數量、分箱邊緣或方法（"auto"、"fd"、"doane"、"scott"、"stone"、"rice"、"sturges"、"sqrt"）
+- `binwidth` - 分箱寬度（覆蓋 bins）
+- `binrange` - 分箱範圍（元組）
+- `discrete` - 將 x 視為離散（長條置中於值）
+- `cumulative` - 計算累積分布
+- `common_bins` - 所有 hue 層級使用相同分箱
+- `common_norm` - 跨 hue 層級正規化
+- `multiple` - 如何處理 hue："layer"、"dodge"、"stack"、"fill"
+- `element` - 視覺元素："bars"、"step"、"poly"
+- `fill` - 填充長條/元素
+- `shrink` - 縮放長條寬度（用於 multiple="dodge"）
+- `kde` - 疊加 KDE 估計
+- `kde_kws` - KDE 的參數
+- `line_kws` - step/poly 元素的參數
+- `thresh` - 分箱的最小計數閾值
+- `pthresh` - 最小機率閾值
+- `pmax` - 色彩縮放的最大機率
+- `log_scale` - 軸的對數刻度（布林值或底數）
+- `legend` - 是否顯示圖例
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.histplot(data=df, x='measurement', hue='condition',
              stat='density', bins=30, kde=True,
@@ -128,62 +128,62 @@ sns.histplot(data=df, x='measurement', hue='condition',
 
 ### kdeplot()
 
-**Purpose:** Plot univariate or bivariate kernel density estimates.
+**用途：** 繪製單變量或雙變量核密度估計。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict
-- `x, y` - Variables (y optional for bivariate)
-- `hue` - Grouping variable
-- `weights` - Variable for weighting observations
-- `palette` - Color palette
-- `hue_order` - Order for hue levels
-- `hue_norm` - Normalization for numeric hue
-- `multiple` - How to handle hue: "layer", "stack", "fill"
-- `common_norm` - Normalize across hue levels
-- `common_grid` - Use same grid for all hue levels
-- `cumulative` - Compute cumulative distribution
-- `bw_method` - Method for bandwidth: "scott", "silverman", or scalar
-- `bw_adjust` - Bandwidth multiplier (higher = smoother)
-- `log_scale` - Log scale for axis
-- `levels` - Number or values for contour levels (bivariate)
-- `thresh` - Minimum density threshold for contours
-- `gridsize` - Grid resolution
-- `cut` - Extension beyond data extremes (in bandwidth units)
-- `clip` - Data range for curve (tuple)
-- `fill` - Fill area under curve/contours
-- `legend` - Whether to show legend
+**關鍵參數：**
+- `data` - DataFrame、陣列或字典
+- `x, y` - 變數（雙變量時 y 為可選）
+- `hue` - 分組變數
+- `weights` - 用於加權觀測值的變數
+- `palette` - 調色盤
+- `hue_order` - hue 層級的順序
+- `hue_norm` - 數值 hue 的正規化
+- `multiple` - 如何處理 hue："layer"、"stack"、"fill"
+- `common_norm` - 跨 hue 層級正規化
+- `common_grid` - 所有 hue 層級使用相同網格
+- `cumulative` - 計算累積分布
+- `bw_method` - 頻寬方法："scott"、"silverman" 或純量
+- `bw_adjust` - 頻寬乘數（越高越平滑）
+- `log_scale` - 軸的對數刻度
+- `levels` - 等高線層級的數量或值（雙變量）
+- `thresh` - 等高線的最小密度閾值
+- `gridsize` - 網格解析度
+- `cut` - 超出資料極值的延伸（以頻寬單位）
+- `clip` - 曲線的資料範圍（元組）
+- `fill` - 填充曲線/等高線下方區域
+- `legend` - 是否顯示圖例
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
-# Univariate
+# 單變量
 sns.kdeplot(data=df, x='measurement', hue='condition',
             fill=True, common_norm=False, bw_adjust=1.5)
 
-# Bivariate
+# 雙變量
 sns.kdeplot(data=df, x='var1', y='var2',
             fill=True, levels=10, thresh=0.05)
 ```
 
 ### ecdfplot()
 
-**Purpose:** Plot empirical cumulative distribution functions.
+**用途：** 繪製經驗累積分布函數。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict
-- `x, y` - Variables (specify one)
-- `hue` - Grouping variable
-- `weights` - Variable for weighting observations
-- `stat` - "proportion" or "count"
-- `complementary` - Plot complementary CDF (1 - ECDF)
-- `palette` - Color palette
-- `hue_order` - Order for hue levels
-- `hue_norm` - Normalization for numeric hue
-- `log_scale` - Log scale for axis
-- `legend` - Whether to show legend
+**關鍵參數：**
+- `data` - DataFrame、陣列或字典
+- `x, y` - 變數（指定其一）
+- `hue` - 分組變數
+- `weights` - 用於加權觀測值的變數
+- `stat` - "proportion" 或 "count"
+- `complementary` - 繪製互補 CDF（1 - ECDF）
+- `palette` - 調色盤
+- `hue_order` - hue 層級的順序
+- `hue_norm` - 數值 hue 的正規化
+- `log_scale` - 軸的對數刻度
+- `legend` - 是否顯示圖例
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.ecdfplot(data=df, x='response_time', hue='treatment',
              stat='proportion', complementary=False)
@@ -191,44 +191,44 @@ sns.ecdfplot(data=df, x='response_time', hue='treatment',
 
 ### rugplot()
 
-**Purpose:** Plot tick marks showing individual observations along an axis.
+**用途：** 沿軸繪製顯示個別觀測值的刻度標記。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict
-- `x, y` - Variable (specify one)
-- `hue` - Grouping variable
-- `height` - Height of ticks (proportion of axis)
-- `expand_margins` - Add margin space for rug
-- `palette` - Color palette
-- `hue_order` - Order for hue levels
-- `hue_norm` - Normalization for numeric hue
-- `legend` - Whether to show legend
+**關鍵參數：**
+- `data` - DataFrame、陣列或字典
+- `x, y` - 變數（指定其一）
+- `hue` - 分組變數
+- `height` - 刻度高度（軸的比例）
+- `expand_margins` - 為地毯圖添加邊距空間
+- `palette` - 調色盤
+- `hue_order` - hue 層級的順序
+- `hue_norm` - 數值 hue 的正規化
+- `legend` - 是否顯示圖例
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.rugplot(data=df, x='value', hue='category', height=0.05)
 ```
 
 ### displot()
 
-**Purpose:** Figure-level interface for distribution plots onto a FacetGrid.
+**用途：** 在 FacetGrid 上繪製分布圖的圖形層級介面。
 
-**Key Parameters:**
-All parameters from `histplot()`, `kdeplot()`, and `ecdfplot()`, plus:
-- `kind` - "hist", "kde", "ecdf"
-- `rug` - Add rug plot on marginal axes
-- `rug_kws` - Parameters for rug plot
-- `col` - Categorical variable for column facets
-- `row` - Categorical variable for row facets
-- `col_wrap` - Wrap columns
-- `col_order` - Order for column facets
-- `row_order` - Order for row facets
-- `height` - Height of each facet
-- `aspect` - Aspect ratio
-- `facet_kws` - Additional parameters for FacetGrid
+**關鍵參數：**
+`histplot()`、`kdeplot()` 和 `ecdfplot()` 的所有參數，加上：
+- `kind` - "hist"、"kde"、"ecdf"
+- `rug` - 在邊際軸上添加地毯圖
+- `rug_kws` - 地毯圖的參數
+- `col` - 欄分面的類別變數
+- `row` - 列分面的類別變數
+- `col_wrap` - 換行欄數
+- `col_order` - 欄分面的順序
+- `row_order` - 列分面的順序
+- `height` - 每個分面的高度
+- `aspect` - 長寬比
+- `facet_kws` - FacetGrid 的額外參數
 
-**Example:**
+**範例：**
 ```python
 sns.displot(data=df, x='measurement', hue='treatment',
             col='timepoint', kind='kde', fill=True,
@@ -237,25 +237,25 @@ sns.displot(data=df, x='measurement', hue='treatment',
 
 ### jointplot()
 
-**Purpose:** Draw a bivariate plot with marginal univariate plots.
+**用途：** 繪製帶有邊際單變量圖的雙變量圖。
 
-**Key Parameters:**
+**關鍵參數：**
 - `data` - DataFrame
-- `x, y` - Variables for x and y axes
-- `hue` - Grouping variable
-- `kind` - "scatter", "kde", "hist", "hex", "reg", "resid"
-- `height` - Size of the figure (square)
-- `ratio` - Ratio of joint to marginal axes
-- `space` - Space between joint and marginal axes
-- `dropna` - Drop missing values
-- `xlim, ylim` - Axis limits (tuples)
-- `marginal_ticks` - Show ticks on marginal axes
-- `joint_kws` - Parameters for joint plot
-- `marginal_kws` - Parameters for marginal plots
-- `hue_order` - Order for hue levels
-- `palette` - Color palette
+- `x, y` - x 和 y 軸的變數
+- `hue` - 分組變數
+- `kind` - "scatter"、"kde"、"hist"、"hex"、"reg"、"resid"
+- `height` - 圖形大小（正方形）
+- `ratio` - 聯合與邊際軸的比例
+- `space` - 聯合與邊際軸之間的空間
+- `dropna` - 刪除缺失值
+- `xlim, ylim` - 軸限制（元組）
+- `marginal_ticks` - 在邊際軸上顯示刻度
+- `joint_kws` - 聯合圖的參數
+- `marginal_kws` - 邊際圖的參數
+- `hue_order` - hue 層級的順序
+- `palette` - 調色盤
 
-**Example:**
+**範例：**
 ```python
 sns.jointplot(data=df, x='var1', y='var2', hue='group',
               kind='scatter', height=6, ratio=4,
@@ -264,59 +264,59 @@ sns.jointplot(data=df, x='var1', y='var2', hue='group',
 
 ### pairplot()
 
-**Purpose:** Plot pairwise relationships in a dataset.
+**用途：** 繪製資料集中的成對關係。
 
-**Key Parameters:**
+**關鍵參數：**
 - `data` - DataFrame
-- `hue` - Grouping variable for color encoding
-- `hue_order` - Order for hue levels
-- `palette` - Color palette
-- `vars` - Variables to plot (default: all numeric)
-- `x_vars, y_vars` - Variables for x and y axes (non-square grid)
-- `kind` - "scatter", "kde", "hist", "reg"
-- `diag_kind` - "auto", "hist", "kde", None
-- `markers` - Marker style(s)
-- `height` - Height of each facet
-- `aspect` - Aspect ratio
-- `corner` - Plot only lower triangle
-- `dropna` - Drop missing values
-- `plot_kws` - Parameters for non-diagonal plots
-- `diag_kws` - Parameters for diagonal plots
-- `grid_kws` - Parameters for PairGrid
+- `hue` - 用於顏色編碼的分組變數
+- `hue_order` - hue 層級的順序
+- `palette` - 調色盤
+- `vars` - 要繪製的變數（預設：所有數值）
+- `x_vars, y_vars` - x 和 y 軸的變數（非正方形網格）
+- `kind` - "scatter"、"kde"、"hist"、"reg"
+- `diag_kind` - "auto"、"hist"、"kde"、None
+- `markers` - 標記樣式
+- `height` - 每個分面的高度
+- `aspect` - 長寬比
+- `corner` - 只繪製下三角
+- `dropna` - 刪除缺失值
+- `plot_kws` - 非對角圖的參數
+- `diag_kws` - 對角圖的參數
+- `grid_kws` - PairGrid 的參數
 
-**Example:**
+**範例：**
 ```python
 sns.pairplot(data=df, hue='species', palette='Set2',
              vars=['sepal_length', 'sepal_width', 'petal_length'],
              corner=True, height=2.5)
 ```
 
-## Categorical Plots
+## 類別圖
 
 ### stripplot()
 
-**Purpose:** Draw a categorical scatterplot with jittered points.
+**用途：** 繪製帶有抖動點的類別散點圖。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict
-- `x, y` - Variables (one categorical, one continuous)
-- `hue` - Grouping variable
-- `order` - Order for categorical levels
-- `hue_order` - Order for hue levels
-- `jitter` - Amount of jitter: True, float, or False
-- `dodge` - Separate hue levels side-by-side
-- `orient` - "v" or "h" (usually inferred)
-- `color` - Single color for all elements
-- `palette` - Color palette
-- `size` - Marker size
-- `edgecolor` - Marker edge color
-- `linewidth` - Marker edge width
-- `native_scale` - Use numeric scale for categorical axis
-- `formatter` - Formatter for categorical axis
-- `legend` - Whether to show legend
+**關鍵參數：**
+- `data` - DataFrame、陣列或字典
+- `x, y` - 變數（一個類別，一個連續）
+- `hue` - 分組變數
+- `order` - 類別層級的順序
+- `hue_order` - hue 層級的順序
+- `jitter` - 抖動量：True、浮點數或 False
+- `dodge` - 將 hue 層級並排分開
+- `orient` - "v" 或 "h"（通常自動推斷）
+- `color` - 所有元素的單一顏色
+- `palette` - 調色盤
+- `size` - 標記大小
+- `edgecolor` - 標記邊緣顏色
+- `linewidth` - 標記邊緣寬度
+- `native_scale` - 使用類別軸的數值刻度
+- `formatter` - 類別軸的格式化器
+- `legend` - 是否顯示圖例
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.stripplot(data=df, x='day', y='total_bill',
               hue='sex', dodge=True, jitter=0.2)
@@ -324,17 +324,17 @@ sns.stripplot(data=df, x='day', y='total_bill',
 
 ### swarmplot()
 
-**Purpose:** Draw a categorical scatterplot with non-overlapping points.
+**用途：** 繪製帶有不重疊點的類別散點圖。
 
-**Key Parameters:**
-Same as `stripplot()`, except:
-- No `jitter` parameter
-- `size` - Marker size (important for avoiding overlap)
-- `warn_thresh` - Threshold for warning about too many points (default: 0.05)
+**關鍵參數：**
+與 `stripplot()` 相同，除了：
+- 無 `jitter` 參數
+- `size` - 標記大小（對避免重疊很重要）
+- `warn_thresh` - 過多點的警告閾值（預設：0.05）
 
-**Note:** Computationally intensive for large datasets. Use stripplot for >1000 points.
+**注意：** 對大型資料集計算密集。超過 1000 點時使用 stripplot。
 
-**Example:**
+**範例：**
 ```python
 sns.swarmplot(data=df, x='day', y='total_bill',
               hue='time', dodge=True, size=5)
@@ -342,38 +342,38 @@ sns.swarmplot(data=df, x='day', y='total_bill',
 
 ### boxplot()
 
-**Purpose:** Draw a box plot showing quartiles and outliers.
+**用途：** 繪製顯示四分位數和離群值的箱形圖。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict
-- `x, y` - Variables (one categorical, one continuous)
-- `hue` - Grouping variable
-- `order` - Order for categorical levels
-- `hue_order` - Order for hue levels
-- `orient` - "v" or "h"
-- `color` - Single color for boxes
-- `palette` - Color palette
-- `saturation` - Color saturation intensity
-- `width` - Width of boxes
-- `dodge` - Separate hue levels side-by-side
-- `fliersize` - Size of outlier markers
-- `linewidth` - Box line width
-- `whis` - IQR multiplier for whiskers (default: 1.5)
-- `notch` - Draw notched boxes
-- `showcaps` - Show whisker caps
-- `showmeans` - Show mean value
-- `meanprops` - Properties for mean marker
-- `boxprops` - Properties for boxes
-- `whiskerprops` - Properties for whiskers
-- `capprops` - Properties for caps
-- `flierprops` - Properties for outliers
-- `medianprops` - Properties for median line
-- `native_scale` - Use numeric scale
-- `formatter` - Formatter for categorical axis
-- `legend` - Whether to show legend
+**關鍵參數：**
+- `data` - DataFrame、陣列或字典
+- `x, y` - 變數（一個類別，一個連續）
+- `hue` - 分組變數
+- `order` - 類別層級的順序
+- `hue_order` - hue 層級的順序
+- `orient` - "v" 或 "h"
+- `color` - 箱形的單一顏色
+- `palette` - 調色盤
+- `saturation` - 顏色飽和度
+- `width` - 箱形寬度
+- `dodge` - 將 hue 層級並排分開
+- `fliersize` - 離群值標記大小
+- `linewidth` - 箱形線寬
+- `whis` - 鬚線的 IQR 乘數（預設：1.5）
+- `notch` - 繪製缺口箱形
+- `showcaps` - 顯示鬚線端點
+- `showmeans` - 顯示平均值
+- `meanprops` - 平均值標記的屬性
+- `boxprops` - 箱形的屬性
+- `whiskerprops` - 鬚線的屬性
+- `capprops` - 端點的屬性
+- `flierprops` - 離群值的屬性
+- `medianprops` - 中位數線的屬性
+- `native_scale` - 使用數值刻度
+- `formatter` - 類別軸的格式化器
+- `legend` - 是否顯示圖例
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.boxplot(data=df, x='day', y='total_bill',
             hue='smoker', palette='Set3',
@@ -382,21 +382,21 @@ sns.boxplot(data=df, x='day', y='total_bill',
 
 ### violinplot()
 
-**Purpose:** Draw a violin plot combining boxplot and KDE.
+**用途：** 繪製結合箱形圖和 KDE 的小提琴圖。
 
-**Key Parameters:**
-Same as `boxplot()`, plus:
-- `bw_method` - KDE bandwidth method
-- `bw_adjust` - KDE bandwidth multiplier
-- `cut` - KDE extension beyond extremes
-- `density_norm` - "area", "count", "width"
-- `inner` - "box", "quartile", "point", "stick", None
-- `split` - Split violins for hue comparison
-- `scale` - Scaling method: "area", "count", "width"
-- `scale_hue` - Scale across hue levels
-- `gridsize` - KDE grid resolution
+**關鍵參數：**
+與 `boxplot()` 相同，加上：
+- `bw_method` - KDE 頻寬方法
+- `bw_adjust` - KDE 頻寬乘數
+- `cut` - KDE 超出極值的延伸
+- `density_norm` - "area"、"count"、"width"
+- `inner` - "box"、"quartile"、"point"、"stick"、None
+- `split` - 分離小提琴以進行 hue 比較
+- `scale` - 縮放方法："area"、"count"、"width"
+- `scale_hue` - 跨 hue 層級縮放
+- `gridsize` - KDE 網格解析度
 
-**Example:**
+**範例：**
 ```python
 sns.violinplot(data=df, x='day', y='total_bill',
                hue='sex', split=True, inner='quartile',
@@ -405,16 +405,16 @@ sns.violinplot(data=df, x='day', y='total_bill',
 
 ### boxenplot()
 
-**Purpose:** Draw enhanced box plot for larger datasets showing more quantiles.
+**用途：** 為較大資料集繪製增強箱形圖，顯示更多分位數。
 
-**Key Parameters:**
-Same as `boxplot()`, plus:
-- `k_depth` - "tukey", "proportion", "trustworthy", "full", or int
-- `outlier_prop` - Proportion of data as outliers
-- `trust_alpha` - Alpha for trustworthy depth
-- `showfliers` - Show outlier points
+**關鍵參數：**
+與 `boxplot()` 相同，加上：
+- `k_depth` - "tukey"、"proportion"、"trustworthy"、"full" 或整數
+- `outlier_prop` - 作為離群值的資料比例
+- `trust_alpha` - trustworthy 深度的 alpha
+- `showfliers` - 顯示離群點
 
-**Example:**
+**範例：**
 ```python
 sns.boxenplot(data=df, x='day', y='total_bill',
               hue='time', palette='Set2')
@@ -422,35 +422,35 @@ sns.boxenplot(data=df, x='day', y='total_bill',
 
 ### barplot()
 
-**Purpose:** Draw a bar plot with error bars showing statistical estimates.
+**用途：** 繪製帶有誤差棒的長條圖，顯示統計估計。
 
-**Key Parameters:**
-- `data` - DataFrame, array, or dict
-- `x, y` - Variables (one categorical, one continuous)
-- `hue` - Grouping variable
-- `order` - Order for categorical levels
-- `hue_order` - Order for hue levels
-- `estimator` - Aggregation function (default: mean)
-- `errorbar` - Error representation: "sd", "se", "pi", ("ci", level), ("pi", level), or None
-- `n_boot` - Bootstrap iterations
-- `seed` - Random seed
-- `units` - Identifier for sampling units
-- `weights` - Observation weights
-- `orient` - "v" or "h"
-- `color` - Single bar color
-- `palette` - Color palette
-- `saturation` - Color saturation
-- `width` - Bar width
-- `dodge` - Separate hue levels side-by-side
-- `errcolor` - Error bar color
-- `errwidth` - Error bar line width
-- `capsize` - Error bar cap width
-- `native_scale` - Use numeric scale
-- `formatter` - Formatter for categorical axis
-- `legend` - Whether to show legend
+**關鍵參數：**
+- `data` - DataFrame、陣列或字典
+- `x, y` - 變數（一個類別，一個連續）
+- `hue` - 分組變數
+- `order` - 類別層級的順序
+- `hue_order` - hue 層級的順序
+- `estimator` - 聚合函數（預設：mean）
+- `errorbar` - 誤差表示："sd"、"se"、"pi"、("ci", level)、("pi", level) 或 None
+- `n_boot` - 自助法迭代次數
+- `seed` - 隨機種子
+- `units` - 取樣單位的識別符
+- `weights` - 觀測值權重
+- `orient` - "v" 或 "h"
+- `color` - 單一長條顏色
+- `palette` - 調色盤
+- `saturation` - 顏色飽和度
+- `width` - 長條寬度
+- `dodge` - 將 hue 層級並排分開
+- `errcolor` - 誤差棒顏色
+- `errwidth` - 誤差棒線寬
+- `capsize` - 誤差棒端點寬度
+- `native_scale` - 使用數值刻度
+- `formatter` - 類別軸的格式化器
+- `legend` - 是否顯示圖例
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.barplot(data=df, x='day', y='total_bill',
             hue='sex', estimator='median',
@@ -459,15 +459,15 @@ sns.barplot(data=df, x='day', y='total_bill',
 
 ### countplot()
 
-**Purpose:** Show counts of observations in each categorical bin.
+**用途：** 顯示每個類別箱的觀測值計數。
 
-**Key Parameters:**
-Same as `barplot()`, but:
-- Only specify one of x or y (the categorical variable)
-- No estimator or errorbar (shows counts)
-- `stat` - "count" or "percent"
+**關鍵參數：**
+與 `barplot()` 相同，但：
+- 只指定 x 或 y 其一（類別變數）
+- 無 estimator 或 errorbar（顯示計數）
+- `stat` - "count" 或 "percent"
 
-**Example:**
+**範例：**
 ```python
 sns.countplot(data=df, x='day', hue='time',
               palette='pastel', dodge=True)
@@ -475,17 +475,17 @@ sns.countplot(data=df, x='day', hue='time',
 
 ### pointplot()
 
-**Purpose:** Show point estimates and confidence intervals with connecting lines.
+**用途：** 顯示帶有連接線的點估計和信賴區間。
 
-**Key Parameters:**
-Same as `barplot()`, plus:
-- `markers` - Marker style(s)
-- `linestyles` - Line style(s)
-- `scale` - Scale for markers
-- `join` - Connect points with lines
-- `capsize` - Error bar cap width
+**關鍵參數：**
+與 `barplot()` 相同，加上：
+- `markers` - 標記樣式
+- `linestyles` - 線條樣式
+- `scale` - 標記的比例
+- `join` - 用線連接點
+- `capsize` - 誤差棒端點寬度
 
-**Example:**
+**範例：**
 ```python
 sns.pointplot(data=df, x='time', y='total_bill',
               hue='sex', markers=['o', 's'],
@@ -494,24 +494,24 @@ sns.pointplot(data=df, x='time', y='total_bill',
 
 ### catplot()
 
-**Purpose:** Figure-level interface for categorical plots onto a FacetGrid.
+**用途：** 在 FacetGrid 上繪製類別圖的圖形層級介面。
 
-**Key Parameters:**
-All parameters from categorical plots, plus:
-- `kind` - "strip", "swarm", "box", "violin", "boxen", "bar", "point", "count"
-- `col` - Categorical variable for column facets
-- `row` - Categorical variable for row facets
-- `col_wrap` - Wrap columns
-- `col_order` - Order for column facets
-- `row_order` - Order for row facets
-- `height` - Height of each facet
-- `aspect` - Aspect ratio
-- `sharex, sharey` - Share axes across facets
-- `legend` - Whether to show legend
-- `legend_out` - Place legend outside figure
-- `facet_kws` - Additional FacetGrid parameters
+**關鍵參數：**
+類別圖的所有參數，加上：
+- `kind` - "strip"、"swarm"、"box"、"violin"、"boxen"、"bar"、"point"、"count"
+- `col` - 欄分面的類別變數
+- `row` - 列分面的類別變數
+- `col_wrap` - 換行欄數
+- `col_order` - 欄分面的順序
+- `row_order` - 列分面的順序
+- `height` - 每個分面的高度
+- `aspect` - 長寬比
+- `sharex, sharey` - 跨分面共享軸
+- `legend` - 是否顯示圖例
+- `legend_out` - 將圖例放在圖形外部
+- `facet_kws` - 額外的 FacetGrid 參數
 
-**Example:**
+**範例：**
 ```python
 sns.catplot(data=df, x='day', y='total_bill',
             hue='smoker', col='time',
@@ -519,41 +519,41 @@ sns.catplot(data=df, x='day', y='total_bill',
             height=4, aspect=0.8)
 ```
 
-## Regression Plots
+## 迴歸圖
 
 ### regplot()
 
-**Purpose:** Plot data and a linear regression fit.
+**用途：** 繪製資料和線性迴歸擬合。
 
-**Key Parameters:**
+**關鍵參數：**
 - `data` - DataFrame
-- `x, y` - Variables or data vectors
-- `x_estimator` - Apply estimator to x bins
-- `x_bins` - Bin x for estimator
-- `x_ci` - CI for binned estimates
-- `scatter` - Show scatter points
-- `fit_reg` - Plot regression line
-- `ci` - CI for regression estimate (int or None)
-- `n_boot` - Bootstrap iterations for CI
-- `units` - Identifier for sampling units
-- `seed` - Random seed
-- `order` - Polynomial regression order
-- `logistic` - Fit logistic regression
-- `lowess` - Fit lowess smoother
-- `robust` - Fit robust regression
-- `logx` - Log-transform x
-- `x_partial, y_partial` - Partial regression (regress out variables)
-- `truncate` - Limit regression line to data range
-- `dropna` - Drop missing values
-- `x_jitter, y_jitter` - Add jitter to data
-- `label` - Label for legend
-- `color` - Color for all elements
-- `marker` - Marker style
-- `scatter_kws` - Parameters for scatter
-- `line_kws` - Parameters for regression line
+- `x, y` - 變數或資料向量
+- `x_estimator` - 對 x 分箱應用估計器
+- `x_bins` - 為估計器對 x 分箱
+- `x_ci` - 分箱估計的信賴區間
+- `scatter` - 顯示散點
+- `fit_reg` - 繪製迴歸線
+- `ci` - 迴歸估計的信賴區間（整數或 None）
+- `n_boot` - 計算信賴區間的自助法迭代次數
+- `units` - 取樣單位的識別符
+- `seed` - 隨機種子
+- `order` - 多項式迴歸階數
+- `logistic` - 擬合邏輯迴歸
+- `lowess` - 擬合 lowess 平滑器
+- `robust` - 擬合穩健迴歸
+- `logx` - 對數轉換 x
+- `x_partial, y_partial` - 偏迴歸（迴歸掉變數）
+- `truncate` - 將迴歸線限制在資料範圍
+- `dropna` - 刪除缺失值
+- `x_jitter, y_jitter` - 對資料添加抖動
+- `label` - 圖例標籤
+- `color` - 所有元素的顏色
+- `marker` - 標記樣式
+- `scatter_kws` - 散點的參數
+- `line_kws` - 迴歸線的參數
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
 sns.regplot(data=df, x='total_bill', y='tip',
             order=2, robust=True, ci=95,
@@ -562,27 +562,27 @@ sns.regplot(data=df, x='total_bill', y='tip',
 
 ### lmplot()
 
-**Purpose:** Figure-level interface for regression plots onto a FacetGrid.
+**用途：** 在 FacetGrid 上繪製迴歸圖的圖形層級介面。
 
-**Key Parameters:**
-All parameters from `regplot()`, plus:
-- `hue` - Grouping variable
-- `col` - Column facets
-- `row` - Row facets
-- `palette` - Color palette
-- `col_wrap` - Wrap columns
-- `height` - Facet height
-- `aspect` - Aspect ratio
-- `markers` - Marker style(s)
-- `sharex, sharey` - Share axes
-- `hue_order` - Order for hue levels
-- `col_order` - Order for column facets
-- `row_order` - Order for row facets
-- `legend` - Whether to show legend
-- `legend_out` - Place legend outside
-- `facet_kws` - FacetGrid parameters
+**關鍵參數：**
+`regplot()` 的所有參數，加上：
+- `hue` - 分組變數
+- `col` - 欄分面
+- `row` - 列分面
+- `palette` - 調色盤
+- `col_wrap` - 換行欄數
+- `height` - 分面高度
+- `aspect` - 長寬比
+- `markers` - 標記樣式
+- `sharex, sharey` - 共享軸
+- `hue_order` - hue 層級的順序
+- `col_order` - 欄分面的順序
+- `row_order` - 列分面的順序
+- `legend` - 是否顯示圖例
+- `legend_out` - 將圖例放在外部
+- `facet_kws` - FacetGrid 參數
 
-**Example:**
+**範例：**
 ```python
 sns.lmplot(data=df, x='total_bill', y='tip',
            hue='smoker', col='time', row='sex',
@@ -591,48 +591,48 @@ sns.lmplot(data=df, x='total_bill', y='tip',
 
 ### residplot()
 
-**Purpose:** Plot residuals of a regression.
+**用途：** 繪製迴歸的殘差。
 
-**Key Parameters:**
-Same as `regplot()`, but:
-- Always plots residuals (y - predicted) vs x
-- Adds horizontal line at y=0
-- `lowess` - Fit lowess smoother to residuals
+**關鍵參數：**
+與 `regplot()` 相同，但：
+- 始終繪製殘差（y - 預測值）vs x
+- 在 y=0 處添加水平線
+- `lowess` - 對殘差擬合 lowess 平滑器
 
-**Example:**
+**範例：**
 ```python
 sns.residplot(data=df, x='x', y='y', lowess=True,
               scatter_kws={'alpha': 0.5})
 ```
 
-## Matrix Plots
+## 矩陣圖
 
 ### heatmap()
 
-**Purpose:** Plot rectangular data as a color-encoded matrix.
+**用途：** 將矩形資料繪製為顏色編碼矩陣。
 
-**Key Parameters:**
-- `data` - 2D array-like data
-- `vmin, vmax` - Anchor values for colormap
-- `cmap` - Colormap name or object
-- `center` - Value at colormap center
-- `robust` - Use robust quantiles for colormap range
-- `annot` - Annotate cells: True, False, or array
-- `fmt` - Format string for annotations (e.g., ".2f")
-- `annot_kws` - Parameters for annotations
-- `linewidths` - Width of cell borders
-- `linecolor` - Color of cell borders
-- `cbar` - Draw colorbar
-- `cbar_kws` - Colorbar parameters
-- `cbar_ax` - Axes for colorbar
-- `square` - Force square cells
-- `xticklabels, yticklabels` - Tick labels (True, False, int, or list)
-- `mask` - Boolean array to mask cells
+**關鍵參數：**
+- `data` - 2D 類陣列資料
+- `vmin, vmax` - 色彩映射的錨定值
+- `cmap` - 色彩映射名稱或物件
+- `center` - 色彩映射中心的值
+- `robust` - 使用穩健分位數計算色彩映射範圍
+- `annot` - 註解儲存格：True、False 或陣列
+- `fmt` - 註解的格式字串（例如 ".2f"）
+- `annot_kws` - 註解的參數
+- `linewidths` - 儲存格邊框寬度
+- `linecolor` - 儲存格邊框顏色
+- `cbar` - 繪製色彩條
+- `cbar_kws` - 色彩條參數
+- `cbar_ax` - 色彩條的 axes
+- `square` - 強制正方形儲存格
+- `xticklabels, yticklabels` - 刻度標籤（True、False、整數或列表）
+- `mask` - 遮罩儲存格的布林陣列
 - `ax` - Matplotlib axes
 
-**Example:**
+**範例：**
 ```python
-# Correlation matrix
+# 相關矩陣
 corr = df.corr()
 mask = np.triu(np.ones_like(corr, dtype=bool))
 sns.heatmap(corr, mask=mask, annot=True, fmt='.2f',
@@ -642,25 +642,25 @@ sns.heatmap(corr, mask=mask, annot=True, fmt='.2f',
 
 ### clustermap()
 
-**Purpose:** Plot a hierarchically-clustered heatmap.
+**用途：** 繪製階層式聚類熱圖。
 
-**Key Parameters:**
-All parameters from `heatmap()`, plus:
-- `pivot_kws` - Parameters for pivoting (if needed)
-- `method` - Linkage method: "single", "complete", "average", "weighted", "centroid", "median", "ward"
-- `metric` - Distance metric for clustering
-- `standard_scale` - Standardize data: 0 (rows), 1 (columns), or None
-- `z_score` - Z-score normalize data: 0 (rows), 1 (columns), or None
-- `row_cluster, col_cluster` - Cluster rows/columns
-- `row_linkage, col_linkage` - Precomputed linkage matrices
-- `row_colors, col_colors` - Additional color annotations
-- `dendrogram_ratio` - Ratio of dendrogram to heatmap
-- `colors_ratio` - Ratio of color annotations to heatmap
-- `cbar_pos` - Colorbar position (tuple: x, y, width, height)
-- `tree_kws` - Parameters for dendrogram
-- `figsize` - Figure size
+**關鍵參數：**
+`heatmap()` 的所有參數，加上：
+- `pivot_kws` - 樞紐分析的參數（如需要）
+- `method` - 連結方法："single"、"complete"、"average"、"weighted"、"centroid"、"median"、"ward"
+- `metric` - 聚類的距離度量
+- `standard_scale` - 標準化資料：0（列）、1（欄）或 None
+- `z_score` - Z 分數正規化資料：0（列）、1（欄）或 None
+- `row_cluster, col_cluster` - 聚類列/欄
+- `row_linkage, col_linkage` - 預先計算的連結矩陣
+- `row_colors, col_colors` - 額外的顏色註解
+- `dendrogram_ratio` - 樹狀圖與熱圖的比例
+- `colors_ratio` - 顏色註解與熱圖的比例
+- `cbar_pos` - 色彩條位置（元組：x, y, 寬度, 高度）
+- `tree_kws` - 樹狀圖的參數
+- `figsize` - 圖形大小
 
-**Example:**
+**範例：**
 ```python
 sns.clustermap(data, method='average', metric='euclidean',
                z_score=0, cmap='viridis',
@@ -668,13 +668,13 @@ sns.clustermap(data, method='average', metric='euclidean',
                figsize=(12, 12), dendrogram_ratio=0.1)
 ```
 
-## Multi-Plot Grids
+## 多圖網格
 
 ### FacetGrid
 
-**Purpose:** Multi-plot grid for plotting conditional relationships.
+**用途：** 用於繪製條件關係的多圖網格。
 
-**Initialization:**
+**初始化：**
 ```python
 g = sns.FacetGrid(data, row=None, col=None, hue=None,
                   col_wrap=None, sharex=True, sharey=True,
@@ -686,16 +686,16 @@ g = sns.FacetGrid(data, row=None, col=None, hue=None,
                   gridspec_kws=None)
 ```
 
-**Methods:**
-- `map(func, *args, **kwargs)` - Apply function to each facet
-- `map_dataframe(func, *args, **kwargs)` - Apply function with full DataFrame
-- `set_axis_labels(x_var, y_var)` - Set axis labels
-- `set_titles(template, **kwargs)` - Set subplot titles
-- `set(kwargs)` - Set attributes on all axes
-- `add_legend(legend_data, title, label_order, **kwargs)` - Add legend
-- `savefig(*args, **kwargs)` - Save figure
+**方法：**
+- `map(func, *args, **kwargs)` - 對每個分面應用函數
+- `map_dataframe(func, *args, **kwargs)` - 用完整 DataFrame 應用函數
+- `set_axis_labels(x_var, y_var)` - 設定軸標籤
+- `set_titles(template, **kwargs)` - 設定子圖標題
+- `set(kwargs)` - 設定所有軸的屬性
+- `add_legend(legend_data, title, label_order, **kwargs)` - 添加圖例
+- `savefig(*args, **kwargs)` - 儲存圖形
 
-**Example:**
+**範例：**
 ```python
 g = sns.FacetGrid(df, col='time', row='sex', hue='smoker',
                   height=3, aspect=1.5, margin_titles=True)
@@ -707,9 +707,9 @@ g.set_titles('{col_name} | {row_name}')
 
 ### PairGrid
 
-**Purpose:** Grid for plotting pairwise relationships in a dataset.
+**用途：** 用於繪製資料集中成對關係的網格。
 
-**Initialization:**
+**初始化：**
 ```python
 g = sns.PairGrid(data, hue=None, vars=None,
                  x_vars=None, y_vars=None,
@@ -720,16 +720,16 @@ g = sns.PairGrid(data, hue=None, vars=None,
                  despine=True, dropna=False)
 ```
 
-**Methods:**
-- `map(func, **kwargs)` - Apply function to all subplots
-- `map_diag(func, **kwargs)` - Apply to diagonal
-- `map_offdiag(func, **kwargs)` - Apply to off-diagonal
-- `map_upper(func, **kwargs)` - Apply to upper triangle
-- `map_lower(func, **kwargs)` - Apply to lower triangle
-- `add_legend(legend_data, **kwargs)` - Add legend
-- `savefig(*args, **kwargs)` - Save figure
+**方法：**
+- `map(func, **kwargs)` - 對所有子圖應用函數
+- `map_diag(func, **kwargs)` - 應用於對角線
+- `map_offdiag(func, **kwargs)` - 應用於非對角線
+- `map_upper(func, **kwargs)` - 應用於上三角
+- `map_lower(func, **kwargs)` - 應用於下三角
+- `add_legend(legend_data, **kwargs)` - 添加圖例
+- `savefig(*args, **kwargs)` - 儲存圖形
 
-**Example:**
+**範例：**
 ```python
 g = sns.PairGrid(df, hue='species', vars=['a', 'b', 'c', 'd'],
                  corner=True, height=2.5)
@@ -741,9 +741,9 @@ g.add_legend()
 
 ### JointGrid
 
-**Purpose:** Grid for bivariate plot with marginal univariate plots.
+**用途：** 用於繪製帶有邊際單變量圖的雙變量圖的網格。
 
-**Initialization:**
+**初始化：**
 ```python
 g = sns.JointGrid(data=None, x=None, y=None, hue=None,
                   height=6, ratio=5, space=0.2,
@@ -752,15 +752,15 @@ g = sns.JointGrid(data=None, x=None, y=None, hue=None,
                   palette=None)
 ```
 
-**Methods:**
-- `plot(joint_func, marginal_func, **kwargs)` - Plot both joint and marginals
-- `plot_joint(func, **kwargs)` - Plot joint distribution
-- `plot_marginals(func, **kwargs)` - Plot marginal distributions
-- `refline(x, y, **kwargs)` - Add reference line
-- `set_axis_labels(xlabel, ylabel, **kwargs)` - Set axis labels
-- `savefig(*args, **kwargs)` - Save figure
+**方法：**
+- `plot(joint_func, marginal_func, **kwargs)` - 同時繪製聯合和邊際
+- `plot_joint(func, **kwargs)` - 繪製聯合分布
+- `plot_marginals(func, **kwargs)` - 繪製邊際分布
+- `refline(x, y, **kwargs)` - 添加參考線
+- `set_axis_labels(xlabel, ylabel, **kwargs)` - 設定軸標籤
+- `savefig(*args, **kwargs)` - 儲存圖形
 
-**Example:**
+**範例：**
 ```python
 g = sns.JointGrid(data=df, x='x', y='y', hue='group',
                   height=6, ratio=5, space=0.2)

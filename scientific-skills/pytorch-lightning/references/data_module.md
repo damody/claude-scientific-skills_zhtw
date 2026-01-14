@@ -1,63 +1,63 @@
-# LightningDataModule - Comprehensive Guide
+# LightningDataModule - 完整指南
 
-## Overview
+## 概述
 
-A LightningDataModule is a reusable, shareable class that encapsulates all data processing steps in PyTorch Lightning. It solves the problem of scattered data preparation logic by standardizing how datasets are managed and shared across projects.
+LightningDataModule 是一個可重用、可分享的類別，封裝了 PyTorch Lightning 中所有資料處理步驟。它透過標準化資料集的管理和跨專案分享方式，解決了分散的資料準備邏輯問題。
 
-## Core Problem It Solves
+## 它解決的核心問題
 
-In traditional PyTorch workflows, data handling is fragmented across multiple files, making it difficult to answer questions like:
-- "What splits did you use?"
-- "What transforms were applied?"
-- "How was the data prepared?"
+在傳統的 PyTorch 工作流程中，資料處理分散在多個檔案中，使得以下問題難以回答：
+- "你使用了什麼分割？"
+- "應用了什麼轉換？"
+- "資料是如何準備的？"
 
-DataModules centralize this information for reproducibility and reusability.
+DataModules 將這些資訊集中化，以實現可重現性和可重用性。
 
-## Five Processing Steps
+## 五個處理步驟
 
-A DataModule organizes data handling into five phases:
+DataModule 將資料處理組織成五個階段：
 
-1. **Download/tokenize/process** - Initial data acquisition
-2. **Clean and save** - Persist processed data to disk
-3. **Load into Dataset** - Create PyTorch Dataset objects
-4. **Apply transforms** - Data augmentation, normalization, etc.
-5. **Wrap in DataLoader** - Configure batching and loading
+1. **下載/分詞/處理** - 初始資料獲取
+2. **清理和儲存** - 將處理後的資料持久化到磁碟
+3. **載入到 Dataset** - 建立 PyTorch Dataset 物件
+4. **應用轉換** - 資料增強、正規化等
+5. **包裝成 DataLoader** - 配置批次處理和載入
 
-## Main Methods
+## 主要方法
 
 ### `prepare_data()`
-Downloads and processes data. Runs only once on a single process (not distributed).
+下載和處理資料。僅在單一程序上執行一次（非分散式）。
 
-**Use for:**
-- Downloading datasets
-- Tokenizing text
-- Saving processed data to disk
+**用途：**
+- 下載資料集
+- 分詞文字
+- 將處理後的資料儲存到磁碟
 
-**Important:** Do not set state here (e.g., self.x = y). State is not transferred to other processes.
+**重要：** 不要在這裡設定狀態（例如 self.x = y）。狀態不會傳輸到其他程序。
 
-**Example:**
+**範例：**
 ```python
 def prepare_data(self):
-    # Download data (runs once)
+    # 下載資料（執行一次）
     download_dataset("http://example.com/data.zip", "data/")
 
-    # Tokenize and save (runs once)
+    # 分詞並儲存（執行一次）
     tokenize_and_save("data/raw/", "data/processed/")
 ```
 
 ### `setup(stage)`
-Creates datasets and applies transforms. Runs on every process in distributed training.
+建立資料集並應用轉換。在分散式訓練中的每個程序上執行。
 
-**Parameters:**
-- `stage` - 'fit', 'validate', 'test', or 'predict'
+**參數：**
+- `stage` - 'fit'、'validate'、'test' 或 'predict'
 
-**Use for:**
-- Creating train/val/test splits
-- Building Dataset objects
-- Applying transforms
-- Setting state (self.train_dataset = ...)
+**用途：**
+- 建立訓練/驗證/測試分割
+- 建構 Dataset 物件
+- 應用轉換
+- 設定狀態（self.train_dataset = ...）
 
-**Example:**
+**範例：**
 ```python
 def setup(self, stage):
     if stage == 'fit':
@@ -74,9 +74,9 @@ def setup(self, stage):
 ```
 
 ### `train_dataloader()`
-Returns the training DataLoader.
+回傳訓練 DataLoader。
 
-**Example:**
+**範例：**
 ```python
 def train_dataloader(self):
     return DataLoader(
@@ -89,9 +89,9 @@ def train_dataloader(self):
 ```
 
 ### `val_dataloader()`
-Returns the validation DataLoader(s).
+回傳驗證 DataLoader。
 
-**Example:**
+**範例：**
 ```python
 def val_dataloader(self):
     return DataLoader(
@@ -104,9 +104,9 @@ def val_dataloader(self):
 ```
 
 ### `test_dataloader()`
-Returns the test DataLoader(s).
+回傳測試 DataLoader。
 
-**Example:**
+**範例：**
 ```python
 def test_dataloader(self):
     return DataLoader(
@@ -118,9 +118,9 @@ def test_dataloader(self):
 ```
 
 ### `predict_dataloader()`
-Returns the prediction DataLoader(s).
+回傳預測 DataLoader。
 
-**Example:**
+**範例：**
 ```python
 def predict_dataloader(self):
     return DataLoader(
@@ -131,7 +131,7 @@ def predict_dataloader(self):
     )
 ```
 
-## Complete Example
+## 完整範例
 
 ```python
 import lightning as L
@@ -145,7 +145,7 @@ class MyDataset(Dataset):
         self.data = self._load_data()
 
     def _load_data(self):
-        # Load your data here
+        # 在這裡載入你的資料
         return torch.randn(1000, 3, 224, 224)
 
     def __len__(self):
@@ -164,25 +164,25 @@ class MyDataModule(L.LightningDataModule):
         self.batch_size = batch_size
         self.num_workers = num_workers
 
-        # Transforms
+        # 轉換
         self.train_transform = self._get_train_transforms()
         self.test_transform = self._get_test_transforms()
 
     def _get_train_transforms(self):
-        # Define training transforms
-        return lambda x: x  # Placeholder
+        # 定義訓練轉換
+        return lambda x: x  # 佔位符
 
     def _get_test_transforms(self):
-        # Define test/val transforms
-        return lambda x: x  # Placeholder
+        # 定義測試/驗證轉換
+        return lambda x: x  # 佔位符
 
     def prepare_data(self):
-        # Download data (runs once on single process)
+        # 下載資料（在單一程序上執行一次）
         # download_data(self.data_dir)
         pass
 
     def setup(self, stage=None):
-        # Create datasets (runs on every process)
+        # 建立資料集（在每個程序上執行）
         if stage == 'fit' or stage is None:
             full_dataset = MyDataset(
                 self.data_dir,
@@ -243,72 +243,72 @@ class MyDataModule(L.LightningDataModule):
         )
 ```
 
-## Usage
+## 使用方法
 
 ```python
-# Create DataModule
+# 建立 DataModule
 dm = MyDataModule(data_dir="./data", batch_size=64, num_workers=8)
 
-# Use with Trainer
+# 與 Trainer 一起使用
 trainer = L.Trainer(max_epochs=10)
 trainer.fit(model, datamodule=dm)
 
-# Test
+# 測試
 trainer.test(model, datamodule=dm)
 
-# Predict
+# 預測
 predictions = trainer.predict(model, datamodule=dm)
 
-# Or use standalone in PyTorch
+# 或在 PyTorch 中獨立使用
 dm.prepare_data()
 dm.setup(stage='fit')
 train_loader = dm.train_dataloader()
 
 for batch in train_loader:
-    # Your training code
+    # 你的訓練程式碼
     pass
 ```
 
-## Additional Hooks
+## 額外的鉤子
 
 ### `transfer_batch_to_device(batch, device, dataloader_idx)`
-Custom logic for moving batches to devices.
+將批次移動到裝置的自訂邏輯。
 
-**Example:**
+**範例：**
 ```python
 def transfer_batch_to_device(self, batch, device, dataloader_idx):
-    # Custom transfer logic
+    # 自訂傳輸邏輯
     if isinstance(batch, dict):
         return {k: v.to(device) for k, v in batch.items()}
     return super().transfer_batch_to_device(batch, device, dataloader_idx)
 ```
 
 ### `on_before_batch_transfer(batch, dataloader_idx)`
-Augment or modify batch before transferring to device (runs on CPU).
+在傳輸到裝置之前增強或修改批次（在 CPU 上執行）。
 
-**Example:**
+**範例：**
 ```python
 def on_before_batch_transfer(self, batch, dataloader_idx):
-    # Apply CPU-based augmentations
+    # 應用基於 CPU 的增強
     batch['image'] = apply_augmentation(batch['image'])
     return batch
 ```
 
 ### `on_after_batch_transfer(batch, dataloader_idx)`
-Augment or modify batch after transferring to device (runs on GPU).
+在傳輸到裝置之後增強或修改批次（在 GPU 上執行）。
 
-**Example:**
+**範例：**
 ```python
 def on_after_batch_transfer(self, batch, dataloader_idx):
-    # Apply GPU-based augmentations
+    # 應用基於 GPU 的增強
     batch['image'] = gpu_augmentation(batch['image'])
     return batch
 ```
 
 ### `state_dict()` / `load_state_dict(state_dict)`
-Save and restore DataModule state for checkpointing.
+儲存和還原 DataModule 狀態以進行檢查點。
 
-**Example:**
+**範例：**
 ```python
 def state_dict(self):
     return {"current_fold": self.current_fold}
@@ -318,22 +318,22 @@ def load_state_dict(self, state_dict):
 ```
 
 ### `teardown(stage)`
-Cleanup operations after training/testing/prediction.
+訓練/測試/預測後的清理操作。
 
-**Example:**
+**範例：**
 ```python
 def teardown(self, stage):
-    # Clean up resources
+    # 清理資源
     if stage == 'fit':
         self.train_dataset = None
         self.val_dataset = None
 ```
 
-## Advanced Patterns
+## 進階模式
 
-### Multiple Validation/Test DataLoaders
+### 多個驗證/測試 DataLoaders
 
-Return a list or dictionary of DataLoaders:
+回傳 DataLoaders 的列表或字典：
 
 ```python
 def val_dataloader(self):
@@ -342,24 +342,24 @@ def val_dataloader(self):
         DataLoader(self.val_dataset_2, batch_size=32)
     ]
 
-# Or with names (for logging)
+# 或使用名稱（用於日誌記錄）
 def val_dataloader(self):
     return {
         "val_easy": DataLoader(self.val_easy, batch_size=32),
         "val_hard": DataLoader(self.val_hard, batch_size=32)
     }
 
-# In LightningModule
+# 在 LightningModule 中
 def validation_step(self, batch, batch_idx, dataloader_idx=0):
     if dataloader_idx == 0:
-        # Handle val_dataset_1
+        # 處理 val_dataset_1
         pass
     else:
-        # Handle val_dataset_2
+        # 處理 val_dataset_2
         pass
 ```
 
-### Cross-Validation
+### 交叉驗證
 
 ```python
 class CrossValidationDataModule(L.LightningDataModule):
@@ -374,7 +374,7 @@ class CrossValidationDataModule(L.LightningDataModule):
         full_dataset = MyDataset(self.data_dir)
         fold_size = len(full_dataset) // self.num_folds
 
-        # Create fold indices
+        # 建立 fold 索引
         indices = list(range(len(full_dataset)))
         val_start = self.current_fold * fold_size
         val_end = val_start + fold_size
@@ -394,7 +394,7 @@ class CrossValidationDataModule(L.LightningDataModule):
     def load_state_dict(self, state_dict):
         self.current_fold = state_dict["current_fold"]
 
-# Usage
+# 使用方法
 dm = CrossValidationDataModule("./data", batch_size=32, num_folds=5)
 
 for fold in range(5):
@@ -403,50 +403,50 @@ for fold in range(5):
     trainer.fit(model, datamodule=dm)
 ```
 
-### Hyperparameter Saving
+### 超參數儲存
 
 ```python
 class MyDataModule(L.LightningDataModule):
     def __init__(self, data_dir, batch_size=32, num_workers=4):
         super().__init__()
-        # Save hyperparameters
+        # 儲存超參數
         self.save_hyperparameters()
 
     def setup(self, stage=None):
-        # Access via self.hparams
+        # 透過 self.hparams 存取
         print(f"Batch size: {self.hparams.batch_size}")
 ```
 
-## Best Practices
+## 最佳實務
 
-### 1. Separate prepare_data and setup
-- `prepare_data()` - Downloads/processes (single process, no state)
-- `setup()` - Creates datasets (every process, set state)
+### 1. 分離 prepare_data 和 setup
+- `prepare_data()` - 下載/處理（單一程序，無狀態）
+- `setup()` - 建立資料集（每個程序，設定狀態）
 
-### 2. Use stage Parameter
-Check the stage in `setup()` to avoid unnecessary work:
+### 2. 使用 stage 參數
+在 `setup()` 中檢查 stage 以避免不必要的工作：
 
 ```python
 def setup(self, stage):
     if stage == 'fit':
-        # Only load train/val data when fitting
+        # 僅在擬合時載入訓練/驗證資料
         self.train_dataset = ...
         self.val_dataset = ...
     elif stage == 'test':
-        # Only load test data when testing
+        # 僅在測試時載入測試資料
         self.test_dataset = ...
 ```
 
-### 3. Pin Memory for GPU Training
-Enable `pin_memory=True` in DataLoaders for faster GPU transfer:
+### 3. 為 GPU 訓練固定記憶體
+在 DataLoaders 中啟用 `pin_memory=True` 以加快 GPU 傳輸：
 
 ```python
 def train_dataloader(self):
     return DataLoader(..., pin_memory=True)
 ```
 
-### 4. Use Persistent Workers
-Prevent worker restarts between epochs:
+### 4. 使用持久性 Workers
+防止 epochs 之間的 worker 重新啟動：
 
 ```python
 def train_dataloader(self):
@@ -457,16 +457,16 @@ def train_dataloader(self):
     )
 ```
 
-### 5. Avoid Shuffle in Validation/Test
-Never shuffle validation or test data:
+### 5. 避免在驗證/測試中隨機打亂
+永遠不要隨機打亂驗證或測試資料：
 
 ```python
 def val_dataloader(self):
-    return DataLoader(..., shuffle=False)  # Never True
+    return DataLoader(..., shuffle=False)  # 永遠不要設為 True
 ```
 
-### 6. Make DataModules Reusable
-Accept configuration parameters in `__init__`:
+### 6. 使 DataModules 可重用
+在 `__init__` 中接受配置參數：
 
 ```python
 class MyDataModule(L.LightningDataModule):
@@ -475,53 +475,53 @@ class MyDataModule(L.LightningDataModule):
         self.save_hyperparameters()
 ```
 
-### 7. Document Data Structure
-Add docstrings explaining data format and expectations:
+### 7. 記錄資料結構
+新增文件字串說明資料格式和預期：
 
 ```python
 class MyDataModule(L.LightningDataModule):
     """
-    DataModule for XYZ dataset.
+    XYZ 資料集的 DataModule。
 
-    Data format: (image, label) tuples
-    - image: torch.Tensor of shape (C, H, W)
-    - label: int in range [0, num_classes)
+    資料格式：(image, label) 元組
+    - image: 形狀為 (C, H, W) 的 torch.Tensor
+    - label: 範圍在 [0, num_classes) 的 int
 
     Args:
-        data_dir: Path to data directory
-        batch_size: Batch size for dataloaders
-        num_workers: Number of data loading workers
+        data_dir: 資料目錄路徑
+        batch_size: dataloaders 的批次大小
+        num_workers: 資料載入 workers 數量
     """
 ```
 
-## Common Pitfalls
+## 常見陷阱
 
-### 1. Setting State in prepare_data
-**Wrong:**
+### 1. 在 prepare_data 中設定狀態
+**錯誤：**
 ```python
 def prepare_data(self):
-    self.dataset = load_data()  # State not transferred to other processes!
+    self.dataset = load_data()  # 狀態不會傳輸到其他程序！
 ```
 
-**Correct:**
+**正確：**
 ```python
 def prepare_data(self):
-    download_data()  # Only download, no state
+    download_data()  # 僅下載，無狀態
 
 def setup(self, stage):
-    self.dataset = load_data()  # Set state here
+    self.dataset = load_data()  # 在這裡設定狀態
 ```
 
-### 2. Not Using stage Parameter
-**Inefficient:**
+### 2. 不使用 stage 參數
+**低效：**
 ```python
 def setup(self, stage):
     self.train_dataset = load_train()
     self.val_dataset = load_val()
-    self.test_dataset = load_test()  # Loads even when just fitting
+    self.test_dataset = load_test()  # 即使只是擬合也會載入
 ```
 
-**Efficient:**
+**高效：**
 ```python
 def setup(self, stage):
     if stage == 'fit':
@@ -531,35 +531,35 @@ def setup(self, stage):
         self.test_dataset = load_test()
 ```
 
-### 3. Forgetting to Return DataLoaders
-**Wrong:**
+### 3. 忘記回傳 DataLoaders
+**錯誤：**
 ```python
 def train_dataloader(self):
-    DataLoader(self.train_dataset, ...)  # Forgot return!
+    DataLoader(self.train_dataset, ...)  # 忘記 return！
 ```
 
-**Correct:**
+**正確：**
 ```python
 def train_dataloader(self):
     return DataLoader(self.train_dataset, ...)
 ```
 
-## Integration with Trainer
+## 與 Trainer 整合
 
 ```python
-# Initialize DataModule
+# 初始化 DataModule
 dm = MyDataModule(data_dir="./data", batch_size=64)
 
-# All data loading is handled by DataModule
+# 所有資料載入由 DataModule 處理
 trainer = L.Trainer(max_epochs=10)
 trainer.fit(model, datamodule=dm)
 
-# DataModule handles validation too
+# DataModule 也處理驗證
 trainer.validate(model, datamodule=dm)
 
-# And testing
+# 以及測試
 trainer.test(model, datamodule=dm)
 
-# And prediction
+# 以及預測
 predictions = trainer.predict(model, datamodule=dm)
 ```

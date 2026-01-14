@@ -1,18 +1,18 @@
-# Visualization in Qiskit
+# Qiskit 中的視覺化
 
-Qiskit provides comprehensive visualization tools for quantum circuits, measurement results, and quantum states.
+Qiskit 提供全面的視覺化工具，用於量子電路、測量結果和量子態。
 
-## Installation
+## 安裝
 
-Install visualization dependencies:
+安裝視覺化相依性：
 
 ```bash
 uv pip install "qiskit[visualization]" matplotlib
 ```
 
-## Circuit Visualization
+## 電路視覺化
 
-### Text-Based Drawings
+### 文字繪製
 
 ```python
 from qiskit import QuantumCircuit
@@ -22,73 +22,73 @@ qc.h(0)
 qc.cx(0, 1)
 qc.cx(1, 2)
 
-# Simple text output
+# 簡單文字輸出
 print(qc.draw())
 
-# Text with more detail
-print(qc.draw('text', fold=-1))  # Don't fold long circuits
+# 更詳細的文字
+print(qc.draw('text', fold=-1))  # 不折疊長電路
 ```
 
-### Matplotlib Drawings
+### Matplotlib 繪製
 
 ```python
-# High-quality matplotlib figure
+# 高品質 matplotlib 圖形
 qc.draw('mpl')
 
-# Save to file
+# 儲存到檔案
 fig = qc.draw('mpl')
 fig.savefig('circuit.png', dpi=300, bbox_inches='tight')
 ```
 
-### LaTeX Drawings
+### LaTeX 繪製
 
 ```python
-# Generate LaTeX circuit diagram
+# 生成 LaTeX 電路圖
 qc.draw('latex')
 
-# Save LaTeX source
+# 儲存 LaTeX 原始碼
 latex_source = qc.draw('latex_source')
 with open('circuit.tex', 'w') as f:
     f.write(latex_source)
 ```
 
-## Customizing Circuit Drawings
+## 自訂電路繪製
 
-### Styling Options
+### 樣式選項
 
 ```python
 from qiskit.visualization import circuit_drawer
 
-# Reverse qubit order
+# 反轉量子位元順序
 qc.draw('mpl', reverse_bits=True)
 
-# Fold long circuits
-qc.draw('mpl', fold=20)  # Fold at 20 columns
+# 折疊長電路
+qc.draw('mpl', fold=20)  # 在 20 列處折疊
 
-# Show idle wires
+# 顯示閒置線路
 qc.draw('mpl', idle_wires=False)
 
-# Add initial state
+# 添加初始態
 qc.draw('mpl', initial_state=True)
 ```
 
-### Color Customization
+### 顏色自訂
 
 ```python
 style = {
     'displaycolor': {
-        'h': ('#FA74A6', '#000000'),     # Hadamard: pink
-        'cx': ('#A8D0DB', '#000000'),    # CNOT: light blue
-        'measure': ('#F7E7B4', '#000000') # Measure: yellow
+        'h': ('#FA74A6', '#000000'),     # Hadamard：粉紅色
+        'cx': ('#A8D0DB', '#000000'),    # CNOT：淺藍色
+        'measure': ('#F7E7B4', '#000000') # 測量：黃色
     }
 }
 
 qc.draw('mpl', style=style)
 ```
 
-## Result Visualization
+## 結果視覺化
 
-### Histogram of Counts
+### 計數直方圖
 
 ```python
 from qiskit.visualization import plot_histogram
@@ -103,57 +103,57 @@ sampler = StatevectorSampler()
 result = sampler.run([qc], shots=1024).result()
 counts = result[0].data.meas.get_counts()
 
-# Plot histogram
+# 繪製直方圖
 plot_histogram(counts)
 
-# Compare multiple experiments
+# 比較多個實驗
 counts1 = {'00': 500, '11': 524}
 counts2 = {'00': 480, '11': 544}
-plot_histogram([counts1, counts2], legend=['Run 1', 'Run 2'])
+plot_histogram([counts1, counts2], legend=['執行 1', '執行 2'])
 
-# Save figure
+# 儲存圖形
 fig = plot_histogram(counts)
 fig.savefig('histogram.png', dpi=300, bbox_inches='tight')
 ```
 
-### Histogram Options
+### 直方圖選項
 
 ```python
-# Customize colors
+# 自訂顏色
 plot_histogram(counts, color=['#1f77b4', '#ff7f0e'])
 
-# Sort by value
+# 按值排序
 plot_histogram(counts, sort='value')
 
-# Set bar labels
+# 設定柱狀標籤
 plot_histogram(counts, bar_labels=True)
 
-# Set target distribution (for comparison)
+# 設定目標分佈（用於比較）
 target = {'00': 0.5, '11': 0.5}
 plot_histogram(counts, target=target)
 ```
 
-## State Visualization
+## 態視覺化
 
-### Bloch Sphere
+### Bloch 球
 
-Visualize single-qubit states on the Bloch sphere:
+在 Bloch 球上視覺化單量子位元態：
 
 ```python
 from qiskit.visualization import plot_bloch_vector
 from qiskit.quantum_info import Statevector
 import numpy as np
 
-# Visualize a specific state vector
-# State |+⟩: equal superposition of |0⟩ and |1⟩
+# 視覺化特定態向量
+# 態 |+⟩：|0⟩ 和 |1⟩ 的等權疊加
 state = Statevector.from_label('+')
 plot_bloch_vector(state.to_bloch())
 
-# Custom vector
-plot_bloch_vector([0, 1, 0])  # |+⟩ state on X-axis
+# 自訂向量
+plot_bloch_vector([0, 1, 0])  # X 軸上的 |+⟩ 態
 ```
 
-### Multi-Qubit Bloch Sphere
+### 多量子位元 Bloch 球
 
 ```python
 from qiskit.visualization import plot_bloch_multivector
@@ -166,9 +166,9 @@ state = Statevector.from_instruction(qc)
 plot_bloch_multivector(state)
 ```
 
-### State City Plot
+### 態城市圖
 
-Visualize state amplitudes as a 3D city:
+以 3D 城市形式視覺化態振幅：
 
 ```python
 from qiskit.visualization import plot_state_city
@@ -180,13 +180,13 @@ state = Statevector.from_instruction(qc)
 
 plot_state_city(state)
 
-# Customize
+# 自訂
 plot_state_city(state, color=['#FF6B6B', '#4ECDC4'])
 ```
 
 ### QSphere
 
-Visualize quantum states on a sphere:
+在球面上視覺化量子態：
 
 ```python
 from qiskit.visualization import plot_state_qsphere
@@ -195,9 +195,9 @@ state = Statevector.from_instruction(qc)
 plot_state_qsphere(state)
 ```
 
-### Hinton Diagram
+### Hinton 圖
 
-Display state amplitudes:
+顯示態振幅：
 
 ```python
 from qiskit.visualization import plot_state_hinton
@@ -206,7 +206,7 @@ state = Statevector.from_instruction(qc)
 plot_state_hinton(state)
 ```
 
-## Density Matrix Visualization
+## 密度矩陣視覺化
 
 ```python
 from qiskit.visualization import plot_state_density
@@ -220,9 +220,9 @@ state = DensityMatrix.from_instruction(qc)
 plot_state_density(state)
 ```
 
-## Gate Map Visualization
+## 閘映射視覺化
 
-Visualize backend coupling map:
+視覺化後端耦合圖：
 
 ```python
 from qiskit.visualization import plot_gate_map
@@ -231,16 +231,16 @@ from qiskit_ibm_runtime import QiskitRuntimeService
 service = QiskitRuntimeService()
 backend = service.backend("ibm_brisbane")
 
-# Show qubit connectivity
+# 顯示量子位元連接性
 plot_gate_map(backend)
 
-# Show with error rates
+# 顯示錯誤率
 plot_gate_map(backend, plot_error_rates=True)
 ```
 
-## Error Map Visualization
+## 錯誤圖視覺化
 
-Display backend error rates:
+顯示後端錯誤率：
 
 ```python
 from qiskit.visualization import plot_error_map
@@ -248,35 +248,35 @@ from qiskit.visualization import plot_error_map
 plot_error_map(backend)
 ```
 
-## Circuit Properties Display
+## 電路屬性顯示
 
 ```python
 from qiskit.visualization import plot_circuit_layout
 
-# Show how circuit maps to physical qubits
+# 顯示電路如何映射到物理量子位元
 transpiled_qc = transpile(qc, backend=backend)
 plot_circuit_layout(transpiled_qc, backend)
 ```
 
-## Pulse Visualization
+## 脈衝視覺化
 
-For pulse-level control:
+用於脈衝級控制：
 
 ```python
 from qiskit import pulse
 from qiskit.visualization import pulse_drawer
 
-# Create pulse schedule
+# 建立脈衝排程
 with pulse.build(backend) as schedule:
     pulse.play(pulse.Gaussian(duration=160, amp=0.1, sigma=40), pulse.drive_channel(0))
 
-# Visualize
+# 視覺化
 schedule.draw()
 ```
 
-## Interactive Widgets (Jupyter)
+## 互動式小工具（Jupyter）
 
-### Circuit Composer Widget
+### 電路組合器小工具
 
 ```python
 from qiskit.tools.jupyter import QuantumCircuitComposer
@@ -285,57 +285,57 @@ composer = QuantumCircuitComposer()
 composer.show()
 ```
 
-### Interactive State Visualization
+### 互動式態視覺化
 
 ```python
 from qiskit.visualization import plot_histogram
 import matplotlib.pyplot as plt
 
-# Enable interactive mode
+# 啟用互動模式
 plt.ion()
 plot_histogram(counts)
 plt.show()
 ```
 
-## Comparison Plots
+## 比較圖
 
-### Multiple Histograms
+### 多直方圖
 
 ```python
-# Compare results from different backends
+# 比較來自不同後端的結果
 counts_sim = {'00': 500, '11': 524}
 counts_hw = {'00': 480, '01': 20, '10': 24, '11': 500}
 
 plot_histogram(
     [counts_sim, counts_hw],
-    legend=['Simulator', 'Hardware'],
+    legend=['模擬器', '硬體'],
     figsize=(12, 6)
 )
 ```
 
-### Before/After Transpilation
+### 轉譯前後比較
 
 ```python
 import matplotlib.pyplot as plt
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 4))
 
-# Original circuit
+# 原始電路
 qc.draw('mpl', ax=ax1)
-ax1.set_title('Original Circuit')
+ax1.set_title('原始電路')
 
-# Transpiled circuit
+# 轉譯後電路
 qc_transpiled = transpile(qc, backend=backend, optimization_level=3)
 qc_transpiled.draw('mpl', ax=ax2)
-ax2.set_title('Transpiled Circuit')
+ax2.set_title('轉譯後電路')
 
 plt.tight_layout()
 plt.show()
 ```
 
-## Saving Visualizations
+## 儲存視覺化
 
-### Save to Various Formats
+### 儲存為各種格式
 
 ```python
 # PNG
@@ -345,71 +345,71 @@ fig.savefig('circuit.png', dpi=300, bbox_inches='tight')
 # PDF
 fig.savefig('circuit.pdf', bbox_inches='tight')
 
-# SVG (vector graphics)
+# SVG（向量圖形）
 fig.savefig('circuit.svg', bbox_inches='tight')
 
-# Histogram
+# 直方圖
 hist_fig = plot_histogram(counts)
 hist_fig.savefig('results.png', dpi=300, bbox_inches='tight')
 ```
 
-## Styling Best Practices
+## 樣式最佳實踐
 
-### Publication-Quality Figures
+### 出版品質圖形
 
 ```python
 import matplotlib.pyplot as plt
 
-# Set matplotlib style
+# 設定 matplotlib 樣式
 plt.rcParams['figure.dpi'] = 300
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.family'] = 'sans-serif'
 
-# Create high-quality visualization
+# 建立高品質視覺化
 fig = qc.draw('mpl', style='iqp')
 fig.savefig('publication_circuit.png', dpi=600, bbox_inches='tight')
 ```
 
-### Available Styles
+### 可用樣式
 
 ```python
-# Default style
+# 預設樣式
 qc.draw('mpl')
 
-# IQP style (IBM Quantum)
+# IQP 樣式（IBM Quantum）
 qc.draw('mpl', style='iqp')
 
-# Colorblind-friendly
-qc.draw('mpl', style='bw')  # Black and white
+# 色盲友善
+qc.draw('mpl', style='bw')  # 黑白
 ```
 
-## Troubleshooting Visualization
+## 視覺化疑難排解
 
-### Common Issues
+### 常見問題
 
-**Issue**: "No module named 'matplotlib'"
+**問題**："No module named 'matplotlib'"
 ```bash
 uv pip install matplotlib
 ```
 
-**Issue**: Circuit too large to display
+**問題**：電路太大無法顯示
 ```python
-# Use folding
+# 使用折疊
 qc.draw('mpl', fold=50)
 
-# Or export to file instead of displaying
+# 或匯出到檔案而不是顯示
 fig = qc.draw('mpl')
 fig.savefig('large_circuit.png', dpi=150, bbox_inches='tight')
 ```
 
-**Issue**: Jupyter notebook not displaying plots
+**問題**：Jupyter notebook 不顯示圖形
 ```python
-# Add magic command at notebook start
+# 在 notebook 開頭添加魔術命令
 %matplotlib inline
 ```
 
-**Issue**: LaTeX visualization not working
+**問題**：LaTeX 視覺化不起作用
 ```bash
-# Install LaTeX support
+# 安裝 LaTeX 支援
 uv pip install pylatexenc
 ```

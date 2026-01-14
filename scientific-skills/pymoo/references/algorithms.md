@@ -1,101 +1,101 @@
-# Pymoo Algorithms Reference
+# Pymoo 演算法參考
 
-Comprehensive reference for optimization algorithms available in pymoo.
+pymoo 中可用最佳化演算法的完整參考。
 
-## Single-Objective Optimization Algorithms
+## 單目標最佳化演算法
 
-### Genetic Algorithm (GA)
-**Purpose:** General-purpose single-objective evolutionary optimization
-**Best for:** Continuous, discrete, or mixed-variable problems
-**Algorithm type:** (μ+λ) genetic algorithm
+### 遺傳演算法（GA）
+**用途：** 通用單目標演化最佳化
+**最適合：** 連續、離散或混合變數問題
+**演算法類型：** (μ+λ) 遺傳演算法
 
-**Key parameters:**
-- `pop_size`: Population size (default: 100)
-- `sampling`: Initial population generation strategy
-- `selection`: Parent selection mechanism (default: Tournament)
-- `crossover`: Recombination operator (default: SBX)
-- `mutation`: Variation operator (default: Polynomial)
-- `eliminate_duplicates`: Remove redundant solutions (default: True)
-- `n_offsprings`: Offspring per generation
+**關鍵參數：**
+- `pop_size`：族群大小（預設：100）
+- `sampling`：初始族群生成策略
+- `selection`：親代選擇機制（預設：Tournament）
+- `crossover`：重組運算子（預設：SBX）
+- `mutation`：變異運算子（預設：Polynomial）
+- `eliminate_duplicates`：移除重複解（預設：True）
+- `n_offsprings`：每代的子代數量
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.soo.nonconvex.ga import GA
 algorithm = GA(pop_size=100, eliminate_duplicates=True)
 ```
 
-### Differential Evolution (DE)
-**Purpose:** Single-objective continuous optimization
-**Best for:** Continuous parameter optimization with good global search
-**Algorithm type:** Population-based differential evolution
+### 差分演化（DE）
+**用途：** 單目標連續最佳化
+**最適合：** 具有良好全域搜尋能力的連續參數最佳化
+**演算法類型：** 基於族群的差分演化
 
-**Variants:** Multiple DE strategies available (rand/1/bin, best/1/bin, etc.)
+**變體：** 多種 DE 策略可用（rand/1/bin、best/1/bin 等）
 
-### Particle Swarm Optimization (PSO)
-**Purpose:** Single-objective optimization through swarm intelligence
-**Best for:** Continuous problems, fast convergence on smooth landscapes
+### 粒子群最佳化（PSO）
+**用途：** 透過群體智慧的單目標最佳化
+**最適合：** 連續問題，在平滑地形上快速收斂
 
 ### CMA-ES
-**Purpose:** Covariance Matrix Adaptation Evolution Strategy
-**Best for:** Continuous optimization, particularly for noisy or ill-conditioned problems
+**用途：** 共變異數矩陣適應演化策略
+**最適合：** 連續最佳化，特別適合雜訊或病態問題
 
 ### Pattern Search
-**Purpose:** Direct search method
-**Best for:** Problems where gradient information is unavailable
+**用途：** 直接搜尋方法
+**最適合：** 梯度資訊不可用的問題
 
 ### Nelder-Mead
-**Purpose:** Simplex-based optimization
-**Best for:** Local optimization of continuous functions
+**用途：** 基於單純形的最佳化
+**最適合：** 連續函數的局部最佳化
 
-## Multi-Objective Optimization Algorithms
+## 多目標最佳化演算法
 
-### NSGA-II (Non-dominated Sorting Genetic Algorithm II)
-**Purpose:** Multi-objective optimization with 2-3 objectives
-**Best for:** Bi- and tri-objective problems requiring well-distributed Pareto fronts
-**Selection strategy:** Non-dominated sorting + crowding distance
+### NSGA-II（非支配排序遺傳演算法 II）
+**用途：** 具有 2-3 個目標的多目標最佳化
+**最適合：** 需要良好分布 Pareto 前沿的雙目標和三目標問題
+**選擇策略：** 非支配排序 + 擁擠度距離
 
-**Key features:**
-- Fast non-dominated sorting
-- Crowding distance for diversity
-- Elitist approach
-- Binary tournament mating selection
+**關鍵特徵：**
+- 快速非支配排序
+- 使用擁擠度距離維持多樣性
+- 菁英主義方法
+- 二元競賽配對選擇
 
-**Key parameters:**
-- `pop_size`: Population size (default: 100)
-- `sampling`: Initial population strategy
-- `crossover`: Default SBX for continuous
-- `mutation`: Default Polynomial Mutation
-- `survival`: RankAndCrowding
+**關鍵參數：**
+- `pop_size`：族群大小（預設：100）
+- `sampling`：初始族群策略
+- `crossover`：連續變數預設 SBX
+- `mutation`：預設多項式突變
+- `survival`：RankAndCrowding
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.moo.nsga2 import NSGA2
 algorithm = NSGA2(pop_size=100)
 ```
 
-**When to use:**
-- 2-3 objectives
-- Need for distributed solutions across Pareto front
-- Standard multi-objective benchmark
+**何時使用：**
+- 2-3 個目標
+- 需要跨 Pareto 前沿的分布解
+- 標準多目標基準
 
 ### NSGA-III
-**Purpose:** Many-objective optimization (4+ objectives)
-**Best for:** Problems with 4 or more objectives requiring uniform Pareto front coverage
-**Selection strategy:** Reference direction-based diversity maintenance
+**用途：** 高維目標最佳化（4+ 個目標）
+**最適合：** 需要均勻 Pareto 前沿覆蓋的 4 個或更多目標問題
+**選擇策略：** 基於參考方向的多樣性維持
 
-**Key features:**
-- Reference directions guide population
-- Maintains diversity in high-dimensional objective spaces
-- Niche preservation through reference points
-- Underrepresented reference direction selection
+**關鍵特徵：**
+- 參考方向引導族群
+- 在高維目標空間維持多樣性
+- 透過參考點進行生態位保留
+- 低代表參考方向選擇
 
-**Key parameters:**
-- `ref_dirs`: Reference directions (REQUIRED)
-- `pop_size`: Defaults to number of reference directions
-- `crossover`: Default SBX
-- `mutation`: Default Polynomial Mutation
+**關鍵參數：**
+- `ref_dirs`：參考方向（必需）
+- `pop_size`：預設為參考方向數量
+- `crossover`：預設 SBX
+- `mutation`：預設多項式突變
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.algorithms.moo.nsga3 import NSGA3
 from pymoo.util.ref_dirs import get_reference_directions
@@ -104,77 +104,77 @@ ref_dirs = get_reference_directions("das-dennis", n_dim=4, n_partitions=12)
 algorithm = NSGA3(ref_dirs=ref_dirs)
 ```
 
-**NSGA-II vs NSGA-III:**
-- Use NSGA-II for 2-3 objectives
-- Use NSGA-III for 4+ objectives
-- NSGA-III provides more uniform distribution
-- NSGA-II has lower computational overhead
+**NSGA-II vs NSGA-III：**
+- 2-3 個目標使用 NSGA-II
+- 4+ 個目標使用 NSGA-III
+- NSGA-III 提供更均勻的分布
+- NSGA-II 計算開銷較低
 
-### R-NSGA-II (Reference Point Based NSGA-II)
-**Purpose:** Multi-objective optimization with preference articulation
-**Best for:** When decision maker has preferred regions of Pareto front
+### R-NSGA-II（基於參考點的 NSGA-II）
+**用途：** 具有偏好表達的多目標最佳化
+**最適合：** 當決策者有偏好的 Pareto 前沿區域時
 
-### U-NSGA-III (Unified NSGA-III)
-**Purpose:** Improved version handling various scenarios
-**Best for:** Many-objective problems with additional robustness
+### U-NSGA-III（統一 NSGA-III）
+**用途：** 處理各種情況的改進版本
+**最適合：** 具有額外穩健性的高維目標問題
 
-### MOEA/D (Multi-Objective Evolutionary Algorithm based on Decomposition)
-**Purpose:** Decomposition-based multi-objective optimization
-**Best for:** Problems where decomposition into scalar subproblems is effective
+### MOEA/D（基於分解的多目標演化演算法）
+**用途：** 基於分解的多目標最佳化
+**最適合：** 分解為標量子問題有效的問題
 
 ### AGE-MOEA
-**Purpose:** Adaptive geometry estimation
-**Best for:** Multi and many-objective problems with adaptive mechanisms
+**用途：** 自適應幾何估計
+**最適合：** 具有自適應機制的多目標和高維目標問題
 
-### RVEA (Reference Vector guided Evolutionary Algorithm)
-**Purpose:** Reference vector-based many-objective optimization
-**Best for:** Many-objective problems with adaptive reference vectors
+### RVEA（參考向量引導演化演算法）
+**用途：** 基於參考向量的高維目標最佳化
+**最適合：** 具有自適應參考向量的高維目標問題
 
 ### SMS-EMOA
-**Purpose:** S-Metric Selection Evolutionary Multi-objective Algorithm
-**Best for:** Problems where hypervolume indicator is critical
-**Selection:** Uses dominated hypervolume contribution
+**用途：** S-度量選擇演化多目標演算法
+**最適合：** 超體積指標關鍵的問題
+**選擇：** 使用支配超體積貢獻
 
-## Dynamic Multi-Objective Algorithms
+## 動態多目標演算法
 
 ### D-NSGA-II
-**Purpose:** Dynamic multi-objective problems
-**Best for:** Time-varying objective functions or constraints
+**用途：** 動態多目標問題
+**最適合：** 隨時間變化的目標函數或約束
 
 ### KGB-DMOEA
-**Purpose:** Knowledge-guided dynamic multi-objective optimization
-**Best for:** Dynamic problems leveraging historical information
+**用途：** 知識引導的動態多目標最佳化
+**最適合：** 利用歷史資訊的動態問題
 
-## Constrained Optimization
+## 約束最佳化
 
-### SRES (Stochastic Ranking Evolution Strategy)
-**Purpose:** Single-objective constrained optimization
-**Best for:** Heavily constrained problems
+### SRES（隨機排序演化策略）
+**用途：** 單目標約束最佳化
+**最適合：** 重度約束問題
 
-### ISRES (Improved SRES)
-**Purpose:** Enhanced constrained optimization
-**Best for:** Complex constraint landscapes
+### ISRES（改進的 SRES）
+**用途：** 增強的約束最佳化
+**最適合：** 複雜的約束地形
 
-## Algorithm Selection Guidelines
+## 演算法選擇指南
 
-**For single-objective problems:**
-- Start with GA for general problems
-- Use DE for continuous optimization
-- Try PSO for faster convergence on smooth problems
-- Use CMA-ES for difficult/noisy landscapes
+**單目標問題：**
+- 通用問題從 GA 開始
+- 連續最佳化使用 DE
+- 平滑問題上更快收斂嘗試 PSO
+- 困難/雜訊地形使用 CMA-ES
 
-**For multi-objective problems:**
-- 2-3 objectives: NSGA-II
-- 4+ objectives: NSGA-III
-- Preference articulation: R-NSGA-II
-- Decomposition-friendly: MOEA/D
-- Hypervolume focus: SMS-EMOA
+**多目標問題：**
+- 2-3 個目標：NSGA-II
+- 4+ 個目標：NSGA-III
+- 偏好表達：R-NSGA-II
+- 適合分解：MOEA/D
+- 超體積重點：SMS-EMOA
 
-**For constrained problems:**
-- Feasibility-based survival selection (works with most algorithms)
-- Heavy constraints: SRES/ISRES
-- Penalty methods for algorithm compatibility
+**約束問題：**
+- 基於可行性的存活選擇（適用於大多數演算法）
+- 重度約束：SRES/ISRES
+- 懲罰方法以確保演算法相容性
 
-**For dynamic problems:**
-- Time-varying: D-NSGA-II
-- Historical knowledge useful: KGB-DMOEA
+**動態問題：**
+- 隨時間變化：D-NSGA-II
+- 歷史知識有用：KGB-DMOEA

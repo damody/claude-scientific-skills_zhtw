@@ -1,221 +1,221 @@
-# Geometric Operations
+# 幾何操作
 
-GeoPandas provides extensive geometric manipulation through Shapely integration.
+GeoPandas 透過 Shapely 整合提供廣泛的幾何操作功能。
 
-## Constructive Operations
+## 建構操作
 
-Create new geometries from existing ones:
+從現有幾何建立新幾何：
 
-### Buffer
+### 緩衝區（Buffer）
 
-Create geometries representing all points within a distance:
+建立表示指定距離內所有點的幾何：
 
 ```python
-# Buffer by fixed distance
+# 按固定距離緩衝
 buffered = gdf.geometry.buffer(10)
 
-# Negative buffer (erosion)
+# 負緩衝（侵蝕）
 eroded = gdf.geometry.buffer(-5)
 
-# Buffer with resolution parameter
+# 帶解析度參數的緩衝
 smooth_buffer = gdf.geometry.buffer(10, resolution=16)
 ```
 
-### Boundary
+### 邊界（Boundary）
 
-Get lower-dimensional boundary:
+取得低維度邊界：
 
 ```python
 # Polygon -> LineString, LineString -> MultiPoint
 boundaries = gdf.geometry.boundary
 ```
 
-### Centroid
+### 質心（Centroid）
 
-Get center point of each geometry:
+取得每個幾何的中心點：
 
 ```python
 centroids = gdf.geometry.centroid
 ```
 
-### Convex Hull
+### 凸包（Convex Hull）
 
-Smallest convex polygon containing all points:
+包含所有點的最小凸多邊形：
 
 ```python
 hulls = gdf.geometry.convex_hull
 ```
 
-### Concave Hull
+### 凹包（Concave Hull）
 
-Smallest concave polygon containing all points:
+包含所有點的最小凹多邊形：
 
 ```python
-# ratio parameter controls concavity (0 = convex hull, 1 = most concave)
+# ratio 參數控制凹度（0 = 凸包，1 = 最凹）
 concave_hulls = gdf.geometry.concave_hull(ratio=0.5)
 ```
 
-### Envelope
+### 包絡矩形（Envelope）
 
-Smallest axis-aligned rectangle:
+最小軸對齊矩形：
 
 ```python
 envelopes = gdf.geometry.envelope
 ```
 
-### Simplify
+### 簡化（Simplify）
 
-Reduce geometric complexity:
+減少幾何複雜度：
 
 ```python
-# Douglas-Peucker algorithm with tolerance
+# Douglas-Peucker 演算法與容差
 simplified = gdf.geometry.simplify(tolerance=10)
 
-# Preserve topology (prevents self-intersections)
+# 保留拓撲（防止自相交）
 simplified = gdf.geometry.simplify(tolerance=10, preserve_topology=True)
 ```
 
-### Segmentize
+### 分段化（Segmentize）
 
-Add vertices to line segments:
+為線段添加頂點：
 
 ```python
-# Add vertices with maximum segment length
+# 添加具有最大線段長度的頂點
 segmented = gdf.geometry.segmentize(max_segment_length=5)
 ```
 
-### Union All
+### 全部合併（Union All）
 
-Combine all geometries into single geometry:
+將所有幾何合併為單一幾何：
 
 ```python
-# Union all features
+# 合併所有圖徵
 unified = gdf.geometry.union_all()
 ```
 
-## Affine Transformations
+## 仿射變換
 
-Mathematical transformations of coordinates:
+座標的數學變換：
 
-### Rotate
+### 旋轉（Rotate）
 
 ```python
-# Rotate around origin (0, 0) by angle in degrees
+# 繞原點 (0, 0) 按角度（度）旋轉
 rotated = gdf.geometry.rotate(angle=45, origin='center')
 
-# Rotate around custom point
+# 繞自訂點旋轉
 rotated = gdf.geometry.rotate(angle=45, origin=(100, 100))
 ```
 
-### Scale
+### 縮放（Scale）
 
 ```python
-# Scale uniformly
+# 均勻縮放
 scaled = gdf.geometry.scale(xfact=2.0, yfact=2.0)
 
-# Scale with origin
+# 帶原點縮放
 scaled = gdf.geometry.scale(xfact=2.0, yfact=2.0, origin='center')
 ```
 
-### Translate
+### 平移（Translate）
 
 ```python
-# Shift coordinates
+# 移動座標
 translated = gdf.geometry.translate(xoff=100, yoff=50)
 ```
 
-### Skew
+### 傾斜（Skew）
 
 ```python
-# Shear transformation
+# 剪切變換
 skewed = gdf.geometry.skew(xs=15, ys=0, origin='center')
 ```
 
-### Custom Affine Transform
+### 自訂仿射變換
 
 ```python
 from shapely import affinity
 
-# Apply 6-parameter affine transformation matrix
+# 應用 6 參數仿射變換矩陣
 # [a, b, d, e, xoff, yoff]
 transformed = gdf.geometry.affine_transform([1, 0, 0, 1, 100, 50])
 ```
 
-## Geometric Properties
+## 幾何屬性
 
-Access geometric properties (returns pandas Series):
+存取幾何屬性（返回 pandas Series）：
 
 ```python
-# Area
+# 面積
 areas = gdf.geometry.area
 
-# Length/perimeter
+# 長度/周長
 lengths = gdf.geometry.length
 
-# Bounding box coordinates
-bounds = gdf.geometry.bounds  # Returns DataFrame with minx, miny, maxx, maxy
+# 邊界框座標
+bounds = gdf.geometry.bounds  # 返回包含 minx, miny, maxx, maxy 的 DataFrame
 
-# Total bounds for entire GeoSeries
-total_bounds = gdf.geometry.total_bounds  # Returns array [minx, miny, maxx, maxy]
+# 整個 GeoSeries 的總邊界
+total_bounds = gdf.geometry.total_bounds  # 返回陣列 [minx, miny, maxx, maxy]
 
-# Check geometry types
+# 檢查幾何類型
 geom_types = gdf.geometry.geom_type
 
-# Check if valid
+# 檢查是否有效
 is_valid = gdf.geometry.is_valid
 
-# Check if empty
+# 檢查是否為空
 is_empty = gdf.geometry.is_empty
 ```
 
-## Geometric Relationships
+## 幾何關係
 
-Binary predicates testing relationships:
+測試關係的二元謂詞：
 
 ```python
-# Within
+# 在...之內
 gdf1.geometry.within(gdf2.geometry)
 
-# Contains
+# 包含
 gdf1.geometry.contains(gdf2.geometry)
 
-# Intersects
+# 相交
 gdf1.geometry.intersects(gdf2.geometry)
 
-# Touches
+# 接觸
 gdf1.geometry.touches(gdf2.geometry)
 
-# Crosses
+# 交叉
 gdf1.geometry.crosses(gdf2.geometry)
 
-# Overlaps
+# 重疊
 gdf1.geometry.overlaps(gdf2.geometry)
 
-# Covers
+# 覆蓋
 gdf1.geometry.covers(gdf2.geometry)
 
-# Covered by
+# 被覆蓋
 gdf1.geometry.covered_by(gdf2.geometry)
 ```
 
-## Point Extraction
+## 點提取
 
-Extract specific points from geometries:
+從幾何中提取特定點：
 
 ```python
-# Representative point (guaranteed to be within geometry)
+# 代表點（保證在幾何內部）
 rep_points = gdf.geometry.representative_point()
 
-# Interpolate point along line at distance
+# 沿線在指定距離處內插點
 points = line_gdf.geometry.interpolate(distance=10)
 
-# Interpolate point at normalized distance (0 to 1)
+# 在標準化距離（0 到 1）處內插點
 midpoints = line_gdf.geometry.interpolate(distance=0.5, normalized=True)
 ```
 
-## Delaunay Triangulation
+## Delaunay 三角剖分
 
 ```python
-# Create triangulation
+# 建立三角剖分
 triangles = gdf.geometry.delaunay_triangles()
 ```

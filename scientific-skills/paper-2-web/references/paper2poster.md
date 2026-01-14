@@ -1,35 +1,35 @@
-# Paper2Poster: Academic Poster Generation
+# Paper2Poster：學術海報生成
 
-## Overview
+## 概述
 
-Paper2Poster automatically generates professional academic posters from research papers. The system extracts key content, designs visually appealing layouts, and creates print-ready posters suitable for conferences, symposiums, and academic presentations.
+Paper2Poster 自動從研究論文生成專業的學術海報。該系統提取關鍵內容、設計視覺吸引力的版面，並創建適合會議、研討會和學術演示的可印刷海報。
 
-## Core Capabilities
+## 核心功能
 
-### 1. Content Extraction
-- Identifies key findings and contributions
-- Extracts important figures and tables
-- Summarizes methodology
-- Highlights results and conclusions
-- Preserves citations and references
+### 1. 內容提取
+- 識別關鍵發現和貢獻
+- 提取重要的圖表和表格
+- 總結方法論
+- 突出結果和結論
+- 保留引用和參考文獻
 
-### 2. Layout Design
-- Creates balanced, professional layouts
-- Optimizes content density and white space
-- Establishes clear visual hierarchy
-- Supports multiple poster sizes
-- Adapts to different content types
+### 2. 版面設計
+- 創建平衡、專業的版面
+- 最佳化內容密度和留白
+- 建立清晰的視覺層次
+- 支援多種海報尺寸
+- 適應不同的內容類型
 
-### 3. Visual Design
-- Applies color schemes and branding
-- Optimizes typography for readability
-- Ensures figure quality and sizing
-- Creates cohesive visual identity
-- Maintains academic presentation standards
+### 3. 視覺設計
+- 應用配色方案和品牌
+- 最佳化排版以提高可讀性
+- 確保圖像品質和尺寸
+- 創建連貫的視覺識別
+- 維護學術演示標準
 
-## Usage
+## 使用方法
 
-### Basic Poster Generation
+### 基本海報生成
 
 ```bash
 python pipeline_all.py \
@@ -39,7 +39,7 @@ python pipeline_all.py \
   --generate-poster
 ```
 
-### Custom Poster Dimensions
+### 自定義海報尺寸
 
 ```bash
 python pipeline_all.py \
@@ -51,169 +51,169 @@ python pipeline_all.py \
   --poster-height-inches 40
 ```
 
-### Parameters
+### 參數
 
-**Basic Configuration:**
-- `--input-dir`: Directory containing paper files
-- `--output-dir`: Directory for generated posters
-- `--model-choice`: LLM model selection (1=GPT-4, 2=GPT-4.1)
-- `--generate-poster`: Enable poster generation
+**基本配置：**
+- `--input-dir`：包含論文檔案的目錄
+- `--output-dir`：生成海報的目錄
+- `--model-choice`：LLM 模型選擇（1=GPT-4，2=GPT-4.1）
+- `--generate-poster`：啟用海報生成
 
-**Poster Dimensions:**
-- `--poster-width-inches`: Width in inches (default: 48)
-- `--poster-height-inches`: Height in inches (default: 36)
-- `--poster-orientation`: Portrait or landscape (default: landscape)
-- `--poster-dpi`: Resolution in DPI (default: 300)
+**海報尺寸：**
+- `--poster-width-inches`：寬度（英吋）（預設：48）
+- `--poster-height-inches`：高度（英吋）（預設：36）
+- `--poster-orientation`：直式或橫式（預設：橫式）
+- `--poster-dpi`：解析度（DPI）（預設：300）
 
-**Design Options:**
-- `--poster-template`: Template style (default: modern)
-- `--color-scheme`: Color palette selection
-- `--institution-branding`: Include institution colors and logos
-- `--font-family`: Typography selection
+**設計選項：**
+- `--poster-template`：模板樣式（預設：現代）
+- `--color-scheme`：配色方案選擇
+- `--institution-branding`：包含機構顏色和標誌
+- `--font-family`：字體選擇
 
-## Standard Poster Sizes
+## 標準海報尺寸
 
-### Conference Standard Sizes
-- **4' × 3'** (48" × 36"): Most common conference poster
-- **5' × 4'** (60" × 48"): Large format for major conferences
-- **3' × 4'** (36" × 48"): Portrait orientation for narrow spaces
-- **A0** (841mm × 1189mm): International standard
-- **A1** (594mm × 841mm): Compact conference poster
+### 會議標準尺寸
+- **4' × 3'**（48" × 36"）：最常見的會議海報
+- **5' × 4'**（60" × 48"）：大型會議的大尺寸格式
+- **3' × 4'**（36" × 48"）：窄空間的直式方向
+- **A0**（841mm × 1189mm）：國際標準
+- **A1**（594mm × 841mm）：緊湊型會議海報
 
-### Custom Sizes
-The system supports any custom dimensions. Specify using:
+### 自定義尺寸
+系統支援任何自定義尺寸。使用以下方式指定：
 ```bash
 --poster-width-inches [width] --poster-height-inches [height]
 ```
 
-## Input Requirements
+## 輸入要求
 
-### Supported Input Formats
-1. **LaTeX source** (preferred)
-   - Main `.tex` file with complete paper
-   - All figures and tables referenced
-   - Compiled successfully
+### 支援的輸入格式
+1. **LaTeX 源檔案**（首選）
+   - 包含完整論文的主 `.tex` 檔案
+   - 所有引用的圖表和表格
+   - 已成功編譯
 
 2. **PDF**
-   - High-quality PDF with embedded fonts
-   - Selectable text (not scanned)
-   - High-resolution figures
+   - 具有嵌入字體的高品質 PDF
+   - 可選取文字（非掃描）
+   - 高解析度圖像
 
-### Required Content Elements
-- Title and authors
-- Abstract or summary
-- Methodology description
-- Key results
-- Conclusions
-- References (optional but recommended)
+### 必要的內容元素
+- 標題和作者
+- 摘要或總結
+- 方法論描述
+- 主要結果
+- 結論
+- 參考文獻（可選但建議）
 
-### Recommended Assets
-- High-resolution figures (300 DPI minimum)
-- Vector graphics (PDF, SVG, EPS)
-- Institution logo
-- Author photos (optional)
-- QR codes for website/repo links
+### 建議的資源
+- 高解析度圖像（最低 300 DPI）
+- 向量圖形（PDF、SVG、EPS）
+- 機構標誌
+- 作者照片（可選）
+- 網站/儲存庫連結的 QR 碼
 
-## Output Structure
+## 輸出結構
 
 ```
 output/paper_name/poster/
-├── poster_final.pdf          # Print-ready poster
-├── poster_final.png          # High-res PNG version
-├── poster_preview.pdf        # Low-res preview
-├── poster_source/            # Source files
-│   ├── layout.pptx          # Editable PowerPoint
-│   ├── layout.svg           # Vector graphics
-│   └── layout.json          # Layout specification
-├── assets/                   # Extracted assets
-│   ├── figures/             # Poster figures
-│   ├── logos/               # Institution logos
-│   └── qrcodes/             # Generated QR codes
+├── poster_final.pdf          # 可印刷的海報
+├── poster_final.png          # 高解析度 PNG 版本
+├── poster_preview.pdf        # 低解析度預覽
+├── poster_source/            # 源檔案
+│   ├── layout.pptx          # 可編輯的 PowerPoint
+│   ├── layout.svg           # 向量圖形
+│   └── layout.json          # 版面規格
+├── assets/                   # 提取的資源
+│   ├── figures/             # 海報圖像
+│   ├── logos/               # 機構標誌
+│   └── qrcodes/             # 生成的 QR 碼
 └── metadata/
-    ├── design_spec.json     # Design specifications
-    └── content_map.json     # Content organization
+    ├── design_spec.json     # 設計規格
+    └── content_map.json     # 內容組織
 ```
 
-## Poster Layout Sections
+## 海報版面區塊
 
-### Standard Sections
-1. **Header**
-   - Title (large, prominent)
-   - Authors and affiliations
-   - Institution logos
-   - Conference information
+### 標準區塊
+1. **標題區**
+   - 標題（大型、突出）
+   - 作者和機構
+   - 機構標誌
+   - 會議資訊
 
-2. **Introduction/Background**
-   - Problem statement
-   - Research motivation
-   - Brief literature context
+2. **引言/背景**
+   - 問題陳述
+   - 研究動機
+   - 簡要文獻背景
 
-3. **Methods**
-   - Experimental design
-   - Key procedures
-   - Important parameters
-   - Visual workflow diagram
+3. **方法**
+   - 實驗設計
+   - 關鍵程序
+   - 重要參數
+   - 視覺化工作流程圖
 
-4. **Results**
-   - Key findings (largest section)
-   - Primary figures and tables
-   - Statistical summaries
-   - Visual data representations
+4. **結果**
+   - 主要發現（最大區塊）
+   - 主要圖表和表格
+   - 統計摘要
+   - 視覺化數據呈現
 
-5. **Conclusions**
-   - Main takeaways
-   - Implications
-   - Future work
+5. **結論**
+   - 主要要點
+   - 影響
+   - 未來工作
 
-6. **References & Contact**
-   - Selected key references
-   - Author contact information
-   - QR codes for paper/website
-   - Acknowledgments
+6. **參考文獻與聯繫方式**
+   - 精選的關鍵參考文獻
+   - 作者聯繫資訊
+   - 論文/網站的 QR 碼
+   - 致謝
 
-## Design Templates
+## 設計模板
 
-### Modern Template (Default)
-- Clean, minimalist design
-- Bold colors for headers
-- Ample white space
-- Modern typography
-- Focus on visual hierarchy
+### 現代模板（預設）
+- 乾淨、極簡設計
+- 標題使用大膽顏色
+- 充足的留白
+- 現代排版
+- 注重視覺層次
 
-### Academic Template
-- Traditional academic styling
-- Conservative color palette
-- Dense information layout
-- Classic serif typography
-- Standard section organization
+### 學術模板
+- 傳統學術風格
+- 保守的配色方案
+- 密集的資訊版面
+- 經典襯線字體
+- 標準區塊組織
 
-### Visual Template
-- Image-focused layout
-- Large figure displays
-- Minimal text density
-- Infographic elements
-- Story-driven flow
+### 視覺模板
+- 以圖像為重點的版面
+- 大型圖像展示
+- 最少文字密度
+- 資訊圖形元素
+- 故事導向流程
 
-### Technical Template
-- Equation-friendly layout
-- Code snippet support
-- Detailed methodology sections
-- Technical figure emphasis
-- Engineering/CS aesthetic
+### 技術模板
+- 方程式友好的版面
+- 程式碼片段支援
+- 詳細的方法論區塊
+- 技術圖像強調
+- 工程/資訊科學美學
 
-## Color Schemes
+## 配色方案
 
-### Predefined Schemes
-- **Institutional**: Uses institution branding colors
-- **Professional**: Navy blue and gray palette
-- **Vibrant**: Bold, eye-catching colors
-- **Nature**: Green and earth tones
-- **Tech**: Modern blue and cyan
-- **Warm**: Orange and red accents
-- **Cool**: Blue and purple tones
+### 預設方案
+- **機構色**：使用機構品牌顏色
+- **專業色**：海軍藍和灰色調
+- **活潑色**：大膽、引人注目的顏色
+- **自然色**：綠色和大地色調
+- **科技色**：現代藍色和青色
+- **暖色**：橙色和紅色點綴
+- **冷色**：藍色和紫色調
 
-### Custom Color Schemes
-Specify custom colors in configuration:
+### 自定義配色方案
+在配置中指定自定義顏色：
 ```json
 {
   "primary": "#1E3A8A",
@@ -224,123 +224,123 @@ Specify custom colors in configuration:
 }
 ```
 
-## Typography Options
+## 排版選項
 
-### Font Families
-- **Sans-serif** (default): Clean, modern, highly readable
-- **Serif**: Traditional academic appearance
-- **Mixed**: Serif for body, sans-serif for headers
-- **Monospace**: For code and technical content
+### 字體家族
+- **無襯線字體**（預設）：乾淨、現代、高可讀性
+- **襯線字體**：傳統學術外觀
+- **混合**：正文使用襯線字體，標題使用無襯線字體
+- **等寬字體**：用於程式碼和技術內容
 
-### Size Hierarchy
-- **Title**: 72-96pt
-- **Section headers**: 48-60pt
-- **Subsection headers**: 36-48pt
-- **Body text**: 24-32pt
-- **Captions**: 18-24pt
-- **References**: 16-20pt
+### 尺寸層次
+- **標題**：72-96pt
+- **區塊標題**：48-60pt
+- **小節標題**：36-48pt
+- **正文**：24-32pt
+- **圖說**：18-24pt
+- **參考文獻**：16-20pt
 
-## Quality Assurance
+## 品質保證
 
-### Automated Checks
-- **Text readability**: Minimum font size verification
-- **Color contrast**: Accessibility compliance
-- **Figure quality**: Resolution and clarity checks
-- **Layout balance**: Content distribution analysis
-- **Branding consistency**: Logo and color verification
+### 自動檢查
+- **文字可讀性**：最小字體大小驗證
+- **顏色對比度**：無障礙設計合規性
+- **圖像品質**：解析度和清晰度檢查
+- **版面平衡**：內容分佈分析
+- **品牌一致性**：標誌和顏色驗證
 
-### Manual Review Checklist
-1. ☐ All figures are high resolution and clear
-2. ☐ Text is readable from 3-6 feet away
-3. ☐ Color scheme is professional and consistent
-4. ☐ No text overlaps or layout issues
-5. ☐ Institution logos are correct and high quality
-6. ☐ QR codes work and link to correct URLs
-7. ☐ Author information is accurate
-8. ☐ Key findings are prominently displayed
-9. ☐ References are properly formatted
-10. ☐ File is correct size and resolution for printing
+### 手動審核清單
+1. ☐ 所有圖像都是高解析度且清晰
+2. ☐ 從 3-6 英尺距離可讀取文字
+3. ☐ 配色方案專業且一致
+4. ☐ 沒有文字重疊或版面問題
+5. ☐ 機構標誌正確且高品質
+6. ☐ QR 碼有效並連結到正確的 URL
+7. ☐ 作者資訊準確
+8. ☐ 主要發現突出顯示
+9. ☐ 參考文獻格式正確
+10. ☐ 檔案尺寸和解析度適合印刷
 
-## Print Preparation
+## 印刷準備
 
-### File Specifications
-- **Format**: PDF/X-1a or PDF/X-4 for professional printing
-- **Resolution**: 300 DPI minimum, 600 DPI for fine details
-- **Color mode**: CMYK for print (system auto-converts from RGB)
-- **Bleed**: 0.125" bleed on all sides (automatically added)
-- **Fonts**: All fonts embedded in PDF
+### 檔案規格
+- **格式**：PDF/X-1a 或 PDF/X-4 用於專業印刷
+- **解析度**：最低 300 DPI，精細細節使用 600 DPI
+- **色彩模式**：印刷使用 CMYK（系統自動從 RGB 轉換）
+- **出血**：所有邊緣 0.125" 出血（自動添加）
+- **字體**：所有字體嵌入 PDF
 
-### Printing Recommendations
-1. **Print shop**: Use professional poster printing service
-2. **Paper type**: Matte or satin finish for academic posters
-3. **Backing**: Foam core or rigid backing for stability
-4. **Protection**: Lamination optional but recommended
-5. **Test print**: Print A4/Letter size preview first
+### 印刷建議
+1. **印刷店**：使用專業海報印刷服務
+2. **紙張類型**：學術海報使用霧面或緞面
+3. **背板**：泡沫板或硬質背板以保持穩定
+4. **保護**：護膜可選但建議使用
+5. **測試印刷**：先印刷 A4/Letter 尺寸預覽
 
-### Budget Options
-- **Standard**: $50-100 for 4'×3' poster at professional shop
-- **Economy**: $20-40 for print-only (no mounting)
-- **Premium**: $150-300 for high-end materials and mounting
-- **DIY**: <$10 for multiple pages tiled and assembled
+### 預算選項
+- **標準**：專業印刷店 4'×3' 海報 $50-100
+- **經濟**：僅印刷（無裝裱）$20-40
+- **高級**：高端材料和裝裱 $150-300
+- **DIY**：多頁拼接組裝 <$10
 
-## Advanced Features
+## 進階功能
 
-### QR Code Generation
-Automatically generates QR codes for:
-- Paper PDF or DOI
-- Project website
-- GitHub repository
-- Data repository
-- Author profiles (ORCID, Google Scholar)
+### QR 碼生成
+自動生成 QR 碼用於：
+- 論文 PDF 或 DOI
+- 專案網站
+- GitHub 儲存庫
+- 資料儲存庫
+- 作者簡介（ORCID、Google Scholar）
 
-### Institution Branding
-When enabled:
-- Extracts institution from author affiliations
-- Searches for official logos (requires Google Search API)
-- Applies institution color schemes
-- Matches brand guidelines
+### 機構品牌
+啟用時：
+- 從作者所屬機構提取機構資訊
+- 搜索官方標誌（需要 Google Search API）
+- 應用機構配色方案
+- 符合品牌準則
 
-### Interactive Elements (Digital Posters)
-For digital display or virtual conferences:
-- Clickable links and references
-- Embedded videos in figures
-- Interactive data visualizations
-- Animated transitions
+### 互動元素（數位海報）
+用於數位顯示或虛擬會議：
+- 可點擊的連結和參考文獻
+- 圖像中的嵌入影片
+- 互動式資料視覺化
+- 動畫過渡效果
 
-## Best Practices
+## 最佳實踐
 
-### Content Optimization
-1. **Focus on key findings**: Poster should tell story at a glance
-2. **Limit text**: Use bullet points, avoid paragraphs
-3. **Prioritize visuals**: Figures should dominate the space
-4. **Clear flow**: Guide viewer through logical progression
-5. **Highlight contributions**: Make novelty obvious
+### 內容最佳化
+1. **聚焦關鍵發現**：海報應能一眼講述故事
+2. **限制文字**：使用項目符號，避免段落
+3. **優先視覺化**：圖像應佔據主要空間
+4. **清晰流程**：引導觀眾按邏輯順序閱讀
+5. **突出貢獻**：使創新點顯而易見
 
-### Design Optimization
-1. **Use contrast**: Ensure text is easily readable
-2. **Maintain hierarchy**: Size indicates importance
-3. **Balance content**: Avoid crowding any section
-4. **Consistent styling**: Same fonts, colors throughout
-5. **White space**: Don't fill every inch
+### 設計最佳化
+1. **使用對比度**：確保文字易於閱讀
+2. **維持層次**：大小表示重要性
+3. **平衡內容**：避免任何區塊過於擁擠
+4. **一致樣式**：全程使用相同的字體、顏色
+5. **留白**：不要填滿每一寸空間
 
-### Figure Optimization
-1. **Large enough**: Minimum 6" width for main figures
-2. **High resolution**: 300 DPI minimum
-3. **Clear labels**: Axis labels, legends readable
-4. **Remove clutter**: Simplify for poster format
-5. **Use captions**: Brief, informative descriptions
+### 圖像最佳化
+1. **足夠大**：主要圖像最小寬度 6"
+2. **高解析度**：最低 300 DPI
+3. **清晰標籤**：軸標籤、圖例可讀
+4. **去除雜亂**：簡化以適應海報格式
+5. **使用圖說**：簡短、資訊豐富的描述
 
-## Limitations
+## 限制
 
-- Complex equations may need manual adjustment for readability
-- Very long papers may require content prioritization
-- Custom branding requires manual specification or API access
-- Multi-language support limited to common languages
-- 3D visualizations may lose quality in 2D poster format
+- 複雜方程式可能需要手動調整以提高可讀性
+- 非常長的論文可能需要內容優先排序
+- 自定義品牌需要手動指定或 API 存取
+- 多語言支援僅限於常用語言
+- 3D 視覺化在 2D 海報格式中可能失去品質
 
-## Integration with Other Components
+## 與其他組件的整合
 
-Combine Paper2Poster with:
-- **Paper2Web**: Use matching visual design and color scheme
-- **Paper2Video**: Create poster walk-through video
-- **AutoPR**: Generate social media graphics from poster
+結合 Paper2Poster 與：
+- **Paper2Web**：使用匹配的視覺設計和配色方案
+- **Paper2Video**：創建海報導覽影片
+- **AutoPR**：從海報生成社交媒體圖形

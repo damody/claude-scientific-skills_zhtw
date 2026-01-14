@@ -1,92 +1,92 @@
-# Genomic Tokenizers
+# 基因體標記器
 
-Tokenizers convert genomic regions into discrete tokens for machine learning applications, particularly useful for training genomic deep learning models.
+標記器將基因體區域轉換為用於機器學習應用的離散標記（token），特別適用於訓練基因體深度學習模型。
 
 ## Python API
 
-### Creating a Tokenizer
+### 建立標記器
 
-Load tokenizer configurations from various sources:
+從各種來源載入標記器配置：
 
 ```python
 import gtars
 
-# From BED file
+# 從 BED 檔案
 tokenizer = gtars.tokenizers.TreeTokenizer.from_bed_file("regions.bed")
 
-# From configuration file
+# 從配置檔案
 tokenizer = gtars.tokenizers.TreeTokenizer.from_config("tokenizer_config.yaml")
 
-# From region string
+# 從區域字串
 tokenizer = gtars.tokenizers.TreeTokenizer.from_region_string("chr1:1000-2000")
 ```
 
-### Tokenizing Genomic Regions
+### 標記化基因體區域
 
-Convert genomic coordinates to tokens:
+將基因體座標轉換為標記：
 
 ```python
-# Tokenize a single region
+# 標記化單一區域
 token = tokenizer.tokenize("chr1", 1000, 2000)
 
-# Tokenize multiple regions
+# 標記化多個區域
 tokens = []
 for chrom, start, end in regions:
     token = tokenizer.tokenize(chrom, start, end)
     tokens.append(token)
 ```
 
-### Token Properties
+### 標記屬性
 
-Access token information:
+存取標記資訊：
 
 ```python
-# Get token ID
+# 取得標記 ID
 token_id = token.id
 
-# Get genomic coordinates
+# 取得基因體座標
 chrom = token.chromosome
 start = token.start
 end = token.end
 
-# Get token metadata
+# 取得標記中繼資料
 metadata = token.metadata
 ```
 
-## Use Cases
+## 使用案例
 
-### Machine Learning Preprocessing
+### 機器學習預處理
 
-Tokenizers are essential for preparing genomic data for ML models:
+標記器對於準備用於 ML 模型的基因體資料至關重要：
 
-1. **Sequence modeling**: Convert genomic intervals into discrete tokens for transformer models
-2. **Position encoding**: Create consistent positional encodings across datasets
-3. **Data augmentation**: Generate alternative tokenizations for training
+1. **序列建模**：將基因體區間轉換為用於 transformer 模型的離散標記
+2. **位置編碼**：在資料集之間建立一致的位置編碼
+3. **資料增強**：為訓練產生替代標記化
 
-### Integration with geniml
+### 與 geniml 整合
 
-The tokenizers module integrates seamlessly with the geniml library for genomic ML:
+標記器模組與 geniml 函式庫無縫整合用於基因體 ML：
 
 ```python
-# Tokenize regions for geniml
+# 為 geniml 標記化區域
 from gtars.tokenizers import TreeTokenizer
 import geniml
 
 tokenizer = TreeTokenizer.from_bed_file("training_regions.bed")
 tokens = [tokenizer.tokenize(r.chrom, r.start, r.end) for r in regions]
 
-# Use tokens in geniml models
+# 在 geniml 模型中使用標記
 model = geniml.Model(vocab_size=tokenizer.vocab_size)
 ```
 
-## Configuration Format
+## 配置格式
 
-Tokenizer configuration files support YAML format:
+標記器配置檔案支援 YAML 格式：
 
 ```yaml
 # tokenizer_config.yaml
 type: tree
-resolution: 1000  # Token resolution in base pairs
+resolution: 1000  # 標記解析度（鹼基對）
 chromosomes:
   - chr1
   - chr2
@@ -96,8 +96,8 @@ options:
   gap_threshold: 100
 ```
 
-## Performance Considerations
+## 效能考量
 
-- TreeTokenizer uses efficient data structures for fast tokenization
-- Batch tokenization is recommended for large datasets
-- Pre-loading tokenizers reduces overhead for repeated operations
+- TreeTokenizer 使用高效資料結構進行快速標記化
+- 建議對大型資料集進行批次標記化
+- 預載入標記器可減少重複操作的開銷

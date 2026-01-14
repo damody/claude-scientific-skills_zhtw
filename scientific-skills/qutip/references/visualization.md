@@ -1,41 +1,41 @@
-# QuTiP Visualization
+# QuTiP 視覺化
 
-## Bloch Sphere
+## Bloch 球
 
-Visualize qubit states on the Bloch sphere.
+在 Bloch 球上視覺化量子位元態。
 
-### Basic Usage
+### 基本用法
 
 ```python
 from qutip import *
 import matplotlib.pyplot as plt
 
-# Create Bloch sphere
+# 建立 Bloch 球
 b = Bloch()
 
-# Add states
+# 添加態
 psi = (basis(2, 0) + basis(2, 1)).unit()
 b.add_states(psi)
 
-# Add vectors
-b.add_vectors([1, 0, 0])  # X-axis
+# 添加向量
+b.add_vectors([1, 0, 0])  # X 軸
 
-# Display
+# 顯示
 b.show()
 ```
 
-### Multiple States
+### 多個態
 
 ```python
-# Add multiple states
+# 添加多個態
 states = [(basis(2, 0) + basis(2, 1)).unit(),
           (basis(2, 0) + 1j*basis(2, 1)).unit()]
 b.add_states(states)
 
-# Add points
+# 添加點
 b.add_points([[0, 1, 0], [0, -1, 0]])
 
-# Customize colors
+# 自訂顏色
 b.point_color = ['r', 'g']
 b.point_marker = ['o', 's']
 b.point_size = [20, 20]
@@ -43,17 +43,17 @@ b.point_size = [20, 20]
 b.show()
 ```
 
-### Animation
+### 動畫
 
 ```python
-# Animate state evolution
-states = result.states  # From sesolve/mesolve
+# 動畫態演化
+states = result.states  # 來自 sesolve/mesolve
 
 b = Bloch()
 b.vector_color = ['r']
-b.view = [-40, 30]  # Viewing angle
+b.view = [-40, 30]  # 檢視角度
 
-# Create animation
+# 建立動畫
 from matplotlib.animation import FuncAnimation
 
 def animate(i):
@@ -67,47 +67,47 @@ anim = FuncAnimation(b.fig, animate, frames=len(states),
 plt.show()
 ```
 
-### Customization
+### 自訂
 
 ```python
 b = Bloch()
 
-# Sphere appearance
+# 球面外觀
 b.sphere_color = '#FFDDDD'
 b.sphere_alpha = 0.1
 b.frame_alpha = 0.1
 
-# Axes
+# 軸
 b.xlabel = ['$|+\\\\rangle$', '$|-\\\\rangle$']
 b.ylabel = ['$|+i\\\\rangle$', '$|-i\\\\rangle$']
 b.zlabel = ['$|0\\\\rangle$', '$|1\\\\rangle$']
 
-# Font sizes
+# 字體大小
 b.font_size = 20
 b.font_color = 'black'
 
-# View angle
+# 檢視角度
 b.view = [-60, 30]
 
-# Save figure
+# 儲存圖形
 b.save('bloch.png')
 ```
 
-## Wigner Function
+## Wigner 函數
 
-Phase-space quasi-probability distribution.
+相空間準機率分佈。
 
-### Basic Calculation
+### 基本計算
 
 ```python
-# Create state
+# 建立態
 psi = coherent(N, alpha)
 
-# Calculate Wigner function
+# 計算 Wigner 函數
 xvec = np.linspace(-5, 5, 200)
 W = wigner(psi, xvec, xvec)
 
-# Plot
+# 繪圖
 fig, ax = plt.subplots(1, 1, figsize=(6, 6))
 cont = ax.contourf(xvec, xvec, W, 100, cmap='RdBu')
 ax.set_xlabel('Re(α)')
@@ -116,22 +116,22 @@ plt.colorbar(cont, ax=ax)
 plt.show()
 ```
 
-### Special Colormap
+### 特殊色彩映射
 
 ```python
-# Wigner colormap emphasizes negative values
+# Wigner 色彩映射強調負值
 from qutip import wigner_cmap
 
 W = wigner(psi, xvec, xvec)
 
 fig, ax = plt.subplots()
 cont = ax.contourf(xvec, xvec, W, 100, cmap=wigner_cmap(W))
-ax.set_title('Wigner Function')
+ax.set_title('Wigner 函數')
 plt.colorbar(cont)
 plt.show()
 ```
 
-### 3D Surface Plot
+### 3D 表面圖
 
 ```python
 from mpl_toolkits.mplot3d import Axes3D
@@ -147,12 +147,12 @@ ax.set_zlabel('W(α)')
 plt.show()
 ```
 
-### Comparing States
+### 比較態
 
 ```python
-# Compare different states
+# 比較不同態
 states = [coherent(N, 2), fock(N, 2), thermal_dm(N, 2)]
-titles = ['Coherent', 'Fock', 'Thermal']
+titles = ['相干態', 'Fock 態', '熱態']
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
@@ -168,11 +168,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Q-Function (Husimi)
+## Q 函數（Husimi）
 
-Smoothed phase-space distribution (always positive).
+平滑的相空間分佈（始終為正）。
 
-### Basic Usage
+### 基本用法
 
 ```python
 from qutip import qfunc
@@ -183,44 +183,44 @@ fig, ax = plt.subplots()
 cont = ax.contourf(xvec, xvec, Q, 100, cmap='viridis')
 ax.set_xlabel('Re(α)')
 ax.set_ylabel('Im(α)')
-ax.set_title('Q-Function')
+ax.set_title('Q 函數')
 plt.colorbar(cont)
 plt.show()
 ```
 
-### Efficient Batch Calculation
+### 高效批次計算
 
 ```python
 from qutip import QFunc
 
-# For calculating Q-function at many points
+# 用於在多點計算 Q 函數
 qf = QFunc(rho)
 Q = qf.eval(xvec, xvec)
 ```
 
-## Fock State Probability Distribution
+## Fock 態機率分佈
 
-Visualize photon number distribution.
+視覺化光子數分佈。
 
-### Basic Histogram
+### 基本直方圖
 
 ```python
 from qutip import plot_fock_distribution
 
-# Single state
+# 單一態
 psi = coherent(N, 2)
 fig, ax = plot_fock_distribution(psi)
-ax.set_title('Coherent State')
+ax.set_title('相干態')
 plt.show()
 ```
 
-### Comparing Distributions
+### 比較分佈
 
 ```python
 states = {
-    'Coherent': coherent(20, 2),
-    'Thermal': thermal_dm(20, 2),
-    'Fock': fock(20, 2)
+    '相干態': coherent(20, 2),
+    '熱態': thermal_dm(20, 2),
+    'Fock 態': fock(20, 2)
 }
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
@@ -234,13 +234,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Time Evolution
+### 時間演化
 
 ```python
-# Show evolution of photon distribution
+# 顯示光子分佈演化
 result = mesolve(H, psi0, tlist, c_ops)
 
-# Plot at different times
+# 在不同時間繪圖
 times_to_plot = [0, 5, 10, 15]
 fig, axes = plt.subplots(1, 4, figsize=(16, 4))
 
@@ -253,129 +253,129 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Matrix Visualization
+## 矩陣視覺化
 
-### Hinton Diagram
+### Hinton 圖
 
-Visualize matrix structure with weighted squares.
+用加權方塊視覺化矩陣結構。
 
 ```python
 from qutip import hinton
 
-# Density matrix
+# 密度矩陣
 rho = bell_state('00').proj()
 
 hinton(rho)
-plt.title('Bell State Density Matrix')
+plt.title('Bell 態密度矩陣')
 plt.show()
 ```
 
-### Matrix Histogram
+### 矩陣直方圖
 
-3D bar plot of matrix elements.
+矩陣元素的 3D 柱狀圖。
 
 ```python
 from qutip import matrix_histogram
 
-# Show real and imaginary parts
+# 顯示實部和虛部
 H = sigmaz()
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 matrix_histogram(H.full(), xlabels=['0', '1'], ylabels=['0', '1'],
                  fig=fig, ax=axes[0])
-axes[0].set_title('Real Part')
+axes[0].set_title('實部')
 
 matrix_histogram(H.full(), bar_type='imag', xlabels=['0', '1'],
                  ylabels=['0', '1'], fig=fig, ax=axes[1])
-axes[1].set_title('Imaginary Part')
+axes[1].set_title('虛部')
 
 plt.tight_layout()
 plt.show()
 ```
 
-### Complex Phase Diagram
+### 複數相位圖
 
 ```python
-# Visualize complex matrix elements
+# 視覺化複數矩陣元素
 rho = coherent_dm(10, 2)
 
-# Plot complex elements
+# 繪製複數元素
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-# Absolute value
+# 絕對值
 matrix_histogram(rho.full(), bar_type='abs', fig=fig, ax=axes[0])
-axes[0].set_title('Absolute Value')
+axes[0].set_title('絕對值')
 
-# Phase
+# 相位
 matrix_histogram(rho.full(), bar_type='phase', fig=fig, ax=axes[1])
-axes[1].set_title('Phase')
+axes[1].set_title('相位')
 
 plt.tight_layout()
 plt.show()
 ```
 
-## Energy Level Diagrams
+## 能階圖
 
 ```python
-# Visualize energy eigenvalues
+# 視覺化能量本徵值
 H = num(N) + 0.1 * (create(N) + destroy(N))**2
 
-# Get eigenvalues and eigenvectors
+# 取得本徵值和本徵向量
 evals, ekets = H.eigenstates()
 
-# Plot energy levels
+# 繪製能階
 fig, ax = plt.subplots(figsize=(8, 6))
 
 for i, E in enumerate(evals[:10]):
     ax.hlines(E, 0, 1, linewidth=2)
     ax.text(1.1, E, f'|{i}⟩', va='center')
 
-ax.set_ylabel('Energy')
+ax.set_ylabel('能量')
 ax.set_xlim([-0.2, 1.5])
 ax.set_xticks([])
-ax.set_title('Energy Spectrum')
+ax.set_title('能譜')
 plt.show()
 ```
 
-## Quantum Process Tomography
+## 量子過程層析
 
-Visualize quantum channel/gate action.
+視覺化量子通道/閘作用。
 
 ```python
 from qutip.qip.operations import cnot
 from qutip_qip.tomography import qpt, qpt_plot_combined
 
-# Define process (e.g., CNOT gate)
+# 定義過程（例如 CNOT 閘）
 U = cnot()
 
-# Perform QPT
+# 執行 QPT
 chi = qpt(U, method='choicm')
 
-# Visualize
+# 視覺化
 fig = qpt_plot_combined(chi)
 plt.show()
 ```
 
-## Expectation Values Over Time
+## 時間相依期望值
 
 ```python
-# Standard plotting of expectation values
+# 期望值的標準繪圖
 result = mesolve(H, psi0, tlist, c_ops, e_ops=[num(N)])
 
 fig, ax = plt.subplots()
 ax.plot(tlist, result.expect[0])
-ax.set_xlabel('Time')
+ax.set_xlabel('時間')
 ax.set_ylabel('⟨n⟩')
-ax.set_title('Photon Number Evolution')
+ax.set_title('光子數演化')
 ax.grid(True)
 plt.show()
 ```
 
-### Multiple Observables
+### 多個可觀測量
 
 ```python
-# Plot multiple expectation values
+# 繪製多個期望值
 e_ops = [a.dag() * a, a + a.dag(), 1j * (a - a.dag())]
 labels = ['⟨n⟩', '⟨X⟩', '⟨P⟩']
 
@@ -388,43 +388,43 @@ for i, (ax, label) in enumerate(zip(axes, labels)):
     ax.set_ylabel(label)
     ax.grid(True)
 
-axes[-1].set_xlabel('Time')
+axes[-1].set_xlabel('時間')
 plt.tight_layout()
 plt.show()
 ```
 
-## Correlation Functions and Spectra
+## 關聯函數和頻譜
 
 ```python
-# Two-time correlation function
+# 雙時關聯函數
 taulist = np.linspace(0, 10, 200)
 corr = correlation_2op_1t(H, rho0, taulist, c_ops, a.dag(), a)
 
-# Plot correlation
+# 繪製關聯
 fig, ax = plt.subplots()
 ax.plot(taulist, np.real(corr))
 ax.set_xlabel('τ')
 ax.set_ylabel('⟨a†(τ)a(0)⟩')
-ax.set_title('Correlation Function')
+ax.set_title('關聯函數')
 plt.show()
 
-# Power spectrum
+# 功率譜
 from qutip import spectrum_correlation_fft
 
 w, S = spectrum_correlation_fft(taulist, corr)
 
 fig, ax = plt.subplots()
 ax.plot(w, S)
-ax.set_xlabel('Frequency')
+ax.set_xlabel('頻率')
 ax.set_ylabel('S(ω)')
-ax.set_title('Power Spectrum')
+ax.set_title('功率譜')
 plt.show()
 ```
 
-## Saving Figures
+## 儲存圖形
 
 ```python
-# High-resolution saves
+# 高解析度儲存
 fig.savefig('my_plot.png', dpi=300, bbox_inches='tight')
 fig.savefig('my_plot.pdf', bbox_inches='tight')
 fig.savefig('my_plot.svg', bbox_inches='tight')

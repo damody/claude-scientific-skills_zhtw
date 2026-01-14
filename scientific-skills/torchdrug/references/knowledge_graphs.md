@@ -1,139 +1,139 @@
-# Knowledge Graph Reasoning
+# 知識圖譜推理
 
-## Overview
+## 概述
 
-Knowledge graphs represent structured information as entities and relations in a graph format. TorchDrug provides comprehensive support for knowledge graph completion (link prediction) using embedding-based models and neural reasoning approaches.
+知識圖譜以圖格式表示結構化資訊，包含實體和關係。TorchDrug 提供全面的知識圖譜補全（連結預測）支援，使用基於嵌入的模型和神經推理方法。
 
-## Available Datasets
+## 可用資料集
 
-### General Knowledge Graphs
+### 通用知識圖譜
 
-**FB15k (Freebase subset):**
-- 14,951 entities
-- 1,345 relation types
-- 592,213 triples
-- General world knowledge from Freebase
+**FB15k（Freebase 子集）：**
+- 14,951 個實體
+- 1,345 種關係類型
+- 592,213 個三元組
+- 來自 Freebase 的通用世界知識
 
-**FB15k-237:**
-- 14,541 entities
-- 237 relation types
-- 310,116 triples
-- Filtered version removing inverse relations
-- More challenging benchmark
+**FB15k-237：**
+- 14,541 個實體
+- 237 種關係類型
+- 310,116 個三元組
+- 移除逆關係的過濾版本
+- 更具挑戰性的基準
 
-**WN18 (WordNet):**
-- 40,943 entities (word senses)
-- 18 relation types (lexical relations)
-- 151,442 triples
-- Linguistic knowledge graph
+**WN18（WordNet）：**
+- 40,943 個實體（詞義）
+- 18 種關係類型（詞彙關係）
+- 151,442 個三元組
+- 語言學知識圖譜
 
-**WN18RR:**
-- 40,943 entities
-- 11 relation types
-- 93,003 triples
-- Filtered WordNet removing easy inverse patterns
+**WN18RR：**
+- 40,943 個實體
+- 11 種關係類型
+- 93,003 個三元組
+- 移除簡單逆向模式的過濾版 WordNet
 
-### Biomedical Knowledge Graphs
+### 生物醫學知識圖譜
 
-**Hetionet:**
-- 45,158 entities (genes, compounds, diseases, pathways, etc.)
-- 24 relation types (treats, causes, binds, etc.)
-- 2,250,197 edges
-- Integrates 29 public biomedical databases
-- Designed for drug repurposing and disease understanding
+**Hetionet：**
+- 45,158 個實體（基因、化合物、疾病、路徑等）
+- 24 種關係類型（治療、導致、結合等）
+- 2,250,197 條邊
+- 整合 29 個公共生物醫學資料庫
+- 設計用於藥物再利用和疾病理解
 
-## Task: KnowledgeGraphCompletion
+## 任務：KnowledgeGraphCompletion
 
-The primary task for knowledge graphs is link prediction - given a head entity and relation, predict the tail entity (or vice versa).
+知識圖譜的主要任務是連結預測 - 給定頭實體和關係，預測尾實體（或反之）。
 
-### Task Modes
+### 任務模式
 
-**Head Prediction:**
-- Given (?, relation, tail), predict head entity
-- "What can cause Disease X?"
+**頭預測：**
+- 給定（?, 關係, 尾），預測頭實體
+- 「什麼可能導致疾病 X？」
 
-**Tail Prediction:**
-- Given (head, relation, ?), predict tail entity
-- "What diseases does Gene X cause?"
+**尾預測：**
+- 給定（頭, 關係, ?），預測尾實體
+- 「基因 X 會導致哪些疾病？」
 
-**Both:**
-- Predict both head and tail
-- Standard evaluation protocol
+**兩者：**
+- 預測頭和尾
+- 標準評估協定
 
-### Evaluation Metrics
+### 評估指標
 
-**Ranking Metrics:**
-- **Mean Rank (MR)**: Average rank of correct entity
-- **Mean Reciprocal Rank (MRR)**: Average of 1/rank
-- **Hits@K**: Percentage of correct entities in top K predictions
-  - Typically reported for K=1, 3, 10
+**排名指標：**
+- **Mean Rank（MR，平均排名）**：正確實體的平均排名
+- **Mean Reciprocal Rank（MRR，平均倒數排名）**：1/排名的平均值
+- **Hits@K**：前 K 個預測中正確實體的百分比
+  - 通常報告 K=1、3、10
 
-**Filtered vs Raw:**
-- **Filtered**: Remove other known true triples from ranking
-- **Raw**: Rank among all possible entities
-- Filtered is standard for evaluation
+**過濾 vs 原始：**
+- **過濾**：從排名中移除其他已知真實三元組
+- **原始**：在所有可能實體中排名
+- 過濾是評估的標準
 
-## Embedding Models
+## 嵌入模型
 
-### Translational Models
+### 平移模型
 
-**TransE (Translation Embedding):**
-- Represents relations as translations in embedding space
-- h + r ≈ t (head + relation ≈ tail)
-- Simple and effective baseline
-- Works well for 1-to-1 relations
-- Struggles with N-to-N relations
+**TransE（平移嵌入）：**
+- 將關係表示為嵌入空間中的平移
+- h + r ≈ t（頭 + 關係 ≈ 尾）
+- 簡單且有效的基線
+- 對 1 對 1 關係效果好
+- 對 N 對 N 關係困難
 
-**RotatE (Rotation Embedding):**
-- Relations as rotations in complex space
-- Better handles symmetric and inverse relations
-- State-of-the-art on many benchmarks
-- Can model composition patterns
+**RotatE（旋轉嵌入）：**
+- 關係作為複數空間中的旋轉
+- 更好地處理對稱和逆向關係
+- 在許多基準上達到最先進水準
+- 可以建模組合模式
 
-### Semantic Matching Models
+### 語義匹配模型
 
-**DistMult:**
-- Bilinear scoring function
-- Handles symmetric relations naturally
-- Cannot model asymmetric relations
-- Fast and memory efficient
+**DistMult：**
+- 雙線性評分函數
+- 自然處理對稱關係
+- 無法建模非對稱關係
+- 快速且記憶體效率高
 
-**ComplEx:**
-- Complex-valued embeddings
-- Models asymmetric and inverse relations
-- Better than DistMult for most graphs
-- Balances expressiveness and efficiency
+**ComplEx：**
+- 複數值嵌入
+- 建模非對稱和逆向關係
+- 對大多數圖比 DistMult 更好
+- 平衡表達能力和效率
 
-**SimplE:**
-- Extends DistMult with inverse relations
-- Fully expressive (can represent any relation pattern)
-- Two embeddings per entity (canonical and inverse)
+**SimplE：**
+- 擴展 DistMult 以處理逆向關係
+- 完全表達性（可以表示任何關係模式）
+- 每個實體有兩個嵌入（規範和逆向）
 
-### Neural Logic Models
+### 神經邏輯模型
 
-**NeuralLP (Neural Logic Programming):**
-- Learns logical rules through differentiable operations
-- Interprets predictions via learned rules
-- Good for sparse knowledge graphs
-- Computationally more expensive
+**NeuralLP（神經邏輯程式設計）：**
+- 通過可微分操作學習邏輯規則
+- 通過學習的規則解釋預測
+- 對稀疏知識圖譜效果好
+- 計算成本更高
 
-**KBGAT (Knowledge Base Graph Attention):**
-- Graph attention networks for KG completion
-- Learns entity representations from neighborhood
-- Handles unseen entities through inductive learning
-- Better for incomplete graphs
+**KBGAT（知識庫圖注意力）：**
+- 用於知識圖譜補全的圖注意力網路
+- 從鄰域學習實體表示
+- 通過歸納學習處理未見實體
+- 對不完整圖效果更好
 
-## Training Workflow
+## 訓練工作流程
 
-### Basic Pipeline
+### 基本管線
 
 ```python
 from torchdrug import datasets, models, tasks, core
 
-# Load dataset
+# 載入資料集
 dataset = datasets.FB15k237("~/kg-datasets/")
 
-# Define model
+# 定義模型
 model = models.RotatE(
     num_entity=dataset.num_entity,
     num_relation=dataset.num_relation,
@@ -141,7 +141,7 @@ model = models.RotatE(
     max_score=9
 )
 
-# Define task
+# 定義任務
 task = tasks.KnowledgeGraphCompletion(
     model,
     num_negative=128,
@@ -149,172 +149,172 @@ task = tasks.KnowledgeGraphCompletion(
     criterion="bce"
 )
 
-# Train with PyTorch Lightning or custom loop
+# 使用 PyTorch Lightning 或自訂循環訓練
 ```
 
-### Negative Sampling
+### 負採樣
 
-**Strategies:**
-- **Uniform**: Sample entities uniformly at random
-- **Self-Adversarial**: Weight samples by current model's scores
-- **Type-Constrained**: Sample only valid entity types for relation
+**策略：**
+- **均勻**：均勻隨機採樣實體
+- **自對抗**：根據當前模型的分數加權樣本
+- **類型約束**：僅採樣關係的有效實體類型
 
-**Parameters:**
-- `num_negative`: Number of negative samples per positive triple
-- `adversarial_temperature`: Temperature for self-adversarial weighting
-- Higher temperature = more focus on hard negatives
+**參數：**
+- `num_negative`：每個正三元組的負樣本數
+- `adversarial_temperature`：自對抗加權的溫度
+- 更高溫度 = 更關注困難負樣本
 
-### Loss Functions
+### 損失函數
 
-**Binary Cross-Entropy (BCE):**
-- Treats each triple independently
-- Balanced classification between positive and negative
+**二元交叉熵（BCE）：**
+- 獨立處理每個三元組
+- 正負之間的平衡分類
 
-**Margin Loss:**
-- Ensures positive scores higher than negative by margin
+**邊界損失：**
+- 確保正分數比負分數高出邊界
 - `max(0, margin + score_neg - score_pos)`
 
-**Logistic Loss:**
-- Smooth version of margin loss
-- Better gradient properties
+**邏輯損失：**
+- 邊界損失的平滑版本
+- 更好的梯度特性
 
-## Model Selection Guide
+## 模型選擇指南
 
-### By Relation Patterns
+### 按關係模式
 
-**1-to-1 Relations:**
-- TransE works well
-- Any model will likely succeed
+**1 對 1 關係：**
+- TransE 效果好
+- 任何模型都可能成功
 
-**1-to-N Relations:**
-- DistMult, ComplEx, SimplE
-- Avoid TransE
+**1 對 N 關係：**
+- DistMult、ComplEx、SimplE
+- 避免 TransE
 
-**N-to-1 Relations:**
-- DistMult, ComplEx, SimplE
-- Avoid TransE
+**N 對 1 關係：**
+- DistMult、ComplEx、SimplE
+- 避免 TransE
 
-**N-to-N Relations:**
-- ComplEx, SimplE, RotatE
-- Most challenging pattern
+**N 對 N 關係：**
+- ComplEx、SimplE、RotatE
+- 最具挑戰性的模式
 
-**Symmetric Relations:**
-- DistMult, ComplEx
-- RotatE with proper initialization
+**對稱關係：**
+- DistMult、ComplEx
+- RotatE 需要適當初始化
 
-**Antisymmetric Relations:**
-- ComplEx, SimplE, RotatE
-- Avoid DistMult
+**反對稱關係：**
+- ComplEx、SimplE、RotatE
+- 避免 DistMult
 
-**Inverse Relations:**
-- ComplEx, SimplE, RotatE
-- Important for bidirectional reasoning
+**逆向關係：**
+- ComplEx、SimplE、RotatE
+- 對雙向推理重要
 
-**Composition:**
-- RotatE (best)
-- TransE (reasonable)
-- Captures multi-hop paths
+**組合：**
+- RotatE（最佳）
+- TransE（合理）
+- 捕捉多跳路徑
 
-### By Dataset Characteristics
+### 按資料集特徵
 
-**Small Graphs (< 50k entities):**
-- ComplEx or SimplE
-- Lower embedding dimensions (200-500)
+**小型圖（< 50k 實體）：**
+- ComplEx 或 SimplE
+- 較低嵌入維度（200-500）
 
-**Large Graphs (> 100k entities):**
-- DistMult for efficiency
-- RotatE for accuracy
-- Higher dimensions (500-2000)
+**大型圖（> 100k 實體）：**
+- DistMult 追求效率
+- RotatE 追求準確度
+- 較高維度（500-2000）
 
-**Sparse Graphs:**
-- NeuralLP (learns rules from limited data)
-- Pre-train embeddings on larger graphs
+**稀疏圖：**
+- NeuralLP（從有限資料學習規則）
+- 在更大圖上預訓練嵌入
 
-**Dense, Complete Graphs:**
-- Any embedding model works well
-- Choose based on relation patterns
+**密集、完整圖：**
+- 任何嵌入模型都效果好
+- 根據關係模式選擇
 
-**Biomedical/Domain Graphs:**
-- Consider type constraints in sampling
-- Use domain-specific negative sampling
-- Hetionet benefits from relation-specific models
+**生物醫學/領域圖：**
+- 考慮採樣中的類型約束
+- 使用領域特定的負採樣
+- Hetionet 受益於關係特定模型
 
-## Advanced Techniques
+## 進階技術
 
-### Multi-Hop Reasoning
+### 多跳推理
 
-Chain multiple relations to answer complex queries:
-- "What drugs treat diseases caused by gene X?"
-- Requires path-based or rule-based reasoning
-- NeuralLP naturally supports this
+鏈接多個關係來回答複雜查詢：
+- 「哪些藥物治療由基因 X 引起的疾病？」
+- 需要基於路徑或基於規則的推理
+- NeuralLP 自然支援這一點
 
-### Temporal Knowledge Graphs
+### 時序知識圖譜
 
-Extend to time-varying facts:
-- Add temporal information to triples
-- Predict future facts
-- Requires temporal encoding in models
+擴展到隨時間變化的事實：
+- 為三元組添加時間資訊
+- 預測未來事實
+- 需要模型中的時間編碼
 
-### Few-Shot Learning
+### 少樣本學習
 
-Handle relations with few examples:
-- Meta-learning approaches
-- Transfer from related relations
-- Important for emerging knowledge
+處理只有少量範例的關係：
+- 元學習方法
+- 從相關關係遷移
+- 對新興知識重要
 
-### Inductive Learning
+### 歸納學習
 
-Generalize to unseen entities:
-- KBGAT and other GNN-based methods
-- Use entity features/descriptions
-- Critical for evolving knowledge graphs
+泛化到未見實體：
+- KBGAT 和其他基於 GNN 的方法
+- 使用實體特徵/描述
+- 對演化的知識圖譜至關重要
 
-## Biomedical Applications
+## 生物醫學應用
 
-### Drug Repurposing
+### 藥物再利用
 
-Predict "drug treats disease" links in Hetionet:
-1. Train on known drug-disease associations
-2. Predict new treatment candidates
-3. Filter by mechanism (gene, pathway involvement)
-4. Validate predictions experimentally
+在 Hetionet 中預測「藥物治療疾病」連結：
+1. 在已知藥物-疾病關聯上訓練
+2. 預測新的治療候選物
+3. 按機制（基因、路徑參與）過濾
+4. 實驗驗證預測
 
-### Disease Gene Discovery
+### 疾病基因發現
 
-Identify genes associated with diseases:
-1. Model gene-disease-pathway networks
-2. Predict missing gene-disease links
-3. Incorporate protein interactions, expression data
-4. Prioritize candidates for validation
+識別與疾病相關的基因：
+1. 建模基因-疾病-路徑網路
+2. 預測缺失的基因-疾病連結
+3. 整合蛋白質交互作用、表達資料
+4. 優先排序驗證候選物
 
-### Protein Function Prediction
+### 蛋白質功能預測
 
-Link proteins to biological processes:
-1. Integrate protein interactions, GO terms
-2. Predict missing GO annotations
-3. Transfer function from similar proteins
+將蛋白質連結到生物過程：
+1. 整合蛋白質交互作用、GO 術語
+2. 預測缺失的 GO 註釋
+3. 從相似蛋白質遷移功能
 
-## Common Issues and Solutions
+## 常見問題和解決方案
 
-**Issue: Poor performance on specific relation types**
-- Solution: Analyze relation patterns, choose appropriate model, or use relation-specific models
+**問題：特定關係類型表現不佳**
+- 解決方案：分析關係模式，選擇適當模型，或使用關係特定模型
 
-**Issue: Overfitting on small graphs**
-- Solution: Reduce embedding dimension, increase regularization, or use simpler models
+**問題：在小型圖上過擬合**
+- 解決方案：減少嵌入維度，增加正則化，或使用更簡單的模型
 
-**Issue: Slow training on large graphs**
-- Solution: Reduce negative samples, use DistMult for efficiency, or implement mini-batch training
+**問題：大型圖上訓練緩慢**
+- 解決方案：減少負樣本，使用 DistMult 追求效率，或實作小批次訓練
 
-**Issue: Cannot handle new entities**
-- Solution: Use inductive models (KBGAT), incorporate entity features, or pre-compute embeddings for new entities based on their neighbors
+**問題：無法處理新實體**
+- 解決方案：使用歸納模型（KBGAT），整合實體特徵，或根據鄰居預計算新實體的嵌入
 
-## Best Practices
+## 最佳實踐
 
-1. Start with ComplEx or RotatE for most tasks
-2. Use self-adversarial negative sampling
-3. Tune embedding dimension (typically 500-2000)
-4. Apply regularization to prevent overfitting
-5. Use filtered evaluation metrics
-6. Analyze performance per relation type
-7. Consider relation-specific models for heterogeneous graphs
-8. Validate predictions with domain experts
+1. 對大多數任務從 ComplEx 或 RotatE 開始
+2. 使用自對抗負採樣
+3. 調整嵌入維度（通常 500-2000）
+4. 應用正則化防止過擬合
+5. 使用過濾評估指標
+6. 分析每種關係類型的表現
+7. 對異質圖考慮關係特定模型
+8. 與領域專家驗證預測

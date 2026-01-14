@@ -1,10 +1,10 @@
-# Matchms Similarity Functions Reference
+# Matchms 相似性函數參考
 
-This document provides detailed information about all similarity scoring methods available in matchms.
+本文件提供 matchms 中所有可用相似性評分方法的詳細資訊。
 
-## Overview
+## 概述
 
-Matchms provides multiple similarity functions for comparing mass spectra. Use `calculate_scores()` to compute pairwise similarities between reference and query spectra collections.
+Matchms 提供多種相似性函數用於比較質譜。使用 `calculate_scores()` 計算參考質譜和查詢質譜集合之間的成對相似性。
 
 ```python
 from matchms import calculate_scores
@@ -15,25 +15,25 @@ scores = calculate_scores(references=library_spectra,
                          similarity_function=CosineGreedy())
 ```
 
-## Peak-Based Similarity Functions
+## 基於峰值的相似性函數
 
-These functions compare mass spectra based on their peak patterns (m/z and intensity values).
+這些函數根據峰值模式（m/z 和強度值）比較質譜。
 
 ### CosineGreedy
 
-**Description**: Calculates cosine similarity between two spectra using a fast greedy matching algorithm. Peaks are matched within a specified tolerance, and similarity is computed based on matched peak intensities.
+**描述**：使用快速貪婪匹配演算法計算兩個質譜之間的餘弦相似性。峰值在指定容差範圍內匹配，相似性基於匹配峰值強度計算。
 
-**When to use**:
-- Fast similarity calculations for large datasets
-- General-purpose spectral matching
-- When speed is prioritized over mathematically optimal matching
+**使用時機**：
+- 大型資料集的快速相似性計算
+- 通用質譜匹配
+- 當速度優先於數學上最優匹配時
 
-**Parameters**:
-- `tolerance` (float, default=0.1): Maximum m/z difference for peak matching (Daltons)
-- `mz_power` (float, default=0.0): Exponent for m/z weighting (0 = no weighting)
-- `intensity_power` (float, default=1.0): Exponent for intensity weighting
+**參數**：
+- `tolerance` (float, 預設=0.1)：峰值匹配的最大 m/z 差異（道爾頓）
+- `mz_power` (float, 預設=0.0)：m/z 加權指數（0 = 無加權）
+- `intensity_power` (float, 預設=1.0)：強度加權指數
 
-**Example**:
+**範例**：
 ```python
 from matchms.similarity import CosineGreedy
 
@@ -41,25 +41,25 @@ similarity_func = CosineGreedy(tolerance=0.1, mz_power=0.0, intensity_power=1.0)
 scores = calculate_scores(references, queries, similarity_func)
 ```
 
-**Output**: Similarity score between 0.0 and 1.0, plus number of matched peaks.
+**輸出**：0.0 到 1.0 之間的相似性分數，以及匹配峰值數量。
 
 ---
 
 ### CosineHungarian
 
-**Description**: Calculates cosine similarity using the Hungarian algorithm for optimal peak matching. Provides mathematically optimal peak assignments but is slower than CosineGreedy.
+**描述**：使用匈牙利演算法計算餘弦相似性以實現最優峰值匹配。提供數學上最優的峰值分配，但比 CosineGreedy 慢。
 
-**When to use**:
-- When optimal peak matching is required
-- High-quality reference library comparisons
-- Research requiring reproducible, mathematically rigorous results
+**使用時機**：
+- 當需要最優峰值匹配時
+- 高品質參考庫比較
+- 需要可重現、數學嚴謹結果的研究
 
-**Parameters**:
-- `tolerance` (float, default=0.1): Maximum m/z difference for peak matching
-- `mz_power` (float, default=0.0): Exponent for m/z weighting
-- `intensity_power` (float, default=1.0): Exponent for intensity weighting
+**參數**：
+- `tolerance` (float, 預設=0.1)：峰值匹配的最大 m/z 差異
+- `mz_power` (float, 預設=0.0)：m/z 加權指數
+- `intensity_power` (float, 預設=1.0)：強度加權指數
 
-**Example**:
+**範例**：
 ```python
 from matchms.similarity import CosineHungarian
 
@@ -67,28 +67,28 @@ similarity_func = CosineHungarian(tolerance=0.1)
 scores = calculate_scores(references, queries, similarity_func)
 ```
 
-**Output**: Optimal similarity score between 0.0 and 1.0, plus matched peaks.
+**輸出**：0.0 到 1.0 之間的最優相似性分數，以及匹配峰值。
 
-**Note**: Slower than CosineGreedy; use for smaller datasets or when accuracy is critical.
+**注意**：比 CosineGreedy 慢；用於較小的資料集或當準確性至關重要時。
 
 ---
 
 ### ModifiedCosine
 
-**Description**: Extends cosine similarity by accounting for precursor m/z differences. Allows peaks to match after applying a mass shift based on the difference between precursor masses. Useful for comparing spectra of related compounds (isotopes, adducts, analogs).
+**描述**：通過考慮前驅離子 m/z 差異來擴展餘弦相似性。允許峰值在應用基於前驅離子質量差異的質量偏移後匹配。適用於比較相關化合物（同位素、加合物、類似物）的質譜。
 
-**When to use**:
-- Comparing spectra from different precursor masses
-- Identifying structural analogs or derivatives
-- Cross-ionization mode comparisons
-- When precursor mass differences are meaningful
+**使用時機**：
+- 比較來自不同前驅離子質量的質譜
+- 識別結構類似物或衍生物
+- 跨離子化模式比較
+- 當前驅離子質量差異有意義時
 
-**Parameters**:
-- `tolerance` (float, default=0.1): Maximum m/z difference for peak matching after shift
-- `mz_power` (float, default=0.0): Exponent for m/z weighting
-- `intensity_power` (float, default=1.0): Exponent for intensity weighting
+**參數**：
+- `tolerance` (float, 預設=0.1)：偏移後峰值匹配的最大 m/z 差異
+- `mz_power` (float, 預設=0.0)：m/z 加權指數
+- `intensity_power` (float, 預設=1.0)：強度加權指數
 
-**Example**:
+**範例**：
 ```python
 from matchms.similarity import ModifiedCosine
 
@@ -96,72 +96,72 @@ similarity_func = ModifiedCosine(tolerance=0.1)
 scores = calculate_scores(references, queries, similarity_func)
 ```
 
-**Requirements**: Both spectra must have valid precursor_mz metadata.
+**要求**：兩個質譜都必須有有效的 precursor_mz 元資料。
 
 ---
 
 ### NeutralLossesCosine
 
-**Description**: Calculates similarity based on neutral loss patterns rather than fragment m/z values. Neutral losses are derived by subtracting fragment m/z from precursor m/z. Particularly useful for identifying compounds with similar fragmentation patterns.
+**描述**：基於中性丟失模式而非碎片 m/z 值計算相似性。中性丟失通過從前驅離子 m/z 減去碎片 m/z 得出。特別適用於識別具有相似碎裂模式的化合物。
 
-**When to use**:
-- Comparing fragmentation patterns across different precursor masses
-- Identifying compounds with similar neutral loss profiles
-- Complementary to regular cosine scoring
-- Metabolite identification and classification
+**使用時機**：
+- 跨不同前驅離子質量比較碎裂模式
+- 識別具有相似中性丟失譜的化合物
+- 作為常規餘弦評分的補充
+- 代謝物識別和分類
 
-**Parameters**:
-- `tolerance` (float, default=0.1): Maximum neutral loss difference for matching
-- `mz_power` (float, default=0.0): Exponent for loss value weighting
-- `intensity_power` (float, default=1.0): Exponent for intensity weighting
+**參數**：
+- `tolerance` (float, 預設=0.1)：匹配的最大中性丟失差異
+- `mz_power` (float, 預設=0.0)：損失值加權指數
+- `intensity_power` (float, 預設=1.0)：強度加權指數
 
-**Example**:
+**範例**：
 ```python
 from matchms.similarity import NeutralLossesCosine
 from matchms.filtering import add_losses
 
-# First add losses to spectra
+# 首先向質譜添加損失
 spectra_with_losses = [add_losses(s) for s in spectra]
 
 similarity_func = NeutralLossesCosine(tolerance=0.1)
 scores = calculate_scores(references_with_losses, queries_with_losses, similarity_func)
 ```
 
-**Requirements**:
-- Both spectra must have valid precursor_mz metadata
-- Use `add_losses()` filter to compute neutral losses before scoring
+**要求**：
+- 兩個質譜都必須有有效的 precursor_mz 元資料
+- 在評分前使用 `add_losses()` 過濾器計算中性丟失
 
 ---
 
-## Structural Similarity Functions
+## 結構相似性函數
 
-These functions compare molecular structures rather than spectral peaks.
+這些函數比較分子結構而非質譜峰值。
 
 ### FingerprintSimilarity
 
-**Description**: Calculates similarity between molecular fingerprints derived from chemical structures (SMILES or InChI). Supports multiple fingerprint types and similarity metrics.
+**描述**：計算從化學結構（SMILES 或 InChI）衍生的分子指紋之間的相似性。支援多種指紋類型和相似性指標。
 
-**When to use**:
-- Structural similarity without spectral data
-- Combining structural and spectral similarity
-- Pre-filtering candidates before spectral matching
-- Structure-activity relationship studies
+**使用時機**：
+- 沒有質譜資料的結構相似性
+- 結合結構和質譜相似性
+- 在質譜匹配前預過濾候選物
+- 結構-活性關係研究
 
-**Parameters**:
-- `fingerprint_type` (str, default="daylight"): Type of fingerprint
-  - `"daylight"`: Daylight fingerprint
-  - `"morgan1"`, `"morgan2"`, `"morgan3"`: Morgan fingerprints with radius 1, 2, or 3
-- `similarity_measure` (str, default="jaccard"): Similarity metric
-  - `"jaccard"`: Jaccard index (intersection / union)
-  - `"dice"`: Dice coefficient (2 * intersection / (size1 + size2))
-  - `"cosine"`: Cosine similarity
+**參數**：
+- `fingerprint_type` (str, 預設="daylight")：指紋類型
+  - `"daylight"`：Daylight 指紋
+  - `"morgan1"`、`"morgan2"`、`"morgan3"`：半徑 1、2 或 3 的 Morgan 指紋
+- `similarity_measure` (str, 預設="jaccard")：相似性指標
+  - `"jaccard"`：Jaccard 指數（交集 / 聯集）
+  - `"dice"`：Dice 係數（2 * 交集 / (大小1 + 大小2)）
+  - `"cosine"`：餘弦相似性
 
-**Example**:
+**範例**：
 ```python
 from matchms.similarity import FingerprintSimilarity
 from matchms.filtering import add_fingerprint
 
-# Add fingerprints to spectra
+# 向質譜添加指紋
 spectra_with_fps = [add_fingerprint(s, fingerprint_type="morgan2", nbits=2048)
                     for s in spectra]
 
@@ -169,106 +169,106 @@ similarity_func = FingerprintSimilarity(similarity_measure="jaccard")
 scores = calculate_scores(references_with_fps, queries_with_fps, similarity_func)
 ```
 
-**Requirements**:
-- Spectra must have valid SMILES or InChI metadata
-- Use `add_fingerprint()` filter to compute fingerprints
-- Requires rdkit library
+**要求**：
+- 質譜必須有有效的 SMILES 或 InChI 元資料
+- 使用 `add_fingerprint()` 過濾器計算指紋
+- 需要 rdkit 庫
 
 ---
 
-## Metadata-Based Similarity Functions
+## 基於元資料的相似性函數
 
-These functions compare metadata fields rather than spectral or structural data.
+這些函數比較元資料欄位而非質譜或結構資料。
 
 ### MetadataMatch
 
-**Description**: Compares user-defined metadata fields between spectra. Supports exact matching for categorical data and tolerance-based matching for numerical data.
+**描述**：比較質譜之間使用者定義的元資料欄位。支援分類資料的精確匹配和數值資料的容差匹配。
 
-**When to use**:
-- Filtering by experimental conditions (collision energy, retention time)
-- Instrument-specific matching
-- Combining metadata constraints with spectral similarity
-- Custom metadata-based filtering
+**使用時機**：
+- 按實驗條件過濾（碰撞能量、滯留時間）
+- 儀器特定匹配
+- 結合元資料限制和質譜相似性
+- 自訂元資料過濾
 
-**Parameters**:
-- `field` (str): Metadata field name to compare
-- `matching_type` (str, default="exact"): Matching method
-  - `"exact"`: Exact string/value match
-  - `"difference"`: Absolute difference for numerical values
-  - `"relative_difference"`: Relative difference for numerical values
-- `tolerance` (float, optional): Maximum difference for numerical matching
+**參數**：
+- `field` (str)：要比較的元資料欄位名稱
+- `matching_type` (str, 預設="exact")：匹配方法
+  - `"exact"`：精確字串/值匹配
+  - `"difference"`：數值的絕對差異
+  - `"relative_difference"`：數值的相對差異
+- `tolerance` (float, 可選)：數值匹配的最大差異
 
-**Example (Exact matching)**:
+**範例（精確匹配）**：
 ```python
 from matchms.similarity import MetadataMatch
 
-# Match by instrument type
+# 按儀器類型匹配
 similarity_func = MetadataMatch(field="instrument_type", matching_type="exact")
 scores = calculate_scores(references, queries, similarity_func)
 ```
 
-**Example (Numerical matching)**:
+**範例（數值匹配）**：
 ```python
-# Match retention time within 0.5 minutes
+# 在 0.5 分鐘內匹配滯留時間
 similarity_func = MetadataMatch(field="retention_time",
                                 matching_type="difference",
                                 tolerance=0.5)
 scores = calculate_scores(references, queries, similarity_func)
 ```
 
-**Output**: Returns 1.0 (match) or 0.0 (no match) for exact matching. For numerical matching, returns similarity score based on difference.
+**輸出**：精確匹配返回 1.0（匹配）或 0.0（不匹配）。數值匹配返回基於差異的相似性分數。
 
 ---
 
 ### PrecursorMzMatch
 
-**Description**: Binary matching based on precursor m/z values. Returns True/False based on whether precursor masses match within specified tolerance.
+**描述**：基於前驅離子 m/z 值的二元匹配。根據前驅離子質量是否在指定容差範圍內匹配返回 True/False。
 
-**When to use**:
-- Pre-filtering spectral libraries by precursor mass
-- Fast mass-based candidate selection
-- Combining with other similarity metrics
-- Isobaric compound identification
+**使用時機**：
+- 按前驅離子質量預過濾質譜庫
+- 快速基於質量的候選選擇
+- 與其他相似性指標結合
+- 同量異構化合物識別
 
-**Parameters**:
-- `tolerance` (float, default=0.1): Maximum m/z difference for matching
-- `tolerance_type` (str, default="Dalton"): Tolerance unit
-  - `"Dalton"`: Absolute mass difference
-  - `"ppm"`: Parts per million (relative)
+**參數**：
+- `tolerance` (float, 預設=0.1)：匹配的最大 m/z 差異
+- `tolerance_type` (str, 預設="Dalton")：容差單位
+  - `"Dalton"`：絕對質量差異
+  - `"ppm"`：百萬分之一（相對）
 
-**Example**:
+**範例**：
 ```python
 from matchms.similarity import PrecursorMzMatch
 
-# Match precursor within 0.1 Da
+# 在 0.1 Da 內匹配前驅離子
 similarity_func = PrecursorMzMatch(tolerance=0.1, tolerance_type="Dalton")
 scores = calculate_scores(references, queries, similarity_func)
 
-# Match precursor within 10 ppm
+# 在 10 ppm 內匹配前驅離子
 similarity_func = PrecursorMzMatch(tolerance=10, tolerance_type="ppm")
 scores = calculate_scores(references, queries, similarity_func)
 ```
 
-**Output**: 1.0 (match) or 0.0 (no match)
+**輸出**：1.0（匹配）或 0.0（不匹配）
 
-**Requirements**: Both spectra must have valid precursor_mz metadata.
+**要求**：兩個質譜都必須有有效的 precursor_mz 元資料。
 
 ---
 
 ### ParentMassMatch
 
-**Description**: Binary matching based on parent mass (neutral mass) values. Similar to PrecursorMzMatch but uses calculated parent mass instead of precursor m/z.
+**描述**：基於母離子質量（中性質量）值的二元匹配。類似於 PrecursorMzMatch，但使用計算的母離子質量而非前驅離子 m/z。
 
-**When to use**:
-- Comparing spectra from different ionization modes
-- Adduct-independent matching
-- Neutral mass-based library searches
+**使用時機**：
+- 比較來自不同離子化模式的質譜
+- 與加合物無關的匹配
+- 基於中性質量的庫搜尋
 
-**Parameters**:
-- `tolerance` (float, default=0.1): Maximum mass difference for matching
-- `tolerance_type` (str, default="Dalton"): Tolerance unit ("Dalton" or "ppm")
+**參數**：
+- `tolerance` (float, 預設=0.1)：匹配的最大質量差異
+- `tolerance_type` (str, 預設="Dalton")：容差單位（"Dalton" 或 "ppm"）
 
-**Example**:
+**範例**：
 ```python
 from matchms.similarity import ParentMassMatch
 
@@ -276,26 +276,26 @@ similarity_func = ParentMassMatch(tolerance=0.1, tolerance_type="Dalton")
 scores = calculate_scores(references, queries, similarity_func)
 ```
 
-**Output**: 1.0 (match) or 0.0 (no match)
+**輸出**：1.0（匹配）或 0.0（不匹配）
 
-**Requirements**: Both spectra must have valid parent_mass metadata.
+**要求**：兩個質譜都必須有有效的 parent_mass 元資料。
 
 ---
 
-## Combining Multiple Similarity Functions
+## 組合多個相似性函數
 
-Combine multiple similarity metrics for robust compound identification:
+結合多個相似性指標以實現穩健的化合物識別：
 
 ```python
 from matchms import calculate_scores
 from matchms.similarity import CosineGreedy, ModifiedCosine, FingerprintSimilarity
 
-# Calculate multiple similarity scores
+# 計算多個相似性分數
 cosine_scores = calculate_scores(refs, queries, CosineGreedy())
 modified_cosine_scores = calculate_scores(refs, queries, ModifiedCosine())
 fingerprint_scores = calculate_scores(refs, queries, FingerprintSimilarity())
 
-# Combine scores with weights
+# 用權重組合分數
 for i, query in enumerate(queries):
     for j, ref in enumerate(refs):
         combined_score = (0.5 * cosine_scores.scores[j, i] +
@@ -303,47 +303,47 @@ for i, query in enumerate(queries):
                          0.2 * fingerprint_scores.scores[j, i])
 ```
 
-## Accessing Scores Results
+## 存取分數結果
 
-The `Scores` object provides multiple methods to access results:
+`Scores` 物件提供多種方法存取結果：
 
 ```python
-# Get best matches for a query
+# 獲取查詢的最佳匹配
 best_matches = scores.scores_by_query(query_spectrum, sort=True)[:10]
 
-# Get scores as numpy array
+# 獲取分數為 numpy 陣列
 score_array = scores.scores
 
-# Get scores as pandas DataFrame
+# 獲取分數為 pandas DataFrame
 import pandas as pd
 df = scores.to_dataframe()
 
-# Filter by threshold
+# 按閾值過濾
 high_scores = [(i, j, score) for i, j, score in scores.to_list() if score > 0.7]
 
-# Save scores
+# 儲存分數
 scores.to_json("scores.json")
 scores.to_pickle("scores.pkl")
 ```
 
-## Performance Considerations
+## 效能考量
 
-**Fast methods** (large datasets):
+**快速方法**（大型資料集）：
 - CosineGreedy
 - PrecursorMzMatch
 - ParentMassMatch
 
-**Slow methods** (smaller datasets or high accuracy):
+**較慢方法**（較小資料集或高準確度）：
 - CosineHungarian
-- ModifiedCosine (slower than CosineGreedy)
+- ModifiedCosine（比 CosineGreedy 慢）
 - NeutralLossesCosine
-- FingerprintSimilarity (requires fingerprint computation)
+- FingerprintSimilarity（需要指紋計算）
 
-**Recommendation**: For large-scale library searches, use PrecursorMzMatch to pre-filter candidates, then apply CosineGreedy or ModifiedCosine to filtered results.
+**建議**：對於大規模庫搜尋，使用 PrecursorMzMatch 預過濾候選物，然後對過濾結果應用 CosineGreedy 或 ModifiedCosine。
 
-## Common Similarity Workflows
+## 常見相似性工作流程
 
-### Standard Library Matching
+### 標準庫匹配
 ```python
 from matchms.similarity import CosineGreedy
 
@@ -351,30 +351,31 @@ scores = calculate_scores(library_spectra, query_spectra,
                          CosineGreedy(tolerance=0.1))
 ```
 
-### Multi-Metric Matching
+### 多指標匹配
 ```python
 from matchms.similarity import CosineGreedy, ModifiedCosine, FingerprintSimilarity
 
-# Spectral similarity
+# 質譜相似性
 cosine = calculate_scores(refs, queries, CosineGreedy())
 modified = calculate_scores(refs, queries, ModifiedCosine())
 
-# Structural similarity
+# 結構相似性
 fingerprint = calculate_scores(refs, queries, FingerprintSimilarity())
 ```
 
-### Precursor-Filtered Matching
+### 前驅離子過濾匹配
 ```python
 from matchms.similarity import PrecursorMzMatch, CosineGreedy
 
-# First filter by precursor mass
+# 首先按前驅離子質量過濾
 mass_filter = calculate_scores(refs, queries, PrecursorMzMatch(tolerance=0.1))
 
-# Then calculate cosine only for matching precursors
+# 然後只對匹配的前驅離子計算餘弦
 cosine_scores = calculate_scores(refs, queries, CosineGreedy())
 ```
 
-## Further Reading
+## 進一步閱讀
 
-For detailed API documentation, parameter descriptions, and mathematical formulations, see:
+有關詳細的 API 文件、參數描述和數學公式，請參閱：
 https://matchms.readthedocs.io/en/latest/api/matchms.similarity.html
+

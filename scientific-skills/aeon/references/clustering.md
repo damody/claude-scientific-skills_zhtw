@@ -1,123 +1,123 @@
-# Time Series Clustering
+# 時間序列聚類
 
-Aeon provides clustering algorithms adapted for temporal data with specialized distance metrics and averaging methods.
+Aeon 提供適配於時間資料的聚類演算法，具有專門的距離度量和平均方法。
 
-## Partitioning Algorithms
+## 分割演算法
 
-Standard k-means/k-medoids adapted for time series:
+適配於時間序列的標準 k-means/k-medoids：
 
-- `TimeSeriesKMeans` - K-means with temporal distance metrics (DTW, Euclidean, etc.)
-- `TimeSeriesKMedoids` - Uses actual time series as cluster centers
-- `TimeSeriesKShape` - Shape-based clustering algorithm
-- `TimeSeriesKernelKMeans` - Kernel-based variant for nonlinear patterns
+- `TimeSeriesKMeans` - 搭配時間距離度量的 K-means（DTW、Euclidean 等）
+- `TimeSeriesKMedoids` - 使用實際時間序列作為聚類中心
+- `TimeSeriesKShape` - 基於形狀的聚類演算法
+- `TimeSeriesKernelKMeans` - 用於非線性模式的核心變體
 
-**Use when**: Known number of clusters, spherical cluster shapes expected.
+**使用時機**：已知聚類數量，預期為球形聚類形狀。
 
-## Large Dataset Methods
+## 大型資料集方法
 
-Efficient clustering for large collections:
+用於大型集合的高效聚類：
 
-- `TimeSeriesCLARA` - Clustering Large Applications with sampling
-- `TimeSeriesCLARANS` - Randomized search variant of CLARA
+- `TimeSeriesCLARA` - 帶抽樣的大型應用聚類
+- `TimeSeriesCLARANS` - CLARA 的隨機搜尋變體
 
-**Use when**: Dataset too large for standard k-medoids, need scalability.
+**使用時機**：資料集太大而無法使用標準 k-medoids，需要可擴展性。
 
-## Elastic Distance Clustering
+## 彈性距離聚類
 
-Specialized for alignment-based similarity:
+專門用於基於對齊相似性的聚類：
 
-- `KASBA` - K-means with shift-invariant elastic averaging
-- `ElasticSOM` - Self-organizing map using elastic distances
+- `KASBA` - 具有平移不變彈性平均的 K-means
+- `ElasticSOM` - 使用彈性距離的自組織映射
 
-**Use when**: Time series have temporal shifts or warping.
+**使用時機**：時間序列具有時間偏移或扭曲。
 
-## Spectral Methods
+## 頻譜方法
 
-Graph-based clustering:
+基於圖的聚類：
 
-- `KSpectralCentroid` - Spectral clustering with centroid computation
+- `KSpectralCentroid` - 帶有質心計算的頻譜聚類
 
-**Use when**: Non-convex cluster shapes, need graph-based approach.
+**使用時機**：非凸聚類形狀，需要基於圖的方法。
 
-## Deep Learning Clustering
+## 深度學習聚類
 
-Neural network-based clustering with auto-encoders:
+使用自動編碼器的神經網路聚類：
 
-- `AEFCNClusterer` - Fully convolutional auto-encoder
-- `AEResNetClusterer` - Residual network auto-encoder
-- `AEDCNNClusterer` - Dilated CNN auto-encoder
-- `AEDRNNClusterer` - Dilated RNN auto-encoder
-- `AEBiGRUClusterer` - Bidirectional GRU auto-encoder
-- `AEAttentionBiGRUClusterer` - Attention-enhanced BiGRU auto-encoder
+- `AEFCNClusterer` - 全卷積自動編碼器
+- `AEResNetClusterer` - 殘差網路自動編碼器
+- `AEDCNNClusterer` - 膨脹 CNN 自動編碼器
+- `AEDRNNClusterer` - 膨脹 RNN 自動編碼器
+- `AEBiGRUClusterer` - 雙向 GRU 自動編碼器
+- `AEAttentionBiGRUClusterer` - 注意力增強的 BiGRU 自動編碼器
 
-**Use when**: Large datasets, need learned representations, or complex patterns.
+**使用時機**：大型資料集，需要學習表示，或複雜模式。
 
-## Feature-Based Clustering
+## 基於特徵的聚類
 
-Transform to feature space before clustering:
+在聚類前轉換到特徵空間：
 
-- `Catch22Clusterer` - Clusters on 22 canonical features
-- `SummaryClusterer` - Uses summary statistics
-- `TSFreshClusterer` - Automated tsfresh features
+- `Catch22Clusterer` - 在 22 個典型特徵上聚類
+- `SummaryClusterer` - 使用摘要統計
+- `TSFreshClusterer` - 自動化 tsfresh 特徵
 
-**Use when**: Raw time series not informative, need interpretable features.
+**使用時機**：原始時間序列資訊不足，需要可解釋特徵。
 
-## Composition
+## 組合
 
-Build custom clustering pipelines:
+建立自訂聚類流程：
 
-- `ClustererPipeline` - Chain transformers with clusterers
+- `ClustererPipeline` - 將轉換器與聚類器串聯
 
-## Averaging Methods
+## 平均方法
 
-Compute cluster centers for time series:
+計算時間序列的聚類中心：
 
-- `mean_average` - Arithmetic mean
-- `ba_average` - Barycentric averaging with DTW
-- `kasba_average` - Shift-invariant averaging
-- `shift_invariant_average` - General shift-invariant method
+- `mean_average` - 算術平均
+- `ba_average` - 搭配 DTW 的重心平均
+- `kasba_average` - 平移不變平均
+- `shift_invariant_average` - 通用平移不變方法
 
-**Use when**: Need representative cluster centers for visualization or initialization.
+**使用時機**：需要代表性聚類中心用於視覺化或初始化。
 
-## Quick Start
+## 快速開始
 
 ```python
 from aeon.clustering import TimeSeriesKMeans
 from aeon.datasets import load_classification
 
-# Load data (using classification data for clustering)
+# 載入資料（使用分類資料進行聚類）
 X_train, _ = load_classification("GunPoint", split="train")
 
-# Cluster time series
+# 聚類時間序列
 clusterer = TimeSeriesKMeans(
     n_clusters=3,
-    distance="dtw",  # Use DTW distance
-    averaging_method="ba"  # Barycentric averaging
+    distance="dtw",  # 使用 DTW 距離
+    averaging_method="ba"  # 重心平均
 )
 labels = clusterer.fit_predict(X_train)
 centers = clusterer.cluster_centers_
 ```
 
-## Algorithm Selection
+## 演算法選擇
 
-- **Speed priority**: TimeSeriesKMeans with Euclidean distance
-- **Temporal alignment**: KASBA, TimeSeriesKMeans with DTW
-- **Large datasets**: TimeSeriesCLARA, TimeSeriesCLARANS
-- **Complex patterns**: Deep learning clusterers
-- **Interpretability**: Catch22Clusterer, SummaryClusterer
-- **Non-convex clusters**: KSpectralCentroid
+- **速度優先**：TimeSeriesKMeans 搭配 Euclidean 距離
+- **時間對齊**：KASBA、TimeSeriesKMeans 搭配 DTW
+- **大型資料集**：TimeSeriesCLARA、TimeSeriesCLARANS
+- **複雜模式**：深度學習聚類器
+- **可解釋性**：Catch22Clusterer、SummaryClusterer
+- **非凸聚類**：KSpectralCentroid
 
-## Distance Metrics
+## 距離度量
 
-Compatible distance metrics include:
-- Euclidean, Manhattan, Minkowski (lock-step)
-- DTW, DDTW, WDTW (elastic with alignment)
-- ERP, EDR, LCSS (edit-based)
-- MSM, TWE (specialized elastic)
+相容的距離度量包括：
+- Euclidean、Manhattan、Minkowski（同步）
+- DTW、DDTW、WDTW（具有對齊的彈性）
+- ERP、EDR、LCSS（基於編輯）
+- MSM、TWE（專門的彈性）
 
-## Evaluation
+## 評估
 
-Use clustering metrics from sklearn or aeon benchmarking:
-- Silhouette score
-- Davies-Bouldin index
-- Calinski-Harabasz index
+使用 sklearn 或 aeon 基準測試的聚類指標：
+- 輪廓係數
+- Davies-Bouldin 指數
+- Calinski-Harabasz 指數

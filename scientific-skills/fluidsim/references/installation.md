@@ -1,68 +1,68 @@
-# FluidSim Installation
+# FluidSim 安裝
 
-## Requirements
+## 需求
 
 - Python >= 3.9
-- Virtual environment recommended
+- 建議使用虛擬環境
 
-## Installation Methods
+## 安裝方法
 
-### Basic Installation
+### 基本安裝
 
-Install fluidsim using uv:
+使用 uv 安裝 fluidsim：
 
 ```bash
 uv pip install fluidsim
 ```
 
-### With FFT Support (Required for Pseudospectral Solvers)
+### 含 FFT 支援（擬譜求解器必需）
 
-Most fluidsim solvers use Fourier-based methods and require FFT libraries:
+大多數 fluidsim 求解器使用基於傅立葉的方法，需要 FFT 函式庫：
 
 ```bash
 uv pip install "fluidsim[fft]"
 ```
 
-This installs fluidfft and pyfftw dependencies.
+這會安裝 fluidfft 和 pyfftw 依賴項。
 
-### With MPI and FFT (For Parallel Simulations)
+### 含 MPI 和 FFT（用於平行模擬）
 
-For high-performance parallel computing:
+用於高效能平行計算：
 
 ```bash
 uv pip install "fluidsim[fft,mpi]"
 ```
 
-Note: This triggers local compilation of mpi4py.
+注意：這會觸發 mpi4py 的本地編譯。
 
-## Environment Configuration
+## 環境設定
 
-### Output Directories
+### 輸出目錄
 
-Set environment variables to control where simulation data is stored:
+設定環境變數以控制模擬資料的儲存位置：
 
 ```bash
 export FLUIDSIM_PATH=/path/to/simulation/outputs
 export FLUIDDYN_PATH_SCRATCH=/path/to/working/directory
 ```
 
-### FFT Method Selection
+### FFT 方法選擇
 
-Specify FFT implementation (optional):
+指定 FFT 實作（可選）：
 
 ```bash
 export FLUIDSIM_TYPE_FFT2D=fft2d.with_fftw
 export FLUIDSIM_TYPE_FFT3D=fft3d.with_fftw
 ```
 
-## Verification
+## 驗證
 
-Test the installation:
+測試安裝：
 
 ```bash
 pytest --pyargs fluidsim
 ```
 
-## No Authentication Required
+## 不需要認證
 
-FluidSim does not require API keys or authentication tokens.
+FluidSim 不需要 API 金鑰或認證令牌。

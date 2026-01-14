@@ -1,34 +1,34 @@
-# Reference Documentation for Modal
+# Modal 參考文件
 
-This is a placeholder for detailed reference documentation.
-Replace with actual reference content or delete if not needed.
+這是詳細參考文件的佔位符。
+請替換為實際的參考內容，或如果不需要則刪除。
 
-Example real reference docs from other skills:
-- product-management/references/communication.md - Comprehensive guide for status updates
-- product-management/references/context_building.md - Deep-dive on gathering context
-- bigquery/references/ - API references and query examples
+其他技能的實際參考文件範例：
+- product-management/references/communication.md - 狀態更新的完整指南
+- product-management/references/context_building.md - 收集情境的深入探討
+- bigquery/references/ - API 參考和查詢範例
 
-## When Reference Docs Are Useful
+## 何時使用參考文件
 
-Reference docs are ideal for:
-- Comprehensive API documentation
-- Detailed workflow guides
-- Complex multi-step processes
-- Information too lengthy for main SKILL.md
-- Content that's only needed for specific use cases
+參考文件適合用於：
+- 完整的 API 文件
+- 詳細的工作流程指南
+- 複雜的多步驟流程
+- 主 SKILL.md 放不下的過長資訊
+- 僅特定使用情境需要的內容
 
-## Structure Suggestions
+## 結構建議
 
-### API Reference Example
-- Overview
-- Authentication
-- Endpoints with examples
-- Error codes
-- Rate limits
+### API 參考範例
+- 概述
+- 驗證
+- 端點與範例
+- 錯誤碼
+- 速率限制
 
-### Workflow Guide Example
-- Prerequisites
-- Step-by-step instructions
-- Common patterns
-- Troubleshooting
-- Best practices
+### 工作流程指南範例
+- 先決條件
+- 逐步說明
+- 常見模式
+- 疑難排解
+- 最佳實踐

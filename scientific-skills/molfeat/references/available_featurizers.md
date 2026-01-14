@@ -1,276 +1,276 @@
-# Available Featurizers in Molfeat
+# Molfeat 可用的特徵提取器
 
-This document provides a comprehensive catalog of all featurizers available in molfeat, organized by category.
+本文件提供 molfeat 中所有可用特徵提取器的完整目錄，按類別組織。
 
-## Transformer-Based Language Models
+## 基於 Transformer 的語言模型
 
-Pre-trained transformer models for molecular embeddings using SMILES/SELFIES representations.
+使用 SMILES/SELFIES 表示的預訓練 transformer 分子嵌入模型。
 
-### RoBERTa-style Models
-- **Roberta-Zinc480M-102M** - RoBERTa masked language model trained on ~480M SMILES strings from ZINC database
-- **ChemBERTa-77M-MLM** - Masked language model based on RoBERTa trained on 77M PubChem compounds
-- **ChemBERTa-77M-MTR** - Multitask regression version trained on PubChem compounds
+### RoBERTa 風格模型
+- **Roberta-Zinc480M-102M** - 在 ZINC 資料庫約 4.8 億個 SMILES 字串上訓練的 RoBERTa 掩碼語言模型
+- **ChemBERTa-77M-MLM** - 基於 RoBERTa、在 7700 萬個 PubChem 化合物上訓練的掩碼語言模型
+- **ChemBERTa-77M-MTR** - 在 PubChem 化合物上訓練的多任務迴歸版本
 
-### GPT-style Autoregressive Models
-- **GPT2-Zinc480M-87M** - GPT-2 autoregressive language model trained on ~480M SMILES from ZINC
-- **ChemGPT-1.2B** - Large transformer (1.2B parameters) pretrained on PubChem10M
-- **ChemGPT-19M** - Medium transformer (19M parameters) pretrained on PubChem10M
-- **ChemGPT-4.7M** - Small transformer (4.7M parameters) pretrained on PubChem10M
+### GPT 風格自迴歸模型
+- **GPT2-Zinc480M-87M** - 在 ZINC 約 4.8 億個 SMILES 上訓練的 GPT-2 自迴歸語言模型
+- **ChemGPT-1.2B** - 在 PubChem10M 上預訓練的大型 transformer（12 億參數）
+- **ChemGPT-19M** - 在 PubChem10M 上預訓練的中型 transformer（1900 萬參數）
+- **ChemGPT-4.7M** - 在 PubChem10M 上預訓練的小型 transformer（470 萬參數）
 
-### Specialized Transformer Models
-- **MolT5** - Self-supervised framework for molecule captioning and text-based generation
+### 專門 Transformer 模型
+- **MolT5** - 用於分子描述和基於文字生成的自監督框架
 
-## Graph Neural Networks (GNNs)
+## 圖神經網路（GNNs）
 
-Pre-trained graph neural network models operating on molecular graph structures.
+在分子圖結構上運作的預訓練圖神經網路模型。
 
-### GIN (Graph Isomorphism Network) Variants
-All pre-trained on ChEMBL molecules with different objectives:
-- **gin-supervised-masking** - Supervised with node masking objective
-- **gin-supervised-infomax** - Supervised with graph-level mutual information maximization
-- **gin-supervised-edgepred** - Supervised with edge prediction objective
-- **gin-supervised-contextpred** - Supervised with context prediction objective
+### GIN（圖同構網路）變體
+全部在 ChEMBL 分子上以不同目標預訓練：
+- **gin-supervised-masking** - 帶節點掩碼目標的監督式
+- **gin-supervised-infomax** - 帶圖級互資訊最大化的監督式
+- **gin-supervised-edgepred** - 帶邊緣預測目標的監督式
+- **gin-supervised-contextpred** - 帶上下文預測目標的監督式
 
-### Other Graph-Based Models
-- **JTVAE_zinc_no_kl** - Junction-tree VAE for molecule generation (trained on ZINC)
-- **Graphormer-pcqm4mv2** - Graph transformer pretrained on PCQM4Mv2 quantum chemistry dataset for HOMO-LUMO gap prediction
+### 其他圖形模型
+- **JTVAE_zinc_no_kl** - 用於分子生成的接點樹 VAE（在 ZINC 上訓練）
+- **Graphormer-pcqm4mv2** - 在 PCQM4Mv2 量子化學資料集上預訓練的圖 transformer，用於 HOMO-LUMO 能隙預測
 
-## Molecular Descriptors
+## 分子描述符
 
-Calculators for physico-chemical properties and molecular characteristics.
+用於物理化學性質和分子特徵的計算器。
 
-### 2D Descriptors
-- **desc2D** / **rdkit2D** - 200+ RDKit 2D molecular descriptors including:
-  - Molecular weight, logP, TPSA
-  - H-bond donors/acceptors
-  - Rotatable bonds
-  - Ring counts and aromaticity
-  - Molecular complexity metrics
+### 2D 描述符
+- **desc2D** / **rdkit2D** - 200+ RDKit 2D 分子描述符，包括：
+  - 分子量、logP、TPSA
+  - 氫鍵供體/受體
+  - 可旋轉鍵
+  - 環計數和芳香性
+  - 分子複雜度指標
 
-### 3D Descriptors
-- **desc3D** / **rdkit3D** - RDKit 3D molecular descriptors (requires conformer generation)
-  - Inertial moments
-  - PMI (Principal Moments of Inertia) ratios
-  - Asphericity, eccentricity
-  - Radius of gyration
+### 3D 描述符
+- **desc3D** / **rdkit3D** - RDKit 3D 分子描述符（需要構象生成）
+  - 慣性矩
+  - PMI（主慣性矩）比率
+  - 非球形性、偏心率
+  - 迴轉半徑
 
-### Comprehensive Descriptor Sets
-- **mordred** - Over 1800 molecular descriptors covering:
-  - Constitutional descriptors
-  - Topological indices
-  - Connectivity indices
-  - Information content
-  - 2D/3D autocorrelations
-  - WHIM descriptors
-  - GETAWAY descriptors
-  - And many more
+### 全面描述符集
+- **mordred** - 超過 1800 個分子描述符，涵蓋：
+  - 構成描述符
+  - 拓撲指數
+  - 連接性指數
+  - 資訊含量
+  - 2D/3D 自相關
+  - WHIM 描述符
+  - GETAWAY 描述符
+  - 以及更多
 
-### Electrotopological Descriptors
-- **estate** - Electrotopological state (E-State) indices encoding:
-  - Atomic environment information
-  - Electronic and topological properties
-  - Heteroatom contributions
+### 電拓撲描述符
+- **estate** - 電拓撲狀態（E-State）指數，編碼：
+  - 原子環境資訊
+  - 電子和拓撲性質
+  - 雜原子貢獻
 
-## Molecular Fingerprints
+## 分子指紋
 
-Binary or count-based fixed-length vectors representing molecular substructures.
+表示分子子結構的二元或計數固定長度向量。
 
-### Circular Fingerprints (ECFP-style)
-- **ecfp** / **ecfp:2** / **ecfp:4** / **ecfp:6** - Extended-connectivity fingerprints
-  - Radius variants (2, 4, 6 correspond to diameter)
-  - Default: radius=3, 2048 bits
-  - Most popular for similarity searching
-- **ecfp-count** - Count version of ECFP (non-binary)
-- **fcfp** / **fcfp-count** - Functional-class circular fingerprints
-  - Similar to ECFP but uses functional groups
-  - Better for pharmacophore-based similarity
+### 圓形指紋（ECFP 風格）
+- **ecfp** / **ecfp:2** / **ecfp:4** / **ecfp:6** - 擴展連接指紋
+  - 半徑變體（2、4、6 對應直徑）
+  - 預設：radius=3、2048 位元
+  - 最受歡迎的相似性搜索方法
+- **ecfp-count** - ECFP 的計數版本（非二元）
+- **fcfp** / **fcfp-count** - 功能類別圓形指紋
+  - 類似 ECFP 但使用官能基
+  - 更適合基於藥效團的相似性
 
-### Path-Based Fingerprints
-- **rdkit** - RDKit topological fingerprints based on linear paths
-- **pattern** - Pattern fingerprints (similar to MACCS but automated)
-- **layered** - Layered fingerprints with multiple substructure layers
+### 路徑指紋
+- **rdkit** - 基於線性路徑的 RDKit 拓撲指紋
+- **pattern** - 模式指紋（類似 MACCS 但自動化）
+- **layered** - 具有多個子結構層的分層指紋
 
-### Key-Based Fingerprints
-- **maccs** - MACCS keys (166-bit structural keys)
-  - Fixed set of predefined substructures
-  - Good for scaffold hopping
-  - Fast computation
-- **avalon** - Avalon fingerprints
-  - Similar to MACCS but more features
-  - Optimized for similarity searching
+### 鍵式指紋
+- **maccs** - MACCS 鍵（166 位元結構鍵）
+  - 預定義子結構的固定集合
+  - 適合骨架跳躍
+  - 計算快速
+- **avalon** - Avalon 指紋
+  - 類似 MACCS 但更多特徵
+  - 針對相似性搜索優化
 
-### Atom-Pair Fingerprints
-- **atompair** - Atom pair fingerprints
-  - Encodes pairs of atoms and distance between them
-  - Good for 3D similarity
-- **atompair-count** - Count version of atom pairs
+### 原子對指紋
+- **atompair** - 原子對指紋
+  - 編碼原子對及其之間的距離
+  - 適合 3D 相似性
+- **atompair-count** - 原子對的計數版本
 
-### Topological Torsion Fingerprints
-- **topological** - Topological torsion fingerprints
-  - Encodes sequences of 4 connected atoms
-  - Captures local topology
-- **topological-count** - Count version of topological torsions
+### 拓撲扭轉指紋
+- **topological** - 拓撲扭轉指紋
+  - 編碼 4 個連接原子的序列
+  - 捕捉局部拓撲
+- **topological-count** - 拓撲扭轉的計數版本
 
-### MinHashed Fingerprints
-- **map4** - MinHashed Atom-Pair fingerprint up to 4 bonds
-  - Combines atom-pair and ECFP concepts
-  - Default: 1024 dimensions
-  - Fast and efficient for large datasets
-- **secfp** - SMILES Extended Connectivity Fingerprint
-  - Operates directly on SMILES strings
-  - Captures both substructure and atom-pair information
+### 最小雜湊指紋
+- **map4** - 最小雜湊原子對指紋（最多 4 個鍵）
+  - 結合原子對和 ECFP 概念
+  - 預設：1024 維
+  - 適合大型資料集的快速高效方法
+- **secfp** - SMILES 擴展連接指紋
+  - 直接在 SMILES 字串上操作
+  - 同時捕捉子結構和原子對資訊
 
-### Extended Reduced Graph
-- **erg** - Extended Reduced Graph
-  - Uses pharmacophoric points instead of atoms
-  - Reduces graph complexity while preserving key features
+### 擴展簡化圖
+- **erg** - 擴展簡化圖
+  - 使用藥效團點而非原子
+  - 在保留關鍵特徵的同時降低圖複雜度
 
-## Pharmacophore Descriptors
+## 藥效團描述符
 
-Features based on pharmacologically relevant functional groups and their spatial relationships.
+基於藥理相關官能基及其空間關係的特徵。
 
-### CATS (Chemically Advanced Template Search)
-- **cats2D** - 2D CATS descriptors
-  - Pharmacophore point pair distributions
-  - Distance based on shortest path
-  - 21 descriptors by default
-- **cats3D** - 3D CATS descriptors
-  - Euclidean distance based
-  - Requires conformer generation
-- **cats2D_pharm** / **cats3D_pharm** - Pharmacophore variants
+### CATS（化學高級模板搜索）
+- **cats2D** - 2D CATS 描述符
+  - 藥效團點對分佈
+  - 基於最短路徑的距離
+  - 預設 21 個描述符
+- **cats3D** - 3D CATS 描述符
+  - 基於歐幾里得距離
+  - 需要構象生成
+- **cats2D_pharm** / **cats3D_pharm** - 藥效團變體
 
-### Gobbi Pharmacophores
-- **gobbi2D** - 2D pharmacophore fingerprints
-  - 8 pharmacophore feature types:
-    - Hydrophobic
-    - Aromatic
-    - H-bond acceptor
-    - H-bond donor
-    - Positive ionizable
-    - Negative ionizable
-    - Lumped hydrophobe
-  - Good for virtual screening
+### Gobbi 藥效團
+- **gobbi2D** - 2D 藥效團指紋
+  - 8 種藥效團特徵類型：
+    - 疏水性
+    - 芳香性
+    - 氫鍵受體
+    - 氫鍵供體
+    - 正離子化
+    - 負離子化
+    - 集合疏水性
+  - 適合虛擬篩選
 
-### Pmapper Pharmacophores
-- **pmapper2D** - 2D pharmacophore signatures
-- **pmapper3D** - 3D pharmacophore signatures
-  - High-dimensional pharmacophore descriptors
-  - Useful for QSAR and similarity searching
+### Pmapper 藥效團
+- **pmapper2D** - 2D 藥效團簽名
+- **pmapper3D** - 3D 藥效團簽名
+  - 高維藥效團描述符
+  - 用於 QSAR 和相似性搜索
 
-## Shape Descriptors
+## 形狀描述符
 
-Descriptors capturing 3D molecular shape and electrostatic properties.
+捕捉 3D 分子形狀和靜電性質的描述符。
 
-### USR (Ultrafast Shape Recognition)
-- **usr** - Basic USR descriptors
-  - 12 dimensions encoding shape distribution
-  - Extremely fast computation
-- **usrcat** - USR with pharmacophoric constraints
-  - 60 dimensions (12 per feature type)
-  - Combines shape and pharmacophore information
+### USR（超快形狀識別）
+- **usr** - 基本 USR 描述符
+  - 12 維編碼形狀分佈
+  - 計算極快
+- **usrcat** - 帶藥效團約束的 USR
+  - 60 維（每種特徵類型 12 維）
+  - 結合形狀和藥效團資訊
 
-### Electrostatic Shape
-- **electroshape** - ElectroShape descriptors
-  - Combines molecular shape, chirality, and electrostatics
-  - Useful for protein-ligand docking predictions
+### 電形狀
+- **electroshape** - 電形狀描述符
+  - 結合分子形狀、手性和靜電
+  - 用於蛋白質-配體對接預測
 
-## Scaffold-Based Descriptors
+## 骨架描述符
 
-Descriptors based on molecular scaffolds and core structures.
+基於分子骨架和核心結構的描述符。
 
-### Scaffold Keys
-- **scaffoldkeys** - Scaffold key calculator
-  - 40+ scaffold-based properties
-  - Bioisosteric scaffold representation
-  - Captures core structural features
+### 骨架鍵
+- **scaffoldkeys** - 骨架鍵計算器
+  - 40+ 種基於骨架的屬性
+  - 生物等排骨架表示
+  - 捕捉核心結構特徵
 
-## Graph Featurizers for GNN Input
+## GNN 輸入的圖形特徵提取器
 
-Atom and bond-level features for constructing graph representations for Graph Neural Networks.
+用於為圖神經網路構建圖表示的原子和鍵級特徵。
 
-### Atom-Level Features
-- **atom-onehot** - One-hot encoded atom features
-- **atom-default** - Default atom featurization including:
-  - Atomic number
-  - Degree, formal charge
-  - Hybridization
-  - Aromaticity
-  - Number of hydrogen atoms
+### 原子級特徵
+- **atom-onehot** - 獨熱編碼的原子特徵
+- **atom-default** - 預設原子特徵化，包括：
+  - 原子序數
+  - 度數、形式電荷
+  - 雜化
+  - 芳香性
+  - 氫原子數
 
-### Bond-Level Features
-- **bond-onehot** - One-hot encoded bond features
-- **bond-default** - Default bond featurization including:
-  - Bond type (single, double, triple, aromatic)
-  - Conjugation
-  - Ring membership
-  - Stereochemistry
+### 鍵級特徵
+- **bond-onehot** - 獨熱編碼的鍵特徵
+- **bond-default** - 預設鍵特徵化，包括：
+  - 鍵類型（單鍵、雙鍵、三鍵、芳香鍵）
+  - 共軛性
+  - 環成員資格
+  - 立體化學
 
-## Integrated Pretrained Model Collections
+## 整合預訓練模型集合
 
-Molfeat integrates models from various sources:
+Molfeat 整合了來自各種來源的模型：
 
-### HuggingFace Models
-Access to transformer models through HuggingFace hub:
-- ChemBERTa variants
-- ChemGPT variants
+### HuggingFace 模型
+透過 HuggingFace hub 存取 transformer 模型：
+- ChemBERTa 變體
+- ChemGPT 變體
 - MolT5
-- Custom uploaded models
+- 自訂上傳的模型
 
-### DGL-LifeSci Models
-Pre-trained GNN models from DGL-Life:
-- GIN variants with different pre-training tasks
-- AttentiveFP models
-- MPNN models
+### DGL-LifeSci 模型
+來自 DGL-Life 的預訓練 GNN 模型：
+- 具有不同預訓練任務的 GIN 變體
+- AttentiveFP 模型
+- MPNN 模型
 
-### FCD (Fréchet ChemNet Distance)
-- **fcd** - Pre-trained CNN for molecular generation evaluation
+### FCD（Fréchet ChemNet 距離）
+- **fcd** - 用於分子生成評估的預訓練 CNN
 
-### Graphormer Models
-- Graph transformers from Microsoft Research
-- Pre-trained on quantum chemistry datasets
+### Graphormer 模型
+- 來自 Microsoft Research 的圖 transformer
+- 在量子化學資料集上預訓練
 
-## Usage Notes
+## 使用說明
 
-### Choosing a Featurizer
+### 選擇特徵提取器
 
-**For traditional ML (Random Forest, SVM, etc.):**
-- Start with **ecfp** or **maccs** fingerprints
-- Try **desc2D** for interpretable models
-- Use **FeatConcat** to combine multiple fingerprints
+**傳統 ML（隨機森林、SVM 等）：**
+- 從 **ecfp** 或 **maccs** 指紋開始
+- 對可解釋模型嘗試 **desc2D**
+- 使用 **FeatConcat** 組合多個指紋
 
-**For deep learning:**
-- Use **ChemBERTa** or **ChemGPT** for transformer embeddings
-- Use **gin-supervised-*** for graph neural network embeddings
-- Consider **Graphormer** for quantum property predictions
+**深度學習：**
+- 使用 **ChemBERTa** 或 **ChemGPT** 獲取 transformer 嵌入
+- 使用 **gin-supervised-*** 獲取圖神經網路嵌入
+- 考慮 **Graphormer** 用於量子屬性預測
 
-**For similarity searching:**
-- **ecfp** - General purpose, most popular
-- **maccs** - Fast, good for scaffold hopping
-- **map4** - Efficient for large-scale searches
-- **usr** / **usrcat** - 3D shape similarity
+**相似性搜索：**
+- **ecfp** - 通用，最受歡迎
+- **maccs** - 快速，適合骨架跳躍
+- **map4** - 適合大規模搜索
+- **usr** / **usrcat** - 3D 形狀相似性
 
-**For pharmacophore-based approaches:**
-- **fcfp** - Functional group based
-- **cats2D/3D** - Pharmacophore pair distributions
-- **gobbi2D** - Explicit pharmacophore features
+**藥效團方法：**
+- **fcfp** - 基於官能基
+- **cats2D/3D** - 藥效團對分佈
+- **gobbi2D** - 明確藥效團特徵
 
-**For interpretability:**
-- **desc2D** / **mordred** - Named descriptors
-- **maccs** - Interpretable substructure keys
-- **scaffoldkeys** - Scaffold-based features
+**可解釋性：**
+- **desc2D** / **mordred** - 命名描述符
+- **maccs** - 可解釋的子結構鍵
+- **scaffoldkeys** - 骨架特徵
 
-### Model Dependencies
+### 模型依賴
 
-Some featurizers require optional dependencies:
+某些特徵提取器需要可選依賴：
 
-- **DGL models** (gin-*, jtvae): `pip install "molfeat[dgl]"`
-- **Graphormer**: `pip install "molfeat[graphormer]"`
-- **Transformers** (ChemBERTa, ChemGPT, MolT5): `pip install "molfeat[transformer]"`
-- **FCD**: `pip install "molfeat[fcd]"`
-- **MAP4**: `pip install "molfeat[map4]"`
-- **All dependencies**: `pip install "molfeat[all]"`
+- **DGL 模型**（gin-*、jtvae）：`pip install "molfeat[dgl]"`
+- **Graphormer**：`pip install "molfeat[graphormer]"`
+- **Transformers**（ChemBERTa、ChemGPT、MolT5）：`pip install "molfeat[transformer]"`
+- **FCD**：`pip install "molfeat[fcd]"`
+- **MAP4**：`pip install "molfeat[map4]"`
+- **所有依賴**：`pip install "molfeat[all]"`
 
-### Accessing All Available Models
+### 存取所有可用模型
 
 ```python
 from molfeat.store.modelstore import ModelStore
@@ -278,56 +278,56 @@ from molfeat.store.modelstore import ModelStore
 store = ModelStore()
 all_models = store.available_models
 
-# Print all available featurizers
+# 列印所有可用的特徵提取器
 for model in all_models:
     print(f"{model.name}: {model.description}")
 
-# Search for specific types
+# 搜索特定類型
 transformers = [m for m in all_models if "transformer" in m.tags]
 gnn_models = [m for m in all_models if "gnn" in m.tags]
 fingerprints = [m for m in all_models if "fingerprint" in m.tags]
 ```
 
-## Performance Characteristics
+## 效能特性
 
-### Computational Speed (relative)
-**Fastest:**
+### 計算速度（相對）
+**最快：**
 - maccs
 - ecfp
-- rdkit fingerprints
+- rdkit 指紋
 - usr
 
-**Medium:**
+**中等：**
 - desc2D
 - cats2D
-- Most fingerprints
+- 大多數指紋
 
-**Slower:**
-- mordred (1800+ descriptors)
-- desc3D (requires conformer generation)
-- 3D descriptors in general
+**較慢：**
+- mordred（1800+ 描述符）
+- desc3D（需要構象生成）
+- 一般 3D 描述符
 
-**Slowest (first run):**
-- Pretrained models (ChemBERTa, ChemGPT, GIN)
-- Note: Subsequent runs benefit from caching
+**最慢（首次運行）：**
+- 預訓練模型（ChemBERTa、ChemGPT、GIN）
+- 注意：後續運行受益於快取
 
-### Dimensionality
+### 維度
 
-**Low (< 200 dims):**
-- maccs (167)
-- usr (12)
-- usrcat (60)
+**低（< 200 維）：**
+- maccs（167）
+- usr（12）
+- usrcat（60）
 
-**Medium (200-2000 dims):**
-- desc2D (~200)
-- ecfp (2048 default, configurable)
-- map4 (1024 default)
+**中等（200-2000 維）：**
+- desc2D（約 200）
+- ecfp（預設 2048，可配置）
+- map4（預設 1024）
 
-**High (> 2000 dims):**
-- mordred (1800+)
-- Concatenated fingerprints
-- Some transformer embeddings
+**高（> 2000 維）：**
+- mordred（1800+）
+- 連接的指紋
+- 某些 transformer 嵌入
 
-**Variable:**
-- Transformer models (typically 768-1024)
-- GNN models (depends on architecture)
+**可變：**
+- Transformer 模型（通常 768-1024）
+- GNN 模型（取決於架構）

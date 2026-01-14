@@ -1,441 +1,441 @@
-# PyTorch Geometric Neural Network Layers Reference
-
-This document provides a comprehensive reference of all neural network layers available in `torch_geometric.nn`.
-
-## Layer Capability Flags
-
-When selecting layers, consider these capability flags:
-
-- **SparseTensor**: Supports `torch_sparse.SparseTensor` format for efficient sparse operations
-- **edge_weight**: Handles one-dimensional edge weight data
-- **edge_attr**: Processes multi-dimensional edge feature information
-- **Bipartite**: Works with bipartite graphs (different source/target node dimensions)
-- **Static**: Operates on static graphs with batched node features
-- **Lazy**: Enables initialization without specifying input channel dimensions
-
-## Convolutional Layers
-
-### Standard Graph Convolutions
-
-**GCNConv** - Graph Convolutional Network layer
-- Implements spectral graph convolution with symmetric normalization
-- Supports: SparseTensor, edge_weight, Bipartite, Lazy
-- Use for: Citation networks, social networks, general graph learning
-- Example: `GCNConv(in_channels, out_channels, improved=False, cached=True)`
-
-**SAGEConv** - GraphSAGE layer
-- Inductive learning via neighborhood sampling and aggregation
-- Supports: SparseTensor, Bipartite, Lazy
-- Use for: Large graphs, inductive learning, heterogeneous features
-- Example: `SAGEConv(in_channels, out_channels, aggr='mean')`
-
-**GATConv** - Graph Attention Network layer
-- Multi-head attention mechanism for adaptive neighbor weighting
-- Supports: SparseTensor, edge_attr, Bipartite, Static, Lazy
-- Use for: Tasks requiring variable neighbor importance
-- Example: `GATConv(in_channels, out_channels, heads=8, dropout=0.6)`
-
-**GraphConv** - Simple graph convolution (Morris et al.)
-- Basic message passing with optional edge weights
-- Supports: SparseTensor, edge_weight, Bipartite, Lazy
-- Use for: Baseline models, simple graph structures
-- Example: `GraphConv(in_channels, out_channels, aggr='add')`
-
-**GINConv** - Graph Isomorphism Network layer
-- Maximally powerful GNN for graph isomorphism testing
-- Supports: Bipartite
-- Use for: Graph classification, molecular property prediction
-- Example: `GINConv(nn.Sequential(nn.Linear(in_channels, out_channels), nn.ReLU()))`
-
-**TransformerConv** - Graph Transformer layer
-- Combines graph structure with transformer attention
-- Supports: SparseTensor, Bipartite, Lazy
-- Use for: Long-range dependencies, complex graphs
-- Example: `TransformerConv(in_channels, out_channels, heads=8, beta=True)`
-
-**ChebConv** - Chebyshev spectral graph convolution
-- Uses Chebyshev polynomials for efficient spectral filtering
-- Supports: SparseTensor, edge_weight, Bipartite, Lazy
-- Use for: Spectral graph learning, efficient convolutions
-- Example: `ChebConv(in_channels, out_channels, K=3)`
-
-**SGConv** - Simplified Graph Convolution
-- Pre-computes fixed number of propagation steps
-- Supports: SparseTensor, edge_weight, Bipartite, Lazy
-- Use for: Fast training, shallow models
-- Example: `SGConv(in_channels, out_channels, K=2)`
-
-**APPNP** - Approximate Personalized Propagation of Neural Predictions
-- Separates feature transformation from propagation
-- Supports: SparseTensor, edge_weight, Lazy
-- Use for: Deep propagation without oversmoothing
-- Example: `APPNP(K=10, alpha=0.1)`
-
-**ARMAConv** - ARMA graph convolution
-- Uses ARMA filters for graph filtering
-- Supports: SparseTensor, edge_weight, Bipartite, Lazy
-- Use for: Advanced spectral methods
-- Example: `ARMAConv(in_channels, out_channels, num_stacks=3, num_layers=2)`
-
-**GATv2Conv** - Improved Graph Attention Network
-- Fixes static attention computation issue in GAT
-- Supports: SparseTensor, edge_attr, Bipartite, Static, Lazy
-- Use for: Better attention learning than original GAT
-- Example: `GATv2Conv(in_channels, out_channels, heads=8)`
-
-**SuperGATConv** - Self-supervised Graph Attention
-- Adds self-supervised attention mechanism
-- Supports: SparseTensor, edge_attr, Bipartite, Static, Lazy
-- Use for: Self-supervised learning, limited labels
-- Example: `SuperGATConv(in_channels, out_channels, heads=8)`
-
-**GMMConv** - Gaussian Mixture Model Convolution
-- Uses Gaussian kernels in pseudo-coordinate space
-- Supports: Bipartite
-- Use for: Point clouds, spatial data
-- Example: `GMMConv(in_channels, out_channels, dim=3, kernel_size=5)`
-
-**SplineConv** - Spline-based convolution
-- B-spline basis functions for spatial filtering
-- Supports: Bipartite
-- Use for: Irregular grids, continuous spaces
-- Example: `SplineConv(in_channels, out_channels, dim=2, kernel_size=5)`
-
-**NNConv** - Neural Network Convolution
-- Edge features processed by neural networks
-- Supports: edge_attr, Bipartite
-- Use for: Rich edge features, molecular graphs
-- Example: `NNConv(in_channels, out_channels, nn=edge_nn, aggr='mean')`
-
-**CGConv** - Crystal Graph Convolution
-- Designed for crystalline materials
-- Supports: Bipartite
-- Use for: Materials science, crystal structures
-- Example: `CGConv(in_channels, dim=3, batch_norm=True)`
-
-**EdgeConv** - Edge Convolution (Dynamic Graph CNN)
-- Dynamically computes edges based on feature space
-- Supports: Static
-- Use for: Point clouds, dynamic graphs
-- Example: `EdgeConv(nn=edge_nn, aggr='max')`
-
-**PointNetConv** - PointNet++ convolution
-- Local and global feature learning for point clouds
-- Use for: 3D point cloud processing
-- Example: `PointNetConv(local_nn, global_nn)`
-
-**ResGatedGraphConv** - Residual Gated Graph Convolution
-- Gating mechanism with residual connections
-- Supports: edge_attr, Bipartite, Lazy
-- Use for: Deep GNNs, complex features
-- Example: `ResGatedGraphConv(in_channels, out_channels)`
-
-**GENConv** - Generalized Graph Convolution
-- Generalizes multiple GNN variants
-- Supports: SparseTensor, edge_weight, edge_attr, Bipartite, Lazy
-- Use for: Flexible architecture exploration
-- Example: `GENConv(in_channels, out_channels, aggr='softmax', num_layers=2)`
-
-**FiLMConv** - Feature-wise Linear Modulation
-- Conditions on global features
-- Supports: Bipartite, Lazy
-- Use for: Conditional generation, multi-task learning
-- Example: `FiLMConv(in_channels, out_channels, num_relations=5)`
-
-**PANConv** - Path Attention Network
-- Attention over multi-hop paths
-- Supports: SparseTensor, Lazy
-- Use for: Complex connectivity patterns
-- Example: `PANConv(in_channels, out_channels, filter_size=3)`
-
-**ClusterGCNConv** - Cluster-GCN convolution
-- Efficient training via graph clustering
-- Supports: edge_attr, Lazy
-- Use for: Very large graphs
-- Example: `ClusterGCNConv(in_channels, out_channels)`
-
-**MFConv** - Multi-scale Feature Convolution
-- Aggregates features at multiple scales
-- Supports: SparseTensor, Lazy
-- Use for: Multi-scale patterns
-- Example: `MFConv(in_channels, out_channels)`
-
-**RGCNConv** - Relational Graph Convolution
-- Handles multiple edge types
-- Supports: SparseTensor, edge_weight, Lazy
-- Use for: Knowledge graphs, heterogeneous graphs
-- Example: `RGCNConv(in_channels, out_channels, num_relations=10)`
-
-**FAConv** - Frequency Adaptive Convolution
-- Adaptive filtering in spectral domain
-- Supports: SparseTensor, Lazy
-- Use for: Spectral graph learning
-- Example: `FAConv(in_channels, eps=0.1, dropout=0.5)`
-
-### Molecular and 3D Convolutions
-
-**SchNet** - Continuous-filter convolutional layer
-- Designed for molecular dynamics
-- Use for: Molecular property prediction, 3D molecules
-- Example: `SchNet(hidden_channels=128, num_filters=64, num_interactions=6)`
-
-**DimeNet** - Directional Message Passing
-- Uses directional information and angles
-- Use for: 3D molecular structures, chemical properties
-- Example: `DimeNet(hidden_channels=128, out_channels=1, num_blocks=6)`
-
-**PointTransformerConv** - Point cloud transformer
-- Transformer for 3D point clouds
-- Use for: 3D vision, point cloud segmentation
-- Example: `PointTransformerConv(in_channels, out_channels)`
-
-### Hypergraph Convolutions
-
-**HypergraphConv** - Hypergraph convolution
-- Operates on hyperedges (edges connecting multiple nodes)
-- Supports: Lazy
-- Use for: Multi-way relationships, chemical reactions
-- Example: `HypergraphConv(in_channels, out_channels)`
-
-**HGTConv** - Heterogeneous Graph Transformer
-- Transformer for heterogeneous graphs with multiple types
-- Supports: Lazy
-- Use for: Heterogeneous networks, knowledge graphs
-- Example: `HGTConv(in_channels, out_channels, metadata, heads=8)`
-
-## Aggregation Operators
-
-**Aggr** - Base aggregation class
-- Flexible aggregation across nodes
-
-**SumAggregation** - Sum aggregation
-- Example: `SumAggregation()`
-
-**MeanAggregation** - Mean aggregation
-- Example: `MeanAggregation()`
-
-**MaxAggregation** - Max aggregation
-- Example: `MaxAggregation()`
-
-**SoftmaxAggregation** - Softmax-weighted aggregation
-- Learnable attention weights
-- Example: `SoftmaxAggregation(learn=True)`
-
-**PowerMeanAggregation** - Power mean aggregation
-- Learnable power parameter
-- Example: `PowerMeanAggregation(learn=True)`
-
-**LSTMAggregation** - LSTM-based aggregation
-- Sequential processing of neighbors
-- Example: `LSTMAggregation(in_channels, out_channels)`
-
-**SetTransformerAggregation** - Set Transformer aggregation
-- Transformer for permutation-invariant aggregation
-- Example: `SetTransformerAggregation(in_channels, out_channels)`
-
-**MultiAggregation** - Multiple aggregations
-- Combines multiple aggregation methods
-- Example: `MultiAggregation(['mean', 'max', 'std'])`
-
-## Pooling Layers
-
-### Global Pooling
-
-**global_mean_pool** - Global mean pooling
-- Averages node features per graph
-- Example: `global_mean_pool(x, batch)`
-
-**global_max_pool** - Global max pooling
-- Max over node features per graph
-- Example: `global_max_pool(x, batch)`
-
-**global_add_pool** - Global sum pooling
-- Sums node features per graph
-- Example: `global_add_pool(x, batch)`
-
-**global_sort_pool** - Global sort pooling
-- Sorts and concatenates top-k nodes
-- Example: `global_sort_pool(x, batch, k=30)`
-
-**GlobalAttention** - Global attention pooling
-- Learnable attention weights for aggregation
-- Example: `GlobalAttention(gate_nn)`
-
-**Set2Set** - Set2Set pooling
-- LSTM-based attention mechanism
-- Example: `Set2Set(in_channels, processing_steps=3)`
-
-### Hierarchical Pooling
-
-**TopKPooling** - Top-k pooling
-- Keeps top-k nodes based on projection scores
-- Example: `TopKPooling(in_channels, ratio=0.5)`
-
-**SAGPooling** - Self-Attention Graph Pooling
-- Uses self-attention for node selection
-- Example: `SAGPooling(in_channels, ratio=0.5)`
-
-**ASAPooling** - Adaptive Structure Aware Pooling
-- Structure-aware node selection
-- Example: `ASAPooling(in_channels, ratio=0.5)`
-
-**PANPooling** - Path Attention Pooling
-- Attention over paths for pooling
-- Example: `PANPooling(in_channels, ratio=0.5)`
-
-**EdgePooling** - Edge contraction pooling
-- Pools by contracting edges
-- Example: `EdgePooling(in_channels)`
-
-**MemPooling** - Memory-based pooling
-- Learnable cluster assignments
-- Example: `MemPooling(in_channels, out_channels, heads=4, num_clusters=10)`
-
-**avg_pool** / **max_pool** - Average/Max pool with clustering
-- Pools nodes within clusters
-- Example: `avg_pool(cluster, data)`
-
-## Normalization Layers
-
-**BatchNorm** - Batch normalization
-- Normalizes features across batch
-- Example: `BatchNorm(in_channels)`
-
-**LayerNorm** - Layer normalization
-- Normalizes features per sample
-- Example: `LayerNorm(in_channels)`
-
-**InstanceNorm** - Instance normalization
-- Normalizes per sample and graph
-- Example: `InstanceNorm(in_channels)`
-
-**GraphNorm** - Graph normalization
-- Graph-specific normalization
-- Example: `GraphNorm(in_channels)`
-
-**PairNorm** - Pair normalization
-- Prevents oversmoothing in deep GNNs
-- Example: `PairNorm(scale_individually=False)`
+# PyTorch Geometric 神經網路層參考
+
+本文件提供 `torch_geometric.nn` 中所有可用神經網路層的完整參考。
+
+## 層功能標記
+
+選擇層時，請考慮以下功能標記：
+
+- **SparseTensor**：支援 `torch_sparse.SparseTensor` 格式以進行高效稀疏運算
+- **edge_weight**：處理一維邊權重資料
+- **edge_attr**：處理多維邊特徵資訊
+- **Bipartite**：適用於二分圖（不同的來源/目標節點維度）
+- **Static**：對具有批次節點特徵的靜態圖進行運算
+- **Lazy**：允許不指定輸入通道維度進行初始化
+
+## 卷積層
+
+### 標準圖卷積
+
+**GCNConv** - 圖卷積網路層
+- 實作具有對稱正規化的頻譜圖卷積
+- 支援：SparseTensor、edge_weight、Bipartite、Lazy
+- 用途：引用網路、社交網路、一般圖學習
+- 範例：`GCNConv(in_channels, out_channels, improved=False, cached=True)`
+
+**SAGEConv** - GraphSAGE 層
+- 透過鄰域取樣和聚合進行歸納學習
+- 支援：SparseTensor、Bipartite、Lazy
+- 用途：大型圖、歸納學習、異質特徵
+- 範例：`SAGEConv(in_channels, out_channels, aggr='mean')`
+
+**GATConv** - 圖注意力網路層
+- 多頭注意力機制，用於自適應鄰居加權
+- 支援：SparseTensor、edge_attr、Bipartite、Static、Lazy
+- 用途：需要可變鄰居重要性的任務
+- 範例：`GATConv(in_channels, out_channels, heads=8, dropout=0.6)`
+
+**GraphConv** - 簡單圖卷積（Morris 等人）
+- 具有可選邊權重的基本訊息傳遞
+- 支援：SparseTensor、edge_weight、Bipartite、Lazy
+- 用途：基準模型、簡單圖結構
+- 範例：`GraphConv(in_channels, out_channels, aggr='add')`
+
+**GINConv** - 圖同構網路層
+- 用於圖同構測試的最大功率 GNN
+- 支援：Bipartite
+- 用途：圖分類、分子性質預測
+- 範例：`GINConv(nn.Sequential(nn.Linear(in_channels, out_channels), nn.ReLU()))`
+
+**TransformerConv** - 圖 Transformer 層
+- 將圖結構與 Transformer 注意力結合
+- 支援：SparseTensor、Bipartite、Lazy
+- 用途：長程依賴、複雜圖
+- 範例：`TransformerConv(in_channels, out_channels, heads=8, beta=True)`
+
+**ChebConv** - Chebyshev 頻譜圖卷積
+- 使用 Chebyshev 多項式進行高效頻譜濾波
+- 支援：SparseTensor、edge_weight、Bipartite、Lazy
+- 用途：頻譜圖學習、高效卷積
+- 範例：`ChebConv(in_channels, out_channels, K=3)`
+
+**SGConv** - 簡化圖卷積
+- 預計算固定數量的傳播步驟
+- 支援：SparseTensor、edge_weight、Bipartite、Lazy
+- 用途：快速訓練、淺層模型
+- 範例：`SGConv(in_channels, out_channels, K=2)`
+
+**APPNP** - 近似個人化神經預測傳播
+- 將特徵轉換與傳播分離
+- 支援：SparseTensor、edge_weight、Lazy
+- 用途：深度傳播而不過度平滑
+- 範例：`APPNP(K=10, alpha=0.1)`
+
+**ARMAConv** - ARMA 圖卷積
+- 使用 ARMA 濾波器進行圖濾波
+- 支援：SparseTensor、edge_weight、Bipartite、Lazy
+- 用途：進階頻譜方法
+- 範例：`ARMAConv(in_channels, out_channels, num_stacks=3, num_layers=2)`
+
+**GATv2Conv** - 改進版圖注意力網路
+- 修正 GAT 中的靜態注意力計算問題
+- 支援：SparseTensor、edge_attr、Bipartite、Static、Lazy
+- 用途：比原始 GAT 更好的注意力學習
+- 範例：`GATv2Conv(in_channels, out_channels, heads=8)`
+
+**SuperGATConv** - 自監督圖注意力
+- 添加自監督注意力機制
+- 支援：SparseTensor、edge_attr、Bipartite、Static、Lazy
+- 用途：自監督學習、有限標籤
+- 範例：`SuperGATConv(in_channels, out_channels, heads=8)`
+
+**GMMConv** - 高斯混合模型卷積
+- 在偽座標空間中使用高斯核
+- 支援：Bipartite
+- 用途：點雲、空間資料
+- 範例：`GMMConv(in_channels, out_channels, dim=3, kernel_size=5)`
+
+**SplineConv** - 基於樣條的卷積
+- B 樣條基函數用於空間濾波
+- 支援：Bipartite
+- 用途：不規則網格、連續空間
+- 範例：`SplineConv(in_channels, out_channels, dim=2, kernel_size=5)`
+
+**NNConv** - 神經網路卷積
+- 由神經網路處理邊特徵
+- 支援：edge_attr、Bipartite
+- 用途：豐富的邊特徵、分子圖
+- 範例：`NNConv(in_channels, out_channels, nn=edge_nn, aggr='mean')`
+
+**CGConv** - 晶體圖卷積
+- 專為晶體材料設計
+- 支援：Bipartite
+- 用途：材料科學、晶體結構
+- 範例：`CGConv(in_channels, dim=3, batch_norm=True)`
+
+**EdgeConv** - 邊卷積（動態圖 CNN）
+- 基於特徵空間動態計算邊
+- 支援：Static
+- 用途：點雲、動態圖
+- 範例：`EdgeConv(nn=edge_nn, aggr='max')`
+
+**PointNetConv** - PointNet++ 卷積
+- 用於點雲的局部和全域特徵學習
+- 用途：3D 點雲處理
+- 範例：`PointNetConv(local_nn, global_nn)`
+
+**ResGatedGraphConv** - 殘差門控圖卷積
+- 具有殘差連接的門控機制
+- 支援：edge_attr、Bipartite、Lazy
+- 用途：深度 GNN、複雜特徵
+- 範例：`ResGatedGraphConv(in_channels, out_channels)`
+
+**GENConv** - 廣義圖卷積
+- 廣義化多種 GNN 變體
+- 支援：SparseTensor、edge_weight、edge_attr、Bipartite、Lazy
+- 用途：靈活的架構探索
+- 範例：`GENConv(in_channels, out_channels, aggr='softmax', num_layers=2)`
+
+**FiLMConv** - 特徵級線性調制
+- 以全域特徵為條件
+- 支援：Bipartite、Lazy
+- 用途：條件生成、多任務學習
+- 範例：`FiLMConv(in_channels, out_channels, num_relations=5)`
+
+**PANConv** - 路徑注意力網路
+- 多跳路徑上的注意力
+- 支援：SparseTensor、Lazy
+- 用途：複雜連接模式
+- 範例：`PANConv(in_channels, out_channels, filter_size=3)`
+
+**ClusterGCNConv** - Cluster-GCN 卷積
+- 透過圖聚類進行高效訓練
+- 支援：edge_attr、Lazy
+- 用途：超大型圖
+- 範例：`ClusterGCNConv(in_channels, out_channels)`
+
+**MFConv** - 多尺度特徵卷積
+- 在多個尺度上聚合特徵
+- 支援：SparseTensor、Lazy
+- 用途：多尺度模式
+- 範例：`MFConv(in_channels, out_channels)`
+
+**RGCNConv** - 關係圖卷積
+- 處理多種邊類型
+- 支援：SparseTensor、edge_weight、Lazy
+- 用途：知識圖譜、異質圖
+- 範例：`RGCNConv(in_channels, out_channels, num_relations=10)`
+
+**FAConv** - 頻率自適應卷積
+- 頻譜域中的自適應濾波
+- 支援：SparseTensor、Lazy
+- 用途：頻譜圖學習
+- 範例：`FAConv(in_channels, eps=0.1, dropout=0.5)`
+
+### 分子和 3D 卷積
+
+**SchNet** - 連續濾波器卷積層
+- 專為分子動力學設計
+- 用途：分子性質預測、3D 分子
+- 範例：`SchNet(hidden_channels=128, num_filters=64, num_interactions=6)`
+
+**DimeNet** - 方向性訊息傳遞
+- 使用方向資訊和角度
+- 用途：3D 分子結構、化學性質
+- 範例：`DimeNet(hidden_channels=128, out_channels=1, num_blocks=6)`
+
+**PointTransformerConv** - 點雲 Transformer
+- 用於 3D 點雲的 Transformer
+- 用途：3D 視覺、點雲分割
+- 範例：`PointTransformerConv(in_channels, out_channels)`
+
+### 超圖卷積
+
+**HypergraphConv** - 超圖卷積
+- 在超邊（連接多個節點的邊）上運算
+- 支援：Lazy
+- 用途：多路關係、化學反應
+- 範例：`HypergraphConv(in_channels, out_channels)`
+
+**HGTConv** - 異質圖 Transformer
+- 用於具有多種類型的異質圖的 Transformer
+- 支援：Lazy
+- 用途：異質網路、知識圖譜
+- 範例：`HGTConv(in_channels, out_channels, metadata, heads=8)`
+
+## 聚合運算子
+
+**Aggr** - 基礎聚合類別
+- 跨節點的靈活聚合
+
+**SumAggregation** - 求和聚合
+- 範例：`SumAggregation()`
+
+**MeanAggregation** - 平均聚合
+- 範例：`MeanAggregation()`
+
+**MaxAggregation** - 最大聚合
+- 範例：`MaxAggregation()`
+
+**SoftmaxAggregation** - Softmax 加權聚合
+- 可學習的注意力權重
+- 範例：`SoftmaxAggregation(learn=True)`
+
+**PowerMeanAggregation** - 冪平均聚合
+- 可學習的冪參數
+- 範例：`PowerMeanAggregation(learn=True)`
+
+**LSTMAggregation** - 基於 LSTM 的聚合
+- 鄰居的序列處理
+- 範例：`LSTMAggregation(in_channels, out_channels)`
+
+**SetTransformerAggregation** - Set Transformer 聚合
+- 用於排列不變聚合的 Transformer
+- 範例：`SetTransformerAggregation(in_channels, out_channels)`
+
+**MultiAggregation** - 多重聚合
+- 結合多種聚合方法
+- 範例：`MultiAggregation(['mean', 'max', 'std'])`
+
+## 池化層
+
+### 全域池化
+
+**global_mean_pool** - 全域平均池化
+- 對每個圖的節點特徵取平均
+- 範例：`global_mean_pool(x, batch)`
+
+**global_max_pool** - 全域最大池化
+- 對每個圖的節點特徵取最大值
+- 範例：`global_max_pool(x, batch)`
+
+**global_add_pool** - 全域求和池化
+- 對每個圖的節點特徵求和
+- 範例：`global_add_pool(x, batch)`
+
+**global_sort_pool** - 全域排序池化
+- 排序並串接前 k 個節點
+- 範例：`global_sort_pool(x, batch, k=30)`
+
+**GlobalAttention** - 全域注意力池化
+- 用於聚合的可學習注意力權重
+- 範例：`GlobalAttention(gate_nn)`
+
+**Set2Set** - Set2Set 池化
+- 基於 LSTM 的注意力機制
+- 範例：`Set2Set(in_channels, processing_steps=3)`
+
+### 分層池化
+
+**TopKPooling** - Top-k 池化
+- 基於投影分數保留前 k 個節點
+- 範例：`TopKPooling(in_channels, ratio=0.5)`
+
+**SAGPooling** - 自注意力圖池化
+- 使用自注意力進行節點選擇
+- 範例：`SAGPooling(in_channels, ratio=0.5)`
+
+**ASAPooling** - 自適應結構感知池化
+- 結構感知的節點選擇
+- 範例：`ASAPooling(in_channels, ratio=0.5)`
+
+**PANPooling** - 路徑注意力池化
+- 用於池化的路徑注意力
+- 範例：`PANPooling(in_channels, ratio=0.5)`
+
+**EdgePooling** - 邊收縮池化
+- 透過收縮邊進行池化
+- 範例：`EdgePooling(in_channels)`
+
+**MemPooling** - 基於記憶的池化
+- 可學習的聚類分配
+- 範例：`MemPooling(in_channels, out_channels, heads=4, num_clusters=10)`
+
+**avg_pool** / **max_pool** - 使用聚類的平均/最大池化
+- 在聚類內對節點進行池化
+- 範例：`avg_pool(cluster, data)`
+
+## 正規化層
+
+**BatchNorm** - 批次正規化
+- 跨批次正規化特徵
+- 範例：`BatchNorm(in_channels)`
+
+**LayerNorm** - 層正規化
+- 每個樣本正規化特徵
+- 範例：`LayerNorm(in_channels)`
+
+**InstanceNorm** - 實例正規化
+- 每個樣本和圖正規化
+- 範例：`InstanceNorm(in_channels)`
+
+**GraphNorm** - 圖正規化
+- 圖特定的正規化
+- 範例：`GraphNorm(in_channels)`
+
+**PairNorm** - 配對正規化
+- 防止深度 GNN 中的過度平滑
+- 範例：`PairNorm(scale_individually=False)`
 
-**MessageNorm** - Message normalization
-- Normalizes messages during passing
-- Example: `MessageNorm(learn_scale=True)`
-
-**DiffGroupNorm** - Differentiable Group Normalization
-- Learnable grouping for normalization
-- Example: `DiffGroupNorm(in_channels, groups=10)`
+**MessageNorm** - 訊息正規化
+- 在傳遞過程中正規化訊息
+- 範例：`MessageNorm(learn_scale=True)`
+
+**DiffGroupNorm** - 可微分群組正規化
+- 用於正規化的可學習分組
+- 範例：`DiffGroupNorm(in_channels, groups=10)`
 
-## Model Architectures
+## 模型架構
 
-### Pre-Built Models
+### 預建模型
 
-**GCN** - Complete Graph Convolutional Network
-- Multi-layer GCN with dropout
-- Example: `GCN(in_channels, hidden_channels, num_layers, out_channels)`
-
-**GraphSAGE** - Complete GraphSAGE model
-- Multi-layer SAGE with dropout
-- Example: `GraphSAGE(in_channels, hidden_channels, num_layers, out_channels)`
+**GCN** - 完整的圖卷積網路
+- 具有 dropout 的多層 GCN
+- 範例：`GCN(in_channels, hidden_channels, num_layers, out_channels)`
+
+**GraphSAGE** - 完整的 GraphSAGE 模型
+- 具有 dropout 的多層 SAGE
+- 範例：`GraphSAGE(in_channels, hidden_channels, num_layers, out_channels)`
 
-**GIN** - Complete Graph Isomorphism Network
-- Multi-layer GIN for graph classification
-- Example: `GIN(in_channels, hidden_channels, num_layers, out_channels)`
+**GIN** - 完整的圖同構網路
+- 用於圖分類的多層 GIN
+- 範例：`GIN(in_channels, hidden_channels, num_layers, out_channels)`
 
-**GAT** - Complete Graph Attention Network
-- Multi-layer GAT with attention
-- Example: `GAT(in_channels, hidden_channels, num_layers, out_channels, heads=8)`
+**GAT** - 完整的圖注意力網路
+- 具有注意力的多層 GAT
+- 範例：`GAT(in_channels, hidden_channels, num_layers, out_channels, heads=8)`
 
-**PNA** - Principal Neighbourhood Aggregation
-- Combines multiple aggregators and scalers
-- Example: `PNA(in_channels, hidden_channels, num_layers, out_channels)`
+**PNA** - 主鄰域聚合
+- 結合多種聚合器和縮放器
+- 範例：`PNA(in_channels, hidden_channels, num_layers, out_channels)`
 
-**EdgeCNN** - Edge Convolution CNN
-- Dynamic graph CNN for point clouds
-- Example: `EdgeCNN(out_channels, num_layers=3, k=20)`
+**EdgeCNN** - 邊卷積 CNN
+- 用於點雲的動態圖 CNN
+- 範例：`EdgeCNN(out_channels, num_layers=3, k=20)`
 
-### Auto-Encoders
+### 自編碼器
 
-**GAE** - Graph Auto-Encoder
-- Encodes graphs into latent space
-- Example: `GAE(encoder)`
+**GAE** - 圖自編碼器
+- 將圖編碼到潛在空間
+- 範例：`GAE(encoder)`
 
-**VGAE** - Variational Graph Auto-Encoder
-- Probabilistic graph encoding
-- Example: `VGAE(encoder)`
+**VGAE** - 變分圖自編碼器
+- 機率圖編碼
+- 範例：`VGAE(encoder)`
 
-**ARGA** - Adversarially Regularized Graph Auto-Encoder
-- GAE with adversarial regularization
-- Example: `ARGA(encoder, discriminator)`
+**ARGA** - 對抗正則化圖自編碼器
+- 具有對抗正則化的 GAE
+- 範例：`ARGA(encoder, discriminator)`
 
-**ARGVA** - Adversarially Regularized Variational Graph Auto-Encoder
-- VGAE with adversarial regularization
-- Example: `ARGVA(encoder, discriminator)`
+**ARGVA** - 對抗正則化變分圖自編碼器
+- 具有對抗正則化的 VGAE
+- 範例：`ARGVA(encoder, discriminator)`
 
-### Knowledge Graph Embeddings
+### 知識圖譜嵌入
 
-**TransE** - Translating embeddings
-- Learns entity and relation embeddings
-- Example: `TransE(num_nodes, num_relations, hidden_channels)`
+**TransE** - 平移嵌入
+- 學習實體和關係嵌入
+- 範例：`TransE(num_nodes, num_relations, hidden_channels)`
 
-**RotatE** - Rotational embeddings
-- Embeddings in complex space
-- Example: `RotatE(num_nodes, num_relations, hidden_channels)`
+**RotatE** - 旋轉嵌入
+- 複數空間中的嵌入
+- 範例：`RotatE(num_nodes, num_relations, hidden_channels)`
 
-**ComplEx** - Complex embeddings
-- Complex-valued embeddings
-- Example: `ComplEx(num_nodes, num_relations, hidden_channels)`
+**ComplEx** - 複數嵌入
+- 複數值嵌入
+- 範例：`ComplEx(num_nodes, num_relations, hidden_channels)`
 
-**DistMult** - Bilinear diagonal model
-- Simplified bilinear model
-- Example: `DistMult(num_nodes, num_relations, hidden_channels)`
+**DistMult** - 雙線性對角模型
+- 簡化的雙線性模型
+- 範例：`DistMult(num_nodes, num_relations, hidden_channels)`
 
-## Utility Layers
+## 實用層
 
-**Sequential** - Sequential container
-- Chains multiple layers
-- Example: `Sequential('x, edge_index', [(GCNConv(16, 64), 'x, edge_index -> x'), nn.ReLU()])`
+**Sequential** - 順序容器
+- 串接多個層
+- 範例：`Sequential('x, edge_index', [(GCNConv(16, 64), 'x, edge_index -> x'), nn.ReLU()])`
 
-**JumpingKnowledge** - Jumping knowledge connections
-- Combines representations from all layers
-- Modes: 'cat', 'max', 'lstm'
-- Example: `JumpingKnowledge(mode='cat')`
+**JumpingKnowledge** - 跳躍知識連接
+- 結合所有層的表示
+- 模式：'cat'、'max'、'lstm'
+- 範例：`JumpingKnowledge(mode='cat')`
 
-**DeepGCNLayer** - Deep GCN layer wrapper
-- Enables very deep GNNs with skip connections
-- Example: `DeepGCNLayer(conv, norm, act, block='res+', dropout=0.1)`
+**DeepGCNLayer** - 深度 GCN 層包裝器
+- 透過跳躍連接實現非常深的 GNN
+- 範例：`DeepGCNLayer(conv, norm, act, block='res+', dropout=0.1)`
 
-**MLP** - Multi-layer perceptron
-- Standard feedforward network
-- Example: `MLP([in_channels, 64, 64, out_channels], dropout=0.5)`
+**MLP** - 多層感知器
+- 標準前饋網路
+- 範例：`MLP([in_channels, 64, 64, out_channels], dropout=0.5)`
 
-**Linear** - Lazy linear layer
-- Linear transformation with lazy initialization
-- Example: `Linear(in_channels, out_channels, bias=True)`
+**Linear** - 惰性線性層
+- 具有惰性初始化的線性轉換
+- 範例：`Linear(in_channels, out_channels, bias=True)`
 
-## Dense Layers
+## 密集層
 
-For dense (non-sparse) graph representations:
+用於密集（非稀疏）圖表示：
 
-**DenseGCNConv** - Dense GCN layer
-**DenseSAGEConv** - Dense SAGE layer
-**DenseGINConv** - Dense GIN layer
-**DenseGraphConv** - Dense graph convolution
+**DenseGCNConv** - 密集 GCN 層
+**DenseSAGEConv** - 密集 SAGE 層
+**DenseGINConv** - 密集 GIN 層
+**DenseGraphConv** - 密集圖卷積
 
-These are useful when working with small, fully-connected, or densely represented graphs.
+這些在處理小型、全連接或密集表示的圖時很有用。
 
-## Usage Tips
+## 使用提示
 
-1. **Start simple**: Begin with GCNConv or GATConv for most tasks
-2. **Consider data type**: Use molecular layers (SchNet, DimeNet) for 3D structures
-3. **Check capabilities**: Match layer capabilities to your data (edge features, bipartite, etc.)
-4. **Deep networks**: Use normalization (PairNorm, LayerNorm) and JumpingKnowledge for deep GNNs
-5. **Large graphs**: Use scalable layers (SAGE, Cluster-GCN) with neighbor sampling
-6. **Heterogeneous**: Use RGCNConv, HGTConv, or to_hetero() conversion
-7. **Lazy initialization**: Use lazy layers when input dimensions vary or are unknown
+1. **從簡單開始**：大多數任務從 GCNConv 或 GATConv 開始
+2. **考慮資料類型**：3D 結構使用分子層（SchNet、DimeNet）
+3. **檢查功能**：將層功能與您的資料匹配（邊特徵、二分圖等）
+4. **深度網路**：深度 GNN 使用正規化（PairNorm、LayerNorm）和 JumpingKnowledge
+5. **大型圖**：使用可擴展層（SAGE、Cluster-GCN）搭配鄰居取樣
+6. **異質**：使用 RGCNConv、HGTConv 或 to_hetero() 轉換
+7. **惰性初始化**：當輸入維度變化或未知時使用惰性層
 
-## Common Patterns
+## 常見模式
 
-### Basic GNN
+### 基本 GNN
 ```python
 from torch_geometric.nn import GCNConv, global_mean_pool
 
@@ -451,7 +451,7 @@ class GNN(torch.nn.Module):
         return global_mean_pool(x, batch)
 ```
 
-### Deep GNN with Normalization
+### 具有正規化的深度 GNN
 ```python
 class DeepGNN(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, num_layers, out_channels):

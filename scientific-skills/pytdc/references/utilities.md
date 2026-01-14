@@ -1,31 +1,31 @@
-# TDC Utilities and Data Functions
+# TDC 工具和資料函數
 
-This document provides comprehensive documentation for TDC's data processing, evaluation, and utility functions.
+本文件提供 TDC 資料處理、評估和工具函數的全面文件。
 
-## Overview
+## 概述
 
-TDC provides utilities organized into four main categories:
-1. **Dataset Splits** - Train/validation/test partitioning strategies
-2. **Model Evaluation** - Standardized performance metrics
-3. **Data Processing** - Molecule conversion, filtering, and transformation
-4. **Entity Retrieval** - Database queries and conversions
+TDC 提供組織為四個主要類別的工具：
+1. **資料集分割** - 訓練/驗證/測試分割策略
+2. **模型評估** - 標準化效能指標
+3. **資料處理** - 分子轉換、過濾和轉換
+4. **實體擷取** - 資料庫查詢和轉換
 
-## 1. Dataset Splits
+## 1. 資料集分割
 
-Dataset splitting is crucial for evaluating model generalization. TDC provides multiple splitting strategies designed for therapeutic ML.
+資料集分割對於評估模型泛化至關重要。TDC 提供多種專為治療性機器學習設計的分割策略。
 
-### Basic Split Usage
+### 基本分割用法
 
 ```python
 from tdc.single_pred import ADME
 
 data = ADME(name='Caco2_Wang')
 
-# Get split with default parameters
+# 使用預設參數取得分割
 split = data.get_split()
-# Returns: {'train': DataFrame, 'valid': DataFrame, 'test': DataFrame}
+# 回傳：{'train': DataFrame, 'valid': DataFrame, 'test': DataFrame}
 
-# Customize split parameters
+# 自訂分割參數
 split = data.get_split(
     method='scaffold',
     seed=42,
@@ -33,275 +33,275 @@ split = data.get_split(
 )
 ```
 
-### Split Methods
+### 分割方法
 
-#### Random Split
-Random shuffling of data - suitable for general ML tasks.
+#### 隨機分割
+隨機打亂資料 - 適用於一般機器學習任務。
 
 ```python
 split = data.get_split(method='random', seed=1)
 ```
 
-**When to use:**
-- Baseline model evaluation
-- When chemical/temporal structure is not important
-- Quick prototyping
+**何時使用：**
+- 基線模型評估
+- 當化學/時間結構不重要時
+- 快速原型開發
 
-**Not recommended for:**
-- Realistic drug discovery scenarios
-- Evaluating generalization to new chemical matter
+**不建議用於：**
+- 真實的藥物發現場景
+- 評估對新化學物質的泛化
 
-#### Scaffold Split
-Splits based on molecular scaffolds (Bemis-Murcko scaffolds) - ensures test molecules are structurally distinct from training.
+#### Scaffold 分割
+基於分子骨架（Bemis-Murcko 骨架）分割 - 確保測試分子與訓練結構不同。
 
 ```python
 split = data.get_split(method='scaffold', seed=1)
 ```
 
-**When to use:**
-- Default for most single prediction tasks
-- Evaluating generalization to new chemical series
-- Realistic drug discovery scenarios
+**何時使用：**
+- 大多數單一預測任務的預設
+- 評估對新化學系列的泛化
+- 真實的藥物發現場景
 
-**How it works:**
-1. Extract Bemis-Murcko scaffold from each molecule
-2. Group molecules by scaffold
-3. Assign scaffolds to train/valid/test sets
-4. Ensures test molecules have unseen scaffolds
+**運作方式：**
+1. 從每個分子提取 Bemis-Murcko 骨架
+2. 按骨架分組分子
+3. 將骨架分配到訓練/驗證/測試集
+4. 確保測試分子具有未見過的骨架
 
-#### Cold Splits (DTI/DDI Tasks)
-For multi-instance prediction, cold splits ensure test set contains unseen drugs, targets, or both.
+#### Cold 分割（DTI/DDI 任務）
+對於多實例預測，cold 分割確保測試集包含未見過的藥物、標靶或兩者。
 
-**Cold Drug Split:**
+**Cold Drug 分割：**
 ```python
 from tdc.multi_pred import DTI
 data = DTI(name='BindingDB_Kd')
 split = data.get_split(method='cold_drug', seed=1)
 ```
-- Test set contains drugs not seen during training
-- Evaluates generalization to new compounds
+- 測試集包含訓練期間未見過的藥物
+- 評估對新化合物的泛化
 
-**Cold Target Split:**
+**Cold Target 分割：**
 ```python
 split = data.get_split(method='cold_target', seed=1)
 ```
-- Test set contains targets not seen during training
-- Evaluates generalization to new proteins
+- 測試集包含訓練期間未見過的標靶
+- 評估對新蛋白質的泛化
 
-**Cold Drug-Target Split:**
+**Cold Drug-Target 分割：**
 ```python
 split = data.get_split(method='cold_drug_target', seed=1)
 ```
-- Test set contains novel drug-target pairs
-- Most challenging evaluation scenario
+- 測試集包含新穎的藥物-標靶對
+- 最具挑戰性的評估場景
 
-#### Temporal Split
-For datasets with temporal information - ensures test data is from later time points.
+#### 時間分割
+對於具有時間資訊的資料集 - 確保測試資料來自較晚的時間點。
 
 ```python
 split = data.get_split(method='temporal', seed=1)
 ```
 
-**When to use:**
-- Datasets with time stamps
-- Simulating prospective prediction
-- Clinical trial outcome prediction
+**何時使用：**
+- 具有時間戳的資料集
+- 模擬前瞻性預測
+- 臨床試驗結果預測
 
-### Custom Split Fractions
+### 自訂分割比例
 
 ```python
-# 80% train, 10% valid, 10% test
+# 80% 訓練，10% 驗證，10% 測試
 split = data.get_split(method='scaffold', frac=[0.8, 0.1, 0.1])
 
-# 70% train, 15% valid, 15% test
+# 70% 訓練，15% 驗證，15% 測試
 split = data.get_split(method='scaffold', frac=[0.7, 0.15, 0.15])
 ```
 
-### Stratified Splits
+### 分層分割
 
-For classification tasks with imbalanced labels:
+對於具有不平衡標籤的分類任務：
 
 ```python
 split = data.get_split(method='scaffold', stratified=True)
 ```
 
-Maintains label distribution across train/valid/test sets.
+維持訓練/驗證/測試集之間的標籤分布。
 
-## 2. Model Evaluation
+## 2. 模型評估
 
-TDC provides standardized evaluation metrics for different task types.
+TDC 提供不同任務類型的標準化評估指標。
 
-### Basic Evaluator Usage
+### 基本評估器用法
 
 ```python
 from tdc import Evaluator
 
-# Initialize evaluator
+# 初始化評估器
 evaluator = Evaluator(name='ROC-AUC')
 
-# Evaluate predictions
+# 評估預測
 score = evaluator(y_true, y_pred)
 ```
 
-### Classification Metrics
+### 分類指標
 
 #### ROC-AUC
-Receiver Operating Characteristic - Area Under Curve
+接收者操作特徵 - 曲線下面積
 
 ```python
 evaluator = Evaluator(name='ROC-AUC')
 score = evaluator(y_true, y_pred_proba)
 ```
 
-**Best for:**
-- Binary classification
-- Imbalanced datasets
-- Overall discriminative ability
+**最適合：**
+- 二元分類
+- 不平衡資料集
+- 整體判別能力
 
-**Range:** 0-1 (higher is better, 0.5 is random)
+**範圍：** 0-1（較高較好，0.5 為隨機）
 
 #### PR-AUC
-Precision-Recall Area Under Curve
+精確率-召回率曲線下面積
 
 ```python
 evaluator = Evaluator(name='PR-AUC')
 score = evaluator(y_true, y_pred_proba)
 ```
 
-**Best for:**
-- Highly imbalanced datasets
-- When positive class is rare
-- Complements ROC-AUC
+**最適合：**
+- 高度不平衡資料集
+- 當正類稀少時
+- 補充 ROC-AUC
 
-**Range:** 0-1 (higher is better)
+**範圍：** 0-1（較高較好）
 
-#### F1 Score
-Harmonic mean of precision and recall
+#### F1 分數
+精確率和召回率的調和平均數
 
 ```python
 evaluator = Evaluator(name='F1')
 score = evaluator(y_true, y_pred_binary)
 ```
 
-**Best for:**
-- Balance between precision and recall
-- Multi-class classification
+**最適合：**
+- 精確率和召回率之間的平衡
+- 多類別分類
 
-**Range:** 0-1 (higher is better)
+**範圍：** 0-1（較高較好）
 
-#### Accuracy
-Fraction of correct predictions
+#### 準確率
+正確預測的比例
 
 ```python
 evaluator = Evaluator(name='Accuracy')
 score = evaluator(y_true, y_pred_binary)
 ```
 
-**Best for:**
-- Balanced datasets
-- Simple baseline metric
+**最適合：**
+- 平衡資料集
+- 簡單基線指標
 
-**Not recommended for:** Imbalanced datasets
+**不建議用於：** 不平衡資料集
 
 #### Cohen's Kappa
-Agreement between predictions and ground truth, accounting for chance
+預測與真實值之間的一致性，考慮機率
 
 ```python
 evaluator = Evaluator(name='Kappa')
 score = evaluator(y_true, y_pred_binary)
 ```
 
-**Range:** -1 to 1 (higher is better, 0 is random)
+**範圍：** -1 到 1（較高較好，0 為隨機）
 
-### Regression Metrics
+### 迴歸指標
 
-#### RMSE - Root Mean Squared Error
+#### RMSE - 均方根誤差
 ```python
 evaluator = Evaluator(name='RMSE')
 score = evaluator(y_true, y_pred)
 ```
 
-**Best for:**
-- Continuous predictions
-- Penalizes large errors heavily
+**最適合：**
+- 連續預測
+- 嚴重懲罰大誤差
 
-**Range:** 0-∞ (lower is better)
+**範圍：** 0-∞（較低較好）
 
-#### MAE - Mean Absolute Error
+#### MAE - 平均絕對誤差
 ```python
 evaluator = Evaluator(name='MAE')
 score = evaluator(y_true, y_pred)
 ```
 
-**Best for:**
-- Continuous predictions
-- More robust to outliers than RMSE
+**最適合：**
+- 連續預測
+- 比 RMSE 對異常值更穩健
 
-**Range:** 0-∞ (lower is better)
+**範圍：** 0-∞（較低較好）
 
-#### R² - Coefficient of Determination
+#### R² - 決定係數
 ```python
 evaluator = Evaluator(name='R2')
 score = evaluator(y_true, y_pred)
 ```
 
-**Best for:**
-- Variance explained by model
-- Comparing different models
+**最適合：**
+- 模型解釋的變異
+- 比較不同模型
 
-**Range:** -∞ to 1 (higher is better, 1 is perfect)
+**範圍：** -∞ 到 1（較高較好，1 為完美）
 
-#### MSE - Mean Squared Error
+#### MSE - 均方誤差
 ```python
 evaluator = Evaluator(name='MSE')
 score = evaluator(y_true, y_pred)
 ```
 
-**Range:** 0-∞ (lower is better)
+**範圍：** 0-∞（較低較好）
 
-### Ranking Metrics
+### 排序指標
 
-#### Spearman Correlation
-Rank correlation coefficient
+#### Spearman 相關
+等級相關係數
 
 ```python
 evaluator = Evaluator(name='Spearman')
 score = evaluator(y_true, y_pred)
 ```
 
-**Best for:**
-- Ranking tasks
-- Non-linear relationships
-- Ordinal data
+**最適合：**
+- 排序任務
+- 非線性關係
+- 序數資料
 
-**Range:** -1 to 1 (higher is better)
+**範圍：** -1 到 1（較高較好）
 
-#### Pearson Correlation
-Linear correlation coefficient
+#### Pearson 相關
+線性相關係數
 
 ```python
 evaluator = Evaluator(name='Pearson')
 score = evaluator(y_true, y_pred)
 ```
 
-**Best for:**
-- Linear relationships
-- Continuous data
+**最適合：**
+- 線性關係
+- 連續資料
 
-**Range:** -1 to 1 (higher is better)
+**範圍：** -1 到 1（較高較好）
 
-### Multi-Label Classification
+### 多標籤分類
 
 ```python
 evaluator = Evaluator(name='Micro-F1')
 score = evaluator(y_true_multilabel, y_pred_multilabel)
 ```
 
-Available: `Micro-F1`, `Macro-F1`, `Micro-AUPR`, `Macro-AUPR`
+可用：`Micro-F1`、`Macro-F1`、`Micro-AUPR`、`Macro-AUPR`
 
-### Benchmark Group Evaluation
+### 基準組評估
 
-For benchmark groups, evaluation requires multiple seeds:
+對於基準組，評估需要多個種子：
 
 ```python
 from tdc.benchmark_group import admet_group
@@ -309,224 +309,224 @@ from tdc.benchmark_group import admet_group
 group = admet_group(path='data/')
 benchmark = group.get('Caco2_Wang')
 
-# Predictions must be dict with seeds as keys
+# 預測必須是以種子為鍵的字典
 predictions = {}
 for seed in [1, 2, 3, 4, 5]:
-    # Train model and predict
+    # 訓練模型並預測
     predictions[seed] = model_predictions
 
-# Evaluate with mean and std across seeds
+# 使用跨種子的平均值和標準差進行評估
 results = group.evaluate(predictions)
 print(results)  # {'Caco2_Wang': [mean_score, std_score]}
 ```
 
-## 3. Data Processing
+## 3. 資料處理
 
-TDC provides 11 comprehensive data processing utilities.
+TDC 提供 11 個全面的資料處理工具。
 
-### Molecule Format Conversion
+### 分子格式轉換
 
-Convert between ~15 molecular representations.
+在約 15 種分子表示之間轉換。
 
 ```python
 from tdc.chem_utils import MolConvert
 
-# SMILES to PyTorch Geometric
+# SMILES 轉 PyTorch Geometric
 converter = MolConvert(src='SMILES', dst='PyG')
 pyg_graph = converter('CC(C)Cc1ccc(cc1)C(C)C(O)=O')
 
-# SMILES to DGL
+# SMILES 轉 DGL
 converter = MolConvert(src='SMILES', dst='DGL')
 dgl_graph = converter('CC(C)Cc1ccc(cc1)C(C)C(O)=O')
 
-# SMILES to Morgan Fingerprint (ECFP)
+# SMILES 轉 Morgan 指紋（ECFP）
 converter = MolConvert(src='SMILES', dst='ECFP')
 fingerprint = converter('CC(C)Cc1ccc(cc1)C(C)C(O)=O')
 ```
 
-**Available formats:**
-- **Text**: SMILES, SELFIES, InChI
-- **Fingerprints**: ECFP (Morgan), MACCS, RDKit, AtomPair, TopologicalTorsion
-- **Graphs**: PyG (PyTorch Geometric), DGL (Deep Graph Library)
-- **3D**: Graph3D, Coulomb Matrix, Distance Matrix
+**可用格式：**
+- **文字**：SMILES、SELFIES、InChI
+- **指紋**：ECFP（Morgan）、MACCS、RDKit、AtomPair、TopologicalTorsion
+- **圖**：PyG（PyTorch Geometric）、DGL（Deep Graph Library）
+- **3D**：Graph3D、Coulomb Matrix、Distance Matrix
 
-**Batch conversion:**
+**批次轉換：**
 ```python
 converter = MolConvert(src='SMILES', dst='PyG')
 graphs = converter(['SMILES1', 'SMILES2', 'SMILES3'])
 ```
 
-### Molecule Filters
+### 分子過濾器
 
-Remove non-drug-like molecules using curated chemical rules.
+使用策劃的化學規則移除非類藥分子。
 
 ```python
 from tdc.chem_utils import MolFilter
 
-# Initialize filter with rules
+# 使用規則初始化過濾器
 mol_filter = MolFilter(
-    rules=['PAINS', 'BMS'],  # Chemical filter rules
+    rules=['PAINS', 'BMS'],  # 化學過濾規則
     property_filters_dict={
-        'MW': (150, 500),      # Molecular weight range
-        'LogP': (-0.4, 5.6),   # Lipophilicity range
-        'HBD': (0, 5),         # H-bond donors
-        'HBA': (0, 10)         # H-bond acceptors
+        'MW': (150, 500),      # 分子量範圍
+        'LogP': (-0.4, 5.6),   # 親脂性範圍
+        'HBD': (0, 5),         # 氫鍵供體
+        'HBA': (0, 10)         # 氫鍵受體
     }
 )
 
-# Filter molecules
+# 過濾分子
 filtered_smiles = mol_filter(smiles_list)
 ```
 
-**Available filter rules:**
-- `PAINS` - Pan-Assay Interference Compounds
-- `BMS` - Bristol-Myers Squibb HTS deck filters
-- `Glaxo` - GlaxoSmithKline filters
-- `Dundee` - University of Dundee filters
-- `Inpharmatica` - Inpharmatica filters
-- `LINT` - Pfizer LINT filters
+**可用過濾規則：**
+- `PAINS` - 泛測定干擾化合物
+- `BMS` - Bristol-Myers Squibb HTS 庫過濾器
+- `Glaxo` - GlaxoSmithKline 過濾器
+- `Dundee` - Dundee 大學過濾器
+- `Inpharmatica` - Inpharmatica 過濾器
+- `LINT` - Pfizer LINT 過濾器
 
-### Label Distribution Visualization
+### 標籤分布視覺化
 
 ```python
-# Visualize label distribution
+# 視覺化標籤分布
 data.label_distribution()
 
-# Print statistics
+# 列印統計
 data.print_stats()
 ```
 
-Displays histogram and computes mean, median, std for continuous labels.
+顯示直方圖並計算連續標籤的平均值、中位數、標準差。
 
-### Label Binarization
+### 標籤二值化
 
-Convert continuous labels to binary using threshold.
+使用閾值將連續標籤轉換為二元。
 
 ```python
 from tdc.utils import binarize
 
-# Binarize with threshold
+# 使用閾值二值化
 binary_labels = binarize(y_continuous, threshold=5.0, order='ascending')
-# order='ascending': values >= threshold become 1
-# order='descending': values <= threshold become 1
+# order='ascending'：值 >= 閾值變為 1
+# order='descending'：值 <= 閾值變為 1
 ```
 
-### Label Units Conversion
+### 標籤單位轉換
 
-Transform between measurement units.
+在測量單位之間轉換。
 
 ```python
 from tdc.chem_utils import label_transform
 
-# Convert nM to pKd
+# 將 nM 轉換為 pKd
 y_pkd = label_transform(y_nM, from_unit='nM', to_unit='p')
 
-# Convert μM to nM
+# 將 μM 轉換為 nM
 y_nM = label_transform(y_uM, from_unit='uM', to_unit='nM')
 ```
 
-**Available conversions:**
-- Binding affinity: nM, μM, pKd, pKi, pIC50
-- Log transformations
-- Natural log conversions
+**可用轉換：**
+- 結合親和力：nM、μM、pKd、pKi、pIC50
+- 對數轉換
+- 自然對數轉換
 
-### Label Meaning
+### 標籤意義
 
-Get interpretable descriptions for labels.
+取得標籤的可解釋描述。
 
 ```python
-# Get label mapping
+# 取得標籤映射
 label_map = data.get_label_map(name='DrugBank')
 print(label_map)
 # {0: 'No interaction', 1: 'Increased effect', 2: 'Decreased effect', ...}
 ```
 
-### Data Balancing
+### 資料平衡
 
-Handle class imbalance via over/under-sampling.
+透過過採樣/欠採樣處理類別不平衡。
 
 ```python
 from tdc.utils import balance
 
-# Oversample minority class
+# 過採樣少數類別
 X_balanced, y_balanced = balance(X, y, method='oversample')
 
-# Undersample majority class
+# 欠採樣多數類別
 X_balanced, y_balanced = balance(X, y, method='undersample')
 ```
 
-### Graph Transformation for Pair Data
+### 配對資料的圖轉換
 
-Convert paired data to graph representations.
+將配對資料轉換為圖表示。
 
 ```python
 from tdc.utils import create_graph_from_pairs
 
-# Create graph from drug-drug pairs
+# 從藥物-藥物對建立圖
 graph = create_graph_from_pairs(
     pairs=ddi_pairs,  # [(drug1, drug2, label), ...]
-    format='edge_list'  # or 'PyG', 'DGL'
+    format='edge_list'  # 或 'PyG'、'DGL'
 )
 ```
 
-### Negative Sampling
+### 負採樣
 
-Generate negative samples for binary tasks.
+為二元任務生成負樣本。
 
 ```python
 from tdc.utils import negative_sample
 
-# Generate negative samples for DTI
+# 為 DTI 生成負樣本
 negative_pairs = negative_sample(
     positive_pairs=known_interactions,
     all_drugs=drug_list,
     all_targets=target_list,
-    ratio=1.0  # Negative:positive ratio
+    ratio=1.0  # 負:正比例
 )
 ```
 
-**Use cases:**
-- Drug-target interaction prediction
-- Drug-drug interaction tasks
-- Creating balanced datasets
+**用例：**
+- 藥物-標靶互動預測
+- 藥物-藥物互動任務
+- 建立平衡資料集
 
-### Entity Retrieval
+### 實體擷取
 
-Convert between database identifiers.
+在資料庫識別碼之間轉換。
 
-#### PubChem CID to SMILES
+#### PubChem CID 轉 SMILES
 ```python
 from tdc.utils import cid2smiles
 
-smiles = cid2smiles(2244)  # Aspirin
-# Returns: 'CC(=O)Oc1ccccc1C(=O)O'
+smiles = cid2smiles(2244)  # 阿斯匹靈
+# 回傳：'CC(=O)Oc1ccccc1C(=O)O'
 ```
 
-#### UniProt ID to Amino Acid Sequence
+#### UniProt ID 轉胺基酸序列
 ```python
 from tdc.utils import uniprot2seq
 
 sequence = uniprot2seq('P12345')
-# Returns: 'MVKVYAPASS...'
+# 回傳：'MVKVYAPASS...'
 ```
 
-#### Batch Retrieval
+#### 批次擷取
 ```python
-# Multiple CIDs
+# 多個 CID
 smiles_list = [cid2smiles(cid) for cid in [2244, 5090, 6323]]
 
-# Multiple UniProt IDs
+# 多個 UniProt ID
 sequences = [uniprot2seq(uid) for uid in ['P12345', 'Q9Y5S9']]
 ```
 
-## 4. Advanced Utilities
+## 4. 進階工具
 
-### Retrieve Dataset Names
+### 擷取資料集名稱
 
 ```python
 from tdc.utils import retrieve_dataset_names
 
-# Get all datasets for a task
+# 取得任務的所有資料集
 adme_datasets = retrieve_dataset_names('ADME')
 dti_datasets = retrieve_dataset_names('DTI')
 tox_datasets = retrieve_dataset_names('Tox')
@@ -534,96 +534,96 @@ tox_datasets = retrieve_dataset_names('Tox')
 print(f"ADME datasets: {adme_datasets}")
 ```
 
-### Fuzzy Search
+### 模糊搜尋
 
-TDC supports fuzzy matching for dataset names:
+TDC 支援資料集名稱的模糊匹配：
 
 ```python
 from tdc.single_pred import ADME
 
-# These all work (typo-tolerant)
+# 這些都有效（容錯拼寫）
 data = ADME(name='Caco2_Wang')
 data = ADME(name='caco2_wang')
-data = ADME(name='Caco2')  # Partial match
+data = ADME(name='Caco2')  # 部分匹配
 ```
 
-### Data Format Options
+### 資料格式選項
 
 ```python
-# Pandas DataFrame (default)
+# Pandas DataFrame（預設）
 df = data.get_data(format='df')
 
-# Dictionary
+# 字典
 data_dict = data.get_data(format='dict')
 
-# DeepPurpose format (for DeepPurpose library)
+# DeepPurpose 格式（用於 DeepPurpose 函式庫）
 dp_format = data.get_data(format='DeepPurpose')
 
-# PyG/DGL graphs (if applicable)
+# PyG/DGL 圖（如適用）
 graphs = data.get_data(format='PyG')
 ```
 
-### Data Loader Utilities
+### 資料載入器工具
 
 ```python
 from tdc.utils import create_fold
 
-# Create cross-validation folds
+# 建立交叉驗證折疊
 folds = create_fold(data, fold=5, seed=42)
-# Returns list of (train_idx, test_idx) tuples
+# 回傳 (train_idx, test_idx) 元組列表
 
-# Iterate through folds
+# 迭代折疊
 for i, (train_idx, test_idx) in enumerate(folds):
     train_data = data.iloc[train_idx]
     test_data = data.iloc[test_idx]
-    # Train and evaluate
+    # 訓練和評估
 ```
 
-## Common Workflows
+## 常見工作流程
 
-### Workflow 1: Complete Data Pipeline
+### 工作流程 1：完整資料流程
 
 ```python
 from tdc.single_pred import ADME
 from tdc import Evaluator
 from tdc.chem_utils import MolConvert, MolFilter
 
-# 1. Load data
+# 1. 載入資料
 data = ADME(name='Caco2_Wang')
 
-# 2. Filter molecules
+# 2. 過濾分子
 mol_filter = MolFilter(rules=['PAINS'])
 filtered_data = data.get_data()
 filtered_data = filtered_data[
     filtered_data['Drug'].apply(lambda x: mol_filter([x]))
 ]
 
-# 3. Split data
+# 3. 分割資料
 split = data.get_split(method='scaffold', seed=42)
 train, valid, test = split['train'], split['valid'], split['test']
 
-# 4. Convert to graph representations
+# 4. 轉換為圖表示
 converter = MolConvert(src='SMILES', dst='PyG')
 train_graphs = converter(train['Drug'].tolist())
 
-# 5. Train model (user implements)
+# 5. 訓練模型（使用者實作）
 # model.fit(train_graphs, train['Y'])
 
-# 6. Evaluate
+# 6. 評估
 evaluator = Evaluator(name='MAE')
 # score = evaluator(test['Y'], predictions)
 ```
 
-### Workflow 2: Multi-Task Learning Preparation
+### 工作流程 2：多任務學習準備
 
 ```python
 from tdc.benchmark_group import admet_group
 from tdc.chem_utils import MolConvert
 
-# Load benchmark group
+# 載入基準組
 group = admet_group(path='data/')
 
-# Get multiple datasets
+# 取得多個資料集
 datasets = ['Caco2_Wang', 'HIA_Hou', 'Bioavailability_Ma']
 all_data = {}
 
@@ -631,54 +631,54 @@ for dataset_name in datasets:
     benchmark = group.get(dataset_name)
     all_data[dataset_name] = benchmark
 
-# Prepare for multi-task learning
+# 準備多任務學習
 converter = MolConvert(src='SMILES', dst='ECFP')
-# Process each dataset...
+# 處理每個資料集...
 ```
 
-### Workflow 3: DTI Cold Split Evaluation
+### 工作流程 3：DTI Cold 分割評估
 
 ```python
 from tdc.multi_pred import DTI
 from tdc import Evaluator
 
-# Load DTI data
+# 載入 DTI 資料
 data = DTI(name='BindingDB_Kd')
 
-# Cold drug split
+# Cold drug 分割
 split = data.get_split(method='cold_drug', seed=42)
 train, test = split['train'], split['test']
 
-# Verify no drug overlap
+# 驗證沒有藥物重疊
 train_drugs = set(train['Drug_ID'])
 test_drugs = set(test['Drug_ID'])
 assert len(train_drugs & test_drugs) == 0, "Drug leakage detected!"
 
-# Train and evaluate
+# 訓練和評估
 # model.fit(train)
 evaluator = Evaluator(name='RMSE')
 # score = evaluator(test['Y'], predictions)
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Always use meaningful splits** - Use scaffold or cold splits for realistic evaluation
-2. **Multiple seeds** - Run experiments with multiple seeds for robust results
-3. **Appropriate metrics** - Choose metrics that match your task and dataset characteristics
-4. **Data filtering** - Remove PAINS and non-drug-like molecules before training
-5. **Format conversion** - Convert molecules to appropriate format for your model
-6. **Batch processing** - Use batch operations for efficiency with large datasets
+1. **總是使用有意義的分割** - 使用 scaffold 或 cold 分割進行真實評估
+2. **多個種子** - 使用多個種子執行實驗以獲得穩健結果
+3. **適當的指標** - 選擇符合您任務和資料集特徵的指標
+4. **資料過濾** - 訓練前移除 PAINS 和非類藥分子
+5. **格式轉換** - 將分子轉換為適合您模型的格式
+6. **批次處理** - 對大型資料集使用批次操作以提高效率
 
-## Performance Tips
+## 效能提示
 
-- Convert molecules in batch mode for faster processing
-- Cache converted representations to avoid recomputation
-- Use appropriate data formats for your framework (PyG, DGL, etc.)
-- Filter data early in the pipeline to reduce computation
+- 以批次模式轉換分子以加快處理速度
+- 快取轉換後的表示以避免重新計算
+- 為您的框架使用適當的資料格式（PyG、DGL 等）
+- 在流程早期過濾資料以減少計算
 
-## References
+## 參考文獻
 
-- TDC Documentation: https://tdc.readthedocs.io
-- Data Functions: https://tdcommons.ai/fct_overview/
-- Evaluation Metrics: https://tdcommons.ai/functions/model_eval/
-- Data Splits: https://tdcommons.ai/functions/data_split/
+- TDC 文件：https://tdc.readthedocs.io
+- 資料函數：https://tdcommons.ai/fct_overview/
+- 評估指標：https://tdcommons.ai/functions/model_eval/
+- 資料分割：https://tdcommons.ai/functions/data_split/

@@ -1,94 +1,94 @@
-# Simulation Workflow
+# 模擬工作流程
 
-## Standard Workflow
+## 標準工作流程
 
-Follow these steps to run a fluidsim simulation:
+按照以下步驟執行 fluidsim 模擬：
 
-### 1. Import Solver
+### 1. 匯入求解器
 
 ```python
 from fluidsim.solvers.ns2d.solver import Simul
 
-# Or use dynamic import
+# 或使用動態匯入
 import fluidsim
 Simul = fluidsim.import_simul_class_from_key("ns2d")
 ```
 
-### 2. Create Default Parameters
+### 2. 建立預設參數
 
 ```python
 params = Simul.create_default_params()
 ```
 
-This returns a hierarchical `Parameters` object containing all simulation settings.
+這會回傳一個包含所有模擬設定的層次結構 `Parameters` 物件。
 
-### 3. Configure Parameters
+### 3. 設定參數
 
-Modify parameters as needed. The Parameters object prevents typos by raising `AttributeError` for non-existent parameters:
+根據需要修改參數。Parameters 物件透過對不存在的參數引發 `AttributeError` 來防止拼寫錯誤：
 
 ```python
-# Domain and resolution
-params.oper.nx = 256  # grid points in x
-params.oper.ny = 256  # grid points in y
-params.oper.Lx = 2 * pi  # domain size x
-params.oper.Ly = 2 * pi  # domain size y
+# 域和解析度
+params.oper.nx = 256  # x 方向的網格點
+params.oper.ny = 256  # y 方向的網格點
+params.oper.Lx = 2 * pi  # x 方向的域大小
+params.oper.Ly = 2 * pi  # y 方向的域大小
 
-# Physical parameters
-params.nu_2 = 1e-3  # viscosity (negative Laplacian)
+# 物理參數
+params.nu_2 = 1e-3  # 黏度（負拉普拉斯）
 
-# Time stepping
-params.time_stepping.t_end = 10.0  # end time
-params.time_stepping.deltat0 = 0.01  # initial time step
-params.time_stepping.USE_CFL = True  # adaptive time step
+# 時間步進
+params.time_stepping.t_end = 10.0  # 結束時間
+params.time_stepping.deltat0 = 0.01  # 初始時間步長
+params.time_stepping.USE_CFL = True  # 自適應時間步長
 
-# Initial conditions
-params.init_fields.type = "noise"  # or "dipole", "vortex", etc.
+# 初始條件
+params.init_fields.type = "noise"  # 或 "dipole"、"vortex" 等
 
-# Output settings
-params.output.periods_save.phys_fields = 1.0  # save every 1.0 time units
+# 輸出設定
+params.output.periods_save.phys_fields = 1.0  # 每 1.0 時間單位儲存
 params.output.periods_save.spectra = 0.5
 params.output.periods_save.spatial_means = 0.1
 ```
 
-### 4. Instantiate Simulation
+### 4. 實例化模擬
 
 ```python
 sim = Simul(params)
 ```
 
-This initializes:
-- Operators (FFT, differential operators)
-- State variables (velocity, vorticity, etc.)
-- Output handlers
-- Time stepping scheme
+這會初始化：
+- 運算子（FFT、微分運算子）
+- 狀態變數（速度、渦度等）
+- 輸出處理器
+- 時間步進格式
 
-### 5. Run Simulation
+### 5. 執行模擬
 
 ```python
 sim.time_stepping.start()
 ```
 
-The simulation runs until `t_end` or specified number of iterations.
+模擬執行直到 `t_end` 或指定的迭代次數。
 
-### 6. Analyze Results During/After Simulation
+### 6. 在模擬期間/之後分析結果
 
 ```python
-# Plot physical fields
+# 繪製物理場
 sim.output.phys_fields.plot()
 sim.output.phys_fields.plot("vorticity")
 sim.output.phys_fields.plot("div")
 
-# Plot spatial means
+# 繪製空間平均
 sim.output.spatial_means.plot()
 
-# Plot spectra
+# 繪製頻譜
 sim.output.spectra.plot1d()
 sim.output.spectra.plot2d()
 ```
 
-## Loading Previous Simulations
+## 載入先前的模擬
 
-### Quick Loading (For Plotting Only)
+### 快速載入（僅用於繪圖）
 
 ```python
 from fluidsim import load_sim_for_plot
@@ -98,43 +98,43 @@ sim.output.phys_fields.plot()
 sim.output.spatial_means.plot()
 ```
 
-Fast loading without full state initialization. Use for post-processing.
+不進行完整狀態初始化的快速載入。用於後處理。
 
-### Full State Loading (For Restarting)
+### 完整狀態載入（用於重新啟動）
 
 ```python
 from fluidsim import load_state_phys_file
 
 sim = load_state_phys_file("path/to/state_file.h5")
-sim.time_stepping.start()  # continue simulation
+sim.time_stepping.start()  # 繼續模擬
 ```
 
-Loads complete state for continuing simulations.
+載入完整狀態以繼續模擬。
 
-## Restarting Simulations
+## 重新啟動模擬
 
-To restart from a saved state:
+從已儲存的狀態重新啟動：
 
 ```python
 params = Simul.create_default_params()
 params.init_fields.type = "from_file"
 params.init_fields.from_file.path = "path/to/state_file.h5"
 
-# Optionally modify parameters for the continuation
-params.time_stepping.t_end = 20.0  # extend simulation
+# 可選擇修改延續的參數
+params.time_stepping.t_end = 20.0  # 延長模擬
 
 sim = Simul(params)
 sim.time_stepping.start()
 ```
 
-## Running on Clusters
+## 在叢集上執行
 
-FluidSim integrates with cluster submission systems:
+FluidSim 與叢集提交系統整合：
 
 ```python
 from fluiddyn.clusters.legi import Calcul8 as Cluster
 
-# Configure cluster job
+# 設定叢集工作
 cluster = Cluster()
 cluster.submit_script(
     "my_simulation.py",
@@ -145,15 +145,15 @@ cluster.submit_script(
 )
 ```
 
-Script should contain standard workflow steps (import, configure, run).
+腳本應包含標準工作流程步驟（匯入、設定、執行）。
 
-## Complete Example
+## 完整範例
 
 ```python
 from fluidsim.solvers.ns2d.solver import Simul
 from math import pi
 
-# Create and configure parameters
+# 建立和設定參數
 params = Simul.create_default_params()
 params.oper.nx = params.oper.ny = 256
 params.oper.Lx = params.oper.Ly = 2 * pi
@@ -162,11 +162,11 @@ params.time_stepping.t_end = 10.0
 params.init_fields.type = "dipole"
 params.output.periods_save.phys_fields = 1.0
 
-# Run simulation
+# 執行模擬
 sim = Simul(params)
 sim.time_stepping.start()
 
-# Analyze results
+# 分析結果
 sim.output.phys_fields.plot("vorticity")
 sim.output.spatial_means.plot()
 ```

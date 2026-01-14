@@ -1,272 +1,272 @@
-# Protein Modeling
+# 蛋白質建模
 
-## Overview
+## 概述
 
-TorchDrug provides extensive support for protein-related tasks including sequence analysis, structure prediction, property prediction, and protein-protein interactions. Proteins are represented as graphs where nodes are amino acid residues and edges represent spatial or sequential relationships.
+TorchDrug 為蛋白質相關任務提供廣泛支援，包括序列分析、結構預測、性質預測和蛋白質-蛋白質交互作用。蛋白質表示為圖，其中節點是胺基酸殘基，邊表示空間或序列關係。
 
-## Available Datasets
+## 可用資料集
 
-### Protein Function Prediction
+### 蛋白質功能預測
 
-**Enzyme Function:**
-- **EnzymeCommission** (17,562 proteins): EC number classification (7 levels)
-- **BetaLactamase** (5,864 sequences): Enzyme activity prediction
+**酵素功能：**
+- **EnzymeCommission**（17,562 蛋白質）：EC 編號分類（7 級）
+- **BetaLactamase**（5,864 序列）：酵素活性預測
 
-**Protein Characteristics:**
-- **Fluorescence** (54,025 sequences): GFP fluorescence intensity
-- **Stability** (53,614 sequences): Thermostability prediction
-- **Solubility** (62,478 sequences): Protein solubility classification
-- **BinaryLocalization** (22,168 proteins): Subcellular localization (membrane vs. soluble)
-- **SubcellularLocalization** (8,943 proteins): 10-class localization prediction
+**蛋白質特性：**
+- **Fluorescence**（54,025 序列）：GFP 螢光強度
+- **Stability**（53,614 序列）：熱穩定性預測
+- **Solubility**（62,478 序列）：蛋白質溶解度分類
+- **BinaryLocalization**（22,168 蛋白質）：亞細胞定位（膜 vs. 可溶）
+- **SubcellularLocalization**（8,943 蛋白質）：10 類定位預測
 
-**Gene Ontology:**
-- **GeneOntology** (46,796 proteins): GO term prediction across biological process, molecular function, and cellular component
+**基因本體：**
+- **GeneOntology**（46,796 蛋白質）：跨生物過程、分子功能和細胞組件的 GO 術語預測
 
-### Protein Structure Prediction
+### 蛋白質結構預測
 
-- **Fold** (16,712 proteins): Structural fold classification (1,195 classes)
-- **SecondaryStructure** (8,678 proteins): 3-state or 8-state secondary structure prediction
-- **ContactPrediction** via ProteinNet: Residue-residue contact maps
+- **Fold**（16,712 蛋白質）：結構摺疊分類（1,195 類）
+- **SecondaryStructure**（8,678 蛋白質）：3 態或 8 態二級結構預測
+- **ContactPrediction**（通過 ProteinNet）：殘基-殘基接觸圖
 
-### Protein Interaction
+### 蛋白質交互作用
 
-**Protein-Protein Interactions:**
-- **HumanPPI** (1,412 proteins, 6,584 interactions): Human protein interaction network
-- **YeastPPI** (2,018 proteins, 6,451 interactions): Yeast protein interaction network
-- **PPIAffinity** (2,156 protein pairs): Binding affinity measurements
+**蛋白質-蛋白質交互作用：**
+- **HumanPPI**（1,412 蛋白質，6,584 交互作用）：人類蛋白質交互作用網路
+- **YeastPPI**（2,018 蛋白質，6,451 交互作用）：酵母蛋白質交互作用網路
+- **PPIAffinity**（2,156 蛋白質對）：結合親和力測量
 
-**Protein-Ligand Binding:**
-- **BindingDB** (~1.5M entries): Comprehensive binding affinity database
-- **PDBBind** (20,000+ complexes): 3D structure-based binding data
-  - Refined set: High-quality crystal structures
-  - Core set: Diverse benchmark set
+**蛋白質-配體結合：**
+- **BindingDB**（~150 萬條目）：綜合結合親和力資料庫
+- **PDBBind**（20,000+ 複合物）：基於 3D 結構的結合資料
+  - 精製集：高品質晶體結構
+  - 核心集：多樣基準集
 
-### Large-Scale Protein Databases
+### 大型蛋白質資料庫
 
-- **AlphaFoldDB**: Access to 200M+ predicted protein structures
-- **ProteinNet**: Standardized dataset for structure prediction
+- **AlphaFoldDB**：存取 2 億+ 預測蛋白質結構
+- **ProteinNet**：結構預測的標準化資料集
 
-## Task Types
+## 任務類型
 
 ### NodePropertyPrediction
 
-Predict properties at the residue (node) level, such as secondary structure or contact maps.
+在殘基（節點）級別預測性質，如二級結構或接觸圖。
 
-**Use Cases:**
-- Secondary structure prediction (helix, sheet, coil)
-- Residue-level disorder prediction
-- Post-translational modification sites
-- Binding site prediction
+**使用案例：**
+- 二級結構預測（螺旋、摺疊、線圈）
+- 殘基級無序預測
+- 轉譯後修飾位點
+- 結合位點預測
 
 ### PropertyPrediction
 
-Predict protein-level properties like function, stability, or localization.
+預測蛋白質級性質，如功能、穩定性或定位。
 
-**Use Cases:**
-- Enzyme function classification
-- Subcellular localization
-- Protein stability prediction
-- Gene ontology term prediction
+**使用案例：**
+- 酵素功能分類
+- 亞細胞定位
+- 蛋白質穩定性預測
+- 基因本體術語預測
 
 ### InteractionPrediction
 
-Predict interactions between protein pairs or protein-ligand pairs.
+預測蛋白質對或蛋白質-配體對之間的交互作用。
 
-**Key Features:**
-- Handles both sequence and structure inputs
-- Supports symmetric (PPI) and asymmetric (protein-ligand) interactions
-- Multiple negative sampling strategies
+**關鍵特徵：**
+- 處理序列和結構輸入
+- 支援對稱（PPI）和非對稱（蛋白質-配體）交互作用
+- 多種負採樣策略
 
 ### ContactPrediction
 
-Specialized task for predicting spatial proximity between residues in folded structures.
+專門用於預測摺疊結構中殘基間空間鄰近性的任務。
 
-**Applications:**
-- Structure prediction from sequence
-- Protein folding pathway analysis
-- Validation of predicted structures
+**應用：**
+- 從序列預測結構
+- 蛋白質摺疊路徑分析
+- 預測結構的驗證
 
-## Protein Representation Models
+## 蛋白質表示模型
 
-### Sequence-Based Models
+### 基於序列的模型
 
-**ESM (Evolutionary Scale Modeling):**
-- Pre-trained transformer model on 250M sequences
-- State-of-the-art for sequence-only tasks
-- Available in multiple sizes (ESM-1b, ESM-2)
-- Captures evolutionary and structural information
+**ESM（演化規模建模）：**
+- 在 2.5 億序列上預訓練的 transformer 模型
+- 僅序列任務的最先進水準
+- 有多種大小可用（ESM-1b、ESM-2）
+- 捕捉演化和結構資訊
 
-**ProteinBERT:**
-- BERT-style masked language model
-- Pre-trained on UniProt sequences
-- Good for transfer learning
+**ProteinBERT：**
+- BERT 風格遮罩語言模型
+- 在 UniProt 序列上預訓練
+- 適合遷移學習
 
-**ProteinLSTM:**
-- Bidirectional LSTM for sequence encoding
-- Lightweight and fast
-- Good baseline for sequence tasks
+**ProteinLSTM：**
+- 用於序列編碼的雙向 LSTM
+- 輕量且快速
+- 序列任務的良好基線
 
-**ProteinCNN / ProteinResNet:**
-- Convolutional architectures
-- Capture local sequence patterns
-- Faster than transformer models
+**ProteinCNN / ProteinResNet：**
+- 卷積架構
+- 捕捉局部序列模式
+- 比 transformer 模型更快
 
-### Structure-Based Models
+### 基於結構的模型
 
-**GearNet (Geometry-Aware Relational Graph Network):**
-- Incorporates 3D geometric information
-- Edge types based on sequential, radius, and K-nearest neighbors
-- State-of-the-art for structure-based tasks
-- Supports both backbone and full-atom representations
+**GearNet（幾何感知關係圖網路）：**
+- 整合 3D 幾何資訊
+- 基於序列、半徑和 K 近鄰的邊類型
+- 基於結構任務的最先進水準
+- 支援骨架和全原子表示
 
-**GCN/GAT/GIN on Protein Graphs:**
-- Standard GNN architectures adapted for proteins
-- Flexible edge definitions (sequence, spatial, contact)
+**蛋白質圖上的 GCN/GAT/GIN：**
+- 適應蛋白質的標準 GNN 架構
+- 靈活的邊定義（序列、空間、接觸）
 
-**SchNet:**
-- Continuous-filter convolutions
-- Handles 3D coordinates directly
-- Good for structure prediction and protein-ligand binding
+**SchNet：**
+- 連續濾波卷積
+- 直接處理 3D 座標
+- 適合結構預測和蛋白質-配體結合
 
-### Feature-Based Models
+### 基於特徵的模型
 
-**Statistic Features:**
-- Amino acid composition
-- Sequence length statistics
-- Motif counts
+**統計特徵：**
+- 胺基酸組成
+- 序列長度統計
+- 基序計數
 
-**Physicochemical Features:**
-- Hydrophobicity scales
-- Charge properties
-- Secondary structure propensity
-- Molecular weight, pI
+**物理化學特徵：**
+- 疏水性尺度
+- 電荷性質
+- 二級結構傾向性
+- 分子量、等電點
 
-## Protein Graph Construction
+## 蛋白質圖構建
 
-### Edge Types
+### 邊類型
 
-**Sequential Edges:**
-- Connect adjacent residues in sequence
-- Captures primary structure
+**序列邊：**
+- 連接序列中相鄰殘基
+- 捕捉一級結構
 
-**Spatial Edges:**
-- K-nearest neighbors in 3D space
-- Radius cutoff (e.g., Cα atoms within 10Å)
-- Captures tertiary structure
+**空間邊：**
+- 3D 空間中的 K 近鄰
+- 半徑截斷（如 10Å 內的 Cα 原子）
+- 捕捉三級結構
 
-**Contact Edges:**
-- Based on heavy atom distances
-- Typically < 8Å threshold
+**接觸邊：**
+- 基於重原子距離
+- 通常 < 8Å 閾值
 
-### Node Features
+### 節點特徵
 
-**Residue Identity:**
-- One-hot encoding of 20 amino acids
-- Learned embeddings
+**殘基身份：**
+- 20 種胺基酸的獨熱編碼
+- 學習嵌入
 
-**Position Information:**
-- 3D coordinates (Cα, N, C, O)
-- Backbone angles (phi, psi, omega)
-- Relative spatial position encodings
+**位置資訊：**
+- 3D 座標（Cα、N、C、O）
+- 骨架角（phi、psi、omega）
+- 相對空間位置編碼
 
-**Physicochemical Properties:**
-- Hydrophobicity
-- Charge
-- Size
-- Secondary structure
+**物理化學性質：**
+- 疏水性
+- 電荷
+- 大小
+- 二級結構
 
-## Training Workflows
+## 訓練工作流程
 
-### Pre-training Strategies
+### 預訓練策略
 
-**Self-Supervised Pre-training:**
-- Masked residue prediction (like BERT)
-- Distance prediction between residues
-- Angle prediction (phi, psi, omega)
-- Dihedral angle prediction
-- Contact map prediction
+**自監督預訓練：**
+- 遮罩殘基預測（類似 BERT）
+- 殘基間距離預測
+- 角度預測（phi、psi、omega）
+- 二面角預測
+- 接觸圖預測
 
-**Pre-trained Model Usage:**
+**預訓練模型使用：**
 ```python
 from torchdrug import models
 
-# Load pre-trained ESM
+# 載入預訓練 ESM
 model = models.ESM(path="esm1b_t33_650M_UR50S.pt")
 
-# Fine-tune on downstream task
+# 在下游任務上微調
 task = tasks.PropertyPrediction(
     model, task=["stability"],
     criterion="mse", metric=["mae", "rmse"]
 )
 ```
 
-### Multi-Task Learning
+### 多任務學習
 
-Train on multiple related tasks simultaneously:
-- Joint prediction of function, localization, and stability
-- Improves generalization and data efficiency
-- Shares representations across tasks
+同時在多個相關任務上訓練：
+- 聯合預測功能、定位和穩定性
+- 提高泛化和資料效率
+- 跨任務共享表示
 
-### Best Practices
+### 最佳實踐
 
-**For Sequence-Only Tasks:**
-1. Start with pre-trained ESM or ProteinBERT
-2. Fine-tune with small learning rate (1e-5 to 1e-4)
-3. Use frozen embeddings for small datasets
-4. Apply dropout for regularization
+**僅序列任務：**
+1. 從預訓練 ESM 或 ProteinBERT 開始
+2. 使用小學習率微調（1e-5 到 1e-4）
+3. 對小型資料集使用凍結嵌入
+4. 應用 dropout 正則化
 
-**For Structure-Based Tasks:**
-1. Use GearNet with multiple edge types
-2. Include geometric features (angles, dihedrals)
-3. Pre-train on large structure databases
-4. Use data augmentation (rotations, crops)
+**基於結構的任務：**
+1. 使用帶多種邊類型的 GearNet
+2. 包含幾何特徵（角度、二面角）
+3. 在大型結構資料庫上預訓練
+4. 使用資料增強（旋轉、裁剪）
 
-**For Small Datasets:**
-1. Transfer learning from pre-trained models
-2. Multi-task learning with related tasks
-3. Data augmentation (sequence mutations, structure perturbations)
-4. Strong regularization (dropout, weight decay)
+**小型資料集：**
+1. 從預訓練模型遷移學習
+2. 與相關任務的多任務學習
+3. 資料增強（序列突變、結構擾動）
+4. 強正則化（dropout、權重衰減）
 
-## Common Use Cases
+## 常見使用案例
 
-### Enzyme Engineering
-- Predict enzyme activity from sequence
-- Design mutations to improve stability
-- Screen for desired catalytic properties
+### 酵素工程
+- 從序列預測酵素活性
+- 設計突變以提高穩定性
+- 篩選所需催化性質
 
-### Antibody Design
-- Predict binding affinity
-- Optimize antibody sequences
-- Predict immunogenicity
+### 抗體設計
+- 預測結合親和力
+- 最佳化抗體序列
+- 預測免疫原性
 
-### Drug Target Identification
-- Predict protein function
-- Identify druggable sites
-- Analyze protein-ligand interactions
+### 藥物標靶識別
+- 預測蛋白質功能
+- 識別可藥位點
+- 分析蛋白質-配體交互作用
 
-### Protein Structure Prediction
-- Predict secondary structure from sequence
-- Generate contact maps for tertiary structure
-- Refine AlphaFold predictions
+### 蛋白質結構預測
+- 從序列預測二級結構
+- 生成三級結構的接觸圖
+- 改進 AlphaFold 預測
 
-## Integration with Other Tools
+## 與其他工具的整合
 
-### AlphaFold Integration
+### AlphaFold 整合
 
-Load AlphaFold-predicted structures:
+載入 AlphaFold 預測的結構：
 ```python
 from torchdrug import data
 
-# Load AlphaFold structure
+# 載入 AlphaFold 結構
 protein = data.Protein.from_pdb("alphafold_structure.pdb")
 
-# Use in TorchDrug workflows
+# 在 TorchDrug 工作流程中使用
 ```
 
-### ESMFold Integration
+### ESMFold 整合
 
-Use ESMFold for structure prediction, then analyze with TorchDrug models.
+使用 ESMFold 進行結構預測，然後使用 TorchDrug 模型進行分析。
 
 ### Rosetta/PyRosetta
 
-Generate structures with Rosetta, import to TorchDrug for analysis.
+使用 Rosetta 生成結構，導入到 TorchDrug 進行分析。

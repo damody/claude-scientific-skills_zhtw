@@ -1,329 +1,329 @@
-# Experimental Design Patterns
-
-## Common Approaches to Testing Scientific Hypotheses
-
-This reference provides patterns and frameworks for designing experiments across scientific domains. Use these patterns to develop rigorous tests for generated hypotheses.
-
-**Note on Report Structure:** When generating hypothesis reports, mention only the key experimental approach (e.g., "in vivo knockout study" or "prospective cohort design") in the main text hypothesis boxes. Include comprehensive experimental protocols with full methods, controls, sample sizes, statistical approaches, feasibility assessments, and resource requirements in **Appendix B: Detailed Experimental Designs**.
-
-## Design Selection Framework
-
-Choose experimental approaches based on:
-- **Nature of hypothesis:** Mechanistic, causal, correlational, descriptive
-- **System studied:** In vitro, in vivo, computational, observational
-- **Feasibility:** Time, cost, ethics, technical capabilities
-- **Evidence needed:** Proof-of-concept, causal demonstration, quantitative relationship
-
-## Laboratory Experimental Designs
-
-### In Vitro Experiments
-
-**When to use:** Testing molecular, cellular, or biochemical mechanisms in controlled systems.
-
-**Common patterns:**
-
-#### 1. Dose-Response Studies
-- **Purpose:** Establish quantitative relationship between input and effect
-- **Design:** Test multiple concentrations/doses of intervention
-- **Key elements:**
-  - Negative control (no treatment)
-  - Positive control (known effective treatment)
-  - Multiple dose levels (typically 5-8 points)
-  - Technical replicates (≥3 per condition)
-  - Appropriate statistical analysis (curve fitting, IC50/EC50 determination)
-
-**Example application:**
-"To test if compound X inhibits enzyme Y, measure enzyme activity at 0, 1, 10, 100, 1000 nM compound X concentrations with n=3 replicates per dose."
-
-#### 2. Gain/Loss of Function Studies
-- **Purpose:** Establish causal role of specific component
-- **Design:** Add (overexpression) or remove (knockout/knockdown) component
-- **Key elements:**
-  - Wild-type control
-  - Gain-of-function condition (overexpression, constitutive activation)
-  - Loss-of-function condition (knockout, knockdown, inhibition)
-  - Rescue experiment (restore function to loss-of-function)
-  - Measure downstream effects
-
-**Example application:**
-"Test if protein X causes phenotype Y by: (1) knocking out X and observing phenotype loss, (2) overexpressing X and observing phenotype enhancement, (3) rescuing knockout with X re-expression."
-
-#### 3. Time-Course Studies
-- **Purpose:** Understand temporal dynamics and sequence of events
-- **Design:** Measure outcomes at multiple time points
-- **Key elements:**
-  - Time 0 baseline
-  - Early time points (capture rapid changes)
-  - Intermediate time points
-  - Late time points (steady state)
-  - Sufficient replication at each time point
-
-**Example application:**
-"Measure protein phosphorylation at 0, 5, 15, 30, 60, 120 minutes after stimulus to determine peak activation timing."
-
-### In Vivo Experiments
-
-**When to use:** Testing hypotheses in whole organisms to assess systemic, physiological, or behavioral effects.
-
-**Common patterns:**
-
-#### 4. Between-Subjects Designs
-- **Purpose:** Compare different groups receiving different treatments
-- **Design:** Randomly assign subjects to treatment groups
-- **Key elements:**
-  - Random assignment to groups
-  - Appropriate sample size (power analysis)
-  - Control group (vehicle, sham, or standard treatment)
-  - Blinding (single or double-blind)
-  - Standardized conditions across groups
-
-**Example application:**
-"Randomly assign 20 mice each to vehicle control or drug treatment groups, measure tumor size weekly for 8 weeks, with experimenters blinded to group assignment."
-
-#### 5. Within-Subjects (Repeated Measures) Designs
-- **Purpose:** Each subject serves as own control, reducing inter-subject variability
-- **Design:** Same subjects measured across multiple conditions/time points
-- **Key elements:**
-  - Baseline measurements
-  - Counterbalancing (if order effects possible)
-  - Washout periods (for sequential treatments)
-  - Appropriate repeated-measures statistics
-
-**Example application:**
-"Measure cognitive performance in same participants at baseline, after training intervention, and at 3-month follow-up."
-
-#### 6. Factorial Designs
-- **Purpose:** Test multiple factors and their interactions simultaneously
-- **Design:** Cross all levels of multiple independent variables
-- **Key elements:**
-  - Clear main effects and interactions
-  - Sufficient power for interaction tests
-  - Full factorial or fractional factorial as appropriate
-
-**Example application:**
-"2×2 design crossing genotype (WT vs. mutant) × treatment (vehicle vs. drug) to test whether drug effect depends on genotype."
-
-### Computational/Modeling Experiments
-
-**When to use:** Testing hypotheses about complex systems, making predictions, or when physical experiments are infeasible.
-
-#### 7. In Silico Simulations
-- **Purpose:** Model complex systems, test theoretical predictions
-- **Design:** Implement computational model and vary parameters
-- **Key elements:**
-  - Well-defined model with explicit assumptions
-  - Parameter sensitivity analysis
-  - Validation against known data
-  - Prediction generation for experimental testing
-
-**Example application:**
-"Build agent-based model of disease spread, vary transmission rate and intervention timing, compare predictions to empirical epidemic data."
-
-#### 8. Bioinformatics/Meta-Analysis
-- **Purpose:** Test hypotheses using existing datasets
-- **Design:** Analyze large-scale data or aggregate multiple studies
-- **Key elements:**
-  - Appropriate statistical corrections (multiple testing)
-  - Validation in independent datasets
-  - Control for confounds and batch effects
-  - Clear inclusion/exclusion criteria
-
-**Example application:**
-"Test if gene X expression correlates with survival across 15 cancer datasets (n>5000 patients total), using Cox regression with clinical covariates."
-
-## Observational Study Designs
-
-### When Physical Manipulation is Impossible or Unethical
-
-#### 9. Cross-Sectional Studies
-- **Purpose:** Examine associations at a single time point
-- **Design:** Measure variables of interest in population at one time
-- **Strengths:** Fast, inexpensive, can establish prevalence
-- **Limitations:** Cannot establish temporality or causation
-- **Key elements:**
-  - Representative sampling
-  - Standardized measurements
-  - Control for confounding variables
-  - Appropriate statistical analysis
-
-**Example application:**
-"Survey 1000 adults to test association between diet pattern and biomarker X, controlling for age, sex, BMI, and physical activity."
-
-#### 10. Cohort Studies (Prospective/Longitudinal)
-- **Purpose:** Establish temporal relationships and potentially causal associations
-- **Design:** Follow group over time, measuring exposures and outcomes
-- **Strengths:** Can establish temporality, calculate incidence
-- **Limitations:** Time-consuming, expensive, subject attrition
-- **Key elements:**
-  - Baseline exposure assessment
-  - Follow-up at defined intervals
-  - Minimize loss to follow-up
-  - Account for time-varying confounders
-
-**Example application:**
-"Follow 5000 initially healthy individuals for 10 years, testing if baseline vitamin D levels predict cardiovascular disease incidence."
-
-#### 11. Case-Control Studies
-- **Purpose:** Efficiently study rare outcomes by comparing cases to controls
-- **Design:** Identify cases with outcome, select matched controls, compare exposures
-- **Strengths:** Efficient for rare diseases, relatively quick
-- **Limitations:** Recall bias, selection bias, cannot calculate incidence
-- **Key elements:**
-  - Clear case definition
-  - Appropriate control selection (matching or statistical adjustment)
-  - Retrospective exposure assessment
-  - Control for confounding
-
-**Example application:**
-"Compare 200 patients with rare disease X to 400 matched controls without X, testing if early-life exposure Y differs between groups."
-
-## Clinical Trial Designs
-
-#### 12. Randomized Controlled Trials (RCTs)
-- **Purpose:** Gold standard for testing interventions in humans
-- **Design:** Randomly assign participants to treatment or control
-- **Key elements:**
-  - Randomization (simple, block, or stratified)
-  - Concealment of allocation
-  - Blinding (participants, providers, assessors)
-  - Intention-to-treat analysis
-  - Pre-registered protocol and analysis plan
-
-**Example application:**
-"Double-blind RCT: randomly assign 300 patients to receive drug X or placebo for 12 weeks, measure primary outcome of symptom improvement."
-
-#### 13. Crossover Trials
-- **Purpose:** Each participant receives all treatments in sequence
-- **Design:** Participants crossed over between treatments with washout
-- **Strengths:** Reduces inter-subject variability, requires fewer participants
-- **Limitations:** Order effects, requires reversible conditions, longer duration
-- **Key elements:**
-  - Adequate washout period
-  - Randomized treatment order
-  - Carryover effect assessment
-
-**Example application:**
-"Crossover trial: participants receive treatment A for 4 weeks, 2-week washout, then treatment B for 4 weeks (randomized order)."
-
-## Advanced Design Considerations
-
-### Sample Size and Statistical Power
-
-**Key questions:**
-- What effect size is meaningful to detect?
-- What statistical test will be used?
-- What alpha (significance level) and beta (power) are appropriate?
-- What is expected variability in the measurement?
-
-**General guidelines:**
-- Conduct formal power analysis before experiment
-- For pilot studies, n≥10 per group minimum
-- For definitive studies, aim for ≥80% power
-- Account for potential attrition in longitudinal studies
-
-### Controls
-
-**Types of controls:**
-- **Negative control:** No intervention (baseline)
-- **Positive control:** Known effective intervention (validates system)
-- **Vehicle control:** Delivery method without active ingredient
-- **Sham control:** Mimics intervention without active component (surgery, etc.)
-- **Historical control:** Prior data (weakest, avoid if possible)
-
-### Blinding
-
-**Levels:**
-- **Open-label:** No blinding (acceptable for objective measures)
-- **Single-blind:** Participants blinded (reduces placebo effects)
-- **Double-blind:** Participants and experimenters blinded (reduces bias in assessment)
-- **Triple-blind:** Participants, experimenters, and analysts blinded (strongest)
-
-### Replication
-
-**Technical replicates:** Repeated measurements on same sample
-- Reduce measurement error
-- Typically 2-3 replicates sufficient
-
-**Biological replicates:** Independent samples/subjects
-- Address biological variability
-- Critical for generalization
-- Minimum: n≥3, preferably n≥5-10 per group
-
-**Experimental replicates:** Repeat entire experiment
-- Validate findings across time, equipment, operators
-- Gold standard for confirming results
-
-### Confound Control
-
-**Strategies:**
-- **Randomization:** Distribute confounds evenly across groups
-- **Matching:** Pair similar subjects across conditions
-- **Blocking:** Group by confound, then randomize within blocks
-- **Statistical adjustment:** Measure confounds and adjust in analysis
-- **Standardization:** Keep conditions constant across groups
-
-## Selecting Appropriate Design
-
-**Decision tree:**
-
-1. **Can variables be manipulated?**
-   - Yes → Experimental design (RCT, lab experiment)
-   - No → Observational design (cohort, case-control, cross-sectional)
-
-2. **What is the system?**
-   - Cells/molecules → In vitro experiments
-   - Whole organisms → In vivo experiments
-   - Humans → Clinical trials or observational studies
-   - Complex systems → Computational modeling
-
-3. **What is the primary goal?**
-   - Mechanism → Gain/loss of function, dose-response
-   - Causation → RCT, cohort study with good controls
-   - Association → Cross-sectional, case-control
-   - Prediction → Modeling, machine learning
-   - Temporal dynamics → Time-course, longitudinal
-
-4. **What are the constraints?**
-   - Time limited → Cross-sectional, in vitro
-   - Budget limited → Computational, observational
-   - Ethical concerns → Observational, in vitro
-   - Rare outcome → Case-control, meta-analysis
-
-## Integrating Multiple Approaches
-
-Strong hypothesis testing often combines multiple designs:
-
-**Example: Testing if microbiome affects cognitive function**
-1. **Observational:** Cohort study showing association between microbiome composition and cognition
-2. **Animal model:** Germ-free mice receiving microbiome transplants show cognitive changes
-3. **Mechanism:** In vitro studies showing microbial metabolites affect neuronal function
-4. **Clinical trial:** RCT of probiotic intervention improving cognitive scores
-5. **Computational:** Model predicting which microbiome profiles should affect cognition
-
-**Triangulation approach:**
-- Each design addresses different aspects/limitations
-- Convergent evidence from multiple approaches strengthens causal claims
-- Start with observational/in vitro, then move to definitive causal tests
-
-## Common Pitfalls
-
-- Insufficient sample size (underpowered)
-- Lack of appropriate controls
-- Confounding variables not accounted for
-- Inappropriate statistical tests
-- P-hacking or multiple testing without correction
-- Lack of blinding when subjective assessments involved
-- Failure to replicate findings
-- Not pre-registering analysis plans (clinical trials)
-
-## Practical Application for Hypothesis Testing
-
-When designing experiments to test hypotheses:
-
-1. **Match design to hypothesis specifics:** Causal claims require experimental manipulation; associations can use observational designs
-2. **Start simple, then elaborate:** Pilot with simple design, then add complexity
-3. **Plan controls carefully:** Controls validate the system and isolate the specific effect
-4. **Consider feasibility:** Balance ideal design with practical constraints
-5. **Plan for multiple experiments:** Rarely does one experiment definitively test a hypothesis
-6. **Pre-specify analysis:** Decide statistical tests before data collection
-7. **Build in validation:** Independent replication, orthogonal methods, convergent evidence
+# 實驗設計模式
+
+## 測試科學假說的常見方法
+
+本參考提供跨科學領域設計實驗的模式和框架。使用這些模式為生成的假說開發嚴謹的測試。
+
+**關於報告結構的說明：** 在生成假說報告時，在主文假說框中僅提及關鍵實驗方法（例如「體內基因剔除研究」或「前瞻性世代研究設計」）。在 **附錄 B：詳細實驗設計** 中包含完整方法、對照、樣本量、統計方法、可行性評估和資源需求的全面實驗方案。
+
+## 設計選擇框架
+
+根據以下因素選擇實驗方法：
+- **假說性質：** 機制性、因果性、相關性、描述性
+- **研究系統：** 體外、體內、計算、觀察性
+- **可行性：** 時間、成本、倫理、技術能力
+- **所需證據：** 概念驗證、因果證明、量化關係
+
+## 實驗室實驗設計
+
+### 體外實驗
+
+**何時使用：** 在受控系統中測試分子、細胞或生化機制。
+
+**常見模式：**
+
+#### 1. 劑量-反應研究
+- **目的：** 建立輸入和效應之間的量化關係
+- **設計：** 測試多個介入濃度/劑量
+- **關鍵要素：**
+  - 陰性對照（無處理）
+  - 陽性對照（已知有效的處理）
+  - 多個劑量水平（通常 5-8 點）
+  - 技術重複（每個條件 ≥3）
+  - 適當的統計分析（曲線擬合、IC50/EC50 測定）
+
+**應用範例：**
+「為測試化合物 X 是否抑制酵素 Y，在 0、1、10、100、1000 nM 化合物 X 濃度下測量酵素活性，每個劑量 n=3 重複。」
+
+#### 2. 功能獲得/喪失研究
+- **目的：** 建立特定組件的因果角色
+- **設計：** 添加（過表達）或移除（基因剔除/基因靜默）組件
+- **關鍵要素：**
+  - 野生型對照
+  - 功能獲得條件（過表達、組成性活化）
+  - 功能喪失條件（基因剔除、基因靜默、抑制）
+  - 挽救實驗（在功能喪失後恢復功能）
+  - 測量下游效應
+
+**應用範例：**
+「通過以下方式測試蛋白質 X 是否導致表型 Y：(1) 剔除 X 並觀察表型消失，(2) 過表達 X 並觀察表型增強，(3) 通過 X 再表達挽救剔除。」
+
+#### 3. 時程研究
+- **目的：** 理解時間動態和事件序列
+- **設計：** 在多個時間點測量結果
+- **關鍵要素：**
+  - 時間 0 基線
+  - 早期時間點（捕捉快速變化）
+  - 中間時間點
+  - 晚期時間點（穩態）
+  - 每個時間點有足夠的重複
+
+**應用範例：**
+「在刺激後 0、5、15、30、60、120 分鐘測量蛋白質磷酸化以確定峰值活化時間。」
+
+### 體內實驗
+
+**何時使用：** 在完整生物體中測試假說以評估系統性、生理性或行為效應。
+
+**常見模式：**
+
+#### 4. 受試者間設計
+- **目的：** 比較接受不同處理的不同組別
+- **設計：** 將受試者隨機分配到處理組
+- **關鍵要素：**
+  - 隨機分配到組別
+  - 適當的樣本量（統計效力分析）
+  - 對照組（載體、假處理或標準處理）
+  - 盲化（單盲或雙盲）
+  - 各組間標準化條件
+
+**應用範例：**
+「將 20 隻小鼠隨機分配到載體對照組或藥物處理組，每週測量腫瘤大小持續 8 週，實驗者對組別分配盲化。」
+
+#### 5. 受試者內（重複測量）設計
+- **目的：** 每個受試者作為自己的對照，減少個體間變異
+- **設計：** 在多個條件/時間點測量相同受試者
+- **關鍵要素：**
+  - 基線測量
+  - 平衡（如果可能有順序效應）
+  - 洗脫期（用於順序處理）
+  - 適當的重複測量統計
+
+**應用範例：**
+「在基線、訓練介入後和 3 個月追蹤時測量相同參與者的認知表現。」
+
+#### 6. 因子設計
+- **目的：** 同時測試多個因素及其交互作用
+- **設計：** 交叉多個自變項的所有水平
+- **關鍵要素：**
+  - 清晰的主效應和交互作用
+  - 對交互作用測試有足夠的統計效力
+  - 適當的完全因子或部分因子設計
+
+**應用範例：**
+「2×2 設計交叉基因型（野生型 vs. 突變型）× 處理（載體 vs. 藥物）以測試藥物效應是否取決於基因型。」
+
+### 計算/建模實驗
+
+**何時使用：** 測試關於複雜系統的假說、進行預測、或當物理實驗不可行時。
+
+#### 7. 電腦模擬
+- **目的：** 對複雜系統建模、測試理論預測
+- **設計：** 實現計算模型並改變參數
+- **關鍵要素：**
+  - 具有明確假設的定義良好的模型
+  - 參數敏感性分析
+  - 對照已知資料進行驗證
+  - 生成用於實驗測試的預測
+
+**應用範例：**
+「建立疾病傳播的代理人基礎模型，改變傳播率和介入時間，將預測與經驗流行病資料比較。」
+
+#### 8. 生物資訊學/統合分析
+- **目的：** 使用現有資料集測試假說
+- **設計：** 分析大規模資料或彙總多個研究
+- **關鍵要素：**
+  - 適當的統計校正（多重測試）
+  - 在獨立資料集中驗證
+  - 控制混淆因素和批次效應
+  - 明確的納入/排除標準
+
+**應用範例：**
+「測試基因 X 表達是否在 15 個癌症資料集（總 n>5000 患者）中與存活率相關，使用包含臨床協變數的 Cox 迴歸。」
+
+## 觀察性研究設計
+
+### 當無法或不道德進行物理操作時
+
+#### 9. 橫斷面研究
+- **目的：** 在單一時間點檢查關聯
+- **設計：** 在單一時間點測量群體中的感興趣變項
+- **優勢：** 快速、成本低、可建立盛行率
+- **限制：** 無法建立時間性或因果關係
+- **關鍵要素：**
+  - 代表性抽樣
+  - 標準化測量
+  - 控制混淆變項
+  - 適當的統計分析
+
+**應用範例：**
+「調查 1000 名成人以測試飲食模式與生物標記 X 之間的關聯，控制年齡、性別、BMI 和體能活動。」
+
+#### 10. 世代研究（前瞻性/縱向）
+- **目的：** 建立時間關係和潛在的因果關聯
+- **設計：** 追蹤群體一段時間，測量暴露和結果
+- **優勢：** 可建立時間性、計算發生率
+- **限制：** 耗時、昂貴、受試者流失
+- **關鍵要素：**
+  - 基線暴露評估
+  - 在定義的間隔進行追蹤
+  - 最小化追蹤流失
+  - 考慮隨時間變化的混淆因素
+
+**應用範例：**
+「追蹤 5000 名最初健康的個體 10 年，測試基線維生素 D 水平是否預測心血管疾病發生率。」
+
+#### 11. 病例對照研究
+- **目的：** 通過比較病例和對照來有效研究罕見結果
+- **設計：** 識別具有結果的病例，選擇配對對照，比較暴露
+- **優勢：** 對罕見疾病有效、相對快速
+- **限制：** 回憶偏誤、選擇偏誤、無法計算發生率
+- **關鍵要素：**
+  - 明確的病例定義
+  - 適當的對照選擇（配對或統計調整）
+  - 回顧性暴露評估
+  - 控制混淆因素
+
+**應用範例：**
+「比較 200 名患有罕見疾病 X 的患者與 400 名無 X 的配對對照，測試早期生活暴露 Y 是否在組間不同。」
+
+## 臨床試驗設計
+
+#### 12. 隨機對照試驗（RCT）
+- **目的：** 測試人類介入的黃金標準
+- **設計：** 將參與者隨機分配到處理組或對照組
+- **關鍵要素：**
+  - 隨機化（簡單、區組或分層）
+  - 分配隱藏
+  - 盲化（參與者、提供者、評估者）
+  - 意向治療分析
+  - 預先註冊的方案和分析計劃
+
+**應用範例：**
+「雙盲 RCT：將 300 名患者隨機分配接受藥物 X 或安慰劑 12 週，測量症狀改善的主要結果。」
+
+#### 13. 交叉試驗
+- **目的：** 每位參與者依序接受所有處理
+- **設計：** 參與者在處理之間交叉並有洗脫期
+- **優勢：** 減少個體間變異、需要較少參與者
+- **限制：** 順序效應、需要可逆條件、持續時間較長
+- **關鍵要素：**
+  - 足夠的洗脫期
+  - 隨機化處理順序
+  - 遺留效應評估
+
+**應用範例：**
+「交叉試驗：參與者接受處理 A 4 週，2 週洗脫期，然後處理 B 4 週（隨機順序）。」
+
+## 進階設計考量
+
+### 樣本量和統計效力
+
+**關鍵問題：**
+- 需要偵測什麼有意義的效應量？
+- 將使用什麼統計檢定？
+- 什麼 alpha（顯著性水準）和 beta（效力）是適當的？
+- 測量的預期變異是什麼？
+
+**一般指南：**
+- 在實驗前進行正式的效力分析
+- 對於試驗研究，每組最少 n≥10
+- 對於確定性研究，目標是 ≥80% 效力
+- 在縱向研究中考慮潛在的流失
+
+### 對照
+
+**對照類型：**
+- **陰性對照：** 無介入（基線）
+- **陽性對照：** 已知有效的介入（驗證系統）
+- **載體對照：** 不含活性成分的遞送方法
+- **假處理對照：** 模擬介入但無活性成分（手術等）
+- **歷史對照：** 先前資料（最弱，盡量避免）
+
+### 盲化
+
+**層級：**
+- **開放標籤：** 無盲化（對客觀測量可接受）
+- **單盲：** 參與者盲化（減少安慰劑效應）
+- **雙盲：** 參與者和實驗者盲化（減少評估偏誤）
+- **三盲：** 參與者、實驗者和分析師盲化（最強）
+
+### 重複
+
+**技術重複：** 對相同樣本的重複測量
+- 減少測量誤差
+- 通常 2-3 次重複足夠
+
+**生物學重複：** 獨立樣本/受試者
+- 處理生物變異
+- 對於推廣至關重要
+- 最少：每組 n≥3，最好 n≥5-10
+
+**實驗重複：** 重複整個實驗
+- 跨時間、設備、操作者驗證發現
+- 確認結果的黃金標準
+
+### 混淆因素控制
+
+**策略：**
+- **隨機化：** 在組間均勻分布混淆因素
+- **配對：** 在條件間配對類似受試者
+- **區組：** 按混淆因素分組，然後在區組內隨機化
+- **統計調整：** 測量混淆因素並在分析中調整
+- **標準化：** 在組間保持條件恆定
+
+## 選擇適當設計
+
+**決策樹：**
+
+1. **變項可以被操縱嗎？**
+   - 是 → 實驗設計（RCT、實驗室實驗）
+   - 否 → 觀察性設計（世代、病例對照、橫斷面）
+
+2. **研究系統是什麼？**
+   - 細胞/分子 → 體外實驗
+   - 完整生物體 → 體內實驗
+   - 人類 → 臨床試驗或觀察性研究
+   - 複雜系統 → 計算建模
+
+3. **主要目標是什麼？**
+   - 機制 → 功能獲得/喪失、劑量-反應
+   - 因果關係 → RCT、具有良好對照的世代研究
+   - 關聯 → 橫斷面、病例對照
+   - 預測 → 建模、機器學習
+   - 時間動態 → 時程、縱向
+
+4. **有什麼限制？**
+   - 時間有限 → 橫斷面、體外
+   - 預算有限 → 計算、觀察性
+   - 倫理顧慮 → 觀察性、體外
+   - 罕見結果 → 病例對照、統合分析
+
+## 整合多種方法
+
+強大的假說測試通常結合多種設計：
+
+**範例：測試微生物群是否影響認知功能**
+1. **觀察性：** 世代研究顯示微生物群組成與認知之間的關聯
+2. **動物模型：** 無菌小鼠接受微生物群移植顯示認知變化
+3. **機制：** 體外研究顯示微生物代謝物影響神經元功能
+4. **臨床試驗：** 益生菌介入改善認知分數的 RCT
+5. **計算：** 預測哪些微生物群譜應該影響認知的模型
+
+**三角驗證方法：**
+- 每種設計處理不同方面/限制
+- 來自多種方法的收斂證據加強因果主張
+- 從觀察性/體外開始，然後轉向確定性因果測試
+
+## 常見陷阱
+
+- 樣本量不足（效力不足）
+- 缺乏適當對照
+- 未考慮混淆變項
+- 不適當的統計檢定
+- P 值操縱或未校正的多重測試
+- 涉及主觀評估時缺乏盲化
+- 未能重複發現
+- 未預先註冊分析計劃（臨床試驗）
+
+## 假說測試的實際應用
+
+在設計測試假說的實驗時：
+
+1. **將設計與假說具體內容配對：** 因果主張需要實驗操作；關聯可以使用觀察性設計
+2. **從簡單開始，然後精煉：** 先用簡單設計試驗，然後增加複雜性
+3. **仔細規劃對照：** 對照驗證系統並隔離特定效應
+4. **考慮可行性：** 在理想設計和實際限制之間取得平衡
+5. **規劃多個實驗：** 很少有單一實驗能確定性地測試假說
+6. **預先指定分析：** 在資料收集前決定統計檢定
+7. **建立驗證：** 獨立重複、正交方法、收斂證據

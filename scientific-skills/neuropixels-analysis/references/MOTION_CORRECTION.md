@@ -1,30 +1,30 @@
-# Motion/Drift Correction Reference
+# 運動/漂移修正參考
 
-Mechanical drift during acute probe insertion is a major challenge for Neuropixels recordings. This guide covers detection, estimation, and correction of motion artifacts.
+急性探針插入期間的機械漂移是 Neuropixels 記錄的主要挑戰。本指南涵蓋運動偽影的偵測、估計和修正。
 
-## Why Motion Correction Matters
+## 為何運動修正很重要
 
-- Neuropixels probes can drift 10-100+ μm during recording
-- Uncorrected drift leads to:
-  - Units appearing/disappearing mid-recording
-  - Waveform amplitude changes
-  - Incorrect spike-unit assignments
-  - Reduced unit yield
+- Neuropixels 探針在記錄期間可能漂移 10-100+ μm
+- 未修正的漂移導致：
+  - 單元在記錄中途出現/消失
+  - 波形振幅變化
+  - 錯誤的尖峰-單元分配
+  - 單元產量降低
 
-## Detection: Check Before Sorting
+## 偵測：分選前檢查
 
-**Always visualize drift before running spike sorting!**
+**務必在執行尖峰分選前視覺化漂移！**
 
 ```python
 import spikeinterface.full as si
 from spikeinterface.sortingcomponents.peak_detection import detect_peaks
 from spikeinterface.sortingcomponents.peak_localization import localize_peaks
 
-# Preprocess first (don't whiten - affects peak localization)
+# 先預處理（不要白化 - 會影響峰值定位）
 rec = si.highpass_filter(recording, freq_min=400.)
 rec = si.common_reference(rec, operator='median', reference='global')
 
-# Detect peaks
+# 偵測峰值
 noise_levels = si.get_noise_levels(rec, return_in_uV=False)
 peaks = detect_peaks(
     rec,
@@ -37,7 +37,7 @@ peaks = detect_peaks(
     progress_bar=True
 )
 
-# Localize peaks
+# 定位峰值
 peak_locations = localize_peaks(
     rec, peaks,
     method='center_of_mass',
@@ -45,48 +45,48 @@ peak_locations = localize_peaks(
     chunk_duration='1s'
 )
 
-# Visualize drift
+# 視覺化漂移
 si.plot_drift_raster_map(
     peaks=peaks,
     peak_locations=peak_locations,
     recording=rec,
-    clim=(-200, 0)  # Adjust color limits
+    clim=(-200, 0)  # 調整顏色範圍
 )
 ```
 
-### Interpreting Drift Plots
+### 解讀漂移圖
 
-| Pattern | Interpretation | Action |
+| 模式 | 解釋 | 動作 |
 |---------|---------------|--------|
-| Horizontal bands, stable | No significant drift | Skip correction |
-| Diagonal bands (slow) | Gradual settling drift | Use motion correction |
-| Rapid jumps | Brain pulsation or movement | Use non-rigid correction |
-| Chaotic patterns | Severe instability | Consider discarding segment |
+| 水平條帶，穩定 | 無顯著漂移 | 跳過修正 |
+| 對角條帶（緩慢） | 逐漸沉降漂移 | 使用運動修正 |
+| 快速跳躍 | 腦脈動或移動 | 使用非剛性修正 |
+| 混亂模式 | 嚴重不穩定 | 考慮捨棄該段 |
 
-## Motion Correction Methods
+## 運動修正方法
 
-### Quick Correction (Recommended Start)
+### 快速修正（建議起點）
 
 ```python
-# Simple one-liner with preset
+# 使用預設的單行指令
 rec_corrected = si.correct_motion(
     recording=rec,
     preset='nonrigid_fast_and_accurate'
 )
 ```
 
-### Available Presets
+### 可用預設
 
-| Preset | Speed | Accuracy | Best For |
+| 預設 | 速度 | 準確度 | 適用情況 |
 |--------|-------|----------|----------|
-| `rigid_fast` | Fast | Low | Quick check, small drift |
-| `kilosort_like` | Medium | Good | Kilosort-compatible results |
-| `nonrigid_accurate` | Slow | High | Publication-quality |
-| `nonrigid_fast_and_accurate` | Medium | High | **Recommended default** |
-| `dredge` | Slow | Highest | Best results, complex drift |
-| `dredge_fast` | Medium | High | DREDge with less compute |
+| `rigid_fast` | 快 | 低 | 快速檢查、小漂移 |
+| `kilosort_like` | 中 | 良好 | 與 Kilosort 相容的結果 |
+| `nonrigid_accurate` | 慢 | 高 | 發表品質 |
+| `nonrigid_fast_and_accurate` | 中 | 高 | **建議預設** |
+| `dredge` | 慢 | 最高 | 最佳結果、複雜漂移 |
+| `dredge_fast` | 中 | 高 | DREDge 低計算量版 |
 
-### Full Control Pipeline
+### 完整控制流程
 
 ```python
 from spikeinterface.sortingcomponents.motion import (
@@ -94,21 +94,21 @@ from spikeinterface.sortingcomponents.motion import (
     interpolate_motion
 )
 
-# Step 1: Estimate motion
+# 步驟 1：估計運動
 motion, temporal_bins, spatial_bins = estimate_motion(
     rec,
     peaks,
     peak_locations,
     method='decentralized',
     direction='y',
-    rigid=False,          # Non-rigid for Neuropixels
-    win_step_um=50,       # Spatial window step
-    win_sigma_um=150,     # Spatial smoothing
-    bin_s=2.0,            # Temporal bin size
+    rigid=False,          # 對 Neuropixels 使用非剛性
+    win_step_um=50,       # 空間視窗步進
+    win_sigma_um=150,     # 空間平滑
+    bin_s=2.0,            # 時間 bin 大小
     progress_bar=True
 )
 
-# Step 2: Visualize motion estimate
+# 步驟 2：視覺化運動估計
 si.plot_motion(
     motion,
     temporal_bins,
@@ -116,7 +116,7 @@ si.plot_motion(
     recording=rec
 )
 
-# Step 3: Apply correction via interpolation
+# 步驟 3：透過插值套用修正
 rec_corrected = interpolate_motion(
     recording=rec,
     motion=motion,
@@ -126,34 +126,34 @@ rec_corrected = interpolate_motion(
 )
 ```
 
-### Save Motion Estimate
+### 儲存運動估計
 
 ```python
-# Save for later use
+# 儲存以供稍後使用
 import numpy as np
 np.savez('motion_estimate.npz',
          motion=motion,
          temporal_bins=temporal_bins,
          spatial_bins=spatial_bins)
 
-# Load later
+# 稍後載入
 data = np.load('motion_estimate.npz')
 motion = data['motion']
 temporal_bins = data['temporal_bins']
 spatial_bins = data['spatial_bins']
 ```
 
-## DREDge: State-of-the-Art Method
+## DREDge：最先進的方法
 
-DREDge (Decentralized Registration of Electrophysiology Data) is currently the best-performing motion correction method.
+DREDge（Decentralized Registration of Electrophysiology Data，電生理資料分散式配準）是目前表現最佳的運動修正方法。
 
-### Using DREDge Preset
+### 使用 DREDge 預設
 
 ```python
-# AP-band motion estimation
+# AP 頻帶運動估計
 rec_corrected = si.correct_motion(rec, preset='dredge')
 
-# Or compute explicitly
+# 或明確計算
 motion, motion_info = si.compute_motion(
     rec,
     preset='dredge',
@@ -163,159 +163,159 @@ motion, motion_info = si.compute_motion(
 )
 ```
 
-### LFP-Based Motion Estimation
+### 基於 LFP 的運動估計
 
-For very fast drift or when AP-band estimation fails:
+對於非常快速的漂移或 AP 頻帶估計失敗時：
 
 ```python
-# Load LFP stream
+# 載入 LFP 串流
 lfp = si.read_spikeglx('/path/to/data', stream_name='imec0.lf')
 
-# Estimate motion from LFP (faster, handles rapid drift)
+# 從 LFP 估計運動（更快，處理快速漂移）
 motion_lfp, motion_info = si.compute_motion(
     lfp,
     preset='dredge_lfp',
     output_motion_info=True
 )
 
-# Apply to AP recording
+# 套用至 AP 記錄
 rec_corrected = interpolate_motion(
-    recording=rec,  # AP recording
+    recording=rec,  # AP 記錄
     motion=motion_lfp,
     temporal_bins=motion_info['temporal_bins'],
     spatial_bins=motion_info['spatial_bins']
 )
 ```
 
-## Integration with Spike Sorting
+## 與尖峰分選整合
 
-### Option 1: Pre-correction (Recommended)
+### 選項 1：預先修正（建議）
 
 ```python
-# Correct before sorting
+# 分選前修正
 rec_corrected = si.correct_motion(rec, preset='nonrigid_fast_and_accurate')
 
-# Save corrected recording
+# 儲存修正後的記錄
 rec_corrected = rec_corrected.save(folder='preprocessed_motion_corrected/',
                                     format='binary', n_jobs=8)
 
-# Run spike sorting on corrected data
+# 在修正後的資料上執行尖峰分選
 sorting = si.run_sorter('kilosort4', rec_corrected, output_folder='ks4/')
 ```
 
-### Option 2: Let Kilosort Handle It
+### 選項 2：讓 Kilosort 處理
 
-Kilosort 2.5+ has built-in drift correction:
+Kilosort 2.5+ 有內建漂移修正：
 
 ```python
 sorting = si.run_sorter(
     'kilosort4',
-    rec,  # Not motion corrected
+    rec,  # 未經運動修正
     output_folder='ks4/',
-    nblocks=5,  # Non-rigid blocks for drift correction
-    do_correction=True  # Enable Kilosort's drift correction
+    nblocks=5,  # 用於漂移修正的非剛性區塊
+    do_correction=True  # 啟用 Kilosort 的漂移修正
 )
 ```
 
-### Option 3: Post-hoc Correction
+### 選項 3：事後修正
 
 ```python
-# Sort first
+# 先分選
 sorting = si.run_sorter('kilosort4', rec, output_folder='ks4/')
 
-# Then estimate motion from sorted spikes
-# (More accurate as it uses actual spike times)
+# 然後從已分選的尖峰估計運動
+#（更準確，因為使用實際尖峰時間）
 from spikeinterface.sortingcomponents.motion import estimate_motion_from_sorting
 
 motion = estimate_motion_from_sorting(sorting, rec)
 ```
 
-## Parameters Deep Dive
+## 參數深入探討
 
-### Peak Detection
+### 峰值偵測
 
 ```python
 peaks = detect_peaks(
     rec,
-    method='locally_exclusive',  # Best for dense probes
+    method='locally_exclusive',  # 最適合高密度探針
     noise_levels=noise_levels,
-    detect_threshold=5,          # Lower = more peaks (noisier estimate)
-    radius_um=50.,               # Exclusion radius
-    exclude_sweep_ms=0.1,        # Temporal exclusion
+    detect_threshold=5,          # 較低 = 更多峰值（較嘈雜的估計）
+    radius_um=50.,               # 排除半徑
+    exclude_sweep_ms=0.1,        # 時間排除
 )
 ```
 
-### Motion Estimation
+### 運動估計
 
 ```python
 motion = estimate_motion(
     rec, peaks, peak_locations,
-    method='decentralized',      # 'decentralized' or 'iterative_template'
-    direction='y',               # Along probe axis
-    rigid=False,                 # False for non-rigid
-    bin_s=2.0,                   # Temporal resolution (seconds)
-    win_step_um=50,              # Spatial window step
-    win_sigma_um=150,            # Spatial smoothing sigma
-    margin_um=0,                 # Margin at probe edges
-    win_scale_um=150,            # Window scale for weights
+    method='decentralized',      # 'decentralized' 或 'iterative_template'
+    direction='y',               # 沿探針軸
+    rigid=False,                 # False 為非剛性
+    bin_s=2.0,                   # 時間解析度（秒）
+    win_step_um=50,              # 空間視窗步進
+    win_sigma_um=150,            # 空間平滑 sigma
+    margin_um=0,                 # 探針邊緣邊距
+    win_scale_um=150,            # 權重的視窗尺度
 )
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Over-correction (Wavy Patterns)
+### 過度修正（波浪狀模式）
 
 ```python
-# Increase temporal smoothing
-motion = estimate_motion(..., bin_s=5.0)  # Larger bins
+# 增加時間平滑
+motion = estimate_motion(..., bin_s=5.0)  # 較大的 bin
 
-# Or use rigid correction for small drift
+# 或對小漂移使用剛性修正
 motion = estimate_motion(..., rigid=True)
 ```
 
-### Under-correction (Drift Remains)
+### 修正不足（漂移仍存在）
 
 ```python
-# Decrease spatial window for finer non-rigid estimate
+# 減少空間視窗以獲得更精細的非剛性估計
 motion = estimate_motion(..., win_step_um=25, win_sigma_um=75)
 
-# Use more peaks
-peaks = detect_peaks(..., detect_threshold=4)  # Lower threshold
+# 使用更多峰值
+peaks = detect_peaks(..., detect_threshold=4)  # 較低閾值
 ```
 
-### Edge Artifacts
+### 邊緣偽影
 
 ```python
 rec_corrected = interpolate_motion(
     rec, motion, temporal_bins, spatial_bins,
-    border_mode='force_extrapolate',  # or 'remove_channels'
+    border_mode='force_extrapolate',  # 或 'remove_channels'
     spatial_interpolation_method='kriging'
 )
 ```
 
-## Validation
+## 驗證
 
-After correction, re-visualize to confirm:
+修正後，重新視覺化以確認：
 
 ```python
-# Re-detect peaks on corrected recording
+# 在修正後的記錄上重新偵測峰值
 peaks_corrected = detect_peaks(rec_corrected, ...)
 peak_locations_corrected = localize_peaks(rec_corrected, peaks_corrected, ...)
 
-# Plot before/after comparison
+# 繪製前/後比較
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
-# Before
+# 修正前
 si.plot_drift_raster_map(peaks, peak_locations, rec, ax=axes[0])
 axes[0].set_title('Before Correction')
 
-# After
+# 修正後
 si.plot_drift_raster_map(peaks_corrected, peak_locations_corrected,
                          rec_corrected, ax=axes[1])
 axes[1].set_title('After Correction')
 ```
 
-## References
+## 參考資料
 
 - [SpikeInterface Motion Correction Docs](https://spikeinterface.readthedocs.io/en/stable/modules/motion_correction.html)
 - [Handle Drift Tutorial](https://spikeinterface.readthedocs.io/en/stable/how_to/handle_drift.html)

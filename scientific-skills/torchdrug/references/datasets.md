@@ -1,380 +1,380 @@
-# Datasets Reference
+# 資料集參考
 
-## Overview
+## 概述
 
-TorchDrug provides 40+ curated datasets across multiple domains: molecular property prediction, protein modeling, knowledge graph reasoning, and retrosynthesis. All datasets support lazy loading, automatic downloading, and customizable feature extraction.
+TorchDrug 提供 40 多個跨多個領域的精選資料集：分子性質預測、蛋白質建模、知識圖譜推理和逆合成。所有資料集支援延遲載入、自動下載和可自訂的特徵提取。
 
-## Molecular Property Prediction Datasets
+## 分子性質預測資料集
 
-### Drug Discovery Classification
+### 藥物發現分類
 
-| Dataset | Size | Task | Classes | Description |
+| 資料集 | 大小 | 任務 | 類別 | 描述 |
 |---------|------|------|---------|-------------|
-| **BACE** | 1,513 | Binary | 2 | β-secretase inhibition for Alzheimer's |
-| **BBBP** | 2,039 | Binary | 2 | Blood-brain barrier penetration |
-| **HIV** | 41,127 | Binary | 2 | Inhibition of HIV replication |
-| **ClinTox** | 1,478 | Multi-label | 2 | Clinical trial toxicity |
-| **SIDER** | 1,427 | Multi-label | 27 | Side effects by system organ class |
-| **Tox21** | 7,831 | Multi-label | 12 | Toxicity across 12 targets |
-| **ToxCast** | 8,576 | Multi-label | 617 | High-throughput toxicology |
-| **MUV** | 93,087 | Multi-label | 17 | Unbiased validation for screening |
+| **BACE** | 1,513 | 二元 | 2 | 阿茲海默症的 β-分泌酶抑制 |
+| **BBBP** | 2,039 | 二元 | 2 | 血腦屏障穿透 |
+| **HIV** | 41,127 | 二元 | 2 | HIV 複製抑制 |
+| **ClinTox** | 1,478 | 多標籤 | 2 | 臨床試驗毒性 |
+| **SIDER** | 1,427 | 多標籤 | 27 | 按系統器官分類的副作用 |
+| **Tox21** | 7,831 | 多標籤 | 12 | 12 個標靶的毒性 |
+| **ToxCast** | 8,576 | 多標籤 | 617 | 高通量毒理學 |
+| **MUV** | 93,087 | 多標籤 | 17 | 篩選的無偏驗證 |
 
-**Key Features:**
-- All use scaffold splits for realistic evaluation
-- Binary classification metrics: AUROC, AUPRC
-- Multi-label handles missing values
+**關鍵特徵：**
+- 全部使用骨架分割進行現實評估
+- 二元分類指標：AUROC、AUPRC
+- 多標籤處理缺失值
 
-**Use Cases:**
-- Drug safety prediction
-- Virtual screening
-- ADMET property prediction
+**使用案例：**
+- 藥物安全預測
+- 虛擬篩選
+- ADMET 性質預測
 
-### Drug Discovery Regression
+### 藥物發現迴歸
 
-| Dataset | Size | Property | Units | Description |
+| 資料集 | 大小 | 性質 | 單位 | 描述 |
 |---------|------|----------|-------|-------------|
-| **ESOL** | 1,128 | Solubility | log(mol/L) | Water solubility |
-| **FreeSolv** | 642 | Hydration | kcal/mol | Hydration free energy |
-| **Lipophilicity** | 4,200 | LogD | - | Octanol/water distribution |
-| **SAMPL** | 643 | Solvation | kcal/mol | Solvation free energies |
+| **ESOL** | 1,128 | 溶解度 | log(mol/L) | 水溶性 |
+| **FreeSolv** | 642 | 水合 | kcal/mol | 水合自由能 |
+| **Lipophilicity** | 4,200 | LogD | - | 辛醇/水分配係數 |
+| **SAMPL** | 643 | 溶劑化 | kcal/mol | 溶劑化自由能 |
 
-**Metrics:** MAE, RMSE, R²
-**Use Cases:** ADME optimization, lead optimization
+**指標：**MAE、RMSE、R²
+**使用案例：**ADME 最佳化、先導化合物最佳化
 
-### Quantum Chemistry
+### 量子化學
 
-| Dataset | Size | Properties | Description |
+| 資料集 | 大小 | 性質 | 描述 |
 |---------|------|------------|-------------|
-| **QM7** | 7,165 | 1 | Atomization energy |
-| **QM8** | 21,786 | 12 | Electronic spectra, excited states |
-| **QM9** | 133,885 | 12 | Geometric, energetic, electronic, thermodynamic |
-| **PCQM4M** | 3.8M | 1 | Large-scale HOMO-LUMO gap |
+| **QM7** | 7,165 | 1 | 原子化能 |
+| **QM8** | 21,786 | 12 | 電子光譜、激發態 |
+| **QM9** | 133,885 | 12 | 幾何、能量、電子、熱力學 |
+| **PCQM4M** | 3.8M | 1 | 大規模 HOMO-LUMO 能隙 |
 
-**Properties (QM9):**
-- Dipole moment
-- Isotropic polarizability
-- HOMO/LUMO energies
-- Internal energy, enthalpy, free energy
-- Heat capacity
-- Electronic spatial extent
+**性質（QM9）：**
+- 偶極矩
+- 各向同性極化率
+- HOMO/LUMO 能量
+- 內能、焓、自由能
+- 熱容
+- 電子空間範圍
 
-**Use Cases:**
-- Quantum property prediction
-- Method development benchmarking
-- Pre-training molecular models
+**使用案例：**
+- 量子性質預測
+- 方法開發基準測試
+- 分子模型預訓練
 
-### Large Molecule Databases
+### 大型分子資料庫
 
-| Dataset | Size | Description | Use Case |
+| 資料集 | 大小 | 描述 | 使用案例 |
 |---------|------|-------------|----------|
-| **ZINC250k** | 250,000 | Drug-like molecules | Generative model training |
-| **ZINC2M** | 2,000,000 | Drug-like molecules | Large-scale pre-training |
-| **ChEMBL** | Millions | Bioactive molecules | Property prediction, generation |
+| **ZINC250k** | 250,000 | 類藥分子 | 生成模型訓練 |
+| **ZINC2M** | 2,000,000 | 類藥分子 | 大規模預訓練 |
+| **ChEMBL** | 百萬級 | 生物活性分子 | 性質預測、生成 |
 
-## Protein Datasets
+## 蛋白質資料集
 
-### Function Prediction
+### 功能預測
 
-| Dataset | Size | Task | Classes | Description |
+| 資料集 | 大小 | 任務 | 類別 | 描述 |
 |---------|------|------|---------|-------------|
-| **EnzymeCommission** | 17,562 | Multi-class | 7 levels | EC number classification |
-| **GeneOntology** | 46,796 | Multi-label | 489 | GO term prediction (BP/MF/CC) |
-| **BetaLactamase** | 5,864 | Regression | - | Enzyme activity levels |
-| **Fluorescence** | 54,025 | Regression | - | GFP fluorescence intensity |
-| **Stability** | 53,614 | Regression | - | Thermostability (ΔΔG) |
+| **EnzymeCommission** | 17,562 | 多類 | 7 級 | EC 編號分類 |
+| **GeneOntology** | 46,796 | 多標籤 | 489 | GO 術語預測（BP/MF/CC）|
+| **BetaLactamase** | 5,864 | 迴歸 | - | 酵素活性水平 |
+| **Fluorescence** | 54,025 | 迴歸 | - | GFP 螢光強度 |
+| **Stability** | 53,614 | 迴歸 | - | 熱穩定性（ΔΔG）|
 
-**Features:**
-- Sequence and/or structure input
-- Evolutionary information available
-- Multiple train/test splits
+**特徵：**
+- 序列和/或結構輸入
+- 演化資訊可用
+- 多個訓練/測試分割
 
-**Use Cases:**
-- Protein engineering
-- Function annotation
-- Enzyme design
+**使用案例：**
+- 蛋白質工程
+- 功能註釋
+- 酵素設計
 
-### Localization and Solubility
+### 定位和溶解度
 
-| Dataset | Size | Task | Classes | Description |
+| 資料集 | 大小 | 任務 | 類別 | 描述 |
 |---------|------|------|---------|-------------|
-| **Solubility** | 62,478 | Binary | 2 | Protein solubility |
-| **BinaryLocalization** | 22,168 | Binary | 2 | Membrane vs soluble |
-| **SubcellularLocalization** | 8,943 | Multi-class | 10 | Subcellular compartment |
+| **Solubility** | 62,478 | 二元 | 2 | 蛋白質溶解度 |
+| **BinaryLocalization** | 22,168 | 二元 | 2 | 膜蛋白 vs 可溶性 |
+| **SubcellularLocalization** | 8,943 | 多類 | 10 | 亞細胞區室 |
 
-**Use Cases:**
-- Protein expression optimization
-- Target identification
-- Cell biology
+**使用案例：**
+- 蛋白質表達最佳化
+- 標靶識別
+- 細胞生物學
 
-### Structure Prediction
+### 結構預測
 
-| Dataset | Size | Task | Description |
+| 資料集 | 大小 | 任務 | 描述 |
 |---------|------|------|-------------|
-| **Fold** | 16,712 | Multi-class (1,195) | Structural fold recognition |
-| **SecondaryStructure** | 8,678 | Sequence labeling | 3-state or 8-state prediction |
-| **ProteinNet** | Varied | Contact prediction | Residue-residue contacts |
+| **Fold** | 16,712 | 多類（1,195）| 結構摺疊識別 |
+| **SecondaryStructure** | 8,678 | 序列標註 | 3 態或 8 態預測 |
+| **ProteinNet** | 可變 | 接觸預測 | 殘基-殘基接觸 |
 
-**Use Cases:**
-- Structure prediction pipelines
-- Fold recognition
-- Contact map generation
+**使用案例：**
+- 結構預測管線
+- 摺疊識別
+- 接觸圖生成
 
-### Protein Interactions
+### 蛋白質交互作用
 
-| Dataset | Size | Positives | Negatives | Description |
+| 資料集 | 大小 | 正樣本 | 負樣本 | 描述 |
 |---------|------|-----------|-----------|-------------|
-| **HumanPPI** | 1,412 proteins | 6,584 | - | Human protein interactions |
-| **YeastPPI** | 2,018 proteins | 6,451 | - | Yeast protein interactions |
-| **PPIAffinity** | 2,156 pairs | - | - | Binding affinity values |
+| **HumanPPI** | 1,412 個蛋白質 | 6,584 | - | 人類蛋白質交互作用網路 |
+| **YeastPPI** | 2,018 個蛋白質 | 6,451 | - | 酵母蛋白質交互作用網路 |
+| **PPIAffinity** | 2,156 對 | - | - | 結合親和力值 |
 
-**Use Cases:**
-- PPI prediction
-- Network biology
-- Drug target identification
+**使用案例：**
+- PPI 預測
+- 網路生物學
+- 藥物標靶識別
 
-### Protein-Ligand Binding
+### 蛋白質-配體結合
 
-| Dataset | Size | Type | Description |
+| 資料集 | 大小 | 類型 | 描述 |
 |---------|------|------|-------------|
-| **BindingDB** | ~1.5M | Affinity | Comprehensive binding data |
-| **PDBBind** | 20,000+ | 3D complexes | Structure-based binding |
-| - Refined Set | 5,316 | High quality | Curated crystal structures |
-| - Core Set | 285 | Benchmark | Diverse test set |
+| **BindingDB** | ~150 萬 | 親和力 | 綜合結合資料 |
+| **PDBBind** | 20,000+ | 3D 複合物 | 基於結構的結合 |
+| - 精製集 | 5,316 | 高品質 | 精選晶體結構 |
+| - 核心集 | 285 | 基準 | 多樣測試集 |
 
-**Use Cases:**
-- Binding affinity prediction
-- Structure-based drug design
-- Scoring function development
+**使用案例：**
+- 結合親和力預測
+- 基於結構的藥物設計
+- 評分函數開發
 
-### Large Protein Databases
+### 大型蛋白質資料庫
 
-| Dataset | Size | Description |
+| 資料集 | 大小 | 描述 |
 |---------|------|-------------|
-| **AlphaFoldDB** | 200M+ | Predicted structures for most known proteins |
-| **UniProt** | Integration | Sequence and annotation data |
+| **AlphaFoldDB** | 2 億+ | 大多數已知蛋白質的預測結構 |
+| **UniProt** | 整合 | 序列和註釋資料 |
 
-## Knowledge Graph Datasets
+## 知識圖譜資料集
 
-### General Knowledge
+### 通用知識
 
-| Dataset | Entities | Relations | Triples | Domain |
+| 資料集 | 實體 | 關係 | 三元組 | 領域 |
 |---------|----------|-----------|---------|--------|
-| **FB15k** | 14,951 | 1,345 | 592,213 | Freebase (general knowledge) |
-| **FB15k-237** | 14,541 | 237 | 310,116 | Filtered Freebase |
-| **WN18** | 40,943 | 18 | 151,442 | WordNet (lexical) |
-| **WN18RR** | 40,943 | 11 | 93,003 | Filtered WordNet |
+| **FB15k** | 14,951 | 1,345 | 592,213 | Freebase（通用知識）|
+| **FB15k-237** | 14,541 | 237 | 310,116 | 過濾的 Freebase |
+| **WN18** | 40,943 | 18 | 151,442 | WordNet（詞彙）|
+| **WN18RR** | 40,943 | 11 | 93,003 | 過濾的 WordNet |
 
-**Relation Types (FB15k-237):**
+**關係類型（FB15k-237）：**
 - `/people/person/nationality`
 - `/film/film/genre`
 - `/location/location/contains`
 - `/business/company/founders`
-- Many more...
+- 更多...
 
-**Use Cases:**
-- Link prediction
-- Relation extraction
-- Knowledge base completion
+**使用案例：**
+- 連結預測
+- 關係提取
+- 知識庫補全
 
-### Biomedical Knowledge
+### 生物醫學知識
 
-| Dataset | Entities | Relations | Triples | Description |
+| 資料集 | 實體 | 關係 | 三元組 | 描述 |
 |---------|----------|-----------|---------|-------------|
-| **Hetionet** | 45,158 | 24 | 2,250,197 | Integrates 29 biomedical databases |
+| **Hetionet** | 45,158 | 24 | 2,250,197 | 整合 29 個生物醫學資料庫 |
 
-**Entity Types in Hetionet:**
-- Genes (20,945)
-- Compounds (1,552)
-- Diseases (137)
-- Anatomy (400)
-- Pathways (1,822)
-- Pharmacologic classes
-- Side effects
-- Symptoms
-- Molecular functions
-- Biological processes
-- Cellular components
+**Hetionet 中的實體類型：**
+- 基因（20,945）
+- 化合物（1,552）
+- 疾病（137）
+- 解剖結構（400）
+- 路徑（1,822）
+- 藥理學類別
+- 副作用
+- 症狀
+- 分子功能
+- 生物過程
+- 細胞組件
 
-**Relation Types:**
-- Compound-binds-Gene
-- Gene-associates-Disease
-- Disease-presents-Symptom
-- Compound-treats-Disease
-- Compound-causes-Side effect
-- Gene-participates-Pathway
-- And 18 more...
+**關係類型：**
+- 化合物-結合-基因
+- 基因-關聯-疾病
+- 疾病-呈現-症狀
+- 化合物-治療-疾病
+- 化合物-導致-副作用
+- 基因-參與-路徑
+- 還有 18 種更多...
 
-**Use Cases:**
-- Drug repurposing
-- Disease mechanism discovery
-- Target identification
-- Multi-hop reasoning in biomedicine
+**使用案例：**
+- 藥物再利用
+- 疾病機制發現
+- 標靶識別
+- 生物醫學多跳推理
 
-## Citation Network Datasets
+## 引用網路資料集
 
-| Dataset | Nodes | Edges | Classes | Description |
+| 資料集 | 節點 | 邊 | 類別 | 描述 |
 |---------|-------|-------|---------|-------------|
-| **Cora** | 2,708 | 5,429 | 7 | Machine learning papers |
-| **CiteSeer** | 3,327 | 4,732 | 6 | Computer science papers |
-| **PubMed** | 19,717 | 44,338 | 3 | Biomedical papers |
+| **Cora** | 2,708 | 5,429 | 7 | 機器學習論文 |
+| **CiteSeer** | 3,327 | 4,732 | 6 | 計算機科學論文 |
+| **PubMed** | 19,717 | 44,338 | 3 | 生物醫學論文 |
 
-**Use Cases:**
-- Node classification
-- GNN baseline comparisons
-- Method development
+**使用案例：**
+- 節點分類
+- GNN 基線比較
+- 方法開發
 
-## Retrosynthesis Datasets
+## 逆合成資料集
 
-| Dataset | Size | Description |
+| 資料集 | 大小 | 描述 |
 |---------|------|-------------|
-| **USPTO-50k** | 50,017 | Curated patent reactions, single-step |
+| **USPTO-50k** | 50,017 | 精選專利反應，單步驟 |
 
-**Features:**
-- Product → Reactants mapping
-- Atom mapping for reaction centers
-- Canonicalized SMILES
-- Balanced across reaction types
+**特徵：**
+- 產物 → 反應物映射
+- 反應中心的原子映射
+- 規範化 SMILES
+- 跨反應類型平衡
 
-**Splits:**
-- Train: ~40,000
-- Validation: ~5,000
-- Test: ~5,000
+**分割：**
+- 訓練：~40,000
+- 驗證：~5,000
+- 測試：~5,000
 
-**Use Cases:**
-- Retrosynthesis prediction
-- Reaction type classification
-- Synthetic route planning
+**使用案例：**
+- 逆合成預測
+- 反應類型分類
+- 合成路線規劃
 
-## Dataset Usage Patterns
+## 資料集使用模式
 
-### Loading Datasets
+### 載入資料集
 
 ```python
 from torchdrug import datasets
 
-# Basic loading
+# 基本載入
 dataset = datasets.BBBP("~/molecule-datasets/")
 
-# With transforms
+# 含轉換
 from torchdrug import transforms
 transform = transforms.VirtualNode()
 dataset = datasets.BBBP("~/molecule-datasets/", transform=transform)
 
-# Protein dataset
+# 蛋白質資料集
 dataset = datasets.EnzymeCommission("~/protein-datasets/")
 
-# Knowledge graph
+# 知識圖譜
 dataset = datasets.FB15k237("~/kg-datasets/")
 ```
 
-### Data Splitting
+### 資料分割
 
 ```python
-# Random split
+# 隨機分割
 train, valid, test = dataset.split([0.8, 0.1, 0.1])
 
-# Scaffold split (for molecules)
+# 骨架分割（用於分子）
 from torchdrug import utils
 train, valid, test = dataset.split(
     utils.scaffold_split(dataset, [0.8, 0.1, 0.1])
 )
 
-# Predefined splits (some datasets)
+# 預定義分割（某些資料集）
 train, valid, test = dataset.split()
 ```
 
-### Feature Extraction
+### 特徵提取
 
-**Node Features (Molecules):**
-- Atom type (one-hot or embedding)
-- Formal charge
-- Hybridization
-- Aromaticity
-- Number of hydrogens
-- Chirality
+**節點特徵（分子）：**
+- 原子類型（獨熱或嵌入）
+- 形式電荷
+- 雜化
+- 芳香性
+- 氫數量
+- 手性
 
-**Edge Features (Molecules):**
-- Bond type (single, double, triple, aromatic)
-- Stereochemistry
-- Conjugation
-- Ring membership
+**邊特徵（分子）：**
+- 鍵類型（單鍵、雙鍵、三鍵、芳香）
+- 立體化學
+- 共軛
+- 環成員資格
 
-**Node Features (Proteins):**
-- Amino acid type (one-hot)
-- Physicochemical properties
-- Position in sequence
-- Secondary structure
-- Solvent accessibility
+**節點特徵（蛋白質）：**
+- 胺基酸類型（獨熱）
+- 物理化學性質
+- 序列中的位置
+- 二級結構
+- 溶劑可及性
 
-**Edge Features (Proteins):**
-- Edge type (sequential, spatial, contact)
-- Distance
-- Angles and dihedrals
+**邊特徵（蛋白質）：**
+- 邊類型（序列、空間、接觸）
+- 距離
+- 角度和二面角
 
-## Choosing Datasets
+## 選擇資料集
 
-### By Task
+### 按任務
 
-**Molecular Property Prediction:**
-- Start with BBBP or HIV (medium size, clear task)
-- Use QM9 for quantum properties
-- ESOL/FreeSolv for regression
+**分子性質預測：**
+- 從 BBBP 或 HIV 開始（中等大小、清晰任務）
+- 量子性質使用 QM9
+- 迴歸使用 ESOL/FreeSolv
 
-**Protein Function:**
-- EnzymeCommission (well-defined classes)
-- GeneOntology (comprehensive annotations)
+**蛋白質功能：**
+- EnzymeCommission（定義明確的類別）
+- GeneOntology（綜合註釋）
 
-**Drug Safety:**
-- Tox21 (standard benchmark)
-- ClinTox (clinical relevance)
+**藥物安全：**
+- Tox21（標準基準）
+- ClinTox（臨床相關性）
 
-**Structure-Based:**
-- PDBBind (protein-ligand)
-- ProteinNet (structure prediction)
+**基於結構：**
+- PDBBind（蛋白質-配體）
+- ProteinNet（結構預測）
 
-**Knowledge Graph:**
-- FB15k-237 (standard benchmark)
-- Hetionet (biomedical applications)
+**知識圖譜：**
+- FB15k-237（標準基準）
+- Hetionet（生物醫學應用）
 
-**Generation:**
-- ZINC250k (training)
-- QM9 (with properties)
+**生成：**
+- ZINC250k（訓練）
+- QM9（含性質）
 
-**Retrosynthesis:**
-- USPTO-50k (only choice)
+**逆合成：**
+- USPTO-50k（唯一選擇）
 
-### By Size and Resources
+### 按大小和資源
 
-**Small (<5k, for testing):**
-- BACE, FreeSolv, ClinTox
-- Core set of PDBBind
+**小型（<5k，用於測試）：**
+- BACE、FreeSolv、ClinTox
+- PDBBind 核心集
 
-**Medium (5k-100k):**
-- BBBP, HIV, ESOL, Tox21
-- EnzymeCommission, Fold
-- FB15k-237, WN18RR
+**中型（5k-100k）：**
+- BBBP、HIV、ESOL、Tox21
+- EnzymeCommission、Fold
+- FB15k-237、WN18RR
 
-**Large (>100k):**
-- QM9, MUV, PCQM4M
-- GeneOntology, AlphaFoldDB
-- ZINC2M, BindingDB
+**大型（>100k）：**
+- QM9、MUV、PCQM4M
+- GeneOntology、AlphaFoldDB
+- ZINC2M、BindingDB
 
-### By Domain
+### 按領域
 
-**Drug Discovery:** BBBP, HIV, Tox21, ESOL, ZINC
-**Quantum Chemistry:** QM7, QM8, QM9, PCQM4M
-**Protein Engineering:** Fluorescence, Stability, Solubility
-**Structural Biology:** Fold, PDBBind, ProteinNet, AlphaFoldDB
-**Biomedical:** Hetionet, GeneOntology, EnzymeCommission
-**Retrosynthesis:** USPTO-50k
+**藥物發現：**BBBP、HIV、Tox21、ESOL、ZINC
+**量子化學：**QM7、QM8、QM9、PCQM4M
+**蛋白質工程：**Fluorescence、Stability、Solubility
+**結構生物學：**Fold、PDBBind、ProteinNet、AlphaFoldDB
+**生物醫學：**Hetionet、GeneOntology、EnzymeCommission
+**逆合成：**USPTO-50k
 
-## Best Practices
+## 最佳實踐
 
-1. **Start Small**: Test on small datasets before scaling
-2. **Scaffold Split**: Use for realistic drug discovery evaluation
-3. **Balanced Metrics**: Use AUROC + AUPRC for imbalanced data
-4. **Multiple Runs**: Report mean ± std over multiple random seeds
-5. **Data Leakage**: Be careful with pre-trained models
-6. **Domain Knowledge**: Understand what you're predicting
-7. **Validation**: Always use held-out test set
-8. **Preprocessing**: Standardize features, handle missing values
+1. **從小開始**：在擴展前先在小型資料集上測試
+2. **骨架分割**：用於現實的藥物發現評估
+3. **平衡指標**：對不平衡資料使用 AUROC + AUPRC
+4. **多次運行**：報告多個隨機種子的平均值 ± 標準差
+5. **資料洩漏**：小心預訓練模型
+6. **領域知識**：理解您正在預測的內容
+7. **驗證**：始終使用保留測試集
+8. **預處理**：標準化特徵、處理缺失值

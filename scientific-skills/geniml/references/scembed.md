@@ -1,24 +1,24 @@
-# scEmbed: Single-Cell Embedding Generation
+# scEmbed：單細胞嵌入生成
 
-## Overview
+## 概述
 
-scEmbed trains Region2Vec models on single-cell ATAC-seq datasets to generate cell embeddings for clustering and analysis. It provides an unsupervised machine learning framework for representing and analyzing scATAC-seq data in low-dimensional space.
+scEmbed 在單細胞 ATAC-seq 資料集上訓練 Region2Vec 模型，生成用於聚類和分析的細胞嵌入。它提供一個非監督式機器學習框架，用於在低維空間中表示和分析 scATAC-seq 資料。
 
-## When to Use
+## 使用時機
 
-Use scEmbed when working with:
-- Single-cell ATAC-seq (scATAC-seq) data requiring clustering
-- Cell-type annotation tasks
-- Dimensionality reduction for single-cell chromatin accessibility
-- Integration with scanpy workflows for downstream analysis
+在處理以下情況時使用 scEmbed：
+- 需要聚類的單細胞 ATAC-seq（scATAC-seq）資料
+- 細胞類型註解任務
+- 單細胞染色質可及性的降維
+- 與 scanpy 工作流程整合進行下游分析
 
-## Workflow
+## 工作流程
 
-### Step 1: Data Preparation
+### 步驟 1：資料準備
 
-Input data must be in AnnData format with `.var` attributes containing `chr`, `start`, and `end` values for peaks.
+輸入資料必須為 AnnData 格式，`.var` 屬性包含峰的 `chr`、`start` 和 `end` 值。
 
-**Starting from raw data** (barcodes.txt, peaks.bed, matrix.mtx):
+**從原始資料開始**（barcodes.txt、peaks.bed、matrix.mtx）：
 
 ```python
 import scanpy as sc
@@ -26,20 +26,20 @@ import pandas as pd
 import scipy.io
 import anndata
 
-# Load data
+# 載入資料
 barcodes = pd.read_csv('barcodes.txt', header=None, names=['barcode'])
 peaks = pd.read_csv('peaks.bed', sep='\t', header=None,
                     names=['chr', 'start', 'end'])
 matrix = scipy.io.mmread('matrix.mtx').tocsr()
 
-# Create AnnData
+# 建立 AnnData
 adata = anndata.AnnData(X=matrix.T, obs=barcodes, var=peaks)
 adata.write('scatac_data.h5ad')
 ```
 
-### Step 2: Pre-tokenization
+### 步驟 2：預符記化
 
-Convert genomic regions into tokens using gtars utilities. This creates a parquet file with tokenized cells for faster training:
+使用 gtars 公用程式將基因體區域轉換為符記。這會建立包含符記化細胞的 parquet 檔案以加快訓練：
 
 ```python
 from geniml.io import tokenize_cells
@@ -51,23 +51,23 @@ tokenize_cells(
 )
 ```
 
-**Benefits of pre-tokenization:**
-- Faster training iterations
-- Reduced memory requirements
-- Reusable tokenized data for multiple training runs
+**預符記化的好處：**
+- 更快的訓練迭代
+- 減少記憶體需求
+- 可重複使用的符記化資料用於多次訓練執行
 
-### Step 3: Model Training
+### 步驟 3：模型訓練
 
-Train the scEmbed model using tokenized data:
+使用符記化資料訓練 scEmbed 模型：
 
 ```python
 from geniml.scembed import ScEmbed
 from geniml.region2vec import Region2VecDataset
 
-# Load tokenized dataset
+# 載入符記化資料集
 dataset = Region2VecDataset('tokenized_cells.parquet')
 
-# Initialize and train model
+# 初始化和訓練模型
 model = ScEmbed(
     embedding_dim=100,
     window_size=5,
@@ -81,103 +81,103 @@ model.train(
     learning_rate=0.025
 )
 
-# Save model
+# 儲存模型
 model.save('scembed_model/')
 ```
 
-### Step 4: Generate Cell Embeddings
+### 步驟 4：生成細胞嵌入
 
-Use the trained model to generate embeddings for cells:
+使用訓練好的模型為細胞生成嵌入：
 
 ```python
 from geniml.scembed import ScEmbed
 
-# Load trained model
+# 載入訓練好的模型
 model = ScEmbed.from_pretrained('scembed_model/')
 
-# Generate embeddings for AnnData object
+# 為 AnnData 物件生成嵌入
 embeddings = model.encode(adata)
 
-# Add to AnnData for downstream analysis
+# 添加到 AnnData 用於下游分析
 adata.obsm['scembed_X'] = embeddings
 ```
 
-### Step 5: Downstream Analysis
+### 步驟 5：下游分析
 
-Integrate with scanpy for clustering and visualization:
+與 scanpy 整合進行聚類和視覺化：
 
 ```python
 import scanpy as sc
 
-# Use scEmbed embeddings for neighborhood graph
+# 使用 scEmbed 嵌入建立鄰域圖
 sc.pp.neighbors(adata, use_rep='scembed_X')
 
-# Cluster cells
+# 聚類細胞
 sc.tl.leiden(adata, resolution=0.5)
 
-# Compute UMAP for visualization
+# 計算 UMAP 用於視覺化
 sc.tl.umap(adata)
 
-# Plot results
+# 繪製結果
 sc.pl.umap(adata, color='leiden')
 ```
 
-## Key Parameters
+## 關鍵參數
 
-### Training Parameters
+### 訓練參數
 
-| Parameter | Description | Typical Range |
-|-----------|-------------|---------------|
-| `embedding_dim` | Dimension of cell embeddings | 50 - 200 |
-| `window_size` | Context window for training | 3 - 10 |
-| `negative_samples` | Number of negative samples | 5 - 20 |
-| `epochs` | Training epochs | 50 - 200 |
-| `batch_size` | Training batch size | 128 - 512 |
-| `learning_rate` | Initial learning rate | 0.01 - 0.05 |
+| 參數 | 描述 | 典型範圍 |
+|------|------|----------|
+| `embedding_dim` | 細胞嵌入的維度 | 50 - 200 |
+| `window_size` | 訓練的上下文視窗 | 3 - 10 |
+| `negative_samples` | 負樣本數量 | 5 - 20 |
+| `epochs` | 訓練輪數 | 50 - 200 |
+| `batch_size` | 訓練批次大小 | 128 - 512 |
+| `learning_rate` | 初始學習率 | 0.01 - 0.05 |
 
-### Tokenization Parameters
+### 符記化參數
 
-- **Universe file**: Reference BED file defining the genomic vocabulary
-- **Overlap threshold**: Minimum overlap for peak-universe matching (typically 1e-9)
+- **Universe 檔案**：定義基因體詞彙表的參考 BED 檔案
+- **重疊閾值**：峰-universe 匹配的最小重疊（通常 1e-9）
 
-## Pre-trained Models
+## 預訓練模型
 
-Pre-trained scEmbed models are available on Hugging Face for common reference datasets. Load them using:
+常見參考資料集的預訓練 scEmbed 模型可在 Hugging Face 上取得。使用以下方式載入：
 
 ```python
 from geniml.scembed import ScEmbed
 
-# Load pre-trained model
+# 載入預訓練模型
 model = ScEmbed.from_pretrained('databio/scembed-pbmc-10k')
 
-# Generate embeddings
+# 生成嵌入
 embeddings = model.encode(adata)
 ```
 
-## Best Practices
+## 最佳實踐
 
-- **Data quality**: Use filtered peak-barcode matrices, not raw counts
-- **Pre-tokenization**: Always pre-tokenize to improve training efficiency
-- **Parameter tuning**: Adjust `embedding_dim` and training epochs based on dataset size
-- **Validation**: Use known cell-type markers to validate clustering quality
-- **Integration**: Combine with scanpy for comprehensive single-cell analysis
-- **Model sharing**: Export trained models to Hugging Face for reproducibility
+- **資料品質**：使用過濾後的峰-條碼矩陣，而非原始計數
+- **預符記化**：始終預符記化以提高訓練效率
+- **參數調整**：根據資料集大小調整 `embedding_dim` 和訓練輪數
+- **驗證**：使用已知的細胞類型標記驗證聚類品質
+- **整合**：與 scanpy 結合進行綜合單細胞分析
+- **模型分享**：將訓練好的模型匯出到 Hugging Face 以確保可重現性
 
-## Example Dataset
+## 範例資料集
 
-The 10x Genomics PBMC 10k dataset (10,000 peripheral blood mononuclear cells) serves as a standard benchmark:
-- Contains diverse immune cell types
-- Well-characterized cell populations
-- Available from 10x Genomics website
+10x Genomics PBMC 10k 資料集（10,000 個外周血單核細胞）作為標準基準：
+- 包含多樣的免疫細胞類型
+- 特徵明確的細胞群體
+- 可從 10x Genomics 網站取得
 
-## Cell-Type Annotation
+## 細胞類型註解
 
-After clustering, annotate cell types using k-nearest neighbors (KNN) with reference datasets:
+聚類後，使用 k-近鄰（KNN）與參考資料集進行細胞類型註解：
 
 ```python
 from geniml.scembed import annotate_celltypes
 
-# Annotate using reference
+# 使用參考進行註解
 annotations = annotate_celltypes(
     query_adata=adata,
     reference_adata=reference,
@@ -188,10 +188,10 @@ annotations = annotate_celltypes(
 adata.obs['cell_type'] = annotations
 ```
 
-## Output
+## 輸出
 
-scEmbed produces:
-- Low-dimensional cell embeddings (stored in `adata.obsm`)
-- Trained model files for reuse
-- Compatible format for scanpy downstream analysis
-- Optional export to Hugging Face for sharing
+scEmbed 產生：
+- 低維細胞嵌入（儲存在 `adata.obsm` 中）
+- 可重複使用的訓練模型檔案
+- 與 scanpy 下游分析相容的格式
+- 可選匯出到 Hugging Face 以供分享

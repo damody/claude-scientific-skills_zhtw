@@ -1,66 +1,66 @@
-# Programming Reference
+# 程式設計參考
 
-## Table of Contents
-1. [Scripts and Functions](#scripts-and-functions)
-2. [Control Flow](#control-flow)
-3. [Function Types](#function-types)
-4. [Error Handling](#error-handling)
-5. [Performance and Debugging](#performance-and-debugging)
-6. [Object-Oriented Programming](#object-oriented-programming)
+## 目錄
+1. [腳本與函數](#腳本與函數)
+2. [控制流程](#控制流程)
+3. [函數類型](#函數類型)
+4. [錯誤處理](#錯誤處理)
+5. [效能與除錯](#效能與除錯)
+6. [物件導向程式設計](#物件導向程式設計)
 
-## Scripts and Functions
+## 腳本與函數
 
-### Scripts
+### 腳本
 
 ```matlab
-% Scripts are .m files with MATLAB commands
-% They run in the base workspace (share variables)
+% 腳本是包含 MATLAB 命令的 .m 檔案
+% 它們在基礎工作區中執行（共享變數）
 
-% Example: myscript.m
-% This is a comment
+% 範例：myscript.m
+% 這是一個註解
 x = 1:10;
 y = x.^2;
 plot(x, y);
-title('My Plot');
+title('我的繪圖');
 
-% Run script
-myscript;           % Or: run('myscript.m')
+% 執行腳本
+myscript;           % 或：run('myscript.m')
 ```
 
-### Functions
+### 函數
 
 ```matlab
-% Functions have their own workspace
-% Save in file with same name as function
+% 函數有自己的工作區
+% 儲存為與函數同名的檔案
 
-% Example: myfunction.m
+% 範例：myfunction.m
 function y = myfunction(x)
-%MYFUNCTION Brief description of function
-%   Y = MYFUNCTION(X) detailed description
+%MYFUNCTION 函數的簡短描述
+%   Y = MYFUNCTION(X) 詳細描述
 %
-%   Example:
+%   範例：
 %       y = myfunction(5);
 %
-%   See also OTHERFUNCTION
+%   另請參閱 OTHERFUNCTION
     y = x.^2;
 end
 
-% Multiple outputs
+% 多輸出
 function [result1, result2] = multioutput(x)
     result1 = x.^2;
     result2 = x.^3;
 end
 
-% Variable arguments
+% 可變參數
 function varargout = flexfun(varargin)
-    % varargin is cell array of inputs
-    % varargout is cell array of outputs
-    n = nargin;          % Number of inputs
-    m = nargout;         % Number of outputs
+    % varargin 是輸入的儲存格陣列
+    % varargout 是輸出的儲存格陣列
+    n = nargin;          % 輸入數量
+    m = nargout;         % 輸出數量
 end
 ```
 
-### Input Validation
+### 輸入驗證
 
 ```matlab
 function result = validatedinput(x, options)
@@ -76,21 +76,21 @@ function result = validatedinput(x, options)
     end
 end
 
-% Usage
+% 使用方式
 y = validatedinput([1 2 3], 'Normalize', true, 'Scale', 2);
 
-% Common validators
+% 常用驗證器
 % mustBePositive, mustBeNegative, mustBeNonzero
 % mustBeInteger, mustBeNumeric, mustBeFinite
 % mustBeNonNaN, mustBeReal, mustBeNonempty
 % mustBeMember, mustBeInRange, mustBeGreaterThan
 ```
 
-### Local Functions
+### 區域函數
 
 ```matlab
-% Local functions appear after main function
-% Only accessible within the same file
+% 區域函數出現在主函數之後
+% 只能在同一檔案內存取
 
 function result = mainfunction(x)
     intermediate = helper1(x);
@@ -106,31 +106,31 @@ function y = helper2(x)
 end
 ```
 
-## Control Flow
+## 控制流程
 
-### Conditional Statements
+### 條件語句
 
 ```matlab
 % if-elseif-else
 if condition1
-    % statements
+    % 語句
 elseif condition2
-    % statements
+    % 語句
 else
-    % statements
+    % 語句
 end
 
-% Logical operators
-%   &  - AND (element-wise)
-%   |  - OR (element-wise)
+% 邏輯運算子
+%   &  - AND（逐元素）
+%   |  - OR（逐元素）
 %   ~  - NOT
-%   && - AND (short-circuit, scalars)
-%   || - OR (short-circuit, scalars)
-%   == - Equal
-%   ~= - Not equal
-%   <, <=, >, >= - Comparisons
+%   && - AND（短路，純量）
+%   || - OR（短路，純量）
+%   == - 相等
+%   ~= - 不相等
+%   <, <=, >, >= - 比較
 
-% Example
+% 範例
 if x > 0 && y > 0
     quadrant = 1;
 elseif x < 0 && y > 0
@@ -142,94 +142,94 @@ else
 end
 ```
 
-### Switch Statements
+### Switch 語句
 
 ```matlab
 switch expression
     case value1
-        % statements
-    case {value2, value3}  % Multiple values
-        % statements
+        % 語句
+    case {value2, value3}  % 多個值
+        % 語句
     otherwise
-        % default statements
+        % 預設語句
 end
 
-% Example
+% 範例
 switch dayOfWeek
     case {'Saturday', 'Sunday'}
-        dayType = 'Weekend';
+        dayType = '週末';
     case {'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'}
-        dayType = 'Weekday';
+        dayType = '工作日';
     otherwise
-        dayType = 'Unknown';
+        dayType = '未知';
 end
 ```
 
-### For Loops
+### For 迴圈
 
 ```matlab
-% Basic for loop
+% 基本 for 迴圈
 for i = 1:10
-    % statements using i
+    % 使用 i 的語句
 end
 
-% Custom step
+% 自訂步長
 for i = 10:-1:1
-    % count down
+    % 倒數
 end
 
-% Loop over vector
+% 遍歷向量
 for val = [1 3 5 7 9]
-    % val takes each value
+    % val 取每個值
 end
 
-% Loop over columns of matrix
+% 遍歷矩陣的欄
 for col = A
-    % col is a column vector
+    % col 是欄向量
 end
 
-% Loop over cell array
+% 遍歷儲存格陣列
 for i = 1:length(C)
     item = C{i};
 end
 ```
 
-### While Loops
+### While 迴圈
 
 ```matlab
-% Basic while loop
+% 基本 while 迴圈
 while condition
-    % statements
-    % Update condition
+    % 語句
+    % 更新條件
 end
 
-% Example
+% 範例
 count = 0;
 while count < 10
     count = count + 1;
-    % Do something
+    % 做某事
 end
 ```
 
-### Loop Control
+### 迴圈控制
 
 ```matlab
-% Break - exit loop immediately
+% Break - 立即退出迴圈
 for i = 1:100
     if someCondition
         break;
     end
 end
 
-% Continue - skip to next iteration
+% Continue - 跳到下一次迭代
 for i = 1:100
     if skipCondition
         continue;
     end
-    % Process i
+    % 處理 i
 end
 
-% Return - exit function
+% Return - 退出函數
 function y = myfunction(x)
     if x < 0
         y = NaN;
@@ -239,106 +239,106 @@ function y = myfunction(x)
 end
 ```
 
-## Function Types
+## 函數類型
 
-### Anonymous Functions
+### 匿名函數
 
 ```matlab
-% Create inline function
+% 建立內嵌函數
 f = @(x) x.^2 + 2*x + 1;
 g = @(x, y) x.^2 + y.^2;
 
-% Use
+% 使用
 y = f(5);           % 36
 z = g(3, 4);        % 25
 
-% With captured variables
+% 帶捕獲變數
 a = 2;
-h = @(x) a * x;     % Captures current value of a
+h = @(x) a * x;     % 捕獲 a 的當前值
 y = h(5);           % 10
-a = 3;              % Changing a doesn't affect h
-y = h(5);           % Still 10
+a = 3;              % 改變 a 不影響 h
+y = h(5);           % 仍然是 10
 
-% No arguments
+% 無參數
 now_fn = @() datestr(now);
 timestamp = now_fn();
 
-% Pass to other functions
+% 傳遞給其他函數
 result = integral(f, 0, 1);
 ```
 
-### Nested Functions
+### 巢狀函數
 
 ```matlab
 function result = outerfunction(x)
-    y = x.^2;           % Shared with nested functions
+    y = x.^2;           % 與巢狀函數共享
 
     function z = nestedfunction(a)
-        z = y + a;      % Can access y from outer scope
+        z = y + a;      % 可存取外部作用域的 y
     end
 
     result = nestedfunction(10);
 end
 ```
 
-### Function Handles
+### 函數控制代碼
 
 ```matlab
-% Create handle to existing function
+% 建立現有函數的控制代碼
 h = @sin;
 y = h(pi/2);        % 1
 
-% From string
+% 從字串
 h = str2func('cos');
 
-% Get function name
+% 取得函數名稱
 name = func2str(h);
 
-% Get handles to local functions
+% 取得區域函數的控制代碼
 handles = localfunctions;
 
-% Function info
+% 函數資訊
 info = functions(h);
 ```
 
-### Callbacks
+### 回呼
 
 ```matlab
-% Using function handles as callbacks
+% 使用函數控制代碼作為回呼
 
-% Timer example
+% 計時器範例
 t = timer('TimerFcn', @myCallback, 'Period', 1);
 start(t);
 
 function myCallback(~, ~)
-    disp(['Time: ' datestr(now)]);
+    disp(['時間：' datestr(now)]);
 end
 
-% With anonymous function
-t = timer('TimerFcn', @(~,~) disp('Tick'), 'Period', 1);
+% 使用匿名函數
+t = timer('TimerFcn', @(~,~) disp('滴答'), 'Period', 1);
 
-% GUI callbacks
+% GUI 回呼
 uicontrol('Style', 'pushbutton', 'Callback', @buttonPressed);
 ```
 
-## Error Handling
+## 錯誤處理
 
 ### Try-Catch
 
 ```matlab
 try
-    % Code that might error
+    % 可能出錯的程式碼
     result = riskyOperation();
 catch ME
-    % Handle error
-    disp(['Error: ' ME.message]);
-    disp(['Identifier: ' ME.identifier]);
+    % 處理錯誤
+    disp(['錯誤：' ME.message]);
+    disp(['識別碼：' ME.identifier]);
 
-    % Optionally rethrow
+    % 可選重新拋出
     rethrow(ME);
 end
 
-% Catch specific errors
+% 捕獲特定錯誤
 try
     result = operation();
 catch ME
@@ -353,191 +353,191 @@ catch ME
 end
 ```
 
-### Throwing Errors
+### 拋出錯誤
 
 ```matlab
-% Simple error
-error('Something went wrong');
+% 簡單錯誤
+error('發生錯誤');
 
-% With identifier
-error('MyPkg:InvalidInput', 'Input must be positive');
+% 帶識別碼
+error('MyPkg:InvalidInput', '輸入必須為正');
 
-% With formatting
-error('MyPkg:OutOfRange', 'Value %f is out of range [%f, %f]', val, lo, hi);
+% 帶格式化
+error('MyPkg:OutOfRange', '值 %f 超出範圍 [%f, %f]', val, lo, hi);
 
-% Create and throw exception
-ME = MException('MyPkg:Error', 'Error message');
+% 建立並拋出例外
+ME = MException('MyPkg:Error', '錯誤訊息');
 throw(ME);
 
-% Assertion
-assert(condition, 'Message if false');
-assert(x > 0, 'MyPkg:NotPositive', 'x must be positive');
+% 斷言
+assert(condition, '若為 false 的訊息');
+assert(x > 0, 'MyPkg:NotPositive', 'x 必須為正');
 ```
 
-### Warnings
+### 警告
 
 ```matlab
-% Issue warning
-warning('This might be a problem');
-warning('MyPkg:Warning', 'Warning message');
+% 發出警告
+warning('這可能是個問題');
+warning('MyPkg:Warning', '警告訊息');
 
-% Control warnings
-warning('off', 'MyPkg:Warning');    % Disable specific warning
-warning('on', 'MyPkg:Warning');     % Enable
-warning('off', 'all');              % Disable all
-warning('on', 'all');               % Enable all
+% 控制警告
+warning('off', 'MyPkg:Warning');    % 停用特定警告
+warning('on', 'MyPkg:Warning');     % 啟用
+warning('off', 'all');              % 停用所有
+warning('on', 'all');               % 啟用所有
 
-% Query warning state
+% 查詢警告狀態
 s = warning('query', 'MyPkg:Warning');
 
-% Temporarily disable
+% 暫時停用
 origState = warning('off', 'MATLAB:nearlySingularMatrix');
-% ... code ...
+% ... 程式碼 ...
 warning(origState);
 ```
 
-## Performance and Debugging
+## 效能與除錯
 
-### Timing
+### 計時
 
 ```matlab
-% Simple timing
+% 簡單計時
 tic;
-% ... code ...
+% ... 程式碼 ...
 elapsed = toc;
 
-% Multiple timers
+% 多個計時器
 t1 = tic;
-% ... code ...
+% ... 程式碼 ...
 elapsed1 = toc(t1);
 
-% CPU time
+% CPU 時間
 t = cputime;
-% ... code ...
+% ... 程式碼 ...
 cpuElapsed = cputime - t;
 
-% Profiler
+% 分析器
 profile on;
 myfunction();
-profile viewer;     % GUI to analyze results
-p = profile('info'); % Get programmatic results
+profile viewer;     % 分析結果的 GUI
+p = profile('info'); % 取得程式化結果
 profile off;
 ```
 
-### Memory
+### 記憶體
 
 ```matlab
-% Memory info
-[user, sys] = memory;   % Windows only
-whos;                   % Variable sizes
+% 記憶體資訊
+[user, sys] = memory;   % 僅 Windows
+whos;                   % 變數大小
 
-% Clear variables
+% 清除變數
 clear x y z;
-clear all;              % All variables (use sparingly)
-clearvars -except x y;  % Keep specific variables
+clear all;              % 所有變數（謹慎使用）
+clearvars -except x y;  % 保留特定變數
 ```
 
-### Debugging
+### 除錯
 
 ```matlab
-% Set breakpoints (in editor or programmatically)
+% 設定中斷點（在編輯器或程式化）
 dbstop in myfunction at 10
 dbstop if error
 dbstop if warning
-dbstop if naninf          % Stop on NaN or Inf
+dbstop if naninf          % 在 NaN 或 Inf 時停止
 
-% Step through code
-dbstep                    % Next line
-dbstep in                 % Step into function
-dbstep out                % Step out of function
-dbcont                    % Continue execution
-dbquit                    % Quit debugging
+% 逐步執行程式碼
+dbstep                    % 下一行
+dbstep in                 % 進入函數
+dbstep out                % 離開函數
+dbcont                    % 繼續執行
+dbquit                    % 退出除錯
 
-% Clear breakpoints
+% 清除中斷點
 dbclear all
 
-% Examine state
-dbstack                   % Call stack
-whos                      % Variables
+% 檢查狀態
+dbstack                   % 呼叫堆疊
+whos                      % 變數
 ```
 
-### Vectorization Tips
+### 向量化技巧
 
 ```matlab
-% AVOID loops when possible
-% Slow:
+% 盡可能避免迴圈
+% 慢：
 for i = 1:n
     y(i) = x(i)^2;
 end
 
-% Fast:
+% 快：
 y = x.^2;
 
-% Element-wise operations (use . prefix)
-y = a .* b;             % Element-wise multiply
-y = a ./ b;             % Element-wise divide
-y = a .^ b;             % Element-wise power
+% 逐元素運算（使用 . 前綴）
+y = a .* b;             % 逐元素乘法
+y = a ./ b;             % 逐元素除法
+y = a .^ b;             % 逐元素乘冪
 
-% Built-in functions operate on arrays
-y = sin(x);             % Apply to all elements
-s = sum(x);             % Sum all
-m = max(x);             % Maximum
+% 內建函數對陣列運算
+y = sin(x);             % 對所有元素應用
+s = sum(x);             % 全部加總
+m = max(x);             % 最大值
 
-% Logical indexing instead of find
-% Slow:
+% 邏輯索引代替 find
+% 慢：
 idx = find(x > 0);
 y = x(idx);
 
-% Fast:
+% 快：
 y = x(x > 0);
 
-% Preallocate arrays
-% Slow:
+% 預分配陣列
+% 慢：
 y = [];
 for i = 1:n
     y(i) = compute(i);
 end
 
-% Fast:
+% 快：
 y = zeros(1, n);
 for i = 1:n
     y(i) = compute(i);
 end
 ```
 
-### Parallel Computing
+### 平行運算
 
 ```matlab
-% Parallel for loop
+% 平行 for 迴圈
 parfor i = 1:n
     results(i) = compute(i);
 end
 
-% Note: parfor has restrictions
-% - Iterations must be independent
-% - Variable classifications (sliced, broadcast, etc.)
+% 注意：parfor 有限制
+% - 迭代必須獨立
+% - 變數分類（切片、廣播等）
 
-% Start parallel pool
-pool = parpool;         % Default cluster
-pool = parpool(4);      % 4 workers
+% 啟動平行池
+pool = parpool;         % 預設叢集
+pool = parpool(4);      % 4 個工作者
 
-% Delete pool
+% 刪除池
 delete(gcp('nocreate'));
 
-% Parallel array operations
+% 平行陣列運算
 spmd
-    % Each worker executes this block
+    % 每個工作者執行此區塊
     localData = myData(labindex);
     result = process(localData);
 end
 ```
 
-## Object-Oriented Programming
+## 物件導向程式設計
 
-### Class Definition
+### 類別定義
 
 ```matlab
-% In file MyClass.m
+% 在 MyClass.m 檔案中
 classdef MyClass
     properties
         PublicProp
@@ -552,12 +552,12 @@ classdef MyClass
     end
 
     methods
-        % Constructor
+        % 建構函數
         function obj = MyClass(value)
             obj.PublicProp = value;
         end
 
-        % Instance method
+        % 實例方法
         function result = compute(obj, x)
             result = obj.PublicProp * x;
         end
@@ -571,28 +571,28 @@ classdef MyClass
 end
 ```
 
-### Using Classes
+### 使用類別
 
 ```matlab
-% Create object
+% 建立物件
 obj = MyClass(10);
 
-% Access properties
+% 存取屬性
 val = obj.PublicProp;
 obj.PublicProp = 20;
 
-% Call methods
+% 呼叫方法
 result = obj.compute(5);
-result = compute(obj, 5);   % Equivalent
+result = compute(obj, 5);   % 等效
 
-% Static method
+% 靜態方法
 result = MyClass.staticMethod(3);
 
-% Constant property
+% 常數屬性
 val = MyClass.ConstProp;
 ```
 
-### Inheritance
+### 繼承
 
 ```matlab
 classdef DerivedClass < BaseClass
@@ -602,14 +602,14 @@ classdef DerivedClass < BaseClass
 
     methods
         function obj = DerivedClass(baseVal, extraVal)
-            % Call superclass constructor
+            % 呼叫父類別建構函數
             obj@BaseClass(baseVal);
             obj.ExtraProp = extraVal;
         end
 
-        % Override method
+        % 覆寫方法
         function result = compute(obj, x)
-            % Call superclass method
+            % 呼叫父類別方法
             baseResult = compute@BaseClass(obj, x);
             result = baseResult + obj.ExtraProp;
         end
@@ -617,10 +617,10 @@ classdef DerivedClass < BaseClass
 end
 ```
 
-### Handle vs Value Classes
+### Handle 與 Value 類別
 
 ```matlab
-% Value class (default) - copy semantics
+% Value 類別（預設）- 複製語意
 classdef ValueClass
     properties
         Data
@@ -629,10 +629,10 @@ end
 
 a = ValueClass();
 a.Data = 1;
-b = a;          % b is a copy
-b.Data = 2;     % a.Data is still 1
+b = a;          % b 是副本
+b.Data = 2;     % a.Data 仍然是 1
 
-% Handle class - reference semantics
+% Handle 類別 - 參考語意
 classdef HandleClass < handle
     properties
         Data
@@ -641,11 +641,11 @@ end
 
 a = HandleClass();
 a.Data = 1;
-b = a;          % b references same object
-b.Data = 2;     % a.Data is now 2
+b = a;          % b 參考同一物件
+b.Data = 2;     % a.Data 現在是 2
 ```
 
-### Events and Listeners
+### 事件與監聽器
 
 ```matlab
 classdef EventClass < handle
@@ -665,8 +665,8 @@ classdef EventClass < handle
     end
 end
 
-% Usage
+% 使用方式
 obj = EventClass();
-listener = addlistener(obj, 'DataChanged', @(src, evt) disp('Data changed!'));
-obj.Data = 42;  % Triggers event
+listener = addlistener(obj, 'DataChanged', @(src, evt) disp('資料已變更！'));
+obj.Data = 42;  % 觸發事件
 ```

@@ -1,9 +1,9 @@
-# Professional Treatment Plan Styling - Quick Reference
+# 專業治療計畫樣式 - 快速參考
 
-## File Location
-`medical_treatment_plan.sty` - Available in the assets directory
+## 檔案位置
+`medical_treatment_plan.sty` - 位於 assets 目錄中
 
-## Quick Start
+## 快速開始
 
 ```latex
 % !TEX program = xelatex
@@ -17,57 +17,57 @@
 \end{document}
 ```
 
-## Custom Box Environments
+## 自訂框環境
 
-### 1. Info Box (Blue) - General Information
+### 1. 資訊框（藍色）- 一般資訊
 ```latex
 \begin{infobox}[Title]
   Content
 \end{infobox}
 ```
-**Use for:** Clinical assessments, monitoring schedules, titration protocols
+**用於：** 臨床評估、監測排程、滴定方案
 
-### 2. Warning Box (Yellow/Red) - Critical Alerts
+### 2. 警告框（黃色/紅色）- 關鍵警報
 ```latex
 \begin{warningbox}[Title]
   Critical information
 \end{warningbox}
 ```
-**Use for:** Safety protocols, decision points, contraindications
+**用於：** 安全協定、決策點、禁忌症
 
-### 3. Goal Box (Green) - Treatment Goals
+### 3. 目標框（綠色）- 治療目標
 ```latex
 \begin{goalbox}[Title]
   Goals and targets
 \end{goalbox}
 ```
-**Use for:** SMART goals, target outcomes, success metrics
+**用於：** SMART 目標、目標結果、成功指標
 
-### 4. Key Points Box (Light Blue) - Highlights
+### 4. 關鍵點框（淺藍色）- 重點
 ```latex
 \begin{keybox}[Title]
   Important highlights
 \end{keybox}
 ```
-**Use for:** Executive summaries, key takeaways, essential recommendations
+**用於：** 執行摘要、關鍵要點、重要建議
 
-### 5. Emergency Box (Red) - Emergency Info
+### 5. 緊急框（紅色）- 緊急資訊
 ```latex
 \begin{emergencybox}
   Emergency contacts
 \end{emergencybox}
 ```
-**Use for:** Emergency contacts, urgent protocols
+**用於：** 緊急聯絡人、緊急協定
 
-### 6. Patient Info Box (White/Blue) - Demographics
+### 6. 病患資訊框（白色/藍色）- 人口統計
 ```latex
 \begin{patientinfo}
   Patient information
 \end{patientinfo}
 ```
-**Use for:** Patient demographics and baseline data
+**用於：** 病患人口統計和基線資料
 
-## Professional Tables
+## 專業表格
 
 ```latex
 \begin{medtable}{Caption}
@@ -86,15 +86,15 @@ Data row 2 \\
 \end{medtable}
 ```
 
-## Color Scheme
+## 色彩方案
 
-- **Primary Blue** (0, 102, 153): Headers, titles
-- **Secondary Blue** (102, 178, 204): Light backgrounds
-- **Accent Blue** (0, 153, 204): Links, highlights
-- **Success Green** (0, 153, 76): Goals
-- **Warning Red** (204, 0, 0): Warnings
+- **主要藍色**（0, 102, 153）：標題、標題
+- **次要藍色**（102, 178, 204）：淺色背景
+- **強調藍色**（0, 153, 204）：連結、重點
+- **成功綠色**（0, 153, 76）：目標
+- **警告紅色**（204, 0, 0）：警告
 
-## Compilation
+## 編譯
 
 ```bash
 xelatex document.tex
@@ -103,33 +103,33 @@ xelatex document.tex
 xelatex document.tex
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Match box type to purpose:** Green for goals, red/yellow for warnings
-2. **Don't overuse boxes:** Reserve for important information only
-3. **Maintain color consistency:** Stick to the defined scheme
-4. **Use white space:** Add `\vspace{0.5cm}` between major sections
-5. **Table alternating rows:** Use `\tablerowcolor` for readability
+1. **將框類型與目的匹配：** 綠色用於目標，紅色/黃色用於警告
+2. **不要過度使用框：** 僅保留給重要資訊
+3. **保持色彩一致性：** 遵循定義的方案
+4. **使用留白：** 在主要區段之間添加 `\vspace{0.5cm}`
+5. **表格交替列：** 使用 `\tablerowcolor` 提高可讀性
 
-## Installation
+## 安裝
 
-**Option 1:** Copy `assets/medical_treatment_plan.sty` to your document directory
+**選項 1：** 複製 `assets/medical_treatment_plan.sty` 到您的文件目錄
 
-**Option 2:** Install to user TeX directory
+**選項 2：** 安裝到使用者 TeX 目錄
 ```bash
 mkdir -p ~/texmf/tex/latex/medical_treatment_plan
 cp assets/medical_treatment_plan.sty ~/texmf/tex/latex/medical_treatment_plan/
 texhash ~/texmf
 ```
 
-## Required Packages
-All automatically loaded by the style:
-- tcolorbox, tikz, xcolor
-- fancyhdr, titlesec, enumitem
-- booktabs, longtable, array, colortbl
-- hyperref, natbib, fontspec
+## 必要套件
+由樣式自動載入：
+- tcolorbox、tikz、xcolor
+- fancyhdr、titlesec、enumitem
+- booktabs、longtable、array、colortbl
+- hyperref、natbib、fontspec
 
-## Example Structure
+## 範例結構
 
 ```latex
 \maketitle
@@ -164,22 +164,21 @@ All automatically loaded by the style:
 \end{emergencybox}
 ```
 
-## Troubleshooting
+## 疑難排解
 
-**Missing packages:**
+**缺少套件：**
 ```bash
 sudo tlmgr install tcolorbox tikz pgf
 ```
 
-**Special characters not showing:**
-- Use XeLaTeX instead of PDFLaTeX
-- Or use LaTeX commands: `$\checkmark$`, `$\geq$`
+**特殊字元未顯示：**
+- 使用 XeLaTeX 而非 PDFLaTeX
+- 或使用 LaTeX 命令：`$\checkmark$`、`$\geq$`
 
-**Header warnings:**
-- Already set to 22pt in style file
-- Adjust if needed
+**標題警告：**
+- 樣式檔案中已設定為 22pt
+- 如需要可調整
 
 ---
 
-For complete documentation, see the "Professional Document Styling" section in SKILL.md
-
+有關完整文件，請參閱 SKILL.md 中的「專業文件樣式」區段

@@ -1,37 +1,37 @@
-# Seaborn Objects Interface
+# Seaborn Objects 介面
 
-The `seaborn.objects` interface provides a modern, declarative API for building visualizations through composition. This guide covers the complete objects interface introduced in seaborn 0.12+.
+`seaborn.objects` 介面提供現代的宣告式 API，透過組合來建構視覺化。本指南涵蓋 seaborn 0.12+ 引入的完整 objects 介面。
 
-## Core Concept
+## 核心概念
 
-The objects interface separates **what you want to show** (data and mappings) from **how to show it** (marks, stats, and moves). Build plots by:
+objects 介面將**你想展示什麼**（資料和映射）與**如何展示**（標記、統計和移動）分開。建構圖形的方式：
 
-1. Creating a `Plot` object with data and aesthetic mappings
-2. Adding layers with `.add()` combining marks and statistical transformations
-3. Customizing with `.scale()`, `.label()`, `.limit()`, `.theme()`, etc.
-4. Rendering with `.show()` or `.save()`
+1. 使用資料和美學映射建立 `Plot` 物件
+2. 使用 `.add()` 添加圖層，結合標記和統計轉換
+3. 使用 `.scale()`、`.label()`、`.limit()`、`.theme()` 等進行自訂
+4. 使用 `.show()` 或 `.save()` 渲染
 
-## Basic Usage
+## 基本用法
 
 ```python
 from seaborn import objects as so
 import pandas as pd
 
-# Create plot with data and mappings
+# 使用資料和映射建立圖形
 p = so.Plot(data=df, x='x_var', y='y_var')
 
-# Add mark (visual representation)
+# 添加標記（視覺表示）
 p = p.add(so.Dot())
 
-# Display (automatic in Jupyter)
+# 顯示（在 Jupyter 中自動顯示）
 p.show()
 ```
 
-## Plot Class
+## Plot 類別
 
-The `Plot` class is the foundation of the objects interface.
+`Plot` 類別是 objects 介面的基礎。
 
-### Initialization
+### 初始化
 
 ```python
 so.Plot(data=None, x=None, y=None, color=None, alpha=None,
@@ -39,88 +39,88 @@ so.Plot(data=None, x=None, y=None, color=None, alpha=None,
         pointsize=None, stroke=None, text=None, **variables)
 ```
 
-**Parameters:**
-- `data` - DataFrame or dict of data vectors
-- `x, y` - Variables for position
-- `color` - Variable for color encoding
-- `alpha` - Variable for transparency
-- `marker` - Variable for marker shape
-- `pointsize` - Variable for point size
-- `stroke` - Variable for line width
-- `text` - Variable for text labels
-- `**variables` - Additional mappings using property names
+**參數：**
+- `data` - DataFrame 或資料向量字典
+- `x, y` - 位置變數
+- `color` - 顏色編碼變數
+- `alpha` - 透明度變數
+- `marker` - 標記形狀變數
+- `pointsize` - 點大小變數
+- `stroke` - 線寬變數
+- `text` - 文字標籤變數
+- `**variables` - 使用屬性名稱的額外映射
 
-**Examples:**
+**範例：**
 ```python
-# Basic mapping
+# 基本映射
 so.Plot(df, x='total_bill', y='tip')
 
-# Multiple mappings
+# 多重映射
 so.Plot(df, x='total_bill', y='tip', color='day', pointsize='size')
 
-# All variables in Plot
+# 所有變數在 Plot 中
 p = so.Plot(df, x='x', y='y', color='cat')
-p.add(so.Dot())  # Uses all mappings
+p.add(so.Dot())  # 使用所有映射
 
-# Some variables in add()
+# 部分變數在 add() 中
 p = so.Plot(df, x='x', y='y')
-p.add(so.Dot(), color='cat')  # Only this layer uses color
+p.add(so.Dot(), color='cat')  # 只有此圖層使用顏色
 ```
 
-### Methods
+### 方法
 
 #### add()
 
-Add a layer to the plot with mark and optional stat/move.
+添加帶有標記和可選 stat/move 的圖層到圖形。
 
 ```python
 Plot.add(mark, *transforms, orient=None, legend=True, data=None,
          **variables)
 ```
 
-**Parameters:**
-- `mark` - Mark object defining visual representation
-- `*transforms` - Stat and/or Move objects for data transformation
-- `orient` - "x", "y", or "v"/"h" for orientation
-- `legend` - Include in legend (True/False)
-- `data` - Override data for this layer
-- `**variables` - Override or add variable mappings
+**參數：**
+- `mark` - 定義視覺表示的 Mark 物件
+- `*transforms` - 用於資料轉換的 Stat 和/或 Move 物件
+- `orient` - "x"、"y" 或 "v"/"h" 表示方向
+- `legend` - 是否包含在圖例中（True/False）
+- `data` - 覆寫此圖層的資料
+- `**variables` - 覆寫或添加變數映射
 
-**Examples:**
+**範例：**
 ```python
-# Simple mark
+# 簡單標記
 p.add(so.Dot())
 
-# Mark with stat
+# 帶有統計的標記
 p.add(so.Line(), so.PolyFit(order=2))
 
-# Mark with multiple transforms
+# 帶有多重轉換的標記
 p.add(so.Bar(), so.Agg(), so.Dodge())
 
-# Layer-specific mappings
+# 圖層特定映射
 p.add(so.Dot(), color='category')
 p.add(so.Line(), so.Agg(), color='category')
 
-# Layer-specific data
+# 圖層特定資料
 p.add(so.Dot())
 p.add(so.Line(), data=summary_df)
 ```
 
 #### facet()
 
-Create subplots from categorical variables.
+從類別變數建立子圖。
 
 ```python
 Plot.facet(col=None, row=None, order=None, wrap=None)
 ```
 
-**Parameters:**
-- `col` - Variable for column facets
-- `row` - Variable for row facets
-- `order` - Dict with facet orders (keys: variable names)
-- `wrap` - Wrap columns after this many
+**參數：**
+- `col` - 欄分面變數
+- `row` - 列分面變數
+- `order` - 分面順序字典（鍵：變數名稱）
+- `wrap` - 此數量後換行欄
 
-**Example:**
+**範例：**
 ```python
 p.facet(col='time', row='sex')
 p.facet(col='category', wrap=3)
@@ -129,77 +129,77 @@ p.facet(col='day', order={'day': ['Thur', 'Fri', 'Sat', 'Sun']})
 
 #### pair()
 
-Create pairwise subplots for multiple variables.
+為多個變數建立成對子圖。
 
 ```python
 Plot.pair(x=None, y=None, wrap=None, cross=True)
 ```
 
-**Parameters:**
-- `x` - Variables for x-axis pairings
-- `y` - Variables for y-axis pairings (if None, uses x)
-- `wrap` - Wrap after this many columns
-- `cross` - Include all x/y combinations (vs. only diagonal)
+**參數：**
+- `x` - x 軸配對的變數
+- `y` - y 軸配對的變數（若為 None，使用 x）
+- `wrap` - 此數量欄後換行
+- `cross` - 包含所有 x/y 組合（vs. 只有對角線）
 
-**Example:**
+**範例：**
 ```python
-# Pairs of all variables
+# 所有變數的配對
 p = so.Plot(df).pair(x=['a', 'b', 'c'])
 p.add(so.Dot())
 
-# Rectangular grid
+# 矩形網格
 p = so.Plot(df).pair(x=['a', 'b'], y=['c', 'd'])
 p.add(so.Dot(), alpha=0.5)
 ```
 
 #### scale()
 
-Customize how data maps to visual properties.
+自訂資料如何映射到視覺屬性。
 
 ```python
 Plot.scale(**scales)
 ```
 
-**Parameters:** Keyword arguments with property names and Scale objects
+**參數：** 帶有屬性名稱和 Scale 物件的關鍵字引數
 
-**Example:**
+**範例：**
 ```python
 p.scale(
     x=so.Continuous().tick(every=5),
     y=so.Continuous().label(like='{x:.1f}'),
     color=so.Nominal(['#1f77b4', '#ff7f0e', '#2ca02c']),
-    pointsize=(5, 10)  # Shorthand for range
+    pointsize=(5, 10)  # 範圍的簡寫
 )
 ```
 
 #### limit()
 
-Set axis limits.
+設定軸限制。
 
 ```python
 Plot.limit(x=None, y=None)
 ```
 
-**Parameters:**
-- `x` - Tuple of (min, max) for x-axis
-- `y` - Tuple of (min, max) for y-axis
+**參數：**
+- `x` - x 軸的（最小值, 最大值）元組
+- `y` - y 軸的（最小值, 最大值）元組
 
-**Example:**
+**範例：**
 ```python
 p.limit(x=(0, 100), y=(0, 50))
 ```
 
 #### label()
 
-Set axis labels and titles.
+設定軸標籤和標題。
 
 ```python
 Plot.label(x=None, y=None, color=None, title=None, **labels)
 ```
 
-**Parameters:** Keyword arguments with property names and label strings
+**參數：** 帶有屬性名稱和標籤字串的關鍵字引數
 
-**Example:**
+**範例：**
 ```python
 p.label(
     x='Total Bill ($)',
@@ -211,76 +211,76 @@ p.label(
 
 #### theme()
 
-Apply matplotlib style settings.
+應用 matplotlib 樣式設定。
 
 ```python
 Plot.theme(config, **kwargs)
 ```
 
-**Parameters:**
-- `config` - Dict of rcParams or seaborn theme dict
-- `**kwargs` - Individual rcParams
+**參數：**
+- `config` - rcParams 字典或 seaborn 主題字典
+- `**kwargs` - 個別 rcParams
 
-**Example:**
+**範例：**
 ```python
-# Seaborn theme
+# Seaborn 主題
 p.theme({**sns.axes_style('whitegrid'), **sns.plotting_context('talk')})
 
-# Custom rcParams
+# 自訂 rcParams
 p.theme({'axes.facecolor': 'white', 'axes.grid': True})
 
-# Individual parameters
+# 個別參數
 p.theme(axes_facecolor='white', font_scale=1.2)
 ```
 
 #### layout()
 
-Configure subplot layout.
+設定子圖版面。
 
 ```python
 Plot.layout(size=None, extent=None, engine=None)
 ```
 
-**Parameters:**
-- `size` - (width, height) in inches
-- `extent` - (left, bottom, right, top) for subplots
-- `engine` - "tight", "constrained", or None
+**參數：**
+- `size` - （寬度, 高度）英寸
+- `extent` - 子圖的（左, 下, 右, 上）
+- `engine` - "tight"、"constrained" 或 None
 
-**Example:**
+**範例：**
 ```python
 p.layout(size=(10, 6), engine='constrained')
 ```
 
 #### share()
 
-Control axis sharing across facets.
+控制跨分面的軸共享。
 
 ```python
 Plot.share(x=None, y=None)
 ```
 
-**Parameters:**
-- `x` - Share x-axis: True, False, or "col"/"row"
-- `y` - Share y-axis: True, False, or "col"/"row"
+**參數：**
+- `x` - 共享 x 軸：True、False 或 "col"/"row"
+- `y` - 共享 y 軸：True、False 或 "col"/"row"
 
-**Example:**
+**範例：**
 ```python
-p.share(x=True, y=False)  # Share x across all, independent y
-p.share(x='col')  # Share x within columns only
+p.share(x=True, y=False)  # 跨所有共享 x，獨立 y
+p.share(x='col')  # 只在欄內共享 x
 ```
 
 #### on()
 
-Plot on existing matplotlib figure or axes.
+在現有 matplotlib 圖形或軸上繪圖。
 
 ```python
 Plot.on(target)
 ```
 
-**Parameters:**
-- `target` - matplotlib Figure or Axes object
+**參數：**
+- `target` - matplotlib Figure 或 Axes 物件
 
-**Example:**
+**範例：**
 ```python
 import matplotlib.pyplot as plt
 
@@ -291,57 +291,57 @@ so.Plot(df, x='x', y='z').add(so.Line()).on(axes[0, 1])
 
 #### show()
 
-Render and display the plot.
+渲染並顯示圖形。
 
 ```python
 Plot.show(**kwargs)
 ```
 
-**Parameters:** Passed to `matplotlib.pyplot.show()`
+**參數：** 傳遞給 `matplotlib.pyplot.show()`
 
 #### save()
 
-Save the plot to file.
+儲存圖形到檔案。
 
 ```python
 Plot.save(filename, **kwargs)
 ```
 
-**Parameters:**
-- `filename` - Output filename
-- `**kwargs` - Passed to `matplotlib.figure.Figure.savefig()`
+**參數：**
+- `filename` - 輸出檔名
+- `**kwargs` - 傳遞給 `matplotlib.figure.Figure.savefig()`
 
-**Example:**
+**範例：**
 ```python
 p.save('plot.png', dpi=300, bbox_inches='tight')
 p.save('plot.pdf')
 ```
 
-## Mark Objects
+## Mark 物件
 
-Marks define how data is visually represented.
+Marks 定義資料如何視覺化呈現。
 
 ### Dot
 
-Points/markers for individual observations.
+個別觀測值的點/標記。
 
 ```python
 so.Dot(artist_kws=None, **kwargs)
 ```
 
-**Properties:**
-- `color` - Fill color
-- `alpha` - Transparency
-- `fillcolor` - Alternate color property
-- `fillalpha` - Alternate alpha property
-- `edgecolor` - Edge color
-- `edgealpha` - Edge transparency
-- `edgewidth` - Edge line width
-- `marker` - Marker style
-- `pointsize` - Marker size
-- `stroke` - Edge width
+**屬性：**
+- `color` - 填充顏色
+- `alpha` - 透明度
+- `fillcolor` - 替代顏色屬性
+- `fillalpha` - 替代 alpha 屬性
+- `edgecolor` - 邊緣顏色
+- `edgealpha` - 邊緣透明度
+- `edgewidth` - 邊緣線寬
+- `marker` - 標記樣式
+- `pointsize` - 標記大小
+- `stroke` - 邊緣寬度
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y').add(so.Dot(color='blue', pointsize=10))
 so.Plot(df, x='x', y='y', color='cat').add(so.Dot(alpha=0.5))
@@ -349,23 +349,23 @@ so.Plot(df, x='x', y='y', color='cat').add(so.Dot(alpha=0.5))
 
 ### Line
 
-Lines connecting observations.
+連接觀測值的線條。
 
 ```python
 so.Line(artist_kws=None, **kwargs)
 ```
 
-**Properties:**
-- `color` - Line color
-- `alpha` - Transparency
-- `linewidth` - Line width
-- `linestyle` - Line style ("-", "--", "-.", ":")
-- `marker` - Marker at data points
-- `pointsize` - Marker size
-- `edgecolor` - Marker edge color
-- `edgewidth` - Marker edge width
+**屬性：**
+- `color` - 線條顏色
+- `alpha` - 透明度
+- `linewidth` - 線寬
+- `linestyle` - 線條樣式（"-"、"--"、"-."、":"）
+- `marker` - 資料點上的標記
+- `pointsize` - 標記大小
+- `edgecolor` - 標記邊緣顏色
+- `edgewidth` - 標記邊緣寬度
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y').add(so.Line())
 so.Plot(df, x='x', y='y', color='cat').add(so.Line(linewidth=2))
@@ -373,37 +373,37 @@ so.Plot(df, x='x', y='y', color='cat').add(so.Line(linewidth=2))
 
 ### Path
 
-Like Line but connects points in data order (not sorted by x).
+類似 Line 但按資料順序連接點（不按 x 排序）。
 
 ```python
 so.Path(artist_kws=None, **kwargs)
 ```
 
-Properties same as `Line`.
+屬性與 `Line` 相同。
 
-**Example:**
+**範例：**
 ```python
-# For trajectories, loops, etc.
+# 用於軌跡、迴圈等
 so.Plot(trajectory_df, x='x', y='y').add(so.Path())
 ```
 
 ### Bar
 
-Rectangular bars.
+矩形長條。
 
 ```python
 so.Bar(artist_kws=None, **kwargs)
 ```
 
-**Properties:**
-- `color` - Fill color
-- `alpha` - Transparency
-- `edgecolor` - Edge color
-- `edgealpha` - Edge transparency
-- `edgewidth` - Edge line width
-- `width` - Bar width (data units)
+**屬性：**
+- `color` - 填充顏色
+- `alpha` - 透明度
+- `edgecolor` - 邊緣顏色
+- `edgealpha` - 邊緣透明度
+- `edgewidth` - 邊緣線寬
+- `width` - 長條寬度（資料單位）
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category', y='value').add(so.Bar())
 so.Plot(df, x='x', y='y').add(so.Bar(color='#1f77b4', width=0.5))
@@ -411,36 +411,36 @@ so.Plot(df, x='x', y='y').add(so.Bar(color='#1f77b4', width=0.5))
 
 ### Bars
 
-Multiple bars (for aggregated data with error bars).
+多個長條（用於帶誤差棒的聚合資料）。
 
 ```python
 so.Bars(artist_kws=None, **kwargs)
 ```
 
-Properties same as `Bar`. Used with `Agg()` or `Est()` stats.
+屬性與 `Bar` 相同。與 `Agg()` 或 `Est()` stats 一起使用。
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category', y='value').add(so.Bars(), so.Agg())
 ```
 
 ### Area
 
-Filled area between line and baseline.
+線條和基線之間的填充區域。
 
 ```python
 so.Area(artist_kws=None, **kwargs)
 ```
 
-**Properties:**
-- `color` - Fill color
-- `alpha` - Transparency
-- `edgecolor` - Edge color
-- `edgealpha` - Edge transparency
-- `edgewidth` - Edge line width
-- `baseline` - Baseline value (default: 0)
+**屬性：**
+- `color` - 填充顏色
+- `alpha` - 透明度
+- `edgecolor` - 邊緣顏色
+- `edgealpha` - 邊緣透明度
+- `edgewidth` - 邊緣線寬
+- `baseline` - 基線值（預設：0）
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y').add(so.Area(alpha=0.3))
 so.Plot(df, x='x', y='y', color='cat').add(so.Area())
@@ -448,15 +448,15 @@ so.Plot(df, x='x', y='y', color='cat').add(so.Area())
 
 ### Band
 
-Filled band between two lines (for ranges/intervals).
+兩條線之間的填充帶（用於範圍/區間）。
 
 ```python
 so.Band(artist_kws=None, **kwargs)
 ```
 
-Properties same as `Area`. Requires `ymin` and `ymax` mappings or used with `Est()` stat.
+屬性與 `Area` 相同。需要 `ymin` 和 `ymax` 映射或與 `Est()` stat 一起使用。
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', ymin='lower', ymax='upper').add(so.Band())
 so.Plot(df, x='x', y='y').add(so.Band(), so.Est())
@@ -464,84 +464,84 @@ so.Plot(df, x='x', y='y').add(so.Band(), so.Est())
 
 ### Range
 
-Line with markers at endpoints (for ranges).
+端點帶標記的線條（用於範圍）。
 
 ```python
 so.Range(artist_kws=None, **kwargs)
 ```
 
-**Properties:**
-- `color` - Line and marker color
-- `alpha` - Transparency
-- `linewidth` - Line width
-- `marker` - Marker style at endpoints
-- `pointsize` - Marker size
-- `edgewidth` - Marker edge width
+**屬性：**
+- `color` - 線條和標記顏色
+- `alpha` - 透明度
+- `linewidth` - 線寬
+- `marker` - 端點的標記樣式
+- `pointsize` - 標記大小
+- `edgewidth` - 標記邊緣寬度
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y').add(so.Range(), so.Est())
 ```
 
 ### Dash
 
-Short horizontal/vertical lines (for distribution marks).
+短水平/垂直線（用於分布標記）。
 
 ```python
 so.Dash(artist_kws=None, **kwargs)
 ```
 
-**Properties:**
-- `color` - Line color
-- `alpha` - Transparency
-- `linewidth` - Line width
-- `width` - Dash length (data units)
+**屬性：**
+- `color` - 線條顏色
+- `alpha` - 透明度
+- `linewidth` - 線寬
+- `width` - 短線長度（資料單位）
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category', y='value').add(so.Dash())
 ```
 
 ### Text
 
-Text labels at data points.
+資料點上的文字標籤。
 
 ```python
 so.Text(artist_kws=None, **kwargs)
 ```
 
-**Properties:**
-- `color` - Text color
-- `alpha` - Transparency
-- `fontsize` - Font size
-- `halign` - Horizontal alignment: "left", "center", "right"
-- `valign` - Vertical alignment: "bottom", "center", "top"
-- `offset` - (x, y) offset from point
+**屬性：**
+- `color` - 文字顏色
+- `alpha` - 透明度
+- `fontsize` - 字體大小
+- `halign` - 水平對齊："left"、"center"、"right"
+- `valign` - 垂直對齊："bottom"、"center"、"top"
+- `offset` - 距點的（x, y）偏移
 
-Requires `text` mapping.
+需要 `text` 映射。
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y', text='label').add(so.Text())
 so.Plot(df, x='x', y='y', text='value').add(so.Text(fontsize=10, offset=(0, 5)))
 ```
 
-## Stat Objects
+## Stat 物件
 
-Stats transform data before rendering. Compose with marks in `.add()`.
+Stats 在渲染前轉換資料。在 `.add()` 中與 marks 組合。
 
 ### Agg
 
-Aggregate observations by group.
+按組聚合觀測值。
 
 ```python
 so.Agg(func='mean')
 ```
 
-**Parameters:**
-- `func` - Aggregation function: "mean", "median", "sum", "min", "max", "count", or callable
+**參數：**
+- `func` - 聚合函數："mean"、"median"、"sum"、"min"、"max"、"count" 或可呼叫物件
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category', y='value').add(so.Bar(), so.Agg('mean'))
 so.Plot(df, x='x', y='y', color='group').add(so.Line(), so.Agg('median'))
@@ -549,23 +549,23 @@ so.Plot(df, x='x', y='y', color='group').add(so.Line(), so.Agg('median'))
 
 ### Est
 
-Estimate central tendency with error intervals.
+帶有誤差區間的中心趨勢估計。
 
 ```python
 so.Est(func='mean', errorbar=('ci', 95), n_boot=1000, seed=None)
 ```
 
-**Parameters:**
-- `func` - Estimator: "mean", "median", "sum", or callable
-- `errorbar` - Error representation:
-  - `("ci", level)` - Confidence interval via bootstrap
-  - `("pi", level)` - Percentile interval
-  - `("se", scale)` - Standard error scaled by factor
-  - `"sd"` - Standard deviation
-- `n_boot` - Bootstrap iterations
-- `seed` - Random seed
+**參數：**
+- `func` - 估計器："mean"、"median"、"sum" 或可呼叫物件
+- `errorbar` - 誤差表示：
+  - `("ci", level)` - 透過自助法的信賴區間
+  - `("pi", level)` - 百分位數區間
+  - `("se", scale)` - 按係數縮放的標準誤
+  - `"sd"` - 標準差
+- `n_boot` - 自助法迭代次數
+- `seed` - 隨機種子
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category', y='value').add(so.Bar(), so.Est())
 so.Plot(df, x='x', y='y').add(so.Line(), so.Est(errorbar='sd'))
@@ -575,23 +575,23 @@ so.Plot(df, x='x', y='y').add(so.Band(), so.Est())
 
 ### Hist
 
-Bin observations and count/aggregate.
+分箱觀測值並計數/聚合。
 
 ```python
 so.Hist(stat='count', bins='auto', binwidth=None, binrange=None,
         common_norm=True, common_bins=True, cumulative=False)
 ```
 
-**Parameters:**
-- `stat` - "count", "density", "probability", "percent", "frequency"
-- `bins` - Number of bins, bin method, or edges
-- `binwidth` - Width of bins
-- `binrange` - (min, max) range for binning
-- `common_norm` - Normalize across groups together
-- `common_bins` - Use same bins for all groups
-- `cumulative` - Cumulative histogram
+**參數：**
+- `stat` - "count"、"density"、"probability"、"percent"、"frequency"
+- `bins` - 分箱數量、分箱方法或邊緣
+- `binwidth` - 分箱寬度
+- `binrange` - 分箱的（最小值, 最大值）範圍
+- `common_norm` - 跨組一起正規化
+- `common_bins` - 所有組使用相同分箱
+- `cumulative` - 累積直方圖
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='value').add(so.Bars(), so.Hist())
 so.Plot(df, x='value').add(so.Bars(), so.Hist(bins=20, stat='density'))
@@ -600,21 +600,21 @@ so.Plot(df, x='value', color='group').add(so.Area(), so.Hist(cumulative=True))
 
 ### KDE
 
-Kernel density estimate.
+核密度估計。
 
 ```python
 so.KDE(bw_method='scott', bw_adjust=1, gridsize=200,
        cut=3, cumulative=False)
 ```
 
-**Parameters:**
-- `bw_method` - Bandwidth method: "scott", "silverman", or scalar
-- `bw_adjust` - Bandwidth multiplier
-- `gridsize` - Resolution of density curve
-- `cut` - Extension beyond data range (in bandwidth units)
-- `cumulative` - Cumulative density
+**參數：**
+- `bw_method` - 頻寬方法："scott"、"silverman" 或純量
+- `bw_adjust` - 頻寬乘數
+- `gridsize` - 密度曲線的解析度
+- `cut` - 超出資料範圍的延伸（以頻寬單位）
+- `cumulative` - 累積密度
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='value').add(so.Line(), so.KDE())
 so.Plot(df, x='value', color='group').add(so.Area(alpha=0.5), so.KDE())
@@ -623,29 +623,29 @@ so.Plot(df, x='x', y='y').add(so.Line(), so.KDE(bw_adjust=0.5))
 
 ### Count
 
-Count observations per group.
+計算每組的觀測值數量。
 
 ```python
 so.Count()
 ```
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category').add(so.Bar(), so.Count())
 ```
 
 ### PolyFit
 
-Polynomial regression fit.
+多項式迴歸擬合。
 
 ```python
 so.PolyFit(order=1)
 ```
 
-**Parameters:**
-- `order` - Polynomial order (1 = linear, 2 = quadratic, etc.)
+**參數：**
+- `order` - 多項式階數（1 = 線性，2 = 二次，等等）
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y').add(so.Dot())
 so.Plot(df, x='x', y='y').add(so.Line(), so.PolyFit(order=2))
@@ -653,38 +653,38 @@ so.Plot(df, x='x', y='y').add(so.Line(), so.PolyFit(order=2))
 
 ### Perc
 
-Compute percentiles.
+計算百分位數。
 
 ```python
 so.Perc(k=5, method='linear')
 ```
 
-**Parameters:**
-- `k` - Number of percentile intervals
-- `method` - Interpolation method
+**參數：**
+- `k` - 百分位數區間數量
+- `method` - 插值方法
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y').add(so.Band(), so.Perc())
 ```
 
-## Move Objects
+## Move 物件
 
-Moves adjust positions to resolve overlaps or create specific layouts.
+Moves 調整位置以解決重疊或建立特定版面。
 
 ### Dodge
 
-Shift positions side-by-side.
+將位置並排移動。
 
 ```python
 so.Dodge(empty='keep', gap=0)
 ```
 
-**Parameters:**
-- `empty` - How to handle empty groups: "keep", "drop", "fill"
-- `gap` - Gap between dodged elements (proportion)
+**參數：**
+- `empty` - 如何處理空組："keep"、"drop"、"fill"
+- `gap` - 閃避元素之間的間隙（比例）
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category', y='value', color='group').add(so.Bar(), so.Dodge())
 so.Plot(df, x='cat', y='val', color='hue').add(so.Dot(), so.Dodge(gap=0.1))
@@ -692,13 +692,13 @@ so.Plot(df, x='cat', y='val', color='hue').add(so.Dot(), so.Dodge(gap=0.1))
 
 ### Stack
 
-Stack marks vertically.
+垂直堆疊標記。
 
 ```python
 so.Stack()
 ```
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y', color='category').add(so.Bar(), so.Stack())
 so.Plot(df, x='x', y='y', color='group').add(so.Area(), so.Stack())
@@ -706,18 +706,18 @@ so.Plot(df, x='x', y='y', color='group').add(so.Area(), so.Stack())
 
 ### Jitter
 
-Add random noise to positions.
+對位置添加隨機雜訊。
 
 ```python
 so.Jitter(width=None, height=None, seed=None)
 ```
 
-**Parameters:**
-- `width` - Jitter in x direction (data units or proportion)
-- `height` - Jitter in y direction
-- `seed` - Random seed
+**參數：**
+- `width` - x 方向的抖動（資料單位或比例）
+- `height` - y 方向的抖動
+- `seed` - 隨機種子
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='category', y='value').add(so.Dot(), so.Jitter())
 so.Plot(df, x='cat', y='val').add(so.Dot(), so.Jitter(width=0.2))
@@ -725,84 +725,84 @@ so.Plot(df, x='cat', y='val').add(so.Dot(), so.Jitter(width=0.2))
 
 ### Shift
 
-Shift positions by constant amount.
+將位置移動固定量。
 
 ```python
 so.Shift(x=0, y=0)
 ```
 
-**Parameters:**
-- `x` - Shift in x direction (data units)
-- `y` - Shift in y direction
+**參數：**
+- `x` - x 方向的移動（資料單位）
+- `y` - y 方向的移動
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y').add(so.Dot(), so.Shift(x=1))
 ```
 
 ### Norm
 
-Normalize values.
+正規化值。
 
 ```python
 so.Norm(func='max', where=None, by=None, percent=False)
 ```
 
-**Parameters:**
-- `func` - Normalization: "max", "sum", "area", or callable
-- `where` - Apply to which axis: "x", "y", or None
-- `by` - Grouping variables for separate normalization
-- `percent` - Show as percentage
+**參數：**
+- `func` - 正規化方式："max"、"sum"、"area" 或可呼叫物件
+- `where` - 應用到哪個軸："x"、"y" 或 None
+- `by` - 分別正規化的分組變數
+- `percent` - 顯示為百分比
 
-**Example:**
+**範例：**
 ```python
 so.Plot(df, x='x', y='y', color='group').add(so.Area(), so.Norm())
 ```
 
-## Scale Objects
+## Scale 物件
 
-Scales control how data values map to visual properties.
+Scales 控制資料值如何映射到視覺屬性。
 
 ### Continuous
 
-For numeric data.
+用於數值資料。
 
 ```python
 so.Continuous(values=None, norm=None, trans=None)
 ```
 
-**Methods:**
-- `.tick(at=None, every=None, between=None, minor=None)` - Configure ticks
-- `.label(like=None, base=None, unit=None)` - Format labels
+**方法：**
+- `.tick(at=None, every=None, between=None, minor=None)` - 設定刻度
+- `.label(like=None, base=None, unit=None)` - 格式化標籤
 
-**Parameters:**
-- `values` - Explicit value range (min, max)
-- `norm` - Normalization function
-- `trans` - Transformation: "log", "sqrt", "symlog", "logit", "pow10", or callable
+**參數：**
+- `values` - 明確的值範圍（最小值, 最大值）
+- `norm` - 正規化函數
+- `trans` - 轉換："log"、"sqrt"、"symlog"、"logit"、"pow10" 或可呼叫物件
 
-**Example:**
+**範例：**
 ```python
 p.scale(
     x=so.Continuous().tick(every=10),
     y=so.Continuous(trans='log').tick(at=[1, 10, 100]),
     color=so.Continuous(values=(0, 1)),
-    pointsize=(5, 20)  # Shorthand for Continuous range
+    pointsize=(5, 20)  # Continuous 範圍的簡寫
 )
 ```
 
 ### Nominal
 
-For categorical data.
+用於類別資料。
 
 ```python
 so.Nominal(values=None, order=None)
 ```
 
-**Parameters:**
-- `values` - Explicit values (e.g., colors, markers)
-- `order` - Category order
+**參數：**
+- `values` - 明確的值（例如顏色、標記）
+- `order` - 類別順序
 
-**Example:**
+**範例：**
 ```python
 p.scale(
     color=so.Nominal(['#1f77b4', '#ff7f0e', '#2ca02c']),
@@ -813,24 +813,24 @@ p.scale(
 
 ### Temporal
 
-For datetime data.
+用於日期時間資料。
 
 ```python
 so.Temporal(values=None, trans=None)
 ```
 
-**Methods:**
-- `.tick(every=None, between=None)` - Configure ticks
-- `.label(concise=False)` - Format labels
+**方法：**
+- `.tick(every=None, between=None)` - 設定刻度
+- `.label(concise=False)` - 格式化標籤
 
-**Example:**
+**範例：**
 ```python
 p.scale(x=so.Temporal().tick(every=('month', 1)).label(concise=True))
 ```
 
-## Complete Examples
+## 完整範例
 
-### Layered Plot with Statistics
+### 帶有統計的分層圖形
 
 ```python
 (
@@ -843,7 +843,7 @@ p.scale(x=so.Temporal().tick(every=('month', 1)).label(concise=True))
 )
 ```
 
-### Faceted Distribution
+### 分面分布
 
 ```python
 (
@@ -857,7 +857,7 @@ p.scale(x=so.Temporal().tick(every=('month', 1)).label(concise=True))
 )
 ```
 
-### Grouped Bar Chart
+### 分組長條圖
 
 ```python
 (
@@ -869,7 +869,7 @@ p.scale(x=so.Temporal().tick(every=('month', 1)).label(concise=True))
 )
 ```
 
-### Complex Multi-Layer
+### 複雜多圖層
 
 ```python
 (
@@ -891,28 +891,28 @@ p.scale(x=so.Temporal().tick(every=('month', 1)).label(concise=True))
 )
 ```
 
-## Migration from Function Interface
+## 從函數介面遷移
 
-### Scatter Plot
+### 散點圖
 
-**Function interface:**
+**函數介面：**
 ```python
 sns.scatterplot(data=df, x='x', y='y', hue='category', size='value')
 ```
 
-**Objects interface:**
+**Objects 介面：**
 ```python
 so.Plot(df, x='x', y='y', color='category', pointsize='value').add(so.Dot())
 ```
 
-### Line Plot with CI
+### 帶有信賴區間的折線圖
 
-**Function interface:**
+**函數介面：**
 ```python
 sns.lineplot(data=df, x='time', y='measurement', hue='group', errorbar='ci')
 ```
 
-**Objects interface:**
+**Objects 介面：**
 ```python
 (
     so.Plot(df, x='time', y='measurement', color='group')
@@ -920,14 +920,14 @@ sns.lineplot(data=df, x='time', y='measurement', hue='group', errorbar='ci')
 )
 ```
 
-### Histogram
+### 直方圖
 
-**Function interface:**
+**函數介面：**
 ```python
 sns.histplot(data=df, x='value', hue='category', stat='density', kde=True)
 ```
 
-**Objects interface:**
+**Objects 介面：**
 ```python
 (
     so.Plot(df, x='value', color='category')
@@ -936,14 +936,14 @@ sns.histplot(data=df, x='value', hue='category', stat='density', kde=True)
 )
 ```
 
-### Bar Plot with Error Bars
+### 帶有誤差棒的長條圖
 
-**Function interface:**
+**函數介面：**
 ```python
 sns.barplot(data=df, x='category', y='value', hue='group', errorbar='ci')
 ```
 
-**Objects interface:**
+**Objects 介面：**
 ```python
 (
     so.Plot(df, x='category', y='value', color='group')
@@ -952,13 +952,13 @@ sns.barplot(data=df, x='category', y='value', hue='group', errorbar='ci')
 )
 ```
 
-## Tips and Best Practices
+## 技巧和最佳實踐
 
-1. **Method chaining**: Each method returns a new Plot object, enabling fluent chaining
-2. **Layer composition**: Combine multiple `.add()` calls to overlay different marks
-3. **Transform order**: In `.add(mark, stat, move)`, stat applies first, then move
-4. **Variable priority**: Layer-specific mappings override Plot-level mappings
-5. **Scale shortcuts**: Use tuples for simple ranges: `color=(min, max)` vs full Scale object
-6. **Jupyter rendering**: Plots render automatically when returned; use `.show()` otherwise
-7. **Saving**: Use `.save()` rather than `plt.savefig()` for proper handling
-8. **Matplotlib access**: Use `.on(ax)` to integrate with matplotlib figures
+1. **方法鏈接**：每個方法回傳新的 Plot 物件，支援流暢的鏈接
+2. **圖層組合**：組合多個 `.add()` 呼叫來疊加不同的標記
+3. **轉換順序**：在 `.add(mark, stat, move)` 中，stat 先應用，然後是 move
+4. **變數優先順序**：圖層特定映射覆寫 Plot 層級映射
+5. **Scale 簡寫**：使用元組表示簡單範圍：`color=(min, max)` vs 完整 Scale 物件
+6. **Jupyter 渲染**：回傳時圖形自動渲染；否則使用 `.show()`
+7. **儲存**：使用 `.save()` 而非 `plt.savefig()` 以正確處理
+8. **Matplotlib 存取**：使用 `.on(ax)` 與 matplotlib 圖形整合

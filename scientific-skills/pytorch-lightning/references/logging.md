@@ -1,21 +1,21 @@
-# Logging - Comprehensive Guide
+# 日誌記錄 - 完整指南
 
-## Overview
+## 概述
 
-PyTorch Lightning supports multiple logging integrations for experiment tracking and visualization. By default, Lightning uses TensorBoard, but you can easily switch to or combine multiple loggers.
+PyTorch Lightning 支援多種日誌整合，用於實驗追蹤和視覺化。預設情況下，Lightning 使用 TensorBoard，但你可以輕鬆切換或組合多個日誌器。
 
-## Supported Loggers
+## 支援的日誌器
 
-### TensorBoardLogger (Default)
+### TensorBoardLogger（預設）
 
-Logs to local or remote file system in TensorBoard format.
+記錄到本地或遠端檔案系統，使用 TensorBoard 格式。
 
-**Installation:**
+**安裝：**
 ```bash
 pip install tensorboard
 ```
 
-**Usage:**
+**用法：**
 ```python
 from lightning.pytorch import loggers as pl_loggers
 
@@ -29,21 +29,21 @@ tb_logger = pl_loggers.TensorBoardLogger(
 trainer = L.Trainer(logger=tb_logger)
 ```
 
-**View logs:**
+**檢視日誌：**
 ```bash
 tensorboard --logdir logs/
 ```
 
 ### WandbLogger
 
-Weights & Biases integration for cloud-based experiment tracking.
+Weights & Biases 整合，用於雲端實驗追蹤。
 
-**Installation:**
+**安裝：**
 ```bash
 pip install wandb
 ```
 
-**Usage:**
+**用法：**
 ```python
 from lightning.pytorch import loggers as pl_loggers
 
@@ -51,29 +51,29 @@ wandb_logger = pl_loggers.WandbLogger(
     project="my-project",
     name="experiment-1",
     save_dir="logs/",
-    log_model=True  # Log model checkpoints to W&B
+    log_model=True  # 將模型檢查點記錄到 W&B
 )
 
 trainer = L.Trainer(logger=wandb_logger)
 ```
 
-**Features:**
-- Cloud-based experiment tracking
-- Model versioning
-- Artifact management
-- Collaborative features
-- Hyperparameter sweeps
+**功能：**
+- 雲端實驗追蹤
+- 模型版本控制
+- 工件管理
+- 協作功能
+- 超參數掃描
 
 ### MLFlowLogger
 
-MLflow tracking integration.
+MLflow 追蹤整合。
 
-**Installation:**
+**安裝：**
 ```bash
 pip install mlflow
 ```
 
-**Usage:**
+**用法：**
 ```python
 from lightning.pytorch import loggers as pl_loggers
 
@@ -88,14 +88,14 @@ trainer = L.Trainer(logger=mlflow_logger)
 
 ### CometLogger
 
-Comet.ml experiment tracking.
+Comet.ml 實驗追蹤。
 
-**Installation:**
+**安裝：**
 ```bash
 pip install comet-ml
 ```
 
-**Usage:**
+**用法：**
 ```python
 from lightning.pytorch import loggers as pl_loggers
 
@@ -110,14 +110,14 @@ trainer = L.Trainer(logger=comet_logger)
 
 ### NeptuneLogger
 
-Neptune.ai integration.
+Neptune.ai 整合。
 
-**Installation:**
+**安裝：**
 ```bash
 pip install neptune
 ```
 
-**Usage:**
+**用法：**
 ```python
 from lightning.pytorch import loggers as pl_loggers
 
@@ -132,9 +132,9 @@ trainer = L.Trainer(logger=neptune_logger)
 
 ### CSVLogger
 
-Log to local file system in YAML and CSV format.
+記錄到本地檔案系統，使用 YAML 和 CSV 格式。
 
-**Usage:**
+**用法：**
 ```python
 from lightning.pytorch import loggers as pl_loggers
 
@@ -147,15 +147,15 @@ csv_logger = pl_loggers.CSVLogger(
 trainer = L.Trainer(logger=csv_logger)
 ```
 
-**Output files:**
-- `metrics.csv` - All logged metrics
-- `hparams.yaml` - Hyperparameters
+**輸出檔案：**
+- `metrics.csv` - 所有記錄的指標
+- `hparams.yaml` - 超參數
 
-## Logging Metrics
+## 記錄指標
 
-### Basic Logging
+### 基本記錄
 
-Use `self.log()` within your LightningModule:
+在 LightningModule 中使用 `self.log()`：
 
 ```python
 class MyModel(L.LightningModule):
@@ -164,7 +164,7 @@ class MyModel(L.LightningModule):
         y_hat = self.model(x)
         loss = F.cross_entropy(y_hat, y)
 
-        # Log metric
+        # 記錄指標
         self.log("train_loss", loss)
 
         return loss
@@ -175,69 +175,69 @@ class MyModel(L.LightningModule):
         loss = F.cross_entropy(y_hat, y)
         acc = (y_hat.argmax(dim=1) == y).float().mean()
 
-        # Log multiple metrics
+        # 記錄多個指標
         self.log("val_loss", loss)
         self.log("val_acc", acc)
 ```
 
-### Logging Parameters
+### 記錄參數
 
-#### `on_step` (bool)
-Log at current step. Default: True in training_step, False otherwise.
+#### `on_step`（bool）
+在當前步驟記錄。預設：training_step 中為 True，其他為 False。
 
 ```python
 self.log("loss", loss, on_step=True)
 ```
 
-#### `on_epoch` (bool)
-Accumulate and log at epoch end. Default: False in training_step, True otherwise.
+#### `on_epoch`（bool）
+累積並在 epoch 結束時記錄。預設：training_step 中為 False，其他為 True。
 
 ```python
 self.log("loss", loss, on_epoch=True)
 ```
 
-#### `prog_bar` (bool)
-Display in progress bar. Default: False.
+#### `prog_bar`（bool）
+在進度條中顯示。預設：False。
 
 ```python
 self.log("train_loss", loss, prog_bar=True)
 ```
 
-#### `logger` (bool)
-Send to logger backends. Default: True.
+#### `logger`（bool）
+發送到日誌後端。預設：True。
 
 ```python
-self.log("internal_metric", value, logger=False)  # Don't log to external logger
+self.log("internal_metric", value, logger=False)  # 不記錄到外部日誌器
 ```
 
-#### `reduce_fx` (str or callable)
-Reduction function: "mean", "sum", "max", "min". Default: "mean".
+#### `reduce_fx`（str 或 callable）
+縮減函數："mean"、"sum"、"max"、"min"。預設："mean"。
 
 ```python
 self.log("batch_size", batch.size(0), reduce_fx="sum")
 ```
 
-#### `sync_dist` (bool)
-Synchronize metric across devices in distributed training. Default: False.
+#### `sync_dist`（bool）
+在分散式訓練中跨裝置同步指標。預設：False。
 
 ```python
 self.log("loss", loss, sync_dist=True)
 ```
 
-#### `rank_zero_only` (bool)
-Only log from rank 0 process. Default: False.
+#### `rank_zero_only`（bool）
+僅從 rank 0 程序記錄。預設：False。
 
 ```python
 self.log("debug_metric", value, rank_zero_only=True)
 ```
 
-### Complete Example
+### 完整範例
 
 ```python
 def training_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
 
-    # Log per-step and per-epoch, display in progress bar
+    # 記錄每步和每 epoch，在進度條中顯示
     self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True)
 
     return loss
@@ -246,14 +246,14 @@ def validation_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
     acc = self.compute_accuracy(batch)
 
-    # Log epoch-level metrics
+    # 記錄 epoch 級別的指標
     self.log("val_loss", loss, on_epoch=True)
     self.log("val_acc", acc, on_epoch=True, prog_bar=True)
 ```
 
-### Logging Multiple Metrics
+### 記錄多個指標
 
-Use `log_dict()` to log multiple metrics at once:
+使用 `log_dict()` 同時記錄多個指標：
 
 ```python
 def training_step(self, batch, batch_idx):
@@ -270,47 +270,47 @@ def training_step(self, batch, batch_idx):
     return loss
 ```
 
-## Logging Hyperparameters
+## 記錄超參數
 
-### Automatic Hyperparameter Logging
+### 自動超參數記錄
 
-Use `save_hyperparameters()` in your model:
+在模型中使用 `save_hyperparameters()`：
 
 ```python
 class MyModel(L.LightningModule):
     def __init__(self, learning_rate, hidden_dim, dropout):
         super().__init__()
-        # Automatically save and log hyperparameters
+        # 自動儲存和記錄超參數
         self.save_hyperparameters()
 ```
 
-### Manual Hyperparameter Logging
+### 手動超參數記錄
 
 ```python
-# In LightningModule
+# 在 LightningModule 中
 class MyModel(L.LightningModule):
     def __init__(self, learning_rate):
         super().__init__()
         self.save_hyperparameters()
 
-# Or manually with logger
+# 或使用日誌器手動記錄
 trainer.logger.log_hyperparams({
     "learning_rate": 0.001,
     "batch_size": 32
 })
 ```
 
-## Logging Frequency
+## 記錄頻率
 
-By default, Lightning logs every 50 training steps. Adjust with `log_every_n_steps`:
+預設情況下，Lightning 每 50 個訓練步驟記錄一次。使用 `log_every_n_steps` 調整：
 
 ```python
 trainer = L.Trainer(log_every_n_steps=10)
 ```
 
-## Multiple Loggers
+## 多個日誌器
 
-Use multiple loggers simultaneously:
+同時使用多個日誌器：
 
 ```python
 from lightning.pytorch import loggers as pl_loggers
@@ -322,9 +322,9 @@ csv_logger = pl_loggers.CSVLogger("logs/")
 trainer = L.Trainer(logger=[tb_logger, wandb_logger, csv_logger])
 ```
 
-## Advanced Logging
+## 進階記錄
 
-### Logging Images
+### 記錄影像
 
 ```python
 import torchvision
@@ -333,15 +333,15 @@ def validation_step(self, batch, batch_idx):
     x, y = batch
     y_hat = self.model(x)
 
-    # Log first batch of images once per epoch
+    # 每個 epoch 記錄第一個批次的影像一次
     if batch_idx == 0:
-        # Create image grid
+        # 建立影像網格
         grid = torchvision.utils.make_grid(x[:8])
 
-        # Log to TensorBoard
+        # 記錄到 TensorBoard
         self.logger.experiment.add_image("val_images", grid, self.current_epoch)
 
-        # Log to Wandb
+        # 記錄到 Wandb
         if isinstance(self.logger, pl_loggers.WandbLogger):
             import wandb
             self.logger.experiment.log({
@@ -349,11 +349,11 @@ def validation_step(self, batch, batch_idx):
             })
 ```
 
-### Logging Histograms
+### 記錄直方圖
 
 ```python
 def on_train_epoch_end(self):
-    # Log parameter histograms
+    # 記錄參數直方圖
     for name, param in self.named_parameters():
         self.logger.experiment.add_histogram(name, param, self.current_epoch)
 
@@ -363,41 +363,41 @@ def on_train_epoch_end(self):
             )
 ```
 
-### Logging Model Graph
+### 記錄模型圖
 
 ```python
 def on_train_start(self):
-    # Log model architecture
+    # 記錄模型架構
     sample_input = torch.randn(1, 3, 224, 224).to(self.device)
     self.logger.experiment.add_graph(self.model, sample_input)
 ```
 
-### Logging Custom Plots
+### 記錄自訂圖表
 
 ```python
 import matplotlib.pyplot as plt
 
 def on_validation_epoch_end(self):
-    # Create custom plot
+    # 建立自訂圖表
     fig, ax = plt.subplots()
     ax.plot(self.validation_losses)
     ax.set_xlabel("Epoch")
     ax.set_ylabel("Loss")
 
-    # Log to TensorBoard
+    # 記錄到 TensorBoard
     self.logger.experiment.add_figure("loss_curve", fig, self.current_epoch)
 
     plt.close(fig)
 ```
 
-### Logging Text
+### 記錄文字
 
 ```python
 def validation_step(self, batch, batch_idx):
-    # Generate predictions
+    # 生成預測
     predictions = self.generate_text(batch)
 
-    # Log to TensorBoard
+    # 記錄到 TensorBoard
     self.logger.experiment.add_text(
         "predictions",
         f"Batch {batch_idx}: {predictions}",
@@ -405,13 +405,13 @@ def validation_step(self, batch, batch_idx):
     )
 ```
 
-### Logging Audio
+### 記錄音訊
 
 ```python
 def validation_step(self, batch, batch_idx):
     audio = self.generate_audio(batch)
 
-    # Log to TensorBoard (audio is tensor of shape [1, samples])
+    # 記錄到 TensorBoard（音訊是形狀為 [1, samples] 的張量）
     self.logger.experiment.add_audio(
         "generated_audio",
         audio,
@@ -420,30 +420,30 @@ def validation_step(self, batch, batch_idx):
     )
 ```
 
-## Accessing Logger in LightningModule
+## 在 LightningModule 中存取日誌器
 
 ```python
 class MyModel(L.LightningModule):
     def training_step(self, batch, batch_idx):
-        # Access logger experiment object
+        # 存取日誌器實驗物件
         logger = self.logger.experiment
 
-        # For TensorBoard
+        # 對於 TensorBoard
         if isinstance(self.logger, pl_loggers.TensorBoardLogger):
             logger.add_scalar("custom_metric", value, self.global_step)
 
-        # For Wandb
+        # 對於 Wandb
         if isinstance(self.logger, pl_loggers.WandbLogger):
             logger.log({"custom_metric": value})
 
-        # For MLflow
+        # 對於 MLflow
         if isinstance(self.logger, pl_loggers.MLFlowLogger):
             logger.log_metric("custom_metric", value)
 ```
 
-## Custom Logger
+## 自訂日誌器
 
-Create a custom logger by inheriting from `Logger`:
+透過繼承 `Logger` 建立自訂日誌器：
 
 ```python
 from lightning.pytorch.loggers import Logger
@@ -466,53 +466,53 @@ class MyCustomLogger(Logger):
 
     @rank_zero_only
     def log_metrics(self, metrics, step):
-        # Log metrics to your backend
+        # 將指標記錄到你的後端
         print(f"Step {step}: {metrics}")
 
     @rank_zero_only
     def log_hyperparams(self, params):
-        # Log hyperparameters
+        # 記錄超參數
         print(f"Hyperparameters: {params}")
 
     @rank_zero_only
     def save(self):
-        # Save logger state
+        # 儲存日誌器狀態
         pass
 
     @rank_zero_only
     def finalize(self, status):
-        # Cleanup when training ends
+        # 訓練結束時清理
         pass
 
-# Usage
+# 用法
 custom_logger = MyCustomLogger(save_dir="logs/")
 trainer = L.Trainer(logger=custom_logger)
 ```
 
-## Best Practices
+## 最佳實務
 
-### 1. Log Both Step and Epoch Metrics
+### 1. 同時記錄步驟和 Epoch 指標
 
 ```python
-# Good: Track both granular and aggregate metrics
+# 好：追蹤細粒度和聚合指標
 self.log("train_loss", loss, on_step=True, on_epoch=True)
 ```
 
-### 2. Use Progress Bar for Key Metrics
+### 2. 對關鍵指標使用進度條
 
 ```python
-# Show important metrics in progress bar
+# 在進度條中顯示重要指標
 self.log("val_acc", acc, prog_bar=True)
 ```
 
-### 3. Synchronize Metrics in Distributed Training
+### 3. 在分散式訓練中同步指標
 
 ```python
-# Ensure correct aggregation across GPUs
+# 確保跨 GPU 的正確聚合
 self.log("val_loss", loss, sync_dist=True)
 ```
 
-### 4. Log Learning Rate
+### 4. 記錄學習率
 
 ```python
 from lightning.pytorch.callbacks import LearningRateMonitor
@@ -520,52 +520,52 @@ from lightning.pytorch.callbacks import LearningRateMonitor
 trainer = L.Trainer(callbacks=[LearningRateMonitor(logging_interval="step")])
 ```
 
-### 5. Log Gradient Norms
+### 5. 記錄梯度範數
 
 ```python
 def on_after_backward(self):
-    # Monitor gradient flow
+    # 監控梯度流
     grad_norm = torch.nn.utils.clip_grad_norm_(self.parameters(), max_norm=float('inf'))
     self.log("grad_norm", grad_norm)
 ```
 
-### 6. Use Descriptive Metric Names
+### 6. 使用描述性指標名稱
 
 ```python
-# Good: Clear naming convention
+# 好：清晰的命名慣例
 self.log("train/loss", loss)
 self.log("train/accuracy", acc)
 self.log("val/loss", val_loss)
 self.log("val/accuracy", val_acc)
 ```
 
-### 7. Log Hyperparameters
+### 7. 記錄超參數
 
 ```python
-# Always save hyperparameters for reproducibility
+# 始終儲存超參數以確保可重現性
 class MyModel(L.LightningModule):
     def __init__(self, **kwargs):
         super().__init__()
         self.save_hyperparameters()
 ```
 
-### 8. Don't Log Too Frequently
+### 8. 不要記錄太頻繁
 
 ```python
-# Avoid logging every step for expensive operations
+# 避免每步記錄昂貴的操作
 if batch_idx % 100 == 0:
     self.log_images(batch)
 ```
 
-## Common Patterns
+## 常見模式
 
-### Structured Logging
+### 結構化記錄
 
 ```python
 def training_step(self, batch, batch_idx):
     loss, metrics = self.compute_loss_and_metrics(batch)
 
-    # Organize logs with prefixes
+    # 使用前綴組織日誌
     self.log("train/loss", loss)
     self.log_dict({f"train/{k}": v for k, v in metrics.items()})
 
@@ -578,13 +578,13 @@ def validation_step(self, batch, batch_idx):
     self.log_dict({f"val/{k}": v for k, v in metrics.items()})
 ```
 
-### Conditional Logging
+### 條件式記錄
 
 ```python
 def training_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
 
-    # Log expensive metrics less frequently
+    # 較少頻率記錄昂貴的指標
     if self.global_step % 100 == 0:
         expensive_metric = self.compute_expensive_metric(batch)
         self.log("expensive_metric", expensive_metric)
@@ -593,7 +593,7 @@ def training_step(self, batch, batch_idx):
     return loss
 ```
 
-### Multi-Task Logging
+### 多任務記錄
 
 ```python
 def training_step(self, batch, batch_idx):
@@ -603,7 +603,7 @@ def training_step(self, batch, batch_idx):
     loss_task2 = self.compute_task2_loss(x, y_task2)
     total_loss = loss_task1 + loss_task2
 
-    # Log per-task metrics
+    # 記錄每個任務的指標
     self.log_dict({
         "train/loss_task1": loss_task1,
         "train/loss_task2": loss_task2,
@@ -613,17 +613,17 @@ def training_step(self, batch, batch_idx):
     return total_loss
 ```
 
-## Troubleshooting
+## 疑難排解
 
-### Metric Not Found Error
+### 找不到指標錯誤
 
-If you get "metric not found" errors with schedulers:
+如果調度器出現「找不到指標」錯誤：
 
 ```python
-# Make sure metric is logged with logger=True
+# 確保指標使用 logger=True 記錄
 self.log("val_loss", loss, logger=True)
 
-# And configure scheduler to monitor it
+# 並配置調度器監控它
 def configure_optimizers(self):
     optimizer = torch.optim.Adam(self.parameters())
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer)
@@ -631,24 +631,24 @@ def configure_optimizers(self):
         "optimizer": optimizer,
         "lr_scheduler": {
             "scheduler": scheduler,
-            "monitor": "val_loss"  # Must match logged metric name
+            "monitor": "val_loss"  # 必須與記錄的指標名稱匹配
         }
     }
 ```
 
-### Metrics Not Syncing in Distributed Training
+### 分散式訓練中指標不同步
 
 ```python
-# Enable sync_dist for proper aggregation
+# 啟用 sync_dist 以正確聚合
 self.log("val_acc", acc, sync_dist=True)
 ```
 
-### Logger Not Saving
+### 日誌器不儲存
 
 ```python
-# Ensure logger has write permissions
+# 確保日誌器有寫入權限
 trainer = L.Trainer(
     logger=pl_loggers.TensorBoardLogger("logs/"),
-    default_root_dir="outputs/"  # Ensure directory exists and is writable
+    default_root_dir="outputs/"  # 確保目錄存在且可寫
 )
 ```

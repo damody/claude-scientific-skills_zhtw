@@ -1,16 +1,16 @@
-# UniProt Query Syntax Reference
+# UniProt 查詢語法參考
 
-Comprehensive guide to UniProt search query syntax for constructing complex searches.
+建構複雜搜尋的 UniProt 搜尋查詢語法完整指南。
 
-## Basic Syntax
+## 基本語法
 
-### Simple Queries
+### 簡單查詢
 ```
 insulin
 kinase
 ```
 
-### Field-Specific Searches
+### 欄位特定搜尋
 ```
 gene:BRCA1
 accession:P12345
@@ -18,239 +18,239 @@ organism_name:human
 protein_name:kinase
 ```
 
-## Boolean Operators
+## 布林運算子
 
-### AND (both terms must be present)
+### AND（兩個術語都必須存在）
 ```
 insulin AND diabetes
 kinase AND human
 gene:BRCA1 AND reviewed:true
 ```
 
-### OR (either term can be present)
+### OR（任一術語可以存在）
 ```
 diabetes OR insulin
 (cancer OR tumor) AND human
 ```
 
-### NOT (exclude terms)
+### NOT（排除術語）
 ```
 kinase NOT human
 protein_name:kinase NOT organism_name:mouse
 ```
 
-### Grouping with Parentheses
+### 使用括號分組
 ```
 (diabetes OR insulin) AND reviewed:true
 (gene:BRCA1 OR gene:BRCA2) AND organism_id:9606
 ```
 
-## Common Search Fields
+## 常見搜尋欄位
 
-### Identification
-- `accession:P12345` - UniProt accession number
-- `id:INSR_HUMAN` - Entry name
-- `gene:BRCA1` - Gene name
-- `gene_exact:BRCA1` - Exact gene name match
+### 識別資訊
+- `accession:P12345` - UniProt 登錄號
+- `id:INSR_HUMAN` - 條目名稱
+- `gene:BRCA1` - 基因名稱
+- `gene_exact:BRCA1` - 精確基因名稱比對
 
-### Organism/Taxonomy
-- `organism_name:human` - Organism name
-- `organism_name:"Homo sapiens"` - Exact organism name (use quotes for multi-word)
-- `organism_id:9606` - NCBI taxonomy ID
-- `taxonomy_id:9606` - Same as organism_id
-- `taxonomy_name:"Homo sapiens"` - Taxonomy name
+### 生物體/分類學
+- `organism_name:human` - 生物體名稱
+- `organism_name:"Homo sapiens"` - 精確生物體名稱（多字詞使用引號）
+- `organism_id:9606` - NCBI 分類學 ID
+- `taxonomy_id:9606` - 與 organism_id 相同
+- `taxonomy_name:"Homo sapiens"` - 分類學名稱
 
-### Protein Information
-- `protein_name:insulin` - Protein name
-- `protein_name:"insulin receptor"` - Exact protein name
-- `reviewed:true` - Only Swiss-Prot (reviewed) entries
-- `reviewed:false` - Only TrEMBL (unreviewed) entries
+### 蛋白質資訊
+- `protein_name:insulin` - 蛋白質名稱
+- `protein_name:"insulin receptor"` - 精確蛋白質名稱
+- `reviewed:true` - 僅 Swiss-Prot（已審核）條目
+- `reviewed:false` - 僅 TrEMBL（未審核）條目
 
-### Sequence Properties
-- `length:[100 TO 500]` - Sequence length range
-- `mass:[50000 TO 100000]` - Molecular mass in Daltons
-- `sequence:MVLSPADKTNVK` - Exact sequence match
-- `fragment:false` - Exclude fragment sequences
+### 序列屬性
+- `length:[100 TO 500]` - 序列長度範圍
+- `mass:[50000 TO 100000]` - 分子量（道爾頓）
+- `sequence:MVLSPADKTNVK` - 精確序列比對
+- `fragment:false` - 排除片段序列
 
-### Gene Ontology (GO)
-- `go:0005515` - GO term ID (0005515 = protein binding)
-- `go_f:* ` - Any molecular function
-- `go_p:*` - Any biological process
-- `go_c:*` - Any cellular component
+### 基因本體論（GO）
+- `go:0005515` - GO 術語 ID（0005515 = 蛋白質結合）
+- `go_f:* ` - 任何分子功能
+- `go_p:*` - 任何生物過程
+- `go_c:*` - 任何細胞組件
 
-### Annotations
-- `annotation:(type:signal)` - Has signal peptide annotation
-- `annotation:(type:transmem)` - Has transmembrane region
-- `cc_function:*` - Has function comment
-- `cc_interaction:*` - Has interaction comment
-- `ft_domain:*` - Has domain feature
+### 註解
+- `annotation:(type:signal)` - 具有訊號肽註解
+- `annotation:(type:transmem)` - 具有跨膜區域
+- `cc_function:*` - 具有功能註解
+- `cc_interaction:*` - 具有交互作用註解
+- `ft_domain:*` - 具有結構域特徵
 
-### Database Cross-References
-- `xref:pdb` - Has PDB structure
-- `xref:ensembl` - Has Ensembl reference
-- `database:pdb` - Same as xref
-- `database:(type:pdb)` - Alternative syntax
+### 資料庫交叉參考
+- `xref:pdb` - 具有 PDB 結構
+- `xref:ensembl` - 具有 Ensembl 參考
+- `database:pdb` - 與 xref 相同
+- `database:(type:pdb)` - 替代語法
 
-### Protein Families and Domains
-- `family:"protein kinase"` - Protein family
-- `keyword:"Protein kinase"` - Keyword annotation
-- `cc_similarity:*` - Has similarity comment
+### 蛋白質家族和結構域
+- `family:"protein kinase"` - 蛋白質家族
+- `keyword:"Protein kinase"` - 關鍵字註解
+- `cc_similarity:*` - 具有相似性註解
 
-## Range Queries
+## 範圍查詢
 
-### Numeric Ranges
+### 數值範圍
 ```
-length:[100 TO 500]          # Between 100 and 500
-mass:[* TO 50000]            # Less than or equal to 50000
-created:[2023-01-01 TO *]   # Created after Jan 1, 2023
+length:[100 TO 500]          # 介於 100 和 500 之間
+mass:[* TO 50000]            # 小於或等於 50000
+created:[2023-01-01 TO *]   # 2023 年 1 月 1 日之後建立
 ```
 
-### Date Ranges
+### 日期範圍
 ```
 created:[2023-01-01 TO 2023-12-31]
 modified:[2024-01-01 TO *]
 ```
 
-## Wildcards
+## 萬用字元
 
-### Single Character (?)
+### 單一字元（?）
 ```
-gene:BRCA?      # Matches BRCA1, BRCA2, etc.
+gene:BRCA?      # 比對 BRCA1、BRCA2 等
 ```
 
-### Multiple Characters (*)
+### 多個字元（*）
 ```
-gene:BRCA*      # Matches BRCA1, BRCA2, BRCA1P1, etc.
+gene:BRCA*      # 比對 BRCA1、BRCA2、BRCA1P1 等
 protein_name:kinase*
 organism_name:Homo*
 ```
 
-## Advanced Searches
+## 進階搜尋
 
-### Existence Queries
+### 存在性查詢
 ```
-cc_function:*              # Has any function annotation
-ft_domain:*                # Has any domain feature
-xref:pdb                   # Has PDB structure
+cc_function:*              # 具有任何功能註解
+ft_domain:*                # 具有任何結構域特徵
+xref:pdb                   # 具有 PDB 結構
 ```
 
-### Combined Complex Queries
+### 組合複雜查詢
 ```
-# Human reviewed kinases with PDB structure
+# 具有 PDB 結構的人類已審核激酶
 (protein_name:kinase OR family:kinase) AND organism_id:9606 AND reviewed:true AND xref:pdb
 
-# Cancer-related proteins excluding mice
+# 排除小鼠的癌症相關蛋白質
 (disease:cancer OR keyword:cancer) NOT organism_name:mouse
 
-# Membrane proteins with signal peptides
+# 具有訊號肽的膜蛋白
 annotation:(type:transmem) AND annotation:(type:signal) AND reviewed:true
 
-# Recently updated human proteins
+# 最近更新的人類蛋白質
 organism_id:9606 AND modified:[2024-01-01 TO *] AND reviewed:true
 ```
 
-## Field-Specific Examples
+## 欄位特定範例
 
-### Protein Names
+### 蛋白質名稱
 ```
-protein_name:"insulin receptor"    # Exact phrase
-protein_name:insulin*              # Starts with insulin
-recommended_name:insulin           # Recommended name only
-alternative_name:insulin           # Alternative names only
-```
-
-### Genes
-```
-gene:BRCA1                        # Gene symbol
-gene_exact:BRCA1                  # Exact gene match
-olnName:BRCA1                     # Ordered locus name
-orfName:BRCA1                     # ORF name
+protein_name:"insulin receptor"    # 精確詞組
+protein_name:insulin*              # 以 insulin 開頭
+recommended_name:insulin           # 僅推薦名稱
+alternative_name:insulin           # 僅替代名稱
 ```
 
-### Organisms
+### 基因
 ```
-organism_name:human               # Common name
-organism_name:"Homo sapiens"      # Scientific name
-organism_id:9606                  # Taxonomy ID
-lineage:primates                  # Taxonomic lineage
-```
-
-### Features
-```
-ft_signal:*                       # Signal peptide
-ft_transmem:*                     # Transmembrane region
-ft_domain:"Protein kinase"        # Specific domain
-ft_binding:*                      # Binding site
-ft_site:*                         # Any site
+gene:BRCA1                        # 基因符號
+gene_exact:BRCA1                  # 精確基因比對
+olnName:BRCA1                     # 有序位點名稱
+orfName:BRCA1                     # ORF 名稱
 ```
 
-### Comments (cc_)
+### 生物體
 ```
-cc_function:*                     # Function description
-cc_catalytic_activity:*           # Catalytic activity
-cc_pathway:*                      # Pathway involvement
-cc_interaction:*                  # Protein interactions
-cc_subcellular_location:*         # Subcellular location
-cc_tissue_specificity:*           # Tissue specificity
-cc_disease:cancer                 # Disease association
+organism_name:human               # 通用名稱
+organism_name:"Homo sapiens"      # 學名
+organism_id:9606                  # 分類學 ID
+lineage:primates                  # 分類學譜系
 ```
 
-## Tips and Best Practices
+### 特徵
+```
+ft_signal:*                       # 訊號肽
+ft_transmem:*                     # 跨膜區域
+ft_domain:"Protein kinase"        # 特定結構域
+ft_binding:*                      # 結合位點
+ft_site:*                         # 任何位點
+```
 
-1. **Use quotes for exact phrases**: `organism_name:"Homo sapiens"` not `organism_name:Homo sapiens`
+### 註解（cc_）
+```
+cc_function:*                     # 功能描述
+cc_catalytic_activity:*           # 催化活性
+cc_pathway:*                      # 路徑參與
+cc_interaction:*                  # 蛋白質交互作用
+cc_subcellular_location:*         # 亞細胞定位
+cc_tissue_specificity:*           # 組織特異性
+cc_disease:cancer                 # 疾病關聯
+```
 
-2. **Filter by review status**: Add `AND reviewed:true` for high-quality Swiss-Prot entries
+## 技巧與最佳實務
 
-3. **Combine wildcards carefully**: `*kinase*` may be too broad; `kinase*` is more specific
+1. **精確詞組使用引號**：`organism_name:"Homo sapiens"` 而非 `organism_name:Homo sapiens`
 
-4. **Use parentheses for complex logic**: `(A OR B) AND (C OR D)` is clearer than `A OR B AND C OR D`
+2. **依審核狀態篩選**：加入 `AND reviewed:true` 以取得高品質 Swiss-Prot 條目
 
-5. **Numeric ranges are inclusive**: `length:[100 TO 500]` includes both 100 and 500
+3. **謹慎組合萬用字元**：`*kinase*` 可能過於廣泛；`kinase*` 更為特定
 
-6. **Field prefixes**: Learn common prefixes:
-   - `cc_` = Comments
-   - `ft_` = Features
-   - `go_` = Gene Ontology
-   - `xref_` = Cross-references
+4. **複雜邏輯使用括號**：`(A OR B) AND (C OR D)` 比 `A OR B AND C OR D` 更清晰
 
-7. **Check field names**: Use the API's `/configure/uniprotkb/result-fields` endpoint to see all available fields
+5. **數值範圍是包含的**：`length:[100 TO 500]` 包含 100 和 500
 
-## Query Validation
+6. **欄位前綴**：學習常見前綴：
+   - `cc_` = 註解
+   - `ft_` = 特徵
+   - `go_` = 基因本體論
+   - `xref_` = 交叉參考
 
-Test queries using:
-- **Web interface**: https://www.uniprot.org/uniprotkb
-- **API**: https://rest.uniprot.org/uniprotkb/search?query=YOUR_QUERY
-- **API documentation**: https://www.uniprot.org/help/query-fields
+7. **檢查欄位名稱**：使用 API 的 `/configure/uniprotkb/result-fields` 端點查看所有可用欄位
 
-## Common Patterns
+## 查詢驗證
 
-### Find well-characterized proteins
+使用以下方式測試查詢：
+- **網頁介面**：https://www.uniprot.org/uniprotkb
+- **API**：https://rest.uniprot.org/uniprotkb/search?query=YOUR_QUERY
+- **API 文件**：https://www.uniprot.org/help/query-fields
+
+## 常見模式
+
+### 尋找特徵完備的蛋白質
 ```
 reviewed:true AND xref:pdb AND cc_function:*
 ```
 
-### Find disease-associated proteins
+### 尋找疾病相關蛋白質
 ```
 cc_disease:* AND organism_id:9606 AND reviewed:true
 ```
 
-### Find proteins with experimental evidence
+### 尋找具有實驗證據的蛋白質
 ```
 existence:"Evidence at protein level" AND reviewed:true
 ```
 
-### Find secreted proteins
+### 尋找分泌蛋白質
 ```
 cc_subcellular_location:secreted AND reviewed:true
 ```
 
-### Find drug targets
+### 尋找藥物靶點
 ```
 keyword:"Pharmaceutical" OR keyword:"Drug target"
 ```
 
-## Resources
+## 資源
 
-- Full query field reference: https://www.uniprot.org/help/query-fields
-- API query documentation: https://www.uniprot.org/help/api_queries
-- Text search documentation: https://www.uniprot.org/help/text-search
+- 完整查詢欄位參考：https://www.uniprot.org/help/query-fields
+- API 查詢文件：https://www.uniprot.org/help/api_queries
+- 文字搜尋文件：https://www.uniprot.org/help/text-search

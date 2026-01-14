@@ -1,33 +1,33 @@
-# Units and Quantities (astropy.units)
+# 單位和物理量（astropy.units）
 
-The `astropy.units` module handles defining, converting between, and performing arithmetic with physical quantities.
+`astropy.units` 模組處理物理量的定義、轉換和運算。
 
-## Creating Quantities
+## 建立物理量
 
-Multiply or divide numeric values by built-in units to create Quantity objects:
+將數值乘以或除以內建單位來建立 Quantity 物件：
 
 ```python
 from astropy import units as u
 import numpy as np
 
-# Scalar quantities
+# 純量物理量
 distance = 42.0 * u.meter
 velocity = 100 * u.km / u.s
 
-# Array quantities
+# 陣列物理量
 distances = np.array([1., 2., 3.]) * u.m
 wavelengths = [500, 600, 700] * u.nm
 ```
 
-Access components via `.value` and `.unit` attributes:
+透過 `.value` 和 `.unit` 屬性存取分量：
 ```python
 distance.value  # 42.0
 distance.unit   # Unit("m")
 ```
 
-## Unit Conversions
+## 單位轉換
 
-Use `.to()` method for conversions:
+使用 `.to()` 方法進行轉換：
 
 ```python
 distance = 1.0 * u.parsec
@@ -37,117 +37,117 @@ wavelength = 500 * u.nm
 wavelength.to(u.angstrom)  # <Quantity 5000. Angstrom>
 ```
 
-## Arithmetic Operations
+## 算術運算
 
-Quantities support standard arithmetic with automatic unit management:
+物理量支援標準算術運算並自動管理單位：
 
 ```python
-# Basic operations
+# 基本運算
 speed = 15.1 * u.meter / (32.0 * u.second)  # <Quantity 0.471875 m / s>
 area = (5 * u.m) * (3 * u.m)  # <Quantity 15. m2>
 
-# Units cancel when appropriate
+# 適當時單位會消去
 ratio = (10 * u.m) / (5 * u.m)  # <Quantity 2. (dimensionless)>
 
-# Decompose complex units
+# 分解複雜單位
 time = (3.0 * u.kilometer / (130.51 * u.meter / u.second))
 time.decompose()  # <Quantity 22.986744310780782 s>
 ```
 
-## Unit Systems
+## 單位系統
 
-Convert between major unit systems:
+在主要單位系統間轉換：
 
 ```python
-# SI to CGS
+# SI 到 CGS
 pressure = 1.0 * u.Pa
 pressure.cgs  # <Quantity 10. Ba>
 
-# Find equivalent representations
+# 尋找等效表示
 (u.s ** -1).compose()  # [Unit("Bq"), Unit("Hz"), ...]
 ```
 
-## Equivalencies
+## 等效關係
 
-Domain-specific conversions require equivalencies:
+領域特定的轉換需要等效關係：
 
 ```python
-# Spectral equivalency (wavelength ↔ frequency)
+# 光譜等效（波長 ↔ 頻率）
 wavelength = 1000 * u.nm
 wavelength.to(u.Hz, equivalencies=u.spectral())
 # <Quantity 2.99792458e+14 Hz>
 
-# Doppler equivalencies
+# 都卜勒等效
 velocity = 1000 * u.km / u.s
 velocity.to(u.Hz, equivalencies=u.doppler_optical(500*u.nm))
 
-# Other equivalencies
+# 其他等效關係
 u.brightness_temperature(500*u.GHz)
 u.doppler_radio(1.4*u.GHz)
 u.mass_energy()
 u.parallax()
 ```
 
-## Logarithmic Units
+## 對數單位
 
-Special units for magnitudes, decibels, and dex:
+用於星等、分貝和 dex 的特殊單位：
 
 ```python
-# Magnitudes
+# 星等
 flux = -2.5 * u.mag(u.ct / u.s)
 
-# Decibels
+# 分貝
 power_ratio = 3 * u.dB(u.W)
 
-# Dex (base-10 logarithm)
+# Dex（以 10 為底的對數）
 abundance = 8.5 * u.dex(u.cm**-3)
 ```
 
-## Common Units
+## 常見單位
 
-### Length
+### 長度
 `u.m, u.km, u.cm, u.mm, u.micron, u.angstrom, u.au, u.pc, u.kpc, u.Mpc, u.lyr`
 
-### Time
+### 時間
 `u.s, u.min, u.hour, u.day, u.year, u.Myr, u.Gyr`
 
-### Mass
+### 質量
 `u.kg, u.g, u.M_sun, u.M_earth, u.M_jup`
 
-### Temperature
+### 溫度
 `u.K, u.deg_C`
 
-### Angle
+### 角度
 `u.deg, u.arcmin, u.arcsec, u.rad, u.hourangle, u.mas`
 
-### Energy/Power
+### 能量/功率
 `u.J, u.erg, u.eV, u.keV, u.MeV, u.GeV, u.W, u.L_sun`
 
-### Frequency
+### 頻率
 `u.Hz, u.kHz, u.MHz, u.GHz`
 
-### Flux
+### 流量
 `u.Jy, u.mJy, u.erg / u.s / u.cm**2`
 
-## Performance Optimization
+## 效能優化
 
-Pre-compute composite units for array operations:
+為陣列運算預先計算複合單位：
 
 ```python
-# Slow (creates intermediate quantities)
+# 慢（建立中間物理量）
 result = array * u.m / u.s / u.kg / u.sr
 
-# Fast (pre-computed composite unit)
+# 快（預先計算的複合單位）
 UNIT_COMPOSITE = u.m / u.s / u.kg / u.sr
 result = array * UNIT_COMPOSITE
 
-# Fastest (avoid copying with <<)
-result = array << UNIT_COMPOSITE  # 10000x faster
+# 最快（使用 << 避免複製）
+result = array << UNIT_COMPOSITE  # 快 10000 倍
 ```
 
-## String Formatting
+## 字串格式化
 
-Format quantities with standard Python syntax:
+使用標準 Python 語法格式化物理量：
 
 ```python
 velocity = 15.1 * u.meter / (32.0 * u.second)
@@ -156,19 +156,19 @@ f"{velocity:.2e}"       # '4.72e-01 m / s'
 f"{velocity.unit:FITS}" # 'm s-1'
 ```
 
-## Defining Custom Units
+## 定義自訂單位
 
 ```python
-# Create new unit
+# 建立新單位
 bakers_fortnight = u.def_unit('bakers_fortnight', 13 * u.day)
 
-# Enable in string parsing
+# 在字串解析中啟用
 u.add_enabled_units([bakers_fortnight])
 ```
 
-## Constants
+## 常數
 
-Access physical constants with units:
+存取帶單位的物理常數：
 
 ```python
 from astropy.constants import c, G, M_sun, h, k_B

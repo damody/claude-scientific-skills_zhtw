@@ -1,85 +1,85 @@
-# Feature Detection and Linking
+# 特徵偵測和連結
 
-## Overview
+## 概述
 
-Feature detection identifies persistent signals (chromatographic peaks) in LC-MS data. Feature linking combines features across multiple samples for quantitative comparison.
+特徵偵測識別 LC-MS 資料中的持續訊號（層析峰）。特徵連結結合多個樣本的特徵以進行定量比較。
 
-## Feature Detection Basics
+## 特徵偵測基礎
 
-A feature represents a chromatographic peak characterized by:
-- m/z value (mass-to-charge ratio)
-- Retention time (RT)
-- Intensity
-- Quality score
-- Convex hull (spatial extent in RT-m/z space)
+特徵代表層析峰，特徵包括：
+- m/z 值（質荷比）
+- 滯留時間（RT）
+- 強度
+- 品質分數
+- 凸包（RT-m/z 空間中的空間範圍）
 
-## Feature Finding
+## 特徵發現
 
-### Feature Finder Multiples (FFM)
+### Feature Finder Multiples（FFM）
 
-Standard algorithm for feature detection in centroided data:
+質心化資料特徵偵測的標準演算法：
 
 ```python
 import pyopenms as ms
 
-# Load centroided data
+# 載入質心化資料
 exp = ms.MSExperiment()
 ms.MzMLFile().load("centroided.mzML", exp)
 
-# Create feature finder
+# 建立特徵發現器
 ff = ms.FeatureFinder()
 
-# Get default parameters
+# 取得預設參數
 params = ff.getParameters("centroided")
 
-# Modify key parameters
+# 修改關鍵參數
 params.setValue("mass_trace:mz_tolerance", 10.0)  # ppm
-params.setValue("mass_trace:min_spectra", 7)  # Min scans per feature
+params.setValue("mass_trace:min_spectra", 7)  # 每個特徵最少掃描次數
 params.setValue("isotopic_pattern:charge_low", 1)
 params.setValue("isotopic_pattern:charge_high", 4)
 
-# Run feature detection
+# 執行特徵偵測
 features = ms.FeatureMap()
 ff.run("centroided", exp, features, params, ms.FeatureMap())
 
 print(f"Detected {features.size()} features")
 
-# Save features
+# 儲存特徵
 ms.FeatureXMLFile().store("features.featureXML", features)
 ```
 
-### Feature Finder for Metabolomics
+### 代謝體學特徵發現器
 
-Optimized for small molecules:
+針對小分子最佳化：
 
 ```python
-# Create feature finder for metabolomics
+# 建立代謝體學特徵發現器
 ff = ms.FeatureFinder()
 
-# Get metabolomics-specific parameters
+# 取得代謝體學特定參數
 params = ff.getParameters("centroided")
 
-# Configure for metabolomics
-params.setValue("mass_trace:mz_tolerance", 5.0)  # Lower tolerance
+# 設定代謝體學
+params.setValue("mass_trace:mz_tolerance", 5.0)  # 較低的容差
 params.setValue("mass_trace:min_spectra", 5)
-params.setValue("isotopic_pattern:charge_low", 1)  # Mostly singly charged
+params.setValue("isotopic_pattern:charge_low", 1)  # 主要是單電荷
 params.setValue("isotopic_pattern:charge_high", 2)
 
-# Run detection
+# 執行偵測
 features = ms.FeatureMap()
 ff.run("centroided", exp, features, params, ms.FeatureMap())
 ```
 
-## Accessing Feature Data
+## 存取特徵資料
 
-### Iterate Through Features
+### 迭代特徵
 
 ```python
-# Load features
+# 載入特徵
 feature_map = ms.FeatureMap()
 ms.FeatureXMLFile().load("features.featureXML", feature_map)
 
-# Access individual features
+# 存取個別特徵
 for feature in feature_map:
     print(f"m/z: {feature.getMZ():.4f}")
     print(f"RT: {feature.getRT():.2f}")
@@ -88,17 +88,17 @@ for feature in feature_map:
     print(f"Quality: {feature.getOverallQuality():.3f}")
     print(f"Width (RT): {feature.getWidth():.2f}")
 
-    # Get convex hull
+    # 取得凸包
     hull = feature.getConvexHull()
     print(f"Hull points: {hull.getHullPoints().size()}")
 ```
 
-### Feature Subordinates (Isotope Pattern)
+### 特徵附屬（同位素模式）
 
 ```python
-# Access isotopic pattern
+# 存取同位素模式
 for feature in feature_map:
-    # Get subordinate features (isotopes)
+    # 取得附屬特徵（同位素）
     subordinates = feature.getSubordinates()
 
     if subordinates:
@@ -108,99 +108,99 @@ for feature in feature_map:
             print(f"  Isotope intensity: {sub.getIntensity():.0f}")
 ```
 
-### Export to Pandas
+### 匯出到 Pandas
 
 ```python
 import pandas as pd
 
-# Convert to DataFrame
+# 轉換為 DataFrame
 df = feature_map.get_df()
 
 print(df.columns)
-# Typical columns: RT, mz, intensity, charge, quality
+# 典型欄位：RT、mz、intensity、charge、quality
 
-# Analyze features
+# 分析特徵
 print(f"Mean intensity: {df['intensity'].mean()}")
 print(f"RT range: {df['RT'].min():.1f} - {df['RT'].max():.1f}")
 ```
 
-## Feature Linking
+## 特徵連結
 
-### Map Alignment
+### 圖對齊
 
-Align retention times before linking:
+連結前對齊滯留時間：
 
 ```python
-# Load multiple feature maps
+# 載入多個特徵圖
 fm1 = ms.FeatureMap()
 fm2 = ms.FeatureMap()
 ms.FeatureXMLFile().load("sample1.featureXML", fm1)
 ms.FeatureXMLFile().load("sample2.featureXML", fm2)
 
-# Create aligner
+# 建立對齊器
 aligner = ms.MapAlignmentAlgorithmPoseClustering()
 
-# Align maps
+# 對齊圖
 fm_aligned = []
 transformations = []
 aligner.align([fm1, fm2], fm_aligned, transformations)
 ```
 
-### Feature Linking Algorithm
+### 特徵連結演算法
 
-Link features across samples:
+跨樣本連結特徵：
 
 ```python
-# Create feature grouping algorithm
+# 建立特徵分組演算法
 grouper = ms.FeatureGroupingAlgorithmQT()
 
-# Configure parameters
+# 設定參數
 params = grouper.getParameters()
-params.setValue("distance_RT:max_difference", 30.0)  # Max RT difference (s)
-params.setValue("distance_MZ:max_difference", 10.0)  # Max m/z difference (ppm)
+params.setValue("distance_RT:max_difference", 30.0)  # 最大 RT 差異（秒）
+params.setValue("distance_MZ:max_difference", 10.0)  # 最大 m/z 差異（ppm）
 params.setValue("distance_MZ:unit", "ppm")
 grouper.setParameters(params)
 
-# Prepare feature maps
+# 準備特徵圖
 feature_maps = [fm1, fm2, fm3]
 
-# Create consensus map
+# 建立共識圖
 consensus_map = ms.ConsensusMap()
 
-# Link features
+# 連結特徵
 grouper.group(feature_maps, consensus_map)
 
 print(f"Created {consensus_map.size()} consensus features")
 
-# Save consensus map
+# 儲存共識圖
 ms.ConsensusXMLFile().store("consensus.consensusXML", consensus_map)
 ```
 
-## Consensus Features
+## 共識特徵
 
-### Access Consensus Data
+### 存取共識資料
 
 ```python
-# Load consensus map
+# 載入共識圖
 consensus_map = ms.ConsensusMap()
 ms.ConsensusXMLFile().load("consensus.consensusXML", consensus_map)
 
-# Iterate through consensus features
+# 迭代共識特徵
 for cons_feature in consensus_map:
     print(f"Consensus m/z: {cons_feature.getMZ():.4f}")
     print(f"Consensus RT: {cons_feature.getRT():.2f}")
 
-    # Get features from individual maps
+    # 取得來自個別圖的特徵
     for handle in cons_feature.getFeatureList():
         map_idx = handle.getMapIndex()
         intensity = handle.getIntensity()
         print(f"  Sample {map_idx}: intensity {intensity:.0f}")
 ```
 
-### Consensus Map Metadata
+### 共識圖中繼資料
 
 ```python
-# Access file descriptions (map metadata)
+# 存取檔案描述（圖中繼資料）
 file_descriptions = consensus_map.getColumnHeaders()
 
 for map_idx, description in file_descriptions.items():
@@ -210,15 +210,15 @@ for map_idx, description in file_descriptions.items():
     print(f"  Size: {description.size}")
 ```
 
-## Adduct Detection
+## 加合物偵測
 
-Identify different ionization forms of the same molecule:
+識別相同分子的不同離子化形式：
 
 ```python
-# Create adduct detector
+# 建立加合物偵測器
 adduct_detector = ms.MetaboliteAdductDecharger()
 
-# Configure parameters
+# 設定參數
 params = adduct_detector.getParameters()
 params.setValue("potential_adducts", "[M+H]+,[M+Na]+,[M+K]+,[M-H]-")
 params.setValue("charge_min", 1)
@@ -226,38 +226,38 @@ params.setValue("charge_max", 1)
 params.setValue("max_neutrals", 1)
 adduct_detector.setParameters(params)
 
-# Detect adducts
+# 偵測加合物
 feature_map_out = ms.FeatureMap()
 adduct_detector.compute(feature_map, feature_map_out, ms.ConsensusMap())
 ```
 
-## Complete Feature Detection Workflow
+## 完整特徵偵測工作流程
 
-### End-to-End Example
+### 端到端範例
 
 ```python
 import pyopenms as ms
 
 def feature_detection_workflow(input_files, output_consensus):
     """
-    Complete workflow: feature detection and linking across samples.
+    完整工作流程：跨樣本的特徵偵測和連結。
 
     Args:
-        input_files: List of mzML file paths
-        output_consensus: Output consensusXML file path
+        input_files: mzML 檔案路徑列表
+        output_consensus: 輸出 consensusXML 檔案路徑
     """
 
     feature_maps = []
 
-    # Step 1: Detect features in each file
+    # 步驟 1：在每個檔案中偵測特徵
     for mzml_file in input_files:
         print(f"Processing {mzml_file}...")
 
-        # Load experiment
+        # 載入實驗
         exp = ms.MSExperiment()
         ms.MzMLFile().load(mzml_file, exp)
 
-        # Find features
+        # 發現特徵
         ff = ms.FeatureFinder()
         params = ff.getParameters("centroided")
         params.setValue("mass_trace:mz_tolerance", 10.0)
@@ -266,20 +266,20 @@ def feature_detection_workflow(input_files, output_consensus):
         features = ms.FeatureMap()
         ff.run("centroided", exp, features, params, ms.FeatureMap())
 
-        # Store filename in feature map
+        # 在特徵圖中儲存檔案名稱
         features.setPrimaryMSRunPath([mzml_file.encode()])
 
         feature_maps.append(features)
         print(f"  Found {features.size()} features")
 
-    # Step 2: Align retention times
+    # 步驟 2：對齊滯留時間
     print("Aligning retention times...")
     aligner = ms.MapAlignmentAlgorithmPoseClustering()
     aligned_maps = []
     transformations = []
     aligner.align(feature_maps, aligned_maps, transformations)
 
-    # Step 3: Link features
+    # 步驟 3：連結特徵
     print("Linking features across samples...")
     grouper = ms.FeatureGroupingAlgorithmQT()
     params = grouper.getParameters()
@@ -291,7 +291,7 @@ def feature_detection_workflow(input_files, output_consensus):
     consensus_map = ms.ConsensusMap()
     grouper.group(aligned_maps, consensus_map)
 
-    # Save results
+    # 儲存結果
     ms.ConsensusXMLFile().store(output_consensus, consensus_map)
 
     print(f"Created {consensus_map.size()} consensus features")
@@ -299,30 +299,30 @@ def feature_detection_workflow(input_files, output_consensus):
 
     return consensus_map
 
-# Run workflow
+# 執行工作流程
 input_files = ["sample1.mzML", "sample2.mzML", "sample3.mzML"]
 consensus = feature_detection_workflow(input_files, "consensus.consensusXML")
 ```
 
-## Feature Filtering
+## 特徵過濾
 
-### Filter by Quality
+### 按品質過濾
 
 ```python
-# Filter features by quality score
+# 按品質分數過濾特徵
 filtered_features = ms.FeatureMap()
 
 for feature in feature_map:
-    if feature.getOverallQuality() > 0.5:  # Quality threshold
+    if feature.getOverallQuality() > 0.5:  # 品質閾值
         filtered_features.push_back(feature)
 
 print(f"Kept {filtered_features.size()} high-quality features")
 ```
 
-### Filter by Intensity
+### 按強度過濾
 
 ```python
-# Keep only intense features
+# 只保留高強度特徵
 min_intensity = 10000
 
 filtered_features = ms.FeatureMap()
@@ -331,10 +331,10 @@ for feature in feature_map:
         filtered_features.push_back(feature)
 ```
 
-### Filter by m/z Range
+### 按 m/z 範圍過濾
 
 ```python
-# Extract features in specific m/z range
+# 提取特定 m/z 範圍的特徵
 mz_min = 200.0
 mz_max = 800.0
 
@@ -345,38 +345,38 @@ for feature in feature_map:
         filtered_features.push_back(feature)
 ```
 
-## Feature Annotation
+## 特徵註釋
 
-### Add Identification Information
+### 添加鑑定資訊
 
 ```python
-# Annotate features with peptide identifications
-# Load identifications
+# 使用肽段鑑定註釋特徵
+# 載入鑑定
 protein_ids = []
 peptide_ids = []
 ms.IdXMLFile().load("identifications.idXML", protein_ids, peptide_ids)
 
-# Create ID mapper
+# 建立 ID 映射器
 mapper = ms.IDMapper()
 
-# Map IDs to features
+# 將 ID 映射到特徵
 mapper.annotate(feature_map, peptide_ids, protein_ids)
 
-# Check annotations
+# 檢查註釋
 for feature in feature_map:
     peptide_ids_for_feature = feature.getPeptideIdentifications()
     if peptide_ids_for_feature:
         print(f"Feature at {feature.getMZ():.4f} m/z identified")
 ```
 
-## Best Practices
+## 最佳實務
 
-### Parameter Optimization
+### 參數最佳化
 
-Optimize parameters for your data type:
+針對您的資料類型最佳化參數：
 
 ```python
-# Test different tolerance values
+# 測試不同的容差值
 mz_tolerances = [5.0, 10.0, 20.0]  # ppm
 
 for tol in mz_tolerances:
@@ -390,12 +390,12 @@ for tol in mz_tolerances:
     print(f"Tolerance {tol} ppm: {features.size()} features")
 ```
 
-### Visual Inspection
+### 視覺檢查
 
-Export features for visualization:
+匯出特徵以進行視覺化：
 
 ```python
-# Convert to DataFrame for plotting
+# 轉換為 DataFrame 以進行繪圖
 df = feature_map.get_df()
 
 import matplotlib.pyplot as plt

@@ -1,99 +1,99 @@
-# FDA Animal and Veterinary Databases
+# FDA 動物與獸醫資料庫
 
-This reference covers FDA animal and veterinary medicine API endpoints accessible through openFDA.
+本參考文件涵蓋透過 openFDA 可存取的 FDA 動物與獸醫藥品 API 端點。
 
-## Overview
+## 概述
 
-The FDA animal and veterinary databases provide access to information about adverse events related to animal drugs and veterinary medical products. These databases help monitor the safety of products used in companion animals, livestock, and other animals.
+FDA 動物與獸醫資料庫提供與動物藥物和獸醫醫療產品相關的不良事件資訊。這些資料庫有助於監控伴侶動物、畜牧動物和其他動物使用產品的安全性。
 
-## Available Endpoints
+## 可用端點
 
-### Animal Drug Adverse Events
+### 動物藥物不良事件
 
-**Endpoint**: `https://api.fda.gov/animalandveterinary/event.json`
+**端點**：`https://api.fda.gov/animalandveterinary/event.json`
 
-**Purpose**: Access reports of side effects, product use errors, product quality problems, and therapeutic failures associated with animal drugs.
+**目的**：存取與動物藥物相關的副作用、產品使用錯誤、產品品質問題和治療失敗的報告。
 
-**Data Source**: FDA Center for Veterinary Medicine (CVM) Adverse Event Reporting System
+**資料來源**：FDA 獸醫中心（CVM）不良事件報告系統
 
-**Key Fields**:
-- `unique_aer_id_number` - Unique adverse event report identifier
-- `report_id` - Report ID number
-- `receiver.organization` - Organization receiving report
-- `receiver.street_address` - Receiver address
-- `receiver.city` - Receiver city
-- `receiver.state` - Receiver state
-- `receiver.postal_code` - Receiver postal code
-- `receiver.country` - Receiver country
-- `primary_reporter` - Primary reporter type (e.g., veterinarian, owner)
-- `onset_date` - Date adverse event began
-- `animal.species` - Animal species affected
-- `animal.gender` - Animal gender
-- `animal.age.min` - Minimum age
-- `animal.age.max` - Maximum age
-- `animal.age.unit` - Age unit (days, months, years)
-- `animal.age.qualifier` - Age qualifier
-- `animal.breed.is_crossbred` - Whether crossbred
-- `animal.breed.breed_component` - Breed(s)
-- `animal.weight.min` - Minimum weight
-- `animal.weight.max` - Maximum weight
-- `animal.weight.unit` - Weight unit
-- `animal.female_animal_physiological_status` - Reproductive status
-- `animal.reproductive_status` - Spayed/neutered status
-- `drug` - Array of drugs involved
-- `drug.active_ingredients` - Active ingredients
-- `drug.active_ingredients.name` - Ingredient name
-- `drug.active_ingredients.dose` - Dose information
-- `drug.brand_name` - Brand name
-- `drug.manufacturer.name` - Manufacturer
-- `drug.administered_by` - Who administered drug
-- `drug.route` - Route of administration
-- `drug.dosage_form` - Dosage form
-- `drug.atc_vet_code` - ATC veterinary code
-- `reaction` - Array of adverse reactions
-- `reaction.veddra_version` - VeDDRA dictionary version
-- `reaction.veddra_term_code` - VeDDRA term code
-- `reaction.veddra_term_name` - VeDDRA term name
-- `reaction.accuracy` - Accuracy of diagnosis
-- `reaction.number_of_animals_affected` - Number affected
-- `reaction.number_of_animals_treated` - Number treated
-- `outcome.medical_status` - Medical outcome
-- `outcome.number_of_animals_affected` - Animals affected by outcome
-- `serious_ae` - Whether serious adverse event
-- `health_assessment_prior_to_exposure.assessed_by` - Who assessed health
-- `health_assessment_prior_to_exposure.condition` - Health condition
-- `treated_for_ae` - Whether treated
-- `time_between_exposure_and_onset` - Time to onset
-- `duration.unit` - Duration unit
-- `duration.value` - Duration value
+**主要欄位**：
+- `unique_aer_id_number` - 唯一不良事件報告識別碼
+- `report_id` - 報告 ID 編號
+- `receiver.organization` - 接收報告的組織
+- `receiver.street_address` - 接收者地址
+- `receiver.city` - 接收者城市
+- `receiver.state` - 接收者州/省
+- `receiver.postal_code` - 接收者郵遞區號
+- `receiver.country` - 接收者國家
+- `primary_reporter` - 主要報告者類型（例如：獸醫、飼主）
+- `onset_date` - 不良事件開始日期
+- `animal.species` - 受影響的動物物種
+- `animal.gender` - 動物性別
+- `animal.age.min` - 最小年齡
+- `animal.age.max` - 最大年齡
+- `animal.age.unit` - 年齡單位（天、月、年）
+- `animal.age.qualifier` - 年齡限定詞
+- `animal.breed.is_crossbred` - 是否為混種
+- `animal.breed.breed_component` - 品種
+- `animal.weight.min` - 最小體重
+- `animal.weight.max` - 最大體重
+- `animal.weight.unit` - 體重單位
+- `animal.female_animal_physiological_status` - 生殖狀態
+- `animal.reproductive_status` - 絕育狀態
+- `drug` - 涉及藥物的陣列
+- `drug.active_ingredients` - 活性成分
+- `drug.active_ingredients.name` - 成分名稱
+- `drug.active_ingredients.dose` - 劑量資訊
+- `drug.brand_name` - 品牌名稱
+- `drug.manufacturer.name` - 製造商
+- `drug.administered_by` - 給藥者
+- `drug.route` - 給藥途徑
+- `drug.dosage_form` - 劑型
+- `drug.atc_vet_code` - ATC 獸醫代碼
+- `reaction` - 不良反應陣列
+- `reaction.veddra_version` - VeDDRA 字典版本
+- `reaction.veddra_term_code` - VeDDRA 術語代碼
+- `reaction.veddra_term_name` - VeDDRA 術語名稱
+- `reaction.accuracy` - 診斷準確性
+- `reaction.number_of_animals_affected` - 受影響動物數量
+- `reaction.number_of_animals_treated` - 治療動物數量
+- `outcome.medical_status` - 醫療結果
+- `outcome.number_of_animals_affected` - 受結果影響的動物數量
+- `serious_ae` - 是否為嚴重不良事件
+- `health_assessment_prior_to_exposure.assessed_by` - 健康評估者
+- `health_assessment_prior_to_exposure.condition` - 健康狀況
+- `treated_for_ae` - 是否接受治療
+- `time_between_exposure_and_onset` - 暴露至發病時間
+- `duration.unit` - 持續時間單位
+- `duration.value` - 持續時間值
 
-**Common Animal Species**:
-- Dog (Canis lupus familiaris)
-- Cat (Felis catus)
-- Horse (Equus caballus)
-- Cattle (Bos taurus)
-- Pig (Sus scrofa domesticus)
-- Chicken (Gallus gallus domesticus)
-- Sheep (Ovis aries)
-- Goat (Capra aegagrus hircus)
-- And many others
+**常見動物物種**：
+- 狗（Canis lupus familiaris）
+- 貓（Felis catus）
+- 馬（Equus caballus）
+- 牛（Bos taurus）
+- 豬（Sus scrofa domesticus）
+- 雞（Gallus gallus domesticus）
+- 綿羊（Ovis aries）
+- 山羊（Capra aegagrus hircus）
+- 以及其他許多物種
 
-**Common Use Cases**:
-- Veterinary pharmacovigilance
-- Product safety monitoring
-- Adverse event trend analysis
-- Drug safety comparison
-- Species-specific safety research
-- Breed predisposition studies
+**常見使用案例**：
+- 獸醫藥物安全監視
+- 產品安全監控
+- 不良事件趨勢分析
+- 藥物安全比較
+- 物種特定安全研究
+- 品種易感性研究
 
-**Example Queries**:
+**查詢範例**：
 ```python
 import requests
 
 api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/animalandveterinary/event.json"
 
-# Find adverse events in dogs
+# 查詢狗的不良事件
 params = {
     "api_key": api_key,
     "search": "animal.species:Dog",
@@ -105,7 +105,7 @@ data = response.json()
 ```
 
 ```python
-# Search for specific drug adverse events
+# 搜尋特定藥物的不良事件
 params = {
     "api_key": api_key,
     "search": "drug.brand_name:*flea+collar*",
@@ -114,7 +114,7 @@ params = {
 ```
 
 ```python
-# Count most common reactions by species
+# 按物種計算最常見反應
 params = {
     "api_key": api_key,
     "search": "animal.species:Cat",
@@ -123,7 +123,7 @@ params = {
 ```
 
 ```python
-# Find serious adverse events
+# 查詢嚴重不良事件
 params = {
     "api_key": api_key,
     "search": "serious_ae:true+AND+outcome.medical_status:Died",
@@ -133,7 +133,7 @@ params = {
 ```
 
 ```python
-# Search by active ingredient
+# 按活性成分搜尋
 params = {
     "api_key": api_key,
     "search": "drug.active_ingredients.name:*ivermectin*",
@@ -142,7 +142,7 @@ params = {
 ```
 
 ```python
-# Find events in specific breed
+# 查詢特定品種的事件
 params = {
     "api_key": api_key,
     "search": "animal.breed.breed_component:*Labrador*",
@@ -151,7 +151,7 @@ params = {
 ```
 
 ```python
-# Get events by route of administration
+# 按給藥途徑取得事件
 params = {
     "api_key": api_key,
     "search": "drug.route:*topical*",
@@ -159,37 +159,37 @@ params = {
 }
 ```
 
-## VeDDRA - Veterinary Dictionary for Drug Related Affairs
+## VeDDRA - 獸醫藥物相關事務詞典
 
-The Veterinary Dictionary for Drug Related Affairs (VeDDRA) is a standardized international veterinary terminology for adverse event reporting. It provides:
+獸醫藥物相關事務詞典（VeDDRA）是用於不良事件報告的標準化國際獸醫術語。它提供：
 
-- Standardized terms for veterinary adverse events
-- Hierarchical organization of terms
-- Species-specific terminology
-- International harmonization
+- 獸醫不良事件的標準化術語
+- 術語的層次結構組織
+- 物種特定術語
+- 國際統一化
 
-**VeDDRA Term Structure**:
-- Terms are organized hierarchically
-- Each term has a unique code
-- Terms are species-appropriate
-- Multiple versions exist (check `veddra_version` field)
+**VeDDRA 術語結構**：
+- 術語按層次結構組織
+- 每個術語都有唯一代碼
+- 術語適合特定物種
+- 存在多個版本（請檢查 `veddra_version` 欄位）
 
-## Integration Tips
+## 整合技巧
 
-### Species-Specific Adverse Event Analysis
+### 物種特定不良事件分析
 
 ```python
 def analyze_species_adverse_events(species, drug_name, api_key):
     """
-    Analyze adverse events for a specific drug in a particular species.
+    分析特定物種對特定藥物的不良事件。
 
-    Args:
-        species: Animal species (e.g., "Dog", "Cat", "Horse")
-        drug_name: Drug brand name or active ingredient
-        api_key: FDA API key
+    參數：
+        species: 動物物種（例如：「Dog」、「Cat」、「Horse」）
+        drug_name: 藥物品牌名稱或活性成分
+        api_key: FDA API 金鑰
 
-    Returns:
-        Dictionary with analysis results
+    回傳：
+        包含分析結果的字典
     """
     import requests
     from collections import Counter
@@ -205,11 +205,11 @@ def analyze_species_adverse_events(species, drug_name, api_key):
     data = response.json()
 
     if "results" not in data:
-        return {"error": "No results found"}
+        return {"error": "未找到結果"}
 
     results = data["results"]
 
-    # Collect reactions and outcomes
+    # 收集反應和結果
     reactions = []
     outcomes = []
     serious_count = 0
@@ -240,20 +240,20 @@ def analyze_species_adverse_events(species, drug_name, api_key):
     }
 ```
 
-### Breed Predisposition Research
+### 品種易感性研究
 
 ```python
 def analyze_breed_predisposition(reaction_term, api_key, min_events=5):
     """
-    Identify breed predispositions for specific adverse reactions.
+    識別特定不良反應的品種易感性。
 
-    Args:
-        reaction_term: VeDDRA reaction term to analyze
-        api_key: FDA API key
-        min_events: Minimum number of events to include breed
+    參數：
+        reaction_term: 要分析的 VeDDRA 反應術語
+        api_key: FDA API 金鑰
+        min_events: 納入品種的最低事件數
 
-    Returns:
-        List of breeds with event counts
+    回傳：
+        包含事件計數的品種列表
     """
     import requests
     from collections import Counter
@@ -283,7 +283,7 @@ def analyze_breed_predisposition(reaction_term, api_key, min_events=5):
 
     breed_counts = Counter(breeds)
 
-    # Filter by minimum events
+    # 按最低事件數過濾
     filtered_breeds = [
         {"breed": breed, "count": count}
         for breed, count in breed_counts.most_common()
@@ -293,20 +293,20 @@ def analyze_breed_predisposition(reaction_term, api_key, min_events=5):
     return filtered_breeds
 ```
 
-### Comparative Drug Safety
+### 比較藥物安全性
 
 ```python
 def compare_drug_safety(drug_list, species, api_key):
     """
-    Compare safety profiles of multiple drugs for a specific species.
+    比較多種藥物在特定物種中的安全概況。
 
-    Args:
-        drug_list: List of drug names to compare
-        species: Animal species
-        api_key: FDA API key
+    參數：
+        drug_list: 要比較的藥物名稱列表
+        species: 動物物種
+        api_key: FDA API 金鑰
 
-    Returns:
-        Dictionary comparing drugs
+    回傳：
+        比較藥物的字典
     """
     import requests
 
@@ -343,35 +343,35 @@ def compare_drug_safety(drug_list, species, api_key):
     return comparison
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Use standard species names** - Full scientific or common names work best
-2. **Consider breed variations** - Spelling and naming can vary
-3. **Check VeDDRA versions** - Terms may change between versions
-4. **Account for reporter bias** - Veterinarians vs. owners report differently
-5. **Filter by serious events** - Focus on clinically significant reactions
-6. **Consider animal demographics** - Age, weight, and reproductive status matter
-7. **Track temporal patterns** - Seasonal variations may exist
-8. **Cross-reference products** - Same active ingredient may have multiple brands
-9. **Analyze by route** - Topical vs. systemic administration affects safety
-10. **Consider species differences** - Drugs affect species differently
+1. **使用標準物種名稱** - 完整的學名或通用名稱效果最佳
+2. **考慮品種變異** - 拼寫和命名可能有所不同
+3. **檢查 VeDDRA 版本** - 術語在不同版本間可能會變更
+4. **考量報告者偏差** - 獸醫與飼主的報告方式不同
+5. **過濾嚴重事件** - 專注於臨床顯著的反應
+6. **考慮動物人口統計** - 年齡、體重和生殖狀態很重要
+7. **追蹤時間模式** - 可能存在季節性變化
+8. **交叉參考產品** - 相同活性成分可能有多個品牌
+9. **按途徑分析** - 外用與全身給藥對安全性的影響不同
+10. **考慮物種差異** - 藥物對不同物種的影響不同
 
-## Reporting Sources
+## 報告來源
 
-Animal drug adverse event reports come from:
-- **Veterinarians** - Professional medical observations
-- **Animal owners** - Direct observations and concerns
-- **Pharmaceutical companies** - Required post-market surveillance
-- **FDA field staff** - Official investigations
-- **Research institutions** - Clinical studies
-- **Other sources** - Varies
+動物藥物不良事件報告來自：
+- **獸醫** - 專業醫療觀察
+- **動物飼主** - 直接觀察和關注
+- **製藥公司** - 法規要求的上市後監測
+- **FDA 現場工作人員** - 官方調查
+- **研究機構** - 臨床研究
+- **其他來源** - 各種
 
-Different sources may have different reporting thresholds and detail levels.
+不同來源可能有不同的報告門檻和詳細程度。
 
-## Additional Resources
+## 其他資源
 
-- OpenFDA Animal & Veterinary API: https://open.fda.gov/apis/animalandveterinary/
-- FDA Center for Veterinary Medicine: https://www.fda.gov/animal-veterinary
-- VeDDRA: https://www.veddra.org/
-- API Basics: See `api_basics.md` in this references directory
-- Python examples: See `scripts/fda_animal_query.py`
+- OpenFDA 動物與獸醫 API：https://open.fda.gov/apis/animalandveterinary/
+- FDA 獸醫中心：https://www.fda.gov/animal-veterinary
+- VeDDRA：https://www.veddra.org/
+- API 基礎：請參閱本參考目錄中的 `api_basics.md`
+- Python 範例：請參閱 `scripts/fda_animal_query.py`

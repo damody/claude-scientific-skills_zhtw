@@ -1,175 +1,175 @@
-# Theoretical Foundations of scvi-tools
+# scvi-tools 的理論基礎
 
-This document explains the mathematical and statistical principles underlying scvi-tools.
+本文檔解釋 scvi-tools 底層的數學和統計原理。
 
-## Core Concepts
+## 核心概念
 
-### Variational Inference
+### 變分推斷（Variational Inference）
 
-**What is it?**
-Variational inference is a technique for approximating complex probability distributions. In single-cell analysis, we want to understand the posterior distribution p(z|x) - the probability of latent variables z given observed data x.
+**什麼是變分推斷？**
+變分推斷是一種近似複雜機率分佈的技術。在單細胞分析中，我們想要理解後驗分佈 p(z|x) - 給定觀測數據 x 時潛在變數 z 的機率。
 
-**Why use it?**
-- Exact inference is computationally intractable for complex models
-- Scales to large datasets (millions of cells)
-- Provides uncertainty quantification
-- Enables Bayesian reasoning about cell states
+**為什麼使用它？**
+- 對於複雜模型，精確推斷在計算上是不可行的
+- 可擴展到大型數據集（數百萬細胞）
+- 提供不確定性量化
+- 支援關於細胞狀態的貝葉斯推理
 
-**How does it work?**
-1. Define a simpler approximate distribution q(z|x) with learnable parameters
-2. Minimize the KL divergence between q(z|x) and true posterior p(z|x)
-3. Equivalent to maximizing the Evidence Lower Bound (ELBO)
+**它是如何工作的？**
+1. 定義一個更簡單的近似分佈 q(z|x)，具有可學習的參數
+2. 最小化 q(z|x) 和真實後驗 p(z|x) 之間的 KL 散度
+3. 等價於最大化證據下界（ELBO）
 
-**ELBO Objective**:
+**ELBO 目標**：
 ```
 ELBO = E_q[log p(x|z)] - KL(q(z|x) || p(z))
        ↑                    ↑
-  Reconstruction          Regularization
+    重建項                正則化項
 ```
 
-- **Reconstruction term**: Model should generate data similar to observed
-- **Regularization term**: Latent representation should match prior
+- **重建項**：模型應生成與觀測相似的數據
+- **正則化項**：潛在表示應匹配先驗
 
-### Variational Autoencoders (VAEs)
+### 變分自編碼器（VAE）
 
-**Architecture**:
+**架構**：
 ```
-x (observed data)
+x（觀測數據）
     ↓
-[Encoder Neural Network]
+[編碼器神經網路]
     ↓
-z (latent representation)
+z（潛在表示）
     ↓
-[Decoder Neural Network]
+[解碼器神經網路]
     ↓
-x̂ (reconstructed data)
+x̂（重建數據）
 ```
 
-**Encoder**: Maps cells (x) to latent space (z)
-- Learns q(z|x), the approximate posterior
-- Parameterized by neural network with learnable weights
-- Outputs mean and variance of latent distribution
+**編碼器**：將細胞（x）映射到潛在空間（z）
+- 學習 q(z|x)，近似後驗
+- 由具有可學習權重的神經網路參數化
+- 輸出潛在分佈的均值和方差
 
-**Decoder**: Maps latent space (z) back to gene space
-- Learns p(x|z), the likelihood
-- Generates gene expression from latent representation
-- Models count distributions (Negative Binomial, Zero-Inflated NB)
+**解碼器**：將潛在空間（z）映射回基因空間
+- 學習 p(x|z)，似然函數
+- 從潛在表示生成基因表達
+- 建模計數分佈（負二項分佈、零膨脹負二項分佈）
 
-**Reparameterization Trick**:
-- Allows backpropagation through stochastic sampling
-- Sample z = μ + σ ⊙ ε, where ε ~ N(0,1)
-- Enables end-to-end training with gradient descent
+**重參數化技巧**：
+- 允許通過隨機取樣進行反向傳播
+- 取樣 z = μ + σ ⊙ ε，其中 ε ~ N(0,1)
+- 支援使用梯度下降進行端到端訓練
 
-### Amortized Inference
+### 攤銷推斷（Amortized Inference）
 
-**Concept**: Share encoder parameters across all cells.
+**概念**：跨所有細胞共享編碼器參數。
 
-**Traditional inference**: Learn separate latent variables for each cell
-- n_cells × n_latent parameters
-- Doesn't scale to large datasets
+**傳統推斷**：為每個細胞學習單獨的潛在變數
+- n_cells × n_latent 個參數
+- 無法擴展到大型數據集
 
-**Amortized inference**: Learn single encoder for all cells
-- Fixed number of parameters regardless of cell count
-- Enables fast inference on new cells
-- Transfers learned patterns across dataset
+**攤銷推斷**：為所有細胞學習單一編碼器
+- 無論細胞數量多少，參數數量固定
+- 支援對新細胞的快速推斷
+- 跨數據集遷移學習到的模式
 
-**Benefits**:
-- Scalable to millions of cells
-- Fast inference on query data
-- Leverages shared structure across cells
-- Enables few-shot learning
+**優點**：
+- 可擴展到數百萬細胞
+- 對查詢數據的快速推斷
+- 利用細胞間的共享結構
+- 支援少樣本學習
 
-## Statistical Modeling
+## 統計建模
 
-### Count Data Distributions
+### 計數數據分佈
 
-Single-cell data are counts (integer-valued), requiring appropriate distributions.
+單細胞數據是計數（整數值），需要適當的分佈。
 
-#### Negative Binomial (NB)
+#### 負二項分佈（NB）
 ```
 x ~ NB(μ, θ)
 ```
-- **μ (mean)**: Expected expression level
-- **θ (dispersion)**: Controls variance
-- **Variance**: Var(x) = μ + μ²/θ
+- **μ（均值）**：期望表達水平
+- **θ（離散度）**：控制方差
+- **方差**：Var(x) = μ + μ²/θ
 
-**When to use**: Gene expression without zero-inflation
-- More flexible than Poisson (allows overdispersion)
-- Models technical and biological variation
+**何時使用**：沒有零膨脹的基因表達
+- 比泊松更靈活（允許過度離散）
+- 建模技術和生物學變異
 
-#### Zero-Inflated Negative Binomial (ZINB)
+#### 零膨脹負二項分佈（ZINB）
 ```
 x ~ π·δ₀ + (1-π)·NB(μ, θ)
 ```
-- **π (dropout rate)**: Probability of technical zero
-- **δ₀**: Point mass at zero
-- **NB(μ, θ)**: Expression when not dropped out
+- **π（丟失率）**：技術零的機率
+- **δ₀**：零處的點質量
+- **NB(μ, θ)**：未丟失時的表達
 
-**When to use**: Sparse scRNA-seq data
-- Models technical dropout separately from biological zeros
-- Better fit for highly sparse data (e.g., 10x data)
+**何時使用**：稀疏的 scRNA-seq 數據
+- 將技術丟失與生物學零值分開建模
+- 更適合高度稀疏的數據（例如 10x 數據）
 
-#### Poisson
+#### 泊松分佈
 ```
 x ~ Poisson(μ)
 ```
-- Simplest count distribution
-- Mean equals variance: Var(x) = μ
+- 最簡單的計數分佈
+- 均值等於方差：Var(x) = μ
 
-**When to use**: Less common; ATAC-seq fragment counts
-- More restrictive than NB
-- Faster computation
+**何時使用**：較少見；ATAC-seq 片段計數
+- 比 NB 更有限制
+- 計算更快
 
-### Batch Correction Framework
+### 批次校正框架
 
-**Problem**: Technical variation confounds biological signal
-- Different sequencing runs, protocols, labs
-- Must remove technical effects while preserving biology
+**問題**：技術變異混淆生物學信號
+- 不同的定序運行、協議、實驗室
+- 必須移除技術效應同時保留生物學
 
-**scvi-tools approach**:
-1. Encode batch as categorical variable s
-2. Include s in generative model
-3. Latent space z is batch-invariant
-4. Decoder conditions on s for batch-specific effects
+**scvi-tools 方法**：
+1. 將批次編碼為分類變數 s
+2. 在生成模型中包含 s
+3. 潛在空間 z 是批次不變的
+4. 解碼器以 s 為條件處理批次特異性效應
 
-**Mathematical formulation**:
+**數學公式**：
 ```
-Encoder: q(z|x, s)  - batch-aware encoding
-Latent: z           - batch-corrected representation
-Decoder: p(x|z, s)  - batch-specific decoding
+編碼器：q(z|x, s)  - 批次感知編碼
+潛在：z           - 批次校正的表示
+解碼器：p(x|z, s)  - 批次特異性解碼
 ```
 
-**Key insight**: Batch info flows through decoder, not latent space
-- z captures biological variation
-- s explains technical variation
-- Separable biology and batch effects
+**關鍵洞察**：批次資訊流經解碼器，而非潛在空間
+- z 捕捉生物學變異
+- s 解釋技術變異
+- 可分離的生物學和批次效應
 
-### Deep Generative Modeling
+### 深度生成建模
 
-**Generative model**: Learns p(x), the data distribution
+**生成模型**：學習 p(x)，數據分佈
 
-**Process**:
-1. Sample latent variable: z ~ p(z) = N(0, I)
-2. Generate expression: x ~ p(x|z)
-3. Joint distribution: p(x, z) = p(x|z)p(z)
+**過程**：
+1. 取樣潛在變數：z ~ p(z) = N(0, I)
+2. 生成表達：x ~ p(x|z)
+3. 聯合分佈：p(x, z) = p(x|z)p(z)
 
-**Benefits**:
-- Generate synthetic cells
-- Impute missing values
-- Quantify uncertainty
-- Perform counterfactual predictions
+**優點**：
+- 生成合成細胞
+- 插補缺失值
+- 量化不確定性
+- 執行反事實預測
 
-**Inference network**: Inverts generative process
-- Given x, infer z
-- q(z|x) approximates true posterior p(z|x)
+**推斷網路**：反轉生成過程
+- 給定 x，推斷 z
+- q(z|x) 近似真實後驗 p(z|x)
 
-## Model Architecture Details
+## 模型架構細節
 
-### scVI Architecture
+### scVI 架構
 
-**Input**: Gene expression counts x ∈ ℕ^G (G genes)
+**輸入**：基因表達計數 x ∈ ℕ^G（G 個基因）
 
-**Encoder**:
+**編碼器**：
 ```
 h = ReLU(W₁·x + b₁)
 μ_z = W₂·h + b₂
@@ -177,130 +177,130 @@ log σ²_z = W₃·h + b₃
 z ~ N(μ_z, σ²_z)
 ```
 
-**Latent space**: z ∈ ℝ^d (typically d=10-30)
+**潛在空間**：z ∈ ℝ^d（通常 d=10-30）
 
-**Decoder**:
+**解碼器**：
 ```
 h = ReLU(W₄·z + b₄)
 μ = softmax(W₅·h + b₅) · library_size
 θ = exp(W₆·h + b₆)
-π = sigmoid(W₇·h + b₇)  # for ZINB
+π = sigmoid(W₇·h + b₇)  # 用於 ZINB
 x ~ ZINB(μ, θ, π)
 ```
 
-**Loss function (ELBO)**:
+**損失函數（ELBO）**：
 ```
 L = E_q[log p(x|z)] - KL(q(z|x) || N(0,I))
 ```
 
-### Handling Covariates
+### 處理共變量
 
-**Categorical covariates** (batch, donor, etc.):
-- One-hot encoded: s ∈ {0,1}^K
-- Concatenate with latent: [z, s]
-- Or use conditional layers
+**分類共變量**（批次、供體等）：
+- 獨熱編碼：s ∈ {0,1}^K
+- 與潛在連接：[z, s]
+- 或使用條件層
 
-**Continuous covariates** (library size, percent_mito):
-- Standardize to zero mean, unit variance
-- Include in encoder and/or decoder
+**連續共變量**（文庫大小、percent_mito）：
+- 標準化為零均值、單位方差
+- 包含在編碼器和/或解碼器中
 
-**Covariate injection strategies**:
-- **Concatenation**: [z, s] fed to decoder
-- **Deep injection**: s added at multiple layers
-- **Conditional batch norm**: Batch-specific normalization
+**共變量注入策略**：
+- **連接**：[z, s] 輸入解碼器
+- **深度注入**：s 在多層添加
+- **條件批次標準化**：批次特異性標準化
 
-## Advanced Theoretical Concepts
+## 進階理論概念
 
-### Transfer Learning (scArches)
+### 遷移學習（scArches）
 
-**Concept**: Use pretrained model as initialization for new data
+**概念**：使用預訓練模型作為新數據的初始化
 
-**Process**:
-1. Train reference model on large dataset
-2. Freeze encoder parameters
-3. Fine-tune decoder on query data
-4. Or fine-tune all with lower learning rate
+**過程**：
+1. 在大型數據集上訓練參考模型
+2. 凍結編碼器參數
+3. 在查詢數據上微調解碼器
+4. 或使用較低學習率微調全部
 
-**Why it works**:
-- Encoder learns general cellular representations
-- Decoder adapts to query-specific characteristics
-- Prevents catastrophic forgetting
+**為什麼有效**：
+- 編碼器學習通用的細胞表示
+- 解碼器適應查詢特異性特徵
+- 防止災難性遺忘
 
-**Applications**:
-- Query-to-reference mapping
-- Few-shot learning for rare cell types
-- Rapid analysis of new datasets
+**應用**：
+- 查詢到參考映射
+- 稀有細胞類型的少樣本學習
+- 快速分析新數據集
 
-### Multi-Resolution Modeling (MrVI)
+### 多解析度建模（MrVI）
 
-**Idea**: Separate shared and sample-specific variation
+**思路**：分離共享和樣本特異性變異
 
-**Latent space decomposition**:
+**潛在空間分解**：
 ```
 z = z_shared + z_sample
 ```
-- **z_shared**: Common across samples
-- **z_sample**: Sample-specific effects
+- **z_shared**：跨樣本通用
+- **z_sample**：樣本特異性效應
 
-**Hierarchical structure**:
+**層次結構**：
 ```
-Sample level: ρ_s ~ N(0, I)
-Cell level: z_i ~ N(ρ_{s(i)}, σ²)
+樣本層級：ρ_s ~ N(0, I)
+細胞層級：z_i ~ N(ρ_{s(i)}, σ²)
 ```
 
-**Benefits**:
-- Disentangle biological sources of variation
-- Compare samples at different resolutions
-- Identify sample-specific cell states
+**優點**：
+- 解開生物學變異來源
+- 在不同解析度比較樣本
+- 識別樣本特異性細胞狀態
 
-### Counterfactual Prediction
+### 反事實預測
 
-**Goal**: Predict outcome under different conditions
+**目標**：預測不同條件下的結果
 
-**Example**: "What would this cell look like if from different batch?"
+**範例**：「如果這個細胞來自不同批次會怎樣？」
 
-**Method**:
-1. Encode cell to latent: z = Encoder(x, s_original)
-2. Decode with new condition: x_new = Decoder(z, s_new)
-3. x_new is counterfactual prediction
+**方法**：
+1. 將細胞編碼到潛在：z = Encoder(x, s_original)
+2. 用新條件解碼：x_new = Decoder(z, s_new)
+3. x_new 是反事實預測
 
-**Applications**:
-- Batch effect assessment
-- Predicting treatment response
-- In silico perturbation studies
+**應用**：
+- 批次效應評估
+- 預測治療反應
+- 電腦模擬擾動研究
 
-### Posterior Predictive Distribution
+### 後驗預測分佈
 
-**Definition**: Distribution of new data given observed data
+**定義**：給定觀測數據的新數據分佈
 
 ```
 p(x_new | x_observed) = ∫ p(x_new|z) q(z|x_observed) dz
 ```
 
-**Estimation**: Sample z from q(z|x), generate x_new from p(x_new|z)
+**估計**：從 q(z|x) 取樣 z，從 p(x_new|z) 生成 x_new
 
-**Uses**:
-- Uncertainty quantification
-- Robust predictions
-- Outlier detection
+**用途**：
+- 不確定性量化
+- 穩健預測
+- 異常值檢測
 
-## Differential Expression Framework
+## 差異表達框架
 
-### Bayesian Approach
+### 貝葉斯方法
 
-**Traditional methods**: Compare point estimates
-- Wilcoxon, t-test, etc.
-- Ignore uncertainty
-- Require pseudocounts
+**傳統方法**：比較點估計
+- Wilcoxon、t 檢驗等
+- 忽略不確定性
+- 需要偽計數
 
-**scvi-tools approach**: Compare distributions
-- Sample from posterior: μ_A ~ p(μ|x_A), μ_B ~ p(μ|x_B)
-- Compute log fold-change: LFC = log(μ_B) - log(μ_A)
-- Posterior distribution of LFC quantifies uncertainty
+**scvi-tools 方法**：比較分佈
+- 從後驗取樣：μ_A ~ p(μ|x_A)，μ_B ~ p(μ|x_B)
+- 計算對數倍數變化：LFC = log(μ_B) - log(μ_A)
+- LFC 的後驗分佈量化不確定性
 
-### Bayes Factor
+### 貝葉斯因子
 
-**Definition**: Ratio of posterior odds to prior odds
+**定義**：後驗勝算與先驗勝算的比率
 
 ```
 BF = P(H₁|data) / P(H₀|data)
@@ -308,131 +308,131 @@ BF = P(H₁|data) / P(H₀|data)
      P(H₁) / P(H₀)
 ```
 
-**Interpretation**:
-- BF > 3: Moderate evidence for H₁
-- BF > 10: Strong evidence
-- BF > 100: Decisive evidence
+**解釋**：
+- BF > 3：對 H₁ 的中等證據
+- BF > 10：強證據
+- BF > 100：決定性證據
 
-**In scvi-tools**: Used to rank genes by evidence for DE
+**在 scvi-tools 中**：用於按 DE 證據對基因排序
 
-### False Discovery Proportion (FDP)
+### 錯誤發現比例（FDP）
 
-**Goal**: Control expected false discovery rate
+**目標**：控制期望錯誤發現率
 
-**Procedure**:
-1. For each gene, compute posterior probability of DE
-2. Rank genes by evidence (Bayes factor)
-3. Select top k genes such that E[FDP] ≤ α
+**程序**：
+1. 對每個基因，計算 DE 的後驗機率
+2. 按證據（貝葉斯因子）對基因排序
+3. 選擇前 k 個基因使得 E[FDP] ≤ α
 
-**Advantage over p-values**:
-- Fully Bayesian
-- Natural for posterior inference
-- No arbitrary thresholds
+**相對於 p 值的優勢**：
+- 完全貝葉斯
+- 自然用於後驗推斷
+- 沒有任意閾值
 
-## Implementation Details
+## 實作細節
 
-### Optimization
+### 優化
 
-**Optimizer**: Adam (adaptive learning rates)
-- Default lr = 0.001
-- Momentum parameters: β₁=0.9, β₂=0.999
+**優化器**：Adam（自適應學習率）
+- 預設 lr = 0.001
+- 動量參數：β₁=0.9，β₂=0.999
 
-**Training loop**:
-1. Sample mini-batch of cells
-2. Compute ELBO loss
-3. Backpropagate gradients
-4. Update parameters with Adam
-5. Repeat until convergence
+**訓練迴圈**：
+1. 取樣細胞的小批量
+2. 計算 ELBO 損失
+3. 反向傳播梯度
+4. 使用 Adam 更新參數
+5. 重複直到收斂
 
-**Convergence criteria**:
-- ELBO plateaus on validation set
-- Early stopping prevents overfitting
-- Typically 200-500 epochs
+**收斂標準**：
+- ELBO 在驗證集上穩定
+- 早停防止過擬合
+- 通常 200-500 個 epoch
 
-### Regularization
+### 正則化
 
-**KL annealing**: Gradually increase KL weight
-- Prevents posterior collapse
-- Starts at 0, increases to 1 over epochs
+**KL 退火**：逐漸增加 KL 權重
+- 防止後驗塌縮
+- 從 0 開始，經過 epoch 增加到 1
 
-**Dropout**: Random neuron dropping during training
-- Default: 0.1 dropout rate
-- Prevents overfitting
-- Improves generalization
+**Dropout**：訓練期間隨機丟棄神經元
+- 預設：0.1 丟棄率
+- 防止過擬合
+- 改善泛化
 
-**Weight decay**: L2 regularization on weights
-- Prevents large weights
-- Improves stability
+**權重衰減**：權重的 L2 正則化
+- 防止大權重
+- 改善穩定性
 
-### Scalability
+### 可擴展性
 
-**Mini-batch training**:
-- Process subset of cells per iteration
-- Batch size: 64-256 cells
-- Enables scaling to millions of cells
+**小批量訓練**：
+- 每次迭代處理細胞子集
+- 批次大小：64-256 個細胞
+- 支援擴展到數百萬細胞
 
-**Stochastic optimization**:
-- Estimates ELBO on mini-batches
-- Unbiased gradient estimates
-- Converges to optimal solution
+**隨機優化**：
+- 在小批量上估計 ELBO
+- 無偏梯度估計
+- 收斂到最優解
 
-**GPU acceleration**:
-- Neural networks naturally parallelize
-- Order of magnitude speedup
-- Essential for large datasets
+**GPU 加速**：
+- 神經網路自然並行化
+- 數量級加速
+- 對大數據集至關重要
 
-## Connections to Other Methods
+## 與其他方法的聯繫
 
 ### vs. PCA
-- **PCA**: Linear, deterministic
-- **scVI**: Nonlinear, probabilistic
-- **Advantage**: scVI captures complex structure, handles counts
+- **PCA**：線性、確定性
+- **scVI**：非線性、機率性
+- **優勢**：scVI 捕捉複雜結構，處理計數
 
 ### vs. t-SNE/UMAP
-- **t-SNE/UMAP**: Visualization-focused
-- **scVI**: Full generative model
-- **Advantage**: scVI enables downstream tasks (DE, imputation)
+- **t-SNE/UMAP**：專注於視覺化
+- **scVI**：完整的生成模型
+- **優勢**：scVI 支援下游任務（DE、插補）
 
-### vs. Seurat Integration
-- **Seurat**: Anchor-based alignment
-- **scVI**: Probabilistic modeling
-- **Advantage**: scVI provides uncertainty, works for multiple batches
+### vs. Seurat 整合
+- **Seurat**：基於錨點的對齊
+- **scVI**：機率建模
+- **優勢**：scVI 提供不確定性，適用於多批次
 
 ### vs. Harmony
-- **Harmony**: PCA + batch correction
-- **scVI**: VAE-based
-- **Advantage**: scVI handles counts natively, more flexible
+- **Harmony**：PCA + 批次校正
+- **scVI**：基於 VAE
+- **優勢**：scVI 原生處理計數，更靈活
 
-## Mathematical Notation
+## 數學符號
 
-**Common symbols**:
-- x: Observed gene expression (counts)
-- z: Latent representation
-- θ: Model parameters
-- q(z|x): Approximate posterior (encoder)
-- p(x|z): Likelihood (decoder)
-- p(z): Prior on latent variables
-- μ, σ²: Mean and variance
-- π: Dropout probability (ZINB)
-- θ (in NB): Dispersion parameter
-- s: Batch/covariate indicator
+**常用符號**：
+- x：觀測基因表達（計數）
+- z：潛在表示
+- θ：模型參數
+- q(z|x)：近似後驗（編碼器）
+- p(x|z)：似然（解碼器）
+- p(z)：潛在變數的先驗
+- μ, σ²：均值和方差
+- π：丟失機率（ZINB）
+- θ（在 NB 中）：離散度參數
+- s：批次/共變量指示器
 
-## Further Reading
+## 延伸閱讀
 
-**Key Papers**:
-1. Lopez et al. (2018): "Deep generative modeling for single-cell transcriptomics"
-2. Xu et al. (2021): "Probabilistic harmonization and annotation of single-cell transcriptomics"
-3. Boyeau et al. (2019): "Deep generative models for detecting differential expression in single cells"
+**重要論文**：
+1. Lopez et al. (2018)：「Deep generative modeling for single-cell transcriptomics」
+2. Xu et al. (2021)：「Probabilistic harmonization and annotation of single-cell transcriptomics」
+3. Boyeau et al. (2019)：「Deep generative models for detecting differential expression in single cells」
 
-**Concepts to explore**:
-- Variational inference in machine learning
-- Bayesian deep learning
-- Information theory (KL divergence, mutual information)
-- Generative models (GANs, normalizing flows, diffusion models)
-- Probabilistic programming (Pyro, PyTorch)
+**要探索的概念**：
+- 機器學習中的變分推斷
+- 貝葉斯深度學習
+- 資訊理論（KL 散度、互資訊）
+- 生成模型（GAN、正規化流、擴散模型）
+- 機率編程（Pyro、PyTorch）
 
-**Mathematical background**:
-- Probability theory and statistics
-- Linear algebra and calculus
-- Optimization theory
-- Information theory
+**數學背景**：
+- 機率論和統計學
+- 線性代數和微積分
+- 優化理論
+- 資訊理論

@@ -1,91 +1,91 @@
-# OMERO Tables
+# OMERO 表格
 
-This reference covers creating and managing structured tabular data in OMERO using OMERO.tables.
+此參考涵蓋使用 OMERO.tables 在 OMERO 中建立和管理結構化表格資料。
 
-## OMERO.tables Overview
+## OMERO.tables 概述
 
-OMERO.tables provides a way to store structured tabular data associated with OMERO objects. Tables are stored as HDF5 files and can be queried efficiently. Common use cases include:
+OMERO.tables 提供了一種儲存與 OMERO 物件關聯的結構化表格資料的方式。表格以 HDF5 檔案儲存，可以有效率地查詢。常見用途包括：
 
-- Storing quantitative measurements from images
-- Recording analysis results
-- Tracking experimental metadata
-- Linking measurements to specific images or ROIs
+- 儲存影像的定量測量
+- 記錄分析結果
+- 追蹤實驗中繼資料
+- 將測量連結到特定影像或 ROI
 
-## Column Types
+## 欄位類型
 
-OMERO.tables supports various column types:
+OMERO.tables 支援多種欄位類型：
 
-- **LongColumn**: Integer values (64-bit)
-- **DoubleColumn**: Floating-point values
-- **StringColumn**: Text data (fixed max length)
-- **BoolColumn**: Boolean values
-- **LongArrayColumn**: Arrays of integers
-- **DoubleArrayColumn**: Arrays of floats
-- **FileColumn**: References to OMERO files
-- **ImageColumn**: References to OMERO images
-- **RoiColumn**: References to OMERO ROIs
-- **WellColumn**: References to OMERO wells
+- **LongColumn**：整數值（64 位元）
+- **DoubleColumn**：浮點數值
+- **StringColumn**：文字資料（固定最大長度）
+- **BoolColumn**：布林值
+- **LongArrayColumn**：整數陣列
+- **DoubleArrayColumn**：浮點數陣列
+- **FileColumn**：OMERO 檔案參考
+- **ImageColumn**：OMERO 影像參考
+- **RoiColumn**：OMERO ROI 參考
+- **WellColumn**：OMERO 孔參考
 
-## Creating Tables
+## 建立表格
 
-### Basic Table Creation
+### 基本表格建立
 
 ```python
 from random import random
 import omero.grid
 
-# Create unique table name
+# 建立唯一表格名稱
 table_name = f"MyAnalysisTable_{random()}"
 
-# Define columns (empty data for initialization)
+# 定義欄位（初始化用空資料）
 col1 = omero.grid.LongColumn('ImageID', 'Image identifier', [])
 col2 = omero.grid.DoubleColumn('MeanIntensity', 'Mean pixel intensity', [])
 col3 = omero.grid.StringColumn('Category', 'Classification', 64, [])
 
 columns = [col1, col2, col3]
 
-# Get resources and create table
+# 取得資源並建立表格
 resources = conn.c.sf.sharedResources()
 repository_id = resources.repositories().descriptions[0].getId().getValue()
 table = resources.newTable(repository_id, table_name)
 
-# Initialize table with column definitions
+# 使用欄位定義初始化表格
 table.initialize(columns)
 ```
 
-### Add Data to Table
+### 新增資料到表格
 
 ```python
-# Prepare data
+# 準備資料
 image_ids = [1, 2, 3, 4, 5]
 intensities = [123.4, 145.2, 98.7, 156.3, 132.8]
 categories = ["Good", "Good", "Poor", "Excellent", "Good"]
 
-# Create data columns
+# 建立資料欄位
 data_col1 = omero.grid.LongColumn('ImageID', 'Image identifier', image_ids)
 data_col2 = omero.grid.DoubleColumn('MeanIntensity', 'Mean pixel intensity', intensities)
 data_col3 = omero.grid.StringColumn('Category', 'Classification', 64, categories)
 
 data = [data_col1, data_col2, data_col3]
 
-# Add data to table
+# 將資料新增到表格
 table.addData(data)
 
-# Get file reference
+# 取得檔案參考
 orig_file = table.getOriginalFile()
-table.close()  # Always close table when done
+table.close()  # 完成後務必關閉表格
 ```
 
-### Link Table to Dataset
+### 將表格連結到資料集
 
 ```python
-# Create file annotation from table
+# 從表格建立檔案註解
 orig_file_id = orig_file.id.val
 file_ann = omero.model.FileAnnotationI()
 file_ann.setFile(omero.model.OriginalFileI(orig_file_id, False))
 file_ann = conn.getUpdateService().saveAndReturnObject(file_ann)
 
-# Link to dataset
+# 連結到資料集
 link = omero.model.DatasetAnnotationLinkI()
 link.setParent(omero.model.DatasetI(dataset_id, False))
 link.setChild(omero.model.FileAnnotationI(file_ann.getId().getValue(), False))
@@ -94,60 +94,60 @@ conn.getUpdateService().saveAndReturnObject(link)
 print(f"Linked table to dataset {dataset_id}")
 ```
 
-## Column Types in Detail
+## 欄位類型詳解
 
-### Long Column (Integers)
+### Long 欄位（整數）
 
 ```python
-# Column for integer values
+# 整數值欄位
 image_ids = [101, 102, 103, 104, 105]
 col = omero.grid.LongColumn('ImageID', 'Image identifier', image_ids)
 ```
 
-### Double Column (Floats)
+### Double 欄位（浮點數）
 
 ```python
-# Column for floating-point values
+# 浮點數值欄位
 measurements = [12.34, 56.78, 90.12, 34.56, 78.90]
 col = omero.grid.DoubleColumn('Measurement', 'Value in microns', measurements)
 ```
 
-### String Column (Text)
+### String 欄位（文字）
 
 ```python
-# Column for text (max length required)
+# 文字欄位（需要最大長度）
 labels = ["Control", "Treatment A", "Treatment B", "Control", "Treatment A"]
 col = omero.grid.StringColumn('Condition', 'Experimental condition', 64, labels)
 ```
 
-### Boolean Column
+### Boolean 欄位
 
 ```python
-# Column for boolean values
+# 布林值欄位
 flags = [True, False, True, True, False]
 col = omero.grid.BoolColumn('QualityPass', 'Passes quality control', flags)
 ```
 
-### Image Column (References to Images)
+### Image 欄位（影像參考）
 
 ```python
-# Column linking to OMERO images
+# 連結到 OMERO 影像的欄位
 image_ids = [101, 102, 103, 104, 105]
 col = omero.grid.ImageColumn('Image', 'Source image', image_ids)
 ```
 
-### ROI Column (References to ROIs)
+### ROI 欄位（ROI 參考）
 
 ```python
-# Column linking to OMERO ROIs
+# 連結到 OMERO ROI 的欄位
 roi_ids = [201, 202, 203, 204, 205]
 col = omero.grid.RoiColumn('ROI', 'Associated ROI', roi_ids)
 ```
 
-### Array Columns
+### 陣列欄位
 
 ```python
-# Column for arrays of doubles
+# Double 陣列欄位
 histogram_data = [
     [10, 20, 30, 40],
     [15, 25, 35, 45],
@@ -155,21 +155,21 @@ histogram_data = [
 ]
 col = omero.grid.DoubleArrayColumn('Histogram', 'Intensity histogram', histogram_data)
 
-# Column for arrays of longs
+# Long 陣列欄位
 bin_counts = [[5, 10, 15], [8, 12, 16], [6, 11, 14]]
 col = omero.grid.LongArrayColumn('Bins', 'Histogram bins', bin_counts)
 ```
 
-## Reading Table Data
+## 讀取表格資料
 
-### Open Existing Table
+### 開啟現有表格
 
 ```python
-# Get table file by name
+# 按名稱取得表格檔案
 orig_table_file = conn.getObject("OriginalFile",
                                  attributes={'name': table_name})
 
-# Open table
+# 開啟表格
 resources = conn.c.sf.sharedResources()
 table = resources.openTable(orig_table_file._obj)
 
@@ -177,19 +177,19 @@ print(f"Opened table: {table.getOriginalFile().getName().getValue()}")
 print(f"Number of rows: {table.getNumberOfRows()}")
 ```
 
-### Read All Data
+### 讀取所有資料
 
 ```python
-# Get column headers
+# 取得欄位標頭
 print("Columns:")
 for col in table.getHeaders():
     print(f"  {col.name}: {col.description}")
 
-# Read all data
+# 讀取所有資料
 row_count = table.getNumberOfRows()
 data = table.readCoordinates(range(row_count))
 
-# Display data
+# 顯示資料
 for col in data.columns:
     print(f"\nColumn: {col.name}")
     for value in col.values:
@@ -198,10 +198,10 @@ for col in data.columns:
 table.close()
 ```
 
-### Read Specific Rows
+### 讀取特定列
 
 ```python
-# Read rows 10-20
+# 讀取第 10-20 列
 start = 10
 stop = 20
 data = table.read(list(range(table.getHeaders().__len__())), start, stop)
@@ -212,10 +212,10 @@ for col in data.columns:
         print(f"  {value}")
 ```
 
-### Read Specific Columns
+### 讀取特定欄位
 
 ```python
-# Read only columns 0 and 2
+# 只讀取欄位 0 和 2
 column_indices = [0, 2]
 start = 0
 stop = table.getNumberOfRows()
@@ -227,12 +227,12 @@ for col in data.columns:
     print(f"Values: {col.values}")
 ```
 
-## Querying Tables
+## 查詢表格
 
-### Query with Conditions
+### 條件查詢
 
 ```python
-# Query rows where MeanIntensity > 100
+# 查詢 MeanIntensity > 100 的列
 row_count = table.getNumberOfRows()
 
 query_rows = table.getWhereList(
@@ -245,7 +245,7 @@ query_rows = table.getWhereList(
 
 print(f"Found {len(query_rows)} matching rows")
 
-# Read matching rows
+# 讀取符合的列
 data = table.readCoordinates(query_rows)
 
 for col in data.columns:
@@ -254,10 +254,10 @@ for col in data.columns:
         print(f"  {value}")
 ```
 
-### Complex Queries
+### 複雜查詢
 
 ```python
-# Multiple conditions with AND
+# 使用 AND 的多個條件
 query_rows = table.getWhereList(
     "(MeanIntensity > 100) & (MeanIntensity < 150)",
     variables={},
@@ -266,7 +266,7 @@ query_rows = table.getWhereList(
     step=0
 )
 
-# Multiple conditions with OR
+# 使用 OR 的多個條件
 query_rows = table.getWhereList(
     "(Category == 'Good') | (Category == 'Excellent')",
     variables={},
@@ -275,7 +275,7 @@ query_rows = table.getWhereList(
     step=0
 )
 
-# String matching
+# 字串匹配
 query_rows = table.getWhereList(
     "(Category == 'Good')",
     variables={},
@@ -285,7 +285,7 @@ query_rows = table.getWhereList(
 )
 ```
 
-## Complete Example: Image Analysis Results
+## 完整範例：影像分析結果
 
 ```python
 from omero.gateway import BlitzGateway
@@ -299,11 +299,11 @@ USERNAME = 'user'
 PASSWORD = 'pass'
 
 with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
-    # Get dataset
+    # 取得資料集
     dataset = conn.getObject("Dataset", dataset_id)
     print(f"Analyzing dataset: {dataset.getName()}")
 
-    # Collect measurements from images
+    # 從影像收集測量
     image_ids = []
     mean_intensities = []
     max_intensities = []
@@ -312,33 +312,33 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
     for image in dataset.listChildren():
         image_ids.append(image.getId())
 
-        # Get pixel data
+        # 取得像素資料
         pixels = image.getPrimaryPixels()
         plane = pixels.getPlane(0, 0, 0)  # Z=0, C=0, T=0
 
-        # Calculate statistics
+        # 計算統計資料
         mean_intensities.append(float(np.mean(plane)))
         max_intensities.append(float(np.max(plane)))
 
-        # Simulate cell count (would be from actual analysis)
+        # 模擬細胞計數（實際應來自分析）
         cell_counts.append(np.random.randint(50, 200))
 
-    # Create table
+    # 建立表格
     table_name = f"Analysis_Results_{dataset.getId()}"
 
-    # Define columns
+    # 定義欄位
     col1 = omero.grid.ImageColumn('Image', 'Source image', [])
     col2 = omero.grid.DoubleColumn('MeanIntensity', 'Mean pixel value', [])
     col3 = omero.grid.DoubleColumn('MaxIntensity', 'Maximum pixel value', [])
     col4 = omero.grid.LongColumn('CellCount', 'Number of cells detected', [])
 
-    # Initialize table
+    # 初始化表格
     resources = conn.c.sf.sharedResources()
     repository_id = resources.repositories().descriptions[0].getId().getValue()
     table = resources.newTable(repository_id, table_name)
     table.initialize([col1, col2, col3, col4])
 
-    # Add data
+    # 新增資料
     data_col1 = omero.grid.ImageColumn('Image', 'Source image', image_ids)
     data_col2 = omero.grid.DoubleColumn('MeanIntensity', 'Mean pixel value',
                                         mean_intensities)
@@ -349,11 +349,11 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
 
     table.addData([data_col1, data_col2, data_col3, data_col4])
 
-    # Get file and close table
+    # 取得檔案並關閉表格
     orig_file = table.getOriginalFile()
     table.close()
 
-    # Link to dataset
+    # 連結到資料集
     orig_file_id = orig_file.id.val
     file_ann = omero.model.FileAnnotationI()
     file_ann.setFile(omero.model.OriginalFileI(orig_file_id, False))
@@ -366,7 +366,7 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
 
     print(f"Created and linked table with {len(image_ids)} rows")
 
-    # Query results
+    # 查詢結果
     table = resources.openTable(orig_file)
 
     high_cell_count_rows = table.getWhereList(
@@ -379,7 +379,7 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
 
     print(f"Images with >100 cells: {len(high_cell_count_rows)}")
 
-    # Read those rows
+    # 讀取這些列
     data = table.readCoordinates(high_cell_count_rows)
     for i in range(len(high_cell_count_rows)):
         img_id = data.columns[0].values[i]
@@ -389,25 +389,25 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
     table.close()
 ```
 
-## Retrieve Tables from Objects
+## 從物件擷取表格
 
-### Find Tables Attached to Dataset
+### 尋找附加到資料集的表格
 
 ```python
-# Get dataset
+# 取得資料集
 dataset = conn.getObject("Dataset", dataset_id)
 
-# List file annotations
+# 列出檔案註解
 for ann in dataset.listAnnotations():
     if isinstance(ann, omero.gateway.FileAnnotationWrapper):
         file_obj = ann.getFile()
         file_name = file_obj.getName()
 
-        # Check if it's a table (might have specific naming pattern)
+        # 檢查是否為表格（可能有特定命名模式）
         if "Table" in file_name or file_name.endswith(".h5"):
             print(f"Found table: {file_name} (ID: {file_obj.getId()})")
 
-            # Open and inspect
+            # 開啟並檢查
             resources = conn.c.sf.sharedResources()
             table = resources.openTable(file_obj._obj)
 
@@ -419,80 +419,80 @@ for ann in dataset.listAnnotations():
             table.close()
 ```
 
-## Updating Tables
+## 更新表格
 
-### Append Rows
+### 附加列
 
 ```python
-# Open existing table
+# 開啟現有表格
 resources = conn.c.sf.sharedResources()
 table = resources.openTable(orig_file._obj)
 
-# Prepare new data
+# 準備新資料
 new_image_ids = [106, 107]
 new_intensities = [88.9, 92.3]
 new_categories = ["Good", "Excellent"]
 
-# Create data columns
+# 建立資料欄位
 data_col1 = omero.grid.LongColumn('ImageID', '', new_image_ids)
 data_col2 = omero.grid.DoubleColumn('MeanIntensity', '', new_intensities)
 data_col3 = omero.grid.StringColumn('Category', '', 64, new_categories)
 
-# Append data
+# 附加資料
 table.addData([data_col1, data_col2, data_col3])
 
 print(f"New row count: {table.getNumberOfRows()}")
 table.close()
 ```
 
-## Deleting Tables
+## 刪除表格
 
-### Delete Table File
+### 刪除表格檔案
 
 ```python
-# Get file object
+# 取得檔案物件
 orig_file = conn.getObject("OriginalFile", file_id)
 
-# Delete file (also deletes table)
+# 刪除檔案（同時刪除表格）
 conn.deleteObjects("OriginalFile", [file_id], wait=True)
 print(f"Deleted table file {file_id}")
 ```
 
-### Unlink Table from Object
+### 取消表格與物件的連結
 
 ```python
-# Find annotation links
+# 尋找註解連結
 dataset = conn.getObject("Dataset", dataset_id)
 
 for ann in dataset.listAnnotations():
     if isinstance(ann, omero.gateway.FileAnnotationWrapper):
         if "Table" in ann.getFile().getName():
-            # Delete link (keeps table, removes association)
+            # 刪除連結（保留表格，移除關聯）
             conn.deleteObjects("DatasetAnnotationLink",
                              [ann.link.getId()],
                              wait=True)
             print(f"Unlinked table from dataset")
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Descriptive Names**: Use meaningful table and column names
-2. **Close Tables**: Always close tables after use
-3. **String Length**: Set appropriate max length for string columns
-4. **Link to Objects**: Attach tables to relevant datasets or projects
-5. **Use References**: Use ImageColumn, RoiColumn for object references
-6. **Query Efficiently**: Use getWhereList() instead of reading all data
-7. **Document**: Add descriptions to columns
-8. **Version Control**: Include version info in table name or metadata
-9. **Batch Operations**: Add data in batches for better performance
-10. **Error Handling**: Check for None returns and handle exceptions
+1. **描述性名稱**：使用有意義的表格和欄位名稱
+2. **關閉表格**：使用後務必關閉表格
+3. **字串長度**：為字串欄位設定適當的最大長度
+4. **連結到物件**：將表格附加到相關的資料集或專案
+5. **使用參考**：為物件參考使用 ImageColumn、RoiColumn
+6. **高效查詢**：使用 getWhereList() 而非讀取所有資料
+7. **文件記錄**：為欄位新增描述
+8. **版本控制**：在表格名稱或中繼資料中包含版本資訊
+9. **批次操作**：以批次新增資料以獲得更好的效能
+10. **錯誤處理**：檢查 None 傳回值並處理異常
 
-## Common Patterns
+## 常見模式
 
-### ROI Measurements Table
+### ROI 測量表格
 
 ```python
-# Table structure for ROI measurements
+# ROI 測量的表格結構
 columns = [
     omero.grid.ImageColumn('Image', 'Source image', []),
     omero.grid.RoiColumn('ROI', 'Measured ROI', []),
@@ -504,10 +504,10 @@ columns = [
 ]
 ```
 
-### Time Series Data Table
+### 時間序列資料表格
 
 ```python
-# Table structure for time series measurements
+# 時間序列測量的表格結構
 columns = [
     omero.grid.ImageColumn('Image', 'Time series image', []),
     omero.grid.LongColumn('Timepoint', 'Time index', []),
@@ -517,10 +517,10 @@ columns = [
 ]
 ```
 
-### Screening Results Table
+### 篩選結果表格
 
 ```python
-# Table structure for screening plate analysis
+# 篩選板分析的表格結構
 columns = [
     omero.grid.WellColumn('Well', 'Plate well', []),
     omero.grid.LongColumn('FieldIndex', 'Field number', []),

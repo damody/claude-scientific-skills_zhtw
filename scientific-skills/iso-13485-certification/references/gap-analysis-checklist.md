@@ -1,568 +1,568 @@
-# ISO 13485:2016 Gap Analysis Checklist
+# ISO 13485:2016 差距分析檢查清單
 
-This comprehensive checklist helps identify gaps between your current Quality Management System and ISO 13485:2016 requirements.
+此綜合檢查清單協助識別您當前品質管理系統與 ISO 13485:2016 要求之間的差距。
 
-## How to Use This Checklist
+## 如何使用此檢查清單
 
-**Status Indicators:**
-- ✅ **Compliant:** Requirement fully implemented and documented
-- ⚠️ **Partial:** Requirement partially implemented, needs improvement
-- ❌ **Non-compliant:** Requirement not implemented or documented
-- N/A **Not Applicable:** Requirement doesn't apply (must be justified)
+**狀態指標：**
+- ✅ **合規：** 要求已完全實施並記錄
+- ⚠️ **部分：** 要求部分實施，需要改進
+- ❌ **不合規：** 要求未實施或未記錄
+- N/A **不適用：** 要求不適用（必須說明理由）
 
-**For Each Item:**
-1. Assess current status
-2. Identify existing documentation
-3. Note gaps or deficiencies
-4. Prioritize actions needed
-5. Assign responsibility and target dates
-
----
-
-## Clause 4: Quality Management System
-
-### 4.1 General Requirements
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 4.1.1 | QMS established, documented, implemented, and maintained | | | | |
-| 4.1.2 | QMS processes identified with sequence and interaction | | | | |
-| 4.1.3 | Outsourced processes controlled and documented | | | | |
-| 4.1.4 | QMS requirements and applicable regulatory requirements met | | | | |
-| 4.1.5 | Risk management requirements documented and maintained | | | | |
-| 4.1.6 | Computer software applications validated before use | | | | |
-
-### 4.2 Documentation Requirements
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 4.2.1 | QMS documentation includes policy, manual, procedures, records | | | | |
-| 4.2.2 | Quality Manual established with required content | | | | |
-| 4.2.2.a | Scope of QMS with justified exclusions | | | | |
-| 4.2.2.b | Documented procedures or references | | | | |
-| 4.2.2.c | Description of process interactions | | | | |
-| 4.2.2.d | Structure of documentation described | | | | |
-| 4.2.3 | Medical Device File established for each device type/family | | | | |
-| 4.2.3.a | General description and intended use documented | | | | |
-| 4.2.3.b | Label and IFU specifications | | | | |
-| 4.2.3.c | Product specifications | | | | |
-| 4.2.3.d | Manufacturing specifications | | | | |
-| 4.2.3.e | Purchasing, manufacturing, servicing procedures | | | | |
-| 4.2.3.f | Measurement and monitoring procedures | | | | |
-| 4.2.3.g | Installation requirements (if applicable) | | | | |
-| 4.2.3.h | Risk management file(s) | | | | |
-| 4.2.3.i | Verification and validation information | | | | |
-| 4.2.3.j | Design and development file(s) when applicable | | | | |
-| 4.2.4 | Control of Documents procedure established | | | | |
-| 4.2.4.a | Documents approved before issue | | | | |
-| 4.2.4.b | Documents reviewed, updated, and re-approved | | | | |
-| 4.2.4.c | Changes and current revision status identified | | | | |
-| 4.2.4.d | Relevant versions available at point of use | | | | |
-| 4.2.4.e | Documents remain legible and identifiable | | | | |
-| 4.2.4.f | External documents controlled | | | | |
-| 4.2.4.g | Obsolete documents prevented from unintended use | | | | |
-| 4.2.4.h | Obsolete documents identified if retained | | | | |
-| 4.2.5 | Control of Records procedure established | | | | |
-| 4.2.5.a | Records remain legible, identifiable, and retrievable | | | | |
-| 4.2.5.b | Changes to records remain identifiable | | | | |
-| 4.2.5.c | Retention time at least device lifetime | | | | |
-| 4.2.5.d | Storage, security, integrity, retrieval, disposition defined | | | | |
+**對於每個項目：**
+1. 評估目前狀態
+2. 識別現有文件
+3. 記錄差距或缺陷
+4. 優先處理所需行動
+5. 分配責任和目標日期
 
 ---
 
-## Clause 5: Management Responsibility
+## 第 4 條：品質管理系統
 
-### 5.1 Management Commitment
+### 4.1 一般要求
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 5.1.a | Importance of meeting requirements communicated | | | | |
-| 5.1.b | Quality policy established | | | | |
-| 5.1.c | Quality objectives established | | | | |
-| 5.1.d | Management reviews conducted | | | | |
-| 5.1.e | Resource availability ensured | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 4.1.1 | QMS 已建立、記錄、實施並維護 | | | | |
+| 4.1.2 | 已識別 QMS 流程及其順序和交互作用 | | | | |
+| 4.1.3 | 外包流程受控制並記錄 | | | | |
+| 4.1.4 | QMS 要求和適用法規要求已滿足 | | | | |
+| 4.1.5 | 風險管理要求已記錄並維護 | | | | |
+| 4.1.6 | 電腦軟體應用程式在使用前已驗證 | | | | |
 
-### 5.2 Customer Focus
+### 4.2 文件要求
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 5.2 | Customer and regulatory requirements determined and met | | | | |
-
-### 5.3 Quality Policy
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 5.3.a | Policy appropriate to organization | | | | |
-| 5.3.b | Includes commitment to meet requirements and maintain effectiveness | | | | |
-| 5.3.c | Provides framework for quality objectives | | | | |
-| 5.3.d | Communicated and understood within organization | | | | |
-| 5.3.e | Reviewed for continuing suitability | | | | |
-
-### 5.4 Planning
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 5.4.1 | Quality objectives established at relevant functions/levels | | | | |
-| 5.4.1 | Objectives measurable and consistent with policy | | | | |
-| 5.4.2 | QMS planning meets general requirements and objectives | | | | |
-| 5.4.2 | QMS integrity maintained when changes occur | | | | |
-
-### 5.5 Responsibility, Authority and Communication
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 5.5.1 | Responsibilities and authorities defined and communicated | | | | |
-| 5.5.1 | Roles for QMS management, performance, verification documented | | | | |
-| 5.5.1 | Interrelation of personnel identified | | | | |
-| 5.5.2 | Management representative appointed | | | | |
-| 5.5.2.a | Representative ensures QMS processes established and maintained | | | | |
-| 5.5.2.b | Representative reports to top management on performance | | | | |
-| 5.5.2.c | Representative ensures awareness of requirements | | | | |
-| 5.5.3 | Internal communication processes established | | | | |
-
-### 5.6 Management Review
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 5.6.1 | QMS reviewed at planned intervals (at least annually) | | | | |
-| 5.6.1 | Review ensures suitability, adequacy, effectiveness | | | | |
-| 5.6.1 | Review includes improvement opportunities | | | | |
-| 5.6.1 | Records of reviews maintained | | | | |
-| 5.6.2 | Review includes audit results | | | | |
-| 5.6.2 | Review includes customer feedback | | | | |
-| 5.6.2 | Review includes process performance and product conformity | | | | |
-| 5.6.2 | Review includes status of corrective and preventive actions | | | | |
-| 5.6.2 | Review includes follow-up from previous reviews | | | | |
-| 5.6.2 | Review includes changes affecting QMS | | | | |
-| 5.6.2 | Review includes recommendations for improvement | | | | |
-| 5.6.2 | Review includes new/revised regulatory requirements | | | | |
-| 5.6.3 | Review output includes QMS improvements | | | | |
-| 5.6.3 | Review output includes product improvements | | | | |
-| 5.6.3 | Review output includes resource needs | | | | |
-| 5.6.3 | Review output includes changes to maintain effectiveness | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 4.2.1 | QMS 文件包含政策、手冊、程序、記錄 | | | | |
+| 4.2.2 | 品質手冊已建立並包含必要內容 | | | | |
+| 4.2.2.a | QMS 範圍並說明排除理由 | | | | |
+| 4.2.2.b | 文件化程序或參照 | | | | |
+| 4.2.2.c | 流程交互作用說明 | | | | |
+| 4.2.2.d | 文件結構說明 | | | | |
+| 4.2.3 | 為每種器材類型/系列建立醫療器材檔案 | | | | |
+| 4.2.3.a | 一般描述和預期用途已記錄 | | | | |
+| 4.2.3.b | 標籤和使用說明規格 | | | | |
+| 4.2.3.c | 產品規格 | | | | |
+| 4.2.3.d | 製造規格 | | | | |
+| 4.2.3.e | 採購、製造、服務程序 | | | | |
+| 4.2.3.f | 量測和監測程序 | | | | |
+| 4.2.3.g | 安裝要求（如適用） | | | | |
+| 4.2.3.h | 風險管理檔案 | | | | |
+| 4.2.3.i | 驗證和確效資訊 | | | | |
+| 4.2.3.j | 設計和開發檔案（當適用時） | | | | |
+| 4.2.4 | 文件管制程序已建立 | | | | |
+| 4.2.4.a | 文件在發佈前核准 | | | | |
+| 4.2.4.b | 文件已審查、更新並重新核准 | | | | |
+| 4.2.4.c | 變更和目前版次狀態已識別 | | | | |
+| 4.2.4.d | 相關版本在使用點可用 | | | | |
+| 4.2.4.e | 文件保持清晰可讀並可識別 | | | | |
+| 4.2.4.f | 外部文件受控制 | | | | |
+| 4.2.4.g | 防止非預期使用作廢文件 | | | | |
+| 4.2.4.h | 保留的作廢文件已識別 | | | | |
+| 4.2.5 | 記錄管制程序已建立 | | | | |
+| 4.2.5.a | 記錄保持清晰可讀、可識別並可檢索 | | | | |
+| 4.2.5.b | 記錄變更保持可識別 | | | | |
+| 4.2.5.c | 保留時間至少為器材壽命 | | | | |
+| 4.2.5.d | 儲存、安全、完整性、檢索、處置已定義 | | | | |
 
 ---
 
-## Clause 6: Resource Management
+## 第 5 條：管理責任
 
-### 6.1 Provision of Resources
+### 5.1 管理承諾
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 6.1 | Resources determined and provided for QMS | | | | |
-| 6.1 | Resources provided to meet regulatory and customer requirements | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 5.1.a | 已傳達滿足要求的重要性 | | | | |
+| 5.1.b | 品質政策已建立 | | | | |
+| 5.1.c | 品質目標已建立 | | | | |
+| 5.1.d | 已進行管理審查 | | | | |
+| 5.1.e | 確保資源可用性 | | | | |
 
-### 6.2 Human Resources
+### 5.2 客戶關注
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 6.2 | Personnel competent based on education, training, skills, experience | | | | |
-| 6.2 | Documented evidence of competence maintained | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 5.2 | 客戶和法規要求已確定並滿足 | | | | |
 
-### 6.3 Infrastructure
+### 5.3 品質政策
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 6.3 | Infrastructure determined, provided, and maintained | | | | |
-| 6.3.a | Buildings, workspace, and utilities provided | | | | |
-| 6.3.b | Process equipment (hardware and software) provided | | | | |
-| 6.3.c | Supporting services provided | | | | |
-| 6.3 | Maintenance requirements documented (when affecting quality) | | | | |
-| 6.3 | Maintenance activity records maintained | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 5.3.a | 政策適合組織 | | | | |
+| 5.3.b | 包含滿足要求和維護有效性的承諾 | | | | |
+| 5.3.c | 提供品質目標的架構 | | | | |
+| 5.3.d | 在組織內溝通並被理解 | | | | |
+| 5.3.e | 審查持續適宜性 | | | | |
 
-### 6.4 Work Environment and Contamination Control
+### 5.4 規劃
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 6.4.1 | Work environment determined and managed | | | | |
-| 6.4.1 | Work environment requirements documented | | | | |
-| 6.4.2 | Contamination control requirements documented (if applicable) | | | | |
-| 6.4.2 | Special arrangements for contaminated product established | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 5.4.1 | 品質目標在相關職能/層級建立 | | | | |
+| 5.4.1 | 目標可衡量且與政策一致 | | | | |
+| 5.4.2 | QMS 規劃滿足一般要求和目標 | | | | |
+| 5.4.2 | 變更發生時 QMS 完整性得以維持 | | | | |
 
----
+### 5.5 責任、權限和溝通
 
-## Clause 7: Product Realization
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 5.5.1 | 責任和權限已定義並溝通 | | | | |
+| 5.5.1 | QMS 管理、執行、驗證角色已記錄 | | | | |
+| 5.5.1 | 人員間的相互關係已識別 | | | | |
+| 5.5.2 | 管理代表已任命 | | | | |
+| 5.5.2.a | 代表確保 QMS 流程建立和維護 | | | | |
+| 5.5.2.b | 代表向最高管理層報告績效 | | | | |
+| 5.5.2.c | 代表確保對要求的認識 | | | | |
+| 5.5.3 | 內部溝通流程已建立 | | | | |
 
-### 7.1 Planning of Product Realization
+### 5.6 管理審查
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 7.1.a | Quality objectives and requirements determined | | | | |
-| 7.1.b | Need for processes, documentation, and resources determined | | | | |
-| 7.1.c | Verification, validation, monitoring, measurement activities determined | | | | |
-| 7.1.c | Handling, storage, distribution, traceability determined | | | | |
-| 7.1.d | Records to provide evidence of conformity determined | | | | |
-| 7.1 | Risk management requirements documented | | | | |
-| 7.1 | Risk management records maintained | | | | |
-
-### 7.2 Customer-Related Processes
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 7.2.1.a | Requirements specified by customer determined | | | | |
-| 7.2.1.b | Requirements not stated but necessary determined | | | | |
-| 7.2.1.c | Applicable regulatory requirements determined | | | | |
-| 7.2.1.d | Additional requirements determined by organization | | | | |
-| 7.2.2 | Product requirements reviewed before commitment | | | | |
-| 7.2.2 | Requirements defined and documented | | | | |
-| 7.2.2 | Differences resolved | | | | |
-| 7.2.2 | Ability to meet requirements ensured | | | | |
-| 7.2.2 | Records of review and follow-up maintained | | | | |
-| 7.2.3 | Arrangements for communication with customers documented | | | | |
-| 7.2.3.a | Communication on product information | | | | |
-| 7.2.3.b | Communication on inquiry, contract, order handling | | | | |
-| 7.2.3.c | Communication on customer feedback including complaints | | | | |
-| 7.2.3.d | Communication on advisory notices | | | | |
-
-### 7.3 Design and Development
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 7.3.1 | Design and development procedures documented | | | | |
-| 7.3.1 | Design and development plan documented for each device | | | | |
-| 7.3.1 | Design and development files maintained | | | | |
-| 7.3.2 | Design and development stages determined | | | | |
-| 7.3.2 | Required review, verification, validation determined | | | | |
-| 7.3.2 | Responsibilities and authorities defined | | | | |
-| 7.3.2 | Resources and interfaces managed | | | | |
-| 7.3.2 | Plans updated as design progresses | | | | |
-| 7.3.3 | Design inputs determined and recorded | | | | |
-| 7.3.3 | Functional, performance, usability, safety requirements included | | | | |
-| 7.3.3 | Regulatory requirements and standards included | | | | |
-| 7.3.3 | Risk management outputs included | | | | |
-| 7.3.3 | Previous similar design information included | | | | |
-| 7.3.3 | Inputs reviewed for adequacy | | | | |
-| 7.3.4 | Design outputs meet input requirements | | | | |
-| 7.3.4 | Outputs provide information for purchasing, production, service | | | | |
-| 7.3.4 | Outputs contain acceptance criteria | | | | |
-| 7.3.4 | Outputs specify characteristics for safe and proper use | | | | |
-| 7.3.4 | Outputs documented and maintained as records | | | | |
-| 7.3.5 | Systematic reviews conducted at suitable stages | | | | |
-| 7.3.5 | Review evaluates ability to meet requirements | | | | |
-| 7.3.5 | Review identifies problems and proposes actions | | | | |
-| 7.3.5 | Representatives of functions concerned included | | | | |
-| 7.3.5 | Records of reviews and follow-up maintained | | | | |
-| 7.3.6 | Verification performed per planned arrangements | | | | |
-| 7.3.6 | Verification ensures outputs meet inputs | | | | |
-| 7.3.6 | Records of verification and follow-up maintained | | | | |
-| 7.3.7 | Validation performed per planned arrangements | | | | |
-| 7.3.7 | Validation ensures product meets specified application | | | | |
-| 7.3.7 | Validation conducted before delivery or implementation | | | | |
-| 7.3.7 | Validation includes defined operating conditions | | | | |
-| 7.3.7 | Records of validation and follow-up maintained | | | | |
-| 7.3.8 | Transfer procedures documented | | | | |
-| 7.3.8 | Manufacturing output verified against design output | | | | |
-| 7.3.8 | Specifications appropriate for manufacturing | | | | |
-| 7.3.8 | Transfer records maintained | | | | |
-| 7.3.9 | Design changes identified, documented, and controlled | | | | |
-| 7.3.9 | Changes reviewed, verified, validated, and approved | | | | |
-| 7.3.9 | Effects on constituent parts and delivered product evaluated | | | | |
-| 7.3.9 | Records of changes and review maintained | | | | |
-| 7.3.10 | Design and development files maintained including all required content | | | | |
-
-### 7.4 Purchasing
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 7.4.1 | Purchased product conforms to purchase information | | | | |
-| 7.4.1 | Purchasing activities documented | | | | |
-| 7.4.1 | Criteria for supplier evaluation and selection established | | | | |
-| 7.4.1 | Criteria based on supplier ability to supply per requirements | | | | |
-| 7.4.1 | Supplier performance monitored | | | | |
-| 7.4.1 | Records of supplier evaluations and follow-up maintained | | | | |
-| 7.4.1 | Process for notifying suppliers of changes established | | | | |
-| 7.4.2 | Purchasing information includes product approval requirements | | | | |
-| 7.4.2 | Purchasing information includes qualification of personnel | | | | |
-| 7.4.2 | Purchasing information includes QMS requirements | | | | |
-| 7.4.2 | Purchasing information includes notification requirements | | | | |
-| 7.4.2 | Purchasing information includes supplier change notification | | | | |
-| 7.4.2 | Purchasing information communicated to sub-tier suppliers | | | | |
-| 7.4.3 | Verification activities to ensure purchased product conformity | | | | |
-| 7.4.3 | Extent of verification documented | | | | |
-| 7.4.3 | Verification at supplier's premises documented (if applicable) | | | | |
-
-### 7.5 Production and Service Provision
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 7.5.1.a | Documented procedures and work instructions available | | | | |
-| 7.5.1.b | Suitable infrastructure and work environment available | | | | |
-| 7.5.1.c | Monitoring and measuring equipment available | | | | |
-| 7.5.1.d | Monitoring and measuring activities available and used | | | | |
-| 7.5.1.e | Product release, delivery, post-delivery activities implemented | | | | |
-| 7.5.1.f | Operations for labelling and packaging defined | | | | |
-| 7.5.1.g | Procedures for servicing documented (if applicable) | | | | |
-| 7.5.1 | Requirements for product cleanliness documented | | | | |
-| 7.5.1 | Requirements for installation and verification documented | | | | |
-| 7.5.2 | Cleanliness requirements documented (if applicable) | | | | |
-| 7.5.2 | Hygiene requirements in manufacturing documented | | | | |
-| 7.5.3 | Installation requirements documented (if applicable) | | | | |
-| 7.5.3 | Verification of installation conducted | | | | |
-| 7.5.3 | Records of installation and verification maintained | | | | |
-| 7.5.4 | Servicing procedures documented (if applicable) | | | | |
-| 7.5.4 | Servicing records analyzed for feedback | | | | |
-| 7.5.4 | Records of servicing maintained | | | | |
-| 7.5.5 | Records of sterilization process parameters maintained (if applicable) | | | | |
-| 7.5.6 | Processes validated where output cannot be verified | | | | |
-| 7.5.6 | Defined criteria for review and approval | | | | |
-| 7.5.6 | Equipment approval and personnel qualification | | | | |
-| 7.5.6 | Specific methods, procedures, and acceptance criteria used | | | | |
-| 7.5.6 | Requirements for records defined | | | | |
-| 7.5.6 | Revalidation criteria defined | | | | |
-| 7.5.6 | Software validation for production documented | | | | |
-| 7.5.6 | Sterilization process validation documented (if applicable) | | | | |
-| 7.5.6 | Aseptic processing validation documented (if applicable) | | | | |
-| 7.5.6 | Clean room validation documented (if applicable) | | | | |
-| 7.5.7 | Sterilization process validation records maintained (if applicable) | | | | |
-| 7.5.7 | Sterile barrier system validation records maintained (if applicable) | | | | |
-| 7.5.8 | Product identification procedures documented | | | | |
-| 7.5.8 | Product identified by suitable means throughout realization | | | | |
-| 7.5.8 | Records of identification maintained where traceability required | | | | |
-| 7.5.9.1 | Traceability extent defined and documented | | | | |
-| 7.5.9.1 | Distribution and location documented | | | | |
-| 7.5.9.2 | Consignee name and address recorded | | | | |
-| 7.5.9.2 | Quantity shipped recorded | | | | |
-| 7.5.9.2 | Regulatory traceability requirements included | | | | |
-| 7.5.9.2 | Traceability records maintained for defined period | | | | |
-| 7.5.10 | Customer property identified, verified, protected (if applicable) | | | | |
-| 7.5.10 | Loss, damage, unsuitability reported to customer | | | | |
-| 7.5.10 | Records of customer property maintained | | | | |
-| 7.5.11 | Product preservation during processing and delivery | | | | |
-| 7.5.11 | Identification, handling, packaging, storage, protection included | | | | |
-| 7.5.11 | Preservation applies to constituent parts | | | | |
-| 7.5.11 | Special handling requirements documented (if applicable) | | | | |
-
-### 7.6 Control of Monitoring and Measuring Equipment
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 7.6 | Monitoring and measurement to be undertaken determined | | | | |
-| 7.6 | Monitoring and measuring equipment needed determined | | | | |
-| 7.6.a | Calibration or verification at specified intervals | | | | |
-| 7.6.b | Adjustment or re-adjustment as necessary | | | | |
-| 7.6.c | Identification to determine calibration status | | | | |
-| 7.6.d | Safeguarding from adjustments invalidating calibration | | | | |
-| 7.6.e | Protection from damage and deterioration | | | | |
-| 7.6 | Validity of previous results assessed when non-conforming | | | | |
-| 7.6 | Records of calibration and verification maintained | | | | |
-| 7.6 | Computer software confirmed for intended application | | | | |
-| 7.6 | Software confirmation before initial use and reconfirmation | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 5.6.1 | QMS 按計畫間隔審查（至少每年） | | | | |
+| 5.6.1 | 審查確保適宜性、充分性、有效性 | | | | |
+| 5.6.1 | 審查包括改進機會 | | | | |
+| 5.6.1 | 維護審查記錄 | | | | |
+| 5.6.2 | 審查包括稽核結果 | | | | |
+| 5.6.2 | 審查包括客戶回饋 | | | | |
+| 5.6.2 | 審查包括流程績效和產品符合性 | | | | |
+| 5.6.2 | 審查包括矯正和預防措施狀態 | | | | |
+| 5.6.2 | 審查包括前次審查的後續行動 | | | | |
+| 5.6.2 | 審查包括影響 QMS 的變更 | | | | |
+| 5.6.2 | 審查包括改進建議 | | | | |
+| 5.6.2 | 審查包括新的/修訂的法規要求 | | | | |
+| 5.6.3 | 審查輸出包括 QMS 改進 | | | | |
+| 5.6.3 | 審查輸出包括產品改進 | | | | |
+| 5.6.3 | 審查輸出包括資源需求 | | | | |
+| 5.6.3 | 審查輸出包括維護有效性的變更 | | | | |
 
 ---
 
-## Clause 8: Measurement, Analysis and Improvement
+## 第 6 條：資源管理
 
-### 8.1 General
+### 6.1 資源提供
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 8.1 | Monitoring, measurement, analysis, improvement processes planned | | | | |
-| 8.1 | Product conformity demonstrated | | | | |
-| 8.1 | QMS conformity ensured | | | | |
-| 8.1 | QMS effectiveness maintained | | | | |
-| 8.1 | Applicable methods including statistical techniques determined | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 6.1 | 已確定並提供 QMS 資源 | | | | |
+| 6.1 | 提供資源以滿足法規和客戶要求 | | | | |
 
-### 8.2 Monitoring and Measurement
+### 6.2 人力資源
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 8.2.1 | Feedback procedure established | | | | |
-| 8.2.1 | Early warning system for quality issues established | | | | |
-| 8.2.1 | Post-production information collected | | | | |
-| 8.2.1 | Requirements for regulatory reporting included | | | | |
-| 8.2.1 | Feedback used as input to risk management | | | | |
-| 8.2.1 | Feedback used as input to corrective/preventive action | | | | |
-| 8.2.2 | Complaint handling procedure established | | | | |
-| 8.2.2 | Requirements for receiving, recording, evaluating complaints | | | | |
-| 8.2.2 | Requirements for handling, investigating complaints | | | | |
-| 8.2.2 | Requirements for reporting to regulatory authorities | | | | |
-| 8.2.2 | Requirements for informing customer of actions | | | | |
-| 8.2.2 | Complaint information transferred to organization | | | | |
-| 8.2.2 | Records of complaints and investigations maintained | | | | |
-| 8.2.3 | Regulatory reporting procedure established | | | | |
-| 8.2.3 | Notification to regulatory authorities per requirements | | | | |
-| 8.2.3 | Advisory notices per applicable requirements | | | | |
-| 8.2.3 | Records of reporting maintained | | | | |
-| 8.2.4 | Internal audits conducted at planned intervals | | | | |
-| 8.2.4 | QMS conformity to ISO 13485 and requirements determined | | | | |
-| 8.2.4 | QMS effective implementation and maintenance determined | | | | |
-| 8.2.4 | Audit program considers importance, changes, previous results | | | | |
-| 8.2.4 | Audit criteria, scope, frequency, methods defined | | | | |
-| 8.2.4 | Audit procedure includes responsibilities and reporting | | | | |
-| 8.2.4 | Objective and impartial auditors selected | | | | |
-| 8.2.4 | Records of audits and results maintained | | | | |
-| 8.2.4 | Need for corrections or corrective actions identified | | | | |
-| 8.2.4 | Follow-up activities conducted | | | | |
-| 8.2.5 | Suitable methods for process monitoring and measurement | | | | |
-| 8.2.5 | Ability to achieve planned results demonstrated | | | | |
-| 8.2.5 | Corrections and corrective actions implemented when needed | | | | |
-| 8.2.5 | Records maintained | | | | |
-| 8.2.6 | Product characteristics monitored and measured | | | | |
-| 8.2.6 | Conducted at appropriate stages per planned arrangements | | | | |
-| 8.2.6 | Records show conformity to acceptance criteria | | | | |
-| 8.2.6 | Authority responsible for release recorded | | | | |
-| 8.2.6 | Release and delivery not proceed until arrangements completed | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 6.2 | 人員能力基於教育、培訓、技能、經驗 | | | | |
+| 6.2 | 維護能力的文件化證據 | | | | |
 
-### 8.3 Control of Nonconforming Product
+### 6.3 基礎設施
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 8.3.1 | Nonconforming product identified and controlled | | | | |
-| 8.3.1 | Procedure for identification, documentation established | | | | |
-| 8.3.1 | Procedure for evaluation, segregation, disposition established | | | | |
-| 8.3.1 | Procedure for notification to external parties established | | | | |
-| 8.3.1 | Review of nonconforming product conducted | | | | |
-| 8.3.1 | Records of nonconformities and actions maintained | | | | |
-| 8.3.2 | Action taken to eliminate detected nonconformity | | | | |
-| 8.3.2 | Use under concession authorized (if applicable) | | | | |
-| 8.3.2 | Action taken to preclude original intended use | | | | |
-| 8.3.2 | Records of concessions maintained | | | | |
-| 8.3.2 | Authority making concession identified | | | | |
-| 8.3.3 | Appropriate action for nonconformity after delivery | | | | |
-| 8.3.3 | Procedure includes regulatory notification requirements | | | | |
-| 8.3.3 | Records maintained | | | | |
-| 8.3.4 | Rework procedures documented | | | | |
-| 8.3.4 | Potential effects on medical device evaluated | | | | |
-| 8.3.4 | Approval before rework implementation | | | | |
-| 8.3.4 | Records of results and actions maintained | | | | |
-| 8.3.4 | Re-verification after rework | | | | |
-| 8.3.4 | Rework procedure documented before beginning | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 6.3 | 基礎設施已確定、提供並維護 | | | | |
+| 6.3.a | 提供建築物、工作空間和設施 | | | | |
+| 6.3.b | 提供製程設備（硬體和軟體） | | | | |
+| 6.3.c | 提供支援服務 | | | | |
+| 6.3 | 維護要求已記錄（當影響品質時） | | | | |
+| 6.3 | 維護活動記錄已維護 | | | | |
 
-### 8.4 Analysis of Data
+### 6.4 工作環境和汙染控制
 
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 8.4 | Appropriate data determined, collected, and analyzed | | | | |
-| 8.4 | Continual improvement opportunities evaluated | | | | |
-| 8.4 | Procedures for data analysis established | | | | |
-| 8.4.a | Analysis provides information on customer satisfaction | | | | |
-| 8.4.b | Analysis of conformity to product requirements | | | | |
-| 8.4.c | Analysis of process and product characteristics and trends | | | | |
-| 8.4.d | Analysis of suppliers | | | | |
-| 8.4.e | Analysis of feedback and risk management outputs | | | | |
-| 8.4 | Statistical techniques used if necessary | | | | |
-| 8.4 | Records of analysis results maintained | | | | |
-
-### 8.5 Improvement
-
-| # | Requirement | Status | Evidence | Gaps | Action Required |
-|---|------------|--------|----------|------|-----------------|
-| 8.5.1 | Changes identified and implemented to ensure effectiveness | | | | |
-| 8.5.1 | Quality policy, objectives, audits, data, CAPA, reviews used | | | | |
-| 8.5.2 | Corrective action procedure established | | | | |
-| 8.5.2.a | Nonconformities including complaints reviewed | | | | |
-| 8.5.2.b | Causes of nonconformities determined | | | | |
-| 8.5.2.c | Need for actions to prevent recurrence evaluated | | | | |
-| 8.5.2.d | Actions needed planned, documented, and implemented | | | | |
-| 8.5.2.e | Results of actions documented | | | | |
-| 8.5.2.f | Effectiveness of corrective actions reviewed | | | | |
-| 8.5.2 | Records of investigation and follow-up maintained | | | | |
-| 8.5.3 | Preventive action procedure established | | | | |
-| 8.5.3.a | Potential nonconformities and causes determined | | | | |
-| 8.5.3.b | Need for action to prevent occurrence evaluated | | | | |
-| 8.5.3.c | Actions needed planned, documented, and implemented | | | | |
-| 8.5.3.d | Results of actions documented | | | | |
-| 8.5.3.e | Effectiveness of preventive actions reviewed | | | | |
-| 8.5.3 | Appropriate information sources used | | | | |
-| 8.5.3 | Records of investigation and follow-up maintained | | | | |
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 6.4.1 | 工作環境已確定並管理 | | | | |
+| 6.4.1 | 工作環境要求已記錄 | | | | |
+| 6.4.2 | 汙染控制要求已記錄（如適用） | | | | |
+| 6.4.2 | 已建立受汙染產品的特殊安排 | | | | |
 
 ---
 
-## Summary and Prioritization
+## 第 7 條：產品實現
 
-### Gap Summary by Clause
+### 7.1 產品實現規劃
 
-| Clause | Total Items | Compliant | Partial | Non-Compliant | N/A | Compliance % |
-|--------|-------------|-----------|---------|---------------|-----|--------------|
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 7.1.a | 已確定品質目標和要求 | | | | |
+| 7.1.b | 已確定流程、文件和資源的需求 | | | | |
+| 7.1.c | 已確定驗證、確效、監測、量測活動 | | | | |
+| 7.1.c | 已確定搬運、儲存、配送、追溯性 | | | | |
+| 7.1.d | 已確定提供符合性證據的記錄 | | | | |
+| 7.1 | 風險管理要求已記錄 | | | | |
+| 7.1 | 風險管理記錄已維護 | | | | |
+
+### 7.2 客戶相關流程
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 7.2.1.a | 已確定客戶規定的要求 | | | | |
+| 7.2.1.b | 已確定未陳述但必要的要求 | | | | |
+| 7.2.1.c | 已確定適用法規要求 | | | | |
+| 7.2.1.d | 已確定組織確定的附加要求 | | | | |
+| 7.2.2 | 承諾前已審查產品要求 | | | | |
+| 7.2.2 | 要求已定義並記錄 | | | | |
+| 7.2.2 | 差異已解決 | | | | |
+| 7.2.2 | 確保滿足要求的能力 | | | | |
+| 7.2.2 | 審查和後續行動記錄已維護 | | | | |
+| 7.2.3 | 與客戶溝通的安排已記錄 | | | | |
+| 7.2.3.a | 產品資訊溝通 | | | | |
+| 7.2.3.b | 詢價、合約、訂單處理溝通 | | | | |
+| 7.2.3.c | 客戶回饋包括抱怨的溝通 | | | | |
+| 7.2.3.d | 諮詢通知溝通 | | | | |
+
+### 7.3 設計和開發
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 7.3.1 | 設計和開發程序已記錄 | | | | |
+| 7.3.1 | 每種器材的設計和開發計畫已記錄 | | | | |
+| 7.3.1 | 設計和開發檔案已維護 | | | | |
+| 7.3.2 | 設計和開發階段已確定 | | | | |
+| 7.3.2 | 所需審查、驗證、確效已確定 | | | | |
+| 7.3.2 | 責任和權限已定義 | | | | |
+| 7.3.2 | 資源和介面已管理 | | | | |
+| 7.3.2 | 計畫隨設計進展而更新 | | | | |
+| 7.3.3 | 設計輸入已確定並記錄 | | | | |
+| 7.3.3 | 包含功能、性能、可用性、安全要求 | | | | |
+| 7.3.3 | 包含法規要求和標準 | | | | |
+| 7.3.3 | 包含風險管理輸出 | | | | |
+| 7.3.3 | 包含先前類似設計資訊 | | | | |
+| 7.3.3 | 輸入已審查其充分性 | | | | |
+| 7.3.4 | 設計輸出滿足輸入要求 | | | | |
+| 7.3.4 | 輸出提供採購、生產、服務資訊 | | | | |
+| 7.3.4 | 輸出包含驗收準則 | | | | |
+| 7.3.4 | 輸出規定安全和適當使用的特性 | | | | |
+| 7.3.4 | 輸出已記錄並維護為記錄 | | | | |
+| 7.3.5 | 在適當階段進行系統審查 | | | | |
+| 7.3.5 | 審查評估滿足要求的能力 | | | | |
+| 7.3.5 | 審查識別問題並提出行動 | | | | |
+| 7.3.5 | 包含相關職能代表 | | | | |
+| 7.3.5 | 審查和後續行動記錄已維護 | | | | |
+| 7.3.6 | 按計畫安排進行驗證 | | | | |
+| 7.3.6 | 驗證確保輸出滿足輸入 | | | | |
+| 7.3.6 | 驗證和後續行動記錄已維護 | | | | |
+| 7.3.7 | 按計畫安排進行確效 | | | | |
+| 7.3.7 | 確效確保產品滿足指定用途 | | | | |
+| 7.3.7 | 確效在交付或實施前進行 | | | | |
+| 7.3.7 | 確效包括定義的操作條件 | | | | |
+| 7.3.7 | 確效和後續行動記錄已維護 | | | | |
+| 7.3.8 | 轉移程序已記錄 | | | | |
+| 7.3.8 | 製造輸出對照設計輸出已驗證 | | | | |
+| 7.3.8 | 規格適合製造 | | | | |
+| 7.3.8 | 轉移記錄已維護 | | | | |
+| 7.3.9 | 設計變更已識別、記錄並控制 | | | | |
+| 7.3.9 | 變更在實施前已審查、驗證、確效並核准 | | | | |
+| 7.3.9 | 對組成零件和已交付產品的影響已評估 | | | | |
+| 7.3.9 | 變更和審查記錄已維護 | | | | |
+| 7.3.10 | 設計和開發檔案已維護並包含所有必要內容 | | | | |
+
+### 7.4 採購
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 7.4.1 | 採購產品符合採購資訊 | | | | |
+| 7.4.1 | 採購活動已記錄 | | | | |
+| 7.4.1 | 供應商評估和選擇標準已建立 | | | | |
+| 7.4.1 | 標準基於供應商按要求供應的能力 | | | | |
+| 7.4.1 | 供應商績效受監測 | | | | |
+| 7.4.1 | 供應商評估和後續行動記錄已維護 | | | | |
+| 7.4.1 | 已建立通知供應商變更的流程 | | | | |
+| 7.4.2 | 採購資訊包含產品核准要求 | | | | |
+| 7.4.2 | 採購資訊包含人員資格要求 | | | | |
+| 7.4.2 | 採購資訊包含 QMS 要求 | | | | |
+| 7.4.2 | 採購資訊包含通知要求 | | | | |
+| 7.4.2 | 採購資訊包含供應商變更通知 | | | | |
+| 7.4.2 | 採購資訊傳達給次級供應商 | | | | |
+| 7.4.3 | 驗證活動確保採購產品符合性 | | | | |
+| 7.4.3 | 驗證範圍已記錄 | | | | |
+| 7.4.3 | 供應商場所驗證已記錄（如適用） | | | | |
+
+### 7.5 生產和服務提供
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 7.5.1.a | 文件化程序和工作指導書可用 | | | | |
+| 7.5.1.b | 適當的基礎設施和工作環境可用 | | | | |
+| 7.5.1.c | 監測量測設備可用 | | | | |
+| 7.5.1.d | 監測和量測活動可用並使用 | | | | |
+| 7.5.1.e | 產品放行、交付、交付後活動已實施 | | | | |
+| 7.5.1.f | 標籤和包裝操作已定義 | | | | |
+| 7.5.1.g | 服務程序已記錄（如適用） | | | | |
+| 7.5.1 | 產品清潔度要求已記錄 | | | | |
+| 7.5.1 | 安裝和驗證要求已記錄 | | | | |
+| 7.5.2 | 清潔度要求已記錄（如適用） | | | | |
+| 7.5.2 | 製造衛生要求已記錄 | | | | |
+| 7.5.3 | 安裝要求已記錄（如適用） | | | | |
+| 7.5.3 | 進行安裝驗證 | | | | |
+| 7.5.3 | 安裝和驗證記錄已維護 | | | | |
+| 7.5.4 | 服務程序已記錄（如適用） | | | | |
+| 7.5.4 | 服務記錄用於回饋分析 | | | | |
+| 7.5.4 | 服務記錄已維護 | | | | |
+| 7.5.5 | 滅菌製程參數記錄已維護（如適用） | | | | |
+| 7.5.6 | 無法驗證輸出的製程已確效 | | | | |
+| 7.5.6 | 已定義審查和核准標準 | | | | |
+| 7.5.6 | 設備核准和人員資格 | | | | |
+| 7.5.6 | 使用特定方法、程序和驗收準則 | | | | |
+| 7.5.6 | 已定義記錄要求 | | | | |
+| 7.5.6 | 已定義再確效準則 | | | | |
+| 7.5.6 | 生產軟體驗證已記錄 | | | | |
+| 7.5.6 | 滅菌製程驗證已記錄（如適用） | | | | |
+| 7.5.6 | 無菌製程驗證已記錄（如適用） | | | | |
+| 7.5.6 | 潔淨室驗證已記錄（如適用） | | | | |
+| 7.5.7 | 滅菌製程驗證記錄已維護（如適用） | | | | |
+| 7.5.7 | 無菌屏障系統驗證記錄已維護（如適用） | | | | |
+| 7.5.8 | 產品識別程序已記錄 | | | | |
+| 7.5.8 | 產品在整個實現過程中以適當方式識別 | | | | |
+| 7.5.8 | 追溯性要求時維護識別記錄 | | | | |
+| 7.5.9.1 | 追溯性範圍已定義並記錄 | | | | |
+| 7.5.9.1 | 配送和位置已記錄 | | | | |
+| 7.5.9.2 | 收貨人名稱和地址已記錄 | | | | |
+| 7.5.9.2 | 出貨數量已記錄 | | | | |
+| 7.5.9.2 | 包含法規追溯性要求 | | | | |
+| 7.5.9.2 | 追溯性記錄維護規定期限 | | | | |
+| 7.5.10 | 客戶財產已識別、驗證、保護（如適用） | | | | |
+| 7.5.10 | 遺失、損壞、不適用向客戶報告 | | | | |
+| 7.5.10 | 客戶財產記錄已維護 | | | | |
+| 7.5.11 | 加工和交付期間產品保存 | | | | |
+| 7.5.11 | 包含識別、搬運、包裝、儲存、保護 | | | | |
+| 7.5.11 | 保存適用於組成零件 | | | | |
+| 7.5.11 | 特殊搬運要求已記錄（如適用） | | | | |
+
+### 7.6 監測量測設備管制
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 7.6 | 已確定要進行的監測和量測 | | | | |
+| 7.6 | 已確定所需監測量測設備 | | | | |
+| 7.6.a | 按規定間隔校正或驗證 | | | | |
+| 7.6.b | 必要時調整或重新調整 | | | | |
+| 7.6.c | 識別以確定校正狀態 | | | | |
+| 7.6.d | 防止使校正失效的調整 | | | | |
+| 7.6.e | 保護免受損壞和劣化 | | | | |
+| 7.6 | 不合格時評估先前結果的有效性 | | | | |
+| 7.6 | 校正和驗證記錄已維護 | | | | |
+| 7.6 | 電腦軟體確認用於預期用途 | | | | |
+| 7.6 | 軟體在初次使用前確認並重新確認 | | | | |
+
+---
+
+## 第 8 條：量測、分析和改進
+
+### 8.1 一般
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 8.1 | 監測、量測、分析、改進流程已規劃 | | | | |
+| 8.1 | 證明產品符合性 | | | | |
+| 8.1 | 確保 QMS 符合性 | | | | |
+| 8.1 | 維持 QMS 有效性 | | | | |
+| 8.1 | 已確定適用方法包括統計技術 | | | | |
+
+### 8.2 監測和量測
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 8.2.1 | 回饋程序已建立 | | | | |
+| 8.2.1 | 品質問題早期預警系統已建立 | | | | |
+| 8.2.1 | 上市後資訊已收集 | | | | |
+| 8.2.1 | 包含法規通報要求 | | | | |
+| 8.2.1 | 回饋用作風險管理輸入 | | | | |
+| 8.2.1 | 回饋用作矯正/預防措施輸入 | | | | |
+| 8.2.2 | 抱怨處理程序已建立 | | | | |
+| 8.2.2 | 接收、記錄、評估抱怨的要求 | | | | |
+| 8.2.2 | 處理、調查抱怨的要求 | | | | |
+| 8.2.2 | 向法規機關報告的要求 | | | | |
+| 8.2.2 | 通知客戶行動的要求 | | | | |
+| 8.2.2 | 抱怨資訊轉移至組織 | | | | |
+| 8.2.2 | 抱怨和調查記錄已維護 | | | | |
+| 8.2.3 | 法規通報程序已建立 | | | | |
+| 8.2.3 | 按要求通知法規機關 | | | | |
+| 8.2.3 | 按適用要求發布諮詢通知 | | | | |
+| 8.2.3 | 通報記錄已維護 | | | | |
+| 8.2.4 | 按計畫間隔進行內部稽核 | | | | |
+| 8.2.4 | 確定 QMS 符合 ISO 13485 和要求 | | | | |
+| 8.2.4 | 確定 QMS 有效實施和維護 | | | | |
+| 8.2.4 | 稽核方案考慮重要性、變更、先前結果 | | | | |
+| 8.2.4 | 稽核準則、範圍、頻率、方法已定義 | | | | |
+| 8.2.4 | 稽核程序包含責任和報告 | | | | |
+| 8.2.4 | 選擇客觀和公正的稽核員 | | | | |
+| 8.2.4 | 稽核和結果記錄已維護 | | | | |
+| 8.2.4 | 識別矯正或矯正措施需求 | | | | |
+| 8.2.4 | 進行後續活動 | | | | |
+| 8.2.5 | 製程監測和量測的適當方法 | | | | |
+| 8.2.5 | 證明達成計畫結果的能力 | | | | |
+| 8.2.5 | 需要時實施矯正和矯正措施 | | | | |
+| 8.2.5 | 記錄已維護 | | | | |
+| 8.2.6 | 產品特性受監測和量測 | | | | |
+| 8.2.6 | 在適當階段按計畫安排進行 | | | | |
+| 8.2.6 | 記錄顯示符合驗收準則 | | | | |
+| 8.2.6 | 放行負責權責已記錄 | | | | |
+| 8.2.6 | 計畫安排完成前不進行放行和交付 | | | | |
+
+### 8.3 不合格產品管制
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 8.3.1 | 不合格產品已識別並控制 | | | | |
+| 8.3.1 | 識別、記錄程序已建立 | | | | |
+| 8.3.1 | 評估、隔離、處置程序已建立 | | | | |
+| 8.3.1 | 通知外部相關方程序已建立 | | | | |
+| 8.3.1 | 進行不合格產品審查 | | | | |
+| 8.3.1 | 不合格和行動記錄已維護 | | | | |
+| 8.3.2 | 採取措施消除已偵測的不合格 | | | | |
+| 8.3.2 | 特許使用已授權（如適用） | | | | |
+| 8.3.2 | 採取措施防止原預期用途 | | | | |
+| 8.3.2 | 特許記錄已維護 | | | | |
+| 8.3.2 | 做出特許決定的權責已識別 | | | | |
+| 8.3.3 | 對交付後不合格採取適當措施 | | | | |
+| 8.3.3 | 程序包含法規通報要求 | | | | |
+| 8.3.3 | 記錄已維護 | | | | |
+| 8.3.4 | 返工程序已記錄 | | | | |
+| 8.3.4 | 對醫療器材潛在影響已評估 | | | | |
+| 8.3.4 | 實施前已核准 | | | | |
+| 8.3.4 | 結果和行動記錄已維護 | | | | |
+| 8.3.4 | 返工後重新驗證 | | | | |
+| 8.3.4 | 返工程序在開始前已記錄 | | | | |
+
+### 8.4 資料分析
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 8.4 | 已確定、收集並分析適當資料 | | | | |
+| 8.4 | 評估持續改進機會 | | | | |
+| 8.4 | 資料分析程序已建立 | | | | |
+| 8.4.a | 分析提供客戶滿意度資訊 | | | | |
+| 8.4.b | 分析產品要求符合性 | | | | |
+| 8.4.c | 分析製程和產品特性與趨勢 | | | | |
+| 8.4.d | 分析供應商 | | | | |
+| 8.4.e | 分析回饋和風險管理輸出 | | | | |
+| 8.4 | 必要時使用統計技術 | | | | |
+| 8.4 | 分析結果記錄已維護 | | | | |
+
+### 8.5 改進
+
+| # | 要求 | 狀態 | 證據 | 差距 | 所需行動 |
+|---|------|------|------|------|----------|
+| 8.5.1 | 識別並實施變更以確保有效性 | | | | |
+| 8.5.1 | 使用品質政策、目標、稽核、資料、CAPA、審查 | | | | |
+| 8.5.2 | 矯正措施程序已建立 | | | | |
+| 8.5.2.a | 審查不合格包括抱怨 | | | | |
+| 8.5.2.b | 確定不合格原因 | | | | |
+| 8.5.2.c | 評估防止再發的措施需求 | | | | |
+| 8.5.2.d | 規劃、記錄並實施所需措施 | | | | |
+| 8.5.2.e | 記錄措施結果 | | | | |
+| 8.5.2.f | 審查矯正措施有效性 | | | | |
+| 8.5.2 | 調查和後續追蹤記錄已維護 | | | | |
+| 8.5.3 | 預防措施程序已建立 | | | | |
+| 8.5.3.a | 確定潛在不合格及其原因 | | | | |
+| 8.5.3.b | 評估防止發生的措施需求 | | | | |
+| 8.5.3.c | 規劃、記錄並實施所需措施 | | | | |
+| 8.5.3.d | 記錄措施結果 | | | | |
+| 8.5.3.e | 審查預防措施有效性 | | | | |
+| 8.5.3 | 使用適當資訊來源 | | | | |
+| 8.5.3 | 調查和後續追蹤記錄已維護 | | | | |
+
+---
+
+## 總結和優先排序
+
+### 按條款的差距總結
+
+| 條款 | 總項目數 | 合規 | 部分 | 不合規 | 不適用 | 合規率 % |
+|------|----------|------|------|--------|--------|----------|
 | 4. QMS | | | | | | |
-| 5. Management | | | | | | |
-| 6. Resources | | | | | | |
-| 7. Product Realization | | | | | | |
-| 8. Measurement & Improvement | | | | | | |
-| **TOTAL** | | | | | | |
+| 5. 管理 | | | | | | |
+| 6. 資源 | | | | | | |
+| 7. 產品實現 | | | | | | |
+| 8. 量測和改進 | | | | | | |
+| **總計** | | | | | | |
 
-### Priority Actions
+### 優先行動
 
-**Critical (Immediate Action Required):**
+**關鍵（需立即行動）：**
 1.
 2.
 3.
 
-**High Priority (Within 30 days):**
+**高優先順序（30 天內）：**
 1.
 2.
 3.
 
-**Medium Priority (Within 90 days):**
+**中優先順序（90 天內）：**
 1.
 2.
 3.
 
-**Low Priority (Within 180 days):**
+**低優先順序（180 天內）：**
 1.
 2.
 3.
 
-### Resource Requirements
+### 資源需求
 
-**Personnel:**
--
--
-
-**Training:**
+**人員：**
 -
 -
 
-**Tools/Systems:**
+**培訓：**
 -
 -
 
-**External Support:**
+**工具/系統：**
 -
 -
 
-### Timeline and Milestones
+**外部支援：**
+-
+-
 
-| Milestone | Target Date | Responsible | Status |
-|-----------|-------------|-------------|--------|
-| Gap analysis completion | | | |
-| Priority 1 items complete | | | |
-| Priority 2 items complete | | | |
-| Priority 3 items complete | | | |
-| Internal audit readiness | | | |
-| Certification audit | | | |
+### 時程和里程碑
+
+| 里程碑 | 目標日期 | 負責人 | 狀態 |
+|--------|----------|--------|------|
+| 差距分析完成 | | | |
+| 優先順序 1 項目完成 | | | |
+| 優先順序 2 項目完成 | | | |
+| 優先順序 3 項目完成 | | | |
+| 內部稽核準備就緒 | | | |
+| 認證稽核 | | | |
 
 ---
 
-## Notes and Additional Considerations
+## 附註和額外考量
 
-### Regulatory Requirements
-Document any additional requirements beyond ISO 13485:
-- FDA QMSR requirements
-- EU MDR/IVDR requirements
-- Health Canada requirements
-- Other regional requirements
+### 法規要求
+記錄 ISO 13485 以外的任何額外要求：
+- FDA QMSR 要求
+- EU MDR/IVDR 要求
+- 加拿大衛生部要求
+- 其他區域要求
 
-### Exclusions
-Document and justify any clause exclusions:
+### 排除項目
+記錄並說明任何條款排除的理由：
 
-| Clause | Exclusion | Justification |
-|--------|-----------|---------------|
+| 條款 | 排除項目 | 理由說明 |
+|------|----------|----------|
 | | | |
 
-### Additional Documentation Needed
-List any additional documents identified during gap analysis:
+### 需要的額外文件
+列出差距分析期間識別的任何額外文件：
 -
 -
 
-### Lessons Learned and Best Practices
+### 經驗教訓和最佳實務
 -
 -
 
 ---
 
-## Revision History
+## 版次歷史
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | | | Initial gap analysis |
+| 版本 | 日期 | 作者 | 變更 |
+|------|------|------|------|
+| 1.0 | | | 初始差距分析 |

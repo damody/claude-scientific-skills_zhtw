@@ -1,189 +1,189 @@
-# Data Processing and Manipulation
+# 資料處理和操作
 
-This reference covers filtering, selections, virtual columns, expressions, aggregations, groupby operations, and data transformations in Vaex.
+本參考文件涵蓋 Vaex 中的篩選、選擇、虛擬欄、表達式、聚合、groupby 操作和資料轉換。
 
-## Filtering and Selections
+## 篩選和選擇
 
-Vaex uses boolean expressions to filter data efficiently without copying:
+Vaex 使用布林表達式高效篩選資料而無需複製：
 
-### Basic Filtering
+### 基本篩選
 
 ```python
-# Simple filter
+# 簡單篩選
 df_filtered = df[df.age > 25]
 
-# Multiple conditions
+# 多重條件
 df_filtered = df[(df.age > 25) & (df.salary > 50000)]
 df_filtered = df[(df.category == 'A') | (df.category == 'B')]
 
-# Negation
+# 否定
 df_filtered = df[~(df.age < 18)]
 ```
 
-### Selection Objects
+### 選擇物件
 
-Vaex can maintain multiple named selections simultaneously:
+Vaex 可同時維護多個命名選擇：
 
 ```python
-# Create named selection
+# 建立命名選擇
 df.select(df.age > 30, name='adults')
 df.select(df.salary > 100000, name='high_earners')
 
-# Use selection in operations
+# 在操作中使用選擇
 mean_age_adults = df.mean(df.age, selection='adults')
 count_high_earners = df.count(selection='high_earners')
 
-# Combine selections
+# 組合選擇
 df.select((df.age > 30) & (df.salary > 100000), name='adult_high_earners')
 
-# List all selections
+# 列出所有選擇
 print(df.selection_names())
 
-# Drop selection
+# 刪除選擇
 df.select_drop('adults')
 ```
 
-### Advanced Filtering
+### 進階篩選
 
 ```python
-# String matching
+# 字串匹配
 df_filtered = df[df.name.str.contains('John')]
 df_filtered = df[df.name.str.startswith('A')]
 df_filtered = df[df.email.str.endswith('@gmail.com')]
 
-# Null/missing value filtering
-df_filtered = df[df.age.isna()]      # Keep missing
-df_filtered = df[df.age.notna()]     # Remove missing
+# 空值/缺失值篩選
+df_filtered = df[df.age.isna()]      # 保留缺失
+df_filtered = df[df.age.notna()]     # 移除缺失
 
-# Value membership
+# 值成員資格
 df_filtered = df[df.category.isin(['A', 'B', 'C'])]
 
-# Range filtering
+# 範圍篩選
 df_filtered = df[df.age.between(25, 65)]
 ```
 
-## Virtual Columns and Expressions
+## 虛擬欄和表達式
 
-Virtual columns are computed on-the-fly with zero memory overhead:
+虛擬欄即時計算，零記憶體開銷：
 
-### Creating Virtual Columns
+### 建立虛擬欄
 
 ```python
-# Arithmetic operations
+# 算術運算
 df['total'] = df.price * df.quantity
 df['price_squared'] = df.price ** 2
 
-# Mathematical functions
+# 數學函數
 df['log_price'] = df.price.log()
 df['sqrt_value'] = df.value.sqrt()
 df['abs_diff'] = (df.x - df.y).abs()
 
-# Conditional logic
+# 條件邏輯
 df['is_adult'] = df.age >= 18
 df['category'] = (df.score > 80).where('A', 'B')  # If-then-else
 ```
 
-### Expression Methods
+### 表達式方法
 
 ```python
-# Mathematical
-df.x.abs()          # Absolute value
-df.x.sqrt()         # Square root
-df.x.log()          # Natural log
-df.x.log10()        # Base-10 log
-df.x.exp()          # Exponential
+# 數學
+df.x.abs()          # 絕對值
+df.x.sqrt()         # 平方根
+df.x.log()          # 自然對數
+df.x.log10()        # 以 10 為底對數
+df.x.exp()          # 指數
 
-# Trigonometric
+# 三角函數
 df.angle.sin()
 df.angle.cos()
 df.angle.tan()
 df.angle.arcsin()
 
-# Rounding
-df.x.round(2)       # Round to 2 decimals
-df.x.floor()        # Round down
-df.x.ceil()         # Round up
+# 捨入
+df.x.round(2)       # 捨入到小數點後 2 位
+df.x.floor()        # 向下捨入
+df.x.ceil()         # 向上捨入
 
-# Type conversion
+# 類型轉換
 df.x.astype('int64')
 df.x.astype('float32')
 df.x.astype('str')
 ```
 
-### Conditional Expressions
+### 條件表達式
 
 ```python
-# where() method: condition.where(true_value, false_value)
+# where() 方法：condition.where(true_value, false_value)
 df['status'] = (df.age >= 18).where('adult', 'minor')
 
-# Multiple conditions with nested where
+# 使用巢狀 where 處理多重條件
 df['grade'] = (df.score >= 90).where('A',
               (df.score >= 80).where('B',
               (df.score >= 70).where('C', 'F')))
 
-# Using searchsorted for binning
+# 使用 searchsorted 進行分箱
 bins = [0, 18, 65, 100]
 labels = ['minor', 'adult', 'senior']
 df['age_group'] = df.age.searchsorted(bins).where(...)
 ```
 
-## String Operations
+## 字串操作
 
-Access string methods via the `.str` accessor:
+透過 `.str` 存取器使用字串方法：
 
-### Basic String Methods
+### 基本字串方法
 
 ```python
-# Case conversion
+# 大小寫轉換
 df['upper_name'] = df.name.str.upper()
 df['lower_name'] = df.name.str.lower()
 df['title_name'] = df.name.str.title()
 
-# Trimming
+# 修剪
 df['trimmed'] = df.text.str.strip()
 df['ltrimmed'] = df.text.str.lstrip()
 df['rtrimmed'] = df.text.str.rstrip()
 
-# Searching
+# 搜尋
 df['has_john'] = df.name.str.contains('John')
 df['starts_with_a'] = df.name.str.startswith('A')
 df['ends_with_com'] = df.email.str.endswith('.com')
 
-# Slicing
+# 切片
 df['first_char'] = df.name.str.slice(0, 1)
 df['last_three'] = df.name.str.slice(-3, None)
 
-# Length
+# 長度
 df['name_length'] = df.name.str.len()
 ```
 
-### Advanced String Operations
+### 進階字串操作
 
 ```python
-# Replacing
+# 替換
 df['clean_text'] = df.text.str.replace('bad', 'good')
 
-# Splitting (returns first part)
+# 分割（回傳第一部分）
 df['first_name'] = df.full_name.str.split(' ')[0]
 
-# Concatenation
+# 串接
 df['full_name'] = df.first_name + ' ' + df.last_name
 
-# Padding
-df['padded'] = df.code.str.pad(10, '0', 'left')  # Zero-padding
+# 填充
+df['padded'] = df.code.str.pad(10, '0', 'left')  # 零填充
 ```
 
-## DateTime Operations
+## 日期時間操作
 
-Access datetime methods via the `.dt` accessor:
+透過 `.dt` 存取器使用日期時間方法：
 
-### DateTime Properties
+### 日期時間屬性
 
 ```python
-# Parsing strings to datetime
+# 解析字串為日期時間
 df['date_parsed'] = df.date_string.astype('datetime64')
 
-# Extracting components
+# 提取組件
 df['year'] = df.timestamp.dt.year
 df['month'] = df.timestamp.dt.month
 df['day'] = df.timestamp.dt.day
@@ -191,23 +191,23 @@ df['hour'] = df.timestamp.dt.hour
 df['minute'] = df.timestamp.dt.minute
 df['second'] = df.timestamp.dt.second
 
-# Day of week
-df['weekday'] = df.timestamp.dt.dayofweek  # 0=Monday
+# 星期幾
+df['weekday'] = df.timestamp.dt.dayofweek  # 0=星期一
 df['day_name'] = df.timestamp.dt.day_name  # 'Monday', 'Tuesday', ...
 
-# Date arithmetic
+# 日期運算
 df['tomorrow'] = df.date + pd.Timedelta(days=1)
 df['next_week'] = df.date + pd.Timedelta(weeks=1)
 ```
 
-## Aggregations
+## 聚合
 
-Vaex performs aggregations efficiently across billions of rows:
+Vaex 高效地對數十億列執行聚合：
 
-### Basic Aggregations
+### 基本聚合
 
 ```python
-# Single column
+# 單一欄位
 mean_age = df.age.mean()
 std_age = df.age.std()
 min_age = df.age.min()
@@ -215,226 +215,226 @@ max_age = df.age.max()
 sum_sales = df.sales.sum()
 count_rows = df.count()
 
-# With selections
+# 使用選擇
 mean_adult_age = df.age.mean(selection='adults')
 
-# Multiple at once with delay
+# 使用 delay 同時計算多個
 mean = df.age.mean(delay=True)
 std = df.age.std(delay=True)
 results = vaex.execute([mean, std])
 ```
 
-### Available Aggregation Functions
+### 可用的聚合函數
 
 ```python
-# Central tendency
+# 集中趨勢
 df.x.mean()
-df.x.median_approx()  # Approximate median (fast)
+df.x.median_approx()  # 近似中位數（快速）
 
-# Dispersion
-df.x.std()           # Standard deviation
-df.x.var()           # Variance
+# 離散程度
+df.x.std()           # 標準差
+df.x.var()           # 變異數
 df.x.min()
 df.x.max()
-df.x.minmax()        # Both min and max
+df.x.minmax()        # 同時取得最小值和最大值
 
-# Count
-df.count()           # Total rows
-df.x.count()         # Non-missing values
+# 計數
+df.count()           # 總列數
+df.x.count()         # 非缺失值
 
-# Sum and product
+# 總和與乘積
 df.x.sum()
 df.x.prod()
 
-# Percentiles
-df.x.quantile(0.5)           # Median
-df.x.quantile([0.25, 0.75])  # Quartiles
+# 百分位數
+df.x.quantile(0.5)           # 中位數
+df.x.quantile([0.25, 0.75])  # 四分位數
 
-# Correlation
+# 相關性
 df.correlation(df.x, df.y)
 df.covar(df.x, df.y)
 
-# Higher moments
+# 高階動差
 df.x.kurtosis()
 df.x.skew()
 
-# Unique values
-df.x.nunique()       # Count unique
-df.x.unique()        # Get unique values (returns array)
+# 唯一值
+df.x.nunique()       # 計算唯一值數量
+df.x.unique()        # 取得唯一值（回傳陣列）
 ```
 
-## GroupBy Operations
+## GroupBy 操作
 
-Group data and compute aggregations per group:
+分組資料並計算每組的聚合：
 
-### Basic GroupBy
+### 基本 GroupBy
 
 ```python
-# Single column groupby
+# 單一欄位 groupby
 grouped = df.groupby('category')
 
-# Aggregation
+# 聚合
 result = grouped.agg({'sales': 'sum'})
 result = grouped.agg({'sales': 'sum', 'quantity': 'mean'})
 
-# Multiple aggregations on same column
+# 對同一欄位進行多個聚合
 result = grouped.agg({
     'sales': ['sum', 'mean', 'std'],
     'quantity': 'sum'
 })
 ```
 
-### Advanced GroupBy
+### 進階 GroupBy
 
 ```python
-# Multiple grouping columns
+# 多個分組欄位
 result = df.groupby(['category', 'region']).agg({
     'sales': 'sum',
     'quantity': 'mean'
 })
 
-# Custom aggregation functions
+# 自訂聚合函數
 result = df.groupby('category').agg({
     'sales': lambda x: x.max() - x.min()
 })
 
-# Available aggregation functions
+# 可用的聚合函數
 # 'sum', 'mean', 'std', 'min', 'max', 'count', 'first', 'last'
 ```
 
-### GroupBy with Binning
+### 帶分箱的 GroupBy
 
 ```python
-# Bin continuous variable and aggregate
+# 分箱連續變數並聚合
 result = df.groupby(vaex.vrange(0, 100, 10)).agg({
     'sales': 'sum'
 })
 
-# Datetime binning
+# 日期時間分箱
 result = df.groupby(df.timestamp.dt.year).agg({
     'sales': 'sum'
 })
 ```
 
-## Binning and Discretization
+## 分箱和離散化
 
-Create bins from continuous variables:
+從連續變數建立分箱：
 
-### Simple Binning
+### 簡單分箱
 
 ```python
-# Create bins
+# 建立分箱
 df['age_bin'] = df.age.digitize([18, 30, 50, 65, 100])
 
-# Labeled bins
+# 標籤分箱
 bins = [0, 18, 30, 50, 65, 100]
 labels = ['child', 'young_adult', 'adult', 'middle_age', 'senior']
 df['age_group'] = df.age.digitize(bins)
-# Note: Apply labels using where() or mapping
+# 注意：使用 where() 或映射套用標籤
 ```
 
-### Statistical Binning
+### 統計分箱
 
 ```python
-# Equal-width bins
+# 等寬分箱
 df['value_bin'] = df.value.digitize(
     vaex.vrange(df.value.min(), df.value.max(), 10)
 )
 
-# Quantile-based bins
+# 基於分位數的分箱
 quantiles = df.value.quantile([0.25, 0.5, 0.75])
 df['value_quartile'] = df.value.digitize(quantiles)
 ```
 
-## Multi-dimensional Aggregations
+## 多維聚合
 
-Compute statistics on grids:
+在網格上計算統計：
 
 ```python
-# 2D histogram/heatmap data
+# 2D 直方圖/熱圖資料
 counts = df.count(binby=[df.x, df.y], limits=[[0, 10], [0, 10]], shape=(100, 100))
 
-# Mean on a grid
+# 網格上的平均值
 mean_z = df.mean(df.z, binby=[df.x, df.y], limits=[[0, 10], [0, 10]], shape=(50, 50))
 
-# Multiple statistics on grid
+# 網格上的多個統計
 stats = df.mean(df.z, binby=[df.x, df.y], shape=(50, 50), delay=True)
 counts = df.count(binby=[df.x, df.y], shape=(50, 50), delay=True)
 results = vaex.execute([stats, counts])
 ```
 
-## Handling Missing Data
+## 處理缺失資料
 
-Work with missing, null, and NaN values:
+處理缺失、空值和 NaN 值：
 
-### Detecting Missing Data
+### 偵測缺失資料
 
 ```python
-# Check for missing
+# 檢查缺失
 df['age_missing'] = df.age.isna()
 df['age_present'] = df.age.notna()
 
-# Count missing
+# 計算缺失
 missing_count = df.age.isna().sum()
 missing_pct = df.age.isna().mean() * 100
 ```
 
-### Handling Missing Data
+### 處理缺失資料
 
 ```python
-# Filter out missing
+# 篩選掉缺失
 df_clean = df[df.age.notna()]
 
-# Fill missing with value
+# 用值填充缺失
 df['age_filled'] = df.age.fillna(0)
 df['age_filled'] = df.age.fillna(df.age.mean())
 
-# Forward/backward fill (for time series)
+# 前向/後向填充（用於時間序列）
 df['age_ffill'] = df.age.fillna(method='ffill')
 df['age_bfill'] = df.age.fillna(method='bfill')
 ```
 
-### Missing Data Types in Vaex
+### Vaex 中的缺失資料類型
 
-Vaex distinguishes between:
-- **NaN** - IEEE floating point Not-a-Number
-- **NA** - Arrow null type
-- **Missing** - General term for absent data
+Vaex 區分以下類型：
+- **NaN** - IEEE 浮點數 Not-a-Number
+- **NA** - Arrow 空值類型
+- **Missing** - 缺失資料的通用術語
 
 ```python
-# Check which missing type
-df.is_masked('column_name')  # True if uses Arrow null (NA)
+# 檢查是哪種缺失類型
+df.is_masked('column_name')  # 如果使用 Arrow null (NA) 則為 True
 
-# Convert between types
-df['col_masked'] = df.col.as_masked()  # Convert to NA representation
+# 類型之間轉換
+df['col_masked'] = df.col.as_masked()  # 轉換為 NA 表示
 ```
 
-## Sorting
+## 排序
 
 ```python
-# Sort by single column
+# 按單一欄位排序
 df_sorted = df.sort('age')
 df_sorted = df.sort('age', ascending=False)
 
-# Sort by multiple columns
+# 按多個欄位排序
 df_sorted = df.sort(['category', 'age'])
 
-# Note: Sorting materializes a new column with indices
-# For very large datasets, consider if sorting is necessary
+# 注意：排序會實體化一個帶有索引的新欄位
+# 對於非常大的資料集，考慮是否真的需要排序
 ```
 
-## Joining DataFrames
+## 合併 DataFrame
 
-Combine DataFrames based on keys:
+基於鍵合併 DataFrame：
 
 ```python
-# Inner join
+# 內部合併
 df_joined = df1.join(df2, on='key_column')
 
-# Left join
+# 左合併
 df_joined = df1.join(df2, on='key_column', how='left')
 
-# Join on different column names
+# 在不同欄位名稱上合併
 df_joined = df1.join(
     df2,
     left_on='id',
@@ -442,59 +442,59 @@ df_joined = df1.join(
     how='left'
 )
 
-# Multiple key columns
+# 多個鍵欄位
 df_joined = df1.join(df2, on=['key1', 'key2'])
 ```
 
-## Adding and Removing Columns
+## 新增和移除欄位
 
-### Adding Columns
+### 新增欄位
 
 ```python
-# Virtual column (no memory)
+# 虛擬欄（無記憶體）
 df['new_col'] = df.x + df.y
 
-# From external array (must match length)
+# 從外部陣列（必須匹配長度）
 import numpy as np
 new_data = np.random.rand(len(df))
 df['random'] = new_data
 
-# Constant value
+# 常數值
 df['constant'] = 42
 ```
 
-### Removing Columns
+### 移除欄位
 
 ```python
-# Drop single column
+# 刪除單一欄位
 df = df.drop('column_name')
 
-# Drop multiple columns
+# 刪除多個欄位
 df = df.drop(['col1', 'col2', 'col3'])
 
-# Select specific columns (drop others)
+# 選擇特定欄位（刪除其他）
 df = df[['col1', 'col2', 'col3']]
 ```
 
-### Renaming Columns
+### 重新命名欄位
 
 ```python
-# Rename single column
+# 重新命名單一欄位
 df = df.rename('old_name', 'new_name')
 
-# Rename multiple columns
+# 重新命名多個欄位
 df = df.rename({
     'old_name1': 'new_name1',
     'old_name2': 'new_name2'
 })
 ```
 
-## Common Patterns
+## 常見模式
 
-### Pattern: Complex Feature Engineering
+### 模式：複雜特徵工程
 
 ```python
-# Multiple derived features
+# 多個衍生特徵
 df['log_price'] = df.price.log()
 df['price_per_unit'] = df.price / df.quantity
 df['is_discount'] = df.discount > 0
@@ -502,19 +502,19 @@ df['price_category'] = (df.price > 100).where('expensive', 'affordable')
 df['revenue'] = df.price * df.quantity * (1 - df.discount)
 ```
 
-### Pattern: Text Cleaning
+### 模式：文字清理
 
 ```python
-# Clean and standardize text
+# 清理和標準化文字
 df['email_clean'] = df.email.str.lower().str.strip()
 df['has_valid_email'] = df.email_clean.str.contains('@')
 df['domain'] = df.email_clean.str.split('@')[1]
 ```
 
-### Pattern: Time-based Analysis
+### 模式：基於時間的分析
 
 ```python
-# Extract temporal features
+# 提取時間特徵
 df['year'] = df.timestamp.dt.year
 df['month'] = df.timestamp.dt.month
 df['day_of_week'] = df.timestamp.dt.dayofweek
@@ -522,34 +522,34 @@ df['is_weekend'] = df.day_of_week >= 5
 df['quarter'] = ((df.month - 1) // 3) + 1
 ```
 
-### Pattern: Grouped Statistics
+### 模式：分組統計
 
 ```python
-# Compute statistics by group
+# 按組計算統計
 monthly_sales = df.groupby(df.timestamp.dt.month).agg({
     'revenue': ['sum', 'mean', 'count'],
     'quantity': 'sum'
 })
 
-# Multiple grouping levels
+# 多層分組
 category_region_sales = df.groupby(['category', 'region']).agg({
     'sales': 'sum',
     'profit': 'mean'
 })
 ```
 
-## Performance Tips
+## 效能提示
 
-1. **Use virtual columns** - They're computed on-the-fly with no memory cost
-2. **Batch operations with delay=True** - Compute multiple aggregations at once
-3. **Avoid `.values` or `.to_pandas_df()`** - Keep operations lazy when possible
-4. **Use selections** - Multiple named selections are more efficient than creating new DataFrames
-5. **Leverage expressions** - They enable query optimization
-6. **Minimize sorting** - Sorting is expensive on large datasets
+1. **使用虛擬欄** - 它們即時計算，無記憶體成本
+2. **使用 delay=True 批次操作** - 一次計算多個聚合
+3. **避免 `.values` 或 `.to_pandas_df()`** - 盡可能保持操作惰性
+4. **使用選擇** - 多個命名選擇比建立新 DataFrame 更高效
+5. **利用表達式** - 它們啟用查詢最佳化
+6. **最小化排序** - 排序在大型資料集上很昂貴
 
-## Related Resources
+## 相關資源
 
-- For DataFrame creation: See `core_dataframes.md`
-- For performance optimization: See `performance.md`
-- For visualization: See `visualization.md`
-- For ML pipelines: See `machine_learning.md`
+- DataFrame 建立：參見 `core_dataframes.md`
+- 效能最佳化：參見 `performance.md`
+- 視覺化：參見 `visualization.md`
+- 機器學習管線：參見 `machine_learning.md`

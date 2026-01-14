@@ -1,492 +1,492 @@
-# Metabolomics Workbench REST API Reference
+# Metabolomics Workbench REST API 參考
 
-## Base URL
+## 基礎 URL
 
-All API requests use the following base URL:
+所有 API 請求使用以下基礎 URL：
 ```
 https://www.metabolomicsworkbench.org/rest/
 ```
 
-## API Structure
+## API 結構
 
-The REST API follows a consistent URL pattern:
+REST API 遵循一致的 URL 模式：
 ```
 /context/input_item/input_value/output_item/output_format
 ```
 
-- **context**: The type of resource to access (study, compound, refmet, metstat, gene, protein, moverz)
-- **input_item**: The type of identifier or search parameter
-- **input_value**: The specific value to search for
-- **output_item**: What data to return (e.g., all, name, summary)
-- **output_format**: json or txt (json is default if omitted)
+- **context**：要存取的資源類型（study、compound、refmet、metstat、gene、protein、moverz）
+- **input_item**：識別碼或搜尋參數的類型
+- **input_value**：要搜尋的特定值
+- **output_item**：要返回的資料（例如：all、name、summary）
+- **output_format**：json 或 txt（省略時預設為 json）
 
-## Output Formats
+## 輸出格式
 
-- **json**: Machine-readable JSON format (default)
-- **txt**: Tab-delimited text format for human readability
+- **json**：機器可讀的 JSON 格式（預設）
+- **txt**：制表符分隔的文字格式，便於人類閱讀
 
-## Context 1: Compound
+## 情境 1：Compound（化合物）
 
-Retrieve metabolite structure and identification data.
+檢索代謝物結構和識別資料。
 
-### Input Items
+### 輸入項目
 
-| Input Item | Description | Example |
+| 輸入項目 | 描述 | 範例 |
 |------------|-------------|---------|
-| `regno` | Metabolomics Workbench registry number | 11 |
-| `pubchem_cid` | PubChem Compound ID | 5281365 |
-| `inchi_key` | International Chemical Identifier Key | WQZGKKKJIJFFOK-GASJEMHNSA-N |
-| `formula` | Molecular formula | C6H12O6 |
+| `regno` | Metabolomics Workbench 註冊編號 | 11 |
+| `pubchem_cid` | PubChem 化合物 ID | 5281365 |
+| `inchi_key` | 國際化學識別碼密鑰 | WQZGKKKJIJFFOK-GASJEMHNSA-N |
+| `formula` | 分子式 | C6H12O6 |
 | `lm_id` | LIPID MAPS ID | LM... |
-| `hmdb_id` | Human Metabolome Database ID | HMDB0000122 |
-| `kegg_id` | KEGG Compound ID | C00031 |
+| `hmdb_id` | 人類代謝體資料庫 ID | HMDB0000122 |
+| `kegg_id` | KEGG 化合物 ID | C00031 |
 
-### Output Items
+### 輸出項目
 
-| Output Item | Description |
+| 輸出項目 | 描述 |
 |-------------|-------------|
-| `all` | All available compound data |
-| `classification` | Compound classification |
-| `regno` | Registry number |
-| `formula` | Molecular formula |
-| `exactmass` | Exact mass |
+| `all` | 所有可用的化合物資料 |
+| `classification` | 化合物分類 |
+| `regno` | 註冊編號 |
+| `formula` | 分子式 |
+| `exactmass` | 精確質量 |
 | `inchi_key` | InChI Key |
-| `name` | Common name |
-| `sys_name` | Systematic name |
-| `smiles` | SMILES notation |
+| `name` | 常用名稱 |
+| `sys_name` | 系統名稱 |
+| `smiles` | SMILES 表示法 |
 | `lm_id` | LIPID MAPS ID |
 | `pubchem_cid` | PubChem CID |
 | `hmdb_id` | HMDB ID |
 | `kegg_id` | KEGG ID |
 | `chebi_id` | ChEBI ID |
 | `metacyc_id` | MetaCyc ID |
-| `molfile` | MOL file structure |
-| `png` | PNG image of structure |
+| `molfile` | MOL 檔案結構 |
+| `png` | 結構的 PNG 圖片 |
 
-### Example Requests
+### 範例請求
 
 ```bash
-# Get all compound data by PubChem CID
+# 透過 PubChem CID 取得所有化合物資料
 curl "https://www.metabolomicsworkbench.org/rest/compound/pubchem_cid/5281365/all/json"
 
-# Get compound name by registry number
+# 透過註冊編號取得化合物名稱
 curl "https://www.metabolomicsworkbench.org/rest/compound/regno/11/name/json"
 
-# Download structure as PNG
+# 下載 PNG 格式的結構
 curl "https://www.metabolomicsworkbench.org/rest/compound/regno/11/png" -o structure.png
 
-# Get compound by KEGG ID
+# 透過 KEGG ID 取得化合物
 curl "https://www.metabolomicsworkbench.org/rest/compound/kegg_id/C00031/all/json"
 
-# Get compound by molecular formula
+# 透過分子式取得化合物
 curl "https://www.metabolomicsworkbench.org/rest/compound/formula/C6H12O6/all/json"
 ```
 
-## Context 2: Study
+## 情境 2：Study（研究）
 
-Access metabolomics research study metadata and experimental results.
+存取代謝體學研究元資料和實驗結果。
 
-### Input Items
+### 輸入項目
 
-| Input Item | Description | Example |
+| 輸入項目 | 描述 | 範例 |
 |------------|-------------|---------|
-| `study_id` | Study identifier | ST000001 |
-| `analysis_id` | Analysis identifier | AN000001 |
-| `study_title` | Keywords in study title | diabetes |
-| `institute` | Institute name | UCSD |
-| `last_name` | Investigator last name | Smith |
-| `metabolite_id` | Metabolite registry number | 11 |
-| `refmet_name` | RefMet standardized name | Glucose |
-| `kegg_id` | KEGG compound ID | C00031 |
+| `study_id` | 研究識別碼 | ST000001 |
+| `analysis_id` | 分析識別碼 | AN000001 |
+| `study_title` | 研究標題中的關鍵字 | diabetes |
+| `institute` | 機構名稱 | UCSD |
+| `last_name` | 研究者姓氏 | Smith |
+| `metabolite_id` | 代謝物註冊編號 | 11 |
+| `refmet_name` | RefMet 標準化名稱 | Glucose |
+| `kegg_id` | KEGG 化合物 ID | C00031 |
 
-### Output Items
+### 輸出項目
 
-| Output Item | Description |
+| 輸出項目 | 描述 |
 |-------------|-------------|
-| `summary` | Study overview and metadata |
-| `factors` | Experimental factors and design |
-| `analysis` | Analysis methods and parameters |
-| `metabolites` | List of measured metabolites |
-| `data` | Complete experimental data |
-| `mwtab` | Complete study in mwTab format |
-| `number_of_metabolites` | Count of metabolites measured |
-| `species` | Organism species |
-| `disease` | Disease studied |
-| `source` | Sample source/tissue type |
-| `untarg_studies` | Untargeted study information |
-| `untarg_factors` | Untargeted study factors |
-| `untarg_data` | Untargeted experimental data |
-| `datatable` | Formatted data table |
-| `available` | List available studies (use with ST as input_value) |
+| `summary` | 研究概述和元資料 |
+| `factors` | 實驗因素和設計 |
+| `analysis` | 分析方法和參數 |
+| `metabolites` | 測量的代謝物列表 |
+| `data` | 完整的實驗資料 |
+| `mwtab` | mwTab 格式的完整研究 |
+| `number_of_metabolites` | 測量的代謝物計數 |
+| `species` | 生物物種 |
+| `disease` | 研究的疾病 |
+| `source` | 樣本來源/組織類型 |
+| `untarg_studies` | 非靶向研究資訊 |
+| `untarg_factors` | 非靶向研究因素 |
+| `untarg_data` | 非靶向實驗資料 |
+| `datatable` | 格式化的資料表 |
+| `available` | 列出可用的研究（使用 ST 作為 input_value） |
 
-### Example Requests
+### 範例請求
 
 ```bash
-# List all publicly available studies
+# 列出所有公開可用的研究
 curl "https://www.metabolomicsworkbench.org/rest/study/study_id/ST/available/json"
 
-# Get study summary
+# 取得研究摘要
 curl "https://www.metabolomicsworkbench.org/rest/study/study_id/ST000001/summary/json"
 
-# Get experimental data
+# 取得實驗資料
 curl "https://www.metabolomicsworkbench.org/rest/study/study_id/ST000001/data/json"
 
-# Get study factors
+# 取得研究因素
 curl "https://www.metabolomicsworkbench.org/rest/study/study_id/ST000001/factors/json"
 
-# Find studies containing a specific metabolite
+# 尋找包含特定代謝物的研究
 curl "https://www.metabolomicsworkbench.org/rest/study/refmet_name/Tyrosine/summary/json"
 
-# Search studies by investigator
+# 按研究者搜尋研究
 curl "https://www.metabolomicsworkbench.org/rest/study/last_name/Smith/summary/json"
 
-# Download complete study in mwTab format
+# 下載 mwTab 格式的完整研究
 curl "https://www.metabolomicsworkbench.org/rest/study/study_id/ST000001/mwtab/txt"
 ```
 
-## Context 3: RefMet
+## 情境 3：RefMet
 
-Query the standardized metabolite nomenclature database with hierarchical classification.
+查詢具有層級分類的標準化代謝物命名法資料庫。
 
-### Input Items
+### 輸入項目
 
-| Input Item | Description | Example |
+| 輸入項目 | 描述 | 範例 |
 |------------|-------------|---------|
-| `name` | Metabolite name | glucose |
+| `name` | 代謝物名稱 | glucose |
 | `inchi_key` | InChI Key | WQZGKKKJIJFFOK-GASJEMHNSA-N |
 | `pubchem_cid` | PubChem CID | 5793 |
-| `exactmass` | Exact mass | 180.0634 |
-| `formula` | Molecular formula | C6H12O6 |
-| `super_class` | Super class name | Organic compounds |
-| `main_class` | Main class name | Carbohydrates |
-| `sub_class` | Sub class name | Monosaccharides |
-| `match` | Name matching/standardization | citrate |
-| `refmet_id` | RefMet identifier | 12345 |
-| `all` | Retrieve all RefMet entries | (no value needed) |
+| `exactmass` | 精確質量 | 180.0634 |
+| `formula` | 分子式 | C6H12O6 |
+| `super_class` | 超類名稱 | Organic compounds |
+| `main_class` | 主類名稱 | Carbohydrates |
+| `sub_class` | 子類名稱 | Monosaccharides |
+| `match` | 名稱匹配/標準化 | citrate |
+| `refmet_id` | RefMet 識別碼 | 12345 |
+| `all` | 檢索所有 RefMet 條目 | （不需要值） |
 
-### Output Items
+### 輸出項目
 
-| Output Item | Description |
+| 輸出項目 | 描述 |
 |-------------|-------------|
-| `all` | All available RefMet data |
-| `name` | Standardized RefMet name |
+| `all` | 所有可用的 RefMet 資料 |
+| `name` | 標準化的 RefMet 名稱 |
 | `inchi_key` | InChI Key |
 | `pubchem_cid` | PubChem CID |
-| `exactmass` | Exact mass |
-| `formula` | Molecular formula |
-| `sys_name` | Systematic name |
-| `super_class` | Super class classification |
-| `main_class` | Main class classification |
-| `sub_class` | Sub class classification |
-| `refmet_id` | RefMet identifier |
+| `exactmass` | 精確質量 |
+| `formula` | 分子式 |
+| `sys_name` | 系統名稱 |
+| `super_class` | 超類分類 |
+| `main_class` | 主類分類 |
+| `sub_class` | 子類分類 |
+| `refmet_id` | RefMet 識別碼 |
 
-### Example Requests
+### 範例請求
 
 ```bash
-# Standardize a metabolite name
+# 標準化代謝物名稱
 curl "https://www.metabolomicsworkbench.org/rest/refmet/match/citrate/name/json"
 
-# Get all RefMet data for a metabolite
+# 取得代謝物的所有 RefMet 資料
 curl "https://www.metabolomicsworkbench.org/rest/refmet/name/Glucose/all/json"
 
-# Query by molecular formula
+# 按分子式查詢
 curl "https://www.metabolomicsworkbench.org/rest/refmet/formula/C6H12O6/all/json"
 
-# Get all metabolites in a main class
+# 取得主類中的所有代謝物
 curl "https://www.metabolomicsworkbench.org/rest/refmet/main_class/Fatty%20Acids/all/json"
 
-# Query by exact mass
+# 按精確質量查詢
 curl "https://www.metabolomicsworkbench.org/rest/refmet/exactmass/180.0634/all/json"
 
-# Download complete RefMet database
+# 下載完整的 RefMet 資料庫
 curl "https://www.metabolomicsworkbench.org/rest/refmet/all/json"
 ```
 
-### RefMet Classification Hierarchy
+### RefMet 分類層級
 
-RefMet provides four-level structural resolution:
+RefMet 提供四級結構解析度：
 
-1. **Super Class**: Broadest categorization (e.g., "Organic compounds", "Lipids")
-2. **Main Class**: Major biochemical categories (e.g., "Fatty Acids", "Carbohydrates")
-3. **Sub Class**: More specific groupings (e.g., "Monosaccharides", "Amino acids")
-4. **Individual Metabolite**: Specific compound with standardized name
+1. **超類（Super Class）**：最廣泛的分類（例如："Organic compounds"、"Lipids"）
+2. **主類（Main Class）**：主要的生化類別（例如："Fatty Acids"、"Carbohydrates"）
+3. **子類（Sub Class）**：更具體的分組（例如："Monosaccharides"、"Amino acids"）
+4. **個別代謝物（Individual Metabolite）**：具有標準化名稱的特定化合物
 
-## Context 4: MetStat
+## 情境 4：MetStat
 
-Filter studies by analytical and biological parameters using semicolon-delimited format.
+使用分號分隔格式按分析和生物參數篩選研究。
 
-### Format
+### 格式
 
 ```
 /metstat/ANALYSIS_TYPE;POLARITY;CHROMATOGRAPHY;SPECIES;SAMPLE_SOURCE;DISEASE;KEGG_ID;REFMET_NAME
 ```
 
-### Parameters
+### 參數
 
-| Position | Parameter | Options |
+| 位置 | 參數 | 選項 |
 |----------|-----------|---------|
-| 1 | Analysis Type | LCMS, GCMS, NMR, MS, ICPMS |
-| 2 | Polarity | POSITIVE, NEGATIVE |
-| 3 | Chromatography | HILIC, RP (Reverse Phase), GC, IC |
-| 4 | Species | Human, Mouse, Rat, etc. |
-| 5 | Sample Source | Blood, Plasma, Serum, Urine, Liver, etc. |
-| 6 | Disease | Diabetes, Cancer, Alzheimer, etc. |
-| 7 | KEGG ID | C00031, etc. |
-| 8 | RefMet Name | Glucose, Tyrosine, etc. |
+| 1 | 分析類型 | LCMS、GCMS、NMR、MS、ICPMS |
+| 2 | 極性 | POSITIVE、NEGATIVE |
+| 3 | 層析法 | HILIC、RP（逆相）、GC、IC |
+| 4 | 物種 | Human、Mouse、Rat 等 |
+| 5 | 樣本來源 | Blood、Plasma、Serum、Urine、Liver 等 |
+| 6 | 疾病 | Diabetes、Cancer、Alzheimer 等 |
+| 7 | KEGG ID | C00031 等 |
+| 8 | RefMet 名稱 | Glucose、Tyrosine 等 |
 
-**Note**: Use empty positions (consecutive semicolons) to skip parameters. All parameters are optional.
+**注意**：使用空位置（連續分號）跳過參數。所有參數都是可選的。
 
-### Example Requests
+### 範例請求
 
 ```bash
-# Human blood diabetes studies with LC-MS HILIC positive mode
+# 使用 LC-MS HILIC 正離子模式的人類血液糖尿病研究
 curl "https://www.metabolomicsworkbench.org/rest/metstat/LCMS;POSITIVE;HILIC;Human;Blood;Diabetes/json"
 
-# All human blood studies containing tyrosine
+# 所有包含酪胺酸的人類血液研究
 curl "https://www.metabolomicsworkbench.org/rest/metstat/;;;Human;Blood;;;Tyrosine/json"
 
-# All GC-MS studies regardless of other parameters
+# 所有 GC-MS 研究，不論其他參數
 curl "https://www.metabolomicsworkbench.org/rest/metstat/GCMS;;;;;;/json"
 
-# Mouse liver studies
+# 小鼠肝臟研究
 curl "https://www.metabolomicsworkbench.org/rest/metstat/;;;Mouse;Liver;;/json"
 
-# All studies measuring glucose
+# 所有測量葡萄糖的研究
 curl "https://www.metabolomicsworkbench.org/rest/metstat/;;;;;;;Glucose/json"
 ```
 
-## Context 5: Moverz
+## 情境 5：Moverz
 
-Perform mass spectrometry precursor ion searches by m/z value.
+透過 m/z 值執行質譜前驅離子搜尋。
 
-### Format for m/z Search
+### m/z 搜尋格式
 
 ```
 /moverz/DATABASE/mass/adduct/tolerance/format
 ```
 
-- **DATABASE**: MB (Metabolomics Workbench), LIPIDS, REFMET
-- **mass**: m/z value (e.g., 635.52)
-- **adduct**: Ion adduct type (see table below)
-- **tolerance**: Mass tolerance in Daltons (e.g., 0.5)
-- **format**: json or txt
+- **DATABASE**：MB（Metabolomics Workbench）、LIPIDS、REFMET
+- **mass**：m/z 值（例如：635.52）
+- **adduct**：離子加合物類型（見下表）
+- **tolerance**：質量容許誤差，單位為道爾頓（例如：0.5）
+- **format**：json 或 txt
 
-### Format for Exact Mass Calculation
+### 精確質量計算格式
 
 ```
 /moverz/exactmass/metabolite_name/adduct/format
 ```
 
-### Ion Adduct Types
+### 離子加合物類型
 
-#### Positive Mode Adducts
+#### 正離子模式加合物
 
-| Adduct | Description | Example Use |
+| 加合物 | 描述 | 使用範例 |
 |--------|-------------|-------------|
-| `M+H` | Protonated molecule | Most common positive ESI |
-| `M+Na` | Sodium adduct | Common in ESI |
-| `M+K` | Potassium adduct | Less common ESI |
-| `M+NH4` | Ammonium adduct | Common with ammonium salts |
-| `M+2H` | Doubly protonated | Multiply charged ions |
-| `M+H-H2O` | Dehydrated protonated | Loss of water |
-| `M+2Na-H` | Disodium minus hydrogen | Multiple sodium |
-| `M+CH3OH+H` | Methanol adduct | Methanol in mobile phase |
-| `M+ACN+H` | Acetonitrile adduct | ACN in mobile phase |
-| `M+ACN+Na` | ACN + sodium | ACN and sodium |
+| `M+H` | 質子化分子 | 最常見的正離子 ESI |
+| `M+Na` | 鈉加合物 | ESI 中常見 |
+| `M+K` | 鉀加合物 | ESI 中較不常見 |
+| `M+NH4` | 銨加合物 | 使用銨鹽時常見 |
+| `M+2H` | 雙質子化 | 多電荷離子 |
+| `M+H-H2O` | 脫水質子化 | 失去水 |
+| `M+2Na-H` | 雙鈉減氫 | 多個鈉 |
+| `M+CH3OH+H` | 甲醇加合物 | 流動相含甲醇 |
+| `M+ACN+H` | 乙腈加合物 | 流動相含 ACN |
+| `M+ACN+Na` | ACN + 鈉 | ACN 和鈉 |
 
-#### Negative Mode Adducts
+#### 負離子模式加合物
 
-| Adduct | Description | Example Use |
+| 加合物 | 描述 | 使用範例 |
 |--------|-------------|-------------|
-| `M-H` | Deprotonated molecule | Most common negative ESI |
-| `M+Cl` | Chloride adduct | Chlorinated mobile phases |
-| `M+FA-H` | Formate adduct | Formic acid in mobile phase |
-| `M+HAc-H` | Acetate adduct | Acetic acid in mobile phase |
-| `M-H-H2O` | Deprotonated minus water | Water loss |
-| `M-2H` | Doubly deprotonated | Multiply charged ions |
-| `M+Na-2H` | Sodium minus two protons | Mixed charge states |
+| `M-H` | 去質子化分子 | 最常見的負離子 ESI |
+| `M+Cl` | 氯化物加合物 | 含氯流動相 |
+| `M+FA-H` | 甲酸加合物 | 流動相含甲酸 |
+| `M+HAc-H` | 乙酸加合物 | 流動相含乙酸 |
+| `M-H-H2O` | 去質子化減水 | 失去水 |
+| `M-2H` | 雙去質子化 | 多電荷離子 |
+| `M+Na-2H` | 鈉減二質子 | 混合電荷狀態 |
 
-#### Uncharged
+#### 無電荷
 
-| Adduct | Description |
+| 加合物 | 描述 |
 |--------|-------------|
-| `M` | Uncharged molecule | Direct ionization methods |
+| `M` | 無電荷分子 | 直接游離方法 |
 
-### Example Requests
+### 範例請求
 
 ```bash
-# Search for compounds with m/z 635.52 (M+H) in MB database
+# 在 MB 資料庫中搜尋 m/z 635.52 (M+H) 的化合物
 curl "https://www.metabolomicsworkbench.org/rest/moverz/MB/635.52/M+H/0.5/json"
 
-# Search in RefMet with negative mode
+# 在 RefMet 中使用負離子模式搜尋
 curl "https://www.metabolomicsworkbench.org/rest/moverz/REFMET/200.15/M-H/0.3/json"
 
-# Search lipids database
+# 搜尋脂質資料庫
 curl "https://www.metabolomicsworkbench.org/rest/moverz/LIPIDS/760.59/M+Na/0.5/json"
 
-# Calculate exact mass for known metabolite
+# 計算已知代謝物的精確質量
 curl "https://www.metabolomicsworkbench.org/rest/moverz/exactmass/PC(34:1)/M+H/json"
 
-# High-resolution MS search (tight tolerance)
+# 高解析度質譜搜尋（緊密容許誤差）
 curl "https://www.metabolomicsworkbench.org/rest/moverz/MB/180.0634/M+H/0.01/json"
 ```
 
-## Context 6: Gene
+## 情境 6：Gene（基因）
 
-Access gene information from the Metabolome Gene/Protein (MGP) database.
+從 Metabolome Gene/Protein（MGP）資料庫存取基因資訊。
 
-### Input Items
+### 輸入項目
 
-| Input Item | Description | Example |
+| 輸入項目 | 描述 | 範例 |
 |------------|-------------|---------|
-| `mgp_id` | MGP database ID | MGP001 |
-| `gene_id` | NCBI Gene ID | 31 |
-| `gene_name` | Full gene name | acetyl-CoA carboxylase |
-| `gene_symbol` | Gene symbol | ACACA |
-| `taxid` | Taxonomy ID | 9606 (human) |
+| `mgp_id` | MGP 資料庫 ID | MGP001 |
+| `gene_id` | NCBI 基因 ID | 31 |
+| `gene_name` | 完整基因名稱 | acetyl-CoA carboxylase |
+| `gene_symbol` | 基因符號 | ACACA |
+| `taxid` | 分類 ID | 9606（人類） |
 
-### Output Items
+### 輸出項目
 
-| Output Item | Description |
+| 輸出項目 | 描述 |
 |-------------|-------------|
-| `all` | All gene information |
-| `mgp_id` | MGP identifier |
-| `gene_id` | NCBI Gene ID |
-| `gene_name` | Full gene name |
-| `gene_symbol` | Gene symbol |
-| `gene_synonyms` | Alternative names |
-| `alt_names` | Alternative nomenclature |
-| `chromosome` | Chromosomal location |
-| `map_location` | Genetic map position |
-| `summary` | Gene description |
-| `taxid` | Taxonomy ID |
-| `species` | Species short name |
-| `species_long` | Full species name |
+| `all` | 所有基因資訊 |
+| `mgp_id` | MGP 識別碼 |
+| `gene_id` | NCBI 基因 ID |
+| `gene_name` | 完整基因名稱 |
+| `gene_symbol` | 基因符號 |
+| `gene_synonyms` | 替代名稱 |
+| `alt_names` | 替代命名法 |
+| `chromosome` | 染色體位置 |
+| `map_location` | 遺傳圖譜位置 |
+| `summary` | 基因描述 |
+| `taxid` | 分類 ID |
+| `species` | 物種簡稱 |
+| `species_long` | 完整物種名稱 |
 
-### Example Requests
+### 範例請求
 
 ```bash
-# Get gene information by symbol
+# 透過符號取得基因資訊
 curl "https://www.metabolomicsworkbench.org/rest/gene/gene_symbol/ACACA/all/json"
 
-# Get gene by NCBI Gene ID
+# 透過 NCBI 基因 ID 取得基因
 curl "https://www.metabolomicsworkbench.org/rest/gene/gene_id/31/all/json"
 
-# Search by gene name
+# 按基因名稱搜尋
 curl "https://www.metabolomicsworkbench.org/rest/gene/gene_name/carboxylase/summary/json"
 ```
 
-## Context 7: Protein
+## 情境 7：Protein（蛋白質）
 
-Retrieve protein sequence and annotation data.
+檢索蛋白質序列和註釋資料。
 
-### Input Items
+### 輸入項目
 
-| Input Item | Description | Example |
+| 輸入項目 | 描述 | 範例 |
 |------------|-------------|---------|
-| `mgp_id` | MGP database ID | MGP001 |
-| `gene_id` | NCBI Gene ID | 31 |
-| `gene_name` | Gene name | acetyl-CoA carboxylase |
-| `gene_symbol` | Gene symbol | ACACA |
-| `taxid` | Taxonomy ID | 9606 |
-| `mrna_id` | mRNA identifier | NM_001093.3 |
+| `mgp_id` | MGP 資料庫 ID | MGP001 |
+| `gene_id` | NCBI 基因 ID | 31 |
+| `gene_name` | 基因名稱 | acetyl-CoA carboxylase |
+| `gene_symbol` | 基因符號 | ACACA |
+| `taxid` | 分類 ID | 9606 |
+| `mrna_id` | mRNA 識別碼 | NM_001093.3 |
 | `refseq_id` | RefSeq ID | NP_001084 |
-| `protein_gi` | GenInfo Identifier | 4557237 |
+| `protein_gi` | GenInfo 識別碼 | 4557237 |
 | `uniprot_id` | UniProt ID | Q13085 |
-| `protein_entry` | Protein entry name | ACACA_HUMAN |
-| `protein_name` | Protein name | Acetyl-CoA carboxylase |
+| `protein_entry` | 蛋白質條目名稱 | ACACA_HUMAN |
+| `protein_name` | 蛋白質名稱 | Acetyl-CoA carboxylase |
 
-### Output Items
+### 輸出項目
 
-| Output Item | Description |
+| 輸出項目 | 描述 |
 |-------------|-------------|
-| `all` | All protein information |
-| `mgp_id` | MGP identifier |
-| `gene_id` | NCBI Gene ID |
-| `gene_name` | Gene name |
-| `gene_symbol` | Gene symbol |
-| `taxid` | Taxonomy ID |
-| `species` | Species short name |
-| `species_long` | Full species name |
-| `mrna_id` | mRNA identifier |
-| `refseq_id` | RefSeq protein ID |
-| `protein_gi` | GenInfo Identifier |
-| `uniprot_id` | UniProt accession |
-| `protein_entry` | Protein entry name |
-| `protein_name` | Full protein name |
-| `seqlength` | Sequence length |
-| `seq` | Amino acid sequence |
-| `is_identical_to` | Identical sequences |
+| `all` | 所有蛋白質資訊 |
+| `mgp_id` | MGP 識別碼 |
+| `gene_id` | NCBI 基因 ID |
+| `gene_name` | 基因名稱 |
+| `gene_symbol` | 基因符號 |
+| `taxid` | 分類 ID |
+| `species` | 物種簡稱 |
+| `species_long` | 完整物種名稱 |
+| `mrna_id` | mRNA 識別碼 |
+| `refseq_id` | RefSeq 蛋白質 ID |
+| `protein_gi` | GenInfo 識別碼 |
+| `uniprot_id` | UniProt 登錄號 |
+| `protein_entry` | 蛋白質條目名稱 |
+| `protein_name` | 完整蛋白質名稱 |
+| `seqlength` | 序列長度 |
+| `seq` | 胺基酸序列 |
+| `is_identical_to` | 相同序列 |
 
-### Example Requests
+### 範例請求
 
 ```bash
-# Get protein information by UniProt ID
+# 透過 UniProt ID 取得蛋白質資訊
 curl "https://www.metabolomicsworkbench.org/rest/protein/uniprot_id/Q13085/all/json"
 
-# Get protein by gene symbol
+# 透過基因符號取得蛋白質
 curl "https://www.metabolomicsworkbench.org/rest/protein/gene_symbol/ACACA/all/json"
 
-# Get protein sequence
+# 取得蛋白質序列
 curl "https://www.metabolomicsworkbench.org/rest/protein/uniprot_id/Q13085/seq/json"
 
-# Search by RefSeq ID
+# 透過 RefSeq ID 搜尋
 curl "https://www.metabolomicsworkbench.org/rest/protein/refseq_id/NP_001084/all/json"
 ```
 
-## Error Handling
+## 錯誤處理
 
-The API returns appropriate HTTP status codes:
+API 返回適當的 HTTP 狀態碼：
 
-- **200 OK**: Successful request
-- **400 Bad Request**: Invalid parameters or malformed request
-- **404 Not Found**: Resource not found
-- **500 Internal Server Error**: Server-side error
+- **200 OK**：請求成功
+- **400 Bad Request**：無效的參數或格式錯誤的請求
+- **404 Not Found**：找不到資源
+- **500 Internal Server Error**：伺服器端錯誤
 
-When no results are found, the API typically returns an empty array or object rather than an error code.
+當找不到結果時，API 通常返回空陣列或物件，而非錯誤碼。
 
-## Rate Limiting
+## 速率限制
 
-As of 2025, the Metabolomics Workbench REST API does not enforce strict rate limits for reasonable use. However, best practices include:
+截至 2025 年，Metabolomics Workbench REST API 對合理使用不強制執行嚴格的速率限制。但是，最佳實踐包括：
 
-- Implementing delays between bulk requests
-- Caching frequently accessed reference data
-- Using appropriate batch sizes for large-scale queries
+- 在批量請求之間實施延遲
+- 快取常用的參考資料
+- 對大規模查詢使用適當的批次大小
 
-## Additional Resources
+## 額外資源
 
-- **Interactive REST URL Creator**: https://www.metabolomicsworkbench.org/tools/mw_rest.php
-- **Official API Specification**: https://www.metabolomicsworkbench.org/tools/MWRestAPIv1.1.pdf
-- **Python Library**: mwtab package for Python users
-- **R Package**: metabolomicsWorkbenchR (Bioconductor)
-- **Julia Package**: MetabolomicsWorkbenchAPI.jl
+- **互動式 REST URL 建立器**：https://www.metabolomicsworkbench.org/tools/mw_rest.php
+- **官方 API 規格**：https://www.metabolomicsworkbench.org/tools/MWRestAPIv1.1.pdf
+- **Python 函式庫**：mwtab 套件供 Python 使用者使用
+- **R 套件**：metabolomicsWorkbenchR（Bioconductor）
+- **Julia 套件**：MetabolomicsWorkbenchAPI.jl
 
-## Python Example: Complete Workflow
+## Python 範例：完整工作流程
 
 ```python
 import requests
 import json
 
-# 1. Standardize metabolite name using RefMet
+# 1. 使用 RefMet 標準化代謝物名稱
 metabolite = "citrate"
 response = requests.get(f'https://www.metabolomicsworkbench.org/rest/refmet/match/{metabolite}/name/json')
 standardized_name = response.json()['name']
 
-# 2. Search for studies containing this metabolite
+# 2. 搜尋包含此代謝物的研究
 response = requests.get(f'https://www.metabolomicsworkbench.org/rest/study/refmet_name/{standardized_name}/summary/json')
 studies = response.json()
 
-# 3. Get detailed data from a specific study
+# 3. 從特定研究取得詳細資料
 study_id = studies[0]['study_id']
 response = requests.get(f'https://www.metabolomicsworkbench.org/rest/study/study_id/{study_id}/data/json')
 data = response.json()
 
-# 4. Perform m/z search for compound identification
+# 4. 執行 m/z 搜尋進行化合物識別
 mz_value = 180.06
 response = requests.get(f'https://www.metabolomicsworkbench.org/rest/moverz/MB/{mz_value}/M+H/0.5/json')
 matches = response.json()
 
-# 5. Get compound structure
+# 5. 取得化合物結構
 regno = matches[0]['regno']
 response = requests.get(f'https://www.metabolomicsworkbench.org/rest/compound/regno/{regno}/png')
 with open('structure.png', 'wb') as f:

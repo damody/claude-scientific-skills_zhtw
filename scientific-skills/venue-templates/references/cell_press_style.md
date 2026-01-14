@@ -1,161 +1,161 @@
-# Cell Press Writing Style Guide
+# Cell Press 寫作風格指南
 
-Comprehensive writing guide for Cell, Neuron, Immunity, Molecular Cell, Developmental Cell, Cell Reports, and other Cell Press journals.
+Cell、Neuron、Immunity、Molecular Cell、Developmental Cell、Cell Reports 及其他 Cell Press 期刊的完整寫作指南。
 
-**Last Updated**: 2024
-
----
-
-## Overview
-
-Cell Press journals emphasize **mechanistic depth**, **rigorous experimentation**, and **biological insight**. Unlike Nature/Science, which prioritize broad accessibility, Cell papers are written for biologists who appreciate technical detail and comprehensive data.
-
-### Key Philosophy
-
-> "Cell papers tell a complete mechanistic story with exhaustive experimental support."
-
-**Primary Goal**: Provide deep biological insight with extensive experimental validation that advances understanding of fundamental mechanisms.
+**最後更新**：2024
 
 ---
 
-## Unique Cell Press Features
+## 概述
 
-Cell Press has several distinctive elements not found in other journals:
+Cell Press 期刊強調**機制深度（mechanistic depth）**、**嚴謹實驗（rigorous experimentation）**和**生物學見解（biological insight）**。與優先考慮廣泛可及性的 Nature/Science 不同，Cell 論文是為欣賞技術細節和全面數據的生物學家所撰寫。
 
-### 1. Summary (Not Abstract)
+### 核心理念
 
-Cell uses "Summary" instead of "Abstract" - functionally similar but emphasizes synthesis.
+> 「Cell 論文透過詳盡的實驗支持來講述一個完整的機制故事。」
 
-### 2. Graphical Abstract (REQUIRED)
-
-A visual summary appearing on the table of contents. **This is mandatory for all Cell Press journals.**
-
-### 3. eTOC Blurb
-
-A 30-50 word "elevator pitch" for the electronic table of contents.
-
-### 4. Highlights
-
-3-4 bullet points (≤85 characters each) capturing key findings.
-
-### 5. In Brief
-
-A one-sentence summary of the paper.
+**主要目標**：提供深入的生物學見解，並透過廣泛的實驗驗證來推進對基本機制的理解。
 
 ---
 
-## Audience and Tone
+## Cell Press 獨特功能
 
-### Target Reader
+Cell Press 有幾個其他期刊沒有的獨特元素：
 
-- Expert biologist in the relevant field
-- Familiar with techniques and terminology
-- Expects comprehensive data and mechanistic depth
-- Values rigor and reproducibility
+### 1. Summary（摘要）（非 Abstract）
 
-### Tone Characteristics
+Cell 使用「Summary」而非「Abstract」——功能相似但強調綜合性。
 
-| Characteristic | Description |
+### 2. Graphical Abstract（圖形摘要）（必填）
+
+出現在目錄中的視覺摘要。**這是所有 Cell Press 期刊的必要元素。**
+
+### 3. eTOC Blurb（電子目錄簡介）
+
+30-50 字的「電梯簡報（elevator pitch）」，用於電子目錄。
+
+### 4. Highlights（亮點）
+
+3-4 個要點（每個 ≤85 字元）擷取關鍵發現。
+
+### 5. In Brief（簡述）
+
+論文的單句摘要。
+
+---
+
+## 讀者與語調
+
+### 目標讀者
+
+- 相關領域的專業生物學家
+- 熟悉技術和術語
+- 期望全面的數據和機制深度
+- 重視嚴謹性和可重複性
+
+### 語調特徵
+
+| 特徵 | 說明 |
 |---------------|-------------|
-| **Technical** | Appropriate jargon for the field |
-| **Mechanistic** | Focus on how and why, not just what |
-| **Comprehensive** | Thorough exploration of the question |
-| **Data-rich** | Extensive experimental support |
-| **Precise** | Exact terminology and quantification |
+| **技術性（Technical）** | 使用領域適當的專業術語 |
+| **機制性（Mechanistic）** | 專注於如何和為何，而非僅是什麼 |
+| **全面性（Comprehensive）** | 徹底探討問題 |
+| **數據豐富（Data-rich）** | 廣泛的實驗支持 |
+| **精確性（Precise）** | 準確的術語和量化 |
 
-### Voice
+### 語態
 
-- **First person ("we") acceptable**: "We demonstrate that..."
-- **Active voice encouraged**: "We identified..." 
-- **Confident but measured**: Strong claims require strong evidence
+- **第一人稱（"we"）可接受**：「We demonstrate that...」
+- **鼓勵主動語態**：「We identified...」
+- **自信但有分寸**：強烈的主張需要強有力的證據
 
 ---
 
-## Summary (Abstract)
+## Summary（摘要）
 
-### Style Requirements
+### 格式要求
 
-- **150 words maximum** for Cell; varies for other Cell Press journals
-- **Flowing paragraph** (not structured sections)
-- **Dense with information**: Every sentence should convey key points
-- **Mechanistic focus**: What was discovered and how it works
+- Cell 最多 **150 字**；其他 Cell Press 期刊有所不同
+- **流暢的段落**（非結構化章節）
+- **資訊密集**：每句話都應傳達關鍵要點
+- **機制聚焦**：發現了什麼以及它如何運作
 
-### Summary Structure
+### Summary 結構
 
-1. **Context** (1 sentence): The biological question/problem
-2. **Approach** (1 sentence): What you did
-3. **Key findings** (2-4 sentences): Main results with mechanism
-4. **Significance** (1 sentence): What this reveals about biology
+1. **背景（Context）**（1 句）：生物學問題/議題
+2. **方法（Approach）**（1 句）：你做了什麼
+3. **關鍵發現（Key findings）**（2-4 句）：主要結果及機制
+4. **重要性（Significance）**（1 句）：這揭示了什麼生物學意義
 
-### Example Summary (Cell Style)
+### Summary 範例（Cell 風格）
 
 ```
-Cellular senescence is a stress response that arrests proliferation and 
-promotes tissue remodeling, but the mechanisms controlling senescent cell 
-fate remain unclear. Here, we identify the transcription factor FOXO4 as a 
-critical regulator of senescent cell viability. FOXO4 is highly expressed 
-in senescent cells and sequesters p53 away from mitochondria, preventing 
-apoptosis. Using a cell-penetrating peptide that disrupts FOXO4-p53 
-interaction, we selectively induce senescent cell apoptosis in vitro and 
-in vivo. Administration of this peptide to aged mice restores fitness, fur 
-density, and renal function. These findings reveal FOXO4-p53 as a senescence 
-vulnerability and establish proof-of-concept for targeted senolytic 
+Cellular senescence is a stress response that arrests proliferation and
+promotes tissue remodeling, but the mechanisms controlling senescent cell
+fate remain unclear. Here, we identify the transcription factor FOXO4 as a
+critical regulator of senescent cell viability. FOXO4 is highly expressed
+in senescent cells and sequesters p53 away from mitochondria, preventing
+apoptosis. Using a cell-penetrating peptide that disrupts FOXO4-p53
+interaction, we selectively induce senescent cell apoptosis in vitro and
+in vivo. Administration of this peptide to aged mice restores fitness, fur
+density, and renal function. These findings reveal FOXO4-p53 as a senescence
+vulnerability and establish proof-of-concept for targeted senolytic
 interventions in aging.
 ```
 
 ---
 
-## Graphical Abstract
+## Graphical Abstract（圖形摘要）
 
-### Purpose
+### 目的
 
-A single-panel visual summary for the table of contents that captures the entire paper's message.
+單一面板的視覺摘要，用於目錄，擷取整篇論文的訊息。
 
-### Requirements
+### 要求
 
-- **Size**: Square format, typically 1200 × 1200 pixels
-- **Layout**: Clean, uncluttered
-- **Content**: Show workflow, key finding, and mechanism
-- **Text**: Minimal labels, large readable fonts
-- **Color**: Vibrant but professional
+- **尺寸**：正方形格式，通常 1200 × 1200 像素
+- **版面**：簡潔、不雜亂
+- **內容**：展示工作流程、關鍵發現和機制
+- **文字**：最少標籤，大而易讀的字體
+- **顏色**：鮮明但專業
 
-### Design Elements
-
-```
-Typical Graphical Abstract Components:
-1. Starting point (cell, organism, condition)
-2. Intervention/treatment (arrows, symbols)
-3. Key measurement or observation
-4. Outcome/conclusion (visual representation)
-5. Minimal text labels connecting elements
-```
-
-### Example Description (for schematic generation)
+### 設計元素
 
 ```
-"Graphical abstract showing: Left panel - normal cells with FOXO4 (blue) 
-and p53 (green) separate. Center panel - senescent cells with FOXO4 
-binding p53, preventing apoptosis. Right panel - FOXO4 peptide disrupts 
-interaction, allowing p53 to reach mitochondria, triggering apoptosis. 
-Arrow at bottom showing aged mouse → treatment → rejuvenated mouse."
+典型 Graphical Abstract 組成元素：
+1. 起點（細胞、生物體、條件）
+2. 介入/處理（箭頭、符號）
+3. 關鍵測量或觀察
+4. 結果/結論（視覺呈現）
+5. 連接元素的最少文字標籤
+```
+
+### 範例說明（用於示意圖生成）
+
+```
+「Graphical abstract 展示：左側面板——正常細胞，FOXO4（藍色）和
+p53（綠色）分離。中間面板——衰老細胞中 FOXO4 結合 p53，
+阻止細胞凋亡。右側面板——FOXO4 胜肽破壞交互作用，
+允許 p53 到達粒線體，觸發細胞凋亡。
+底部箭頭顯示老化小鼠 → 治療 → 年輕化小鼠。」
 ```
 
 ---
 
-## Highlights
+## Highlights（亮點）
 
-### Format
+### 格式
 
-3-4 bullet points, each ≤85 characters (including spaces)
+3-4 個要點，每個 ≤85 字元（包括空格）
 
-### Content Guidelines
+### 內容指南
 
-- Start with an action verb or key noun
-- Include specific findings
-- Make each highlight standalone
-- Cover different aspects of the paper
+- 以動詞或關鍵名詞開頭
+- 包含具體發現
+- 使每個亮點獨立成意
+- 涵蓋論文的不同面向
 
-### Example Highlights
+### Highlights 範例
 
 ```
 • FOXO4 is selectively expressed in senescent cells
@@ -169,169 +169,169 @@ Arrow at bottom showing aged mouse → treatment → rejuvenated mouse."
 
 ---
 
-## eTOC Blurb
+## eTOC Blurb（電子目錄簡介）
 
-### Format
+### 格式
 
-30-50 words for the electronic table of contents
+30-50 字，用於電子目錄
 
-### Writing Guidelines
+### 寫作指南
 
-- Written by authors (editors may modify)
-- Start with author names or key finding
-- Make it a complete, engaging sentence
-- Highlight the most exciting aspect
+- 由作者撰寫（編輯可能修改）
+- 以作者姓名或關鍵發現開頭
+- 使其成為完整、引人入勝的句子
+- 突出最令人興奮的面向
 
-### Example eTOC Blurb
+### eTOC Blurb 範例
 
 ```
-Baar et al. identify FOXO4 as a vulnerability of senescent cells and 
-develop a peptide that induces targeted apoptosis of senescent cells. 
-Treatment of aged mice with this senolytic peptide restores fitness 
+Baar et al. identify FOXO4 as a vulnerability of senescent cells and
+develop a peptide that induces targeted apoptosis of senescent cells.
+Treatment of aged mice with this senolytic peptide restores fitness
 and organ function.
 ```
 
 ---
 
-## Introduction
+## Introduction（緒論）
 
-### Length and Structure
+### 長度與結構
 
-- **4-6 paragraphs** (800-1200 words)
-- More comprehensive than Nature/Science
-- Can include more technical detail and literature
+- **4-6 段落**（800-1200 字）
+- 比 Nature/Science 更全面
+- 可包含更多技術細節和文獻
 
-### Paragraph-by-Paragraph Guide
+### 逐段指南
 
-**Paragraph 1: Biological Context**
-- Establish the biological process or system
-- Why is this important to understand?
-- Set up the key players and mechanisms
+**第 1 段：生物學背景**
+- 建立生物學過程或系統
+- 為什麼理解這個很重要？
+- 設定關鍵參與者和機制
 
-**Paragraphs 2-3: State of the Field**
-- Detailed review of relevant prior work
-- Establish what is known mechanistically
-- More comprehensive than Nature/Science
+**第 2-3 段：領域現況**
+- 相關先前工作的詳細回顧
+- 建立機制上已知的內容
+- 比 Nature/Science 更全面
 
-**Paragraph 4: The Gap**
-- What remains unknown or controversial?
-- Why is this a critical question?
-- What has prevented progress?
+**第 4 段：知識空白**
+- 什麼仍然未知或有爭議？
+- 為什麼這是一個關鍵問題？
+- 什麼阻礙了進展？
 
-**Paragraph 5: Your Approach**
-- How did you tackle this question?
-- What techniques/systems did you use?
-- Why was your approach appropriate?
+**第 5 段：你的方法**
+- 你如何解決這個問題？
+- 使用了什麼技術/系統？
+- 為什麼你的方法是適當的？
 
-**Final Paragraph: Key Findings Preview**
-- Brief statement of what you discovered
-- How does this advance the field?
-- Set up the structure of results
+**最後一段：關鍵發現預覽**
+- 簡述你發現了什麼
+- 這如何推進該領域？
+- 設定結果的結構
 
-### Example Introduction Paragraph
+### 緒論段落範例
 
 ```
-Cellular senescence is characterized by stable cell-cycle arrest, profound 
-chromatin alterations, and a complex secretory phenotype known as the 
-senescence-associated secretory phenotype (SASP) (Coppé et al., 2008; 
-Rodier and Campisi, 2011). Senescent cells accumulate with age and at 
-sites of pathology, where they can drive tissue dysfunction through 
-SASP-mediated inflammation and disruption of tissue architecture (van 
-Deursen, 2014). The targeted elimination of senescent cells—senolysis—has 
-emerged as a promising therapeutic strategy, with genetic and pharmacological 
-approaches demonstrating benefits in mouse models of aging and age-related 
+Cellular senescence is characterized by stable cell-cycle arrest, profound
+chromatin alterations, and a complex secretory phenotype known as the
+senescence-associated secretory phenotype (SASP) (Coppé et al., 2008;
+Rodier and Campisi, 2011). Senescent cells accumulate with age and at
+sites of pathology, where they can drive tissue dysfunction through
+SASP-mediated inflammation and disruption of tissue architecture (van
+Deursen, 2014). The targeted elimination of senescent cells—senolysis—has
+emerged as a promising therapeutic strategy, with genetic and pharmacological
+approaches demonstrating benefits in mouse models of aging and age-related
 disease (Baker et al., 2011, 2016; Chang et al., 2016).
 ```
 
 ---
 
-## Results
+## Results（結果）
 
-### Organization
+### 組織
 
-Cell papers typically have **5-8 results sections**, each with a descriptive subheading:
+Cell 論文通常有 **5-8 個結果章節**，每個都有描述性子標題：
 
 ```
 Results
-├── Section 1: Discovery of the phenomenon
-├── Section 2: Characterization of the mechanism  
-├── Section 3: Identification of molecular players
-├── Section 4: Functional validation
-├── Section 5: In vivo confirmation
-├── Section 6: Therapeutic proof-of-concept
-└── Section 7: Broader implications
+├── Section 1: 現象的發現
+├── Section 2: 機制的特徵化
+├── Section 3: 分子參與者的鑑定
+├── Section 4: 功能驗證
+├── Section 5: 體內確認
+├── Section 6: 治療概念驗證
+└── Section 7: 更廣泛的影響
 ```
 
-### Subheading Style
+### 子標題風格
 
-Cell uses **declarative subheadings** stating the finding:
+Cell 使用**陳述性子標題**說明發現：
 
-❌ "Analysis of FOXO4 expression" (descriptive - avoid)
-✅ "FOXO4 Is Selectively Upregulated in Senescent Cells" (declarative)
+❌ 「Analysis of FOXO4 expression」（描述性——避免）
+✅ 「FOXO4 Is Selectively Upregulated in Senescent Cells」（陳述性）
 
-### Results Writing Style
+### 結果寫作風格
 
-- **Comprehensive detail**: Cell expects more methodological context in Results than Nature
-- **Figure-by-figure narrative**: Each major figure often corresponds to a results section
-- **Statistical rigor**: All quantifications with statistics
-- **Biological interpretation**: More interpretation woven in than pure Results sections
+- **全面細節**：Cell 期望結果中包含比 Nature 更多的方法學背景
+- **逐圖敘事**：每個主要圖通常對應一個結果章節
+- **統計嚴謹**：所有量化都附帶統計數據
+- **生物學解釋**：比純粹的結果章節穿插更多解釋
 
-### Example Results Paragraph
+### 結果段落範例
 
 ```
-To identify transcription factors regulating senescent cell viability, we 
-performed RNA sequencing on proliferating and senescent human fibroblasts 
-(IMR90 cells induced to senesce by replicative exhaustion, ionizing 
-radiation, or oncogene-induced senescence). Differential expression 
-analysis revealed 47 transcription factors significantly upregulated 
-across all senescence modalities (FDR < 0.05, fold change > 2; Figure 1A 
-and Table S1). Among these, FOXO4 showed the highest and most consistent 
-upregulation (12.3 ± 2.1-fold; Figure 1B), a finding we confirmed by 
-quantitative RT-PCR (Figure 1C) and immunoblot analysis (Figure 1D). 
-Immunofluorescence microscopy revealed nuclear FOXO4 accumulation in 
+To identify transcription factors regulating senescent cell viability, we
+performed RNA sequencing on proliferating and senescent human fibroblasts
+(IMR90 cells induced to senesce by replicative exhaustion, ionizing
+radiation, or oncogene-induced senescence). Differential expression
+analysis revealed 47 transcription factors significantly upregulated
+across all senescence modalities (FDR < 0.05, fold change > 2; Figure 1A
+and Table S1). Among these, FOXO4 showed the highest and most consistent
+upregulation (12.3 ± 2.1-fold; Figure 1B), a finding we confirmed by
+quantitative RT-PCR (Figure 1C) and immunoblot analysis (Figure 1D).
+Immunofluorescence microscopy revealed nuclear FOXO4 accumulation in
 senescent but not proliferating cells (Figure 1E,F).
 ```
 
 ---
 
-## Discussion
+## Discussion（討論）
 
-### Structure
+### 結構
 
-Cell discussions are **thorough and mechanistic**:
+Cell 的討論是**徹底且機制導向的**：
 
-**Paragraph 1: Summary**
-- Restate key findings
-- Synthesize the main message
+**第 1 段：摘要**
+- 重述關鍵發現
+- 綜合主要訊息
 
-**Paragraphs 2-4: Mechanistic Interpretation**
-- Deep dive into how your findings fit with known biology
-- Propose models
-- Discuss molecular mechanisms in detail
+**第 2-4 段：機制解釋**
+- 深入探討你的發現如何與已知生物學相符
+- 提出模型
+- 詳細討論分子機制
 
-**Paragraph 5: Comparison with Literature**
-- How do your findings relate to prior work?
-- Resolve apparent contradictions
+**第 5 段：與文獻比較**
+- 你的發現與先前工作有何關係？
+- 解決明顯的矛盾
 
-**Paragraph 6: Implications and Applications**
-- Therapeutic implications
-- Broader significance
+**第 6 段：影響與應用**
+- 治療影響
+- 更廣泛的重要性
 
-**Paragraph 7: Limitations**
-- Honest assessment
-- Open questions remaining
+**第 7 段：局限性**
+- 誠實評估
+- 剩餘的開放問題
 
-**Final Paragraph: Conclusions**
-- Big-picture take-home message
-- Future directions
+**最後一段：結論**
+- 宏觀重點訊息
+- 未來方向
 
 ---
 
-## Experimental Procedures / STAR Methods
+## Experimental Procedures / STAR Methods（實驗程序 / STAR 方法）
 
-### STAR Methods Format
+### STAR Methods 格式
 
-Cell uses a structured **STAR Methods** section:
+Cell 使用結構化的 **STAR Methods** 章節：
 
 ```
 RESOURCE AVAILABILITY
@@ -345,14 +345,14 @@ EXPERIMENTAL MODEL AND SUBJECT DETAILS
   Human Subjects
 
 METHOD DETAILS
-  [Detailed protocols for each technique]
+  [每種技術的詳細方案]
 
 QUANTIFICATION AND STATISTICAL ANALYSIS
 ```
 
-### Key Reagent Table (KEY RESOURCES TABLE)
+### Key Reagent Table（KEY RESOURCES TABLE，關鍵試劑表）
 
-Cell requires a comprehensive table of all key resources:
+Cell 要求所有關鍵資源的完整表格：
 
 | REAGENT or RESOURCE | SOURCE | IDENTIFIER |
 |---------------------|--------|------------|
@@ -365,38 +365,38 @@ Cell requires a comprehensive table of all key resources:
 
 ---
 
-## Figures
+## Figures（圖表）
 
-### Figure Philosophy
+### 圖表理念
 
-Cell papers are **figure-heavy** with extensive multi-panel figures:
+Cell 論文**圖表密集**，有大量多面板圖：
 
-- **6-8 main figures** typical
-- **Multi-panel format**: 6-12 panels per figure common
-- **Data-dense**: Comprehensive experimental support
-- **Extended Data**: Supplementary figures for additional validation
+- 通常 **6-8 個主要圖**
+- **多面板格式**：每圖 6-12 個面板很常見
+- **數據密集**：全面的實驗支持
+- **Extended Data（擴展數據）**：額外驗證的補充圖
 
-### Panel Labeling
+### 面板標籤
 
-Panels labeled with lowercase letters: **(A)**, **(B)**, **(C)**
+面板使用小寫字母標籤：**(A)**、**(B)**、**(C)**
 
-### Figure Legend Format
+### 圖例格式
 
 ```
 Figure 3. FOXO4 Sequesters p53 in the Nucleus of Senescent Cells
 
-(A) Immunofluorescence microscopy of p53 (green) and FOXO4 (red) in 
-proliferating (left) and senescent (right) IMR90 cells. DAPI (blue) 
+(A) Immunofluorescence microscopy of p53 (green) and FOXO4 (red) in
+proliferating (left) and senescent (right) IMR90 cells. DAPI (blue)
 marks nuclei. Scale bar, 10 μm.
 
-(B) Quantification of nuclear p53 intensity in proliferating versus 
-senescent cells. Data represent mean ± SEM; n = 3 biological replicates, 
+(B) Quantification of nuclear p53 intensity in proliferating versus
+senescent cells. Data represent mean ± SEM; n = 3 biological replicates,
 >100 cells per condition. ***p < 0.001, two-tailed Student's t test.
 
-(C and D) Co-immunoprecipitation of FOXO4 and p53 in proliferating (C) 
+(C and D) Co-immunoprecipitation of FOXO4 and p53 in proliferating (C)
 and senescent (D) cell lysates. IgG, immunoglobulin G control.
 
-(E) Proximity ligation assay for FOXO4-p53 interaction. Red dots indicate 
+(E) Proximity ligation assay for FOXO4-p53 interaction. Red dots indicate
 interaction events. Scale bar, 10 μm.
 
 (F) Model of FOXO4-mediated p53 sequestration in senescent cells.
@@ -406,78 +406,78 @@ See also Figure S3 and Table S2.
 
 ---
 
-## References
+## References（參考文獻）
 
-### Citation Style
+### 引用風格
 
-- **Author-year format**: (Smith et al., 2023) or Smith et al. (2023)
-- **Multiple citations**: (Smith et al., 2020; Jones et al., 2021)
-- **Two authors**: (Smith and Jones, 2023)
-- **Three or more**: (Smith et al., 2023)
+- **作者-年份格式**：(Smith et al., 2023) 或 Smith et al. (2023)
+- **多個引用**：(Smith et al., 2020; Jones et al., 2021)
+- **兩位作者**：(Smith and Jones, 2023)
+- **三位或更多**：(Smith et al., 2023)
 
-### Reference Format
+### 參考文獻格式
 
 ```
-Baker, D.J., Wijshake, T., Tchkonia, T., LeBrasseur, N.K., Childs, B.G., 
-van de Sluis, B., Kirkland, J.L., and van Deursen, J.M. (2011). Clearance 
-of p16Ink4a-positive senescent cells delays ageing-associated disorders. 
+Baker, D.J., Wijshake, T., Tchkonia, T., LeBrasseur, N.K., Childs, B.G.,
+van de Sluis, B., Kirkland, J.L., and van Deursen, J.M. (2011). Clearance
+of p16Ink4a-positive senescent cells delays ageing-associated disorders.
 Nature 479, 232–236.
 ```
 
 ---
 
-## Cell Press Journal Comparison
+## Cell Press 期刊比較
 
-| Journal | Focus | Article Length | Figures |
+| 期刊 | 重點 | 文章長度 | 圖表數量 |
 |---------|-------|---------------|---------|
-| **Cell** | Breakthrough biology | Long | 7-8 main + ED |
-| **Neuron** | Neuroscience | Long | 6-8 main |
-| **Immunity** | Immunology | Medium-Long | 6-7 main |
-| **Molecular Cell** | Molecular mechanisms | Medium | 5-7 main |
-| **Developmental Cell** | Development | Medium | 5-7 main |
-| **Cell Reports** | Solid science | Medium | 4-6 main |
+| **Cell** | 突破性生物學 | 長 | 7-8 主圖 + ED |
+| **Neuron** | 神經科學 | 長 | 6-8 主圖 |
+| **Immunity** | 免疫學 | 中長 | 6-7 主圖 |
+| **Molecular Cell** | 分子機制 | 中 | 5-7 主圖 |
+| **Developmental Cell** | 發育生物學 | 中 | 5-7 主圖 |
+| **Cell Reports** | 紮實的科學 | 中 | 4-6 主圖 |
 
 ---
 
-## Common Mistakes
+## 常見錯誤
 
-1. **Insufficient mechanism**: Describing what happens without how
-2. **Under-controlled experiments**: Missing key controls
-3. **Weak phenotype validation**: Single approach instead of multiple
-4. **Missing in vivo work**: Cell papers often expect animal studies
-5. **Incomplete figure panels**: Not showing all relevant conditions
-6. **Forgetting graphical abstract**: Required element
-7. **Exceeding highlight character limits**: ≤85 characters per bullet
+1. **機制不足**：描述發生什麼而沒有如何發生
+2. **實驗對照不足**：缺少關鍵對照
+3. **表型驗證薄弱**：單一方法而非多重方法
+4. **缺少體內工作**：Cell 論文通常期望動物研究
+5. **圖面板不完整**：未顯示所有相關條件
+6. **忘記圖形摘要**：必要元素
+7. **超過亮點字元限制**：每個要點 ≤85 字元
 
 ---
 
-## Pre-Submission Checklist
+## 投稿前檢查清單
 
-### Required Elements
-- [ ] Graphical abstract (square format)
-- [ ] Highlights (3-4 bullets, ≤85 characters each)
-- [ ] eTOC blurb (30-50 words)
-- [ ] Summary (≤150 words)
+### 必要元素
+- [ ] Graphical abstract（正方形格式）
+- [ ] Highlights（3-4 要點，每個 ≤85 字元）
+- [ ] eTOC blurb（30-50 字）
+- [ ] Summary（≤150 字）
 - [ ] Key Resources Table
 
-### Content
-- [ ] Mechanistic depth throughout
-- [ ] Multiple complementary approaches
-- [ ] In vivo validation (if applicable)
-- [ ] Declarative subheadings
-- [ ] Comprehensive figure panels
+### 內容
+- [ ] 全文機制深度
+- [ ] 多種互補方法
+- [ ] 體內驗證（如適用）
+- [ ] 陳述性子標題
+- [ ] 全面的圖面板
 
-### Style
-- [ ] Technical precision in terminology
-- [ ] Author-year citations
-- [ ] Figure legends complete and standalone
-- [ ] STAR Methods properly formatted
+### 風格
+- [ ] 術語精確
+- [ ] 作者-年份引用
+- [ ] 圖例完整且獨立成意
+- [ ] STAR Methods 格式正確
 
 ---
 
-## See Also
+## 另請參閱
 
-- `venue_writing_styles.md` - Master style overview
-- `journals_formatting.md` - Technical formatting requirements
-- `nature_science_style.md` - Comparison with Nature/Science style
+- `venue_writing_styles.md` - 風格總覽
+- `journals_formatting.md` - 技術格式要求
+- `nature_science_style.md` - 與 Nature/Science 風格比較
 

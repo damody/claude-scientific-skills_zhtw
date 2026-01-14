@@ -1,104 +1,104 @@
-# Connection & Session Management
+# 連線與會話管理
 
-This reference covers establishing and managing connections to OMERO servers using BlitzGateway.
+此參考涵蓋使用 BlitzGateway 建立和管理與 OMERO 伺服器的連線。
 
-## Basic Connection
+## 基本連線
 
-### Standard Connection Pattern
+### 標準連線模式
 
 ```python
 from omero.gateway import BlitzGateway
 
-# Create connection
+# 建立連線
 conn = BlitzGateway(username, password, host=host, port=4064)
 
-# Connect to server
+# 連線到伺服器
 if conn.connect():
     print("Connected successfully")
-    # Perform operations
+    # 執行操作
     conn.close()
 else:
     print("Failed to connect")
 ```
 
-### Connection Parameters
+### 連線參數
 
-- **username** (str): OMERO user account name
-- **password** (str): User password
-- **host** (str): OMERO server hostname or IP address
-- **port** (int): Server port (default: 4064)
-- **secure** (bool): Force encrypted connection (default: False)
+- **username** (str)：OMERO 使用者帳號名稱
+- **password** (str)：使用者密碼
+- **host** (str)：OMERO 伺服器主機名稱或 IP 位址
+- **port** (int)：伺服器連接埠（預設：4064）
+- **secure** (bool)：強制加密連線（預設：False）
 
-### Secure Connection
+### 安全連線
 
-To ensure all data transfers are encrypted:
+確保所有資料傳輸都加密：
 
 ```python
 conn = BlitzGateway(username, password, host=host, port=4064, secure=True)
 conn.connect()
 ```
 
-## Context Manager Pattern (Recommended)
+## 上下文管理器模式（推薦）
 
-Use context managers for automatic connection management and cleanup:
+使用上下文管理器進行自動連線管理和清理：
 
 ```python
 from omero.gateway import BlitzGateway
 
 with BlitzGateway(username, password, host=host, port=4064) as conn:
-    # Connection automatically established
+    # 連線自動建立
     for project in conn.getObjects('Project'):
         print(project.getName())
-    # Connection automatically closed on exit
+    # 退出時自動關閉連線
 ```
 
-**Benefits:**
-- Automatic `connect()` call
-- Automatic `close()` call on exit
-- Exception-safe resource cleanup
-- Cleaner code
+**優點：**
+- 自動呼叫 `connect()`
+- 退出時自動呼叫 `close()`
+- 異常安全的資源清理
+- 更簡潔的程式碼
 
-## Session Management
+## 會話管理
 
-### Connection from Existing Client
+### 從現有用戶端建立連線
 
-Create BlitzGateway from an existing `omero.client` session:
+從現有的 `omero.client` 會話建立 BlitzGateway：
 
 ```python
 import omero.clients
 from omero.gateway import BlitzGateway
 
-# Create client and session
+# 建立用戶端和會話
 client = omero.client(host, port)
 session = client.createSession(username, password)
 
-# Create BlitzGateway from existing client
+# 從現有用戶端建立 BlitzGateway
 conn = BlitzGateway(client_obj=client)
 
-# Use connection
+# 使用連線
 # ...
 
-# Close when done
+# 完成後關閉
 conn.close()
 ```
 
-### Retrieve Session Information
+### 擷取會話資訊
 
 ```python
-# Get current user information
+# 取得當前使用者資訊
 user = conn.getUser()
 print(f"User ID: {user.getId()}")
 print(f"Username: {user.getName()}")
 print(f"Full Name: {user.getFullName()}")
 print(f"Is Admin: {conn.isAdmin()}")
 
-# Get current group
+# 取得當前群組
 group = conn.getGroupFromContext()
 print(f"Current Group: {group.getName()}")
 print(f"Group ID: {group.getId()}")
 ```
 
-### Check Admin Privileges
+### 檢查管理員權限
 
 ```python
 if conn.isAdmin():
@@ -107,108 +107,108 @@ if conn.isAdmin():
 if conn.isFullAdmin():
     print("User is full administrator")
 else:
-    # Check specific admin privileges
+    # 檢查特定管理員權限
     privileges = conn.getCurrentAdminPrivileges()
     print(f"Admin privileges: {privileges}")
 ```
 
-## Group Context Management
+## 群組上下文管理
 
-OMERO uses groups to manage data access permissions. Users can belong to multiple groups.
+OMERO 使用群組來管理資料存取權限。使用者可以屬於多個群組。
 
-### Get Current Group Context
+### 取得當前群組上下文
 
 ```python
-# Get the current group context
+# 取得當前群組上下文
 group = conn.getGroupFromContext()
 print(f"Current group: {group.getName()}")
 print(f"Group ID: {group.getId()}")
 ```
 
-### Query Across All Groups
+### 跨所有群組查詢
 
-Use group ID `-1` to query across all accessible groups:
+使用群組 ID `-1` 跨所有可存取的群組查詢：
 
 ```python
-# Set context to query all groups
+# 設定上下文以查詢所有群組
 conn.SERVICE_OPTS.setOmeroGroup('-1')
 
-# Now queries span all accessible groups
+# 現在查詢跨越所有可存取的群組
 image = conn.getObject("Image", image_id)
 projects = conn.listProjects()
 ```
 
-### Switch to Specific Group
+### 切換到特定群組
 
-Switch context to work within a specific group:
+切換上下文以在特定群組中工作：
 
 ```python
-# Get group ID from an object
+# 從物件取得群組 ID
 image = conn.getObject("Image", image_id)
 group_id = image.getDetails().getGroup().getId()
 
-# Switch to that group's context
+# 切換到該群組的上下文
 conn.SERVICE_OPTS.setOmeroGroup(group_id)
 
-# Subsequent operations use this group context
+# 後續操作使用此群組上下文
 projects = conn.listProjects()
 ```
 
-### List Available Groups
+### 列出可用群組
 
 ```python
-# Get all groups for current user
+# 取得當前使用者的所有群組
 for group in conn.getGroupsMemberOf():
     print(f"Group: {group.getName()} (ID: {group.getId()})")
 ```
 
-## Advanced Connection Features
+## 進階連線功能
 
-### Substitute User Connection (Admin Only)
+### 替代使用者連線（僅限管理員）
 
-Administrators can create connections acting as other users:
+管理員可以建立以其他使用者身份操作的連線：
 
 ```python
-# Connect as admin
+# 以管理員身份連線
 admin_conn = BlitzGateway(admin_user, admin_pass, host=host, port=4064)
 admin_conn.connect()
 
-# Get target user
+# 取得目標使用者
 target_user = admin_conn.getObject("Experimenter", user_id).getName()
 
-# Create connection as that user
+# 建立該使用者的連線
 user_conn = admin_conn.suConn(target_user)
 
-# Operations performed as target user
+# 以目標使用者身份執行操作
 for project in user_conn.listProjects():
     print(project.getName())
 
-# Close substitute connection
+# 關閉替代連線
 user_conn.close()
 admin_conn.close()
 ```
 
-### List Administrators
+### 列出管理員
 
 ```python
-# Get all administrators
+# 取得所有管理員
 for admin in conn.getAdministrators():
     print(f"ID: {admin.getId()}, Name: {admin.getFullName()}, "
           f"Username: {admin.getOmeName()}")
 ```
 
-## Connection Lifecycle
+## 連線生命週期
 
-### Closing Connections
+### 關閉連線
 
-Always close connections to free server resources:
+務必關閉連線以釋放伺服器資源：
 
 ```python
 try:
     conn = BlitzGateway(username, password, host=host, port=4064)
     conn.connect()
 
-    # Perform operations
+    # 執行操作
 
 except Exception as e:
     print(f"Error: {e}")
@@ -217,7 +217,7 @@ finally:
         conn.close()
 ```
 
-### Check Connection Status
+### 檢查連線狀態
 
 ```python
 if conn.isConnected():
@@ -226,9 +226,9 @@ else:
     print("Connection is closed")
 ```
 
-## Error Handling
+## 錯誤處理
 
-### Robust Connection Pattern
+### 穩健的連線模式
 
 ```python
 from omero.gateway import BlitzGateway
@@ -236,10 +236,10 @@ import traceback
 
 def connect_to_omero(username, password, host, port=4064):
     """
-    Establish connection to OMERO server with error handling.
+    建立與 OMERO 伺服器的連線，具有錯誤處理。
 
-    Returns:
-        BlitzGateway connection object or None if failed
+    傳回：
+        BlitzGateway 連線物件，如果失敗則傳回 None
     """
     try:
         conn = BlitzGateway(username, password, host=host, port=port, secure=True)
@@ -254,46 +254,46 @@ def connect_to_omero(username, password, host, port=4064):
         traceback.print_exc()
         return None
 
-# Usage
+# 使用方式
 conn = connect_to_omero(username, password, host)
 if conn:
     try:
-        # Perform operations
+        # 執行操作
         pass
     finally:
         conn.close()
 ```
 
-## Common Connection Patterns
+## 常見連線模式
 
-### Pattern 1: Simple Script
+### 模式 1：簡單腳本
 
 ```python
 from omero.gateway import BlitzGateway
 
-# Connection parameters
+# 連線參數
 HOST = 'omero.example.com'
 PORT = 4064
 USERNAME = 'user'
 PASSWORD = 'pass'
 
-# Connect
+# 連線
 with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
     print(f"Connected as {conn.getUser().getName()}")
-    # Perform operations
+    # 執行操作
 ```
 
-### Pattern 2: Configuration-Based Connection
+### 模式 2：基於配置的連線
 
 ```python
 import yaml
 from omero.gateway import BlitzGateway
 
-# Load configuration
+# 載入配置
 with open('omero_config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 
-# Connect using config
+# 使用配置連線
 with BlitzGateway(
     config['username'],
     config['password'],
@@ -301,69 +301,69 @@ with BlitzGateway(
     port=config.get('port', 4064),
     secure=config.get('secure', True)
 ) as conn:
-    # Perform operations
+    # 執行操作
     pass
 ```
 
-### Pattern 3: Environment Variables
+### 模式 3：環境變數
 
 ```python
 import os
 from omero.gateway import BlitzGateway
 
-# Get credentials from environment
+# 從環境取得憑證
 USERNAME = os.environ.get('OMERO_USER')
 PASSWORD = os.environ.get('OMERO_PASSWORD')
 HOST = os.environ.get('OMERO_HOST', 'localhost')
 PORT = int(os.environ.get('OMERO_PORT', 4064))
 
-# Connect
+# 連線
 with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
-    # Perform operations
+    # 執行操作
     pass
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use Context Managers**: Always prefer context managers for automatic cleanup
-2. **Secure Connections**: Use `secure=True` for production environments
-3. **Error Handling**: Wrap connection code in try-except blocks
-4. **Close Connections**: Always close connections when done
-5. **Group Context**: Set appropriate group context before queries
-6. **Credential Security**: Never hardcode credentials; use environment variables or config files
-7. **Connection Pooling**: For web applications, implement connection pooling
-8. **Timeouts**: Consider implementing connection timeouts for long-running operations
+1. **使用上下文管理器**：務必優先使用上下文管理器進行自動清理
+2. **安全連線**：在生產環境中使用 `secure=True`
+3. **錯誤處理**：將連線程式碼包裝在 try-except 區塊中
+4. **關閉連線**：完成後務必關閉連線
+5. **群組上下文**：在查詢前設定適當的群組上下文
+6. **憑證安全**：切勿硬編碼憑證；使用環境變數或配置檔
+7. **連線池**：對於 Web 應用程式，實作連線池
+8. **逾時**：考慮為長時間執行的操作實作連線逾時
 
-## Troubleshooting
+## 疑難排解
 
-### Connection Refused
+### 連線被拒絕
 
 ```
 Unable to contact ORB
 ```
 
-**Solutions:**
-- Verify host and port are correct
-- Check firewall settings
-- Ensure OMERO server is running
-- Verify network connectivity
+**解決方案：**
+- 驗證主機和連接埠是否正確
+- 檢查防火牆設定
+- 確保 OMERO 伺服器正在執行
+- 驗證網路連通性
 
-### Authentication Failed
+### 身份驗證失敗
 
 ```
 Cannot connect to server
 ```
 
-**Solutions:**
-- Verify username and password
-- Check user account is active
-- Verify group membership
-- Check server logs for details
+**解決方案：**
+- 驗證使用者名稱和密碼
+- 檢查使用者帳號是否啟用
+- 驗證群組成員資格
+- 檢查伺服器日誌以取得詳情
 
-### Session Timeout
+### 會話逾時
 
-**Solutions:**
-- Increase session timeout on server
-- Implement session keepalive
-- Reconnect on timeout
-- Use connection pools for long-running applications
+**解決方案：**
+- 增加伺服器上的會話逾時
+- 實作會話保活機制
+- 逾時時重新連線
+- 對長時間執行的應用程式使用連線池

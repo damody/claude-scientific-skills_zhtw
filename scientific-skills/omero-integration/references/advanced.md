@@ -1,40 +1,40 @@
-# Advanced Features
+# 進階功能
 
-This reference covers advanced OMERO operations including permissions, deletion, filesets, and administrative tasks.
+此參考涵蓋進階 OMERO 操作，包括權限、刪除、檔案集和管理任務。
 
-## Deleting Objects
+## 刪除物件
 
-### Delete with Wait
+### 等待刪除完成
 
 ```python
-# Delete objects and wait for completion
+# 刪除物件並等待完成
 project_ids = [1, 2, 3]
 conn.deleteObjects("Project", project_ids, wait=True)
 print("Deletion complete")
 
-# Delete without waiting (asynchronous)
+# 不等待即刪除（非同步）
 conn.deleteObjects("Dataset", [dataset_id], wait=False)
 ```
 
-### Delete with Callback Monitoring
+### 使用回呼監控刪除
 
 ```python
 from omero.callbacks import CmdCallbackI
 
-# Start delete operation
+# 開始刪除操作
 handle = conn.deleteObjects("Project", [project_id])
 
-# Create callback to monitor progress
+# 建立回呼以監控進度
 cb = CmdCallbackI(conn.c, handle)
 print("Deleting, please wait...")
 
-# Poll for completion
-while not cb.block(500):  # Check every 500ms
+# 輪詢完成狀態
+while not cb.block(500):  # 每 500ms 檢查一次
     print(".", end="", flush=True)
 
 print("\nDeletion finished")
 
-# Check for errors
+# 檢查錯誤
 response = cb.getResponse()
 if isinstance(response, omero.cmd.ERR):
     print("Error occurred:")
@@ -42,47 +42,47 @@ if isinstance(response, omero.cmd.ERR):
 else:
     print("Deletion successful")
 
-# Clean up
-cb.close(True)  # Also closes handle
+# 清理
+cb.close(True)  # 同時關閉 handle
 ```
 
-### Delete Different Object Types
+### 刪除不同物件類型
 
 ```python
-# Delete images
+# 刪除影像
 image_ids = [101, 102, 103]
 conn.deleteObjects("Image", image_ids, wait=True)
 
-# Delete datasets
+# 刪除資料集
 dataset_ids = [10, 11]
 conn.deleteObjects("Dataset", dataset_ids, wait=True)
 
-# Delete ROIs
+# 刪除 ROI
 roi_ids = [201, 202]
 conn.deleteObjects("Roi", roi_ids, wait=True)
 
-# Delete annotations
+# 刪除註解
 annotation_ids = [301, 302]
 conn.deleteObjects("Annotation", annotation_ids, wait=True)
 ```
 
-### Delete with Cascade
+### 級聯刪除
 
 ```python
-# Deleting a project will cascade to contained datasets
-# This behavior depends on server configuration
+# 刪除專案將級聯到包含的資料集
+# 此行為取決於伺服器配置
 project_id = 123
 conn.deleteObjects("Project", [project_id], wait=True)
 
-# Datasets and images may be deleted or orphaned
-# depending on delete specifications
+# 資料集和影像可能被刪除或成為孤立
+# 取決於刪除規範
 ```
 
-## Filesets
+## 檔案集
 
-Filesets represent collections of original imported files. They were introduced in OMERO 5.0.
+檔案集代表原始匯入檔案的集合。它們是在 OMERO 5.0 中引入的。
 
-### Check if Image Has Fileset
+### 檢查影像是否有檔案集
 
 ```python
 image = conn.getObject("Image", image_id)
@@ -94,7 +94,7 @@ else:
     print("Image has no fileset (pre-OMERO 5.0)")
 ```
 
-### Access Fileset Information
+### 存取檔案集資訊
 
 ```python
 image = conn.getObject("Image", image_id)
@@ -104,35 +104,35 @@ if fileset:
     fs_id = fileset.getId()
     print(f"Fileset ID: {fs_id}")
 
-    # List all images in this fileset
+    # 列出此檔案集中的所有影像
     print("Images in fileset:")
     for fs_image in fileset.copyImages():
         print(f"  {fs_image.getId()}: {fs_image.getName()}")
 
-    # List original imported files
+    # 列出原始匯入檔案
     print("\nOriginal files:")
     for orig_file in fileset.listFiles():
         print(f"  {orig_file.getPath()}/{orig_file.getName()}")
         print(f"    Size: {orig_file.getSize()} bytes")
 ```
 
-### Get Fileset Directly
+### 直接取得檔案集
 
 ```python
-# Get fileset object
+# 取得檔案集物件
 fileset = conn.getObject("Fileset", fileset_id)
 
 if fileset:
-    # Access images
+    # 存取影像
     for image in fileset.copyImages():
         print(f"Image: {image.getName()}")
 
-    # Access files
+    # 存取檔案
     for orig_file in fileset.listFiles():
         print(f"File: {orig_file.getName()}")
 ```
 
-### Download Original Files
+### 下載原始檔案
 
 ```python
 import os
@@ -149,14 +149,14 @@ if fileset:
 
         print(f"Downloading: {file_name}")
 
-        # Get file as RawFileStore
+        # 以 RawFileStore 取得檔案
         raw_file_store = conn.createRawFileStore()
         raw_file_store.setFileId(orig_file.getId())
 
-        # Download in chunks
+        # 分塊下載
         with open(file_path, 'wb') as f:
             offset = 0
-            chunk_size = 1024 * 1024  # 1MB chunks
+            chunk_size = 1024 * 1024  # 1MB 塊
             size = orig_file.getSize()
 
             while offset < size:
@@ -168,28 +168,28 @@ if fileset:
         print(f"Saved to: {file_path}")
 ```
 
-## Group Permissions
+## 群組權限
 
-OMERO uses group-based permissions to control data access.
+OMERO 使用基於群組的權限來控制資料存取。
 
-### Permission Levels
+### 權限等級
 
-- **PRIVATE** (`rw----`): Only owner can read/write
-- **READ-ONLY** (`rwr---`): Group members can read, only owner can write
-- **READ-ANNOTATE** (`rwra--`): Group members can read and annotate
-- **READ-WRITE** (`rwrw--`): Group members can read and write
+- **PRIVATE** (`rw----`)：只有所有者可以讀取/寫入
+- **READ-ONLY** (`rwr---`)：群組成員可以讀取，只有所有者可以寫入
+- **READ-ANNOTATE** (`rwra--`)：群組成員可以讀取和註解
+- **READ-WRITE** (`rwrw--`)：群組成員可以讀取和寫入
 
-### Check Current Group Permissions
+### 檢查當前群組權限
 
 ```python
-# Get current group
+# 取得當前群組
 group = conn.getGroupFromContext()
 
-# Get permissions
+# 取得權限
 permissions = group.getDetails().getPermissions()
 perm_string = str(permissions)
 
-# Map to readable names
+# 對應到可讀名稱
 permission_names = {
     'rw----': 'PRIVATE',
     'rwr---': 'READ-ONLY',
@@ -202,97 +202,97 @@ print(f"Group: {group.getName()}")
 print(f"Permissions: {perm_name} ({perm_string})")
 ```
 
-### List User's Groups
+### 列出使用者的群組
 
 ```python
-# Get all groups for current user
+# 取得當前使用者的所有群組
 print("User's groups:")
 for group in conn.getGroupsMemberOf():
     print(f"  {group.getName()} (ID: {group.getId()})")
 
-    # Get group permissions
+    # 取得群組權限
     perms = group.getDetails().getPermissions()
     print(f"    Permissions: {perms}")
 ```
 
-### Get Group Members
+### 取得群組成員
 
 ```python
-# Get group
+# 取得群組
 group = conn.getObject("ExperimenterGroup", group_id)
 
-# List members
+# 列出成員
 print(f"Members of {group.getName()}:")
 for member in group.getMembers():
     print(f"  {member.getFullName()} ({member.getOmeName()})")
 ```
 
-## Cross-Group Queries
+## 跨群組查詢
 
-### Query Across All Groups
+### 查詢所有群組
 
 ```python
-# Set context to query all accessible groups
+# 設定上下文以查詢所有可存取的群組
 conn.SERVICE_OPTS.setOmeroGroup('-1')
 
-# Now queries span all groups
+# 現在查詢跨越所有群組
 image = conn.getObject("Image", image_id)
 if image:
     group = image.getDetails().getGroup()
     print(f"Image found in group: {group.getName()}")
 
-# List projects across all groups
+# 列出所有群組中的專案
 for project in conn.getObjects("Project"):
     group = project.getDetails().getGroup()
     print(f"Project: {project.getName()} (Group: {group.getName()})")
 ```
 
-### Switch to Specific Group
+### 切換到特定群組
 
 ```python
-# Get image's group
+# 取得影像的群組
 image = conn.getObject("Image", image_id)
 group_id = image.getDetails().getGroup().getId()
 
-# Switch to that group's context
+# 切換到該群組的上下文
 conn.SERVICE_OPTS.setOmeroGroup(group_id)
 
-# Subsequent operations use this group
-projects = conn.listProjects()  # Only from this group
+# 後續操作使用此群組
+projects = conn.listProjects()  # 只來自此群組
 ```
 
-### Reset to Default Group
+### 重設為預設群組
 
 ```python
-# Get default group
+# 取得預設群組
 default_group_id = conn.getEventContext().groupId
 
-# Switch back to default
+# 切換回預設
 conn.SERVICE_OPTS.setOmeroGroup(default_group_id)
 ```
 
-## Administrative Operations
+## 管理操作
 
-### Check Admin Status
+### 檢查管理員狀態
 
 ```python
-# Check if current user is admin
+# 檢查當前使用者是否為管理員
 if conn.isAdmin():
     print("User has admin privileges")
 
-# Check if full admin
+# 檢查是否為完整管理員
 if conn.isFullAdmin():
     print("User is full administrator")
 else:
-    # Check specific privileges
+    # 檢查特定權限
     privileges = conn.getCurrentAdminPrivileges()
     print(f"Admin privileges: {privileges}")
 ```
 
-### List Administrators
+### 列出管理員
 
 ```python
-# Get all administrators
+# 取得所有管理員
 print("Administrators:")
 for admin in conn.getAdministrators():
     print(f"  ID: {admin.getId()}")
@@ -300,16 +300,16 @@ for admin in conn.getAdministrators():
     print(f"  Full Name: {admin.getFullName()}")
 ```
 
-### Set Object Owner (Admin Only)
+### 設定物件所有者（僅限管理員）
 
 ```python
 import omero.model
 
-# Create annotation with specific owner (requires admin)
+# 建立具有特定所有者的註解（需要管理員權限）
 tag_ann = omero.gateway.TagAnnotationWrapper(conn)
 tag_ann.setValue("Admin-created tag")
 
-# Set owner
+# 設定所有者
 user_id = 5
 tag_ann._obj.details.owner = omero.model.ExperimenterI(user_id, False)
 tag_ann.save()
@@ -317,36 +317,36 @@ tag_ann.save()
 print(f"Created annotation owned by user {user_id}")
 ```
 
-### Substitute User Connection (Admin Only)
+### 替代使用者連線（僅限管理員）
 
 ```python
-# Connect as admin
+# 以管理員身份連線
 admin_conn = BlitzGateway(admin_user, admin_pass, host=host, port=4064)
 admin_conn.connect()
 
-# Get target user
+# 取得目標使用者
 target_user_id = 10
 user = admin_conn.getObject("Experimenter", target_user_id)
 username = user.getOmeName()
 
-# Create connection as that user
+# 建立該使用者的連線
 user_conn = admin_conn.suConn(username)
 
 print(f"Connected as {username}")
 
-# Perform operations as that user
+# 以該使用者身份執行操作
 for project in user_conn.listProjects():
     print(f"  {project.getName()}")
 
-# Close connections
+# 關閉連線
 user_conn.close()
 admin_conn.close()
 ```
 
-### List All Users
+### 列出所有使用者
 
 ```python
-# Get all users (admin operation)
+# 取得所有使用者（管理員操作）
 print("All users:")
 for user in conn.getObjects("Experimenter"):
     print(f"  ID: {user.getId()}")
@@ -356,48 +356,48 @@ for user in conn.getObjects("Experimenter"):
     print()
 ```
 
-## Service Access
+## 服務存取
 
-OMERO provides various services for specific operations.
+OMERO 提供各種服務用於特定操作。
 
-### Update Service
+### 更新服務
 
 ```python
-# Get update service
+# 取得更新服務
 updateService = conn.getUpdateService()
 
-# Save and return object
+# 儲存並傳回物件
 roi = omero.model.RoiI()
 roi.setImage(image._obj)
 saved_roi = updateService.saveAndReturnObject(roi)
 
-# Save multiple objects
+# 儲存多個物件
 objects = [obj1, obj2, obj3]
 saved_objects = updateService.saveAndReturnArray(objects)
 ```
 
-### ROI Service
+### ROI 服務
 
 ```python
-# Get ROI service
+# 取得 ROI 服務
 roi_service = conn.getRoiService()
 
-# Find ROIs for image
+# 尋找影像的 ROI
 result = roi_service.findByImage(image_id, None)
 
-# Get shape statistics
+# 取得形狀統計
 shape_ids = [shape.id.val for roi in result.rois
              for shape in roi.copyShapes()]
 stats = roi_service.getShapeStatsRestricted(shape_ids, 0, 0, [0])
 ```
 
-### Metadata Service
+### 中繼資料服務
 
 ```python
-# Get metadata service
+# 取得中繼資料服務
 metadataService = conn.getMetadataService()
 
-# Load annotations by type and namespace
+# 按類型和命名空間載入註解
 ns_to_include = ["mylab.analysis"]
 ns_to_exclude = []
 
@@ -412,13 +412,13 @@ for ann in annotations:
     print(f"Annotation: {ann.getId().getValue()}")
 ```
 
-### Query Service
+### 查詢服務
 
 ```python
-# Get query service
+# 取得查詢服務
 queryService = conn.getQueryService()
 
-# Build query (more complex queries)
+# 建立查詢（更複雜的查詢）
 params = omero.sys.ParametersI()
 params.addLong("image_id", image_id)
 
@@ -426,75 +426,75 @@ query = "select i from Image i where i.id = :image_id"
 image = queryService.findByQuery(query, params)
 ```
 
-### Thumbnail Service
+### 縮圖服務
 
 ```python
-# Get thumbnail service
+# 取得縮圖服務
 thumbnailService = conn.createThumbnailStore()
 
-# Set current image
+# 設定當前影像
 thumbnailService.setPixelsId(image.getPrimaryPixels().getId())
 
-# Get thumbnail
+# 取得縮圖
 thumbnail = thumbnailService.getThumbnail(96, 96)
 
-# Close service
+# 關閉服務
 thumbnailService.close()
 ```
 
-### Raw File Store
+### 原始檔案儲存
 
 ```python
-# Get raw file store
+# 取得原始檔案儲存
 rawFileStore = conn.createRawFileStore()
 
-# Set file ID
+# 設定檔案 ID
 rawFileStore.setFileId(orig_file_id)
 
-# Read file
+# 讀取檔案
 data = rawFileStore.read(0, rawFileStore.size())
 
-# Close
+# 關閉
 rawFileStore.close()
 ```
 
-## Object Ownership and Details
+## 物件所有權和詳情
 
-### Get Object Details
+### 取得物件詳情
 
 ```python
 image = conn.getObject("Image", image_id)
 
-# Get details
+# 取得詳情
 details = image.getDetails()
 
-# Owner information
+# 所有者資訊
 owner = details.getOwner()
 print(f"Owner ID: {owner.getId()}")
 print(f"Username: {owner.getOmeName()}")
 print(f"Full Name: {owner.getFullName()}")
 
-# Group information
+# 群組資訊
 group = details.getGroup()
 print(f"Group: {group.getName()} (ID: {group.getId()})")
 
-# Creation information
+# 建立資訊
 creation_event = details.getCreationEvent()
 print(f"Created: {creation_event.getTime()}")
 
-# Update information
+# 更新資訊
 update_event = details.getUpdateEvent()
 print(f"Updated: {update_event.getTime()}")
 ```
 
-### Get Permissions
+### 取得權限
 
 ```python
-# Get object permissions
+# 取得物件權限
 details = image.getDetails()
 permissions = details.getPermissions()
 
-# Check specific permissions
+# 檢查特定權限
 can_edit = permissions.canEdit()
 can_annotate = permissions.canAnnotate()
 can_link = permissions.canLink()
@@ -506,12 +506,12 @@ print(f"Can link: {can_link}")
 print(f"Can delete: {can_delete}")
 ```
 
-## Event Context
+## 事件上下文
 
-### Get Current Event Context
+### 取得當前事件上下文
 
 ```python
-# Get event context (current session info)
+# 取得事件上下文（當前會話資訊）
 ctx = conn.getEventContext()
 
 print(f"User ID: {ctx.userId}")
@@ -522,12 +522,12 @@ print(f"Session ID: {ctx.sessionId}")
 print(f"Is Admin: {ctx.isAdmin}")
 ```
 
-## Complete Admin Example
+## 完整管理員範例
 
 ```python
 from omero.gateway import BlitzGateway
 
-# Connect as admin
+# 以管理員身份連線
 ADMIN_USER = 'root'
 ADMIN_PASS = 'password'
 HOST = 'omero.example.com'
@@ -536,22 +536,22 @@ PORT = 4064
 with BlitzGateway(ADMIN_USER, ADMIN_PASS, host=HOST, port=PORT) as admin_conn:
     print("=== Administrator Operations ===\n")
 
-    # List all users
+    # 列出所有使用者
     print("All Users:")
     for user in admin_conn.getObjects("Experimenter"):
         print(f"  {user.getOmeName()}: {user.getFullName()}")
 
-    # List all groups
+    # 列出所有群組
     print("\nAll Groups:")
     for group in admin_conn.getObjects("ExperimenterGroup"):
         perms = group.getDetails().getPermissions()
         print(f"  {group.getName()}: {perms}")
 
-        # List members
+        # 列出成員
         for member in group.getMembers():
             print(f"    - {member.getOmeName()}")
 
-    # Query across all groups
+    # 跨所有群組查詢
     print("\nAll Projects (all groups):")
     admin_conn.SERVICE_OPTS.setOmeroGroup('-1')
 
@@ -562,7 +562,7 @@ with BlitzGateway(ADMIN_USER, ADMIN_PASS, host=HOST, port=PORT) as admin_conn:
         print(f"    Owner: {owner.getOmeName()}")
         print(f"    Group: {group.getName()}")
 
-    # Connect as another user
+    # 以另一使用者身份連線
     target_user_id = 5
     user = admin_conn.getObject("Experimenter", target_user_id)
 
@@ -571,29 +571,29 @@ with BlitzGateway(ADMIN_USER, ADMIN_PASS, host=HOST, port=PORT) as admin_conn:
 
         user_conn = admin_conn.suConn(user.getOmeName())
 
-        # List that user's projects
+        # 列出該使用者的專案
         for project in user_conn.listProjects():
             print(f"  {project.getName()}")
 
         user_conn.close()
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Permissions**: Always check permissions before operations
-2. **Group Context**: Set appropriate group context for queries
-3. **Admin Operations**: Use admin privileges sparingly and carefully
-4. **Delete Confirmation**: Always confirm before deleting objects
-5. **Callback Monitoring**: Monitor long delete operations with callbacks
-6. **Fileset Awareness**: Check for filesets when working with images
-7. **Service Cleanup**: Close services when done (thumbnailStore, rawFileStore)
-8. **Cross-Group Queries**: Use `-1` group ID for cross-group access
-9. **Error Handling**: Always handle permission and access errors
-10. **Documentation**: Document administrative operations clearly
+1. **權限**：在操作前務必檢查權限
+2. **群組上下文**：為查詢設定適當的群組上下文
+3. **管理員操作**：謹慎且節制地使用管理員權限
+4. **刪除確認**：在刪除物件前務必確認
+5. **回呼監控**：使用回呼監控長時間的刪除操作
+6. **檔案集意識**：處理影像時檢查檔案集
+7. **服務清理**：完成後關閉服務（thumbnailStore、rawFileStore）
+8. **跨群組查詢**：使用 `-1` 群組 ID 進行跨群組存取
+9. **錯誤處理**：務必處理權限和存取錯誤
+10. **文件記錄**：清楚記錄管理操作
 
-## Troubleshooting
+## 疑難排解
 
-### Permission Denied
+### 權限被拒絕
 
 ```python
 try:
@@ -605,27 +605,27 @@ except Exception as e:
         raise
 ```
 
-### Object Not Found
+### 物件未找到
 
 ```python
-# Check if object exists before accessing
+# 存取前檢查物件是否存在
 obj = conn.getObject("Image", image_id)
 if obj is None:
     print(f"Image {image_id} not found or not accessible")
 else:
-    # Process object
+    # 處理物件
     pass
 ```
 
-### Group Context Issues
+### 群組上下文問題
 
 ```python
-# If object not found, try cross-group query
+# 如果物件未找到，嘗試跨群組查詢
 conn.SERVICE_OPTS.setOmeroGroup('-1')
 obj = conn.getObject("Image", image_id)
 
 if obj:
-    # Switch to object's group for further operations
+    # 切換到物件的群組以進行後續操作
     group_id = obj.getDetails().getGroup().getId()
     conn.SERVICE_OPTS.setOmeroGroup(group_id)
 ```

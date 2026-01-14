@@ -1,77 +1,77 @@
-# Single-Cell RNA-seq Models
+# 單細胞 RNA-seq 模型
 
-This document covers core models for analyzing single-cell RNA sequencing data in scvi-tools.
+本文檔涵蓋 scvi-tools 中用於分析單細胞 RNA 定序數據的核心模型。
 
-## scVI (Single-Cell Variational Inference)
+## scVI（Single-Cell Variational Inference，單細胞變分推斷）
 
-**Purpose**: Unsupervised analysis, dimensionality reduction, and batch correction for scRNA-seq data.
+**目的**：scRNA-seq 數據的無監督分析、降維和批次校正。
 
-**Key Features**:
-- Deep generative model based on variational autoencoders (VAE)
-- Learns low-dimensional latent representations that capture biological variation
-- Automatically corrects for batch effects and technical covariates
-- Enables normalized gene expression estimation
-- Supports differential expression analysis
+**主要特點**：
+- 基於變分自編碼器（VAE）的深度生成模型
+- 學習捕捉生物學變異的低維潛在表示
+- 自動校正批次效應和技術共變量
+- 支援標準化基因表達估計
+- 支援差異表達分析
 
-**When to Use**:
-- Initial exploration and dimensionality reduction of scRNA-seq datasets
-- Integrating multiple batches or studies
-- Generating batch-corrected expression matrices
-- Performing probabilistic differential expression analysis
+**何時使用**：
+- scRNA-seq 數據集的初始探索和降維
+- 整合多個批次或研究
+- 生成批次校正的表達矩陣
+- 執行機率性差異表達分析
 
-**Basic Usage**:
+**基本用法**：
 ```python
 import scvi
 
-# Setup data
+# 設定數據
 scvi.model.SCVI.setup_anndata(
     adata,
     layer="counts",
     batch_key="batch"
 )
 
-# Train model
+# 訓練模型
 model = scvi.model.SCVI(adata, n_latent=30)
 model.train()
 
-# Extract results
+# 提取結果
 latent = model.get_latent_representation()
 normalized = model.get_normalized_expression()
 ```
 
-**Key Parameters**:
-- `n_latent`: Dimensionality of latent space (default: 10)
-- `n_layers`: Number of hidden layers (default: 1)
-- `n_hidden`: Number of nodes per hidden layer (default: 128)
-- `dropout_rate`: Dropout rate for neural networks (default: 0.1)
-- `dispersion`: Gene-specific or cell-specific dispersion ("gene" or "gene-batch")
-- `gene_likelihood`: Distribution for data ("zinb", "nb", "poisson")
+**關鍵參數**：
+- `n_latent`：潛在空間維度（預設：10）
+- `n_layers`：隱藏層數（預設：1）
+- `n_hidden`：每個隱藏層的節點數（預設：128）
+- `dropout_rate`：神經網路的丟棄率（預設：0.1）
+- `dispersion`：基因特定或細胞特定離散度（「gene」或「gene-batch」）
+- `gene_likelihood`：數據分佈（「zinb」、「nb」、「poisson」）
 
-**Outputs**:
-- `get_latent_representation()`: Batch-corrected low-dimensional embeddings
-- `get_normalized_expression()`: Denoised, normalized expression values
-- `differential_expression()`: Probabilistic DE testing between groups
-- `get_feature_correlation_matrix()`: Gene-gene correlation estimates
+**輸出**：
+- `get_latent_representation()`：批次校正的低維嵌入
+- `get_normalized_expression()`：去噪、標準化的表達值
+- `differential_expression()`：組間機率性 DE 檢驗
+- `get_feature_correlation_matrix()`：基因-基因相關性估計
 
-## scANVI (Single-Cell ANnotation using Variational Inference)
+## scANVI（Single-Cell ANnotation using Variational Inference，使用變分推斷的單細胞註釋）
 
-**Purpose**: Semi-supervised cell type annotation and integration using labeled and unlabeled cells.
+**目的**：使用有標籤和無標籤細胞進行半監督細胞類型註釋和整合。
 
-**Key Features**:
-- Extends scVI with cell type labels
-- Leverages partially labeled datasets for annotation transfer
-- Performs simultaneous batch correction and cell type prediction
-- Enables query-to-reference mapping
+**主要特點**：
+- 用細胞類型標籤擴展 scVI
+- 利用部分標記的數據集進行註釋遷移
+- 同時執行批次校正和細胞類型預測
+- 支援查詢到參考的映射
 
-**When to Use**:
-- Annotating new datasets using reference labels
-- Transfer learning from well-annotated to unlabeled datasets
-- Joint analysis of labeled and unlabeled cells
-- Building cell type classifiers with uncertainty quantification
+**何時使用**：
+- 使用參考標籤註釋新數據集
+- 從標註良好的數據集遷移學習到無標籤數據集
+- 有標籤和無標籤細胞的聯合分析
+- 建立帶有不確定性量化的細胞類型分類器
 
-**Basic Usage**:
+**基本用法**：
 ```python
-# Option 1: Train from scratch
+# 選項 1：從頭訓練
 scvi.model.SCANVI.setup_anndata(
     adata,
     layer="counts",
@@ -82,7 +82,7 @@ scvi.model.SCANVI.setup_anndata(
 model = scvi.model.SCANVI(adata)
 model.train()
 
-# Option 2: Initialize from pretrained scVI
+# 選項 2：從預訓練的 scVI 初始化
 scvi_model = scvi.model.SCVI(adata)
 scvi_model.train()
 scanvi_model = scvi.model.SCANVI.from_scvi_model(
@@ -91,133 +91,133 @@ scanvi_model = scvi.model.SCANVI.from_scvi_model(
 )
 scanvi_model.train()
 
-# Predict cell types
+# 預測細胞類型
 predictions = scanvi_model.predict()
 ```
 
-**Key Parameters**:
-- `labels_key`: Column in `adata.obs` containing cell type labels
-- `unlabeled_category`: Label for cells without annotations
-- All scVI parameters are also available
+**關鍵參數**：
+- `labels_key`：`adata.obs` 中包含細胞類型標籤的欄位
+- `unlabeled_category`：無註釋細胞的標籤
+- 所有 scVI 參數也可用
 
-**Outputs**:
-- `predict()`: Cell type predictions for all cells
-- `predict_proba()`: Prediction probabilities
-- `get_latent_representation()`: Cell type-aware latent space
+**輸出**：
+- `predict()`：所有細胞的細胞類型預測
+- `predict_proba()`：預測機率
+- `get_latent_representation()`：感知細胞類型的潛在空間
 
 ## AUTOZI
 
-**Purpose**: Automatic identification and modeling of zero-inflated genes in scRNA-seq data.
+**目的**：自動識別和建模 scRNA-seq 數據中的零膨脹基因。
 
-**Key Features**:
-- Distinguishes biological zeros from technical dropout
-- Learns which genes exhibit zero-inflation
-- Provides gene-specific zero-inflation probabilities
-- Improves downstream analysis by accounting for dropout
+**主要特點**：
+- 區分生物學零值和技術丟失
+- 學習哪些基因表現出零膨脹
+- 提供基因特定的零膨脹機率
+- 通過考慮丟失來改善下游分析
 
-**When to Use**:
-- Detecting which genes are affected by technical dropout
-- Improving imputation and normalization for sparse datasets
-- Understanding the extent of zero-inflation in your data
+**何時使用**：
+- 檢測哪些基因受技術丟失影響
+- 改善稀疏數據集的插補和標準化
+- 理解數據中零膨脹的程度
 
-**Basic Usage**:
+**基本用法**：
 ```python
 scvi.model.AUTOZI.setup_anndata(adata, layer="counts")
 model = scvi.model.AUTOZI(adata)
 model.train()
 
-# Get zero-inflation probabilities per gene
+# 獲取每個基因的零膨脹機率
 zi_probs = model.get_alphas_betas()
 ```
 
 ## VeloVI
 
-**Purpose**: RNA velocity analysis using variational inference.
+**目的**：使用變分推斷進行 RNA 速度分析。
 
-**Key Features**:
-- Joint modeling of spliced and unspliced RNA counts
-- Probabilistic estimation of RNA velocity
-- Accounts for technical noise and batch effects
-- Provides uncertainty quantification for velocity estimates
+**主要特點**：
+- 聯合建模剪接和未剪接 RNA 計數
+- RNA 速度的機率估計
+- 考慮技術噪音和批次效應
+- 提供速度估計的不確定性量化
 
-**When to Use**:
-- Inferring cellular dynamics and differentiation trajectories
-- Analyzing spliced/unspliced count data
-- RNA velocity analysis with batch correction
+**何時使用**：
+- 推斷細胞動態和分化軌跡
+- 分析剪接/未剪接計數數據
+- 帶有批次校正的 RNA 速度分析
 
-**Basic Usage**:
+**基本用法**：
 ```python
 import scvelo as scv
 
-# Prepare velocity data
+# 準備速度數據
 scv.pp.filter_and_normalize(adata)
 scv.pp.moments(adata)
 
-# Train VeloVI
+# 訓練 VeloVI
 scvi.model.VELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
 model = scvi.model.VELOVI(adata)
 model.train()
 
-# Get velocity estimates
+# 獲取速度估計
 latent_time = model.get_latent_time()
 velocities = model.get_velocity()
 ```
 
 ## contrastiveVI
 
-**Purpose**: Isolating perturbation-specific variations from background biological variation.
+**目的**：從背景生物學變異中分離擾動特異性變異。
 
-**Key Features**:
-- Separates shared variation (common across conditions) from target-specific variation
-- Useful for perturbation studies (drug treatments, genetic perturbations)
-- Identifies condition-specific gene programs
-- Enables discovery of treatment-specific effects
+**主要特點**：
+- 將共享變異（跨條件通用）與目標特異性變異分開
+- 適用於擾動研究（藥物處理、基因擾動）
+- 識別條件特異性基因程式
+- 支援發現處理特異性效應
 
-**When to Use**:
-- Analyzing perturbation experiments (drug screens, CRISPR, etc.)
-- Identifying genes responding specifically to treatments
-- Separating treatment effects from background variation
-- Comparing control vs. perturbed conditions
+**何時使用**：
+- 分析擾動實驗（藥物篩選、CRISPR 等）
+- 識別特定響應處理的基因
+- 將處理效應與背景變異分開
+- 比較對照 vs 擾動條件
 
-**Basic Usage**:
+**基本用法**：
 ```python
 scvi.model.CONTRASTIVEVI.setup_anndata(
     adata,
     layer="counts",
     batch_key="batch",
-    categorical_covariate_keys=["condition"]  # control vs treated
+    categorical_covariate_keys=["condition"]  # 對照 vs 處理
 )
 
 model = scvi.model.CONTRASTIVEVI(
     adata,
-    n_latent=10,        # Shared variation
-    n_latent_target=5   # Target-specific variation
+    n_latent=10,        # 共享變異
+    n_latent_target=5   # 目標特異性變異
 )
 model.train()
 
-# Extract representations
+# 提取表示
 shared = model.get_latent_representation(representation="shared")
 target_specific = model.get_latent_representation(representation="target")
 ```
 
 ## CellAssign
 
-**Purpose**: Marker-based cell type annotation using known marker genes.
+**目的**：使用已知標記基因進行基於標記的細胞類型註釋。
 
-**Key Features**:
-- Uses prior knowledge of marker genes for cell types
-- Probabilistic assignment of cells to types
-- Handles marker gene overlap and ambiguity
-- Provides soft assignments with uncertainty
+**主要特點**：
+- 使用細胞類型的標記基因先驗知識
+- 細胞到類型的機率分配
+- 處理標記基因重疊和歧義
+- 提供帶有不確定性的軟分配
 
-**When to Use**:
-- Annotating cells using known marker genes
-- Leveraging existing biological knowledge for classification
-- Cases where marker gene lists are available but reference datasets are not
+**何時使用**：
+- 使用已知標記基因註釋細胞
+- 利用現有生物學知識進行分類
+- 有標記基因列表但沒有參考數據集的情況
 
-**Basic Usage**:
+**基本用法**：
 ```python
-# Create marker gene matrix (cell types x genes)
+# 創建標記基因矩陣（細胞類型 × 基因）
 marker_gene_mat = pd.DataFrame({
     "CD4 T cells": [1, 1, 0, 0],  # CD3D, CD4, CD8A, CD19
     "CD8 T cells": [1, 0, 1, 0],
@@ -231,100 +231,100 @@ model.train()
 predictions = model.predict()
 ```
 
-## Solo (Doublet Detection)
+## Solo（雙細胞檢測）
 
-**Purpose**: Identifying doublets (cells containing two or more cells) in scRNA-seq data.
+**目的**：識別 scRNA-seq 數據中的雙細胞（包含兩個或多個細胞）。
 
-**Key Features**:
-- Semi-supervised doublet detection using scVI embeddings
-- Simulates artificial doublets for training
-- Provides doublet probability scores
-- Can be applied to any scVI model
+**主要特點**：
+- 使用 scVI 嵌入的半監督雙細胞檢測
+- 模擬人工雙細胞用於訓練
+- 提供雙細胞機率分數
+- 可應用於任何 scVI 模型
 
-**When to Use**:
-- Quality control of scRNA-seq datasets
-- Removing doublets before downstream analysis
-- Assessing doublet rates in your data
+**何時使用**：
+- scRNA-seq 數據集的品質控制
+- 在下游分析前移除雙細胞
+- 評估數據中的雙細胞率
 
-**Basic Usage**:
+**基本用法**：
 ```python
-# Train scVI model first
+# 首先訓練 scVI 模型
 scvi.model.SCVI.setup_anndata(adata, layer="counts")
 scvi_model = scvi.model.SCVI(adata)
 scvi_model.train()
 
-# Train Solo for doublet detection
+# 訓練 Solo 進行雙細胞檢測
 solo_model = scvi.external.SOLO.from_scvi_model(scvi_model)
 solo_model.train()
 
-# Predict doublets
+# 預測雙細胞
 predictions = solo_model.predict()
 doublet_scores = predictions["doublet"]
 adata.obs["doublet_score"] = doublet_scores
 ```
 
-## Amortized LDA (Topic Modeling)
+## Amortized LDA（主題模型）
 
-**Purpose**: Topic modeling for gene expression using Latent Dirichlet Allocation.
+**目的**：使用潛在狄利克雷分配（Latent Dirichlet Allocation）進行基因表達的主題建模。
 
-**Key Features**:
-- Discovers gene expression programs (topics)
-- Amortized variational inference for scalability
-- Each cell is a mixture of topics
-- Each topic is a distribution over genes
+**主要特點**：
+- 發現基因表達程式（主題）
+- 用於可擴展性的攤銷變分推斷
+- 每個細胞是主題的混合
+- 每個主題是基因上的分佈
 
-**When to Use**:
-- Discovering gene programs or expression modules
-- Understanding compositional structure of expression
-- Alternative dimensionality reduction approach
-- Interpretable decomposition of expression patterns
+**何時使用**：
+- 發現基因程式或表達模組
+- 理解表達的組成結構
+- 替代性降維方法
+- 表達模式的可解釋分解
 
-**Basic Usage**:
+**基本用法**：
 ```python
 scvi.model.AMORTIZEDLDA.setup_anndata(adata, layer="counts")
 model = scvi.model.AMORTIZEDLDA(adata, n_topics=10)
 model.train()
 
-# Get topic compositions per cell
+# 獲取每個細胞的主題組成
 topic_proportions = model.get_latent_representation()
 
-# Get gene loadings per topic
+# 獲取每個主題的基因載荷
 topic_gene_loadings = model.get_topic_distribution()
 ```
 
-## Model Selection Guidelines
+## 模型選擇指南
 
-**Choose scVI when**:
-- Starting with unsupervised analysis
-- Need batch correction and integration
-- Want normalized expression and DE analysis
+**選擇 scVI 當**：
+- 從無監督分析開始
+- 需要批次校正和整合
+- 想要標準化表達和 DE 分析
 
-**Choose scANVI when**:
-- Have some labeled cells for training
-- Need cell type annotation
-- Want to transfer labels from reference to query
+**選擇 scANVI 當**：
+- 有一些有標籤的細胞用於訓練
+- 需要細胞類型註釋
+- 想要將標籤從參考遷移到查詢
 
-**Choose AUTOZI when**:
-- Concerned about technical dropout
-- Need to identify zero-inflated genes
-- Working with very sparse datasets
+**選擇 AUTOZI 當**：
+- 擔心技術丟失
+- 需要識別零膨脹基因
+- 處理非常稀疏的數據集
 
-**Choose VeloVI when**:
-- Have spliced/unspliced count data
-- Interested in cellular dynamics
-- Need RNA velocity with batch correction
+**選擇 VeloVI 當**：
+- 有剪接/未剪接計數數據
+- 對細胞動態感興趣
+- 需要帶有批次校正的 RNA 速度
 
-**Choose contrastiveVI when**:
-- Analyzing perturbation experiments
-- Need to separate treatment effects
-- Want to identify condition-specific programs
+**選擇 contrastiveVI 當**：
+- 分析擾動實驗
+- 需要分離處理效應
+- 想要識別條件特異性程式
 
-**Choose CellAssign when**:
-- Have marker gene lists available
-- Want probabilistic marker-based annotation
-- No reference dataset available
+**選擇 CellAssign 當**：
+- 有標記基因列表可用
+- 想要基於標記的機率註釋
+- 沒有參考數據集可用
 
-**Choose Solo when**:
-- Need doublet detection
-- Already using scVI for analysis
-- Want probabilistic doublet scores
+**選擇 Solo 當**：
+- 需要雙細胞檢測
+- 已經使用 scVI 進行分析
+- 想要機率性雙細胞分數

@@ -1,76 +1,76 @@
-# ChEMBL Web Services API Reference
+# ChEMBL Web 服務 API 參考
 
-## Overview
+## 概述
 
-ChEMBL is a manually curated database of bioactive molecules with drug-like properties maintained by the European Bioinformatics Institute (EBI). It contains information about compounds, targets, assays, bioactivity data, and approved drugs.
+ChEMBL 是由歐洲生物資訊研究所（EBI）維護的人工策展具有類藥性質的生物活性分子資料庫。它包含化合物、靶標、測定法、生物活性資料和已核准藥物的資訊。
 
-The ChEMBL database contains:
-- Over 2 million compound records
-- Over 1.4 million assay records
-- Over 19 million activity values
-- Information on 13,000+ drug targets
-- Data on 16,000+ approved drugs and clinical candidates
+ChEMBL 資料庫包含：
+- 超過 200 萬筆化合物記錄
+- 超過 140 萬筆測定記錄
+- 超過 1,900 萬個活性值
+- 13,000 多個藥物靶標的資訊
+- 16,000 多種已核准藥物和臨床候選藥物的資料
 
-## Python Client Installation
+## Python 用戶端安裝
 
 ```bash
 pip install chembl_webresource_client
 ```
 
-## Key Resources and Endpoints
+## 主要資源和端點
 
-ChEMBL provides access to 30+ specialized endpoints:
+ChEMBL 提供 30 多個專門端點的存取：
 
-### Core Data Types
+### 核心資料類型
 
-- **molecule** - Compound structures, properties, and synonyms
-- **target** - Protein and non-protein biological targets
-- **activity** - Bioassay measurement results
-- **assay** - Experimental assay details
-- **drug** - Approved pharmaceutical information
-- **mechanism** - Drug mechanism of action data
-- **document** - Literature sources and references
-- **cell_line** - Cell line information
-- **tissue** - Tissue types
-- **protein_class** - Protein classification
-- **target_component** - Target component details
-- **compound_structural_alert** - Structural alerts for toxicity
+- **molecule** - 化合物結構、性質和同義詞
+- **target** - 蛋白質和非蛋白質生物靶標
+- **activity** - 生物測定測量結果
+- **assay** - 實驗測定詳細資訊
+- **drug** - 已核准的藥品資訊
+- **mechanism** - 藥物作用機制資料
+- **document** - 文獻來源和參考資料
+- **cell_line** - 細胞系資訊
+- **tissue** - 組織類型
+- **protein_class** - 蛋白質分類
+- **target_component** - 靶標組件詳細資訊
+- **compound_structural_alert** - 毒性結構警示
 
-## Query Patterns and Filters
+## 查詢模式和篩選
 
-### Filter Operators
+### 篩選運算子
 
-The API supports Django-style filter operators:
+API 支援 Django 風格的篩選運算子：
 
-- `__exact` - Exact match
-- `__iexact` - Case-insensitive exact match
-- `__contains` - Contains substring
-- `__icontains` - Case-insensitive contains
-- `__startswith` - Starts with prefix
-- `__endswith` - Ends with suffix
-- `__gt` - Greater than
-- `__gte` - Greater than or equal
-- `__lt` - Less than
-- `__lte` - Less than or equal
-- `__range` - Value in range
-- `__in` - Value in list
-- `__isnull` - Is null/not null
-- `__regex` - Regular expression match
-- `__search` - Full text search
+- `__exact` - 精確匹配
+- `__iexact` - 不區分大小寫的精確匹配
+- `__contains` - 包含子字串
+- `__icontains` - 不區分大小寫的包含
+- `__startswith` - 以前綴開頭
+- `__endswith` - 以後綴結尾
+- `__gt` - 大於
+- `__gte` - 大於或等於
+- `__lt` - 小於
+- `__lte` - 小於或等於
+- `__range` - 值在範圍內
+- `__in` - 值在清單中
+- `__isnull` - 為空/非空
+- `__regex` - 正規表達式匹配
+- `__search` - 全文搜尋
 
-### Example Filter Queries
+### 篩選查詢範例
 
-**Molecular weight filtering:**
+**分子量篩選：**
 ```python
 molecules.filter(molecule_properties__mw_freebase__lte=300)
 ```
 
-**Name pattern matching:**
+**名稱模式匹配：**
 ```python
 molecules.filter(pref_name__endswith='nib')
 ```
 
-**Multiple conditions:**
+**多個條件：**
 ```python
 molecules.filter(
     molecule_properties__mw_freebase__lte=300,
@@ -78,10 +78,10 @@ molecules.filter(
 )
 ```
 
-## Chemical Structure Searches
+## 化學結構搜尋
 
-### Substructure Search
-Search for compounds containing a specific substructure using SMILES:
+### 子結構搜尋
+使用 SMILES 搜尋包含特定子結構的化合物：
 
 ```python
 from chembl_webresource_client.new_client import new_client
@@ -89,27 +89,27 @@ similarity = new_client.similarity
 results = similarity.filter(smiles='CC(=O)Oc1ccccc1C(=O)O', similarity=70)
 ```
 
-### Similarity Search
-Find compounds similar to a query structure:
+### 相似性搜尋
+尋找與查詢結構相似的化合物：
 
 ```python
 similarity = new_client.similarity
 results = similarity.filter(smiles='CC(=O)Oc1ccccc1C(=O)O', similarity=85)
 ```
 
-## Common Data Retrieval Patterns
+## 常見資料擷取模式
 
-### Get Molecule by ChEMBL ID
+### 依 ChEMBL ID 取得分子
 ```python
 molecule = new_client.molecule.get('CHEMBL25')
 ```
 
-### Get Target Information
+### 取得靶標資訊
 ```python
 target = new_client.target.get('CHEMBL240')
 ```
 
-### Get Activity Data
+### 取得活性資料
 ```python
 activities = new_client.activity.filter(
     target_chembl_id='CHEMBL240',
@@ -118,94 +118,94 @@ activities = new_client.activity.filter(
 )
 ```
 
-### Get Drug Information
+### 取得藥物資訊
 ```python
 drug = new_client.drug.get('CHEMBL1234')
 ```
 
-## Response Formats
+## 回應格式
 
-The API supports multiple response formats:
-- JSON (default)
+API 支援多種回應格式：
+- JSON（預設）
 - XML
 - YAML
 
-## Caching and Performance
+## 快取和效能
 
-The Python client automatically caches results locally:
-- **Default cache duration**: 24 hours
-- **Cache location**: Local file system
-- **Lazy evaluation**: Queries execute only when data is accessed
+Python 用戶端自動在本地快取結果：
+- **預設快取持續時間**：24 小時
+- **快取位置**：本地檔案系統
+- **延遲評估**：查詢僅在存取資料時執行
 
-### Configuration Settings
+### 設定選項
 
 ```python
 from chembl_webresource_client.settings import Settings
 
-# Disable caching
+# 停用快取
 Settings.Instance().CACHING = False
 
-# Adjust cache expiration (in seconds)
-Settings.Instance().CACHE_EXPIRE = 86400  # 24 hours
+# 調整快取過期時間（秒）
+Settings.Instance().CACHE_EXPIRE = 86400  # 24 小時
 
-# Set timeout
+# 設定逾時
 Settings.Instance().TIMEOUT = 30
 
-# Set retries
+# 設定重試次數
 Settings.Instance().TOTAL_RETRIES = 3
 ```
 
-## Molecular Properties
+## 分子性質
 
-Common molecular properties available:
+可用的常見分子性質：
 
-- `mw_freebase` - Molecular weight
-- `alogp` - Calculated LogP
-- `hba` - Hydrogen bond acceptors
-- `hbd` - Hydrogen bond donors
-- `psa` - Polar surface area
-- `rtb` - Rotatable bonds
-- `ro3_pass` - Rule of 3 compliance
-- `num_ro5_violations` - Lipinski rule of 5 violations
-- `cx_most_apka` - Most acidic pKa
-- `cx_most_bpka` - Most basic pKa
-- `molecular_species` - Molecular species
-- `full_mwt` - Full molecular weight
+- `mw_freebase` - 分子量
+- `alogp` - 計算的 LogP
+- `hba` - 氫鍵受體數
+- `hbd` - 氫鍵供體數
+- `psa` - 極性表面積
+- `rtb` - 可旋轉鍵數
+- `ro3_pass` - 三規則符合性
+- `num_ro5_violations` - Lipinski 五規則違規數
+- `cx_most_apka` - 最酸性 pKa
+- `cx_most_bpka` - 最鹼性 pKa
+- `molecular_species` - 分子種類
+- `full_mwt` - 完整分子量
 
-## Bioactivity Data Fields
+## 生物活性資料欄位
 
-Key bioactivity fields:
+主要生物活性欄位：
 
-- `standard_type` - Activity type (IC50, Ki, Kd, EC50, etc.)
-- `standard_value` - Numerical activity value
-- `standard_units` - Units (nM, uM, etc.)
-- `pchembl_value` - Normalized activity value (-log scale)
-- `activity_comment` - Activity annotations
-- `data_validity_comment` - Data validity flags
-- `potential_duplicate` - Duplicate flag
+- `standard_type` - 活性類型（IC50、Ki、Kd、EC50 等）
+- `standard_value` - 數值活性值
+- `standard_units` - 單位（nM、uM 等）
+- `pchembl_value` - 標準化活性值（-log 刻度）
+- `activity_comment` - 活性註釋
+- `data_validity_comment` - 資料有效性標誌
+- `potential_duplicate` - 重複標誌
 
-## Target Information Fields
+## 靶標資訊欄位
 
-Target data includes:
+靶標資料包含：
 
-- `target_chembl_id` - ChEMBL target identifier
-- `pref_name` - Preferred target name
-- `target_type` - Type (PROTEIN, ORGANISM, etc.)
-- `organism` - Target organism
-- `tax_id` - NCBI taxonomy ID
-- `target_components` - Component details
+- `target_chembl_id` - ChEMBL 靶標識別碼
+- `pref_name` - 首選靶標名稱
+- `target_type` - 類型（PROTEIN、ORGANISM 等）
+- `organism` - 靶標生物體
+- `tax_id` - NCBI 分類 ID
+- `target_components` - 組件詳細資訊
 
-## Advanced Query Examples
+## 進階查詢範例
 
-### Find Kinase Inhibitors
+### 尋找激酶抑制劑
 ```python
-# Get kinase targets
+# 取得激酶靶標
 targets = new_client.target.filter(
     target_type='SINGLE PROTEIN',
     pref_name__icontains='kinase'
 )
 
-# Get activities for these targets
+# 取得這些靶標的活性
 activities = new_client.activity.filter(
     target_chembl_id__in=[t['target_chembl_id'] for t in targets],
     standard_type='IC50',
@@ -213,14 +213,14 @@ activities = new_client.activity.filter(
 )
 ```
 
-### Retrieve Drug Mechanisms
+### 擷取藥物作用機制
 ```python
 mechanisms = new_client.mechanism.filter(
     molecule_chembl_id='CHEMBL25'
 )
 ```
 
-### Get Compound Bioactivities
+### 取得化合物生物活性
 ```python
 activities = new_client.activity.filter(
     molecule_chembl_id='CHEMBL25',
@@ -228,9 +228,9 @@ activities = new_client.activity.filter(
 )
 ```
 
-## Image Generation
+## 圖像產生
 
-ChEMBL can generate SVG images of molecular structures:
+ChEMBL 可以產生分子結構的 SVG 圖像：
 
 ```python
 from chembl_webresource_client.new_client import new_client
@@ -238,9 +238,9 @@ image = new_client.image
 svg = image.get('CHEMBL25')
 ```
 
-## Pagination
+## 分頁
 
-Results are paginated automatically. To iterate through all results:
+結果會自動分頁。迭代所有結果：
 
 ```python
 activities = new_client.activity.filter(target_chembl_id='CHEMBL240')
@@ -248,25 +248,25 @@ for activity in activities:
     print(activity)
 ```
 
-## Error Handling
+## 錯誤處理
 
-Common errors:
-- **404**: Resource not found
-- **503**: Service temporarily unavailable
-- **Timeout**: Request took too long
+常見錯誤：
+- **404**：找不到資源
+- **503**：服務暫時無法使用
+- **Timeout**：請求耗時過長
 
-The client automatically retries failed requests based on `TOTAL_RETRIES` setting.
+用戶端根據 `TOTAL_RETRIES` 設定自動重試失敗的請求。
 
-## Rate Limiting
+## 速率限制
 
-ChEMBL has fair usage policies:
-- Be respectful with query frequency
-- Use caching to minimize repeated requests
-- Consider bulk downloads for large datasets
+ChEMBL 有公平使用政策：
+- 請尊重查詢頻率
+- 使用快取以減少重複請求
+- 對大型資料集考慮批量下載
 
-## Additional Resources
+## 其他資源
 
-- Official API documentation: https://www.ebi.ac.uk/chembl/api/data/docs
-- Python client GitHub: https://github.com/chembl/chembl_webresource_client
-- ChEMBL interface docs: https://chembl.gitbook.io/chembl-interface-documentation/
-- Example notebooks: https://github.com/chembl/notebooks
+- 官方 API 文件：https://www.ebi.ac.uk/chembl/api/data/docs
+- Python 用戶端 GitHub：https://github.com/chembl/chembl_webresource_client
+- ChEMBL 介面文件：https://chembl.gitbook.io/chembl-interface-documentation/
+- 範例筆記本：https://github.com/chembl/notebooks

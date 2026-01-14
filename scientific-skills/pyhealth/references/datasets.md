@@ -1,178 +1,178 @@
-# PyHealth Datasets and Data Structures
+# PyHealth 資料集與資料結構
 
-## Core Data Structures
+## 核心資料結構
 
-### Event
-Individual medical occurrences with attributes including:
-- **code**: Medical code (diagnosis, medication, procedure, lab test)
-- **vocabulary**: Coding system (ICD-9-CM, NDC, LOINC, etc.)
-- **timestamp**: Event occurrence time
-- **value**: Numeric value (for labs, vital signs)
-- **unit**: Measurement unit
+### Event（事件）
+具有以下屬性的個別醫療事件：
+- **code**：醫療代碼（診斷、藥物、處置、檢驗）
+- **vocabulary**：編碼系統（ICD-9-CM、NDC、LOINC 等）
+- **timestamp**：事件發生時間
+- **value**：數值（用於檢驗、生命徵象）
+- **unit**：測量單位
 
-### Patient
-Collection of events organized chronologically across visits. Each patient contains:
-- **patient_id**: Unique identifier
-- **birth_datetime**: Date of birth
-- **gender**: Patient gender
-- **ethnicity**: Patient ethnicity
-- **visits**: List of visit objects
+### Patient（病人）
+按時間順序組織的跨就診事件集合。每個病人包含：
+- **patient_id**：唯一識別碼
+- **birth_datetime**：出生日期
+- **gender**：病人性別
+- **ethnicity**：病人種族
+- **visits**：就診物件列表
 
-### Visit
-Healthcare encounter containing:
-- **visit_id**: Unique identifier
-- **encounter_time**: Visit timestamp
-- **discharge_time**: Discharge timestamp
-- **visit_type**: Type of encounter (inpatient, outpatient, emergency)
-- **events**: List of events during this visit
+### Visit（就診）
+包含以下內容的醫療照護encounter：
+- **visit_id**：唯一識別碼
+- **encounter_time**：就診時間戳記
+- **discharge_time**：出院時間戳記
+- **visit_type**：encounter類型（住院、門診、急診）
+- **events**：此次就診期間的事件列表
 
-## BaseDataset Class
+## BaseDataset 類別
 
-**Key Methods:**
-- `get_patient(patient_id)`: Retrieve single patient record
-- `iter_patients()`: Iterate through all patients
-- `stats()`: Get dataset statistics (patients, visits, events)
-- `set_task(task_fn)`: Define prediction task
+**關鍵方法：**
+- `get_patient(patient_id)`：擷取單一病人記錄
+- `iter_patients()`：遍歷所有病人
+- `stats()`：取得資料集統計（病人數、就診數、事件數）
+- `set_task(task_fn)`：定義預測任務
 
-## Available Datasets
+## 可用資料集
 
-### Electronic Health Record (EHR) Datasets
+### 電子健康記錄（EHR）資料集
 
-**MIMIC-III Dataset** (`MIMIC3Dataset`)
-- Intensive care unit data from Beth Israel Deaconess Medical Center
-- 40,000+ critical care patients
-- Diagnoses, procedures, medications, lab results
-- Usage: `from pyhealth.datasets import MIMIC3Dataset`
+**MIMIC-III Dataset**（`MIMIC3Dataset`）
+- 來自 Beth Israel Deaconess 醫學中心的加護病房資料
+- 40,000+ 重症病人
+- 診斷、處置、藥物、檢驗結果
+- 使用方式：`from pyhealth.datasets import MIMIC3Dataset`
 
-**MIMIC-IV Dataset** (`MIMIC4Dataset`)
-- Updated version with 70,000+ patients
-- Improved data quality and coverage
-- Enhanced demographic and clinical detail
-- Usage: `from pyhealth.datasets import MIMIC4Dataset`
+**MIMIC-IV Dataset**（`MIMIC4Dataset`）
+- 更新版本，包含 70,000+ 病人
+- 改善的資料品質與涵蓋範圍
+- 增強的人口統計與臨床細節
+- 使用方式：`from pyhealth.datasets import MIMIC4Dataset`
 
-**eICU Dataset** (`eICUDataset`)
-- Multi-center critical care database
-- 200,000+ admissions from 200+ hospitals
-- Standardized ICU data across facilities
-- Usage: `from pyhealth.datasets import eICUDataset`
+**eICU Dataset**（`eICUDataset`）
+- 多中心重症照護資料庫
+- 來自 200+ 醫院的 200,000+ 入院記錄
+- 跨機構的標準化加護病房資料
+- 使用方式：`from pyhealth.datasets import eICUDataset`
 
-**OMOP Dataset** (`OMOPDataset`)
-- Observational Medical Outcomes Partnership format
-- Standardized common data model
-- Interoperability across healthcare systems
-- Usage: `from pyhealth.datasets import OMOPDataset`
+**OMOP Dataset**（`OMOPDataset`）
+- Observational Medical Outcomes Partnership 格式
+- 標準化通用資料模型
+- 跨醫療系統的互通性
+- 使用方式：`from pyhealth.datasets import OMOPDataset`
 
-**EHRShot Dataset** (`EHRShotDataset`)
-- Benchmark dataset for few-shot learning
-- Specialized for testing model generalization
-- Usage: `from pyhealth.datasets import EHRShotDataset`
+**EHRShot Dataset**（`EHRShotDataset`）
+- 少樣本學習基準資料集
+- 專門用於測試模型泛化能力
+- 使用方式：`from pyhealth.datasets import EHRShotDataset`
 
-### Physiological Signal Datasets
+### 生理訊號資料集
 
-**Sleep EEG Datasets:**
-- `SleepEDFDataset`: Sleep-EDF database for sleep staging
-- `SHHSDataset`: Sleep Heart Health Study data
-- `ISRUCDataset`: ISRUC-Sleep database
+**睡眠腦電圖資料集：**
+- `SleepEDFDataset`：用於睡眠分期的 Sleep-EDF 資料庫
+- `SHHSDataset`：睡眠心臟健康研究資料
+- `ISRUCDataset`：ISRUC-Sleep 資料庫
 
-**Temple University EEG Datasets:**
-- `TUEVDataset`: Abnormal EEG events detection
-- `TUABDataset`: Abnormal/normal EEG classification
-- `TUSZDataset`: Seizure detection
+**Temple University 腦電圖資料集：**
+- `TUEVDataset`：異常腦電圖事件檢測
+- `TUABDataset`：異常/正常腦電圖分類
+- `TUSZDataset`：癲癇發作檢測
 
-**All signal datasets support:**
-- Multi-channel EEG signals
-- Standardized sampling rates
-- Expert annotations
-- Sleep stage or abnormality labels
+**所有訊號資料集支援：**
+- 多通道腦電圖訊號
+- 標準化採樣率
+- 專家標註
+- 睡眠階段或異常標籤
 
-### Medical Imaging Datasets
+### 醫學影像資料集
 
-**COVID-19 CXR Dataset** (`COVID19CXRDataset`)
-- Chest X-ray images for COVID-19 classification
-- Multi-class labels (COVID-19, pneumonia, normal)
-- Usage: `from pyhealth.datasets import COVID19CXRDataset`
+**COVID-19 CXR Dataset**（`COVID19CXRDataset`）
+- 用於 COVID-19 分類的胸部 X 光影像
+- 多類別標籤（COVID-19、肺炎、正常）
+- 使用方式：`from pyhealth.datasets import COVID19CXRDataset`
 
-### Text-Based Datasets
+### 文字資料集
 
-**Medical Transcriptions Dataset** (`MedicalTranscriptionsDataset`)
-- Clinical notes and transcriptions
-- Medical specialty classification
-- Text-based prediction tasks
-- Usage: `from pyhealth.datasets import MedicalTranscriptionsDataset`
+**Medical Transcriptions Dataset**（`MedicalTranscriptionsDataset`）
+- 臨床筆記與轉錄文字
+- 醫療專科分類
+- 文字預測任務
+- 使用方式：`from pyhealth.datasets import MedicalTranscriptionsDataset`
 
-**Cardiology Dataset** (`CardiologyDataset`)
-- Cardiac patient records
-- Cardiovascular disease prediction
-- Usage: `from pyhealth.datasets import CardiologyDataset`
+**Cardiology Dataset**（`CardiologyDataset`）
+- 心臟科病人記錄
+- 心血管疾病預測
+- 使用方式：`from pyhealth.datasets import CardiologyDataset`
 
-### Preprocessed Datasets
+### 預處理資料集
 
-**MIMIC Extract Dataset** (`MIMICExtractDataset`)
-- Pre-extracted MIMIC features
-- Ready-to-use benchmarking data
-- Reduced preprocessing requirements
-- Usage: `from pyhealth.datasets import MIMICExtractDataset`
+**MIMIC Extract Dataset**（`MIMICExtractDataset`）
+- 預先提取的 MIMIC 特徵
+- 可直接使用的基準測試資料
+- 減少預處理需求
+- 使用方式：`from pyhealth.datasets import MIMICExtractDataset`
 
-## SampleDataset Class
+## SampleDataset 類別
 
-Converts raw datasets into task-specific formatted samples.
+將原始資料集轉換為任務特定格式的樣本。
 
-**Purpose:** Transform patient-level data into model-ready input/output pairs
+**用途：** 將病人層級資料轉換為模型可用的輸入/輸出配對
 
-**Key Attributes:**
-- `input_schema`: Defines input data structure
-- `output_schema`: Defines target labels/predictions
-- `samples`: List of processed samples
+**關鍵屬性：**
+- `input_schema`：定義輸入資料結構
+- `output_schema`：定義目標標籤/預測
+- `samples`：處理後的樣本列表
 
-**Usage Pattern:**
+**使用模式：**
 ```python
-# After setting task on BaseDataset
+# 在 BaseDataset 上設定任務後
 sample_dataset = dataset.set_task(task_fn)
 ```
 
-## Data Splitting Functions
+## 資料分割函數
 
-**Patient-Level Split** (`split_by_patient`)
-- Ensures no patient appears in multiple splits
-- Prevents data leakage
-- Recommended for clinical prediction tasks
+**病人層級分割**（`split_by_patient`）
+- 確保同一病人不會出現在多個分割中
+- 防止資料洩漏
+- 推薦用於臨床預測任務
 
-**Visit-Level Split** (`split_by_visit`)
-- Splits by individual visits
-- Allows same patient across splits (use cautiously)
+**就診層級分割**（`split_by_visit`）
+- 按個別就診進行分割
+- 允許同一病人跨分割（請謹慎使用）
 
-**Sample-Level Split** (`split_by_sample`)
-- Random sample splitting
-- Most flexible but may cause leakage
+**樣本層級分割**（`split_by_sample`）
+- 隨機樣本分割
+- 最靈活但可能造成洩漏
 
-**Parameters:**
-- `dataset`: SampleDataset to split
-- `ratios`: Tuple of split ratios (e.g., [0.7, 0.1, 0.2])
-- `seed`: Random seed for reproducibility
+**參數：**
+- `dataset`：要分割的 SampleDataset
+- `ratios`：分割比例元組（例如 [0.7, 0.1, 0.2]）
+- `seed`：用於可重現性的隨機種子
 
-## Common Workflow
+## 常見工作流程
 
 ```python
 from pyhealth.datasets import MIMIC4Dataset
 from pyhealth.tasks import mortality_prediction_mimic4_fn
 from pyhealth.datasets import split_by_patient
 
-# 1. Load dataset
+# 1. 載入資料集
 dataset = MIMIC4Dataset(root="/path/to/data")
 
-# 2. Set prediction task
+# 2. 設定預測任務
 sample_dataset = dataset.set_task(mortality_prediction_mimic4_fn)
 
-# 3. Split data
+# 3. 分割資料
 train, val, test = split_by_patient(sample_dataset, [0.7, 0.1, 0.2])
 
-# 4. Get statistics
+# 4. 取得統計資訊
 print(dataset.stats())
 ```
 
-## Performance Notes
+## 效能備註
 
-- PyHealth is **3x faster than pandas** for healthcare data processing
-- Optimized for large-scale EHR datasets
-- Memory-efficient patient iteration
-- Vectorized operations for feature extraction
+- PyHealth 處理醫療資料的速度**比 pandas 快 3 倍**
+- 針對大規模 EHR 資料集進行優化
+- 記憶體高效的病人迭代
+- 向量化特徵提取操作

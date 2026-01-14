@@ -1,8 +1,8 @@
-# Plotting Guide
+# 繪圖指南
 
-Comprehensive guide for creating publication-quality visualizations from Neuropixels data.
+從 Neuropixels 資料建立發表品質視覺化的綜合指南。
 
-## Setup
+## 設定
 
 ```python
 import matplotlib.pyplot as plt
@@ -11,22 +11,22 @@ import spikeinterface.full as si
 import spikeinterface.widgets as sw
 import neuropixels_analysis as npa
 
-# High-quality settings
+# 高品質設定
 plt.rcParams['figure.dpi'] = 150
 plt.rcParams['savefig.dpi'] = 300
 plt.rcParams['font.size'] = 10
 plt.rcParams['font.family'] = 'sans-serif'
 ```
 
-## Drift and Motion Plots
+## 漂移與運動圖
 
-### Basic Drift Map
+### 基本漂移圖
 
 ```python
-# Using npa
+# 使用 npa
 npa.plot_drift(recording, output='drift_map.png')
 
-# Using SpikeInterface widgets
+# 使用 SpikeInterface widgets
 from spikeinterface.preprocessing import detect_peaks, localize_peaks
 
 peaks = detect_peaks(recording, method='locally_exclusive')
@@ -41,14 +41,14 @@ sw.plot_drift_raster_map(
 plt.savefig('drift_raster.png', bbox_inches='tight')
 ```
 
-### Motion Estimate Visualization
+### 運動估計視覺化
 
 ```python
 motion_info = npa.estimate_motion(recording)
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-# Motion over time
+# 運動隨時間變化
 ax = axes[0]
 for i in range(motion_info['motion'].shape[1]):
     ax.plot(motion_info['temporal_bins'], motion_info['motion'][:, i], alpha=0.5)
@@ -56,7 +56,7 @@ ax.set_xlabel('Time (s)')
 ax.set_ylabel('Motion (um)')
 ax.set_title('Estimated Motion')
 
-# Motion histogram
+# 運動直方圖
 ax = axes[1]
 ax.hist(motion_info['motion'].flatten(), bins=50, edgecolor='black')
 ax.set_xlabel('Motion (um)')
@@ -67,35 +67,35 @@ plt.tight_layout()
 plt.savefig('motion_analysis.png', dpi=300)
 ```
 
-## Waveform Plots
+## 波形圖
 
-### Single Unit Waveforms
+### 單一單元波形
 
 ```python
 unit_id = 0
 
-# Basic waveforms
+# 基本波形
 sw.plot_unit_waveforms(analyzer, unit_ids=[unit_id])
 plt.savefig(f'unit_{unit_id}_waveforms.png')
 
-# With density map
+# 含密度圖
 sw.plot_unit_waveform_density_map(analyzer, unit_ids=[unit_id])
 plt.savefig(f'unit_{unit_id}_density.png')
 ```
 
-### Template Comparison
+### 範本比較
 
 ```python
-# Compare multiple units
+# 比較多個單元
 unit_ids = [0, 1, 2, 3]
 sw.plot_unit_templates(analyzer, unit_ids=unit_ids)
 plt.savefig('template_comparison.png')
 ```
 
-### Waveforms on Probe
+### 探針上的波形
 
 ```python
-# Show waveforms spatially on probe
+# 在探針上顯示空間波形
 sw.plot_unit_waveforms_on_probe(
     analyzer,
     unit_ids=[unit_id],
@@ -104,15 +104,15 @@ sw.plot_unit_waveforms_on_probe(
 plt.savefig(f'unit_{unit_id}_probe.png')
 ```
 
-## Quality Metrics Visualization
+## 品質指標視覺化
 
-### Metrics Overview
+### 指標概覽
 
 ```python
 npa.plot_quality_metrics(analyzer, metrics, output='quality_overview.png')
 ```
 
-### Metrics Distribution
+### 指標分布
 
 ```python
 fig, axes = plt.subplots(2, 3, figsize=(12, 8))
@@ -133,7 +133,7 @@ plt.tight_layout()
 plt.savefig('metrics_distribution.png', dpi=300)
 ```
 
-### Metrics Scatter Matrix
+### 指標散佈矩陣
 
 ```python
 import pandas as pd
@@ -148,7 +148,7 @@ pd.plotting.scatter_matrix(
 plt.savefig('metrics_scatter.png', dpi=300)
 ```
 
-### Metrics vs Labels
+### 指標與標籤
 
 ```python
 labels_series = pd.Series(labels)
@@ -168,9 +168,9 @@ plt.tight_layout()
 plt.savefig('metrics_by_label.png', dpi=300)
 ```
 
-## Correlogram Plots
+## 相關圖
 
-### Autocorrelogram
+### 自相關圖
 
 ```python
 sw.plot_autocorrelograms(
@@ -182,7 +182,7 @@ sw.plot_autocorrelograms(
 plt.savefig(f'unit_{unit_id}_acg.png')
 ```
 
-### Cross-correlograms
+### 互相關圖
 
 ```python
 unit_pairs = [(0, 1), (0, 2), (1, 2)]
@@ -195,30 +195,30 @@ sw.plot_crosscorrelograms(
 plt.savefig('crosscorrelograms.png')
 ```
 
-### Correlogram Matrix
+### 相關圖矩陣
 
 ```python
 sw.plot_autocorrelograms(
     analyzer,
-    unit_ids=analyzer.sorting.unit_ids[:10],  # First 10 units
+    unit_ids=analyzer.sorting.unit_ids[:10],  # 前 10 個單元
 )
 plt.savefig('acg_matrix.png')
 ```
 
-## Spike Train Plots
+## 尖峰序列圖
 
-### Raster Plot
+### 光柵圖
 
 ```python
 sw.plot_rasters(
     sorting,
-    time_range=(0, 30),  # First 30 seconds
+    time_range=(0, 30),  # 前 30 秒
     unit_ids=unit_ids[:5],
 )
 plt.savefig('raster.png')
 ```
 
-### Firing Rate Over Time
+### 放電率隨時間變化
 
 ```python
 unit_id = 0
@@ -226,8 +226,8 @@ spike_train = sorting.get_unit_spike_train(unit_id)
 fs = recording.get_sampling_frequency()
 times = spike_train / fs
 
-# Compute firing rate histogram
-bin_width = 1.0  # seconds
+# 計算放電率直方圖
+bin_width = 1.0  # 秒
 bins = np.arange(0, recording.get_total_duration(), bin_width)
 hist, _ = np.histogram(times, bins=bins)
 firing_rate = hist / bin_width
@@ -240,32 +240,32 @@ plt.title(f'Unit {unit_id} firing rate')
 plt.savefig(f'unit_{unit_id}_firing_rate.png', dpi=300)
 ```
 
-## Probe and Location Plots
+## 探針與位置圖
 
-### Probe Layout
+### 探針配置
 
 ```python
 sw.plot_probe_map(recording, with_channel_ids=True)
 plt.savefig('probe_layout.png')
 ```
 
-### Unit Locations on Probe
+### 探針上的單元位置
 
 ```python
 sw.plot_unit_locations(analyzer, with_channel_ids=True)
 plt.savefig('unit_locations.png')
 ```
 
-### Spike Locations
+### 尖峰位置
 
 ```python
 sw.plot_spike_locations(analyzer, unit_ids=[unit_id])
 plt.savefig(f'unit_{unit_id}_spike_locations.png')
 ```
 
-## Amplitude Plots
+## 振幅圖
 
-### Amplitudes Over Time
+### 振幅隨時間變化
 
 ```python
 sw.plot_amplitudes(
@@ -276,7 +276,7 @@ sw.plot_amplitudes(
 plt.savefig(f'unit_{unit_id}_amplitudes.png')
 ```
 
-### Amplitude Distribution
+### 振幅分布
 
 ```python
 amplitudes = analyzer.get_extension('spike_amplitudes').get_data()
@@ -295,9 +295,9 @@ ax.legend()
 plt.savefig(f'unit_{unit_id}_amp_dist.png', dpi=300)
 ```
 
-## ISI Plots
+## ISI 圖
 
-### ISI Histogram
+### ISI 直方圖
 
 ```python
 sw.plot_isi_distribution(
@@ -309,7 +309,7 @@ sw.plot_isi_distribution(
 plt.savefig(f'unit_{unit_id}_isi.png')
 ```
 
-### ISI with Refractory Markers
+### 含反應期標記的 ISI
 
 ```python
 spike_train = sorting.get_unit_spike_train(unit_id)
@@ -327,20 +327,20 @@ ax.legend()
 plt.savefig(f'unit_{unit_id}_isi_detailed.png', dpi=300)
 ```
 
-## Summary Plots
+## 摘要圖
 
-### Unit Summary Panel
+### 單元摘要面板
 
 ```python
 npa.plot_unit_summary(analyzer, unit_id, output=f'unit_{unit_id}_summary.png')
 ```
 
-### Manual Multi-Panel Summary
+### 手動多面板摘要
 
 ```python
 fig = plt.figure(figsize=(16, 12))
 
-# Waveforms
+# 波形
 ax1 = fig.add_subplot(2, 3, 1)
 wfs = analyzer.get_extension('waveforms').get_waveforms(unit_id)
 for i in range(min(50, wfs.shape[0])):
@@ -349,7 +349,7 @@ template = wfs.mean(axis=0)[:, 0]
 ax1.plot(template, 'b', linewidth=2)
 ax1.set_title('Waveforms')
 
-# Template
+# 範本
 ax2 = fig.add_subplot(2, 3, 2)
 templates_ext = analyzer.get_extension('templates')
 template = templates_ext.get_unit_template(unit_id, operator='average')
@@ -360,7 +360,7 @@ ax2.fill_between(x, template[:, 0] - template_std[:, 0],
                  template[:, 0] + template_std[:, 0], alpha=0.3)
 ax2.set_title('Template')
 
-# Autocorrelogram
+# 自相關圖
 ax3 = fig.add_subplot(2, 3, 3)
 correlograms = analyzer.get_extension('correlograms')
 ccg, bins = correlograms.get_data()
@@ -369,7 +369,7 @@ ax3.bar(bins[:-1], ccg[unit_idx, unit_idx, :], width=bins[1]-bins[0], color='gra
 ax3.axvline(0, color='r', linestyle='--', alpha=0.5)
 ax3.set_title('Autocorrelogram')
 
-# Amplitudes
+# 振幅
 ax4 = fig.add_subplot(2, 3, 4)
 amps_ext = analyzer.get_extension('spike_amplitudes')
 amps = amps_ext.get_data()
@@ -390,7 +390,7 @@ ax5.axvline(1.5, color='r', linestyle='--')
 ax5.set_xlabel('ISI (ms)')
 ax5.set_title('ISI Distribution')
 
-# Metrics
+# 指標
 ax6 = fig.add_subplot(2, 3, 6)
 unit_metrics = metrics.loc[unit_id]
 text_lines = [f"{k}: {v:.4f}" for k, v in unit_metrics.items() if not np.isnan(v)]
@@ -403,22 +403,22 @@ plt.tight_layout()
 plt.savefig(f'unit_{unit_id}_full_summary.png', dpi=300)
 ```
 
-## Publication-Quality Settings
+## 發表品質設定
 
-### Figure Sizes
+### 圖形大小
 
 ```python
-# Single column (3.5 inches)
+# 單欄（3.5 英寸）
 fig, ax = plt.subplots(figsize=(3.5, 3))
 
-# Double column (7 inches)
+# 雙欄（7 英寸）
 fig, ax = plt.subplots(figsize=(7, 4))
 
-# Full page
+# 全頁
 fig, ax = plt.subplots(figsize=(7, 9))
 ```
 
-### Font Settings
+### 字體設定
 
 ```python
 plt.rcParams.update({
@@ -432,23 +432,23 @@ plt.rcParams.update({
 })
 ```
 
-### Export Settings
+### 匯出設定
 
 ```python
-# For publications
+# 用於發表
 plt.savefig('figure.pdf', format='pdf', bbox_inches='tight')
 plt.savefig('figure.svg', format='svg', bbox_inches='tight')
 
-# High-res PNG
+# 高解析度 PNG
 plt.savefig('figure.png', dpi=600, bbox_inches='tight', facecolor='white')
 ```
 
-### Color Palettes
+### 色彩調色盤
 
 ```python
-# Colorblind-friendly
+# 色盲友好
 colors = ['#0072B2', '#E69F00', '#009E73', '#CC79A7', '#F0E442']
 
-# For good/mua/noise
+# 用於 good/mua/noise
 label_colors = {'good': '#2ecc71', 'mua': '#f39c12', 'noise': '#e74c3c'}
 ```

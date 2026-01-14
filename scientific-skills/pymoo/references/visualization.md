@@ -1,56 +1,56 @@
-# Pymoo Visualization Reference
+# Pymoo 視覺化參考
 
-Comprehensive reference for visualization capabilities in pymoo.
+pymoo 中視覺化功能的完整參考。
 
-## Overview
+## 概述
 
-Pymoo provides eight visualization types for analyzing multi-objective optimization results. All plots wrap matplotlib and accept standard matplotlib keyword arguments for customization.
+Pymoo 提供八種視覺化類型用於分析多目標最佳化結果。所有圖表都包裝 matplotlib 並接受標準 matplotlib 關鍵字引數進行自訂。
 
-## Core Visualization Types
+## 核心視覺化類型
 
-### 1. Scatter Plots
-**Purpose:** Visualize objective space for 2D, 3D, or higher dimensions
-**Best for:** Pareto fronts, solution distributions, algorithm comparisons
+### 1. 散佈圖
+**用途：** 視覺化 2D、3D 或更高維度的目標空間
+**最適合：** Pareto 前沿、解分布、演算法比較
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.scatter import Scatter
 
-# 2D scatter plot
+# 2D 散佈圖
 plot = Scatter()
-plot.add(result.F, color="red", label="Algorithm A")
-plot.add(ref_pareto_front, color="black", alpha=0.3, label="True PF")
+plot.add(result.F, color="red", label="演算法 A")
+plot.add(ref_pareto_front, color="black", alpha=0.3, label="真實 PF")
 plot.show()
 
-# 3D scatter plot
-plot = Scatter(title="3D Pareto Front")
+# 3D 散佈圖
+plot = Scatter(title="3D Pareto 前沿")
 plot.add(result.F)
 plot.show()
 ```
 
-**Parameters:**
-- `title`: Plot title
-- `figsize`: Figure size tuple (width, height)
-- `legend`: Show legend (default: True)
-- `labels`: Axis labels list
+**參數：**
+- `title`：圖表標題
+- `figsize`：圖形大小元組（寬度，高度）
+- `legend`：顯示圖例（預設：True）
+- `labels`：軸標籤列表
 
-**Add method parameters:**
-- `color`: Color specification
-- `alpha`: Transparency (0-1)
-- `s`: Marker size
-- `marker`: Marker style
-- `label`: Legend label
+**add 方法參數：**
+- `color`：顏色指定
+- `alpha`：透明度（0-1）
+- `s`：標記大小
+- `marker`：標記樣式
+- `label`：圖例標籤
 
-**N-dimensional projection:**
-For >3 objectives, automatically creates scatter plot matrix
+**N 維投影：**
+對於 >3 個目標，自動建立散佈圖矩陣
 
-### 2. Parallel Coordinate Plots (PCP)
-**Purpose:** Compare multiple solutions across many objectives
-**Best for:** Many-objective problems, comparing algorithm performance
+### 2. 平行座標圖（PCP）
+**用途：** 跨多個目標比較多個解
+**最適合：** 高維目標問題、比較演算法效能
 
-**Mechanism:** Each vertical axis represents one objective, lines connect objective values for each solution
+**機制：** 每個垂直軸代表一個目標，線連接每個解的目標值
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.pcp import PCP
 
@@ -60,113 +60,113 @@ plot.add(reference_set, color="red", alpha=0.8)
 plot.show()
 ```
 
-**Parameters:**
-- `title`: Plot title
-- `figsize`: Figure size
-- `labels`: Objective labels
-- `bounds`: Normalization bounds (min, max) per objective
-- `normalize_each_axis`: Normalize to [0,1] per axis (default: True)
+**參數：**
+- `title`：圖表標題
+- `figsize`：圖形大小
+- `labels`：目標標籤
+- `bounds`：每個目標的正規化邊界（最小、最大）
+- `normalize_each_axis`：每軸正規化到 [0,1]（預設：True）
 
-**Best practices:**
-- Normalize for different objective scales
-- Use transparency for overlapping lines
-- Limit number of solutions for clarity (<1000)
+**最佳實務：**
+- 不同目標尺度時正規化
+- 對重疊線使用透明度
+- 為清晰度限制解數量（<1000）
 
-### 3. Heatmap
-**Purpose:** Show solution density and distribution patterns
-**Best for:** Understanding solution clustering, identifying gaps
+### 3. 熱圖
+**用途：** 顯示解密度和分布模式
+**最適合：** 了解解聚類、識別間隙
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.heatmap import Heatmap
 
-plot = Heatmap(title="Solution Density")
+plot = Heatmap(title="解密度")
 plot.add(result.F)
 plot.show()
 ```
 
-**Parameters:**
-- `bins`: Number of bins per dimension (default: 20)
-- `cmap`: Colormap name (e.g., "viridis", "plasma", "hot")
-- `norm`: Normalization method
+**參數：**
+- `bins`：每個維度的區間數（預設：20）
+- `cmap`：色彩圖名稱（例如 "viridis"、"plasma"、"hot"）
+- `norm`：正規化方法
 
-**Interpretation:**
-- Bright regions: High solution density
-- Dark regions: Few or no solutions
-- Reveals distribution uniformity
+**解讀：**
+- 明亮區域：高解密度
+- 暗區域：很少或沒有解
+- 揭示分布均勻性
 
-### 4. Petal Diagram
-**Purpose:** Radial representation of multiple objectives
-**Best for:** Comparing individual solutions across objectives
+### 4. 花瓣圖
+**用途：** 多個目標的放射狀表示
+**最適合：** 跨目標比較個別解
 
-**Structure:** Each "petal" represents one objective, length indicates objective value
+**結構：** 每個「花瓣」代表一個目標，長度表示目標值
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.petal import Petal
 
-plot = Petal(title="Solution Comparison", bounds=[min_vals, max_vals])
-plot.add(result.F[0], color="blue", label="Solution 1")
-plot.add(result.F[1], color="red", label="Solution 2")
+plot = Petal(title="解比較", bounds=[min_vals, max_vals])
+plot.add(result.F[0], color="blue", label="解 1")
+plot.add(result.F[1], color="red", label="解 2")
 plot.show()
 ```
 
-**Parameters:**
-- `bounds`: [min, max] per objective for normalization
-- `labels`: Objective names
-- `reverse`: Reverse specific objectives (for minimization display)
+**參數：**
+- `bounds`：每個目標的正規化 [最小、最大]
+- `labels`：目標名稱
+- `reverse`：反轉特定目標（用於最小化顯示）
 
-**Use cases:**
-- Decision making between few solutions
-- Presenting trade-offs to stakeholders
+**用例：**
+- 少數解之間的決策
+- 向利害關係人展示權衡
 
-### 5. Radar Charts
-**Purpose:** Multi-criteria performance profiles
-**Best for:** Comparing solution characteristics
+### 5. 雷達圖
+**用途：** 多準則效能剖面
+**最適合：** 比較解特徵
 
-**Similar to:** Petal diagram but with connected vertices
+**類似於：** 花瓣圖但頂點連接
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.radar import Radar
 
 plot = Radar(bounds=[min_vals, max_vals])
-plot.add(solution_A, label="Design A")
-plot.add(solution_B, label="Design B")
+plot.add(solution_A, label="設計 A")
+plot.add(solution_B, label="設計 B")
 plot.show()
 ```
 
 ### 6. Radviz
-**Purpose:** Dimensional reduction for visualization
-**Best for:** High-dimensional data exploration, pattern recognition
+**用途：** 視覺化的降維
+**最適合：** 高維資料探索、模式識別
 
-**Mechanism:** Projects high-dimensional points onto 2D circle, dimension anchors on perimeter
+**機制：** 將高維點投影到 2D 圓上，維度錨點在周邊
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.radviz import Radviz
 
-plot = Radviz(title="High-dimensional Solution Space")
+plot = Radviz(title="高維解空間")
 plot.add(result.F, color="blue", s=30)
 plot.show()
 ```
 
-**Parameters:**
-- `endpoint_style`: Anchor point visualization
-- `labels`: Dimension labels
+**參數：**
+- `endpoint_style`：錨點視覺化
+- `labels`：維度標籤
 
-**Interpretation:**
-- Points near anchor: High value in that dimension
-- Central points: Balanced across dimensions
-- Clusters: Similar solutions
+**解讀：**
+- 靠近錨點的點：該維度值高
+- 中央點：跨維度平衡
+- 聚類：相似解
 
-### 7. Star Coordinates
-**Purpose:** Alternative high-dimensional visualization
-**Best for:** Comparing multi-dimensional datasets
+### 7. 星座標
+**用途：** 替代的高維視覺化
+**最適合：** 比較多維資料集
 
-**Mechanism:** Each dimension as axis from origin, points plotted based on values
+**機制：** 每個維度作為從原點的軸，點根據值繪製
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.star_coordinate import StarCoordinate
 
@@ -175,54 +175,54 @@ plot.add(result.F)
 plot.show()
 ```
 
-**Parameters:**
-- `axis_style`: Axis appearance
-- `axis_extension`: Axis length beyond max value
-- `labels`: Dimension labels
+**參數：**
+- `axis_style`：軸外觀
+- `axis_extension`：軸超出最大值的長度
+- `labels`：維度標籤
 
-### 8. Video/Animation
-**Purpose:** Show optimization progress over time
-**Best for:** Understanding convergence behavior, presentations
+### 8. 影片/動畫
+**用途：** 顯示最佳化隨時間的進展
+**最適合：** 了解收斂行為、簡報
 
-**Usage:**
+**用法：**
 ```python
 from pymoo.visualization.video import Video
 
-# Create animation from algorithm history
+# 從演算法歷史建立動畫
 anim = Video(result.algorithm)
 anim.save("optimization_progress.mp4")
 ```
 
-**Requirements:**
-- Algorithm must store history (use `save_history=True` in minimize)
-- ffmpeg installed for video export
+**需求：**
+- 演算法必須儲存歷史（在 minimize 中使用 `save_history=True`）
+- 安裝 ffmpeg 以匯出影片
 
-**Customization:**
-- Frame rate
-- Plot type per frame
-- Overlay information (generation, hypervolume, etc.)
+**自訂：**
+- 幀率
+- 每幀的圖表類型
+- 疊加資訊（世代、超體積等）
 
-## Advanced Features
+## 進階功能
 
-### Multiple Dataset Overlay
+### 多資料集疊加
 
-All plot types support adding multiple datasets:
+所有圖表類型支援添加多個資料集：
 
 ```python
-plot = Scatter(title="Algorithm Comparison")
+plot = Scatter(title="演算法比較")
 plot.add(nsga2_result.F, color="red", alpha=0.5, label="NSGA-II")
 plot.add(nsga3_result.F, color="blue", alpha=0.5, label="NSGA-III")
-plot.add(true_pareto_front, color="black", linewidth=2, label="True PF")
+plot.add(true_pareto_front, color="black", linewidth=2, label="真實 PF")
 plot.show()
 ```
 
-### Custom Styling
+### 自訂樣式
 
-Pass matplotlib kwargs directly:
+直接傳遞 matplotlib kwargs：
 
 ```python
 plot = Scatter(
-    title="My Results",
+    title="我的結果",
     figsize=(10, 8),
     tight_layout=True
 )
@@ -237,17 +237,17 @@ plot.add(
 )
 ```
 
-### Normalization
+### 正規化
 
-Normalize objectives to [0,1] for fair comparison:
+將目標正規化到 [0,1] 以進行公平比較：
 
 ```python
 plot = PCP(normalize_each_axis=True, bounds=[min_bounds, max_bounds])
 ```
 
-### Save to File
+### 儲存到檔案
 
-Save plots instead of displaying:
+儲存圖表而非顯示：
 
 ```python
 plot = Scatter()
@@ -255,44 +255,44 @@ plot.add(result.F)
 plot.save("my_plot.png", dpi=300)
 ```
 
-## Visualization Selection Guide
+## 視覺化選擇指南
 
-**Choose visualization based on:**
+**根據以下選擇視覺化：**
 
-| Problem Type | Primary Plot | Secondary Plot |
+| 問題類型 | 主要圖表 | 次要圖表 |
 |--------------|--------------|----------------|
-| 2-objective | Scatter | Heatmap |
-| 3-objective | 3D Scatter | Parallel Coordinates |
-| Many-objective (4-10) | Parallel Coordinates | Radviz |
-| Many-objective (>10) | Radviz | Star Coordinates |
-| Solution comparison | Petal/Radar | Parallel Coordinates |
-| Algorithm convergence | Video | Scatter (final) |
-| Distribution analysis | Heatmap | Scatter |
+| 2 目標 | 散佈圖 | 熱圖 |
+| 3 目標 | 3D 散佈圖 | 平行座標 |
+| 高維目標（4-10） | 平行座標 | Radviz |
+| 高維目標（>10） | Radviz | 星座標 |
+| 解比較 | 花瓣/雷達 | 平行座標 |
+| 演算法收斂 | 影片 | 散佈圖（最終） |
+| 分布分析 | 熱圖 | 散佈圖 |
 
-**Combinations:**
-- Scatter + Heatmap: Overall distribution + density
-- PCP + Petal: Population overview + individual solutions
-- Scatter + Video: Final result + convergence process
+**組合：**
+- 散佈圖 + 熱圖：整體分布 + 密度
+- PCP + 花瓣：族群概覽 + 個別解
+- 散佈圖 + 影片：最終結果 + 收斂過程
 
-## Common Visualization Workflows
+## 常見視覺化工作流程
 
-### 1. Algorithm Comparison
+### 1. 演算法比較
 ```python
 from pymoo.visualization.scatter import Scatter
 
-plot = Scatter(title="Algorithm Comparison on ZDT1")
+plot = Scatter(title="ZDT1 上的演算法比較")
 plot.add(ga_result.F, color="blue", label="GA", alpha=0.6)
 plot.add(nsga2_result.F, color="red", label="NSGA-II", alpha=0.6)
-plot.add(zdt1.pareto_front(), color="black", label="True PF")
+plot.add(zdt1.pareto_front(), color="black", label="真實 PF")
 plot.show()
 ```
 
-### 2. Many-objective Analysis
+### 2. 高維目標分析
 ```python
 from pymoo.visualization.pcp import PCP
 
 plot = PCP(
-    title="5-objective DTLZ2 Results",
+    title="5 目標 DTLZ2 結果",
     labels=["f1", "f2", "f3", "f4", "f5"],
     normalize_each_axis=True
 )
@@ -300,28 +300,28 @@ plot.add(result.F, alpha=0.3)
 plot.show()
 ```
 
-### 3. Decision Making
+### 3. 決策
 ```python
 from pymoo.visualization.petal import Petal
 
-# Compare top 3 solutions
+# 比較前 3 個解
 candidates = result.F[:3]
 
 plot = Petal(
-    title="Top 3 Solutions",
+    title="前 3 個解",
     bounds=[result.F.min(axis=0), result.F.max(axis=0)],
-    labels=["Cost", "Weight", "Efficiency", "Safety"]
+    labels=["成本", "重量", "效率", "安全性"]
 )
 for i, sol in enumerate(candidates):
-    plot.add(sol, label=f"Solution {i+1}")
+    plot.add(sol, label=f"解 {i+1}")
 plot.show()
 ```
 
-### 4. Convergence Visualization
+### 4. 收斂視覺化
 ```python
 from pymoo.optimize import minimize
 
-# Enable history
+# 啟用歷史
 result = minimize(
     problem,
     algorithm,
@@ -331,23 +331,23 @@ result = minimize(
     verbose=False
 )
 
-# Create convergence plot
+# 建立收斂圖
 from pymoo.visualization.scatter import Scatter
 
-plot = Scatter(title="Convergence Over Generations")
+plot = Scatter(title="跨世代的收斂")
 for gen in [0, 50, 100, 150, 200]:
     F = result.history[gen].opt.get("F")
-    plot.add(F, alpha=0.5, label=f"Gen {gen}")
+    plot.add(F, alpha=0.5, label=f"世代 {gen}")
 plot.show()
 ```
 
-## Tips and Best Practices
+## 提示與最佳實務
 
-1. **Use appropriate alpha:** For overlapping points, use `alpha=0.3-0.7`
-2. **Normalize objectives:** Different scales? Normalize for fair visualization
-3. **Label clearly:** Always provide meaningful labels and legends
-4. **Limit data points:** >10000 points? Sample or use heatmap
-5. **Color schemes:** Use colorblind-friendly palettes
-6. **Save high-res:** Use `dpi=300` for publications
-7. **Interactive exploration:** Consider plotly for interactive plots
-8. **Combine views:** Show multiple perspectives for comprehensive analysis
+1. **使用適當的 alpha：** 對於重疊點，使用 `alpha=0.3-0.7`
+2. **正規化目標：** 尺度不同？正規化以進行公平視覺化
+3. **清楚標籤：** 始終提供有意義的標籤和圖例
+4. **限制資料點：** >10000 點？抽樣或使用熱圖
+5. **色彩方案：** 使用色盲友善的調色板
+6. **儲存高解析度：** 出版物使用 `dpi=300`
+7. **互動式探索：** 考慮 plotly 進行互動式圖表
+8. **結合視圖：** 顯示多個視角以進行全面分析

@@ -1,90 +1,90 @@
-# FDA Other Databases - Substances and NSDE
+# FDA 其他資料庫 - 物質與 NSDE
 
-This reference covers FDA substance-related and other specialized API endpoints accessible through openFDA.
+本參考文件涵蓋透過 openFDA 可存取的 FDA 物質相關和其他專業 API 端點。
 
-## Overview
+## 概述
 
-The FDA maintains additional databases for substance-level information that is precise to the molecular level. These databases support regulatory activities across drugs, biologics, devices, foods, and cosmetics.
+FDA 維護額外的資料庫，提供精確到分子層級的物質資訊。這些資料庫支援跨藥物、生物製劑、器材、食品和化妝品的法規活動。
 
-## Available Endpoints
+## 可用端點
 
-### 1. Substance Data
+### 1. 物質資料
 
-**Endpoint**: `https://api.fda.gov/other/substance.json`
+**端點**：`https://api.fda.gov/other/substance.json`
 
-**Purpose**: Access substance information that is precise to the molecular level for internal and external use. This includes information about active pharmaceutical ingredients, excipients, and other substances used in FDA-regulated products.
+**目的**：存取精確到分子層級的物質資訊，供內部和外部使用。這包括活性藥物成分、賦形劑和用於 FDA 監管產品的其他物質的資訊。
 
-**Data Source**: FDA Global Substance Registration System (GSRS)
+**資料來源**：FDA 全球物質註冊系統（GSRS）
 
-**Key Fields**:
-- `uuid` - Unique substance identifier (UUID)
-- `approvalID` - FDA Unique Ingredient Identifier (UNII)
-- `approved` - Approval date
-- `substanceClass` - Type of substance (chemical, protein, nucleic acid, polymer, etc.)
-- `names` - Array of substance names
-- `names.name` - Name text
-- `names.type` - Name type (systematic, brand, common, etc.)
-- `names.preferred` - Whether preferred name
-- `codes` - Array of substance codes
-- `codes.code` - Code value
-- `codes.codeSystem` - Code system (CAS, ECHA, EINECS, etc.)
-- `codes.type` - Code type
-- `relationships` - Array of substance relationships
-- `relationships.type` - Relationship type (ACTIVE MOIETY, METABOLITE, IMPURITY, etc.)
-- `relationships.relatedSubstance` - Related substance reference
-- `moieties` - Molecular moieties
-- `properties` - Array of physicochemical properties
-- `properties.name` - Property name
-- `properties.value` - Property value
-- `properties.propertyType` - Property type
-- `structure` - Chemical structure information
-- `structure.smiles` - SMILES notation
-- `structure.inchi` - InChI string
-- `structure.inchiKey` - InChI key
-- `structure.formula` - Molecular formula
-- `structure.molecularWeight` - Molecular weight
-- `modifications` - Structural modifications (for proteins, etc.)
-- `protein` - Protein-specific information
-- `protein.subunits` - Protein subunits
-- `protein.sequenceType` - Sequence type
-- `nucleicAcid` - Nucleic acid information
-- `nucleicAcid.subunits` - Sequence subunits
-- `polymer` - Polymer information
-- `mixture` - Mixture components
-- `mixture.components` - Component substances
-- `tags` - Substance tags
-- `references` - Literature references
+**主要欄位**：
+- `uuid` - 唯一物質識別碼（UUID）
+- `approvalID` - FDA 唯一成分識別碼（UNII）
+- `approved` - 核准日期
+- `substanceClass` - 物質類型（化學、蛋白質、核酸、聚合物等）
+- `names` - 物質名稱陣列
+- `names.name` - 名稱文字
+- `names.type` - 名稱類型（系統、品牌、通用等）
+- `names.preferred` - 是否為首選名稱
+- `codes` - 物質代碼陣列
+- `codes.code` - 代碼值
+- `codes.codeSystem` - 代碼系統（CAS、ECHA、EINECS 等）
+- `codes.type` - 代碼類型
+- `relationships` - 物質關係陣列
+- `relationships.type` - 關係類型（活性部分、代謝物、雜質等）
+- `relationships.relatedSubstance` - 相關物質參考
+- `moieties` - 分子部分
+- `properties` - 理化性質陣列
+- `properties.name` - 性質名稱
+- `properties.value` - 性質值
+- `properties.propertyType` - 性質類型
+- `structure` - 化學結構資訊
+- `structure.smiles` - SMILES 表示法
+- `structure.inchi` - InChI 字串
+- `structure.inchiKey` - InChI 鍵
+- `structure.formula` - 分子式
+- `structure.molecularWeight` - 分子量
+- `modifications` - 結構修飾（用於蛋白質等）
+- `protein` - 蛋白質特定資訊
+- `protein.subunits` - 蛋白質亞基
+- `protein.sequenceType` - 序列類型
+- `nucleicAcid` - 核酸資訊
+- `nucleicAcid.subunits` - 序列亞基
+- `polymer` - 聚合物資訊
+- `mixture` - 混合物成分
+- `mixture.components` - 成分物質
+- `tags` - 物質標籤
+- `references` - 文獻參考
 
-**Substance Classes**:
-- **Chemical** - Small molecules with defined chemical structure
-- **Protein** - Proteins and peptides
-- **Nucleic Acid** - DNA, RNA, oligonucleotides
-- **Polymer** - Polymeric substances
-- **Structurally Diverse** - Complex mixtures, botanicals
-- **Mixture** - Defined mixtures
-- **Concept** - Abstract concepts (e.g., groups)
+**物質類別**：
+- **Chemical** - 具有定義化學結構的小分子
+- **Protein** - 蛋白質和多肽
+- **Nucleic Acid** - DNA、RNA、寡核苷酸
+- **Polymer** - 聚合物質
+- **Structurally Diverse** - 複雜混合物、植物提取物
+- **Mixture** - 已定義的混合物
+- **Concept** - 抽象概念（例如：群組）
 
-**Common Use Cases**:
-- Active ingredient identification
-- Molecular structure lookup
-- UNII code resolution
-- Chemical identifier mapping (CAS to UNII, etc.)
-- Substance relationship analysis
-- Excipient identification
-- Botanical substance information
-- Protein and biologic characterization
+**常見使用案例**：
+- 活性成分識別
+- 分子結構查詢
+- UNII 代碼解析
+- 化學識別碼對應（CAS 到 UNII 等）
+- 物質關係分析
+- 賦形劑識別
+- 植物物質資訊
+- 蛋白質和生物製劑特性描述
 
-**Example Queries**:
+**查詢範例**：
 ```python
 import requests
 
 api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/other/substance.json"
 
-# Look up substance by UNII code
+# 按 UNII 代碼查詢物質
 params = {
     "api_key": api_key,
-    "search": "approvalID:R16CO5Y76E",  # Aspirin UNII
+    "search": "approvalID:R16CO5Y76E",  # 阿斯匹靈 UNII
     "limit": 1
 }
 
@@ -93,7 +93,7 @@ data = response.json()
 ```
 
 ```python
-# Search by substance name
+# 按物質名稱搜尋
 params = {
     "api_key": api_key,
     "search": "names.name:acetaminophen",
@@ -102,16 +102,16 @@ params = {
 ```
 
 ```python
-# Find substances by CAS number
+# 按 CAS 編號查詢物質
 params = {
     "api_key": api_key,
-    "search": "codes.code:50-78-2",  # Aspirin CAS
+    "search": "codes.code:50-78-2",  # 阿斯匹靈 CAS
     "limit": 1
 }
 ```
 
 ```python
-# Get chemical substances only
+# 僅取得化學物質
 params = {
     "api_key": api_key,
     "search": "substanceClass:chemical",
@@ -120,16 +120,16 @@ params = {
 ```
 
 ```python
-# Search by molecular formula
+# 按分子式搜尋
 params = {
     "api_key": api_key,
-    "search": "structure.formula:C8H9NO2",  # Acetaminophen
+    "search": "structure.formula:C8H9NO2",  # 對乙醯氨基酚
     "limit": 10
 }
 ```
 
 ```python
-# Find protein substances
+# 查詢蛋白質物質
 params = {
     "api_key": api_key,
     "search": "substanceClass:protein",
@@ -137,35 +137,35 @@ params = {
 }
 ```
 
-### 2. NSDE (National Substance Database Entry)
+### 2. NSDE（國家物質資料庫條目）
 
-**Endpoint**: `https://api.fda.gov/other/nsde.json`
+**端點**：`https://api.fda.gov/other/nsde.json`
 
-**Purpose**: Access historical substance data from legacy National Drug Code (NDC) directory entries. This endpoint provides substance information as it appears in historical drug product listings.
+**目的**：存取舊版國家藥品代碼（NDC）目錄條目中的歷史物質資料。此端點提供歷史藥品列名中的物質資訊。
 
-**Note**: This database is primarily for historical reference. For current substance information, use the Substance Data endpoint.
+**注意**：此資料庫主要用於歷史參考。如需最新物質資訊，請使用物質資料端點。
 
-**Key Fields**:
-- `proprietary_name` - Product proprietary name
-- `nonproprietary_name` - Nonproprietary name
-- `dosage_form` - Dosage form
-- `route` - Route of administration
-- `company_name` - Company name
-- `substance_name` - Substance name
-- `active_numerator_strength` - Active ingredient strength (numerator)
-- `active_ingred_unit` - Active ingredient unit
-- `pharm_classes` - Pharmacological classes
-- `dea_schedule` - DEA controlled substance schedule
+**主要欄位**：
+- `proprietary_name` - 產品專有名稱
+- `nonproprietary_name` - 非專有名稱
+- `dosage_form` - 劑型
+- `route` - 給藥途徑
+- `company_name` - 公司名稱
+- `substance_name` - 物質名稱
+- `active_numerator_strength` - 活性成分強度（分子）
+- `active_ingred_unit` - 活性成分單位
+- `pharm_classes` - 藥理類別
+- `dea_schedule` - DEA 管制物質等級
 
-**Common Use Cases**:
-- Historical drug formulation research
-- Legacy system integration
-- Historical substance name mapping
-- Pharmaceutical history research
+**常見使用案例**：
+- 歷史藥物配方研究
+- 舊系統整合
+- 歷史物質名稱對應
+- 藥學歷史研究
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Search by substance name
+# 按物質名稱搜尋
 params = {
     "api_key": api_key,
     "search": "substance_name:ibuprofen",
@@ -176,7 +176,7 @@ response = requests.get("https://api.fda.gov/other/nsde.json", params=params)
 ```
 
 ```python
-# Find controlled substances by DEA schedule
+# 按 DEA 等級查詢管制物質
 params = {
     "api_key": api_key,
     "search": "dea_schedule:CII",
@@ -184,21 +184,21 @@ params = {
 }
 ```
 
-## Integration Tips
+## 整合技巧
 
-### UNII to CAS Mapping
+### UNII 到 CAS 對應
 
 ```python
 def get_substance_identifiers(unii, api_key):
     """
-    Get all identifiers for a substance given its UNII code.
+    取得給定 UNII 代碼的物質所有識別碼。
 
-    Args:
-        unii: FDA Unique Ingredient Identifier
-        api_key: FDA API key
+    參數：
+        unii: FDA 唯一成分識別碼
+        api_key: FDA API 金鑰
 
-    Returns:
-        Dictionary with substance identifiers
+    回傳：
+        包含物質識別碼的字典
     """
     import requests
 
@@ -225,7 +225,7 @@ def get_substance_identifiers(unii, api_key):
         "other_codes": {}
     }
 
-    # Extract names
+    # 提取名稱
     if "names" in substance:
         for name in substance["names"]:
             if name.get("preferred"):
@@ -234,7 +234,7 @@ def get_substance_identifiers(unii, api_key):
         if not identifiers["preferred_name"] and len(substance["names"]) > 0:
             identifiers["preferred_name"] = substance["names"][0].get("name")
 
-    # Extract codes
+    # 提取代碼
     if "codes" in substance:
         for code in substance["codes"]:
             code_system = code.get("codeSystem", "").upper()
@@ -250,19 +250,19 @@ def get_substance_identifiers(unii, api_key):
     return identifiers
 ```
 
-### Chemical Structure Lookup
+### 化學結構查詢
 
 ```python
 def get_chemical_structure(substance_name, api_key):
     """
-    Get chemical structure information for a substance.
+    取得物質的化學結構資訊。
 
-    Args:
-        substance_name: Name of the substance
-        api_key: FDA API key
+    參數：
+        substance_name: 物質名稱
+        api_key: FDA API 金鑰
 
-    Returns:
-        Dictionary with structure information
+    回傳：
+        包含結構資訊的字典
     """
     import requests
 
@@ -296,19 +296,19 @@ def get_chemical_structure(substance_name, api_key):
     }
 ```
 
-### Substance Relationship Mapping
+### 物質關係對應
 
 ```python
 def get_substance_relationships(unii, api_key):
     """
-    Get all related substances (metabolites, active moieties, etc.).
+    取得所有相關物質（代謝物、活性部分等）。
 
-    Args:
-        unii: FDA Unique Ingredient Identifier
-        api_key: FDA API key
+    參數：
+        unii: FDA 唯一成分識別碼
+        api_key: FDA API 金鑰
 
-    Returns:
-        Dictionary organizing relationships by type
+    回傳：
+        按類型組織的關係字典
     """
     import requests
 
@@ -345,23 +345,23 @@ def get_substance_relationships(unii, api_key):
     return relationships
 ```
 
-### Active Ingredient Extraction
+### 活性成分提取
 
 ```python
 def find_active_ingredients_by_product(product_name, api_key):
     """
-    Find active ingredients in a drug product.
+    查詢藥品中的活性成分。
 
-    Args:
-        product_name: Drug product name
-        api_key: FDA API key
+    參數：
+        product_name: 藥品名稱
+        api_key: FDA API 金鑰
 
-    Returns:
-        List of active ingredient UNIIs and names
+    回傳：
+        活性成分 UNII 和名稱的列表
     """
     import requests
 
-    # First search drug label database
+    # 首先搜尋藥物標籤資料庫
     label_url = "https://api.fda.gov/drug/label.json"
     label_params = {
         "api_key": api_key,
@@ -377,13 +377,13 @@ def find_active_ingredients_by_product(product_name, api_key):
 
     label = data["results"][0]
 
-    # Extract UNIIs from openfda section
+    # 從 openfda 區段提取 UNII
     active_ingredients = []
 
     if "openfda" in label:
         openfda = label["openfda"]
 
-        # Get UNIIs
+        # 取得 UNII
         unii_list = openfda.get("unii", [])
         generic_names = openfda.get("generic_name", [])
 
@@ -392,7 +392,7 @@ def find_active_ingredients_by_product(product_name, api_key):
             if i < len(generic_names):
                 ingredient["name"] = generic_names[i]
 
-            # Get additional substance info
+            # 取得額外的物質資訊
             substance_info = get_substance_identifiers(unii, api_key)
             if substance_info:
                 ingredient.update(substance_info)
@@ -402,71 +402,71 @@ def find_active_ingredients_by_product(product_name, api_key):
     return active_ingredients
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Use UNII as primary identifier** - Most consistent across FDA databases
-2. **Map between identifier systems** - CAS, UNII, InChI Key for cross-referencing
-3. **Handle substance variations** - Different salt forms, hydrates have different UNIIs
-4. **Check substance class** - Different classes have different data structures
-5. **Validate chemical structures** - SMILES and InChI should be verified
-6. **Consider substance relationships** - Active moiety vs. salt form matters
-7. **Use preferred names** - More consistent than trade names
-8. **Cache substance data** - Substance information changes infrequently
-9. **Cross-reference with other endpoints** - Link substances to drugs/products
-10. **Handle mixture components** - Complex products have multiple components
+1. **使用 UNII 作為主要識別碼** - 跨 FDA 資料庫最一致
+2. **在識別碼系統間對應** - CAS、UNII、InChI 鍵用於交叉參考
+3. **處理物質變體** - 不同鹽型、水合物有不同的 UNII
+4. **檢查物質類別** - 不同類別有不同的資料結構
+5. **驗證化學結構** - 應驗證 SMILES 和 InChI
+6. **考慮物質關係** - 活性部分與鹽型很重要
+7. **使用首選名稱** - 比商品名更一致
+8. **快取物質資料** - 物質資訊很少變更
+9. **與其他端點交叉參考** - 連結物質與藥物/產品
+10. **處理混合物成分** - 複雜產品有多個成分
 
-## UNII System
+## UNII 系統
 
-The FDA Unique Ingredient Identifier (UNII) system provides:
-- **Unique identifiers** - Each substance gets one UNII
-- **Substance specificity** - Different forms (salts, hydrates) get different UNIIs
-- **Global recognition** - Used internationally
-- **Stability** - UNIIs don't change once assigned
-- **Free access** - No licensing required
+FDA 唯一成分識別碼（UNII）系統提供：
+- **唯一識別碼** - 每種物質獲得一個 UNII
+- **物質特異性** - 不同形式（鹽、水合物）獲得不同的 UNII
+- **全球認可** - 國際使用
+- **穩定性** - UNII 一旦分配就不會改變
+- **免費存取** - 無需授權
 
-**UNII Format**: 10-character alphanumeric code (e.g., `R16CO5Y76E`)
+**UNII 格式**：10 字元字母數字代碼（例如：`R16CO5Y76E`）
 
-## Substance Classes Explained
+## 物質類別說明
 
-### Chemical
-- Traditional small molecule drugs
-- Have defined molecular structure
-- Include organic and inorganic compounds
-- SMILES, InChI, molecular formula available
+### Chemical（化學）
+- 傳統小分子藥物
+- 具有定義的分子結構
+- 包括有機和無機化合物
+- 可獲得 SMILES、InChI、分子式
 
-### Protein
-- Polypeptides and proteins
-- Sequence information available
-- May have post-translational modifications
-- Includes antibodies, enzymes, hormones
+### Protein（蛋白質）
+- 多肽和蛋白質
+- 可獲得序列資訊
+- 可能有轉譯後修飾
+- 包括抗體、酵素、激素
 
-### Nucleic Acid
-- DNA and RNA sequences
-- Oligonucleotides
-- Antisense, siRNA, mRNA
-- Sequence data available
+### Nucleic Acid（核酸）
+- DNA 和 RNA 序列
+- 寡核苷酸
+- 反義、siRNA、mRNA
+- 可獲得序列資料
 
-### Polymer
-- Synthetic and natural polymers
-- Structural repeat units
-- Molecular weight distributions
-- Used as excipients and active ingredients
+### Polymer（聚合物）
+- 合成和天然聚合物
+- 結構重複單元
+- 分子量分佈
+- 用作賦形劑和活性成分
 
-### Structurally Diverse
-- Complex natural products
-- Botanical extracts
-- Materials without single molecular structure
-- Characterized by source and composition
+### Structurally Diverse（結構多樣性）
+- 複雜的天然產物
+- 植物提取物
+- 沒有單一分子結構的材料
+- 以來源和組成特徵描述
 
-### Mixture
-- Defined combinations of substances
-- Fixed or variable composition
-- Each component trackable
+### Mixture（混合物）
+- 已定義的物質組合
+- 固定或可變組成
+- 每個成分可追蹤
 
-## Additional Resources
+## 其他資源
 
-- FDA Substance Registration System: https://fdasis.nlm.nih.gov/srs/
-- UNII Search: https://precision.fda.gov/uniisearch
-- OpenFDA Other APIs: https://open.fda.gov/apis/other/
-- API Basics: See `api_basics.md` in this references directory
-- Python examples: See `scripts/fda_substance_query.py`
+- FDA 物質註冊系統：https://fdasis.nlm.nih.gov/srs/
+- UNII 搜尋：https://precision.fda.gov/uniisearch
+- OpenFDA 其他 API：https://open.fda.gov/apis/other/
+- API 基礎：請參閱本參考目錄中的 `api_basics.md`
+- Python 範例：請參閱 `scripts/fda_substance_query.py`

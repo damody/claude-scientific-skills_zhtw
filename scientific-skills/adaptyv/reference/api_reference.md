@@ -1,40 +1,40 @@
-# Adaptyv API Reference
+# Adaptyv API 參考
 
-## Base URL
+## 基礎 URL
 
 ```
 https://kq5jp7qj7wdqklhsxmovkzn4l40obksv.lambda-url.eu-central-1.on.aws
 ```
 
-## Authentication
+## 身份驗證
 
-All API requests require bearer token authentication in the request header:
+所有 API 請求都需要在請求標頭中使用 bearer token 身份驗證：
 
 ```
 Authorization: Bearer YOUR_API_KEY
 ```
 
-To obtain API access:
-1. Contact support@adaptyvbio.com
-2. Request API access during alpha/beta period
-3. Receive your personal access token
+取得 API 存取權限：
+1. 聯繫 support@adaptyvbio.com
+2. 在 alpha/beta 期間申請 API 存取權限
+3. 收到您的個人存取權杖
 
-Store your API key securely:
-- Use environment variables: `ADAPTYV_API_KEY`
-- Never commit API keys to version control
-- Use `.env` files with `.gitignore` for local development
+安全儲存您的 API 金鑰：
+- 使用環境變數：`ADAPTYV_API_KEY`
+- 永遠不要將 API 金鑰提交到版本控制系統
+- 在本地開發時使用含 `.gitignore` 的 `.env` 檔案
 
-## Endpoints
+## 端點
 
-### Experiments
+### 實驗
 
-#### Create Experiment
+#### 建立實驗
 
-Submit protein sequences for experimental testing.
+提交蛋白質序列進行實驗測試。
 
-**Endpoint:** `POST /experiments`
+**端點：** `POST /experiments`
 
-**Request Body:**
+**請求主體：**
 ```json
 {
   "sequences": ">protein1\nMKVLWALLGLLGAA...\n>protein2\nMATGVLWALLG...",
@@ -48,12 +48,12 @@ Submit protein sequences for experimental testing.
 }
 ```
 
-**Sequence Format:**
-- FASTA format with headers
-- Multiple sequences supported
-- Standard amino acid codes
+**序列格式：**
+- 帶標頭的 FASTA 格式
+- 支援多個序列
+- 標準胺基酸代碼
 
-**Response:**
+**回應：**
 ```json
 {
   "experiment_id": "exp_abc123xyz",
@@ -63,13 +63,13 @@ Submit protein sequences for experimental testing.
 }
 ```
 
-#### Get Experiment Status
+#### 取得實驗狀態
 
-Check the current status of an experiment.
+檢查實驗的目前狀態。
 
-**Endpoint:** `GET /experiments/{experiment_id}`
+**端點：** `GET /experiments/{experiment_id}`
 
-**Response:**
+**回應：**
 ```json
 {
   "experiment_id": "exp_abc123xyz",
@@ -83,24 +83,24 @@ Check the current status of an experiment.
 }
 ```
 
-**Status Values:**
-- `submitted` - Experiment received and queued
-- `processing` - Active testing in progress
-- `completed` - Results available for download
-- `failed` - Experiment encountered an error
+**狀態值：**
+- `submitted` - 實驗已收到並排隊
+- `processing` - 測試正在進行中
+- `completed` - 結果可供下載
+- `failed` - 實驗遇到錯誤
 
-#### List Experiments
+#### 列出實驗
 
-Retrieve all experiments for your organization.
+擷取您組織的所有實驗。
 
-**Endpoint:** `GET /experiments`
+**端點：** `GET /experiments`
 
-**Query Parameters:**
-- `status` - Filter by status (optional)
-- `limit` - Number of results per page (default: 50)
-- `offset` - Pagination offset (default: 0)
+**查詢參數：**
+- `status` - 按狀態篩選（可選）
+- `limit` - 每頁結果數（預設：50）
+- `offset` - 分頁偏移量（預設：0）
 
-**Response:**
+**回應：**
 ```json
 {
   "experiments": [
@@ -117,15 +117,15 @@ Retrieve all experiments for your organization.
 }
 ```
 
-### Results
+### 結果
 
-#### Get Experiment Results
+#### 取得實驗結果
 
-Download results from a completed experiment.
+下載已完成實驗的結果。
 
-**Endpoint:** `GET /experiments/{experiment_id}/results`
+**端點：** `GET /experiments/{experiment_id}/results`
 
-**Response:**
+**回應：**
 ```json
 {
   "experiment_id": "exp_abc123xyz",
@@ -151,20 +151,20 @@ Download results from a completed experiment.
 }
 ```
 
-### Targets
+### 標靶
 
-#### Search Target Catalog
+#### 搜尋標靶目錄
 
-Search the ACROBiosystems antigen catalog.
+搜尋 ACROBiosystems 抗原目錄。
 
-**Endpoint:** `GET /targets`
+**端點：** `GET /targets`
 
-**Query Parameters:**
-- `search` - Search term (protein name, UniProt ID, etc.)
-- `species` - Filter by species
-- `category` - Filter by category
+**查詢參數：**
+- `search` - 搜尋詞（蛋白質名稱、UniProt ID 等）
+- `species` - 按物種篩選
+- `category` - 按類別篩選
 
-**Response:**
+**回應：**
 ```json
 {
   "targets": [
@@ -180,13 +180,13 @@ Search the ACROBiosystems antigen catalog.
 }
 ```
 
-#### Request Custom Target
+#### 請求自訂標靶
 
-Request an antigen not in the standard catalog.
+請求標準目錄中沒有的抗原。
 
-**Endpoint:** `POST /targets/request`
+**端點：** `POST /targets/request`
 
-**Request Body:**
+**請求主體：**
 ```json
 {
   "target_name": "Custom target name",
@@ -196,15 +196,15 @@ Request an antigen not in the standard catalog.
 }
 ```
 
-### Organization
+### 組織
 
-#### Get Credits Balance
+#### 取得點數餘額
 
-Check your organization's credit balance and usage.
+檢查您組織的點數餘額和使用情況。
 
-**Endpoint:** `GET /organization/credits`
+**端點：** `GET /organization/credits`
 
-**Response:**
+**回應：**
 ```json
 {
   "balance": 10000,
@@ -216,9 +216,9 @@ Check your organization's credit balance and usage.
 
 ## Webhooks
 
-Configure webhook URLs to receive notifications when experiments complete.
+配置 webhook URL 以在實驗完成時接收通知。
 
-**Webhook Payload:**
+**Webhook 負載：**
 ```json
 {
   "event": "experiment.completed",
@@ -229,20 +229,20 @@ Configure webhook URLs to receive notifications when experiments complete.
 }
 ```
 
-**Webhook Events:**
-- `experiment.submitted` - Experiment received
-- `experiment.started` - Processing began
-- `experiment.completed` - Results available
-- `experiment.failed` - Error occurred
+**Webhook 事件：**
+- `experiment.submitted` - 實驗已收到
+- `experiment.started` - 處理已開始
+- `experiment.completed` - 結果可用
+- `experiment.failed` - 發生錯誤
 
-**Security:**
-- Verify webhook signatures (details provided during onboarding)
-- Use HTTPS endpoints only
-- Respond with 200 OK to acknowledge receipt
+**安全性：**
+- 驗證 webhook 簽名（詳情在入門時提供）
+- 僅使用 HTTPS 端點
+- 回應 200 OK 以確認收到
 
-## Error Handling
+## 錯誤處理
 
-**Error Response Format:**
+**錯誤回應格式：**
 ```json
 {
   "error": {
@@ -257,52 +257,52 @@ Configure webhook URLs to receive notifications when experiments complete.
 }
 ```
 
-**Common Error Codes:**
-- `authentication_failed` - Invalid or missing API key
-- `invalid_sequence` - Malformed FASTA or invalid amino acids
-- `insufficient_credits` - Not enough credits for experiment
-- `target_not_found` - Specified target ID doesn't exist
-- `rate_limit_exceeded` - Too many requests
-- `experiment_not_found` - Invalid experiment ID
-- `internal_error` - Server-side error
+**常見錯誤代碼：**
+- `authentication_failed` - API 金鑰無效或缺失
+- `invalid_sequence` - FASTA 格式錯誤或無效的胺基酸
+- `insufficient_credits` - 點數不足以進行實驗
+- `target_not_found` - 指定的標靶 ID 不存在
+- `rate_limit_exceeded` - 請求過多
+- `experiment_not_found` - 無效的實驗 ID
+- `internal_error` - 伺服器端錯誤
 
-## Rate Limits
+## 速率限制
 
-- 100 requests per minute per API key
-- 1000 experiments per day per organization
-- Batch submissions encouraged for large-scale testing
+- 每個 API 金鑰每分鐘 100 個請求
+- 每個組織每天 1000 個實驗
+- 建議使用批次提交進行大規模測試
 
-When rate limited, response includes:
+當被速率限制時，回應包含：
 ```
 HTTP 429 Too Many Requests
 Retry-After: 60
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use webhooks** for long-running experiments instead of polling
-2. **Batch sequences** when submitting multiple variants
-3. **Cache results** to avoid redundant API calls
-4. **Implement retry logic** with exponential backoff
-5. **Monitor credits** to avoid experiment failures
-6. **Validate sequences** locally before submission
-7. **Use descriptive metadata** for better experiment tracking
+1. **使用 webhooks** 處理長時間執行的實驗，而非輪詢
+2. **批次處理序列** 當提交多個變體時
+3. **快取結果** 以避免冗餘的 API 呼叫
+4. **實作重試邏輯** 並使用指數退避
+5. **監控點數** 以避免實驗失敗
+6. **在提交前驗證序列** 在本地進行
+7. **使用描述性 metadata** 以便更好地追蹤實驗
 
-## API Versioning
+## API 版本控制
 
-The API is currently in alpha/beta. Breaking changes may occur but will be:
-- Announced via email to registered users
-- Documented in the changelog
-- Supported with migration guides
+API 目前處於 alpha/beta 階段。可能會發生破壞性變更，但會：
+- 透過電子郵件通知註冊使用者
+- 記錄在變更日誌中
+- 提供遷移指南支援
 
-Current version is reflected in response headers:
+目前版本反映在回應標頭中：
 ```
 X-API-Version: alpha-2025-11
 ```
 
-## Support
+## 支援
 
-For API issues or questions:
-- Email: support@adaptyvbio.com
-- Documentation updates: https://docs.adaptyvbio.com
-- Report bugs with experiment IDs and request details
+API 問題或疑問：
+- 電子郵件：support@adaptyvbio.com
+- 文件更新：https://docs.adaptyvbio.com
+- 回報錯誤時請附上實驗 ID 和請求詳情

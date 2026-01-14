@@ -1,23 +1,23 @@
-# Noise Modeling and Mitigation
+# 雜訊建模和緩解
 
-This guide covers noise models, noisy simulation, characterization, and error mitigation in Cirq.
+本指南涵蓋 Cirq 中的雜訊模型、雜訊模擬、特性分析和錯誤緩解。
 
-## Noise Channels
+## 雜訊通道
 
-### Depolarizing Noise
+### 去極化雜訊
 
 ```python
 import cirq
 import numpy as np
 
-# Single-qubit depolarizing channel
+# 單量子位元去極化通道
 depol_channel = cirq.depolarize(p=0.01)
 
-# Apply to qubit
+# 應用到量子位元
 q = cirq.LineQubit(0)
 noisy_op = depol_channel(q)
 
-# Add to circuit
+# 加入電路
 circuit = cirq.Circuit(
     cirq.H(q),
     depol_channel(q),
@@ -25,24 +25,24 @@ circuit = cirq.Circuit(
 )
 ```
 
-### Amplitude Damping
+### 振幅阻尼
 
 ```python
-# Amplitude damping (T1 decay)
+# 振幅阻尼（T1 衰減）
 gamma = 0.1
 amp_damp = cirq.amplitude_damp(gamma)
 
-# Apply after gate
+# 在閘之後應用
 circuit = cirq.Circuit(
     cirq.X(q),
     amp_damp(q)
 )
 ```
 
-### Phase Damping
+### 相位阻尼
 
 ```python
-# Phase damping (T2 dephasing)
+# 相位阻尼（T2 退相干）
 gamma = 0.1
 phase_damp = cirq.phase_damp(gamma)
 
@@ -52,10 +52,10 @@ circuit = cirq.Circuit(
 )
 ```
 
-### Bit Flip Noise
+### 位元翻轉雜訊
 
 ```python
-# Bit flip channel
+# 位元翻轉通道
 bit_flip_prob = 0.01
 bit_flip = cirq.bit_flip(bit_flip_prob)
 
@@ -65,10 +65,10 @@ circuit = cirq.Circuit(
 )
 ```
 
-### Phase Flip Noise
+### 相位翻轉雜訊
 
 ```python
-# Phase flip channel
+# 相位翻轉通道
 phase_flip_prob = 0.01
 phase_flip = cirq.phase_flip(phase_flip_prob)
 
@@ -78,55 +78,55 @@ circuit = cirq.Circuit(
 )
 ```
 
-### Generalized Amplitude Damping
+### 廣義振幅阻尼
 
 ```python
-# Generalized amplitude damping
-p = 0.1  # Damping probability
-gamma = 0.2  # Excitation probability
+# 廣義振幅阻尼
+p = 0.1  # 阻尼機率
+gamma = 0.2  # 激發機率
 gen_amp_damp = cirq.generalized_amplitude_damp(p=p, gamma=gamma)
 ```
 
-### Reset Channel
+### 重置通道
 
 ```python
-# Reset to |0⟩ or |1⟩
+# 重置到 |0⟩ 或 |1⟩
 reset_to_zero = cirq.reset(q)
 
-# Reset appears as measurement followed by conditional flip
+# 重置表現為測量後條件翻轉
 circuit = cirq.Circuit(
     cirq.H(q),
     reset_to_zero
 )
 ```
 
-## Noise Models
+## 雜訊模型
 
-### Constant Noise Model
+### 常數雜訊模型
 
 ```python
-# Apply same noise to all qubits
+# 對所有量子位元應用相同雜訊
 noise = cirq.ConstantQubitNoiseModel(
     qubit_noise_gate=cirq.depolarize(0.01)
 )
 
-# Simulate with noise
+# 使用雜訊模擬
 simulator = cirq.DensityMatrixSimulator(noise=noise)
 result = simulator.run(circuit, repetitions=1000)
 ```
 
-### Gate-Specific Noise
+### 閘特定雜訊
 
 ```python
 class CustomNoiseModel(cirq.NoiseModel):
-    """Apply different noise to different gate types."""
+    """對不同閘類型應用不同雜訊。"""
 
     def noisy_operation(self, op):
-        # Single-qubit gates: depolarizing noise
+        # 單量子位元閘：去極化雜訊
         if len(op.qubits) == 1:
             return [op, cirq.depolarize(0.001)(op.qubits[0])]
 
-        # Two-qubit gates: higher depolarizing noise
+        # 雙量子位元閘：更高的去極化雜訊
         elif len(op.qubits) == 2:
             return [
                 op,
@@ -136,16 +136,16 @@ class CustomNoiseModel(cirq.NoiseModel):
 
         return op
 
-# Use custom noise model
+# 使用自訂雜訊模型
 noise_model = CustomNoiseModel()
 simulator = cirq.DensityMatrixSimulator(noise=noise_model)
 ```
 
-### Qubit-Specific Noise
+### 量子位元特定雜訊
 
 ```python
 class QubitSpecificNoise(cirq.NoiseModel):
-    """Different noise for different qubits."""
+    """對不同量子位元應用不同雜訊。"""
 
     def __init__(self, qubit_noise_map):
         self.qubit_noise_map = qubit_noise_map
@@ -158,7 +158,7 @@ class QubitSpecificNoise(cirq.NoiseModel):
                 noise_ops.append(noise(qubit))
         return noise_ops
 
-# Define per-qubit noise
+# 定義每個量子位元的雜訊
 q0, q1, q2 = cirq.LineQubit.range(3)
 noise_map = {
     q0: cirq.depolarize(0.001),
@@ -169,19 +169,19 @@ noise_map = {
 noise_model = QubitSpecificNoise(noise_map)
 ```
 
-### Thermal Noise
+### 熱雜訊
 
 ```python
 class ThermalNoise(cirq.NoiseModel):
-    """Thermal relaxation noise."""
+    """熱弛豫雜訊。"""
 
     def __init__(self, T1, T2, gate_time):
-        self.T1 = T1  # Amplitude damping time
-        self.T2 = T2  # Dephasing time
+        self.T1 = T1  # 振幅阻尼時間
+        self.T2 = T2  # 退相干時間
         self.gate_time = gate_time
 
     def noisy_operation(self, op):
-        # Calculate probabilities
+        # 計算機率
         p_amp = 1 - np.exp(-self.gate_time / self.T1)
         p_phase = 1 - np.exp(-self.gate_time / self.T2)
 
@@ -192,7 +192,7 @@ class ThermalNoise(cirq.NoiseModel):
 
         return noise_ops
 
-# Typical superconducting qubit parameters
+# 典型超導量子位元參數
 T1 = 50e-6  # 50 μs
 T2 = 30e-6  # 30 μs
 gate_time = 25e-9  # 25 ns
@@ -200,23 +200,23 @@ gate_time = 25e-9  # 25 ns
 noise_model = ThermalNoise(T1, T2, gate_time)
 ```
 
-## Adding Noise to Circuits
+## 將雜訊加入電路
 
-### with_noise Method
+### with_noise 方法
 
 ```python
-# Add noise to all operations
+# 對所有操作加入雜訊
 noisy_circuit = circuit.with_noise(cirq.depolarize(p=0.01))
 
-# Simulate noisy circuit
+# 模擬雜訊電路
 simulator = cirq.DensityMatrixSimulator()
 result = simulator.run(noisy_circuit, repetitions=1000)
 ```
 
-### insert_into_circuit Method
+### insert_into_circuit 方法
 
 ```python
-# Manual noise insertion
+# 手動雜訊插入
 def add_noise_to_circuit(circuit, noise_model):
     noisy_moments = []
     for moment in circuit:
@@ -227,46 +227,46 @@ def add_noise_to_circuit(circuit, noise_model):
     return cirq.Circuit(noisy_moments)
 ```
 
-## Readout Noise
+## 讀取雜訊
 
-### Measurement Error Model
+### 測量錯誤模型
 
 ```python
 class ReadoutNoiseModel(cirq.NoiseModel):
-    """Model readout/measurement errors."""
+    """建模讀取/測量錯誤。"""
 
     def __init__(self, p0_given_1, p1_given_0):
-        # p0_given_1: Probability of measuring 0 when state is 1
-        # p1_given_0: Probability of measuring 1 when state is 0
+        # p0_given_1：狀態為 1 時測量到 0 的機率
+        # p1_given_0：狀態為 0 時測量到 1 的機率
         self.p0_given_1 = p0_given_1
         self.p1_given_0 = p1_given_0
 
     def noisy_operation(self, op):
         if isinstance(op.gate, cirq.MeasurementGate):
-            # Apply bit flip before measurement
+            # 在測量前應用位元翻轉
             noise_ops = []
             for qubit in op.qubits:
-                # Average readout error
+                # 平均讀取錯誤
                 p_error = (self.p0_given_1 + self.p1_given_0) / 2
                 noise_ops.append(cirq.bit_flip(p_error)(qubit))
             noise_ops.append(op)
             return noise_ops
         return op
 
-# Typical readout errors
+# 典型讀取錯誤
 readout_noise = ReadoutNoiseModel(p0_given_1=0.02, p1_given_0=0.01)
 ```
 
-## Noise Characterization
+## 雜訊特性分析
 
-### Randomized Benchmarking
+### 隨機基準測試
 
 ```python
 import cirq
 
 def generate_rb_circuit(qubits, depth):
-    """Generate randomized benchmarking circuit."""
-    # Random Clifford gates
+    """生成隨機基準測試電路。"""
+    # 隨機 Clifford 閘
     clifford_gates = [cirq.X, cirq.Y, cirq.Z, cirq.H, cirq.S]
 
     circuit = cirq.Circuit()
@@ -275,15 +275,15 @@ def generate_rb_circuit(qubits, depth):
             gate = np.random.choice(clifford_gates)
             circuit.append(gate(qubit))
 
-    # Add inverse to return to initial state (ideally)
-    # (simplified - proper RB requires tracking full sequence)
+    # 加入逆操作以返回初始態（理想情況下）
+    # （簡化版 - 正確的 RB 需要追蹤完整序列）
 
     circuit.append(cirq.measure(*qubits, key='result'))
     return circuit
 
-# Run RB experiment
+# 執行 RB 實驗
 def run_rb_experiment(qubits, depths, repetitions=1000):
-    """Run randomized benchmarking at various depths."""
+    """在不同深度執行隨機基準測試。"""
     simulator = cirq.DensityMatrixSimulator(
         noise=cirq.ConstantQubitNoiseModel(cirq.depolarize(0.01))
     )
@@ -295,7 +295,7 @@ def run_rb_experiment(qubits, depths, repetitions=1000):
         total_survival = 0
         for circuit in circuits:
             result = simulator.run(circuit, repetitions=repetitions)
-            # Calculate survival probability (returned to |0⟩)
+            # 計算存活機率（返回到 |0⟩）
             counts = result.histogram(key='result')
             survival = counts.get(0, 0) / repetitions
             total_survival += survival
@@ -305,54 +305,54 @@ def run_rb_experiment(qubits, depths, repetitions=1000):
 
     return survival_probs
 
-# Fit to extract error rate
+# 擬合以提取錯誤率
 # p_survival = A * p^depth + B
-# Error per gate ≈ (1 - p) / 2
+# 每閘錯誤 ≈ (1 - p) / 2
 ```
 
-### Cross-Entropy Benchmarking (XEB)
+### 交叉熵基準測試（XEB）
 
 ```python
 def xeb_fidelity(circuit, simulator, ideal_probs, repetitions=10000):
-    """Calculate XEB fidelity."""
+    """計算 XEB 保真度。"""
 
-    # Run noisy simulation
+    # 執行雜訊模擬
     result = simulator.run(circuit, repetitions=repetitions)
     measured_probs = result.histogram(key='result')
 
-    # Normalize
+    # 正規化
     for key in measured_probs:
         measured_probs[key] /= repetitions
 
-    # Calculate cross-entropy
+    # 計算交叉熵
     cross_entropy = 0
     for bitstring, prob in measured_probs.items():
         if bitstring in ideal_probs:
             cross_entropy += prob * np.log2(ideal_probs[bitstring])
 
-    # Convert to fidelity
+    # 轉換為保真度
     n_qubits = len(circuit.all_qubits())
     fidelity = (2**n_qubits * cross_entropy + 1) / (2**n_qubits - 1)
 
     return fidelity
 ```
 
-## Noise Visualization
+## 雜訊視覺化
 
-### Heatmap Visualization
+### 熱圖視覺化
 
 ```python
 import matplotlib.pyplot as plt
 
 def plot_noise_heatmap(device, noise_metric):
-    """Plot noise characteristics across 2D grid device."""
+    """繪製 2D 網格裝置上的雜訊特性。"""
 
-    # Get device qubits (assuming GridQubit)
+    # 取得裝置量子位元（假設為 GridQubit）
     qubits = sorted(device.metadata.qubit_set)
     rows = max(q.row for q in qubits) + 1
     cols = max(q.col for q in qubits) + 1
 
-    # Create heatmap data
+    # 建立熱圖資料
     heatmap = np.full((rows, cols), np.nan)
 
     for qubit in qubits:
@@ -360,25 +360,25 @@ def plot_noise_heatmap(device, noise_metric):
             value = noise_metric.get(qubit, 0)
             heatmap[qubit.row, qubit.col] = value
 
-    # Plot
+    # 繪圖
     plt.figure(figsize=(10, 8))
     plt.imshow(heatmap, cmap='RdYlGn_r', interpolation='nearest')
-    plt.colorbar(label='Error Rate')
-    plt.title('Qubit Error Rates')
-    plt.xlabel('Column')
-    plt.ylabel('Row')
+    plt.colorbar(label='錯誤率')
+    plt.title('量子位元錯誤率')
+    plt.xlabel('列')
+    plt.ylabel('行')
     plt.show()
 
-# Example usage
+# 範例用法
 noise_metric = {q: np.random.random() * 0.01 for q in device.metadata.qubit_set}
 plot_noise_heatmap(device, noise_metric)
 ```
 
-### Gate Fidelity Visualization
+### 閘保真度視覺化
 
 ```python
 def plot_gate_fidelities(calibration_data):
-    """Plot single- and two-qubit gate fidelities."""
+    """繪製單量子位元和雙量子位元閘保真度。"""
 
     sq_fidelities = []
     tq_fidelities = []
@@ -392,42 +392,42 @@ def plot_gate_fidelities(calibration_data):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
     ax1.hist(sq_fidelities, bins=20)
-    ax1.set_xlabel('Single-Qubit Gate Fidelity')
-    ax1.set_ylabel('Count')
-    ax1.set_title('Single-Qubit Gate Fidelities')
+    ax1.set_xlabel('單量子位元閘保真度')
+    ax1.set_ylabel('計數')
+    ax1.set_title('單量子位元閘保真度')
 
     ax2.hist(tq_fidelities, bins=20)
-    ax2.set_xlabel('Two-Qubit Gate Fidelity')
-    ax2.set_ylabel('Count')
-    ax2.set_title('Two-Qubit Gate Fidelities')
+    ax2.set_xlabel('雙量子位元閘保真度')
+    ax2.set_ylabel('計數')
+    ax2.set_title('雙量子位元閘保真度')
 
     plt.tight_layout()
     plt.show()
 ```
 
-## Error Mitigation Techniques
+## 錯誤緩解技術
 
-### Zero-Noise Extrapolation
+### 零雜訊外推
 
 ```python
 def zero_noise_extrapolation(circuit, noise_levels, simulator):
-    """Extrapolate to zero noise limit."""
+    """外推到零雜訊極限。"""
 
     expectation_values = []
 
     for noise_level in noise_levels:
-        # Scale noise
+        # 縮放雜訊
         noisy_circuit = circuit.with_noise(
             cirq.depolarize(p=noise_level)
         )
 
-        # Measure expectation
+        # 測量期望值
         result = simulator.simulate(noisy_circuit)
-        # ... calculate expectation value
+        # ... 計算期望值
         exp_val = calculate_expectation(result)
         expectation_values.append(exp_val)
 
-    # Extrapolate to zero noise
+    # 外推到零雜訊
     from scipy.optimize import curve_fit
 
     def exponential_fit(x, a, b, c):
@@ -439,77 +439,77 @@ def zero_noise_extrapolation(circuit, noise_levels, simulator):
     return zero_noise_value
 ```
 
-### Probabilistic Error Cancellation
+### 機率錯誤消除
 
 ```python
 def quasi_probability_decomposition(noisy_gate, ideal_gate, noise_model):
-    """Decompose noisy gate into quasi-probability distribution."""
+    """將雜訊閘分解為準機率分佈。"""
 
-    # Decompose noisy gate as: N = ideal + error
-    # Invert: ideal = (N - error) / (1 - error_rate)
+    # 將雜訊閘分解為：N = ideal + error
+    # 反轉：ideal = (N - error) / (1 - error_rate)
 
-    # This creates a quasi-probability distribution
-    # (some probabilities may be negative)
+    # 這會建立準機率分佈
+    # （部分機率可能為負）
 
-    # Implementation depends on specific noise model
+    # 實作取決於具體的雜訊模型
     pass
 ```
 
-### Readout Error Mitigation
+### 讀取錯誤緩解
 
 ```python
 def mitigate_readout_errors(results, confusion_matrix):
-    """Apply readout error mitigation using confusion matrix."""
+    """使用混淆矩陣應用讀取錯誤緩解。"""
 
-    # Invert confusion matrix
+    # 反轉混淆矩陣
     inv_confusion = np.linalg.inv(confusion_matrix)
 
-    # Get measured counts
+    # 取得測量計數
     counts = results.histogram(key='result')
 
-    # Convert to probability vector
+    # 轉換為機率向量
     total_counts = sum(counts.values())
     measured_probs = np.array([counts.get(i, 0) / total_counts
                                for i in range(len(confusion_matrix))])
 
-    # Apply inverse
+    # 應用逆矩陣
     corrected_probs = inv_confusion @ measured_probs
 
-    # Convert back to counts
+    # 轉換回計數
     corrected_counts = {i: int(p * total_counts)
                        for i, p in enumerate(corrected_probs) if p > 0}
 
     return corrected_counts
 ```
 
-## Hardware-Based Noise Models
+## 基於硬體的雜訊模型
 
-### From Google Calibration
+### 從 Google 校準
 
 ```python
 import cirq_google
 
-# Get calibration data
+# 取得校準資料
 processor = cirq_google.get_engine().get_processor('weber')
 noise_props = processor.get_device_specification()
 
-# Create noise model from calibration
+# 從校準建立雜訊模型
 noise_model = cirq_google.NoiseModelFromGoogleNoiseProperties(noise_props)
 
-# Simulate with realistic noise
+# 使用真實雜訊模擬
 simulator = cirq.DensityMatrixSimulator(noise=noise_model)
 result = simulator.run(circuit, repetitions=1000)
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use density matrix simulator for noisy simulations**: State vector simulators cannot model mixed states
-2. **Match noise model to hardware**: Use calibration data when available
-3. **Include all error sources**: Gate errors, decoherence, readout errors
-4. **Characterize before mitigating**: Understand noise before applying mitigation
-5. **Consider error propagation**: Noise compounds through circuit depth
-6. **Use appropriate benchmarking**: RB for gate errors, XEB for full circuit fidelity
-7. **Visualize noise patterns**: Identify problematic qubits and gates
-8. **Apply targeted mitigation**: Focus on dominant error sources
-9. **Validate mitigation**: Verify that mitigation improves results
-10. **Keep circuits shallow**: Minimize noise accumulation
+1. **使用密度矩陣模擬器進行雜訊模擬**：狀態向量模擬器無法建模混合態
+2. **將雜訊模型與硬體匹配**：可用時使用校準資料
+3. **包含所有錯誤來源**：閘錯誤、退相干、讀取錯誤
+4. **先特性分析再緩解**：緩解前先了解雜訊
+5. **考慮錯誤傳播**：雜訊會隨電路深度累積
+6. **使用適當的基準測試**：RB 用於閘錯誤，XEB 用於完整電路保真度
+7. **視覺化雜訊模式**：識別有問題的量子位元和閘
+8. **應用針對性緩解**：專注於主要錯誤來源
+9. **驗證緩解效果**：確認緩解改善了結果
+10. **保持電路淺層**：最小化雜訊累積

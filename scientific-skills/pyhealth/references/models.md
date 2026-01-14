@@ -1,38 +1,38 @@
-# PyHealth Models
+# PyHealth 模型
 
-## Overview
+## 概述
 
-PyHealth provides 33+ models for healthcare prediction tasks, ranging from simple baselines to state-of-the-art deep learning architectures. Models are organized into general-purpose architectures and healthcare-specific models.
+PyHealth 提供 33+ 個用於醫療預測任務的模型，從簡單的基準模型到最先進的深度學習架構。模型分為通用架構和醫療專用模型。
 
-## Model Base Class
+## 模型基礎類別
 
-All models inherit from `BaseModel` with standard PyTorch functionality:
+所有模型繼承自 `BaseModel`，具有標準 PyTorch 功能：
 
-**Key Attributes:**
-- `dataset`: Associated SampleDataset
-- `feature_keys`: Input features to use (e.g., ["diagnoses", "medications"])
-- `mode`: Task type ("binary", "multiclass", "multilabel", "regression")
-- `embedding_dim`: Feature embedding dimension
-- `device`: Computation device (CPU/GPU)
+**關鍵屬性：**
+- `dataset`：關聯的 SampleDataset
+- `feature_keys`：要使用的輸入特徵（例如 ["diagnoses", "medications"]）
+- `mode`：任務類型（"binary"、"multiclass"、"multilabel"、"regression"）
+- `embedding_dim`：特徵嵌入維度
+- `device`：運算裝置（CPU/GPU）
 
-**Key Methods:**
-- `forward()`: Model forward pass
-- `train_step()`: Single training iteration
-- `eval_step()`: Single evaluation iteration
-- `save()`: Save model checkpoint
-- `load()`: Load model checkpoint
+**關鍵方法：**
+- `forward()`：模型前向傳遞
+- `train_step()`：單次訓練迭代
+- `eval_step()`：單次評估迭代
+- `save()`：儲存模型檢查點
+- `load()`：載入模型檢查點
 
-## General-Purpose Models
+## 通用模型
 
-### Baseline Models
+### 基準模型
 
-**Logistic Regression** (`LogisticRegression`)
-- Linear classifier with mean pooling
-- Simple baseline for comparison
-- Fast training and inference
-- Good for interpretability
+**Logistic Regression**（`LogisticRegression`）
+- 使用平均池化的線性分類器
+- 用於比較的簡單基準
+- 快速訓練與推論
+- 適合可解釋性需求
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import LogisticRegression
 
@@ -43,19 +43,19 @@ model = LogisticRegression(
 )
 ```
 
-**Multi-Layer Perceptron** (`MLP`)
-- Feedforward neural network
-- Configurable hidden layers
-- Supports mean/sum/max pooling
-- Good baseline for structured data
+**Multi-Layer Perceptron**（`MLP`）
+- 前饋神經網路
+- 可配置隱藏層
+- 支援 mean/sum/max 池化
+- 結構化資料的良好基準
 
-**Parameters:**
-- `hidden_dim`: Hidden layer size
-- `num_layers`: Number of hidden layers
-- `dropout`: Dropout rate
-- `pooling`: Aggregation method ("mean", "sum", "max")
+**參數：**
+- `hidden_dim`：隱藏層大小
+- `num_layers`：隱藏層數量
+- `dropout`：Dropout 率
+- `pooling`：聚合方法（"mean"、"sum"、"max"）
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import MLP
 
@@ -69,26 +69,26 @@ model = MLP(
 )
 ```
 
-### Convolutional Neural Networks
+### 卷積神經網路
 
-**CNN** (`CNN`)
-- Convolutional layers for pattern detection
-- Effective for sequential and spatial data
-- Captures local temporal patterns
-- Parameter efficient
+**CNN**（`CNN`）
+- 用於模式檢測的卷積層
+- 對序列和空間資料有效
+- 捕捉局部時間模式
+- 參數效率高
 
-**Architecture:**
-- Multiple 1D convolutional layers
-- Max pooling for dimension reduction
-- Fully connected output layers
+**架構：**
+- 多個一維卷積層
+- 最大池化進行維度縮減
+- 全連接輸出層
 
-**Parameters:**
-- `num_filters`: Number of convolutional filters
-- `kernel_size`: Convolution kernel size
-- `num_layers`: Number of conv layers
-- `dropout`: Dropout rate
+**參數：**
+- `num_filters`：卷積濾波器數量
+- `kernel_size`：卷積核大小
+- `num_layers`：卷積層數量
+- `dropout`：Dropout 率
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import CNN
 
@@ -102,33 +102,33 @@ model = CNN(
 )
 ```
 
-**Temporal Convolutional Networks** (`TCN`)
-- Dilated convolutions for long-range dependencies
-- Causal convolutions (no future information leakage)
-- Efficient for long sequences
-- Good for time-series prediction
+**Temporal Convolutional Networks**（`TCN`）
+- 用於長距離依賴的擴張卷積
+- 因果卷積（無未來資訊洩漏）
+- 對長序列效率高
+- 適合時間序列預測
 
-**Advantages:**
-- Captures long-term dependencies
-- Parallelizable (faster than RNNs)
-- Stable gradients
+**優勢：**
+- 捕捉長期依賴
+- 可平行化（比 RNN 快）
+- 梯度穩定
 
-### Recurrent Neural Networks
+### 循環神經網路
 
-**RNN** (`RNN`)
-- Basic recurrent architecture
-- Supports LSTM, GRU, RNN variants
-- Sequential processing
-- Captures temporal dependencies
+**RNN**（`RNN`）
+- 基本循環架構
+- 支援 LSTM、GRU、RNN 變體
+- 序列處理
+- 捕捉時間依賴
 
-**Parameters:**
-- `rnn_type`: "LSTM", "GRU", or "RNN"
-- `hidden_dim`: Hidden state dimension
-- `num_layers`: Number of recurrent layers
-- `dropout`: Dropout rate
-- `bidirectional`: Use bidirectional RNN
+**參數：**
+- `rnn_type`："LSTM"、"GRU" 或 "RNN"
+- `hidden_dim`：隱藏狀態維度
+- `num_layers`：循環層數量
+- `dropout`：Dropout 率
+- `bidirectional`：使用雙向 RNN
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import RNN
 
@@ -143,33 +143,33 @@ model = RNN(
 )
 ```
 
-**Best for:**
-- Sequential clinical events
-- Temporal pattern learning
-- Variable-length sequences
+**最適合：**
+- 序列臨床事件
+- 時間模式學習
+- 變長序列
 
-### Transformer Models
+### Transformer 模型
 
-**Transformer** (`Transformer`)
-- Self-attention mechanism
-- Parallel processing of sequences
-- State-of-the-art performance
-- Effective for long-range dependencies
+**Transformer**（`Transformer`）
+- 自注意力機制
+- 序列平行處理
+- 最先進效能
+- 對長距離依賴有效
 
-**Architecture:**
-- Multi-head self-attention
-- Position embeddings
-- Feed-forward networks
-- Layer normalization
+**架構：**
+- 多頭自注意力
+- 位置嵌入
+- 前饋網路
+- 層標準化
 
-**Parameters:**
-- `num_heads`: Number of attention heads
-- `num_layers`: Number of transformer layers
-- `hidden_dim`: Hidden dimension
-- `dropout`: Dropout rate
-- `max_seq_length`: Maximum sequence length
+**參數：**
+- `num_heads`：注意力頭數量
+- `num_layers`：Transformer 層數量
+- `hidden_dim`：隱藏維度
+- `dropout`：Dropout 率
+- `max_seq_length`：最大序列長度
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import Transformer
 
@@ -184,13 +184,13 @@ model = Transformer(
 )
 ```
 
-**TransformersModel** (`TransformersModel`)
-- Integration with HuggingFace transformers
-- Pre-trained language models for clinical text
-- Fine-tuning for healthcare tasks
-- Examples: BERT, RoBERTa, BioClinicalBERT
+**TransformersModel**（`TransformersModel`）
+- 與 HuggingFace transformers 整合
+- 用於臨床文字的預訓練語言模型
+- 針對醫療任務的微調
+- 範例：BERT、RoBERTa、BioClinicalBERT
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import TransformersModel
 
@@ -202,27 +202,27 @@ model = TransformersModel(
 )
 ```
 
-### Graph Neural Networks
+### 圖神經網路
 
-**GNN** (`GNN`)
-- Graph-based learning
-- Models relationships between entities
-- Supports GAT (Graph Attention) and GCN (Graph Convolutional)
+**GNN**（`GNN`）
+- 基於圖的學習
+- 建模實體間關係
+- 支援 GAT（圖注意力）和 GCN（圖卷積）
 
-**Use Cases:**
-- Drug-drug interactions
-- Patient similarity networks
-- Knowledge graph integration
-- Comorbidity relationships
+**使用情境：**
+- 藥物交互作用
+- 病人相似性網路
+- 知識圖譜整合
+- 共病關係
 
-**Parameters:**
-- `gnn_type`: "GAT" or "GCN"
-- `hidden_dim`: Hidden dimension
-- `num_layers`: Number of GNN layers
-- `dropout`: Dropout rate
-- `num_heads`: Attention heads (for GAT)
+**參數：**
+- `gnn_type`："GAT" 或 "GCN"
+- `hidden_dim`：隱藏維度
+- `num_layers`：GNN 層數量
+- `dropout`：Dropout 率
+- `num_heads`：注意力頭數（用於 GAT）
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import GNN
 
@@ -237,23 +237,23 @@ model = GNN(
 )
 ```
 
-## Healthcare-Specific Models
+## 醫療專用模型
 
-### Interpretable Clinical Models
+### 可解釋臨床模型
 
-**RETAIN** (`RETAIN`)
-- Reverse time attention mechanism
-- Highly interpretable predictions
-- Visit-level and event-level attention
-- Identifies influential clinical events
+**RETAIN**（`RETAIN`）
+- 反向時間注意力機制
+- 高度可解釋的預測
+- 就診層級和事件層級注意力
+- 識別有影響力的臨床事件
 
-**Key Features:**
-- Two-level attention (visits and features)
-- Temporal decay modeling
-- Clinically meaningful explanations
-- Published in NeurIPS 2016
+**關鍵特徵：**
+- 兩層注意力（就診和特徵）
+- 時間衰減建模
+- 臨床意義的解釋
+- 發表於 NeurIPS 2016
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import RETAIN
 
@@ -264,44 +264,44 @@ model = RETAIN(
     hidden_dim=128
 )
 
-# Get attention weights for interpretation
+# 取得注意力權重進行解釋
 outputs = model(batch)
 visit_attention = outputs["visit_attention"]
 feature_attention = outputs["feature_attention"]
 ```
 
-**Best for:**
-- Mortality prediction
-- Readmission prediction
-- Clinical risk scoring
-- Interpretable predictions
+**最適合：**
+- 死亡率預測
+- 再入院預測
+- 臨床風險評分
+- 可解釋預測
 
-**AdaCare** (`AdaCare`)
-- Adaptive care model with feature calibration
-- Disease-specific attention
-- Handles irregular time intervals
-- Interpretable feature importance
+**AdaCare**（`AdaCare`）
+- 具特徵校準的自適應照護模型
+- 疾病特定注意力
+- 處理不規則時間間隔
+- 可解釋的特徵重要性
 
-**ConCare** (`ConCare`)
-- Cross-visit convolutional attention
-- Temporal convolutional feature extraction
-- Multi-level attention mechanism
-- Good for longitudinal EHR modeling
+**ConCare**（`ConCare`）
+- 跨就診卷積注意力
+- 時間卷積特徵提取
+- 多層注意力機制
+- 適合縱向 EHR 建模
 
-### Medication Recommendation Models
+### 藥物推薦模型
 
-**GAMENet** (`GAMENet`)
-- Graph-based medication recommendation
-- Drug-drug interaction modeling
-- Memory network for patient history
-- Multi-hop reasoning
+**GAMENet**（`GAMENet`）
+- 基於圖的藥物推薦
+- 藥物交互作用建模
+- 用於病人歷史的記憶網路
+- 多跳推理
 
-**Architecture:**
-- Drug knowledge graph
-- Memory-augmented neural network
-- DDI-aware prediction
+**架構：**
+- 藥物知識圖譜
+- 記憶增強神經網路
+- DDI 感知預測
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import GAMENet
 
@@ -314,24 +314,24 @@ model = GAMENet(
 )
 ```
 
-**MICRON** (`MICRON`)
-- Medication recommendation with DDI constraints
-- Interaction-aware predictions
-- Safety-focused drug selection
+**MICRON**（`MICRON`）
+- 帶 DDI 約束的藥物推薦
+- 交互作用感知預測
+- 安全導向的藥物選擇
 
-**SafeDrug** (`SafeDrug`)
-- Safety-aware drug recommendation
-- Molecular structure integration
-- DDI constraint optimization
-- Balances efficacy and safety
+**SafeDrug**（`SafeDrug`）
+- 安全感知藥物推薦
+- 分子結構整合
+- DDI 約束優化
+- 平衡療效與安全性
 
-**Key Features:**
-- Molecular graph encoding
-- DDI graph neural network
-- Reinforcement learning for safety
-- Published in KDD 2021
+**關鍵特徵：**
+- 分子圖編碼
+- DDI 圖神經網路
+- 用於安全的強化學習
+- 發表於 KDD 2021
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import SafeDrug
 
@@ -344,25 +344,25 @@ model = SafeDrug(
 )
 ```
 
-**MoleRec** (`MoleRec`)
-- Molecular-level drug recommendations
-- Sub-structure reasoning
-- Fine-grained medication selection
+**MoleRec**（`MoleRec`）
+- 分子層級藥物推薦
+- 子結構推理
+- 細粒度藥物選擇
 
-### Disease Progression Models
+### 疾病進展模型
 
-**StageNet** (`StageNet`)
-- Disease stage-aware prediction
-- Learns clinical stages automatically
-- Stage-adaptive feature extraction
-- Effective for chronic disease monitoring
+**StageNet**（`StageNet`）
+- 疾病階段感知預測
+- 自動學習臨床階段
+- 階段自適應特徵提取
+- 對慢性病監測有效
 
-**Architecture:**
-- Stage-aware LSTM
-- Dynamic stage transitions
-- Time-decay mechanism
+**架構：**
+- 階段感知 LSTM
+- 動態階段轉換
+- 時間衰減機制
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.models import StageNet
 
@@ -376,186 +376,186 @@ model = StageNet(
 )
 ```
 
-**Best for:**
-- ICU mortality prediction
-- Chronic disease progression
-- Time-varying risk assessment
+**最適合：**
+- 加護病房死亡率預測
+- 慢性病進展
+- 時變風險評估
 
-**Deepr** (`Deepr`)
-- Deep recurrent architecture
-- Medical concept embeddings
-- Temporal pattern learning
-- Published in JAMIA
+**Deepr**（`Deepr`）
+- 深度循環架構
+- 醫療概念嵌入
+- 時間模式學習
+- 發表於 JAMIA
 
-### Advanced Sequential Models
+### 進階序列模型
 
-**Agent** (`Agent`)
-- Reinforcement learning-based
-- Treatment recommendation
-- Action-value optimization
-- Policy learning for sequential decisions
+**Agent**（`Agent`）
+- 基於強化學習
+- 治療推薦
+- 動作價值優化
+- 序列決策的策略學習
 
-**GRASP** (`GRASP`)
-- Graph-based sequence patterns
-- Structural event relationships
-- Hierarchical representation learning
+**GRASP**（`GRASP`）
+- 基於圖的序列模式
+- 結構事件關係
+- 階層表示學習
 
-**SparcNet** (`SparcNet`)
-- Sparse clinical networks
-- Efficient feature selection
-- Reduced computational cost
-- Interpretable predictions
+**SparcNet**（`SparcNet`）
+- 稀疏臨床網路
+- 高效特徵選擇
+- 降低運算成本
+- 可解釋預測
 
-**ContraWR** (`ContraWR`)
-- Contrastive learning approach
-- Self-supervised pre-training
-- Robust representations
-- Limited labeled data scenarios
+**ContraWR**（`ContraWR`）
+- 對比學習方法
+- 自監督預訓練
+- 魯棒表示
+- 有限標註資料場景
 
-### Medical Entity Linking
+### 醫療實體連結
 
-**MedLink** (`MedLink`)
-- Medical entity linking to knowledge bases
-- Clinical concept normalization
-- UMLS integration
-- Entity disambiguation
+**MedLink**（`MedLink`）
+- 醫療實體連結到知識庫
+- 臨床概念標準化
+- UMLS 整合
+- 實體消歧
 
-### Generative Models
+### 生成模型
 
-**GAN** (`GAN`)
-- Generative Adversarial Networks
-- Synthetic EHR data generation
-- Privacy-preserving data sharing
-- Augmentation for rare conditions
+**GAN**（`GAN`）
+- 生成對抗網路
+- 合成 EHR 資料生成
+- 隱私保護資料共享
+- 罕見疾病資料增強
 
-**VAE** (`VAE`)
-- Variational Autoencoder
-- Patient representation learning
-- Anomaly detection
-- Latent space exploration
+**VAE**（`VAE`）
+- 變分自編碼器
+- 病人表示學習
+- 異常檢測
+- 潛在空間探索
 
-### Social Determinants of Health
+### 健康社會決定因素
 
-**SDOH** (`SDOH`)
-- Social determinants integration
-- Multi-modal prediction
-- Addresses health disparities
-- Combines clinical and social data
+**SDOH**（`SDOH`）
+- 社會決定因素整合
+- 多模態預測
+- 解決健康不平等
+- 結合臨床與社會資料
 
-## Model Selection Guidelines
+## 模型選擇指南
 
-### By Task Type
+### 按任務類型
 
-**Binary Classification** (Mortality, Readmission)
-- Start with: Logistic Regression (baseline)
-- Standard: RNN, Transformer
-- Interpretable: RETAIN, AdaCare
-- Advanced: StageNet
+**二元分類**（死亡率、再入院）
+- 起始：Logistic Regression（基準）
+- 標準：RNN、Transformer
+- 可解釋：RETAIN、AdaCare
+- 進階：StageNet
 
-**Multi-Label Classification** (Drug Recommendation)
-- Standard: CNN, RNN
-- Healthcare-specific: GAMENet, SafeDrug, MICRON, MoleRec
-- Graph-based: GNN
+**多標籤分類**（藥物推薦）
+- 標準：CNN、RNN
+- 醫療專用：GAMENet、SafeDrug、MICRON、MoleRec
+- 基於圖：GNN
 
-**Regression** (Length of Stay)
-- Start with: MLP (baseline)
-- Sequential: RNN, TCN
-- Advanced: Transformer
+**迴歸**（住院天數）
+- 起始：MLP（基準）
+- 序列：RNN、TCN
+- 進階：Transformer
 
-**Multi-Class Classification** (Medical Coding, Specialty)
-- Standard: CNN, RNN, Transformer
-- Text-based: TransformersModel (BERT variants)
+**多類別分類**（醫療編碼、專科）
+- 標準：CNN、RNN、Transformer
+- 文字：TransformersModel（BERT 變體）
 
-### By Data Type
+### 按資料類型
 
-**Sequential Events** (Diagnoses, Medications, Procedures)
-- RNN, LSTM, GRU
+**序列事件**（診斷、藥物、處置）
+- RNN、LSTM、GRU
 - Transformer
-- RETAIN, AdaCare, ConCare
+- RETAIN、AdaCare、ConCare
 
-**Time-Series Signals** (EEG, ECG)
-- CNN, TCN
+**時間序列訊號**（EEG、ECG）
+- CNN、TCN
 - RNN
 - Transformer
 
-**Text** (Clinical Notes)
-- TransformersModel (ClinicalBERT, BioBERT)
-- CNN for shorter text
-- RNN for sequential text
+**文字**（臨床筆記）
+- TransformersModel（ClinicalBERT、BioBERT）
+- CNN 用於較短文字
+- RNN 用於序列文字
 
-**Graphs** (Drug Interactions, Patient Networks)
-- GNN (GAT, GCN)
-- GAMENet, SafeDrug
+**圖**（藥物交互作用、病人網路）
+- GNN（GAT、GCN）
+- GAMENet、SafeDrug
 
-**Images** (X-rays, CT scans)
-- CNN (ResNet, DenseNet via TransformersModel)
+**影像**（X 光、CT 掃描）
+- CNN（透過 TransformersModel 使用 ResNet、DenseNet）
 - Vision Transformers
 
-### By Interpretability Needs
+### 按可解釋性需求
 
-**High Interpretability Required:**
+**需要高可解釋性：**
 - Logistic Regression
 - RETAIN
 - AdaCare
 - SparcNet
 
-**Moderate Interpretability:**
-- CNN (filter visualization)
-- Transformer (attention visualization)
-- GNN (graph attention)
+**中等可解釋性：**
+- CNN（濾波器視覺化）
+- Transformer（注意力視覺化）
+- GNN（圖注意力）
 
-**Black-Box Acceptable:**
-- Deep RNN models
-- Complex ensembles
+**可接受黑盒：**
+- 深度 RNN 模型
+- 複雜集成模型
 
-## Training Considerations
+## 訓練考量
 
-### Hyperparameter Tuning
+### 超參數調整
 
-**Embedding Dimension:**
-- Small datasets: 64-128
-- Large datasets: 128-256
-- Complex tasks: 256-512
+**嵌入維度：**
+- 小型資料集：64-128
+- 大型資料集：128-256
+- 複雜任務：256-512
 
-**Hidden Dimension:**
-- Proportional to embedding_dim
-- Typically 1-2x embedding_dim
+**隱藏維度：**
+- 與 embedding_dim 成比例
+- 通常為 embedding_dim 的 1-2 倍
 
-**Number of Layers:**
-- Start with 2-3 layers
-- Deeper for complex patterns
-- Watch for overfitting
+**層數：**
+- 從 2-3 層開始
+- 複雜模式用更深
+- 注意過擬合
 
-**Dropout:**
-- Start with 0.5
-- Reduce if underfitting (0.1-0.3)
-- Increase if overfitting (0.5-0.7)
+**Dropout：**
+- 從 0.5 開始
+- 欠擬合時降低（0.1-0.3）
+- 過擬合時增加（0.5-0.7）
 
-### Computational Requirements
+### 運算需求
 
-**Memory (GPU):**
-- CNN: Low to moderate
-- RNN: Moderate (sequence length dependent)
-- Transformer: High (quadratic in sequence length)
-- GNN: Moderate to high (graph size dependent)
+**記憶體（GPU）：**
+- CNN：低到中等
+- RNN：中等（取決於序列長度）
+- Transformer：高（與序列長度呈二次關係）
+- GNN：中到高（取決於圖大小）
 
-**Training Speed:**
-- Fastest: Logistic Regression, MLP, CNN
-- Moderate: RNN, GNN
-- Slower: Transformer (but parallelizable)
+**訓練速度：**
+- 最快：Logistic Regression、MLP、CNN
+- 中等：RNN、GNN
+- 較慢：Transformer（但可平行化）
 
-### Best Practices
+### 最佳實務
 
-1. **Start with simple baselines** (Logistic Regression, MLP)
-2. **Use appropriate feature keys** based on data availability
-3. **Match mode to task output** (binary, multiclass, multilabel, regression)
-4. **Consider interpretability requirements** for clinical deployment
-5. **Validate on held-out test set** for realistic performance
-6. **Monitor for overfitting** especially with complex models
-7. **Use pretrained models** when possible (TransformersModel)
-8. **Consider computational constraints** for deployment
+1. **從簡單基準開始**（Logistic Regression、MLP）
+2. **根據資料可用性使用適當的特徵鍵**
+3. **將模式與任務輸出匹配**（binary、multiclass、multilabel、regression）
+4. **考慮臨床部署的可解釋性需求**
+5. **在保留測試集上驗證**以獲得實際效能
+6. **監控過擬合**尤其是複雜模型
+7. 盡可能**使用預訓練模型**（TransformersModel）
+8. **考慮部署的運算限制**
 
-## Example Workflow
+## 範例工作流程
 
 ```python
 from pyhealth.datasets import MIMIC4Dataset
@@ -563,11 +563,11 @@ from pyhealth.tasks import mortality_prediction_mimic4_fn
 from pyhealth.models import Transformer
 from pyhealth.trainer import Trainer
 
-# 1. Prepare data
+# 1. 準備資料
 dataset = MIMIC4Dataset(root="/path/to/data")
 sample_dataset = dataset.set_task(mortality_prediction_mimic4_fn)
 
-# 2. Initialize model
+# 2. 初始化模型
 model = Transformer(
     dataset=sample_dataset,
     feature_keys=["diagnoses", "medications", "procedures"],
@@ -578,7 +578,7 @@ model = Transformer(
     dropout=0.3
 )
 
-# 3. Train model
+# 3. 訓練模型
 trainer = Trainer(model=model)
 trainer.train(
     train_dataloader=train_loader,
@@ -588,7 +588,7 @@ trainer.train(
     monitor_criterion="max"
 )
 
-# 4. Evaluate
+# 4. 評估
 results = trainer.evaluate(test_loader)
 print(results)
 ```

@@ -1,272 +1,272 @@
-# Astronomical Coordinates (astropy.coordinates)
+# 天文座標（astropy.coordinates）
 
-The `astropy.coordinates` package provides tools for representing celestial coordinates and transforming between different coordinate systems.
+`astropy.coordinates` 套件提供表示天體座標和在不同座標系統間轉換的工具。
 
-## Creating Coordinates with SkyCoord
+## 使用 SkyCoord 建立座標
 
-The high-level `SkyCoord` class is the recommended interface:
+高階 `SkyCoord` 類別是推薦的介面：
 
 ```python
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 
-# Decimal degrees
+# 十進制度數
 c = SkyCoord(ra=10.625*u.degree, dec=41.2*u.degree, frame='icrs')
 
-# Sexagesimal strings
+# 六十進制字串
 c = SkyCoord(ra='00h42m30s', dec='+41d12m00s', frame='icrs')
 
-# Mixed formats
+# 混合格式
 c = SkyCoord('00h42.5m +41d12m', unit=(u.hourangle, u.deg))
 
-# Galactic coordinates
+# 銀河座標
 c = SkyCoord(l=120.5*u.degree, b=-23.4*u.degree, frame='galactic')
 ```
 
-## Array Coordinates
+## 陣列座標
 
-Process multiple coordinates efficiently using arrays:
+使用陣列高效處理多個座標：
 
 ```python
-# Create array of coordinates
+# 建立座標陣列
 coords = SkyCoord(ra=[10, 11, 12]*u.degree,
                   dec=[41, -5, 42]*u.degree)
 
-# Access individual elements
+# 存取個別元素
 coords[0]
 coords[1:3]
 
-# Array operations
+# 陣列操作
 coords.shape
 len(coords)
 ```
 
-## Accessing Components
+## 存取座標分量
 
 ```python
 c = SkyCoord(ra=10.68*u.degree, dec=41.27*u.degree, frame='icrs')
 
-# Access coordinates
+# 存取座標
 c.ra        # <Longitude 10.68 deg>
 c.dec       # <Latitude 41.27 deg>
-c.ra.hour   # Convert to hours
-c.ra.hms    # Hours, minutes, seconds tuple
-c.dec.dms   # Degrees, arcminutes, arcseconds tuple
+c.ra.hour   # 轉換為小時
+c.ra.hms    # 時、分、秒元組
+c.dec.dms   # 度、角分、角秒元組
 ```
 
-## String Formatting
+## 字串格式化
 
 ```python
 c.to_string('decimal')      # '10.68 41.27'
 c.to_string('dms')          # '10d40m48s 41d16m12s'
 c.to_string('hmsdms')       # '00h42m43.2s +41d16m12s'
 
-# Custom formatting
+# 自訂格式化
 c.ra.to_string(unit=u.hour, sep=':', precision=2)
 ```
 
-## Coordinate Transformations
+## 座標轉換
 
-Transform between reference frames:
+在參考框架間轉換：
 
 ```python
 c_icrs = SkyCoord(ra=10.68*u.degree, dec=41.27*u.degree, frame='icrs')
 
-# Simple transformations (as attributes)
+# 簡單轉換（作為屬性）
 c_galactic = c_icrs.galactic
 c_fk5 = c_icrs.fk5
 c_fk4 = c_icrs.fk4
 
-# Explicit transformations
+# 明確轉換
 c_icrs.transform_to('galactic')
-c_icrs.transform_to(FK5(equinox='J1975'))  # Custom frame parameters
+c_icrs.transform_to(FK5(equinox='J1975'))  # 自訂框架參數
 ```
 
-## Common Coordinate Frames
+## 常見座標框架
 
-### Celestial Frames
-- **ICRS**: International Celestial Reference System (default, most common)
-- **FK5**: Fifth Fundamental Catalogue (equinox J2000.0 by default)
-- **FK4**: Fourth Fundamental Catalogue (older, requires equinox specification)
-- **GCRS**: Geocentric Celestial Reference System
-- **CIRS**: Celestial Intermediate Reference System
+### 天球框架
+- **ICRS**：國際天球參考系統（預設，最常用）
+- **FK5**：第五基本星表（預設曆元 J2000.0）
+- **FK4**：第四基本星表（較舊，需要指定曆元）
+- **GCRS**：地心天球參考系統
+- **CIRS**：天球中間參考系統
 
-### Galactic Frames
-- **Galactic**: IAU 1958 galactic coordinates
-- **Supergalactic**: De Vaucouleurs supergalactic coordinates
-- **Galactocentric**: Galactic center-based 3D coordinates
+### 銀河框架
+- **Galactic**：IAU 1958 銀河座標
+- **Supergalactic**：De Vaucouleurs 超銀河座標
+- **Galactocentric**：以銀河中心為基準的 3D 座標
 
-### Horizontal Frames
-- **AltAz**: Altitude-azimuth (observer-dependent)
-- **HADec**: Hour angle-declination
+### 地平框架
+- **AltAz**：高度-方位角（觀測者相關）
+- **HADec**：時角-赤緯
 
-### Ecliptic Frames
-- **GeocentricMeanEcliptic**: Geocentric mean ecliptic
-- **BarycentricMeanEcliptic**: Barycentric mean ecliptic
-- **HeliocentricMeanEcliptic**: Heliocentric mean ecliptic
+### 黃道框架
+- **GeocentricMeanEcliptic**：地心平黃道
+- **BarycentricMeanEcliptic**：質心平黃道
+- **HeliocentricMeanEcliptic**：日心平黃道
 
-## Observer-Dependent Transformations
+## 觀測者相關轉換
 
-For altitude-azimuth coordinates, specify observation time and location:
+對於高度-方位角座標，需指定觀測時間和位置：
 
 ```python
 from astropy.time import Time
 from astropy.coordinates import EarthLocation, AltAz
 
-# Define observer location
+# 定義觀測者位置
 observing_location = EarthLocation(lat=40.8*u.deg, lon=-121.5*u.deg, height=1060*u.m)
-# Or use named observatory
+# 或使用命名天文台
 observing_location = EarthLocation.of_site('Apache Point Observatory')
 
-# Define observation time
+# 定義觀測時間
 observing_time = Time('2023-01-15 23:00:00')
 
-# Transform to alt-az
+# 轉換到地平座標
 aa_frame = AltAz(obstime=observing_time, location=observing_location)
 aa = c_icrs.transform_to(aa_frame)
 
-print(f"Altitude: {aa.alt}")
-print(f"Azimuth: {aa.az}")
+print(f"高度: {aa.alt}")
+print(f"方位角: {aa.az}")
 ```
 
-## Working with Distances
+## 處理距離
 
-Add distance information for 3D coordinates:
+加入距離資訊以進行 3D 座標操作：
 
 ```python
-# With distance
+# 帶距離
 c = SkyCoord(ra=10*u.degree, dec=9*u.degree, distance=770*u.kpc, frame='icrs')
 
-# Access 3D Cartesian coordinates
+# 存取 3D 笛卡爾座標
 c.cartesian.x
 c.cartesian.y
 c.cartesian.z
 
-# Distance from origin
+# 到原點的距離
 c.distance
 
-# 3D separation
+# 3D 分離
 c1 = SkyCoord(ra=10*u.degree, dec=9*u.degree, distance=10*u.pc)
 c2 = SkyCoord(ra=11*u.degree, dec=10*u.degree, distance=11.5*u.pc)
-sep_3d = c1.separation_3d(c2)  # 3D distance
+sep_3d = c1.separation_3d(c2)  # 3D 距離
 ```
 
-## Angular Separation
+## 角距離
 
-Calculate on-sky separations:
+計算天球上的分離：
 
 ```python
 c1 = SkyCoord(ra=10*u.degree, dec=9*u.degree, frame='icrs')
 c2 = SkyCoord(ra=11*u.degree, dec=10*u.degree, frame='fk5')
 
-# Angular separation (handles frame conversion automatically)
+# 角距離（自動處理框架轉換）
 sep = c1.separation(c2)
-print(f"Separation: {sep.arcsec} arcsec")
+print(f"分離: {sep.arcsec} 角秒")
 
-# Position angle
+# 位置角
 pa = c1.position_angle(c2)
 ```
 
-## Catalog Matching
+## 星表匹配
 
-Match coordinates to catalog sources:
+將座標與星表來源匹配：
 
 ```python
-# Single target matching
+# 單目標匹配
 catalog = SkyCoord(ra=ra_array*u.degree, dec=dec_array*u.degree)
 target = SkyCoord(ra=10.5*u.degree, dec=41.2*u.degree)
 
-# Find closest match
+# 尋找最近匹配
 idx, sep2d, dist3d = target.match_to_catalog_sky(catalog)
 matched_coord = catalog[idx]
 
-# Match with maximum separation constraint
+# 帶最大分離限制的匹配
 matches = target.separation(catalog) < 1*u.arcsec
 ```
 
-## Named Objects
+## 命名天體
 
-Retrieve coordinates from online catalogs:
+從線上星表擷取座標：
 
 ```python
-# Query by name (requires internet)
+# 按名稱查詢（需要網路）
 m31 = SkyCoord.from_name("M31")
 crab = SkyCoord.from_name("Crab Nebula")
 psr = SkyCoord.from_name("PSR J1012+5307")
 ```
 
-## Earth Locations
+## 地球位置
 
-Define observer locations:
+定義觀測者位置：
 
 ```python
-# By coordinates
+# 按座標
 location = EarthLocation(lat=40*u.deg, lon=-120*u.deg, height=1000*u.m)
 
-# By named observatory
+# 按命名天文台
 keck = EarthLocation.of_site('Keck Observatory')
 vlt = EarthLocation.of_site('Paranal Observatory')
 
-# By address (requires internet)
+# 按地址（需要網路）
 location = EarthLocation.of_address('1002 Holy Grail Court, St. Louis, MO')
 
-# List available observatories
+# 列出可用天文台
 EarthLocation.get_site_names()
 ```
 
-## Velocity Information
+## 速度資訊
 
-Include proper motion and radial velocity:
+包含自行和視向速度：
 
 ```python
-# Proper motion
+# 自行
 c = SkyCoord(ra=10*u.degree, dec=41*u.degree,
              pm_ra_cosdec=15*u.mas/u.yr,
              pm_dec=5*u.mas/u.yr,
              distance=150*u.pc)
 
-# Radial velocity
+# 視向速度
 c = SkyCoord(ra=10*u.degree, dec=41*u.degree,
              radial_velocity=20*u.km/u.s)
 
-# Both
+# 兩者都有
 c = SkyCoord(ra=10*u.degree, dec=41*u.degree, distance=150*u.pc,
              pm_ra_cosdec=15*u.mas/u.yr, pm_dec=5*u.mas/u.yr,
              radial_velocity=20*u.km/u.s)
 ```
 
-## Representation Types
+## 表示類型
 
-Switch between coordinate representations:
+在座標表示間切換：
 
 ```python
-# Cartesian representation
+# 笛卡爾表示
 c = SkyCoord(x=1*u.kpc, y=2*u.kpc, z=3*u.kpc,
              representation_type='cartesian', frame='icrs')
 
-# Change representation
+# 變更表示
 c.representation_type = 'cylindrical'
-c.rho  # Cylindrical radius
-c.phi  # Azimuthal angle
-c.z    # Height
+c.rho  # 柱面半徑
+c.phi  # 方位角
+c.z    # 高度
 
-# Spherical (default for most frames)
+# 球面（大多數框架的預設）
 c.representation_type = 'spherical'
 ```
 
-## Performance Tips
+## 效能技巧
 
-1. **Use arrays, not loops**: Process multiple coordinates as single array
-2. **Pre-compute frames**: Reuse frame objects for multiple transformations
-3. **Use broadcasting**: Efficiently transform many positions across many times
-4. **Enable interpolation**: For dense time sampling, use ErfaAstromInterpolator
+1. **使用陣列，而非迴圈**：將多個座標作為單一陣列處理
+2. **預先計算框架**：為多次轉換重複使用框架物件
+3. **使用廣播**：高效地在多個時間點轉換多個位置
+4. **啟用內插**：對於密集時間取樣，使用 ErfaAstromInterpolator
 
 ```python
-# Fast approach
+# 快速方法
 coords = SkyCoord(ra=ra_array*u.degree, dec=dec_array*u.degree)
 coords_transformed = coords.transform_to('galactic')
 
-# Slow approach (avoid)
+# 慢速方法（避免使用）
 for ra, dec in zip(ra_array, dec_array):
     c = SkyCoord(ra=ra*u.degree, dec=dec*u.degree)
     c_transformed = c.transform_to('galactic')

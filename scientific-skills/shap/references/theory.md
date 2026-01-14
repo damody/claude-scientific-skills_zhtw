@@ -1,449 +1,449 @@
-# SHAP Theoretical Foundation
+# SHAP 理論基礎
 
-This document explains the theoretical foundations of SHAP (SHapley Additive exPlanations), including Shapley values from game theory, the principles that make SHAP unique, and connections to other explanation methods.
+本文件解釋 SHAP（SHapley Additive exPlanations）的理論基礎，包括博弈論中的 Shapley 值、使 SHAP 獨特的原則，以及與其他解釋方法的連接。
 
-## Game Theory Origins
+## 博弈論起源
 
-### Shapley Values
+### Shapley 值
 
-SHAP is grounded in **Shapley values**, a solution concept from cooperative game theory developed by Lloyd Shapley in 1951.
+SHAP 基於 **Shapley 值**，這是 Lloyd Shapley 於 1951 年開發的合作博弈論中的解概念。
 
-**Core Concept**:
-In cooperative game theory, players collaborate to achieve a total payoff, and the question is: how should this payoff be fairly distributed among players?
+**核心概念**：
+在合作博弈論中，玩家合作以達成總收益，問題是：這個收益應該如何在玩家之間公平分配？
 
-**Mapping to Machine Learning**:
-- **Players** → Input features
-- **Game** → Model prediction task
-- **Payoff** → Model output (prediction value)
-- **Coalition** → Subset of features with known values
-- **Fair Distribution** → Attributing prediction to features
+**映射到機器學習**：
+- **玩家** → 輸入特徵
+- **遊戲** → 模型預測任務
+- **收益** → 模型輸出（預測值）
+- **聯盟** → 具有已知值的特徵子集
+- **公平分配** → 將預測歸因於特徵
 
-### The Shapley Value Formula
+### Shapley 值公式
 
-For a feature $i$, its Shapley value $\phi_i$ is:
+對於特徵 $i$，其 Shapley 值 $\phi_i$ 為：
 
 $$\phi_i = \sum_{S \subseteq F \setminus \{i\}} \frac{|S|!(|F|-|S|-1)!}{|F|!} [f(S \cup \{i\}) - f(S)]$$
 
-Where:
-- $F$ is the set of all features
-- $S$ is a subset of features not including $i$
-- $f(S)$ is the model's expected output given only features in $S$
-- $|S|$ is the size of subset $S$
+其中：
+- $F$ 是所有特徵的集合
+- $S$ 是不包括 $i$ 的特徵子集
+- $f(S)$ 是僅給定 $S$ 中特徵時模型的期望輸出
+- $|S|$ 是子集 $S$ 的大小
 
-**Interpretation**:
-The Shapley value averages the marginal contribution of feature $i$ across all possible feature coalitions (subsets). The contribution is weighted by how likely each coalition is to occur.
+**解釋**：
+Shapley 值對特徵 $i$ 在所有可能特徵聯盟（子集）上的邊際貢獻進行平均。貢獻根據每個聯盟發生的可能性進行加權。
 
-### Key Properties of Shapley Values
+### Shapley 值的關鍵屬性
 
-**1. Efficiency (Additivity)**:
+**1. 效率性（可加性）**：
 $$\sum_{i=1}^{n} \phi_i = f(x) - f(\emptyset)$$
 
-The sum of all SHAP values equals the difference between the model's prediction for the instance and the expected value (baseline).
+所有 SHAP 值的總和等於模型對該實例的預測與期望值（基準值）之間的差異。
 
-This is why SHAP waterfall plots always sum to the total prediction change.
+這就是為什麼 SHAP 瀑布圖總是加總到總預測變化。
 
-**2. Symmetry**:
-If two features $i$ and $j$ contribute equally to all coalitions, then $\phi_i = \phi_j$.
+**2. 對稱性**：
+如果兩個特徵 $i$ 和 $j$ 對所有聯盟的貢獻相等，則 $\phi_i = \phi_j$。
 
-Features with identical effects receive identical attribution.
+具有相同效果的特徵獲得相同的歸因。
 
-**3. Dummy**:
-If a feature $i$ doesn't change the model output for any coalition, then $\phi_i = 0$.
+**3. 虛擬性**：
+如果特徵 $i$ 對任何聯盟都不改變模型輸出，則 $\phi_i = 0$。
 
-Irrelevant features receive zero attribution.
+不相關的特徵獲得零歸因。
 
-**4. Monotonicity**:
-If a feature's marginal contribution increases across coalitions, its Shapley value increases.
+**4. 單調性**：
+如果特徵的邊際貢獻在聯盟間增加，其 Shapley 值也會增加。
 
-## From Game Theory to Machine Learning
+## 從博弈論到機器學習
 
-### The Challenge
+### 挑戰
 
-Computing exact Shapley values requires evaluating the model on all possible feature coalitions:
-- For $n$ features, there are $2^n$ possible coalitions
-- For 50 features, this is over 1 quadrillion evaluations
+計算精確的 Shapley 值需要在所有可能的特徵聯盟上評估模型：
+- 對於 $n$ 個特徵，有 $2^n$ 個可能的聯盟
+- 對於 50 個特徵，這超過 1 千萬億次評估
 
-This exponential complexity makes exact computation intractable for most real-world models.
+這種指數複雜度使得大多數實際模型的精確計算變得不可行。
 
-### SHAP's Solution: Additive Feature Attribution
+### SHAP 的解決方案：加性特徵歸因
 
-SHAP connects Shapley values to **additive feature attribution methods**, enabling efficient computation.
+SHAP 將 Shapley 值連接到**加性特徵歸因方法**，實現高效計算。
 
-**Additive Feature Attribution Model**:
+**加性特徵歸因模型**：
 $$g(z') = \phi_0 + \sum_{i=1}^{M} \phi_i z'_i$$
 
-Where:
-- $g$ is the explanation model
-- $z' \in \{0,1\}^M$ indicates feature presence/absence
-- $\phi_i$ is the attribution to feature $i$
-- $\phi_0$ is the baseline (expected value)
+其中：
+- $g$ 是解釋模型
+- $z' \in \{0,1\}^M$ 表示特徵存在/缺失
+- $\phi_i$ 是對特徵 $i$ 的歸因
+- $\phi_0$ 是基準值（期望值）
 
-SHAP proves that **Shapley values are the only attribution values satisfying three desirable properties**: local accuracy, missingness, and consistency.
+SHAP 證明 **Shapley 值是滿足三個理想屬性的唯一歸因值**：局部準確性、缺失性和一致性。
 
-## SHAP Properties and Guarantees
+## SHAP 屬性和保證
 
-### Local Accuracy
+### 局部準確性
 
-**Property**: The explanation matches the model's output:
+**屬性**：解釋與模型的輸出匹配：
 $$f(x) = g(x') = \phi_0 + \sum_{i=1}^{M} \phi_i x'_i$$
 
-**Interpretation**: SHAP values exactly account for the model's prediction. This enables waterfall plots to precisely decompose predictions.
+**解釋**：SHAP 值精確地解釋模型的預測。這使瀑布圖能夠精確分解預測。
 
-### Missingness
+### 缺失性
 
-**Property**: If a feature is missing (not observed), its attribution is zero:
+**屬性**：如果特徵缺失（未觀察到），其歸因為零：
 $$x'_i = 0 \Rightarrow \phi_i = 0$$
 
-**Interpretation**: Only features that are present contribute to explanations.
+**解釋**：只有存在的特徵對解釋有貢獻。
 
-### Consistency
+### 一致性
 
-**Property**: If a model changes so a feature's marginal contribution increases (or stays the same) for all inputs, that feature's attribution should not decrease.
+**屬性**：如果模型改變使特徵的邊際貢獻對所有輸入增加（或保持不變），該特徵的歸因不應減少。
 
-**Interpretation**: If a feature becomes more important to the model, its SHAP value reflects this. This enables meaningful model comparisons.
+**解釋**：如果特徵對模型變得更重要，其 SHAP 值會反映這一點。這使得有意義的模型比較成為可能。
 
-## SHAP as a Unified Framework
+## SHAP 作為統一框架
 
-SHAP unifies several existing explanation methods by showing they're special cases of Shapley values under specific assumptions.
+SHAP 透過展示幾種現有解釋方法是特定假設下 Shapley 值的特例來統一它們。
 
-### LIME (Local Interpretable Model-agnostic Explanations)
+### LIME（Local Interpretable Model-agnostic Explanations）
 
-**LIME's Approach**: Fit a local linear model around a prediction using perturbed samples.
+**LIME 的方法**：使用擾動樣本在預測周圍擬合局部線性模型。
 
-**Connection to SHAP**: LIME approximates Shapley values but with suboptimal sample weighting. SHAP uses theoretically optimal weights derived from Shapley value formula.
+**與 SHAP 的連接**：LIME 近似 Shapley 值，但樣本加權次優。SHAP 使用從 Shapley 值公式衍生的理論最優權重。
 
-**Key Difference**: LIME's loss function and sampling don't guarantee consistency or exact additivity; SHAP does.
+**關鍵差異**：LIME 的損失函數和取樣不保證一致性或精確可加性；SHAP 保證。
 
 ### DeepLIFT
 
-**DeepLIFT's Approach**: Backpropagate contributions through neural networks by comparing to reference activations.
+**DeepLIFT 的方法**：透過與參考激活比較來反向傳播貢獻通過神經網路。
 
-**Connection to SHAP**: DeepExplainer uses DeepLIFT but averages over multiple reference samples to approximate conditional expectations, yielding Shapley values.
+**與 SHAP 的連接**：DeepExplainer 使用 DeepLIFT，但在多個參考樣本上平均以近似條件期望，產生 Shapley 值。
 
-### Layer-Wise Relevance Propagation (LRP)
+### 層級相關性傳播（LRP）
 
-**LRP's Approach**: Decompose neural network predictions by propagating relevance scores backward through layers.
+**LRP 的方法**：透過反向傳播相關性分數通過各層來分解神經網路預測。
 
-**Connection to SHAP**: LRP is a special case of SHAP with specific propagation rules. SHAP generalizes these rules with Shapley value theory.
+**與 SHAP 的連接**：LRP 是具有特定傳播規則的 SHAP 特例。SHAP 用 Shapley 值理論概括這些規則。
 
-### Integrated Gradients
+### 積分梯度
 
-**Integrated Gradients' Approach**: Integrate gradients along path from baseline to input.
+**積分梯度的方法**：沿從基準到輸入的路徑積分梯度。
 
-**Connection to SHAP**: When using a single reference point, Integrated Gradients approximates SHAP values for smooth models.
+**與 SHAP 的連接**：當使用單一參考點時，積分梯度為平滑模型近似 SHAP 值。
 
-## SHAP Computation Methods
+## SHAP 計算方法
 
-Different SHAP explainers use specialized algorithms to compute Shapley values efficiently for specific model types.
+不同的 SHAP 解釋器使用專門的演算法來為特定模型類型高效計算 Shapley 值。
 
-### Tree SHAP (TreeExplainer)
+### Tree SHAP（TreeExplainer）
 
-**Innovation**: Exploits tree structure to compute exact Shapley values in polynomial time instead of exponential.
+**創新**：利用樹結構以多項式時間而非指數時間計算精確 Shapley 值。
 
-**Algorithm**:
-- Traverses each tree path from root to leaf
-- Computes feature contributions using tree splits and weights
-- Aggregates across all trees in ensemble
+**演算法**：
+- 遍歷從根到葉的每條樹路徑
+- 使用樹分割和權重計算特徵貢獻
+- 在集成中的所有樹上聚合
 
-**Complexity**: $O(TLD^2)$ where $T$ = number of trees, $L$ = max leaves, $D$ = max depth
+**複雜度**：$O(TLD^2)$，其中 $T$ = 樹數量，$L$ = 最大葉節點數，$D$ = 最大深度
 
-**Key Advantage**: Exact Shapley values computed efficiently for tree-based models (XGBoost, LightGBM, Random Forest, etc.)
+**關鍵優勢**：為基於樹的模型（XGBoost、LightGBM、隨機森林等）高效計算精確 Shapley 值
 
-### Kernel SHAP (KernelExplainer)
+### Kernel SHAP（KernelExplainer）
 
-**Innovation**: Uses weighted linear regression to estimate Shapley values for any model.
+**創新**：使用加權線性迴歸為任何模型估計 Shapley 值。
 
-**Algorithm**:
-- Samples coalitions (feature subsets) according to Shapley kernel weights
-- Evaluates model on each coalition (missing features replaced by background values)
-- Fits weighted linear model to estimate feature attributions
+**演算法**：
+- 根據 Shapley 核權重對聯盟（特徵子集）進行取樣
+- 在每個聯盟上評估模型（缺失特徵由背景值替換）
+- 擬合加權線性模型以估計特徵歸因
 
-**Complexity**: $O(n \cdot 2^M)$ but approximates with fewer samples
+**複雜度**：$O(n \cdot 2^M)$ 但用較少的樣本近似
 
-**Key Advantage**: Model-agnostic; works with any prediction function
+**關鍵優勢**：模型無關；適用於任何預測函數
 
-**Trade-off**: Slower than specialized explainers; approximate rather than exact
+**權衡**：比專門的解釋器慢；是近似而非精確
 
-### Deep SHAP (DeepExplainer)
+### Deep SHAP（DeepExplainer）
 
-**Innovation**: Combines DeepLIFT with Shapley value sampling.
+**創新**：結合 DeepLIFT 與 Shapley 值取樣。
 
-**Algorithm**:
-- Computes DeepLIFT attributions for each reference sample
-- Averages attributions across multiple reference samples
-- Approximates conditional expectations: $E[f(x) | x_S]$
+**演算法**：
+- 為每個參考樣本計算 DeepLIFT 歸因
+- 在多個參考樣本上平均歸因
+- 近似條件期望：$E[f(x) | x_S]$
 
-**Complexity**: $O(n \cdot m)$ where $m$ = number of reference samples
+**複雜度**：$O(n \cdot m)$，其中 $m$ = 參考樣本數量
 
-**Key Advantage**: Efficiently approximates Shapley values for deep neural networks
+**關鍵優勢**：為深度神經網路高效近似 Shapley 值
 
-### Linear SHAP (LinearExplainer)
+### Linear SHAP（LinearExplainer）
 
-**Innovation**: Closed-form Shapley values for linear models.
+**創新**：線性模型的封閉形式 Shapley 值。
 
-**Algorithm**:
-- For independent features: $\phi_i = w_i \cdot (x_i - E[x_i])$
-- For correlated features: Adjusts for feature covariance
+**演算法**：
+- 對於獨立特徵：$\phi_i = w_i \cdot (x_i - E[x_i])$
+- 對於相關特徵：調整特徵協方差
 
-**Complexity**: $O(n)$ - nearly instantaneous
+**複雜度**：$O(n)$ - 幾乎瞬間完成
 
-**Key Advantage**: Exact Shapley values with minimal computation
+**關鍵優勢**：以最小計算獲得精確 Shapley 值
 
-## Understanding Conditional Expectations
+## 理解條件期望
 
-### The Core Challenge
+### 核心挑戰
 
-Computing $f(S)$ (model output given only features in $S$) requires handling missing features.
+計算 $f(S)$（僅給定 $S$ 中特徵時的模型輸出）需要處理缺失特徵。
 
-**Question**: How should we represent "missing" features when the model requires all features as input?
+**問題**：當模型需要所有特徵作為輸入時，我們應該如何表示「缺失」特徵？
 
-### Two Approaches
+### 兩種方法
 
-**1. Interventional (Marginal) Approach**:
-- Replace missing features with values from background dataset
-- Estimates: $E[f(x) | x_S]$ by marginalizing over $x_{\bar{S}}$
-- Interpretation: "What would the model predict if we didn't know features $\bar{S}$?"
+**1. 介入性（邊際）方法**：
+- 用來自背景資料集的值替換缺失特徵
+- 估計：$E[f(x) | x_S]$，透過對 $x_{\bar{S}}$ 邊際化
+- 解釋：「如果我們不知道特徵 $\bar{S}$，模型會預測什麼？」
 
-**2. Observational (Conditional) Approach**:
-- Use conditional distribution: $E[f(x) | x_S = x_S^*]$
-- Accounts for feature dependencies
-- Interpretation: "What would the model predict for similar instances with features $S = x_S^*$?"
+**2. 觀測性（條件）方法**：
+- 使用條件分佈：$E[f(x) | x_S = x_S^*]$
+- 考慮特徵依賴關係
+- 解釋：「對於具有特徵 $S = x_S^*$ 的相似實例，模型會預測什麼？」
 
-**Trade-offs**:
-- **Interventional**: Simpler, assumes feature independence, matches causal interpretation
-- **Observational**: More accurate for correlated features, requires conditional distribution estimation
+**權衡**：
+- **介入性**：更簡單，假設特徵獨立，匹配因果解釋
+- **觀測性**：對相關特徵更準確，需要條件分佈估計
 
-**TreeExplainer** supports both via `feature_perturbation` parameter.
+**TreeExplainer** 透過 `feature_perturbation` 參數支援兩種方法。
 
-## Baseline (Expected Value) Selection
+## 基準值（期望值）選擇
 
-The **baseline** $\phi_0 = E[f(x)]$ represents the model's average prediction.
+**基準值** $\phi_0 = E[f(x)]$ 代表模型的平均預測。
 
-### Computing the Baseline
+### 計算基準值
 
-**For TreeExplainer**:
-- With background data: Average prediction on background dataset
-- With tree_path_dependent: Weighted average using tree leaf distributions
+**對於 TreeExplainer**：
+- 有背景資料：背景資料集上的平均預測
+- 使用 tree_path_dependent：使用樹葉分佈的加權平均
 
-**For DeepExplainer / KernelExplainer**:
-- Average prediction on background samples
+**對於 DeepExplainer / KernelExplainer**：
+- 背景樣本上的平均預測
 
-### Importance of Baseline
+### 基準值的重要性
 
-- SHAP values measure deviation from baseline
-- Different baselines → different SHAP values (but still sum correctly)
-- Choose baseline representative of "typical" or "neutral" input
-- Common choices: Training set mean, median, or mode
+- SHAP 值衡量與基準值的偏差
+- 不同的基準值 → 不同的 SHAP 值（但仍正確加總）
+- 選擇代表「典型」或「中性」輸入的基準值
+- 常見選擇：訓練集平均值、中位數或眾數
 
-## Interpreting SHAP Values
+## 解釋 SHAP 值
 
-### Units and Scale
+### 單位和尺度
 
-**SHAP values have the same units as the model output**:
-- Regression: Same units as target variable (dollars, temperature, etc.)
-- Classification (log-odds): Log-odds units
-- Classification (probability): Probability units (if model output transformed)
+**SHAP 值與模型輸出具有相同的單位**：
+- 迴歸：與目標變數相同的單位（美元、溫度等）
+- 分類（對數賠率）：對數賠率單位
+- 分類（機率）：機率單位（如果模型輸出已轉換）
 
-**Magnitude**: Higher absolute SHAP value = stronger feature impact
+**大小**：較高的絕對 SHAP 值 = 較強的特徵影響
 
-**Sign**:
-- Positive SHAP value = Feature pushes prediction higher
-- Negative SHAP value = Feature pushes prediction lower
+**符號**：
+- 正 SHAP 值 = 特徵將預測推高
+- 負 SHAP 值 = 特徵將預測推低
 
-### Additive Decomposition
+### 加性分解
 
-For a prediction $f(x)$:
+對於預測 $f(x)$：
 $$f(x) = E[f(X)] + \sum_{i=1}^{n} \phi_i(x)$$
 
-**Example**:
-- Expected value (baseline): 0.3
-- SHAP values: {Age: +0.15, Income: +0.10, Education: -0.05}
-- Prediction: $0.3 + 0.15 + 0.10 - 0.05 = 0.50$
+**範例**：
+- 期望值（基準值）：0.3
+- SHAP 值：{Age: +0.15, Income: +0.10, Education: -0.05}
+- 預測：$0.3 + 0.15 + 0.10 - 0.05 = 0.50$
 
-### Global vs. Local Importance
+### 全局 vs 局部重要性
 
-**Local (Instance-level)**:
-- SHAP values for single prediction: $\phi_i(x)$
-- Explains: "Why did the model predict $f(x)$ for this instance?"
-- Visualization: Waterfall, force plots
+**局部（實例層面）**：
+- 單一預測的 SHAP 值：$\phi_i(x)$
+- 解釋：「為什麼模型對這個實例預測 $f(x)$？」
+- 視覺化：瀑布圖、力場圖
 
-**Global (Dataset-level)**:
-- Average absolute SHAP values: $E[|\phi_i(x)|]$
-- Explains: "Which features are most important overall?"
-- Visualization: Beeswarm, bar plots
+**全局（資料集層面）**：
+- 平均絕對 SHAP 值：$E[|\phi_i(x)|]$
+- 解釋：「整體上哪些特徵最重要？」
+- 視覺化：蜂群圖、長條圖
 
-**Key Insight**: Global importance is the aggregation of local importances, maintaining consistency between instance and dataset explanations.
+**關鍵見解**：全局重要性是局部重要性的聚合，維持實例和資料集解釋之間的一致性。
 
-## SHAP vs. Other Feature Importance Methods
+## SHAP vs 其他特徵重要性方法
 
-### Comparison with Permutation Importance
+### 與排列重要性的比較
 
-**Permutation Importance**:
-- Shuffles a feature and measures accuracy drop
-- Global metric only (no instance-level explanations)
-- Can be misleading with correlated features
+**排列重要性**：
+- 打亂特徵並測量準確性下降
+- 僅限全局指標（無實例層面解釋）
+- 對相關特徵可能產生誤導
 
-**SHAP**:
-- Provides both local and global importance
-- Handles feature correlations through coalitional averaging
-- Consistent: Additive property guarantees sum to prediction
+**SHAP**：
+- 提供局部和全局重要性
+- 透過聯盟平均處理特徵相關性
+- 一致性：可加性屬性保證加總到預測
 
-### Comparison with Feature Coefficients (Linear Models)
+### 與特徵係數（線性模型）的比較
 
-**Feature Coefficients** ($w_i$):
-- Measure impact per unit change in feature
-- Don't account for feature scale or distribution
+**特徵係數** ($w_i$)：
+- 衡量每單位特徵變化的影響
+- 不考慮特徵尺度或分佈
 
-**SHAP for Linear Models**:
+**線性模型的 SHAP**：
 - $\phi_i = w_i \cdot (x_i - E[x_i])$
-- Accounts for feature value relative to average
-- More interpretable for comparing features with different units/scales
+- 考慮相對於平均值的特徵值
+- 對比較具有不同單位/尺度的特徵更具可解釋性
 
-### Comparison with Tree Feature Importance (Gini/Split-based)
+### 與樹特徵重要性（Gini/基於分割）的比較
 
-**Gini/Split Importance**:
-- Based on training process (purity gain or frequency of splits)
-- Biased toward high-cardinality features
-- No instance-level explanations
-- Can be misleading (importance ≠ predictive power)
+**Gini/分割重要性**：
+- 基於訓練過程（純度增益或分割頻率）
+- 偏向高基數特徵
+- 無實例層面解釋
+- 可能產生誤導（重要性 ≠ 預測能力）
 
-**SHAP (Tree SHAP)**:
-- Based on model output (prediction behavior)
-- Fair attribution through Shapley values
-- Provides instance-level explanations
-- Consistent and theoretically grounded
+**SHAP（Tree SHAP）**：
+- 基於模型輸出（預測行為）
+- 透過 Shapley 值公平歸因
+- 提供實例層面解釋
+- 一致且具有理論基礎
 
-## Interactions and Higher-Order Effects
+## 互動和高階效應
 
-### SHAP Interaction Values
+### SHAP 互動值
 
-Standard SHAP captures main effects. **SHAP interaction values** capture pairwise interactions.
+標準 SHAP 捕捉主效應。**SHAP 互動值**捕捉成對互動。
 
-**Formula for Interaction**:
+**互動公式**：
 $$\phi_{i,j} = \sum_{S \subseteq F \setminus \{i,j\}} \frac{|S|!(|F|-|S|-2)!}{2(|F|-1)!} \Delta_{ij}(S)$$
 
-Where $\Delta_{ij}(S)$ is the interaction effect of features $i$ and $j$ given coalition $S$.
+其中 $\Delta_{ij}(S)$ 是給定聯盟 $S$ 時特徵 $i$ 和 $j$ 的互動效應。
 
-**Interpretation**:
-- $\phi_{i,i}$: Main effect of feature $i$
-- $\phi_{i,j}$ ($i \neq j$): Interaction effect between features $i$ and $j$
+**解釋**：
+- $\phi_{i,i}$：特徵 $i$ 的主效應
+- $\phi_{i,j}$（$i \neq j$）：特徵 $i$ 和 $j$ 之間的互動效應
 
-**Property**:
+**屬性**：
 $$\phi_i = \phi_{i,i} + \sum_{j \neq i} \phi_{i,j}$$
 
-Main SHAP value equals main effect plus half of all pairwise interactions involving feature $i$.
+主 SHAP 值等於主效應加上涉及特徵 $i$ 的所有成對互動的一半。
 
-### Computing Interactions
+### 計算互動
 
-**TreeExplainer** supports exact interaction computation:
+**TreeExplainer** 支援精確互動計算：
 ```python
 explainer = shap.TreeExplainer(model)
 shap_interaction_values = explainer.shap_interaction_values(X)
 ```
 
-**Limitation**: Exponentially complex for other explainers (only practical for tree models)
+**限制**：對其他解釋器指數複雜（僅對樹模型實用）
 
-## Theoretical Limitations and Considerations
+## 理論限制和考量
 
-### Computational Complexity
+### 計算複雜度
 
-**Exact Computation**: $O(2^n)$ - intractable for large $n$
+**精確計算**：$O(2^n)$ - 對大 $n$ 不可行
 
-**Specialized Algorithms**:
-- Tree SHAP: $O(TLD^2)$ - efficient for trees
-- Deep SHAP, Kernel SHAP: Approximations required
+**專門演算法**：
+- Tree SHAP：$O(TLD^2)$ - 對樹高效
+- Deep SHAP、Kernel SHAP：需要近似
 
-**Implication**: For non-tree models with many features, explanations may be approximate.
+**含義**：對於具有許多特徵的非樹模型，解釋可能是近似的。
 
-### Feature Independence Assumption
+### 特徵獨立假設
 
-**Kernel SHAP and Basic Implementation**: Assume features can be independently manipulated
+**Kernel SHAP 和基本實現**：假設特徵可以獨立操作
 
-**Challenge**: Real features are often correlated (e.g., height and weight)
+**挑戰**：真實特徵通常是相關的（例如，身高和體重）
 
-**Solutions**:
-- Use observational approach (conditional expectations)
-- TreeExplainer with correlation-aware perturbation
-- Feature grouping for highly correlated features
+**解決方案**：
+- 使用觀測性方法（條件期望）
+- 使用相關性感知擾動的 TreeExplainer
+- 對高度相關的特徵進行特徵分組
 
-### Out-of-Distribution Samples
+### 分佈外樣本
 
-**Issue**: Creating coalitions by replacing features may create unrealistic samples (outside training distribution)
+**問題**：透過替換特徵建立聯盟可能會建立不真實的樣本（在訓練分佈之外）
 
-**Example**: Setting "Age=5" and "Has PhD=Yes" simultaneously
+**範例**：同時設定「Age=5」和「Has PhD=Yes」
 
-**Implication**: SHAP values reflect model behavior on potentially unrealistic inputs
+**含義**：SHAP 值反映模型在可能不真實輸入上的行為
 
-**Mitigation**: Use observational approach or carefully selected background data
+**緩解**：使用觀測性方法或仔細選擇的背景資料
 
-### Causality
+### 因果性
 
-**SHAP measures association, not causation**
+**SHAP 衡量關聯，而非因果**
 
-SHAP answers: "How does the model's prediction change with this feature?"
-SHAP does NOT answer: "What would happen if we changed this feature in reality?"
+SHAP 回答：「模型的預測如何隨這個特徵變化？」
+SHAP 不回答：「如果我們在現實中改變這個特徵會發生什麼？」
 
-**Example**:
-- SHAP: "Hospital stay length increases prediction of mortality" (association)
-- Causality: "Longer hospital stays cause higher mortality" (incorrect!)
+**範例**：
+- SHAP：「住院時間增加死亡率預測」（關聯）
+- 因果：「更長的住院時間導致更高的死亡率」（不正確！）
 
-**Implication**: Use domain knowledge to interpret SHAP causally; SHAP alone doesn't establish causation.
+**含義**：使用領域知識進行因果解釋 SHAP；SHAP 本身不建立因果關係。
 
-## Advanced Theoretical Topics
+## 進階理論主題
 
-### SHAP as Optimal Credit Allocation
+### SHAP 作為最優信用分配
 
-SHAP is the unique attribution method satisfying:
-1. **Local accuracy**: Explanation matches model
-2. **Missingness**: Absent features have zero attribution
-3. **Consistency**: Attribution reflects feature importance changes
+SHAP 是滿足以下條件的唯一歸因方法：
+1. **局部準確性**：解釋與模型匹配
+2. **缺失性**：缺失特徵有零歸因
+3. **一致性**：歸因反映特徵重要性變化
 
-**Proof**: Lundberg & Lee (2017) showed Shapley values are the only solution satisfying these axioms.
+**證明**：Lundberg & Lee（2017）展示 Shapley 值是滿足這些公理的唯一解。
 
-### Connection to Functional ANOVA
+### 與函數 ANOVA 的連接
 
-SHAP values correspond to first-order terms in functional ANOVA decomposition:
+SHAP 值對應於函數 ANOVA 分解中的一階項：
 $$f(x) = f_0 + \sum_i f_i(x_i) + \sum_{i,j} f_{ij}(x_i, x_j) + ...$$
 
-Where $f_i(x_i)$ captures main effect of feature $i$, and $\phi_i \approx f_i(x_i)$.
+其中 $f_i(x_i)$ 捕捉特徵 $i$ 的主效應，且 $\phi_i \approx f_i(x_i)$。
 
-### Relationship to Sensitivity Analysis
+### 與敏感性分析的關係
 
-SHAP generalizes sensitivity analysis:
-- **Sensitivity Analysis**: $\frac{\partial f}{\partial x_i}$ (local gradient)
-- **SHAP**: Integrated sensitivity over feature coalition space
+SHAP 概括敏感性分析：
+- **敏感性分析**：$\frac{\partial f}{\partial x_i}$（局部梯度）
+- **SHAP**：在特徵聯盟空間上的積分敏感性
 
-Gradient-based methods (GradientExplainer, Integrated Gradients) approximate SHAP using derivatives.
+基於梯度的方法（GradientExplainer、積分梯度）使用導數近似 SHAP。
 
-## Practical Implications of Theory
+## 理論的實際含義
 
-### Why Use SHAP?
+### 為什麼使用 SHAP？
 
-1. **Theoretical Guarantees**: Only method with consistency, local accuracy, and missingness
-2. **Unified Framework**: Connects and generalizes multiple explanation methods
-3. **Additive Decomposition**: Predictions precisely decompose into feature contributions
-4. **Model Comparison**: Consistency enables comparing feature importance across models
-5. **Versatility**: Works with any model type (with appropriate explainer)
+1. **理論保證**：具有一致性、局部準確性和缺失性的唯一方法
+2. **統一框架**：連接和概括多種解釋方法
+3. **加性分解**：預測精確分解為特徵貢獻
+4. **模型比較**：一致性使得跨模型比較特徵重要性成為可能
+5. **多功能性**：適用於任何模型類型（使用適當的解釋器）
 
-### When to Be Cautious
+### 何時需要謹慎
 
-1. **Computational Cost**: May be slow for complex models without specialized explainers
-2. **Feature Correlation**: Standard approaches may create unrealistic samples
-3. **Interpretation**: Requires understanding baseline, units, and assumptions
-4. **Causality**: SHAP doesn't imply causation; use domain knowledge
-5. **Approximations**: Non-tree methods use approximations; understand accuracy trade-offs
+1. **計算成本**：對於沒有專門解釋器的複雜模型可能較慢
+2. **特徵相關性**：標準方法可能建立不真實的樣本
+3. **解釋**：需要理解基準值、單位和假設
+4. **因果性**：SHAP 不暗示因果關係；使用領域知識
+5. **近似**：非樹方法使用近似；理解準確性權衡
 
-## References and Further Reading
+## 參考文獻和進一步閱讀
 
-**Foundational Papers**:
-- Shapley, L. S. (1951). "A value for n-person games"
-- Lundberg, S. M., & Lee, S. I. (2017). "A Unified Approach to Interpreting Model Predictions" (NeurIPS)
-- Lundberg, S. M., et al. (2020). "From local explanations to global understanding with explainable AI for trees" (Nature Machine Intelligence)
+**基礎論文**：
+- Shapley, L. S.（1951）. 「A value for n-person games」
+- Lundberg, S. M., & Lee, S. I.（2017）. 「A Unified Approach to Interpreting Model Predictions」（NeurIPS）
+- Lundberg, S. M., et al.（2020）. 「From local explanations to global understanding with explainable AI for trees」（Nature Machine Intelligence）
 
-**Key Concepts**:
-- Cooperative game theory and Shapley values
-- Additive feature attribution methods
-- Conditional expectation estimation
-- Tree SHAP algorithm and polynomial-time computation
+**關鍵概念**：
+- 合作博弈論和 Shapley 值
+- 加性特徵歸因方法
+- 條件期望估計
+- Tree SHAP 演算法和多項式時間計算
 
-This theoretical foundation explains why SHAP is a principled, versatile, and powerful tool for model interpretation.
+這個理論基礎解釋了為什麼 SHAP 是一個有原則、多功能且強大的模型解釋工具。

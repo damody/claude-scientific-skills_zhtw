@@ -1,38 +1,38 @@
-# Getting Started with Modal
+# Modal 入門
 
-## Sign Up
+## 註冊
 
-Sign up for free at https://modal.com and get $30/month of credits.
+在 https://modal.com 免費註冊並獲得每月 $30 的額度。
 
-## Authentication
+## 驗證
 
-Set up authentication using the Modal CLI:
+使用 Modal CLI 設定驗證：
 
 ```bash
 modal token new
 ```
 
-This creates credentials in `~/.modal.toml`. Alternatively, set environment variables:
+這會在 `~/.modal.toml` 中建立憑證。或者，設定環境變數：
 - `MODAL_TOKEN_ID`
 - `MODAL_TOKEN_SECRET`
 
-## Basic Concepts
+## 基本概念
 
-### Modal is Serverless
+### Modal 是無伺服器的
 
-Modal is a serverless platform - only pay for resources used and spin up containers on demand in seconds.
+Modal 是一個無伺服器平台 - 只需為使用的資源付費，並在幾秒內按需啟動容器。
 
-### Core Components
+### 核心元件
 
-**App**: Represents an application running on Modal, grouping one or more Functions for atomic deployment.
+**App（應用程式）**：代表在 Modal 上執行的應用程式，將一個或多個函數分組以進行原子部署。
 
-**Function**: Acts as an independent unit that scales up and down independently. No containers run (and no charges) when there are no live inputs.
+**Function（函數）**：作為獨立擴展的單位。沒有即時輸入時，不會執行容器（也不會產生費用）。
 
-**Image**: The environment code runs in - a container snapshot with dependencies installed.
+**Image（映像）**：程式碼執行的環境 - 安裝了相依性的容器快照。
 
-## First Modal App
+## 第一個 Modal 應用程式
 
-Create a file `hello_modal.py`:
+建立檔案 `hello_modal.py`：
 
 ```python
 import modal
@@ -49,44 +49,44 @@ def main():
     hello.remote()
 ```
 
-Run with:
+執行：
 ```bash
 modal run hello_modal.py
 ```
 
-## Running Apps
+## 執行應用程式
 
-### Ephemeral Apps (Development)
+### 臨時應用程式（開發）
 
-Run temporarily with `modal run`:
+使用 `modal run` 暫時執行：
 ```bash
 modal run script.py
 ```
 
-The app stops when the script exits. Use `--detach` to keep running after client exits.
+腳本退出時應用程式停止。使用 `--detach` 在客戶端退出後保持執行。
 
-### Deployed Apps (Production)
+### 已部署的應用程式（生產）
 
-Deploy persistently with `modal deploy`:
+使用 `modal deploy` 持久部署：
 ```bash
 modal deploy script.py
 ```
 
-View deployed apps at https://modal.com/apps or with:
+在 https://modal.com/apps 或使用以下命令查看已部署的應用程式：
 ```bash
 modal app list
 ```
 
-Stop deployed apps:
+停止已部署的應用程式：
 ```bash
 modal app stop app-name
 ```
 
-## Key Features
+## 主要功能
 
-- **Fast prototyping**: Write Python, run on GPUs in seconds
-- **Serverless APIs**: Create web endpoints with a decorator
-- **Scheduled jobs**: Run cron jobs in the cloud
-- **GPU inference**: Access T4, L4, A10, A100, H100, H200, B200 GPUs
-- **Distributed volumes**: Persistent storage for ML models
-- **Sandboxes**: Secure containers for untrusted code
+- **快速原型開發**：撰寫 Python，在幾秒內在 GPU 上執行
+- **無伺服器 API**：使用裝飾器建立 web 端點
+- **排程任務**：在雲端執行 cron 任務
+- **GPU 推論**：存取 T4、L4、A10、A100、H100、H200、B200 GPU
+- **分散式磁碟區**：ML 模型的持久化儲存
+- **沙箱**：用於不受信任程式碼的安全容器

@@ -1,29 +1,29 @@
-# Liquid Handling with PyLabRobot
+# PyLabRobot 液體處理
 
-## Overview
+## 概述
 
-The liquid handling module (`pylabrobot.liquid_handling`) provides a unified interface for controlling liquid handling robots. The `LiquidHandler` class serves as the main interface for all pipetting operations, working across different hardware platforms through backend abstraction.
+液體處理模組（`pylabrobot.liquid_handling`）提供控制液體處理機器人的統一介面。`LiquidHandler` 類別作為所有移液操作的主要介面，通過後端抽象在不同硬體平台上運作。
 
-## Basic Setup
+## 基本設置
 
-### Initializing a Liquid Handler
+### 初始化液體處理器
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
 from pylabrobot.liquid_handling.backends import STAR
 from pylabrobot.resources import STARLetDeck
 
-# Create liquid handler with STAR backend
+# 建立使用 STAR 後端的液體處理器
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 await lh.setup()
 
-# When done
+# 完成時
 await lh.stop()
 ```
 
-### Switching Between Backends
+### 在後端之間切換
 
-Change robots by swapping the backend without rewriting protocols:
+通過更換後端即可更改機器人，無需重寫協定：
 
 ```python
 # Hamilton STAR
@@ -34,119 +34,119 @@ lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 from pylabrobot.liquid_handling.backends import OpentronsBackend
 lh = LiquidHandler(backend=OpentronsBackend(host="192.168.1.100"), deck=OTDeck())
 
-# Simulation (no hardware required)
+# 模擬（不需要硬體）
 from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
 lh = LiquidHandler(backend=ChatterboxBackend(), deck=STARLetDeck())
 ```
 
-## Core Operations
+## 核心操作
 
-### Tip Management
+### 吸頭管理
 
-Picking up and dropping tips is fundamental to liquid handling operations:
+拾取和丟棄吸頭是液體處理操作的基礎：
 
 ```python
-# Pick up tips from specific positions
-await lh.pick_up_tips(tip_rack["A1"])           # Single tip
-await lh.pick_up_tips(tip_rack["A1:H1"])        # Row of 8 tips
-await lh.pick_up_tips(tip_rack["A1:A12"])       # Column of 12 tips
+# 從特定位置拾取吸頭
+await lh.pick_up_tips(tip_rack["A1"])           # 單個吸頭
+await lh.pick_up_tips(tip_rack["A1:H1"])        # 一排 8 個吸頭
+await lh.pick_up_tips(tip_rack["A1:A12"])       # 一列 12 個吸頭
 
-# Drop tips
-await lh.drop_tips()                             # Drop at current location
-await lh.drop_tips(waste)                        # Drop at specific location
+# 丟棄吸頭
+await lh.drop_tips()                             # 在目前位置丟棄
+await lh.drop_tips(waste)                        # 在指定位置丟棄
 
-# Return tips to original rack
+# 將吸頭放回原架
 await lh.return_tips()
 ```
 
-**Tip Tracking**: Enable automatic tip tracking to monitor tip usage:
+**吸頭追蹤**：啟用自動吸頭追蹤以監控吸頭使用：
 
 ```python
 from pylabrobot.resources import set_tip_tracking
-set_tip_tracking(True)  # Enable globally
+set_tip_tracking(True)  # 全域啟用
 ```
 
-### Aspirating Liquids
+### 吸取液體
 
-Draw liquid from wells or containers:
+從孔或容器中抽取液體：
 
 ```python
-# Basic aspiration
-await lh.aspirate(plate["A1"], vols=100)         # 100 µL from A1
+# 基本吸取
+await lh.aspirate(plate["A1"], vols=100)         # 從 A1 吸取 100 µL
 
-# Multiple wells with same volume
-await lh.aspirate(plate["A1:H1"], vols=100)      # 100 µL from each well
+# 多個孔使用相同體積
+await lh.aspirate(plate["A1:H1"], vols=100)      # 從每個孔吸取 100 µL
 
-# Multiple wells with different volumes
+# 多個孔使用不同體積
 await lh.aspirate(
     plate["A1:A3"],
-    vols=[100, 150, 200]                          # Different volumes
+    vols=[100, 150, 200]                          # 不同體積
 )
 
-# Advanced parameters
+# 進階參數
 await lh.aspirate(
     plate["A1"],
     vols=100,
     flow_rate=50,                                 # µL/s
-    liquid_height=5,                              # mm from bottom
-    blow_out_air_volume=10                        # µL air
+    liquid_height=5,                              # 距離底部 mm
+    blow_out_air_volume=10                        # µL 空氣
 )
 ```
 
-### Dispensing Liquids
+### 分配液體
 
-Dispense liquid into wells or containers:
+將液體分配到孔或容器中：
 
 ```python
-# Basic dispensing
-await lh.dispense(plate["A2"], vols=100)         # 100 µL to A2
+# 基本分配
+await lh.dispense(plate["A2"], vols=100)         # 分配 100 µL 到 A2
 
-# Multiple wells
-await lh.dispense(plate["A1:H1"], vols=100)      # 100 µL to each
+# 多個孔
+await lh.dispense(plate["A1:H1"], vols=100)      # 分配 100 µL 到每個孔
 
-# Different volumes
+# 不同體積
 await lh.dispense(
     plate["A1:A3"],
     vols=[100, 150, 200]
 )
 
-# Advanced parameters
+# 進階參數
 await lh.dispense(
     plate["A2"],
     vols=100,
     flow_rate=50,                                 # µL/s
-    liquid_height=2,                              # mm from bottom
-    blow_out_air_volume=10                        # µL air
+    liquid_height=2,                              # 距離底部 mm
+    blow_out_air_volume=10                        # µL 空氣
 )
 ```
 
-### Transferring Liquids
+### 轉移液體
 
-Transfer combines aspirate and dispense in a single operation:
+轉移將吸取和分配合併為單一操作：
 
 ```python
-# Basic transfer
+# 基本轉移
 await lh.transfer(
     source=source_plate["A1"],
     dest=dest_plate["A1"],
     vols=100
 )
 
-# Multiple transfers (same tips)
+# 多次轉移（相同吸頭）
 await lh.transfer(
     source=source_plate["A1:H1"],
     dest=dest_plate["A1:H1"],
     vols=100
 )
 
-# Different volumes per well
+# 每個孔不同體積
 await lh.transfer(
     source=source_plate["A1:A3"],
     dest=dest_plate["B1:B3"],
     vols=[50, 100, 150]
 )
 
-# With tip handling
+# 帶有吸頭處理
 await lh.pick_up_tips(tip_rack["A1:H1"])
 await lh.transfer(
     source=source_plate["A1:H12"],
@@ -156,18 +156,18 @@ await lh.transfer(
 await lh.drop_tips()
 ```
 
-## Advanced Techniques
+## 進階技術
 
-### Serial Dilutions
+### 連續稀釋
 
-Create serial dilutions across plate rows or columns:
+在微孔盤行或列中建立連續稀釋：
 
 ```python
-# 2-fold serial dilution
+# 2 倍連續稀釋
 source_vols = [100, 50, 50, 50, 50, 50, 50, 50]
 dest_vols = [0, 50, 50, 50, 50, 50, 50, 50]
 
-# Add diluent first
+# 先添加稀釋液
 await lh.pick_up_tips(tip_rack["A1"])
 await lh.transfer(
     source=buffer["A1"],
@@ -176,26 +176,26 @@ await lh.transfer(
 )
 await lh.drop_tips()
 
-# Perform serial dilution
+# 執行連續稀釋
 await lh.pick_up_tips(tip_rack["A2"])
 for i in range(7):
     await lh.aspirate(plate[f"A{i+1}"], vols=50)
     await lh.dispense(plate[f"A{i+2}"], vols=50)
-    # Mix
+    # 混合
     await lh.aspirate(plate[f"A{i+2}"], vols=50)
     await lh.dispense(plate[f"A{i+2}"], vols=50)
 await lh.drop_tips()
 ```
 
-### Plate Replication
+### 微孔盤複製
 
-Copy an entire plate layout to another plate:
+將整個微孔盤布局複製到另一個微孔盤：
 
 ```python
-# Setup tips
+# 設置吸頭
 await lh.pick_up_tips(tip_rack["A1:H1"])
 
-# Replicate 96-well plate (12 columns)
+# 複製 96 孔盤（12 列）
 for col in range(1, 13):
     await lh.transfer(
         source=source_plate[f"A{col}:H{col}"],
@@ -206,12 +206,12 @@ for col in range(1, 13):
 await lh.drop_tips()
 ```
 
-### Multi-Channel Pipetting
+### 多通道移液
 
-Use multiple channels simultaneously for parallel operations:
+同時使用多個通道進行平行操作：
 
 ```python
-# 8-channel transfer (entire row)
+# 8 通道轉移（整行）
 await lh.pick_up_tips(tip_rack["A1:H1"])
 await lh.transfer(
     source=source_plate["A1:H1"],
@@ -220,7 +220,7 @@ await lh.transfer(
 )
 await lh.drop_tips()
 
-# Process entire plate with 8-channel
+# 使用 8 通道處理整個微孔盤
 for col in range(1, 13):
     await lh.pick_up_tips(tip_rack[f"A{col}:H{col}"])
     await lh.transfer(
@@ -231,15 +231,15 @@ for col in range(1, 13):
     await lh.drop_tips()
 ```
 
-### Mixing Liquids
+### 混合液體
 
-Mix liquids by repeatedly aspirating and dispensing:
+通過重複吸取和分配來混合液體：
 
 ```python
-# Mix by aspiration/dispensing
+# 通過吸取/分配混合
 await lh.pick_up_tips(tip_rack["A1"])
 
-# Mix 5 times
+# 混合 5 次
 for _ in range(5):
     await lh.aspirate(plate["A1"], vols=80)
     await lh.dispense(plate["A1"], vols=80)
@@ -247,36 +247,36 @@ for _ in range(5):
 await lh.drop_tips()
 ```
 
-## Volume Tracking
+## 體積追蹤
 
-Track liquid volumes in wells automatically:
+自動追蹤孔中的液體體積：
 
 ```python
 from pylabrobot.resources import set_volume_tracking
 
-# Enable volume tracking globally
+# 全域啟用體積追蹤
 set_volume_tracking(True)
 
-# Set initial volumes
+# 設定初始體積
 plate["A1"].tracker.set_liquids([(None, 200)])  # 200 µL
 
-# After aspirating 100 µL
+# 吸取 100 µL 後
 await lh.aspirate(plate["A1"], vols=100)
 print(plate["A1"].tracker.get_volume())  # 100 µL
 
-# Check remaining volume
+# 檢查剩餘體積
 remaining = plate["A1"].tracker.get_volume()
 ```
 
-## Liquid Classes
+## 液體類別
 
-Define liquid properties for optimal pipetting:
+定義液體屬性以優化移液：
 
 ```python
-# Liquid classes control aspiration/dispense parameters
+# 液體類別控制吸取/分配參數
 from pylabrobot.liquid_handling import LiquidClass
 
-# Create custom liquid class
+# 建立自訂液體類別
 water = LiquidClass(
     name="Water",
     aspiration_flow_rate=100,
@@ -286,7 +286,7 @@ water = LiquidClass(
     air_transport_retract_dist=10
 )
 
-# Use with operations
+# 與操作一起使用
 await lh.aspirate(
     plate["A1"],
     vols=100,
@@ -294,9 +294,9 @@ await lh.aspirate(
 )
 ```
 
-## Error Handling
+## 錯誤處理
 
-Handle errors in liquid handling operations:
+處理液體處理操作中的錯誤：
 
 ```python
 try:
@@ -305,8 +305,8 @@ try:
     await lh.transfer(source["A1"], dest["A1"], vols=100)
     await lh.drop_tips()
 except Exception as e:
-    print(f"Error during liquid handling: {e}")
-    # Attempt to drop tips if holding them
+    print(f"液體處理錯誤：{e}")
+    # 嘗試丟棄吸頭（如果持有）
     try:
         await lh.drop_tips()
     except:
@@ -315,22 +315,22 @@ finally:
     await lh.stop()
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Always Setup and Stop**: Call `await lh.setup()` before operations and `await lh.stop()` when done
-2. **Enable Tracking**: Use tip tracking and volume tracking for accurate state management
-3. **Tip Management**: Always pick up tips before aspirating and drop them when done
-4. **Flow Rates**: Adjust flow rates based on liquid viscosity and vessel type
-5. **Liquid Height**: Set appropriate aspiration/dispense heights to avoid splashing
-6. **Error Handling**: Use try/finally blocks to ensure proper cleanup
-7. **Test in Simulation**: Use ChatterboxBackend to test protocols before running on hardware
-8. **Volume Limits**: Respect tip volume limits and well capacities
-9. **Mixing**: Mix after dispensing viscous liquids or when accuracy is critical
-10. **Documentation**: Document liquid classes and custom parameters for reproducibility
+1. **始終設置和停止**：在操作前呼叫 `await lh.setup()`，完成時呼叫 `await lh.stop()`
+2. **啟用追蹤**：使用吸頭追蹤和體積追蹤以實現準確的狀態管理
+3. **吸頭管理**：始終在吸取前拾取吸頭，完成後丟棄
+4. **流速**：根據液體黏度和容器類型調整流速
+5. **液體高度**：設定適當的吸取/分配高度以避免飛濺
+6. **錯誤處理**：使用 try/finally 區塊確保適當清理
+7. **在模擬中測試**：在硬體上執行前使用 ChatterboxBackend 測試協定
+8. **體積限制**：遵守吸頭體積限制和孔容量
+9. **混合**：分配黏稠液體後或準確度至關重要時進行混合
+10. **文件**：記錄液體類別和自訂參數以確保可重現性
 
-## Common Patterns
+## 常見模式
 
-### Complete Liquid Handling Protocol
+### 完整液體處理協定
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -338,30 +338,30 @@ from pylabrobot.liquid_handling.backends import STAR
 from pylabrobot.resources import STARLetDeck, TIP_CAR_480_A00, Cos_96_DW_1mL
 from pylabrobot.resources import set_tip_tracking, set_volume_tracking
 
-# Enable tracking
+# 啟用追蹤
 set_tip_tracking(True)
 set_volume_tracking(True)
 
-# Initialize
+# 初始化
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 await lh.setup()
 
 try:
-    # Define resources
+    # 定義資源
     tip_rack = TIP_CAR_480_A00(name="tips")
     source = Cos_96_DW_1mL(name="source")
     dest = Cos_96_DW_1mL(name="dest")
 
-    # Assign to deck
+    # 分配到工作台
     lh.deck.assign_child_resource(tip_rack, rails=1)
     lh.deck.assign_child_resource(source, rails=10)
     lh.deck.assign_child_resource(dest, rails=15)
 
-    # Set initial volumes
+    # 設定初始體積
     for well in source.children:
         well.tracker.set_liquids([(None, 200)])
 
-    # Execute protocol
+    # 執行協定
     await lh.pick_up_tips(tip_rack["A1:H1"])
     await lh.transfer(
         source=source["A1:H12"],
@@ -374,30 +374,30 @@ finally:
     await lh.stop()
 ```
 
-## Hardware-Specific Notes
+## 硬體專用說明
 
 ### Hamilton STAR
 
-- Supports full liquid handling capabilities
-- Uses USB connection for communication
-- Firmware commands executed directly
-- Supports CO-RE (Compressed O-Ring Expansion) tips
+- 支援完整液體處理功能
+- 使用 USB 連接進行通訊
+- 直接執行韌體命令
+- 支援 CO-RE（壓縮 O 型環擴展）吸頭
 
 ### Opentrons OT-2
 
-- Requires IP address for network connection
-- Uses HTTP API for communication
-- Limited to 8-channel and single-channel pipettes
-- Simpler deck layout compared to STAR
+- 需要 IP 位址進行網路連接
+- 使用 HTTP API 進行通訊
+- 僅限 8 通道和單通道移液器
+- 與 STAR 相比工作台布局較簡單
 
 ### Tecan EVO
 
-- Work-in-progress support
-- Similar capabilities to Hamilton STAR
-- Check current compatibility status in documentation
+- 開發中支援
+- 與 Hamilton STAR 類似的功能
+- 請查看文件以了解目前相容性狀態
 
-## Additional Resources
+## 其他資源
 
-- Official Liquid Handling Guide: https://docs.pylabrobot.org/user_guide/basic.html
-- API Reference: https://docs.pylabrobot.org/api/pylabrobot.liquid_handling.html
-- Example Protocols: https://github.com/PyLabRobot/pylabrobot/tree/main/examples
+- 官方液體處理指南：https://docs.pylabrobot.org/user_guide/basic.html
+- API 參考：https://docs.pylabrobot.org/api/pylabrobot.liquid_handling.html
+- 範例協定：https://github.com/PyLabRobot/pylabrobot/tree/main/examples

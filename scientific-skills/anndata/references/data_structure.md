@@ -1,44 +1,44 @@
-# AnnData Object Structure
+# AnnData 物件結構
 
-The AnnData object stores a data matrix with associated annotations, providing a flexible framework for managing experimental data and metadata.
+AnnData 物件儲存帶有相關註解的資料矩陣，為管理實驗資料和中繼資料提供靈活的框架。
 
-## Core Components
+## 核心組件
 
-### X (Data Matrix)
-The primary data matrix with shape (n_obs, n_vars) storing experimental measurements.
+### X（資料矩陣）
+形狀為 (n_obs, n_vars) 的主要資料矩陣，儲存實驗測量值。
 
 ```python
 import anndata as ad
 import numpy as np
 
-# Create with dense array
+# 使用密集陣列建立
 adata = ad.AnnData(X=np.random.rand(100, 2000))
 
-# Create with sparse matrix (recommended for large, sparse data)
+# 使用稀疏矩陣建立（推薦用於大型稀疏資料）
 from scipy.sparse import csr_matrix
 sparse_data = csr_matrix(np.random.rand(100, 2000))
 adata = ad.AnnData(X=sparse_data)
 ```
 
-Access data:
+存取資料：
 ```python
-# Full matrix (caution with large datasets)
+# 完整矩陣（大型資料集需謹慎）
 full_data = adata.X
 
-# Single observation
+# 單個觀測值
 obs_data = adata.X[0, :]
 
-# Single variable across all observations
+# 所有觀測值的單個變數
 var_data = adata.X[:, 0]
 ```
 
-### obs (Observation Annotations)
-DataFrame storing metadata about observations (rows). Each row corresponds to one observation in X.
+### obs（觀測註解）
+儲存觀測值（列）中繼資料的 DataFrame。每列對應 X 中的一個觀測值。
 
 ```python
 import pandas as pd
 
-# Create AnnData with observation metadata
+# 建立附帶觀測中繼資料的 AnnData
 obs_df = pd.DataFrame({
     'cell_type': ['T cell', 'B cell', 'Monocyte'],
     'treatment': ['control', 'treated', 'control'],
@@ -47,16 +47,16 @@ obs_df = pd.DataFrame({
 
 adata = ad.AnnData(X=np.random.rand(3, 100), obs=obs_df)
 
-# Access observation metadata
+# 存取觀測中繼資料
 print(adata.obs['cell_type'])
 print(adata.obs.loc['cell_1'])
 ```
 
-### var (Variable Annotations)
-DataFrame storing metadata about variables (columns). Each row corresponds to one variable in X.
+### var（變數註解）
+儲存變數（欄）中繼資料的 DataFrame。每列對應 X 中的一個變數。
 
 ```python
-# Create AnnData with variable metadata
+# 建立附帶變數中繼資料的 AnnData
 var_df = pd.DataFrame({
     'gene_name': ['ACTB', 'GAPDH', 'TP53'],
     'chromosome': ['7', '12', '17'],
@@ -65,108 +65,108 @@ var_df = pd.DataFrame({
 
 adata = ad.AnnData(X=np.random.rand(100, 3), var=var_df)
 
-# Access variable metadata
+# 存取變數中繼資料
 print(adata.var['gene_name'])
 print(adata.var.loc['ENSG00001'])
 ```
 
-### layers (Alternative Data Representations)
-Dictionary storing alternative matrices with the same dimensions as X.
+### layers（替代資料表示）
+儲存與 X 具有相同維度的替代矩陣的字典。
 
 ```python
-# Store raw counts, normalized data, and scaled data
+# 儲存原始計數、標準化資料和縮放資料
 adata = ad.AnnData(X=np.random.rand(100, 2000))
 adata.layers['raw_counts'] = np.random.randint(0, 100, (100, 2000))
 adata.layers['normalized'] = adata.X / np.sum(adata.X, axis=1, keepdims=True)
 adata.layers['scaled'] = (adata.X - adata.X.mean()) / adata.X.std()
 
-# Access layers
+# 存取圖層
 raw_data = adata.layers['raw_counts']
 normalized_data = adata.layers['normalized']
 ```
 
-Common layer uses:
-- `raw_counts`: Original count data before normalization
-- `normalized`: Log-normalized or TPM values
-- `scaled`: Z-scored values for analysis
-- `imputed`: Data after imputation
+常見圖層用途：
+- `raw_counts`：標準化前的原始計數資料
+- `normalized`：對數標準化或 TPM 值
+- `scaled`：用於分析的 Z 分數值
+- `imputed`：填補後的資料
 
-### obsm (Multi-dimensional Observation Annotations)
-Dictionary storing multi-dimensional arrays aligned to observations.
+### obsm（多維觀測註解）
+儲存與觀測值對齊的多維陣列的字典。
 
 ```python
-# Store PCA coordinates and UMAP embeddings
-adata.obsm['X_pca'] = np.random.rand(100, 50)  # 50 principal components
-adata.obsm['X_umap'] = np.random.rand(100, 2)  # 2D UMAP coordinates
-adata.obsm['X_tsne'] = np.random.rand(100, 2)  # 2D t-SNE coordinates
+# 儲存 PCA 座標和 UMAP 嵌入
+adata.obsm['X_pca'] = np.random.rand(100, 50)  # 50 個主成分
+adata.obsm['X_umap'] = np.random.rand(100, 2)  # 2D UMAP 座標
+adata.obsm['X_tsne'] = np.random.rand(100, 2)  # 2D t-SNE 座標
 
-# Access embeddings
+# 存取嵌入
 pca_coords = adata.obsm['X_pca']
 umap_coords = adata.obsm['X_umap']
 ```
 
-Common obsm uses:
-- `X_pca`: Principal component coordinates
-- `X_umap`: UMAP embedding coordinates
-- `X_tsne`: t-SNE embedding coordinates
-- `X_diffmap`: Diffusion map coordinates
-- `protein_expression`: Protein abundance measurements (CITE-seq)
+常見 obsm 用途：
+- `X_pca`：主成分座標
+- `X_umap`：UMAP 嵌入座標
+- `X_tsne`：t-SNE 嵌入座標
+- `X_diffmap`：擴散圖座標
+- `protein_expression`：蛋白質豐度測量值（CITE-seq）
 
-### varm (Multi-dimensional Variable Annotations)
-Dictionary storing multi-dimensional arrays aligned to variables.
+### varm（多維變數註解）
+儲存與變數對齊的多維陣列的字典。
 
 ```python
-# Store PCA loadings
-adata.varm['PCs'] = np.random.rand(2000, 50)  # Loadings for 50 components
-adata.varm['gene_modules'] = np.random.rand(2000, 10)  # Gene module scores
+# 儲存 PCA 載荷
+adata.varm['PCs'] = np.random.rand(2000, 50)  # 50 個成分的載荷
+adata.varm['gene_modules'] = np.random.rand(2000, 10)  # 基因模組分數
 
-# Access loadings
+# 存取載荷
 pc_loadings = adata.varm['PCs']
 ```
 
-Common varm uses:
-- `PCs`: Principal component loadings
-- `gene_modules`: Gene co-expression module assignments
+常見 varm 用途：
+- `PCs`：主成分載荷
+- `gene_modules`：基因共表達模組分配
 
-### obsp (Pairwise Observation Relationships)
-Dictionary storing sparse matrices representing relationships between observations.
+### obsp（成對觀測關係）
+儲存表示觀測值之間關係的稀疏矩陣的字典。
 
 ```python
 from scipy.sparse import csr_matrix
 
-# Store k-nearest neighbor graph
+# 儲存 k 最近鄰圖
 n_obs = 100
 knn_graph = csr_matrix(np.random.rand(n_obs, n_obs) > 0.95)
 adata.obsp['connectivities'] = knn_graph
 adata.obsp['distances'] = csr_matrix(np.random.rand(n_obs, n_obs))
 
-# Access graphs
+# 存取圖
 knn_connections = adata.obsp['connectivities']
 distances = adata.obsp['distances']
 ```
 
-Common obsp uses:
-- `connectivities`: Cell-cell neighborhood graph
-- `distances`: Pairwise distances between cells
+常見 obsp 用途：
+- `connectivities`：細胞-細胞鄰域圖
+- `distances`：細胞之間的成對距離
 
-### varp (Pairwise Variable Relationships)
-Dictionary storing sparse matrices representing relationships between variables.
+### varp（成對變數關係）
+儲存表示變數之間關係的稀疏矩陣的字典。
 
 ```python
-# Store gene-gene correlation matrix
+# 儲存基因-基因相關矩陣
 n_vars = 2000
 gene_corr = csr_matrix(np.random.rand(n_vars, n_vars) > 0.99)
 adata.varp['correlations'] = gene_corr
 
-# Access correlations
+# 存取相關性
 gene_correlations = adata.varp['correlations']
 ```
 
-### uns (Unstructured Annotations)
-Dictionary storing arbitrary unstructured metadata.
+### uns（非結構化註解）
+儲存任意非結構化中繼資料的字典。
 
 ```python
-# Store analysis parameters and results
+# 儲存分析參數和結果
 adata.uns['experiment_date'] = '2025-11-03'
 adata.uns['pca'] = {
     'variance_ratio': [0.15, 0.10, 0.08],
@@ -177,73 +177,73 @@ adata.uns['neighbors'] = {
     'connectivities_key': 'connectivities'
 }
 
-# Access unstructured data
+# 存取非結構化資料
 exp_date = adata.uns['experiment_date']
 pca_params = adata.uns['pca']['params']
 ```
 
-Common uns uses:
-- Analysis parameters and settings
-- Color palettes for plotting
-- Cluster information
-- Tool-specific metadata
+常見 uns 用途：
+- 分析參數和設定
+- 繪圖用色彩調色板
+- 群集資訊
+- 工具特定中繼資料
 
-### raw (Original Data Snapshot)
-Optional attribute preserving the original data matrix and variable annotations before filtering.
+### raw（原始資料快照）
+保留過濾前原始資料矩陣和變數註解的可選屬性。
 
 ```python
-# Create AnnData and store raw state
+# 建立 AnnData 並儲存原始狀態
 adata = ad.AnnData(X=np.random.rand(100, 5000))
 adata.var['gene_name'] = [f'Gene_{i}' for i in range(5000)]
 
-# Store raw state before filtering
+# 過濾前儲存原始狀態
 adata.raw = adata.copy()
 
-# Filter to highly variable genes
+# 過濾至高變異基因
 highly_variable_mask = np.random.rand(5000) > 0.5
 adata = adata[:, highly_variable_mask]
 
-# Access original data
+# 存取原始資料
 original_matrix = adata.raw.X
 original_var = adata.raw.var
 ```
 
-## Object Properties
+## 物件屬性
 
 ```python
-# Dimensions
+# 維度
 n_observations = adata.n_obs
 n_variables = adata.n_vars
 shape = adata.shape  # (n_obs, n_vars)
 
-# Index information
-obs_names = adata.obs_names  # Observation identifiers
-var_names = adata.var_names  # Variable identifiers
+# 索引資訊
+obs_names = adata.obs_names  # 觀測識別碼
+var_names = adata.var_names  # 變數識別碼
 
-# Storage mode
-is_view = adata.is_view  # True if this is a view of another object
-is_backed = adata.isbacked  # True if backed by on-disk storage
-filename = adata.filename  # Path to backing file (if backed)
+# 儲存模式
+is_view = adata.is_view  # 如果這是另一個物件的視圖則為 True
+is_backed = adata.isbacked  # 如果由磁碟儲存支援則為 True
+filename = adata.filename  # 支援檔案的路徑（如果是 backed）
 ```
 
-## Creating AnnData Objects
+## 建立 AnnData 物件
 
-### From arrays and DataFrames
+### 從陣列和 DataFrames
 ```python
 import anndata as ad
 import numpy as np
 import pandas as pd
 
-# Minimal creation
+# 最小建立
 X = np.random.rand(100, 2000)
 adata = ad.AnnData(X)
 
-# With metadata
+# 附帶中繼資料
 obs = pd.DataFrame({'cell_type': ['A', 'B'] * 50}, index=[f'cell_{i}' for i in range(100)])
 var = pd.DataFrame({'gene_name': [f'Gene_{i}' for i in range(2000)]}, index=[f'ENSG{i:05d}' for i in range(2000)])
 adata = ad.AnnData(X=X, obs=obs, var=var)
 
-# With all components
+# 附帶所有組件
 adata = ad.AnnData(
     X=X,
     obs=obs,
@@ -254,9 +254,9 @@ adata = ad.AnnData(
 )
 ```
 
-### From DataFrame
+### 從 DataFrame
 ```python
-# Create from pandas DataFrame (genes as columns, cells as rows)
+# 從 pandas DataFrame 建立（基因為欄，細胞為列）
 df = pd.DataFrame(
     np.random.rand(100, 50),
     columns=[f'Gene_{i}' for i in range(50)],
@@ -265,50 +265,50 @@ df = pd.DataFrame(
 adata = ad.AnnData(df)
 ```
 
-## Data Access Patterns
+## 資料存取模式
 
-### Vector extraction
+### 向量擷取
 ```python
-# Get observation annotation as array
+# 取得觀測註解為陣列
 cell_types = adata.obs_vector('cell_type')
 
-# Get variable values across observations
-gene_expression = adata.obs_vector('ACTB')  # If ACTB is in var_names
+# 取得跨觀測值的變數值
+gene_expression = adata.obs_vector('ACTB')  # 如果 ACTB 在 var_names 中
 
-# Get variable annotation as array
+# 取得變數註解為陣列
 gene_names = adata.var_vector('gene_name')
 ```
 
-### Subsetting
+### 子集
 ```python
-# By index
-subset = adata[0:10, 0:100]  # First 10 obs, first 100 vars
+# 按索引
+subset = adata[0:10, 0:100]  # 前 10 個觀測值，前 100 個變數
 
-# By name
+# 按名稱
 subset = adata[['cell_1', 'cell_2'], ['ACTB', 'GAPDH']]
 
-# By boolean mask
+# 按布林遮罩
 high_count_cells = adata.obs['total_counts'] > 1000
 subset = adata[high_count_cells, :]
 
-# By observation metadata
+# 按觀測中繼資料
 t_cells = adata[adata.obs['cell_type'] == 'T cell']
 ```
 
-## Memory Considerations
+## 記憶體考量
 
-The AnnData structure is designed for memory efficiency:
-- Sparse matrices reduce memory for sparse data
-- Views avoid copying data when possible
-- Backed mode enables working with data larger than RAM
-- Categorical annotations reduce memory for discrete values
+AnnData 結構設計為記憶體高效：
+- 稀疏矩陣減少稀疏資料的記憶體
+- 視圖盡可能避免複製資料
+- Backed 模式能夠處理比 RAM 更大的資料
+- 類別註解減少離散值的記憶體
 
 ```python
-# Convert strings to categoricals (more memory efficient)
+# 將字串轉換為類別（更節省記憶體）
 adata.obs['cell_type'] = adata.obs['cell_type'].astype('category')
 adata.strings_to_categoricals()
 
-# Check if object is a view (doesn't own data)
+# 檢查物件是否為視圖（不擁有資料）
 if adata.is_view:
-    adata = adata.copy()  # Create independent copy
+    adata = adata.copy()  # 建立獨立複製
 ```

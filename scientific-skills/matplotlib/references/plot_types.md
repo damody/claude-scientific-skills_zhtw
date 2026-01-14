@@ -1,12 +1,12 @@
-# Matplotlib Plot Types Guide
+# Matplotlib 繪圖類型指南
 
-Comprehensive guide to different plot types in matplotlib with examples and use cases.
+matplotlib 中不同繪圖類型的完整指南，附有範例和使用場景。
 
-## 1. Line Plots
+## 1. 折線圖
 
-**Use cases:** Time series, continuous data, trends, function visualization
+**使用場景：** 時間序列、連續資料、趨勢、函數視覺化
 
-### Basic Line Plot
+### 基本折線圖
 ```python
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.plot(x, y, linewidth=2, label='Data')
@@ -15,7 +15,7 @@ ax.set_ylabel('Y axis')
 ax.legend()
 ```
 
-### Multiple Lines
+### 多條線
 ```python
 ax.plot(x, y1, label='Dataset 1', linewidth=2)
 ax.plot(x, y2, label='Dataset 2', linewidth=2, linestyle='--')
@@ -23,41 +23,41 @@ ax.plot(x, y3, label='Dataset 3', linewidth=2, linestyle=':')
 ax.legend()
 ```
 
-### Line with Markers
+### 帶標記的線
 ```python
 ax.plot(x, y, marker='o', markersize=8, linestyle='-',
         linewidth=2, markerfacecolor='red', markeredgecolor='black')
 ```
 
-### Step Plot
+### 階梯圖
 ```python
 ax.step(x, y, where='mid', linewidth=2, label='Step function')
-# where options: 'pre', 'post', 'mid'
+# where 選項：'pre'、'post'、'mid'
 ```
 
-### Error Bars
+### 誤差條
 ```python
 ax.errorbar(x, y, yerr=error, fmt='o-', linewidth=2,
             capsize=5, capthick=2, label='With uncertainty')
 ```
 
-## 2. Scatter Plots
+## 2. 散點圖
 
-**Use cases:** Correlations, relationships between variables, clusters, outliers
+**使用場景：** 相關性、變數之間的關係、群集、離群值
 
-### Basic Scatter
+### 基本散點圖
 ```python
 ax.scatter(x, y, s=50, alpha=0.6)
 ```
 
-### Sized and Colored Scatter
+### 帶大小和顏色的散點圖
 ```python
 scatter = ax.scatter(x, y, s=sizes*100, c=colors,
                      cmap='viridis', alpha=0.6, edgecolors='black')
 plt.colorbar(scatter, ax=ax, label='Color variable')
 ```
 
-### Categorical Scatter
+### 類別散點圖
 ```python
 for category in categories:
     mask = data['category'] == category
@@ -66,25 +66,25 @@ for category in categories:
 ax.legend()
 ```
 
-## 3. Bar Charts
+## 3. 長條圖
 
-**Use cases:** Categorical comparisons, discrete data, counts
+**使用場景：** 類別比較、離散資料、計數
 
-### Vertical Bar Chart
+### 垂直長條圖
 ```python
 ax.bar(categories, values, color='steelblue',
        edgecolor='black', linewidth=1.5)
 ax.set_ylabel('Values')
 ```
 
-### Horizontal Bar Chart
+### 水平長條圖
 ```python
 ax.barh(categories, values, color='coral',
         edgecolor='black', linewidth=1.5)
 ax.set_xlabel('Values')
 ```
 
-### Grouped Bar Chart
+### 群組長條圖
 ```python
 x = np.arange(len(categories))
 width = 0.35
@@ -96,7 +96,7 @@ ax.set_xticklabels(categories)
 ax.legend()
 ```
 
-### Stacked Bar Chart
+### 堆疊長條圖
 ```python
 ax.bar(categories, values1, label='Part 1')
 ax.bar(categories, values2, bottom=values1, label='Part 2')
@@ -104,13 +104,13 @@ ax.bar(categories, values3, bottom=values1+values2, label='Part 3')
 ax.legend()
 ```
 
-### Bar Chart with Error Bars
+### 帶誤差條的長條圖
 ```python
 ax.bar(categories, values, yerr=errors, capsize=5,
        color='steelblue', edgecolor='black')
 ```
 
-### Bar Chart with Patterns
+### 帶圖案的長條圖
 ```python
 bars1 = ax.bar(x - width/2, values1, width, label='Group 1',
                color='white', edgecolor='black', hatch='//')
@@ -118,30 +118,30 @@ bars2 = ax.bar(x + width/2, values2, width, label='Group 2',
                color='white', edgecolor='black', hatch='\\\\')
 ```
 
-## 4. Histograms
+## 4. 直方圖
 
-**Use cases:** Distributions, frequency analysis
+**使用場景：** 分佈、頻率分析
 
-### Basic Histogram
+### 基本直方圖
 ```python
 ax.hist(data, bins=30, edgecolor='black', alpha=0.7)
 ax.set_xlabel('Value')
 ax.set_ylabel('Frequency')
 ```
 
-### Multiple Overlapping Histograms
+### 多個重疊直方圖
 ```python
 ax.hist(data1, bins=30, alpha=0.5, label='Dataset 1')
 ax.hist(data2, bins=30, alpha=0.5, label='Dataset 2')
 ax.legend()
 ```
 
-### Normalized Histogram (Density)
+### 正規化直方圖（密度）
 ```python
 ax.hist(data, bins=30, density=True, alpha=0.7,
         edgecolor='black', label='Empirical')
 
-# Overlay theoretical distribution
+# 疊加理論分佈
 from scipy.stats import norm
 x = np.linspace(data.min(), data.max(), 100)
 ax.plot(x, norm.pdf(x, data.mean(), data.std()),
@@ -149,23 +149,23 @@ ax.plot(x, norm.pdf(x, data.mean(), data.std()),
 ax.legend()
 ```
 
-### 2D Histogram (Hexbin)
+### 2D 直方圖（Hexbin）
 ```python
 hexbin = ax.hexbin(x, y, gridsize=30, cmap='Blues')
 plt.colorbar(hexbin, ax=ax, label='Counts')
 ```
 
-### 2D Histogram (hist2d)
+### 2D 直方圖（hist2d）
 ```python
 h = ax.hist2d(x, y, bins=30, cmap='Blues')
 plt.colorbar(h[3], ax=ax, label='Counts')
 ```
 
-## 5. Box and Violin Plots
+## 5. 箱形圖和小提琴圖
 
-**Use cases:** Statistical distributions, outlier detection, comparing distributions
+**使用場景：** 統計分佈、離群值偵測、分佈比較
 
-### Box Plot
+### 箱形圖
 ```python
 ax.boxplot([data1, data2, data3],
            labels=['Group A', 'Group B', 'Group C'],
@@ -173,14 +173,14 @@ ax.boxplot([data1, data2, data3],
 ax.set_ylabel('Values')
 ```
 
-### Horizontal Box Plot
+### 水平箱形圖
 ```python
 ax.boxplot([data1, data2, data3], vert=False,
            labels=['Group A', 'Group B', 'Group C'])
 ax.set_xlabel('Values')
 ```
 
-### Violin Plot
+### 小提琴圖
 ```python
 parts = ax.violinplot([data1, data2, data3],
                       positions=[1, 2, 3],
@@ -189,11 +189,11 @@ ax.set_xticks([1, 2, 3])
 ax.set_xticklabels(['Group A', 'Group B', 'Group C'])
 ```
 
-## 6. Heatmaps
+## 6. 熱圖
 
-**Use cases:** Matrix data, correlations, intensity maps
+**使用場景：** 矩陣資料、相關性、強度圖
 
-### Basic Heatmap
+### 基本熱圖
 ```python
 im = ax.imshow(matrix, cmap='coolwarm', aspect='auto')
 plt.colorbar(im, ax=ax, label='Values')
@@ -201,49 +201,49 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ```
 
-### Heatmap with Annotations
+### 帶註釋的熱圖
 ```python
 im = ax.imshow(matrix, cmap='coolwarm')
 plt.colorbar(im, ax=ax)
 
-# Add text annotations
+# 新增文字註釋
 for i in range(matrix.shape[0]):
     for j in range(matrix.shape[1]):
         text = ax.text(j, i, f'{matrix[i, j]:.2f}',
                        ha='center', va='center', color='black')
 ```
 
-### Correlation Matrix
+### 相關矩陣
 ```python
 corr = data.corr()
 im = ax.imshow(corr, cmap='RdBu_r', vmin=-1, vmax=1)
 plt.colorbar(im, ax=ax, label='Correlation')
 
-# Set tick labels
+# 設定刻度標籤
 ax.set_xticks(range(len(corr)))
 ax.set_yticks(range(len(corr)))
 ax.set_xticklabels(corr.columns, rotation=45, ha='right')
 ax.set_yticklabels(corr.columns)
 ```
 
-## 7. Contour Plots
+## 7. 等高線圖
 
-**Use cases:** 3D data on 2D plane, topography, function visualization
+**使用場景：** 2D 平面上的 3D 資料、地形、函數視覺化
 
-### Contour Lines
+### 等高線
 ```python
 contour = ax.contour(X, Y, Z, levels=10, cmap='viridis')
 ax.clabel(contour, inline=True, fontsize=8)
 plt.colorbar(contour, ax=ax)
 ```
 
-### Filled Contours
+### 填充等高線
 ```python
 contourf = ax.contourf(X, Y, Z, levels=20, cmap='viridis')
 plt.colorbar(contourf, ax=ax)
 ```
 
-### Combined Contours
+### 組合等高線
 ```python
 contourf = ax.contourf(X, Y, Z, levels=20, cmap='viridis', alpha=0.8)
 contour = ax.contour(X, Y, Z, levels=10, colors='black',
@@ -252,37 +252,37 @@ ax.clabel(contour, inline=True, fontsize=8)
 plt.colorbar(contourf, ax=ax)
 ```
 
-## 8. Pie Charts
+## 8. 圓餅圖
 
-**Use cases:** Proportions, percentages (use sparingly)
+**使用場景：** 比例、百分比（謹慎使用）
 
-### Basic Pie Chart
+### 基本圓餅圖
 ```python
 ax.pie(sizes, labels=labels, autopct='%1.1f%%',
        startangle=90, colors=colors)
-ax.axis('equal')  # Equal aspect ratio ensures circular pie
+ax.axis('equal')  # 等長寬比確保圓形
 ```
 
-### Exploded Pie Chart
+### 分離圓餅圖
 ```python
-explode = (0.1, 0, 0, 0)  # Explode first slice
+explode = (0.1, 0, 0, 0)  # 分離第一個扇形
 ax.pie(sizes, explode=explode, labels=labels,
        autopct='%1.1f%%', shadow=True, startangle=90)
 ax.axis('equal')
 ```
 
-### Donut Chart
+### 環形圖
 ```python
 ax.pie(sizes, labels=labels, autopct='%1.1f%%',
        wedgeprops=dict(width=0.5), startangle=90)
 ax.axis('equal')
 ```
 
-## 9. Polar Plots
+## 9. 極座標圖
 
-**Use cases:** Cyclic data, directional data, radar charts
+**使用場景：** 週期性資料、方向性資料、雷達圖
 
-### Basic Polar Plot
+### 基本極座標圖
 ```python
 theta = np.linspace(0, 2*np.pi, 100)
 r = np.abs(np.sin(2*theta))
@@ -291,12 +291,12 @@ ax = plt.subplot(111, projection='polar')
 ax.plot(theta, r, linewidth=2)
 ```
 
-### Radar Chart
+### 雷達圖
 ```python
 categories = ['A', 'B', 'C', 'D', 'E']
 values = [4, 3, 5, 2, 4]
 
-# Add first value to the end to close the polygon
+# 將第一個值加到最後以閉合多邊形
 angles = np.linspace(0, 2*np.pi, len(categories), endpoint=False)
 values_closed = np.concatenate((values, [values[0]]))
 angles_closed = np.concatenate((angles, [angles[0]]))
@@ -308,11 +308,11 @@ ax.set_xticks(angles)
 ax.set_xticklabels(categories)
 ```
 
-## 10. Stream and Quiver Plots
+## 10. 流線圖和箭頭圖
 
-**Use cases:** Vector fields, flow visualization
+**使用場景：** 向量場、流場視覺化
 
-### Quiver Plot (Vector Field)
+### 箭頭圖（向量場）
 ```python
 ax.quiver(X, Y, U, V, alpha=0.8)
 ax.set_xlabel('X')
@@ -320,7 +320,7 @@ ax.set_ylabel('Y')
 ax.set_aspect('equal')
 ```
 
-### Stream Plot
+### 流線圖
 ```python
 ax.streamplot(X, Y, U, V, density=1.5, color='k', linewidth=1)
 ax.set_xlabel('X')
@@ -328,11 +328,11 @@ ax.set_ylabel('Y')
 ax.set_aspect('equal')
 ```
 
-## 11. Fill Between
+## 11. 填充區域
 
-**Use cases:** Uncertainty bounds, confidence intervals, areas under curves
+**使用場景：** 不確定性範圍、信賴區間、曲線下面積
 
-### Fill Between Two Curves
+### 兩曲線之間填充
 ```python
 ax.plot(x, y, 'k-', linewidth=2, label='Mean')
 ax.fill_between(x, y - std, y + std, alpha=0.3,
@@ -340,7 +340,7 @@ ax.fill_between(x, y - std, y + std, alpha=0.3,
 ax.legend()
 ```
 
-### Fill Between with Condition
+### 條件填充
 ```python
 ax.plot(x, y1, label='Line 1')
 ax.plot(x, y2, label='Line 2')
@@ -349,11 +349,11 @@ ax.fill_between(x, y1, y2, where=(y2 >= y1),
 ax.legend()
 ```
 
-## 12. 3D Plots
+## 12. 3D 繪圖
 
-**Use cases:** Three-dimensional data visualization
+**使用場景：** 三維資料視覺化
 
-### 3D Scatter
+### 3D 散點圖
 ```python
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -367,7 +367,7 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ```
 
-### 3D Surface Plot
+### 3D 曲面圖
 ```python
 fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection='3d')
@@ -379,7 +379,7 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ```
 
-### 3D Wireframe
+### 3D 線框圖
 ```python
 fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection='3d')
@@ -389,7 +389,7 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ```
 
-### 3D Contour
+### 3D 等高線圖
 ```python
 fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection='3d')
@@ -399,16 +399,16 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ```
 
-## 13. Specialized Plots
+## 13. 特殊繪圖
 
-### Stem Plot
+### 莖葉圖
 ```python
 ax.stem(x, y, linefmt='C0-', markerfmt='C0o', basefmt='k-')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ```
 
-### Filled Polygon
+### 填充多邊形
 ```python
 vertices = [(0, 0), (1, 0), (1, 1), (0, 1)]
 from matplotlib.patches import Polygon
@@ -419,12 +419,12 @@ ax.set_xlim(-0.5, 1.5)
 ax.set_ylim(-0.5, 1.5)
 ```
 
-### Staircase Plot
+### 階梯圖
 ```python
 ax.stairs(values, edges, fill=True, alpha=0.5)
 ```
 
-### Broken Barh (Gantt-style)
+### 間斷長條圖（甘特圖風格）
 ```python
 ax.broken_barh([(10, 50), (100, 20), (130, 10)], (10, 9),
                facecolors='tab:blue')
@@ -437,9 +437,9 @@ ax.set_yticks([15, 25])
 ax.set_yticklabels(['Task 1', 'Task 2'])
 ```
 
-## 14. Time Series Plots
+## 14. 時間序列圖
 
-### Basic Time Series
+### 基本時間序列
 ```python
 import pandas as pd
 import matplotlib.dates as mdates
@@ -452,25 +452,25 @@ ax.set_xlabel('Date')
 ax.set_ylabel('Value')
 ```
 
-### Time Series with Shaded Regions
+### 帶陰影區域的時間序列
 ```python
 ax.plot(dates, values, linewidth=2)
-# Shade weekends or specific periods
+# 為週末或特定時期加陰影
 ax.axvspan(start_date, end_date, alpha=0.2, color='gray')
 ```
 
-## Plot Selection Guide
+## 繪圖選擇指南
 
-| Data Type | Recommended Plot | Alternative Options |
-|-----------|-----------------|---------------------|
-| Single continuous variable | Histogram, KDE | Box plot, Violin plot |
-| Two continuous variables | Scatter plot | Hexbin, 2D histogram |
-| Time series | Line plot | Area plot, Step plot |
-| Categorical vs continuous | Bar chart, Box plot | Violin plot, Strip plot |
-| Two categorical variables | Heatmap | Grouped bar chart |
-| Three continuous variables | 3D scatter, Contour | Color-coded scatter |
-| Proportions | Bar chart | Pie chart (use sparingly) |
-| Distributions comparison | Box plot, Violin plot | Overlaid histograms |
-| Correlation matrix | Heatmap | Clustered heatmap |
-| Vector field | Quiver plot, Stream plot | - |
-| Function visualization | Line plot, Contour | 3D surface |
+| 資料類型 | 建議繪圖 | 替代選項 |
+|----------|----------|----------|
+| 單一連續變數 | 直方圖、KDE | 箱形圖、小提琴圖 |
+| 兩個連續變數 | 散點圖 | Hexbin、2D 直方圖 |
+| 時間序列 | 折線圖 | 面積圖、階梯圖 |
+| 類別 vs 連續 | 長條圖、箱形圖 | 小提琴圖、帶狀圖 |
+| 兩個類別變數 | 熱圖 | 群組長條圖 |
+| 三個連續變數 | 3D 散點圖、等高線圖 | 顏色編碼散點圖 |
+| 比例 | 長條圖 | 圓餅圖（謹慎使用） |
+| 分佈比較 | 箱形圖、小提琴圖 | 重疊直方圖 |
+| 相關矩陣 | 熱圖 | 聚類熱圖 |
+| 向量場 | 箭頭圖、流線圖 | - |
+| 函數視覺化 | 折線圖、等高線圖 | 3D 曲面 |

@@ -1,330 +1,330 @@
-# Nature and Science Writing Style Guide
+# Nature 和 Science 寫作風格指南
 
-Comprehensive writing guide for Nature, Science, and related high-impact multidisciplinary journals (Nature Communications, Science Advances, PNAS).
+Nature、Science 及相關高影響力多學科期刊（Nature Communications、Science Advances、PNAS）的完整寫作指南。
 
-**Last Updated**: 2024
-
----
-
-## Overview
-
-Nature and Science are the world's premier multidisciplinary scientific journals. Papers published here must appeal to scientists across all disciplines, not just specialists. This fundamentally shapes the writing style.
-
-### Key Philosophy
-
-> "If a structural biologist can't understand why your particle physics paper matters, it won't be published in Nature."
-
-**Primary Goal**: Communicate groundbreaking science to an educated but non-specialist audience.
+**最後更新**：2024
 
 ---
 
-## Audience and Tone
+## 概述
 
-### Target Reader
+Nature 和 Science 是世界頂尖的多學科科學期刊。在此發表的論文必須吸引所有學科的科學家，而不僅是專家。這從根本上塑造了寫作風格。
 
-- PhD-level scientist in **any** field
-- Familiar with scientific methodology
-- **Not** an expert in your specific subfield
-- Reading broadly to stay current across science
+### 核心理念
 
-### Tone Characteristics
+> 「如果一位結構生物學家無法理解您的粒子物理學論文為何重要，它就不會在 Nature 發表。」
 
-| Characteristic | Description |
+**主要目標**：向受過教育但非專家的讀者傳達開創性科學。
+
+---
+
+## 讀者與語氣
+
+### 目標讀者
+
+- **任何**領域的博士級科學家
+- 熟悉科學方法論
+- **非**您特定子領域的專家
+- 廣泛閱讀以保持對科學的了解
+
+### 語氣特徵
+
+| 特徵 | 說明 |
 |---------------|-------------|
-| **Accessible** | Avoid jargon; explain technical concepts |
-| **Engaging** | Hook the reader; tell a story |
-| **Significant** | Emphasize why this matters broadly |
-| **Confident** | State findings clearly (with appropriate hedging) |
-| **Active** | Use active voice; first person acceptable |
+| **易理解** | 避免術語；解釋技術概念 |
+| **引人入勝** | 吸引讀者；講述故事 |
+| **重要性** | 強調為何這在廣泛層面上重要 |
+| **自信** | 清楚陳述發現（適當保守措辭） |
+| **主動** | 使用主動語態；可接受第一人稱 |
 
-### Voice
+### 語態
 
-- **First person plural ("we") is encouraged**: "We discovered that..." not "It was discovered that..."
-- **Active voice preferred**: "We measured..." not "Measurements were taken..."
-- **Direct statements**: "Protein X controls Y" not "Protein X appears to potentially control Y"
+- **鼓勵第一人稱複數（「we」）**：「We discovered that...」而非「It was discovered that...」
+- **偏好主動語態**：「We measured...」而非「Measurements were taken...」
+- **直接陳述**：「Protein X controls Y」而非「Protein X appears to potentially control Y」
 
 ---
 
-## Abstract
+## 摘要
 
-### Style Requirements
+### 風格要求
 
-- **Flowing paragraphs** (NOT structured with labeled sections)
-- **150-200 words** for Nature; up to 250 for Nature Communications
-- **No citations** in abstract
-- **No abbreviations** (or define at first use if essential)
-- **Self-contained**: Understandable without reading the paper
+- **流暢段落**（非帶標籤章節的結構化格式）
+- **150-200 字**用於 Nature；Nature Communications 最多 250 字
+- 摘要中**不引用文獻**
+- **不使用縮寫**（或必要時在首次使用時定義）
+- **自我完整**：無需閱讀論文即可理解
 
-### Abstract Structure (Implicit)
+### 摘要結構（隱含式）
 
-Write as flowing prose covering:
+以流暢散文撰寫，涵蓋：
 
-1. **Context** (1-2 sentences): Why this area matters
-2. **Gap/Problem** (1 sentence): What was unknown or problematic
-3. **Approach** (1 sentence): What you did (briefly)
-4. **Key findings** (2-3 sentences): Main results with key numbers
-5. **Significance** (1-2 sentences): Why this matters, implications
+1. **背景**（1-2 句）：為何這個領域重要
+2. **缺口/問題**（1 句）：什麼是未知或有問題的
+3. **方法**（1 句）：您做了什麼（簡短）
+4. **關鍵發現**（2-3 句）：主要結果及關鍵數字
+5. **重要性**（1-2 句）：為何這很重要，有何意涵
 
-### Example Abstract (Nature Style)
+### 範例摘要（Nature 格式）
 
 ```
-The origins of multicellular life remain one of biology's greatest mysteries. 
-How individual cells first cooperated to form complex organisms has been 
-difficult to study because the transition occurred over 600 million years ago. 
-Here we show that the unicellular alga Chlamydomonas reinhardtii can evolve 
-simple multicellular structures within 750 generations when exposed to 
-predation pressure. Using experimental evolution with the predator Paramecium, 
-we observed the emergence of stable multicellular clusters in 5 of 10 
-replicate populations. Genomic analysis revealed that mutations in just two 
-genes—encoding cell adhesion proteins—were sufficient to trigger this 
-transition. These results demonstrate that the evolution of multicellularity 
-may require fewer genetic changes than previously thought, providing insight 
+The origins of multicellular life remain one of biology's greatest mysteries.
+How individual cells first cooperated to form complex organisms has been
+difficult to study because the transition occurred over 600 million years ago.
+Here we show that the unicellular alga Chlamydomonas reinhardtii can evolve
+simple multicellular structures within 750 generations when exposed to
+predation pressure. Using experimental evolution with the predator Paramecium,
+we observed the emergence of stable multicellular clusters in 5 of 10
+replicate populations. Genomic analysis revealed that mutations in just two
+genes—encoding cell adhesion proteins—were sufficient to trigger this
+transition. These results demonstrate that the evolution of multicellularity
+may require fewer genetic changes than previously thought, providing insight
 into one of life's major transitions.
 ```
 
-### What NOT to Write
+### 不該寫的內容
 
-❌ **Too technical**:
-> "Using CRISPR-Cas9-mediated knockout of the CAD1 gene (encoding cadherin-1) in C. reinhardtii strain CC-125, we demonstrated that loss of CAD1 function combined with overexpression of FLA10 under control of the HSP70A/RBCS2 tandem promoter..."
+❌ **過於技術性**：
+> 「Using CRISPR-Cas9-mediated knockout of the CAD1 gene (encoding cadherin-1) in C. reinhardtii strain CC-125, we demonstrated that loss of CAD1 function combined with overexpression of FLA10 under control of the HSP70A/RBCS2 tandem promoter...」
 
-❌ **Too vague**:
-> "We studied how cells can form groups. Our results are interesting and may have implications for understanding evolution."
-
----
-
-## Introduction
-
-### Length and Structure
-
-- **3-5 paragraphs** (roughly 500-800 words)
-- **Funnel structure**: Broad → Specific → Your contribution
-
-### Paragraph-by-Paragraph Guide
-
-**Paragraph 1: The Big Picture**
-- Open with a broad, engaging statement about the field
-- Establish why this area matters to science/society
-- Accessible to any scientist
-
-```
-Example:
-"The ability to predict protein structure from sequence alone has been a grand 
-challenge of biology for over 50 years. Accurate predictions would transform 
-drug discovery, enable understanding of disease mechanisms, and illuminate the 
-fundamental rules governing molecular self-assembly."
-```
-
-**Paragraph 2-3: What We Know**
-- Review key prior work (selectively, not exhaustively)
-- Build toward the gap you'll address
-- Keep citations focused on essential papers
-
-```
-Example:
-"Significant progress has been made through template-based methods that 
-leverage known structures of homologous proteins. However, for the estimated 
-30% of proteins without detectable homologs, prediction accuracy has remained 
-limited. Deep learning approaches have shown promise, achieving improved 
-accuracy on benchmark datasets, yet still fall short of experimental accuracy 
-for many protein families."
-```
-
-**Paragraph 4: The Gap**
-- Clearly state what remains unknown or unresolved
-- Frame this as an important problem
-
-```
-Example:
-"Despite these advances, the fundamental question remains: can we predict 
-protein structure with experimental-level accuracy for proteins across all 
-of sequence space? This capability would democratize structural biology and 
-enable rapid characterization of newly discovered proteins."
-```
-
-**Final Paragraph: This Paper**
-- State what you did and preview key findings
-- Signal the significance of your contribution
-
-```
-Example:
-"Here we present AlphaFold2, a neural network architecture that predicts 
-protein structure with atomic-level accuracy. In the CASP14 blind assessment, 
-AlphaFold2 achieved a median GDT score of 92.4, matching experimental 
-accuracy for most targets. We show that this system can be applied to predict 
-structures across entire proteomes, opening new avenues for understanding 
-protein function at scale."
-```
-
-### Introduction Don'ts
-
-- ❌ Don't start with "Since ancient times..." or overly grandiose claims
-- ❌ Don't provide an exhaustive literature review (save for specialist journals)
-- ❌ Don't include methods or results in the introduction
-- ❌ Don't use unexplained acronyms or jargon
+❌ **過於模糊**：
+> 「We studied how cells can form groups. Our results are interesting and may have implications for understanding evolution.」
 
 ---
 
-## Results
+## 引言
 
-### Organizational Philosophy
+### 長度與結構
 
-**Story-driven, not experiment-driven**
+- **3-5 段**（約 500-800 字）
+- **漏斗結構**：廣泛 → 具體 → 您的貢獻
 
-Organize by **finding**, not by the chronological order of experiments:
+### 逐段指南
 
-❌ **Experiment-driven** (avoid):
-> "We first performed experiment A. Next, we did experiment B. Then we conducted experiment C."
-
-✅ **Finding-driven** (preferred):
-> "We discovered that X. To understand the mechanism, we found that Y. This led us to test whether Z, confirming our hypothesis."
-
-### Results Writing Style
-
-- **Past tense** for describing what was done/found
-- **Present tense** for referring to figures ("Figure 2 shows...")
-- **Objective but interpretive**: State findings with minimal interpretation, but provide enough context for non-specialists
-- **Quantitative**: Include key numbers, statistics, effect sizes
-
-### Example Results Paragraph
+**第 1 段：大局觀**
+- 以關於該領域的廣泛、引人入勝的陳述開場
+- 建立為何這個領域對科學/社會重要
+- 任何科學家都可理解
 
 ```
-To test whether protein X is required for cell division, we generated 
-knockout cell lines using CRISPR-Cas9 (Fig. 1a). Cells lacking protein X 
-showed a 73% reduction in division rate compared to controls (P < 0.001, 
-n = 6 biological replicates; Fig. 1b). Live-cell imaging revealed that 
-knockout cells arrested in metaphase, with 84% showing abnormal spindle 
-morphology (Fig. 1c,d). These results demonstrate that protein X is 
+範例：
+「The ability to predict protein structure from sequence alone has been a grand
+challenge of biology for over 50 years. Accurate predictions would transform
+drug discovery, enable understanding of disease mechanisms, and illuminate the
+fundamental rules governing molecular self-assembly.」
+```
+
+**第 2-3 段：我們所知**
+- 回顧關鍵先前工作（選擇性，非詳盡）
+- 朝向您要解決的缺口建構
+- 引用聚焦於重要論文
+
+```
+範例：
+「Significant progress has been made through template-based methods that
+leverage known structures of homologous proteins. However, for the estimated
+30% of proteins without detectable homologs, prediction accuracy has remained
+limited. Deep learning approaches have shown promise, achieving improved
+accuracy on benchmark datasets, yet still fall short of experimental accuracy
+for many protein families.」
+```
+
+**第 4 段：缺口**
+- 清楚說明什麼仍未知或未解決
+- 將此框架為重要問題
+
+```
+範例：
+「Despite these advances, the fundamental question remains: can we predict
+protein structure with experimental-level accuracy for proteins across all
+of sequence space? This capability would democratize structural biology and
+enable rapid characterization of newly discovered proteins.」
+```
+
+**最後一段：本論文**
+- 說明您做了什麼並預覽關鍵發現
+- 表明您貢獻的重要性
+
+```
+範例：
+「Here we present AlphaFold2, a neural network architecture that predicts
+protein structure with atomic-level accuracy. In the CASP14 blind assessment,
+AlphaFold2 achieved a median GDT score of 92.4, matching experimental
+accuracy for most targets. We show that this system can be applied to predict
+structures across entire proteomes, opening new avenues for understanding
+protein function at scale.」
+```
+
+### 引言禁忌
+
+- ❌ 不要以「Since ancient times...」或過於誇大的聲稱開場
+- ❌ 不要提供詳盡的文獻回顧（留給專業期刊）
+- ❌ 不要在引言中包含方法或結果
+- ❌ 不要使用未解釋的縮寫或術語
+
+---
+
+## 結果
+
+### 組織理念
+
+**故事驅動，而非實驗驅動**
+
+按**發現**組織，而非按實驗的時間順序：
+
+❌ **實驗驅動**（避免）：
+> 「We first performed experiment A. Next, we did experiment B. Then we conducted experiment C.」
+
+✅ **發現驅動**（偏好）：
+> 「We discovered that X. To understand the mechanism, we found that Y. This led us to test whether Z, confirming our hypothesis.」
+
+### 結果寫作風格
+
+- **過去式**用於描述所做/發現的事
+- **現在式**用於引用圖片（「Figure 2 shows...」）
+- **客觀但有詮釋性**：以最少詮釋陳述發現，但為非專家提供足夠背景
+- **量化**：包含關鍵數字、統計、效果量
+
+### 範例結果段落
+
+```
+To test whether protein X is required for cell division, we generated
+knockout cell lines using CRISPR-Cas9 (Fig. 1a). Cells lacking protein X
+showed a 73% reduction in division rate compared to controls (P < 0.001,
+n = 6 biological replicates; Fig. 1b). Live-cell imaging revealed that
+knockout cells arrested in metaphase, with 84% showing abnormal spindle
+morphology (Fig. 1c,d). These results demonstrate that protein X is
 essential for proper spindle assembly and cell division.
 ```
 
-### Subheadings
+### 小標題
 
-Use descriptive subheadings that convey findings:
+使用傳達發現的描述性小標題：
 
-❌ **Vague**: "Protein expression analysis"
-✅ **Informative**: "Protein X is upregulated in response to stress"
-
----
-
-## Discussion
-
-### Structure (4-6 paragraphs)
-
-**Paragraph 1: Summary of Key Findings**
-- Restate main findings (don't repeat Results verbatim)
-- State whether hypotheses were supported
-
-**Paragraphs 2-3: Interpretation and Context**
-- What do the findings mean?
-- How do they relate to prior work?
-- What mechanisms might explain the results?
-
-**Paragraph 4: Broader Implications**
-- Why does this matter beyond your specific system?
-- Connections to other fields
-- Potential applications
-
-**Paragraph 5: Limitations**
-- Acknowledge limitations honestly
-- Be specific, not generic
-
-**Final Paragraph: Conclusions and Future**
-- Big-picture take-home message
-- Brief mention of future directions
-
-### Discussion Writing Tips
-
-- **Lead with implications**, not caveats
-- **Compare to literature constructively**: "Our findings extend the work of Smith et al. by demonstrating..."
-- **Acknowledge alternative interpretations**: "An alternative explanation is that..."
-- **Be honest about limitations**: Specific > generic
-
-### Example Limitation Statement
-
-❌ **Generic**: "Our study has limitations that should be addressed in future work."
-
-✅ **Specific**: "Our analysis was limited to cultured cells, which may not fully recapitulate the tissue microenvironment. Additionally, the 48-hour observation window may miss slower-developing phenotypes."
+❌ **模糊**：「Protein expression analysis」
+✅ **資訊豐富**：「Protein X is upregulated in response to stress」
 
 ---
 
-## Methods
+## 討論
 
-### Nature Methods Placement
+### 結構（4-6 段）
 
-- **Brief Methods** in main text (often at the end)
-- **Extended Methods** in Supplementary Information
-- Must be detailed enough for reproduction
+**第 1 段：關鍵發現摘要**
+- 重述主要發現（不要逐字重複結果）
+- 說明假說是否獲得支持
 
-### Writing Style
+**第 2-3 段：詮釋與背景**
+- 發現意味著什麼？
+- 它們與先前工作如何相關？
+- 什麼機制可能解釋結果？
 
-- **Past tense, passive voice acceptable**: "Cells were cultured..." or "We cultured cells..."
-- **Precise and reproducible**: Include concentrations, times, temperatures
-- **Reference established protocols**: "Following the method of Smith et al.³..."
+**第 4 段：更廣泛的意涵**
+- 為何這在您的特定系統之外也重要？
+- 與其他領域的連結
+- 潛在應用
+
+**第 5 段：限制**
+- 誠實承認限制
+- 具體，而非泛泛而論
+
+**最後一段：結論與未來**
+- 大局觀的要點
+- 簡短提及未來方向
+
+### 討論寫作技巧
+
+- **以意涵為先**，而非注意事項
+- **建設性地與文獻比較**：「Our findings extend the work of Smith et al. by demonstrating...」
+- **承認替代解釋**：「An alternative explanation is that...」
+- **對限制誠實**：具體 > 泛泛
+
+### 範例限制陳述
+
+❌ **泛泛**：「Our study has limitations that should be addressed in future work.」
+
+✅ **具體**：「Our analysis was limited to cultured cells, which may not fully recapitulate the tissue microenvironment. Additionally, the 48-hour observation window may miss slower-developing phenotypes.」
 
 ---
 
-## Figures
+## 方法
 
-### Figure Philosophy
+### Nature 方法的位置
 
-Nature values **conceptual figures** alongside data:
+- **簡短方法**在正文中（通常在結尾）
+- **延伸方法**在補充資料中
+- 必須足夠詳細以供重現
 
-1. **Figure 1**: Often a schematic/model showing the concept
-2. **Data figures**: Clear, not cluttered
-3. **Final figure**: Often a summary model
+### 寫作風格
 
-### Figure Design Principles
+- **過去式，被動語態可接受**：「Cells were cultured...」或「We cultured cells...」
+- **精確且可重現**：包含濃度、時間、溫度
+- **引用已建立的方法**：「Following the method of Smith et al.³...」
 
-- **Single-column (89 mm) or double-column (183 mm)** width
-- **High resolution**: 300+ dpi for photos, 1000+ dpi for line art
-- **Colorblind-accessible**: Avoid red-green distinctions alone
-- **Minimal chartjunk**: No 3D effects, unnecessary gridlines
-- **Complete legends**: Self-explanatory without reading text
+---
 
-### Figure Legend Format
+## 圖片
+
+### 圖片理念
+
+Nature 重視**概念圖**與資料並重：
+
+1. **圖 1**：通常是展示概念的示意圖/模型
+2. **資料圖**：清晰、不雜亂
+3. **最後一張圖**：通常是摘要模型
+
+### 圖片設計原則
+
+- **單欄（89 mm）或雙欄（183 mm）**寬度
+- **高解析度**：照片 300+ dpi，線條圖 1000+ dpi
+- **色盲友善**：避免僅用紅綠區分
+- **最少圖表垃圾**：無 3D 效果、不必要的格線
+- **完整圖說**：無需閱讀正文即可自我解釋
+
+### 圖說格式
 
 ```
 Figure 1 | Protein X controls cell division through spindle assembly.
-a, Schematic of the experimental approach. b, Quantification of cell 
-division rate in control (grey) and knockout (blue) cells. Data are 
-mean ± s.e.m., n = 6 biological replicates. ***P < 0.001, two-tailed 
-t-test. c,d, Representative images of spindle morphology in control (c) 
+a, Schematic of the experimental approach. b, Quantification of cell
+division rate in control (grey) and knockout (blue) cells. Data are
+mean ± s.e.m., n = 6 biological replicates. ***P < 0.001, two-tailed
+t-test. c,d, Representative images of spindle morphology in control (c)
 and knockout (d) cells. Scale bars, 10 μm.
 ```
 
 ---
 
-## References
+## 參考文獻
 
-### Citation Style
+### 引用格式
 
-- **Numbered superscripts**: ¹, ², ¹⁻³, ¹'⁵'⁷
-- **Nature format** for bibliography
+- **上標數字**：¹, ², ¹⁻³, ¹'⁵'⁷
+- **Nature 格式**用於參考書目
 
-### Reference Format
+### 參考文獻格式
 
 ```
-1. Watson, J. D. & Crick, F. H. C. Molecular structure of nucleic acids. 
+1. Watson, J. D. & Crick, F. H. C. Molecular structure of nucleic acids.
    Nature 171, 737–738 (1953).
 
-2. Smith, A. B., Jones, C. D. & Williams, E. F. Discovery of protein X. 
+2. Smith, A. B., Jones, C. D. & Williams, E. F. Discovery of protein X.
    Science 380, 123–130 (2023).
 ```
 
-### Citation Best Practices
+### 引用最佳實踐
 
-- **Recent literature**: Include papers from last 2-3 years
-- **Seminal papers**: Cite foundational work
-- **Diverse sources**: Don't over-cite your own work
-- **Primary sources**: Cite original discoveries, not reviews (when possible)
+- **近期文獻**：包含過去 2-3 年的論文
+- **開創性論文**：引用基礎性工作
+- **多元來源**：不要過度引用自己的工作
+- **原始來源**：引用原始發現，而非綜述（可能時）
 
 ---
 
-## Language and Style Tips
+## 語言與風格技巧
 
-### Word Choice
+### 用詞選擇
 
-| Avoid | Prefer |
+| 避免 | 偏好 |
 |-------|--------|
 | utilize | use |
 | methodology | method |
@@ -332,74 +332,73 @@ and knockout (d) cells. Scale bars, 10 μm.
 | a large number of | many |
 | at this point in time | now |
 | has the ability to | can |
-| it is interesting to note that | [delete entirely] |
+| it is interesting to note that | [直接刪除] |
 
-### Sentence Structure
+### 句子結構
 
-- **Vary sentence length**: Mix short and longer sentences
-- **Lead with importance**: Put key information at the start
-- **One idea per sentence**: Complex ideas need multiple sentences
+- **變化句子長度**：混合短句和長句
+- **重要性領先**：將關鍵資訊放在開頭
+- **每句一個想法**：複雜想法需要多個句子
 
-### Paragraph Structure
+### 段落結構
 
-- **Topic sentence first**: State the main point
-- **Supporting evidence**: Data and citations
-- **Transition**: Connect to next paragraph
+- **主題句在前**：陳述主要觀點
+- **支持證據**：資料和引用
+- **過渡**：連接到下一段
 
 ---
 
-## Comparison: Nature vs. Science
+## 比較：Nature vs. Science
 
-| Feature | Nature | Science |
+| 特點 | Nature | Science |
 |---------|--------|---------|
-| Abstract length | 150-200 words | ≤125 words |
-| Citation style | Numbered superscript | Numbered parentheses (1, 2) |
-| Article titles in refs | Yes | No (in main refs) |
-| Methods placement | End of paper or supplement | Supplement |
-| Significance statement | No | No |
-| Open access option | Yes | Yes |
+| 摘要長度 | 150-200 字 | ≤125 字 |
+| 引用格式 | 上標數字 | 括號數字 (1, 2) |
+| 參考文獻中的文章標題 | 有 | 無（在主要參考文獻中） |
+| 方法位置 | 論文末端或補充資料 | 補充資料 |
+| 重要性聲明 | 無 | 無 |
+| 開放取用選項 | 有 | 有 |
 
 ---
 
-## Common Rejection Reasons
+## 常見被拒原因
 
-1. **Not of sufficient broad interest**: Too specialized for Nature/Science
-2. **Incremental advance**: Not transformative enough
-3. **Overselling**: Claims not supported by data
-4. **Poor accessibility**: Too technical for general audience
-5. **Weak significance statement**: "So what?" unclear
-6. **Insufficient novelty**: Similar findings published elsewhere
-7. **Methodological concerns**: Results not convincing
-
----
-
-## Pre-Submission Checklist
-
-### Content
-- [ ] Significance to broad audience clear in first paragraph
-- [ ] Non-specialist can understand the abstract
-- [ ] Story-driven results (not experiment-by-experiment)
-- [ ] Implications emphasized in discussion
-- [ ] Limitations acknowledged specifically
-
-### Style
-- [ ] Active voice predominates
-- [ ] Jargon minimized or explained
-- [ ] Sentences vary in length
-- [ ] Paragraphs have clear topic sentences
-
-### Technical
-- [ ] Figures are high resolution
-- [ ] Citations in correct format
-- [ ] Word count within limits
-- [ ] Line numbers included
-- [ ] Double-spaced
+1. **廣泛興趣不足**：對 Nature/Science 來說過於專門
+2. **增量式進展**：不夠具變革性
+3. **過度宣傳**：聲稱無資料支持
+4. **可及性差**：對一般讀者過於技術性
+5. **重要性聲明薄弱**：「So what?」不清楚
+6. **新穎性不足**：類似發現已在他處發表
+7. **方法論疑慮**：結果不夠有說服力
 
 ---
 
-## See Also
+## 投稿前檢核表
 
-- `venue_writing_styles.md` - Master style overview
-- `journals_formatting.md` - Technical formatting requirements
-- `reviewer_expectations.md` - What Nature/Science reviewers seek
+### 內容
+- [ ] 第一段清楚說明對廣泛讀者的重要性
+- [ ] 非專家可以理解摘要
+- [ ] 故事驅動的結果（非逐實驗陳述）
+- [ ] 討論中強調意涵
+- [ ] 具體承認限制
 
+### 風格
+- [ ] 主動語態為主
+- [ ] 術語最少化或已解釋
+- [ ] 句子長度有變化
+- [ ] 段落有清楚的主題句
+
+### 技術
+- [ ] 圖片是高解析度
+- [ ] 引用格式正確
+- [ ] 字數在限制內
+- [ ] 包含行號
+- [ ] 雙倍行距
+
+---
+
+## 另請參閱
+
+- `venue_writing_styles.md` - 主要風格概述
+- `journals_formatting.md` - 技術格式要求
+- `reviewer_expectations.md` - Nature/Science 審稿人的期望

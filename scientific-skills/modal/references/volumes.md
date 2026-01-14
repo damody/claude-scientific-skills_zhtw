@@ -1,34 +1,34 @@
 # Modal Volumes
 
-## Overview
+## 概述
 
-Modal Volumes provide high-performance distributed file systems for Modal applications. Designed for write-once, read-many workloads like ML model weights and distributed data processing.
+Modal Volumes 為 Modal 應用程式提供高效能分散式檔案系統。專為一次寫入、多次讀取的工作負載設計，如 ML 模型權重和分散式資料處理。
 
-## Creating Volumes
+## 建立 Volumes
 
-### Via CLI
+### 透過 CLI
 
 ```bash
 modal volume create my-volume
 ```
 
-For Volumes v2 (beta):
+對於 Volumes v2（測試版）：
 ```bash
 modal volume create --version=2 my-volume
 ```
 
-### From Code
+### 從程式碼
 
 ```python
 vol = modal.Volume.from_name("my-volume", create_if_missing=True)
 
-# For v2
+# 對於 v2
 vol = modal.Volume.from_name("my-volume", create_if_missing=True, version=2)
 ```
 
-## Using Volumes
+## 使用 Volumes
 
-Attach to functions via mount points:
+透過掛載點附加到函數：
 
 ```python
 vol = modal.Volume.from_name("my-volume")
@@ -37,42 +37,42 @@ vol = modal.Volume.from_name("my-volume")
 def run():
     with open("/data/xyz.txt", "w") as f:
         f.write("hello")
-    vol.commit()  # Persist changes
+    vol.commit()  # 持久化變更
 ```
 
-## Commits and Reloads
+## 提交和重新載入
 
-### Commits
+### 提交
 
-Persist changes to Volume:
+將變更持久化到 Volume：
 
 ```python
 @app.function(volumes={"/data": vol})
 def write_data():
     with open("/data/file.txt", "w") as f:
         f.write("data")
-    vol.commit()  # Make changes visible to other containers
+    vol.commit()  # 使變更對其他容器可見
 ```
 
-**Background commits**: Modal automatically commits Volume changes every few seconds and on container shutdown.
+**背景提交**：Modal 每隔幾秒和容器關閉時自動提交 Volume 變更。
 
-### Reloads
+### 重新載入
 
-Fetch latest changes from other containers:
+從其他容器取得最新變更：
 
 ```python
 @app.function(volumes={"/data": vol})
 def read_data():
-    vol.reload()  # Fetch latest changes
+    vol.reload()  # 取得最新變更
     with open("/data/file.txt", "r") as f:
         content = f.read()
 ```
 
-At container creation, latest Volume state is mounted. Reload needed to see subsequent commits from other containers.
+在容器建立時，掛載最新的 Volume 狀態。需要重新載入才能看到其他容器的後續提交。
 
-## Uploading Files
+## 上傳檔案
 
-### Batch Upload (Efficient)
+### 批次上傳（高效）
 
 ```python
 vol = modal.Volume.from_name("my-volume")
@@ -83,7 +83,7 @@ with vol.batch_upload() as batch:
     batch.put_file(io.BytesIO(b"some data"), "/foobar")
 ```
 
-### Via Image
+### 透過映像
 
 ```python
 image = modal.Image.debian_slim().add_local_dir(
@@ -93,22 +93,22 @@ image = modal.Image.debian_slim().add_local_dir(
 
 @app.function(image=image)
 def process():
-    # Files available at /app
+    # 檔案在 /app 可用
     ...
 ```
 
-## Downloading Files
+## 下載檔案
 
-### Via CLI
+### 透過 CLI
 
 ```bash
 modal volume get my-volume remote.txt local.txt
 ```
 
-Max file size via CLI: No limit
-Max file size via dashboard: 16 MB
+CLI 最大檔案大小：無限制
+儀表板最大檔案大小：16 MB
 
-### Via Python SDK
+### 透過 Python SDK
 
 ```python
 vol = modal.Volume.from_name("my-volume")
@@ -117,32 +117,32 @@ for data in vol.read_file("path.txt"):
     print(data)
 ```
 
-## Volume Performance
+## Volume 效能
 
 ### Volumes v1
 
-Best for:
-- <50,000 files (recommended)
-- <500,000 files (hard limit)
-- Sequential access patterns
-- <5 concurrent writers
+最適合：
+- <50,000 個檔案（建議）
+- <500,000 個檔案（硬性限制）
+- 順序存取模式
+- <5 個並行寫入者
 
-### Volumes v2 (Beta)
+### Volumes v2（測試版）
 
-Improved for:
-- Unlimited files
-- Hundreds of concurrent writers
-- Random access patterns
-- Large files (up to 1 TiB)
+改進：
+- 無限檔案數
+- 數百個並行寫入者
+- 隨機存取模式
+- 大型檔案（最多 1 TiB）
 
-Current v2 limits:
-- Max file size: 1 TiB
-- Max files per directory: 32,768
-- Unlimited directory depth
+目前 v2 限制：
+- 最大檔案大小：1 TiB
+- 每目錄最大檔案數：32,768
+- 無限目錄深度
 
-## Model Storage
+## 模型儲存
 
-### Saving Model Weights
+### 儲存模型權重
 
 ```python
 volume = modal.Volume.from_name("model-weights", create_if_missing=True)
@@ -155,7 +155,7 @@ def train():
     volume.commit()
 ```
 
-### Loading Model Weights
+### 載入模型權重
 
 ```python
 @app.function(volumes={MODEL_DIR: volume})
@@ -163,14 +163,14 @@ def inference(model_id: str):
     try:
         model = load_model(f"{MODEL_DIR}/{model_id}")
     except NotFound:
-        volume.reload()  # Fetch latest models
+        volume.reload()  # 取得最新模型
         model = load_model(f"{MODEL_DIR}/{model_id}")
     return model.run(request)
 ```
 
-## Model Checkpointing
+## 模型檢查點
 
-Save checkpoints during long training jobs:
+在長時間訓練任務期間儲存檢查點：
 
 ```python
 volume = modal.Volume.from_name("checkpoints")
@@ -178,52 +178,52 @@ VOL_PATH = "/vol"
 
 @app.function(
     gpu="A10G",
-    timeout=2*60*60,  # 2 hours
+    timeout=2*60*60,  # 2 小時
     volumes={VOL_PATH: volume}
 )
 def finetune():
     from transformers import Seq2SeqTrainer, Seq2SeqTrainingArguments
 
     training_args = Seq2SeqTrainingArguments(
-        output_dir=str(VOL_PATH / "model"),  # Checkpoints saved to Volume
+        output_dir=str(VOL_PATH / "model"),  # 檢查點儲存到 Volume
         save_steps=100,
-        # ... more args
+        # ... 更多參數
     )
 
     trainer = Seq2SeqTrainer(model=model, args=training_args, ...)
     trainer.train()
 ```
 
-Background commits ensure checkpoints persist even if training is interrupted.
+背景提交確保即使訓練被中斷，檢查點也會持久化。
 
-## CLI Commands
+## CLI 命令
 
 ```bash
-# List files
+# 列出檔案
 modal volume ls my-volume
 
-# Upload
+# 上傳
 modal volume put my-volume local.txt remote.txt
 
-# Download
+# 下載
 modal volume get my-volume remote.txt local.txt
 
-# Copy within Volume
+# 在 Volume 內複製
 modal volume cp my-volume src.txt dst.txt
 
-# Delete
+# 刪除
 modal volume rm my-volume file.txt
 
-# List all volumes
+# 列出所有 volumes
 modal volume list
 
-# Delete volume
+# 刪除 volume
 modal volume delete my-volume
 ```
 
-## Ephemeral Volumes
+## 臨時 Volumes
 
-Create temporary volumes that are garbage collected:
+建立會被垃圾收集的臨時 volumes：
 
 ```python
 with modal.Volume.ephemeral() as vol:
@@ -231,73 +231,73 @@ with modal.Volume.ephemeral() as vol:
         volumes={"/cache": vol},
         app=my_app,
     )
-    # Use volume
-    # Automatically cleaned up when context exits
+    # 使用 volume
+    # 情境退出時自動清理
 ```
 
-## Concurrent Access
+## 並行存取
 
-### Concurrent Reads
+### 並行讀取
 
-Multiple containers can read simultaneously without issues.
+多個容器可以同時讀取，沒有問題。
 
-### Concurrent Writes
+### 並行寫入
 
-Supported but:
-- Avoid modifying same files concurrently
-- Last write wins (data loss possible)
-- v1: Limit to ~5 concurrent writers
-- v2: Hundreds of concurrent writers supported
+支援但：
+- 避免同時修改相同檔案
+- 最後寫入勝出（可能資料遺失）
+- v1：限制約 5 個並行寫入者
+- v2：支援數百個並行寫入者
 
-## Volume Errors
+## Volume 錯誤
 
-### "Volume Busy"
+### 「Volume Busy」
 
-Cannot reload when files are open:
+檔案開啟時無法重新載入：
 
 ```python
-# WRONG
+# 錯誤
 f = open("/vol/data.txt", "r")
-volume.reload()  # ERROR: volume busy
+volume.reload()  # 錯誤：volume 忙碌
 ```
 
 ```python
-# CORRECT
+# 正確
 with open("/vol/data.txt", "r") as f:
     data = f.read()
-# File closed before reload
+# 重新載入前檔案已關閉
 volume.reload()
 ```
 
-### "File Not Found"
+### 「File Not Found」
 
-Remember to use mount point:
+記得使用掛載點：
 
 ```python
-# WRONG - file saved to local disk
+# 錯誤 - 檔案儲存到本地磁碟
 with open("/xyz.txt", "w") as f:
     f.write("data")
 
-# CORRECT - file saved to Volume
+# 正確 - 檔案儲存到 Volume
 with open("/data/xyz.txt", "w") as f:
     f.write("data")
 ```
 
-## Upgrading from v1 to v2
+## 從 v1 升級到 v2
 
-No automated migration currently. Manual steps:
+目前沒有自動遷移。手動步驟：
 
-1. Create new v2 Volume
-2. Copy data using `cp` or `rsync`
-3. Update app to use new Volume
+1. 建立新的 v2 Volume
+2. 使用 `cp` 或 `rsync` 複製資料
+3. 更新應用程式使用新 Volume
 
 ```bash
 modal volume create --version=2 my-volume-v2
 modal shell --volume my-volume --volume my-volume-v2
 
-# In shell:
+# 在 shell 中：
 cp -rp /mnt/my-volume/. /mnt/my-volume-v2/.
 sync /mnt/my-volume-v2
 ```
 
-Warning: Deployed apps reference Volumes by ID. Re-deploy after creating new Volume.
+警告：已部署的應用程式透過 ID 參照 Volumes。建立新 Volume 後重新部署。

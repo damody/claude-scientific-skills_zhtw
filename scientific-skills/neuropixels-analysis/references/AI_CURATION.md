@@ -1,68 +1,68 @@
-# AI-Assisted Curation Reference
+# AI 輔助篩選參考
 
-Guide to using AI visual analysis for unit curation, inspired by SpikeAgent's approach.
+使用 AI 視覺分析進行單元篩選的指南，靈感來自 SpikeAgent 的方法。
 
-## Overview
+## 概述
 
-AI-assisted curation uses vision-language models to analyze spike sorting visualizations,
-providing expert-level quality assessments similar to human curators.
+AI 輔助篩選使用視覺語言模型分析尖峰分選視覺化，
+提供類似人類篩選者的專家級品質評估。
 
-### Workflow
+### 工作流程
 
 ```
-Traditional:  Metrics → Threshold → Labels
-AI-Enhanced:  Metrics → AI Visual Analysis → Confidence Score → Labels
+傳統方式：  指標 → 閾值 → 標籤
+AI 增強：   指標 → AI 視覺分析 → 信心分數 → 標籤
 ```
 
-## Claude Code Integration
+## Claude Code 整合
 
-When using this skill within Claude Code, Claude can directly analyze waveform plots without requiring API setup. Simply:
+在 Claude Code 中使用此技能時，Claude 可以直接分析波形圖，無需 API 設定。只需：
 
-1. Generate a unit report or plot
-2. Ask Claude to analyze the visualization
-3. Claude will provide expert-level curation decisions
+1. 產生單元報告或圖表
+2. 請 Claude 分析視覺化
+3. Claude 將提供專家級篩選決策
 
-Example workflow in Claude Code:
+Claude Code 中的範例工作流程：
 ```python
-# Generate plots for a unit
+# 為單元產生圖表
 npa.plot_unit_summary(analyzer, unit_id=0, output='unit_0_summary.png')
 
-# Then ask Claude: "Please analyze this unit's waveforms and autocorrelogram
-# to determine if it's a well-isolated single unit, multi-unit activity, or noise"
+# 然後詢問 Claude：「請分析此單元的波形和自相關圖
+# 以判斷它是否為分離良好的單一單元、多單元活動或雜訊」
 ```
 
-Claude can assess:
-- Waveform consistency and shape
-- Refractory period violations from autocorrelograms
-- Amplitude stability over time
-- Overall unit isolation quality
+Claude 可以評估：
+- 波形一致性和形狀
+- 從自相關圖判斷反應期違規
+- 振幅隨時間的穩定性
+- 整體單元分離品質
 
-## Quick Start
+## 快速開始
 
-### Generate Unit Report
+### 產生單元報告
 
 ```python
 import neuropixels_analysis as npa
 
-# Create visual report for a unit
+# 為單元建立視覺報告
 report = npa.generate_unit_report(analyzer, unit_id=0, output_dir='reports/')
 
-# Report includes:
-# - Waveforms, templates, autocorrelogram
-# - Amplitudes over time, ISI histogram
-# - Quality metrics summary
-# - Base64 encoded image for API
+# 報告包含：
+# - 波形、範本、自相關圖
+# - 振幅隨時間變化、ISI 直方圖
+# - 品質指標摘要
+# - 用於 API 的 Base64 編碼圖片
 ```
 
-### AI Visual Analysis
+### AI 視覺分析
 
 ```python
 from anthropic import Anthropic
 
-# Setup API client
+# 設定 API 客戶端
 client = Anthropic()
 
-# Analyze single unit
+# 分析單一單元
 result = npa.analyze_unit_visually(
     analyzer,
     unit_id=0,
@@ -75,10 +75,10 @@ print(f"Classification: {result['classification']}")
 print(f"Reasoning: {result['reasoning']}")
 ```
 
-### Batch Analysis
+### 批次分析
 
 ```python
-# Analyze all units
+# 分析所有單元
 results = npa.batch_visual_curation(
     analyzer,
     api_client=client,
@@ -86,23 +86,23 @@ results = npa.batch_visual_curation(
     progress_callback=lambda i, n: print(f"Progress: {i}/{n}")
 )
 
-# Get labels
+# 取得標籤
 ai_labels = {uid: r['classification'] for uid, r in results.items()}
 ```
 
-## Interactive Curation Session
+## 互動式篩選會話
 
-For human-in-the-loop curation with AI assistance:
+用於人機協作的 AI 輔助篩選：
 
 ```python
-# Create session
+# 建立會話
 session = npa.CurationSession.create(
     analyzer,
     output_dir='curation_session/',
-    sort_by_confidence=True  # Show uncertain units first
+    sort_by_confidence=True  # 先顯示不確定的單元
 )
 
-# Process units
+# 處理單元
 while True:
     unit = session.current_unit()
     if unit is None:
@@ -111,77 +111,77 @@ while True:
     print(f"Unit {unit.unit_id}:")
     print(f"  Auto: {unit.auto_classification} (conf: {unit.confidence:.2f})")
 
-    # Generate report
+    # 產生報告
     report = npa.generate_unit_report(analyzer, unit.unit_id)
 
-    # Get AI opinion
+    # 取得 AI 意見
     ai_result = npa.analyze_unit_visually(analyzer, unit.unit_id, api_client=client)
     session.set_ai_classification(unit.unit_id, ai_result['classification'])
 
-    # Human decision
+    # 人工決策
     decision = input("Decision (good/mua/noise/skip): ")
     if decision != 'skip':
         session.set_decision(unit.unit_id, decision)
 
     session.next_unit()
 
-# Export results
+# 匯出結果
 labels = session.get_final_labels()
 session.export_decisions('final_curation.csv')
 ```
 
-## Analysis Tasks
+## 分析任務
 
-### Quality Assessment (Default)
+### 品質評估（預設）
 
-Analyzes waveform shape, refractory period, amplitude stability.
+分析波形形狀、反應期、振幅穩定性。
 
 ```python
 result = npa.analyze_unit_visually(analyzer, uid, task='quality_assessment')
-# Returns: 'good', 'mua', or 'noise'
+# 回傳：'good'、'mua' 或 'noise'
 ```
 
-### Merge Candidate Detection
+### 合併候選偵測
 
-Determines if two units should be merged.
+判斷兩個單元是否應該合併。
 
 ```python
 result = npa.analyze_unit_visually(analyzer, uid, task='merge_candidate')
-# Returns: 'merge' or 'keep_separate'
+# 回傳：'merge' 或 'keep_separate'
 ```
 
-### Drift Assessment
+### 漂移評估
 
-Evaluates motion/drift in the recording.
+評估記錄中的運動/漂移。
 
 ```python
 result = npa.analyze_unit_visually(analyzer, uid, task='drift_assessment')
-# Returns drift magnitude and correction recommendation
+# 回傳漂移幅度和修正建議
 ```
 
-## Custom Prompts
+## 自訂提示
 
-Create custom analysis prompts:
+建立自訂分析提示：
 
 ```python
 from neuropixels_analysis.ai_curation import create_curation_prompt
 
-# Get base prompt
+# 取得基本提示
 prompt = create_curation_prompt(
     task='quality_assessment',
     additional_context='Focus on waveform amplitude consistency'
 )
 
-# Or fully custom
+# 或完全自訂
 custom_prompt = """
-Analyze this unit and determine if it represents a fast-spiking interneuron.
+分析此單元並判斷它是否代表快速放電中間神經元。
 
-Look for:
-1. Narrow waveform (peak-to-trough < 0.5ms)
-2. High firing rate
-3. Regular ISI distribution
+尋找：
+1. 窄波形（峰谷時間 < 0.5ms）
+2. 高放電率
+3. 規則的 ISI 分布
 
-Classify as: FSI (fast-spiking interneuron) or OTHER
+分類為：FSI（快速放電中間神經元）或 OTHER
 """
 
 result = npa.analyze_unit_visually(
@@ -191,19 +191,19 @@ result = npa.analyze_unit_visually(
 )
 ```
 
-## Combining AI with Metrics
+## 結合 AI 與指標
 
-Best practice: use both AI and quantitative metrics:
+最佳實踐：同時使用 AI 和量化指標：
 
 ```python
 def hybrid_curation(analyzer, metrics, api_client):
-    """Combine metrics and AI for robust curation."""
+    """結合指標和 AI 進行穩健篩選。"""
     labels = {}
 
     for unit_id in metrics.index:
         row = metrics.loc[unit_id]
 
-        # High confidence from metrics alone
+        # 僅憑指標就具有高信心
         if row['snr'] > 10 and row['isi_violations_ratio'] < 0.001:
             labels[unit_id] = 'good'
             continue
@@ -212,7 +212,7 @@ def hybrid_curation(analyzer, metrics, api_client):
             labels[unit_id] = 'noise'
             continue
 
-        # Uncertain cases: use AI
+        # 不確定案例：使用 AI
         result = npa.analyze_unit_visually(
             analyzer, unit_id, api_client=api_client
         )
@@ -221,77 +221,77 @@ def hybrid_curation(analyzer, metrics, api_client):
     return labels
 ```
 
-## Session Management
+## 會話管理
 
-### Resume Session
+### 繼續會話
 
 ```python
-# Resume interrupted session
+# 繼續中斷的會話
 session = npa.CurationSession.load('curation_session/20250101_120000/')
 
-# Check progress
+# 檢查進度
 summary = session.get_summary()
 print(f"Progress: {summary['progress_pct']:.1f}%")
 print(f"Remaining: {summary['remaining']} units")
 
-# Continue from where we left off
+# 從中斷處繼續
 unit = session.current_unit()
 ```
 
-### Navigate Session
+### 導覽會話
 
 ```python
-# Go to specific unit
+# 前往特定單元
 session.go_to_unit(42)
 
-# Previous/next
+# 上一個/下一個
 session.prev_unit()
 session.next_unit()
 
-# Update decision
+# 更新決策
 session.set_decision(42, 'good', notes='Clear refractory period')
 ```
 
-### Export Results
+### 匯出結果
 
 ```python
-# Get final labels (priority: human > AI > auto)
+# 取得最終標籤（優先順序：人工 > AI > 自動）
 labels = session.get_final_labels()
 
-# Export detailed results
+# 匯出詳細結果
 df = session.export_decisions('curation_results.csv')
 
-# Summary
+# 摘要
 summary = session.get_summary()
 print(f"Good: {summary['decisions'].get('good', 0)}")
 print(f"MUA: {summary['decisions'].get('mua', 0)}")
 print(f"Noise: {summary['decisions'].get('noise', 0)}")
 ```
 
-## Visual Report Components
+## 視覺報告組件
 
-The generated report includes 6 panels:
+產生的報告包含 6 個面板：
 
-| Panel | Content | What to Look For |
+| 面板 | 內容 | 觀察重點 |
 |-------|---------|------------------|
-| Waveforms | Individual spike waveforms | Consistency, shape |
-| Template | Mean ± std | Clean negative peak, physiological shape |
-| Autocorrelogram | Spike timing | Gap at 0ms (refractory period) |
-| Amplitudes | Amplitude over time | Stability, no drift |
-| ISI Histogram | Inter-spike intervals | Refractory gap < 1.5ms |
-| Metrics | Quality numbers | SNR, ISI violations, presence |
+| 波形 | 個別尖峰波形 | 一致性、形狀 |
+| 範本 | 平均值 ± 標準差 | 清晰的負峰、生理性形狀 |
+| 自相關圖 | 尖峰時序 | 0ms 處的間隙（反應期） |
+| 振幅 | 振幅隨時間變化 | 穩定性、無漂移 |
+| ISI 直方圖 | 尖峰間隔 | 反應期間隙 < 1.5ms |
+| 指標 | 品質數值 | SNR、ISI 違規、存在比率 |
 
-## API Support
+## API 支援
 
-Currently supported APIs:
+目前支援的 API：
 
-| Provider | Client | Model Examples |
+| 提供者 | 客戶端 | 模型範例 |
 |----------|--------|----------------|
 | Anthropic | `anthropic.Anthropic()` | claude-3-5-sonnet-20241022 |
 | OpenAI | `openai.OpenAI()` | gpt-4-vision-preview |
 | Google | `google.generativeai` | gemini-pro-vision |
 
-### Anthropic Example
+### Anthropic 範例
 
 ```python
 from anthropic import Anthropic
@@ -300,7 +300,7 @@ client = Anthropic(api_key="your-api-key")
 result = npa.analyze_unit_visually(analyzer, uid, api_client=client)
 ```
 
-### OpenAI Example
+### OpenAI 範例
 
 ```python
 from openai import OpenAI
@@ -313,24 +313,24 @@ result = npa.analyze_unit_visually(
 )
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Use AI for uncertain cases** - Don't waste API calls on obvious good/noise units
-2. **Combine with metrics** - AI should supplement, not replace, quantitative measures
-3. **Human oversight** - Review AI decisions, especially for important analyses
-4. **Save sessions** - Always use CurationSession to track decisions
-5. **Document reasoning** - Use notes field to record decision rationale
+1. **對不確定案例使用 AI** - 不要在明顯的 good/noise 單元上浪費 API 呼叫
+2. **結合指標** - AI 應該補充而非取代量化測量
+3. **人工監督** - 審查 AI 決策，特別是重要分析
+4. **儲存會話** - 始終使用 CurationSession 追蹤決策
+5. **記錄推理** - 使用備註欄位記錄決策理由
 
-## Cost Optimization
+## 成本優化
 
 ```python
-# Only use AI for uncertain units
+# 僅對不確定的單元使用 AI
 uncertain_units = metrics.query("""
     snr > 2 and snr < 8 and
     isi_violations_ratio > 0.001 and isi_violations_ratio < 0.1
 """).index.tolist()
 
-# Batch process only these
+# 僅批次處理這些
 results = npa.batch_visual_curation(
     analyzer,
     unit_ids=uncertain_units,
@@ -338,8 +338,8 @@ results = npa.batch_visual_curation(
 )
 ```
 
-## References
+## 參考資料
 
-- [SpikeAgent](https://github.com/SpikeAgent/SpikeAgent) - AI-powered spike sorting assistant
+- [SpikeAgent](https://github.com/SpikeAgent/SpikeAgent) - AI 驅動的尖峰分選助手
 - [Anthropic Vision API](https://docs.anthropic.com/en/docs/vision)
 - [GPT-4 Vision](https://platform.openai.com/docs/guides/vision)

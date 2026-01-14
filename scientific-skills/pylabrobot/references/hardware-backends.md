@@ -1,104 +1,104 @@
-# Hardware Backends in PyLabRobot
+# PyLabRobot 硬體後端
 
-## Overview
+## 概述
 
-PyLabRobot uses a backend abstraction system that allows the same protocol code to run on different liquid handling robots and platforms. Backends handle device-specific communication while the `LiquidHandler` frontend provides a unified interface.
+PyLabRobot 使用後端抽象系統，允許相同的協定程式碼在不同的液體處理機器人和平台上執行。後端處理設備特定的通訊，而 `LiquidHandler` 前端提供統一的介面。
 
-## Backend Architecture
+## 後端架構
 
-### How Backends Work
+### 後端如何運作
 
-1. **Frontend**: `LiquidHandler` class provides high-level API
-2. **Backend**: Device-specific class handles hardware communication
-3. **Protocol**: Same code works across different backends
+1. **前端**：`LiquidHandler` 類別提供高階 API
+2. **後端**：設備特定的類別處理硬體通訊
+3. **協定**：相同的程式碼適用於不同的後端
 
 ```python
-# Same protocol code
+# 相同的協定程式碼
 await lh.pick_up_tips(tip_rack["A1"])
 await lh.aspirate(plate["A1"], vols=100)
 await lh.dispense(plate["A2"], vols=100)
 await lh.drop_tips()
 
-# Works with any backend (STAR, Opentrons, simulation, etc.)
+# 適用於任何後端（STAR、Opentrons、模擬等）
 ```
 
-### Backend Interface
+### 後端介面
 
-All backends inherit from `LiquidHandlerBackend` and implement:
-- `setup()`: Initialize connection to hardware
-- `stop()`: Close connection and cleanup
-- Device-specific command methods (aspirate, dispense, etc.)
+所有後端繼承自 `LiquidHandlerBackend` 並實現：
+- `setup()`：初始化與硬體的連接
+- `stop()`：關閉連接並清理
+- 設備特定的命令方法（aspirate、dispense 等）
 
-## Supported Backends
+## 支援的後端
 
-### Hamilton STAR (Full Support)
+### Hamilton STAR（完整支援）
 
-The Hamilton STAR and STARlet liquid handling robots have full PyLabRobot support.
+Hamilton STAR 和 STARlet 液體處理機器人具有完整的 PyLabRobot 支援。
 
-**Setup:**
+**設置：**
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
 from pylabrobot.liquid_handling.backends import STAR
 from pylabrobot.resources import STARLetDeck
 
-# Create STAR backend
+# 建立 STAR 後端
 backend = STAR()
 
-# Initialize liquid handler
+# 初始化液體處理器
 lh = LiquidHandler(backend=backend, deck=STARLetDeck())
 await lh.setup()
 ```
 
-**Platform Support:**
+**平台支援：**
 - Windows ✅
 - macOS ✅
 - Linux ✅
 - Raspberry Pi ✅
 
-**Communication:**
-- USB connection to robot
-- Direct firmware commands
-- No Hamilton software required
+**通訊：**
+- USB 連接到機器人
+- 直接韌體命令
+- 不需要 Hamilton 軟體
 
-**Features:**
-- Full liquid handling operations
-- CO-RE tip support
-- 96-channel head support (if equipped)
-- Temperature control
-- Carrier and rail-based positioning
+**功能：**
+- 完整液體處理操作
+- CO-RE 吸頭支援
+- 96 通道頭支援（如有配備）
+- 溫度控制
+- 載體和軌道式定位
 
-**Deck Types:**
+**工作台類型：**
 ```python
 from pylabrobot.resources import STARLetDeck, STARDeck
 
-# For STARlet (smaller deck)
+# 用於 STARlet（較小工作台）
 deck = STARLetDeck()
 
-# For STAR (full deck)
+# 用於 STAR（完整工作台）
 deck = STARDeck()
 ```
 
-**Example:**
+**範例：**
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
 from pylabrobot.liquid_handling.backends import STAR
 from pylabrobot.resources import STARLetDeck, TIP_CAR_480_A00, Cos_96_DW_1mL
 
-# Initialize
+# 初始化
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 await lh.setup()
 
-# Define resources
+# 定義資源
 tip_rack = TIP_CAR_480_A00(name="tips")
 plate = Cos_96_DW_1mL(name="plate")
 
-# Assign to rails
+# 分配到軌道
 lh.deck.assign_child_resource(tip_rack, rails=1)
 lh.deck.assign_child_resource(plate, rails=10)
 
-# Execute protocol
+# 執行協定
 await lh.pick_up_tips(tip_rack["A1"])
 await lh.transfer(plate["A1"], plate["A2"], vols=100)
 await lh.drop_tips()
@@ -106,61 +106,61 @@ await lh.drop_tips()
 await lh.stop()
 ```
 
-### Opentrons OT-2 (Supported)
+### Opentrons OT-2（支援）
 
-The Opentrons OT-2 is supported through the Opentrons HTTP API.
+Opentrons OT-2 通過 Opentrons HTTP API 支援。
 
-**Setup:**
+**設置：**
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
 from pylabrobot.liquid_handling.backends import OpentronsBackend
 from pylabrobot.resources import OTDeck
 
-# Create Opentrons backend (requires robot IP address)
-backend = OpentronsBackend(host="192.168.1.100")  # Replace with your robot's IP
+# 建立 Opentrons 後端（需要機器人 IP 位址）
+backend = OpentronsBackend(host="192.168.1.100")  # 替換為您機器人的 IP
 
-# Initialize liquid handler
+# 初始化液體處理器
 lh = LiquidHandler(backend=backend, deck=OTDeck())
 await lh.setup()
 ```
 
-**Platform Support:**
-- Any platform with network access to OT-2
+**平台支援：**
+- 任何可網路存取 OT-2 的平台
 
-**Communication:**
-- HTTP API over network
-- Requires robot IP address
-- No Opentrons app required
+**通訊：**
+- 透過網路的 HTTP API
+- 需要機器人 IP 位址
+- 不需要 Opentrons 應用程式
 
-**Features:**
-- 8-channel pipette support
-- Single-channel pipette support
-- Standard OT-2 deck layout
-- Coordinate-based positioning
+**功能：**
+- 8 通道移液器支援
+- 單通道移液器支援
+- 標準 OT-2 工作台布局
+- 座標式定位
 
-**Limitations:**
-- Uses older Opentrons HTTP API
-- Some features may be limited compared to STAR
+**限制：**
+- 使用較舊的 Opentrons HTTP API
+- 某些功能可能比 STAR 有限
 
-**Example:**
+**範例：**
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
 from pylabrobot.liquid_handling.backends import OpentronsBackend
 from pylabrobot.resources import OTDeck
 
-# Initialize with robot IP
+# 使用機器人 IP 初始化
 lh = LiquidHandler(
     backend=OpentronsBackend(host="192.168.1.100"),
     deck=OTDeck()
 )
 await lh.setup()
 
-# Load deck layout
+# 載入工作台布局
 lh.deck = Deck.load_from_json_file("opentrons_layout.json")
 
-# Execute protocol
+# 執行協定
 await lh.pick_up_tips(tip_rack["A1"])
 await lh.transfer(plate["A1"], plate["A2"], vols=100)
 await lh.drop_tips()
@@ -168,16 +168,16 @@ await lh.drop_tips()
 await lh.stop()
 ```
 
-### Tecan EVO (Work in Progress)
+### Tecan EVO（開發中）
 
-Support for Tecan EVO liquid handling robots is under development.
+Tecan EVO 液體處理機器人的支援正在開發中。
 
-**Current Status:**
-- Work-in-progress
-- Basic commands may be available
-- Check documentation for current feature support
+**目前狀態：**
+- 開發中
+- 基本命令可能可用
+- 請查看文件以了解目前功能支援
 
-**Setup (when available):**
+**設置（當可用時）：**
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -188,11 +188,11 @@ backend = TecanBackend()
 lh = LiquidHandler(backend=backend, deck=TecanDeck())
 ```
 
-### Hamilton Vantage (Mostly Supported)
+### Hamilton Vantage（大部分支援）
 
-Hamilton Vantage has "mostly" complete support.
+Hamilton Vantage 具有「大部分」完整的支援。
 
-**Setup:**
+**設置：**
 
 ```python
 from pylabrobot.liquid_handling.backends import Vantage
@@ -201,45 +201,45 @@ from pylabrobot.resources import VantageDeck
 lh = LiquidHandler(backend=Vantage(), deck=VantageDeck())
 ```
 
-**Features:**
-- Similar to STAR support
-- Some advanced features may be limited
+**功能：**
+- 類似 STAR 支援
+- 某些進階功能可能有限
 
-## Simulation Backend
+## 模擬後端
 
-### ChatterboxBackend (Simulation)
+### ChatterboxBackend（模擬）
 
-Test protocols without physical hardware using the simulation backend.
+使用模擬後端在沒有實體硬體的情況下測試協定。
 
-**Setup:**
+**設置：**
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
 from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
 from pylabrobot.resources import STARLetDeck
 
-# Create simulation backend
+# 建立模擬後端
 backend = ChatterboxBackend(num_channels=8)
 
-# Initialize liquid handler
+# 初始化液體處理器
 lh = LiquidHandler(backend=backend, deck=STARLetDeck())
 await lh.setup()
 ```
 
-**Features:**
-- No hardware required
-- Simulates all liquid handling operations
-- Works with visualizer for real-time feedback
-- Validates protocol logic
-- Tracks tips and volumes
+**功能：**
+- 不需要硬體
+- 模擬所有液體處理操作
+- 與視覺化器配合使用提供即時反饋
+- 驗證協定邏輯
+- 追蹤吸頭和體積
 
-**Use Cases:**
-- Protocol development and testing
-- Training and education
-- CI/CD pipeline testing
-- Debugging without hardware access
+**使用情境：**
+- 協定開發和測試
+- 培訓和教育
+- CI/CD 管線測試
+- 無硬體存取時的除錯
 
-**Example:**
+**範例：**
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -247,49 +247,49 @@ from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
 from pylabrobot.resources import STARLetDeck, TIP_CAR_480_A00, Cos_96_DW_1mL
 from pylabrobot.resources import set_tip_tracking, set_volume_tracking
 
-# Enable tracking for simulation
+# 啟用模擬追蹤
 set_tip_tracking(True)
 set_volume_tracking(True)
 
-# Initialize with simulation backend
+# 使用模擬後端初始化
 lh = LiquidHandler(
     backend=ChatterboxBackend(num_channels=8),
     deck=STARLetDeck()
 )
 await lh.setup()
 
-# Define resources
+# 定義資源
 tip_rack = TIP_CAR_480_A00(name="tips")
 plate = Cos_96_DW_1mL(name="plate")
 
 lh.deck.assign_child_resource(tip_rack, rails=1)
 lh.deck.assign_child_resource(plate, rails=10)
 
-# Set initial volumes
+# 設定初始體積
 for well in plate.children:
     well.tracker.set_liquids([(None, 200)])
 
-# Run simulated protocol
+# 執行模擬協定
 await lh.pick_up_tips(tip_rack["A1:H1"])
 await lh.transfer(plate["A1:H1"], plate["A2:H2"], vols=100)
 await lh.drop_tips()
 
-# Check results
-print(f"A1 volume: {plate['A1'].tracker.get_volume()} µL")  # 100 µL
-print(f"A2 volume: {plate['A2'].tracker.get_volume()} µL")  # 100 µL
+# 檢查結果
+print(f"A1 體積：{plate['A1'].tracker.get_volume()} µL")  # 100 µL
+print(f"A2 體積：{plate['A2'].tracker.get_volume()} µL")  # 100 µL
 
 await lh.stop()
 ```
 
-## Switching Backends
+## 切換後端
 
-### Backend-Agnostic Protocols
+### 與後端無關的協定
 
-Write protocols that work with any backend:
+編寫適用於任何後端的協定：
 
 ```python
 def get_backend(robot_type: str):
-    """Factory function to create appropriate backend"""
+    """建立適當後端的工廠函數"""
     if robot_type == "star":
         from pylabrobot.liquid_handling.backends import STAR
         return STAR()
@@ -300,10 +300,10 @@ def get_backend(robot_type: str):
         from pylabrobot.liquid_handling.backends.simulation import ChatterboxBackend
         return ChatterboxBackend()
     else:
-        raise ValueError(f"Unknown robot type: {robot_type}")
+        raise ValueError(f"未知的機器人類型：{robot_type}")
 
 def get_deck(robot_type: str):
-    """Factory function to create appropriate deck"""
+    """建立適當工作台的工廠函數"""
     if robot_type == "star":
         from pylabrobot.resources import STARLetDeck
         return STARLetDeck()
@@ -314,115 +314,115 @@ def get_deck(robot_type: str):
         from pylabrobot.resources import STARLetDeck
         return STARLetDeck()
     else:
-        raise ValueError(f"Unknown robot type: {robot_type}")
+        raise ValueError(f"未知的機器人類型：{robot_type}")
 
-# Use in protocol
-robot_type = "simulation"  # Change to "star" or "opentrons" as needed
+# 在協定中使用
+robot_type = "simulation"  # 根據需要更改為 "star" 或 "opentrons"
 backend = get_backend(robot_type)
 deck = get_deck(robot_type)
 
 lh = LiquidHandler(backend=backend, deck=deck)
 await lh.setup()
 
-# Protocol code works with any backend
+# 協定程式碼適用於任何後端
 await lh.pick_up_tips(tip_rack["A1"])
 await lh.transfer(plate["A1"], plate["A2"], vols=100)
 await lh.drop_tips()
 ```
 
-### Development Workflow
+### 開發工作流程
 
-1. **Develop**: Write protocol using ChatterboxBackend
-2. **Test**: Run with visualizer to validate logic
-3. **Verify**: Test on simulation with real deck layout
-4. **Deploy**: Switch to hardware backend (STAR, Opentrons)
+1. **開發**：使用 ChatterboxBackend 編寫協定
+2. **測試**：使用視覺化器執行以驗證邏輯
+3. **驗證**：使用真實工作台布局在模擬中測試
+4. **部署**：切換到硬體後端（STAR、Opentrons）
 
 ```python
-# Development
+# 開發
 lh = LiquidHandler(backend=ChatterboxBackend(), deck=STARLetDeck())
 
-# ... develop protocol ...
+# ... 開發協定 ...
 
-# Production (just change backend)
+# 正式環境（只需更改後端）
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 ```
 
-## Backend Configuration
+## 後端配置
 
-### Custom Backend Parameters
+### 自訂後端參數
 
-Some backends accept configuration parameters:
+某些後端接受配置參數：
 
 ```python
-# Opentrons with custom parameters
+# 帶有自訂參數的 Opentrons
 backend = OpentronsBackend(
     host="192.168.1.100",
-    port=31950  # Default Opentrons API port
+    port=31950  # 預設 Opentrons API 連接埠
 )
 
-# ChatterboxBackend with custom channels
+# 帶有自訂通道的 ChatterboxBackend
 backend = ChatterboxBackend(
-    num_channels=8  # 8-channel simulation
+    num_channels=8  # 8 通道模擬
 )
 ```
 
-### Connection Troubleshooting
+### 連接故障排除
 
-**Hamilton STAR:**
-- Ensure USB cable is connected
-- Check that no other software is using the robot
-- Verify firmware is up to date
-- On macOS/Linux, may need USB permissions
+**Hamilton STAR：**
+- 確保 USB 傳輸線已連接
+- 檢查沒有其他軟體正在使用機器人
+- 驗證韌體是最新的
+- 在 macOS/Linux 上，可能需要 USB 權限
 
-**Opentrons OT-2:**
-- Verify robot IP address is correct
-- Check network connectivity (ping robot)
-- Ensure robot is powered on
-- Confirm Opentrons app is not blocking API access
+**Opentrons OT-2：**
+- 驗證機器人 IP 位址正確
+- 檢查網路連通性（ping 機器人）
+- 確保機器人已開機
+- 確認 Opentrons 應用程式沒有阻擋 API 存取
 
-**General:**
-- Use `await lh.setup()` to test connection
-- Check error messages for specific issues
-- Ensure proper permissions for device access
+**一般：**
+- 使用 `await lh.setup()` 測試連接
+- 檢查錯誤訊息以了解具體問題
+- 確保有適當的設備存取權限
 
-## Backend-Specific Features
+## 後端特定功能
 
-### Hamilton STAR Specific
+### Hamilton STAR 專用
 
 ```python
-# Access backend directly for hardware-specific features
+# 直接存取後端以使用硬體專用功能
 star_backend = lh.backend
 
-# Hamilton-specific commands (if needed)
-# Most operations should go through LiquidHandler interface
+# Hamilton 專用命令（如需要）
+# 大多數操作應通過 LiquidHandler 介面
 ```
 
-### Opentrons Specific
+### Opentrons 專用
 
 ```python
-# Opentrons-specific configuration
+# Opentrons 專用配置
 ot_backend = lh.backend
 
-# Access OT-2 API directly if needed (advanced)
-# Most operations should go through LiquidHandler interface
+# 如需要可直接存取 OT-2 API（進階）
+# 大多數操作應通過 LiquidHandler 介面
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Abstract Hardware**: Write backend-agnostic protocols when possible
-2. **Test in Simulation**: Always test with ChatterboxBackend first
-3. **Factory Pattern**: Use factory functions to create backends
-4. **Error Handling**: Handle connection errors gracefully
-5. **Documentation**: Document which backends your protocol supports
-6. **Configuration**: Use config files for backend parameters
-7. **Version Control**: Track backend versions and compatibility
-8. **Cleanup**: Always call `await lh.stop()` to release hardware
-9. **Single Connection**: Only one program should connect to hardware at a time
-10. **Platform Testing**: Test on target platform before deployment
+1. **抽象硬體**：盡可能編寫與後端無關的協定
+2. **在模擬中測試**：始終先使用 ChatterboxBackend 測試
+3. **工廠模式**：使用工廠函數建立後端
+4. **錯誤處理**：優雅地處理連接錯誤
+5. **文件**：記錄您的協定支援哪些後端
+6. **配置**：使用配置檔案儲存後端參數
+7. **版本控制**：追蹤後端版本和相容性
+8. **清理**：始終呼叫 `await lh.stop()` 以釋放硬體
+9. **單一連接**：同時只應有一個程式連接到硬體
+10. **平台測試**：部署前在目標平台上測試
 
-## Common Patterns
+## 常見模式
 
-### Multi-Backend Support
+### 多後端支援
 
 ```python
 import asyncio
@@ -432,9 +432,9 @@ async def run_protocol(
     robot_type: Literal["star", "opentrons", "simulation"],
     visualize: bool = False
 ):
-    """Run protocol on specified backend"""
+    """在指定後端上執行協定"""
 
-    # Create backend
+    # 建立後端
     if robot_type == "star":
         from pylabrobot.liquid_handling.backends import STAR
         backend = STAR()
@@ -448,33 +448,33 @@ async def run_protocol(
         backend = ChatterboxBackend()
         deck = STARLetDeck()
 
-    # Initialize
+    # 初始化
     lh = LiquidHandler(backend=backend, deck=deck)
     await lh.setup()
 
     try:
-        # Load deck layout (backend-agnostic)
+        # 載入工作台布局（與後端無關）
         # lh.deck = Deck.load_from_json_file(f"{robot_type}_layout.json")
 
-        # Execute protocol (backend-agnostic)
+        # 執行協定（與後端無關）
         await lh.pick_up_tips(tip_rack["A1"])
         await lh.transfer(plate["A1"], plate["A2"], vols=100)
         await lh.drop_tips()
 
-        print("Protocol completed successfully!")
+        print("協定成功完成！")
 
     finally:
         await lh.stop()
 
-# Run on different backends
-await run_protocol("simulation")      # Test in simulation
-await run_protocol("star")            # Run on Hamilton STAR
-await run_protocol("opentrons")       # Run on Opentrons OT-2
+# 在不同後端上執行
+await run_protocol("simulation")      # 在模擬中測試
+await run_protocol("star")            # 在 Hamilton STAR 上執行
+await run_protocol("opentrons")       # 在 Opentrons OT-2 上執行
 ```
 
-## Additional Resources
+## 其他資源
 
-- Backend Documentation: https://docs.pylabrobot.org/user_guide/backends.html
-- Supported Machines: https://docs.pylabrobot.org/user_guide/machines.html
-- API Reference: https://docs.pylabrobot.org/api/pylabrobot.liquid_handling.backends.html
-- GitHub Examples: https://github.com/PyLabRobot/pylabrobot/tree/main/examples
+- 後端文件：https://docs.pylabrobot.org/user_guide/backends.html
+- 支援的機器：https://docs.pylabrobot.org/user_guide/machines.html
+- API 參考：https://docs.pylabrobot.org/api/pylabrobot.liquid_handling.backends.html
+- GitHub 範例：https://github.com/PyLabRobot/pylabrobot/tree/main/examples

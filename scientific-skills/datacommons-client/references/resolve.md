@@ -1,34 +1,34 @@
-# Resolve Endpoint - Entity Identification
+# Resolve 端點 - 實體識別
 
-## Purpose
+## 用途
 
-The Resolve API identifies Data Commons IDs (DCIDs) for entities in the knowledge graph. DCIDs are required for most queries in the Data Commons API, so resolution is typically the first step in any workflow.
+Resolve API 識別知識圖譜中實體的 Data Commons ID（DCIDs）。DCIDs 是 Data Commons API 中大多數查詢所必需的，因此解析通常是任何工作流程的第一步。
 
-## Key Capabilities
+## 主要功能
 
-The endpoint currently supports **place entities only** and allows resolution through multiple methods:
-- **By name**: Search using descriptive terms like "San Francisco, CA"
-- **By Wikidata ID**: Lookup using external identifiers (e.g., "Q30" for USA)
-- **By coordinates**: Locate places via latitude/longitude
-- **By relation expressions**: Advanced searches using synthetic attributes
+端點目前僅支援**地點實體**，並允許透過多種方法解析：
+- **按名稱**：使用描述性詞彙搜尋，如 "San Francisco, CA"
+- **按 Wikidata ID**：使用外部識別碼查詢（例如 "Q30" 代表美國）
+- **按座標**：透過經緯度定位地點
+- **按關係表達式**：使用合成屬性進行進階搜尋
 
-## Available Methods
+## 可用方法
 
 ### 1. fetch()
 
-General resolution using relation expressions—most flexible method.
+使用關係表達式進行一般解析——最靈活的方法。
 
-**Parameters:**
-- `nodes`: List of search terms or identifiers
-- `property`: Property to search (e.g., "name", "wikidataId")
+**參數：**
+- `nodes`：搜尋詞或識別碼列表
+- `property`：要搜尋的屬性（例如 "name"、"wikidataId"）
 
-**Example Usage:**
+**使用範例：**
 ```python
 from datacommons_client import DataCommonsClient
 
 client = DataCommonsClient()
 
-# Resolve by name
+# 按名稱解析
 response = client.resolve.fetch(
     nodes=["California", "Texas"],
     property="name"
@@ -37,83 +37,83 @@ response = client.resolve.fetch(
 
 ### 2. fetch_dcids_by_name()
 
-Name-based lookup with optional type filtering—most commonly used method.
+具有可選類型篩選的名稱查詢——最常用的方法。
 
-**Parameters:**
-- `names`: List of place names to resolve
-- `entity_type`: Optional type filter (e.g., "City", "State", "County")
+**參數：**
+- `names`：要解析的地名列表
+- `entity_type`：可選的類型篩選（例如 "City"、"State"、"County"）
 
-**Returns:** `ResolveResponse` object with candidates for each name
+**回傳：**具有每個名稱候選項的 `ResolveResponse` 物件
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Basic name resolution
+# 基本名稱解析
 response = client.resolve.fetch_dcids_by_name(
     names=["San Francisco, CA", "Los Angeles"]
 )
 
-# With type filtering
+# 具有類型篩選
 response = client.resolve.fetch_dcids_by_name(
     names=["San Francisco"],
     entity_type="City"
 )
 
-# Access results
+# 存取結果
 for name, result in response.to_dict().items():
     print(f"{name}: {result['candidates']}")
 ```
 
 ### 3. fetch_dcids_by_wikidata_id()
 
-Wikidata ID resolution for entities with known Wikidata identifiers.
+具有已知 Wikidata 識別碼的實體的 Wikidata ID 解析。
 
-**Parameters:**
-- `wikidata_ids`: List of Wikidata IDs (e.g., "Q30", "Q99")
+**參數：**
+- `wikidata_ids`：Wikidata ID 列表（例如 "Q30"、"Q99"）
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Resolve Wikidata IDs
+# 解析 Wikidata ID
 response = client.resolve.fetch_dcids_by_wikidata_id(
-    wikidata_ids=["Q30", "Q99"]  # USA and California
+    wikidata_ids=["Q30", "Q99"]  # 美國和加州
 )
 ```
 
 ### 4. fetch_dcid_by_coordinates()
 
-Geographic coordinate lookup to find the place at specific lat/long coordinates.
+地理座標查詢以尋找特定經緯度座標處的地點。
 
-**Parameters:**
-- `latitude`: Latitude coordinate
-- `longitude`: Longitude coordinate
+**參數：**
+- `latitude`：緯度座標
+- `longitude`：經度座標
 
-**Returns:** Single DCID string for the place at those coordinates
+**回傳：**該座標處地點的單一 DCID 字串
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Find place at coordinates
+# 尋找座標處的地點
 dcid = client.resolve.fetch_dcid_by_coordinates(
     latitude=37.7749,
     longitude=-122.4194
 )
-# Returns DCID for San Francisco
+# 回傳舊金山的 DCID
 ```
 
-## Response Structure
+## 回應結構
 
-All methods (except `fetch_dcid_by_coordinates`) return a `ResolveResponse` object containing:
-- **node**: The search term provided
-- **candidates**: List of matching DCIDs with optional metadata
-  - Each candidate may include `dominantType` field for disambiguation
-- **Helper methods**:
-  - `to_dict()`: Full response as dictionary
-  - `to_json()`: JSON string format
-  - `to_flat_dict()`: Simplified format with just DCIDs
+所有方法（除了 `fetch_dcid_by_coordinates`）回傳包含以下內容的 `ResolveResponse` 物件：
+- **node**：提供的搜尋詞
+- **candidates**：具有可選中繼資料的匹配 DCID 列表
+  - 每個候選項可能包含用於消歧的 `dominantType` 欄位
+- **輔助方法**：
+  - `to_dict()`：完整回應作為字典
+  - `to_json()`：JSON 字串格式
+  - `to_flat_dict()`：僅包含 DCID 的簡化格式
 
-**Example Response:**
+**回應範例：**
 ```python
 response = client.resolve.fetch_dcids_by_name(names=["Springfield"])
 
-# May return multiple candidates since many cities named Springfield exist
+# 可能回傳多個候選項，因為有許多名為 Springfield 的城市
 # {
 #   "Springfield": {
 #     "candidates": [
@@ -125,24 +125,24 @@ response = client.resolve.fetch_dcids_by_name(names=["Springfield"])
 # }
 ```
 
-## Common Use Cases
+## 常見使用案例
 
-### Use Case 1: Resolve Place Names Before Querying
+### 使用案例 1：查詢前解析地名
 
-Most workflows start by resolving names to DCIDs:
+大多數工作流程從將名稱解析為 DCID 開始：
 ```python
-# Step 1: Resolve names
+# 步驟 1：解析名稱
 resolve_response = client.resolve.fetch_dcids_by_name(
     names=["California", "Texas"]
 )
 
-# Step 2: Extract DCIDs
+# 步驟 2：提取 DCID
 dcids = []
 for name, result in resolve_response.to_dict().items():
     if result["candidates"]:
         dcids.append(result["candidates"][0]["dcid"])
 
-# Step 3: Query data using DCIDs
+# 步驟 3：使用 DCID 查詢資料
 data_response = client.observation.fetch(
     variable_dcids=["Count_Person"],
     entity_dcids=dcids,
@@ -150,27 +150,27 @@ data_response = client.observation.fetch(
 )
 ```
 
-### Use Case 2: Handle Ambiguous Names
+### 使用案例 2：處理模糊名稱
 
-When multiple candidates exist, use `dominantType` or be more specific:
+當存在多個候選項時，使用 `dominantType` 或更具體：
 ```python
-# Ambiguous name
+# 模糊名稱
 response = client.resolve.fetch_dcids_by_name(names=["Springfield"])
 candidates = response.to_dict()["Springfield"]["candidates"]
 
-# Filter by type or choose based on context
+# 按類型篩選或根據上下文選擇
 city_candidates = [c for c in candidates if c.get("dominantType") == "City"]
 
-# Or be more specific in the query
+# 或在查詢中更具體
 response = client.resolve.fetch_dcids_by_name(
     names=["Springfield, Illinois"],
     entity_type="City"
 )
 ```
 
-### Use Case 3: Batch Resolution
+### 使用案例 3：批次解析
 
-Resolve multiple entities efficiently:
+高效解析多個實體：
 ```python
 places = [
     "San Francisco, CA",
@@ -181,25 +181,25 @@ places = [
 
 response = client.resolve.fetch_dcids_by_name(names=places)
 
-# Build mapping of name to DCID
+# 建立名稱到 DCID 的對應
 name_to_dcid = {}
 for name, result in response.to_dict().items():
     if result["candidates"]:
         name_to_dcid[name] = result["candidates"][0]["dcid"]
 ```
 
-### Use Case 4: Coordinate-Based Queries
+### 使用案例 4：座標查詢
 
-Find the administrative place for a location:
+尋找位置的行政區劃地點：
 ```python
-# User provides coordinates, find the place
+# 使用者提供座標，尋找地點
 latitude, longitude = 37.7749, -122.4194
 dcid = client.resolve.fetch_dcid_by_coordinates(
     latitude=latitude,
     longitude=longitude
 )
 
-# Now query data for that place
+# 現在查詢該地點的資料
 response = client.observation.fetch(
     variable_dcids=["Count_Person", "MedianIncome_Household"],
     entity_dcids=[dcid],
@@ -207,40 +207,40 @@ response = client.observation.fetch(
 )
 ```
 
-### Use Case 5: External ID Integration
+### 使用案例 5：外部 ID 整合
 
-When working with external datasets that use Wikidata IDs:
+當處理使用 Wikidata ID 的外部資料集時：
 ```python
-# External dataset has Wikidata IDs
-wikidata_ids = ["Q30", "Q99", "Q1384"]  # USA, California, New York
+# 外部資料集有 Wikidata ID
+wikidata_ids = ["Q30", "Q99", "Q1384"]  # 美國、加州、紐約
 
-# Convert to Data Commons DCIDs
+# 轉換為 Data Commons DCID
 response = client.resolve.fetch_dcids_by_wikidata_id(
     wikidata_ids=wikidata_ids
 )
 
-# Extract DCIDs for further queries
+# 提取 DCID 以進行進一步查詢
 dcids = []
 for wid, result in response.to_dict().items():
     if result["candidates"]:
         dcids.append(result["candidates"][0]["dcid"])
 ```
 
-## Important Limitations
+## 重要限制
 
-1. **Place entities only**: The Resolve API currently supports only place entities (countries, states, cities, counties, etc.). For other entity types, DCIDs must be obtained through other means (e.g., Node API exploration).
+1. **僅支援地點實體**：Resolve API 目前僅支援地點實體（國家、州、城市、縣等）。對於其他實體類型，必須透過其他方式取得 DCID（例如 Node API 探索）。
 
-2. **Cannot resolve linked entity properties**: For queries involving relationships like `containedInPlace`, use the Node API instead.
+2. **無法解析連結實體屬性**：對於涉及 `containedInPlace` 等關係的查詢，改用 Node API。
 
-3. **Ambiguity handling**: When multiple candidates exist, the API returns all matches. The application must decide which is correct based on context or additional filtering.
+3. **模糊處理**：當存在多個候選項時，API 回傳所有匹配項。應用程式必須根據上下文或額外篩選決定哪個是正確的。
 
-## Best Practices
+## 最佳實踐
 
-1. **Always resolve names first**: Never assume DCID format—always use the Resolve API
-2. **Cache resolutions**: If querying the same places repeatedly, cache name→DCID mappings
-3. **Handle ambiguity**: Check for multiple candidates and use `entity_type` filtering or more specific names
-4. **Validate results**: Always check that `candidates` list is not empty before accessing DCIDs
-5. **Use appropriate method**:
-   - Names → `fetch_dcids_by_name()`
-   - Coordinates → `fetch_dcid_by_coordinates()`
-   - Wikidata IDs → `fetch_dcids_by_wikidata_id()`
+1. **始終先解析名稱**：永遠不要假設 DCID 格式——始終使用 Resolve API
+2. **快取解析結果**：如果重複查詢相同的地點，快取名稱→DCID 對應
+3. **處理模糊性**：檢查多個候選項並使用 `entity_type` 篩選或更具體的名稱
+4. **驗證結果**：在存取 DCID 之前始終檢查 `candidates` 列表不為空
+5. **使用適當的方法**：
+   - 名稱 → `fetch_dcids_by_name()`
+   - 座標 → `fetch_dcid_by_coordinates()`
+   - Wikidata ID → `fetch_dcids_by_wikidata_id()`

@@ -1,59 +1,59 @@
-# FDA Medical Device Databases
+# FDA 醫療器材資料庫
 
-This reference covers all FDA medical device-related API endpoints accessible through openFDA.
+本參考文件涵蓋透過 openFDA 可存取的所有 FDA 醫療器材相關 API 端點。
 
-## Overview
+## 概述
 
-The FDA device databases provide access to information about medical devices, including adverse events, recalls, approvals, registrations, and classification data. Medical devices range from simple items like tongue depressors to complex instruments like pacemakers and surgical robots.
+FDA 器材資料庫提供醫療器材的相關資訊，包括不良事件、召回、核准、註冊和分類資料。醫療器材範圍從簡單的物品如壓舌板到複雜的儀器如心律調節器和手術機器人。
 
-## Device Classification System
+## 器材分類系統
 
-Medical devices are classified into three categories based on risk:
+醫療器材根據風險分為三個類別：
 
-- **Class I**: Low risk (e.g., bandages, examination gloves)
-- **Class II**: Moderate risk (e.g., powered wheelchairs, infusion pumps)
-- **Class III**: High risk (e.g., heart valves, implantable pacemakers)
+- **第一類**：低風險（例如：繃帶、檢查手套）
+- **第二類**：中度風險（例如：電動輪椅、輸液泵）
+- **第三類**：高風險（例如：心臟瓣膜、植入式心律調節器）
 
-## Available Endpoints
+## 可用端點
 
-### 1. Device Adverse Events
+### 1. 器材不良事件
 
-**Endpoint**: `https://api.fda.gov/device/event.json`
+**端點**：`https://api.fda.gov/device/event.json`
 
-**Purpose**: Access reports documenting serious injuries, deaths, malfunctions, and other undesirable effects from medical device use.
+**目的**：存取記錄醫療器材使用導致的嚴重傷害、死亡、故障和其他不良影響的報告。
 
-**Data Source**: Manufacturer and User Facility Device Experience (MAUDE) database
+**資料來源**：製造商和使用者設施器材經驗（MAUDE）資料庫
 
-**Key Fields**:
-- `device.brand_name` - Brand name of device
-- `device.generic_name` - Generic device name
-- `device.manufacturer_d_name` - Manufacturer name
-- `device.device_class` - Device class (1, 2, or 3)
-- `event_type` - Type of event (Death, Injury, Malfunction, Other)
-- `date_received` - Date FDA received report
-- `mdr_report_key` - Unique report identifier
-- `adverse_event_flag` - Whether reported as adverse event
-- `product_problem_flag` - Whether product problem reported
-- `patient.patient_problems` - Patient problems/complications
-- `device.openfda.device_name` - Official device name
-- `device.openfda.medical_specialty_description` - Medical specialty
-- `remedial_action` - Actions taken (recall, repair, replace, etc.)
+**主要欄位**：
+- `device.brand_name` - 器材品牌名稱
+- `device.generic_name` - 器材通用名稱
+- `device.manufacturer_d_name` - 製造商名稱
+- `device.device_class` - 器材類別（1、2 或 3）
+- `event_type` - 事件類型（死亡、傷害、故障、其他）
+- `date_received` - FDA 收到報告的日期
+- `mdr_report_key` - 唯一報告識別碼
+- `adverse_event_flag` - 是否報告為不良事件
+- `product_problem_flag` - 是否報告產品問題
+- `patient.patient_problems` - 患者問題/併發症
+- `device.openfda.device_name` - 官方器材名稱
+- `device.openfda.medical_specialty_description` - 醫學專科
+- `remedial_action` - 採取的行動（召回、維修、更換等）
 
-**Common Use Cases**:
-- Post-market surveillance
-- Safety signal detection
-- Device comparison studies
-- Risk analysis
-- Quality improvement
+**常見使用案例**：
+- 上市後監測
+- 安全信號偵測
+- 器材比較研究
+- 風險分析
+- 品質改進
 
-**Example Queries**:
+**查詢範例**：
 ```python
 import requests
 
 api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/device/event.json"
 
-# Find adverse events for a specific device
+# 查詢特定器材的不良事件
 params = {
     "api_key": api_key,
     "search": "device.brand_name:pacemaker",
@@ -65,7 +65,7 @@ data = response.json()
 ```
 
 ```python
-# Count events by type
+# 按類型計數事件
 params = {
     "api_key": api_key,
     "search": "device.generic_name:insulin+pump",
@@ -74,7 +74,7 @@ params = {
 ```
 
 ```python
-# Find death events for Class III devices
+# 查詢第三類器材的死亡事件
 params = {
     "api_key": api_key,
     "search": "event_type:Death+AND+device.device_class:3",
@@ -83,41 +83,41 @@ params = {
 }
 ```
 
-### 2. Device 510(k) Clearances
+### 2. 器材 510(k) 許可
 
-**Endpoint**: `https://api.fda.gov/device/510k.json`
+**端點**：`https://api.fda.gov/device/510k.json`
 
-**Purpose**: Access 510(k) premarket notification data demonstrating device equivalence to legally marketed predicate devices.
+**目的**：存取 510(k) 上市前通知資料，證明器材與合法上市的前置器材等效。
 
-**Data Source**: 510(k) Premarket Notifications
+**資料來源**：510(k) 上市前通知
 
-**Key Fields**:
-- `k_number` - 510(k) number (unique identifier)
-- `applicant` - Company submitting 510(k)
-- `device_name` - Name of device
-- `device_class` - Device classification (1, 2, or 3)
-- `decision_date` - Date of FDA decision
-- `decision_description` - Substantially Equivalent (SE) or Not SE
-- `product_code` - FDA product code
-- `statement_or_summary` - Type of summary provided
-- `clearance_type` - Traditional, Special, Abbreviated, etc.
-- `expedited_review_flag` - Whether expedited review
-- `advisory_committee` - Advisory committee name
-- `openfda.device_name` - Official device name
-- `openfda.device_class` - Device class description
-- `openfda.medical_specialty_description` - Medical specialty
-- `openfda.regulation_number` - CFR regulation number
+**主要欄位**：
+- `k_number` - 510(k) 編號（唯一識別碼）
+- `applicant` - 提交 510(k) 的公司
+- `device_name` - 器材名稱
+- `device_class` - 器材分類（1、2 或 3）
+- `decision_date` - FDA 決定日期
+- `decision_description` - 實質等效（SE）或非 SE
+- `product_code` - FDA 產品代碼
+- `statement_or_summary` - 提供的摘要類型
+- `clearance_type` - 傳統、特殊、簡化等
+- `expedited_review_flag` - 是否加速審查
+- `advisory_committee` - 諮詢委員會名稱
+- `openfda.device_name` - 官方器材名稱
+- `openfda.device_class` - 器材類別描述
+- `openfda.medical_specialty_description` - 醫學專科
+- `openfda.regulation_number` - CFR 法規編號
 
-**Common Use Cases**:
-- Regulatory pathway research
-- Predicate device identification
-- Market entry analysis
-- Competitive intelligence
-- Device development planning
+**常見使用案例**：
+- 法規途徑研究
+- 前置器材識別
+- 市場進入分析
+- 競爭情報
+- 器材開發規劃
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find 510(k) clearances by company
+# 按公司查詢 510(k) 許可
 params = {
     "api_key": api_key,
     "search": "applicant:Medtronic",
@@ -129,7 +129,7 @@ response = requests.get("https://api.fda.gov/device/510k.json", params=params)
 ```
 
 ```python
-# Search for specific device type clearances
+# 搜尋特定器材類型的許可
 params = {
     "api_key": api_key,
     "search": "device_name:*surgical+robot*",
@@ -138,7 +138,7 @@ params = {
 ```
 
 ```python
-# Get all Class III 510(k) clearances in recent year
+# 取得近年所有第三類 510(k) 許可
 params = {
     "api_key": api_key,
     "search": "device_class:3+AND+decision_date:[20240101+TO+20241231]",
@@ -146,40 +146,40 @@ params = {
 }
 ```
 
-### 3. Device Classification
+### 3. 器材分類
 
-**Endpoint**: `https://api.fda.gov/device/classification.json`
+**端點**：`https://api.fda.gov/device/classification.json`
 
-**Purpose**: Access device classification database with medical device names, product codes, medical specialty panels, and classification information.
+**目的**：存取器材分類資料庫，包含醫療器材名稱、產品代碼、醫學專科面板和分類資訊。
 
-**Data Source**: FDA Device Classification Database
+**資料來源**：FDA 器材分類資料庫
 
-**Key Fields**:
-- `product_code` - Three-letter FDA product code
-- `device_name` - Official device name
-- `device_class` - Class (1, 2, or 3)
-- `medical_specialty` - Medical specialty (e.g., Radiology, Cardiovascular)
-- `medical_specialty_description` - Full specialty description
-- `regulation_number` - CFR regulation number (e.g., 21 CFR 870.2300)
-- `review_panel` - FDA review panel
-- `definition` - Official device definition
-- `physical_state` - Solid, liquid, gas
-- `technical_method` - Method of operation
-- `target_area` - Body area/system targeted
-- `gmp_exempt_flag` - Whether exempt from Good Manufacturing Practice
-- `implant_flag` - Whether device is implanted
-- `life_sustain_support_flag` - Whether life-sustaining/supporting
+**主要欄位**：
+- `product_code` - 三字母 FDA 產品代碼
+- `device_name` - 官方器材名稱
+- `device_class` - 類別（1、2 或 3）
+- `medical_specialty` - 醫學專科（例如：放射科、心血管科）
+- `medical_specialty_description` - 完整專科描述
+- `regulation_number` - CFR 法規編號（例如：21 CFR 870.2300）
+- `review_panel` - FDA 審查面板
+- `definition` - 官方器材定義
+- `physical_state` - 固體、液體、氣體
+- `technical_method` - 操作方法
+- `target_area` - 目標身體區域/系統
+- `gmp_exempt_flag` - 是否豁免良好製造規範
+- `implant_flag` - 是否為植入式器材
+- `life_sustain_support_flag` - 是否為生命維持/支援器材
 
-**Common Use Cases**:
-- Device identification
-- Regulatory requirement determination
-- Product code lookup
-- Classification research
-- Device categorization
+**常見使用案例**：
+- 器材識別
+- 法規要求判定
+- 產品代碼查詢
+- 分類研究
+- 器材分類
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Look up device by product code
+# 按產品代碼查詢器材
 params = {
     "api_key": api_key,
     "search": "product_code:LWL",
@@ -190,7 +190,7 @@ response = requests.get("https://api.fda.gov/device/classification.json", params
 ```
 
 ```python
-# Find all cardiovascular devices
+# 查詢所有心血管器材
 params = {
     "api_key": api_key,
     "search": "medical_specialty:CV",
@@ -199,7 +199,7 @@ params = {
 ```
 
 ```python
-# Get all implantable Class III devices
+# 取得所有可植入的第三類器材
 params = {
     "api_key": api_key,
     "search": "device_class:3+AND+implant_flag:Y",
@@ -207,38 +207,38 @@ params = {
 }
 ```
 
-### 4. Device Recall Enforcement Reports
+### 4. 器材召回執法報告
 
-**Endpoint**: `https://api.fda.gov/device/enforcement.json`
+**端點**：`https://api.fda.gov/device/enforcement.json`
 
-**Purpose**: Access medical device product recall enforcement reports.
+**目的**：存取醫療器材產品召回執法報告。
 
-**Data Source**: FDA Enforcement Reports
+**資料來源**：FDA 執法報告
 
-**Key Fields**:
-- `status` - Current status (Ongoing, Completed, Terminated)
-- `recall_number` - Unique recall identifier
-- `classification` - Class I, II, or III
-- `product_description` - Description of recalled device
-- `reason_for_recall` - Why device was recalled
-- `product_quantity` - Amount of product recalled
-- `code_info` - Lot numbers, serial numbers, model numbers
-- `distribution_pattern` - Geographic distribution
-- `recalling_firm` - Company conducting recall
-- `recall_initiation_date` - When recall began
-- `report_date` - When FDA received notice
-- `product_res_number` - Product problem number
+**主要欄位**：
+- `status` - 目前狀態（進行中、已完成、已終止）
+- `recall_number` - 唯一召回識別碼
+- `classification` - 第一類、第二類或第三類
+- `product_description` - 被召回器材的描述
+- `reason_for_recall` - 召回原因
+- `product_quantity` - 召回的產品數量
+- `code_info` - 批號、序號、型號
+- `distribution_pattern` - 地理分佈
+- `recalling_firm` - 進行召回的公司
+- `recall_initiation_date` - 召回開始時間
+- `report_date` - FDA 收到通知時間
+- `product_res_number` - 產品問題編號
 
-**Common Use Cases**:
-- Quality monitoring
-- Supply chain risk management
-- Patient safety tracking
-- Regulatory compliance
-- Device surveillance
+**常見使用案例**：
+- 品質監控
+- 供應鏈風險管理
+- 患者安全追蹤
+- 法規合規
+- 器材監測
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find all Class I device recalls (most serious)
+# 查詢所有第一類器材召回（最嚴重）
 params = {
     "api_key": api_key,
     "search": "classification:Class+I",
@@ -250,7 +250,7 @@ response = requests.get("https://api.fda.gov/device/enforcement.json", params=pa
 ```
 
 ```python
-# Search recalls by manufacturer
+# 按製造商搜尋召回
 params = {
     "api_key": api_key,
     "search": "recalling_firm:*Philips*",
@@ -258,34 +258,34 @@ params = {
 }
 ```
 
-### 5. Device Recalls
+### 5. 器材召回
 
-**Endpoint**: `https://api.fda.gov/device/recall.json`
+**端點**：`https://api.fda.gov/device/recall.json`
 
-**Purpose**: Access information about device recalls addressing problems that violate FDA law or pose health risks.
+**目的**：存取關於違反 FDA 法規或造成健康風險的器材召回資訊。
 
-**Data Source**: FDA Recalls Database
+**資料來源**：FDA 召回資料庫
 
-**Key Fields**:
-- `res_event_number` - Recall event number
-- `product_code` - FDA product code
-- `openfda.device_name` - Device name
-- `openfda.device_class` - Device class
-- `product_res_number` - Product recall number
-- `firm_fei_number` - Firm establishment identifier
-- `k_numbers` - Associated 510(k) numbers
-- `pma_numbers` - Associated PMA numbers
-- `root_cause_description` - Root cause of issue
+**主要欄位**：
+- `res_event_number` - 召回事件編號
+- `product_code` - FDA 產品代碼
+- `openfda.device_name` - 器材名稱
+- `openfda.device_class` - 器材類別
+- `product_res_number` - 產品召回編號
+- `firm_fei_number` - 公司設施識別碼
+- `k_numbers` - 相關的 510(k) 編號
+- `pma_numbers` - 相關的 PMA 編號
+- `root_cause_description` - 問題根本原因
 
-**Common Use Cases**:
-- Recall tracking
-- Quality investigation
-- Root cause analysis
-- Trend identification
+**常見使用案例**：
+- 召回追蹤
+- 品質調查
+- 根本原因分析
+- 趨勢識別
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Search recalls by product code
+# 按產品代碼搜尋召回
 params = {
     "api_key": api_key,
     "search": "product_code:DQY",
@@ -295,39 +295,39 @@ params = {
 response = requests.get("https://api.fda.gov/device/recall.json", params=params)
 ```
 
-### 6. Premarket Approval (PMA)
+### 6. 上市前核准（PMA）
 
-**Endpoint**: `https://api.fda.gov/device/pma.json`
+**端點**：`https://api.fda.gov/device/pma.json`
 
-**Purpose**: Access data from FDA's premarket approval process for Class III medical devices.
+**目的**：存取 FDA 第三類醫療器材上市前核准程序的資料。
 
-**Data Source**: PMA Database
+**資料來源**：PMA 資料庫
 
-**Key Fields**:
-- `pma_number` - PMA application number (e.g., P850005)
-- `supplement_number` - Supplement number if applicable
-- `applicant` - Company name
-- `trade_name` - Trade/brand name
-- `generic_name` - Generic name
-- `product_code` - FDA product code
-- `decision_date` - Date of FDA decision
-- `decision_code` - Approval status (APPR = approved)
-- `advisory_committee` - Advisory committee
-- `openfda.device_name` - Official device name
-- `openfda.device_class` - Device class
-- `openfda.medical_specialty_description` - Medical specialty
-- `openfda.regulation_number` - Regulation number
+**主要欄位**：
+- `pma_number` - PMA 申請編號（例如：P850005）
+- `supplement_number` - 補充編號（如適用）
+- `applicant` - 公司名稱
+- `trade_name` - 商品名/品牌名
+- `generic_name` - 通用名稱
+- `product_code` - FDA 產品代碼
+- `decision_date` - FDA 決定日期
+- `decision_code` - 核准狀態（APPR = 已核准）
+- `advisory_committee` - 諮詢委員會
+- `openfda.device_name` - 官方器材名稱
+- `openfda.device_class` - 器材類別
+- `openfda.medical_specialty_description` - 醫學專科
+- `openfda.regulation_number` - 法規編號
 
-**Common Use Cases**:
-- High-risk device research
-- Approval timeline analysis
-- Regulatory strategy
-- Market intelligence
-- Clinical trial planning
+**常見使用案例**：
+- 高風險器材研究
+- 核准時間線分析
+- 法規策略
+- 市場情報
+- 臨床試驗規劃
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find PMA approvals by company
+# 按公司查詢 PMA 核准
 params = {
     "api_key": api_key,
     "search": "applicant:Boston+Scientific",
@@ -338,7 +338,7 @@ response = requests.get("https://api.fda.gov/device/pma.json", params=params)
 ```
 
 ```python
-# Search for specific device PMAs
+# 搜尋特定器材的 PMA
 params = {
     "api_key": api_key,
     "search": "generic_name:*cardiac+pacemaker*",
@@ -346,41 +346,41 @@ params = {
 }
 ```
 
-### 7. Registrations and Listings
+### 7. 註冊與列名
 
-**Endpoint**: `https://api.fda.gov/device/registrationlisting.json`
+**端點**：`https://api.fda.gov/device/registrationlisting.json`
 
-**Purpose**: Access location data for medical device establishments and devices they manufacture.
+**目的**：存取醫療器材設施的位置資料及其製造的器材。
 
-**Data Source**: Device Registration and Listing Database
+**資料來源**：器材註冊和列名資料庫
 
-**Key Fields**:
-- `registration.fei_number` - Facility establishment identifier
-- `registration.name` - Facility name
-- `registration.registration_number` - Registration number
-- `registration.reg_expiry_date_year` - Registration expiration year
-- `registration.address_line_1` - Street address
-- `registration.city` - City
-- `registration.state_code` - State/province
-- `registration.iso_country_code` - Country code
-- `registration.zip_code` - Postal code
-- `products.product_code` - Device product code
-- `products.created_date` - When device was listed
-- `products.openfda.device_name` - Device name
-- `products.openfda.device_class` - Device class
-- `proprietary_name` - Proprietary/brand names
-- `establishment_type` - Types of operations (manufacturer, etc.)
+**主要欄位**：
+- `registration.fei_number` - 設施建立識別碼
+- `registration.name` - 設施名稱
+- `registration.registration_number` - 註冊編號
+- `registration.reg_expiry_date_year` - 註冊到期年份
+- `registration.address_line_1` - 街道地址
+- `registration.city` - 城市
+- `registration.state_code` - 州/省代碼
+- `registration.iso_country_code` - 國家代碼
+- `registration.zip_code` - 郵遞區號
+- `products.product_code` - 器材產品代碼
+- `products.created_date` - 器材列名時間
+- `products.openfda.device_name` - 器材名稱
+- `products.openfda.device_class` - 器材類別
+- `proprietary_name` - 專有名稱/品牌名
+- `establishment_type` - 營運類型（製造商等）
 
-**Common Use Cases**:
-- Manufacturer identification
-- Facility location lookup
-- Supply chain mapping
-- Due diligence research
-- Market analysis
+**常見使用案例**：
+- 製造商識別
+- 設施位置查詢
+- 供應鏈對應
+- 盡職調查研究
+- 市場分析
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find registered facilities by country
+# 按國家查詢註冊設施
 params = {
     "api_key": api_key,
     "search": "registration.iso_country_code:US",
@@ -391,7 +391,7 @@ response = requests.get("https://api.fda.gov/device/registrationlisting.json", p
 ```
 
 ```python
-# Search by facility name
+# 按設施名稱搜尋
 params = {
     "api_key": api_key,
     "search": "registration.name:*Johnson*",
@@ -399,49 +399,49 @@ params = {
 }
 ```
 
-### 8. Unique Device Identification (UDI)
+### 8. 唯一器材識別（UDI）
 
-**Endpoint**: `https://api.fda.gov/device/udi.json`
+**端點**：`https://api.fda.gov/device/udi.json`
 
-**Purpose**: Access the Global Unique Device Identification Database (GUDID) containing device identification information.
+**目的**：存取全球唯一器材識別資料庫（GUDID），包含器材識別資訊。
 
-**Data Source**: GUDID
+**資料來源**：GUDID
 
-**Key Fields**:
-- `identifiers.id` - Device identifier (DI)
-- `identifiers.issuing_agency` - Issuing agency (GS1, HIBCC, ICCBBA)
-- `identifiers.type` - Primary or Package DI
-- `brand_name` - Brand name
-- `version_model_number` - Version/model number
-- `catalog_number` - Catalog number
-- `company_name` - Device company
-- `device_count_in_base_package` - Quantity in base package
-- `device_description` - Description
-- `is_rx` - Prescription device (true/false)
-- `is_otc` - Over-the-counter device (true/false)
-- `is_combination_product` - Combination product (true/false)
-- `is_kit` - Kit (true/false)
-- `is_labeled_no_nrl` - Latex-free labeled
-- `has_lot_or_batch_number` - Uses lot/batch numbers
-- `has_serial_number` - Uses serial numbers
-- `has_manufacturing_date` - Has manufacturing date
-- `has_expiration_date` - Has expiration date
-- `mri_safety` - MRI safety status
-- `gmdn_terms` - Global Medical Device Nomenclature terms
-- `product_codes` - FDA product codes
-- `storage` - Storage requirements
-- `customer_contacts` - Contact information
+**主要欄位**：
+- `identifiers.id` - 器材識別碼（DI）
+- `identifiers.issuing_agency` - 發行機構（GS1、HIBCC、ICCBBA）
+- `identifiers.type` - 主要或包裝 DI
+- `brand_name` - 品牌名稱
+- `version_model_number` - 版本/型號
+- `catalog_number` - 目錄編號
+- `company_name` - 器材公司
+- `device_count_in_base_package` - 基本包裝中的數量
+- `device_description` - 描述
+- `is_rx` - 處方器材（true/false）
+- `is_otc` - 非處方器材（true/false）
+- `is_combination_product` - 組合產品（true/false）
+- `is_kit` - 套組（true/false）
+- `is_labeled_no_nrl` - 標示不含乳膠
+- `has_lot_or_batch_number` - 使用批號
+- `has_serial_number` - 使用序號
+- `has_manufacturing_date` - 有製造日期
+- `has_expiration_date` - 有有效期限
+- `mri_safety` - MRI 安全狀態
+- `gmdn_terms` - 全球醫療器材命名術語
+- `product_codes` - FDA 產品代碼
+- `storage` - 儲存要求
+- `customer_contacts` - 聯絡資訊
 
-**Common Use Cases**:
-- Device identification and verification
-- Supply chain tracking
-- Adverse event reporting
-- Inventory management
-- Procurement
+**常見使用案例**：
+- 器材識別和驗證
+- 供應鏈追蹤
+- 不良事件報告
+- 庫存管理
+- 採購
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Look up device by UDI
+# 按 UDI 查詢器材
 params = {
     "api_key": api_key,
     "search": "identifiers.id:00884838003019",
@@ -452,7 +452,7 @@ response = requests.get("https://api.fda.gov/device/udi.json", params=params)
 ```
 
 ```python
-# Find prescription devices by brand name
+# 按品牌名稱查詢處方器材
 params = {
     "api_key": api_key,
     "search": "brand_name:*insulin+pump*+AND+is_rx:true",
@@ -461,7 +461,7 @@ params = {
 ```
 
 ```python
-# Search for MRI safe devices
+# 搜尋 MRI 安全器材
 params = {
     "api_key": api_key,
     "search": 'mri_safety:"MR Safe"',
@@ -469,33 +469,33 @@ params = {
 }
 ```
 
-### 9. COVID-19 Serological Testing Evaluations
+### 9. COVID-19 血清學檢測評估
 
-**Endpoint**: `https://api.fda.gov/device/covid19serology.json`
+**端點**：`https://api.fda.gov/device/covid19serology.json`
 
-**Purpose**: Access FDA's independent evaluations of COVID-19 antibody tests.
+**目的**：存取 FDA 對 COVID-19 抗體檢測的獨立評估。
 
-**Data Source**: FDA COVID-19 Serology Test Performance
+**資料來源**：FDA COVID-19 血清學檢測效能
 
-**Key Fields**:
-- `manufacturer` - Test manufacturer
-- `device` - Device/test name
-- `authorization_status` - EUA status
-- `control_panel` - Control panel used for evaluation
-- `sample_sensitivity_report_one` - Sensitivity data (first report)
-- `sample_specificity_report_one` - Specificity data (first report)
-- `sample_sensitivity_report_two` - Sensitivity data (second report)
-- `sample_specificity_report_two` - Specificity data (second report)
+**主要欄位**：
+- `manufacturer` - 檢測製造商
+- `device` - 器材/檢測名稱
+- `authorization_status` - EUA 狀態
+- `control_panel` - 用於評估的對照面板
+- `sample_sensitivity_report_one` - 敏感度資料（第一份報告）
+- `sample_specificity_report_one` - 特異度資料（第一份報告）
+- `sample_sensitivity_report_two` - 敏感度資料（第二份報告）
+- `sample_specificity_report_two` - 特異度資料（第二份報告）
 
-**Common Use Cases**:
-- Test performance comparison
-- Diagnostic accuracy assessment
-- Procurement decision support
-- Quality assurance
+**常見使用案例**：
+- 檢測效能比較
+- 診斷準確性評估
+- 採購決策支援
+- 品質保證
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find tests by manufacturer
+# 按製造商查詢檢測
 params = {
     "api_key": api_key,
     "search": "manufacturer:Abbott",
@@ -506,7 +506,7 @@ response = requests.get("https://api.fda.gov/device/covid19serology.json", param
 ```
 
 ```python
-# Get all tests with EUA
+# 取得所有具有 EUA 的檢測
 params = {
     "api_key": api_key,
     "search": "authorization_status:*EUA*",
@@ -514,25 +514,25 @@ params = {
 }
 ```
 
-## Integration Tips
+## 整合技巧
 
-### Comprehensive Device Search
+### 全面器材搜尋
 
 ```python
 def search_device_across_databases(device_name, api_key):
     """
-    Search for a device across multiple FDA databases.
+    跨多個 FDA 資料庫搜尋器材。
 
-    Args:
-        device_name: Name or partial name of device
-        api_key: FDA API key
+    參數：
+        device_name: 器材名稱或部分名稱
+        api_key: FDA API 金鑰
 
-    Returns:
-        Dictionary with results from each database
+    回傳：
+        包含各資料庫結果的字典
     """
     results = {}
 
-    # Search adverse events
+    # 搜尋不良事件
     events_url = "https://api.fda.gov/device/event.json"
     events_params = {
         "api_key": api_key,
@@ -541,7 +541,7 @@ def search_device_across_databases(device_name, api_key):
     }
     results["adverse_events"] = requests.get(events_url, params=events_params).json()
 
-    # Search 510(k) clearances
+    # 搜尋 510(k) 許可
     fiveten_url = "https://api.fda.gov/device/510k.json"
     fiveten_params = {
         "api_key": api_key,
@@ -550,7 +550,7 @@ def search_device_across_databases(device_name, api_key):
     }
     results["510k_clearances"] = requests.get(fiveten_url, params=fiveten_params).json()
 
-    # Search recalls
+    # 搜尋召回
     recall_url = "https://api.fda.gov/device/enforcement.json"
     recall_params = {
         "api_key": api_key,
@@ -559,7 +559,7 @@ def search_device_across_databases(device_name, api_key):
     }
     results["recalls"] = requests.get(recall_url, params=recall_params).json()
 
-    # Search UDI
+    # 搜尋 UDI
     udi_url = "https://api.fda.gov/device/udi.json"
     udi_params = {
         "api_key": api_key,
@@ -571,19 +571,19 @@ def search_device_across_databases(device_name, api_key):
     return results
 ```
 
-### Product Code Lookup
+### 產品代碼查詢
 
 ```python
 def get_device_classification(product_code, api_key):
     """
-    Get detailed classification information for a device product code.
+    取得器材產品代碼的詳細分類資訊。
 
-    Args:
-        product_code: Three-letter FDA product code
-        api_key: FDA API key
+    參數：
+        product_code: 三字母 FDA 產品代碼
+        api_key: FDA API 金鑰
 
-    Returns:
-        Classification details dictionary
+    回傳：
+        分類詳情字典
     """
     url = "https://api.fda.gov/device/classification.json"
     params = {
@@ -610,23 +610,23 @@ def get_device_classification(product_code, api_key):
     return None
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Use product codes** - Most efficient way to search across device databases
-2. **Check multiple databases** - Device information is spread across multiple endpoints
-3. **Handle large result sets** - Device databases can be very large; use pagination
-4. **Validate device identifiers** - Ensure UDIs, 510(k) numbers, and PMA numbers are properly formatted
-5. **Filter by device class** - Narrow searches by risk classification when relevant
-6. **Use exact brand names** - Wildcards work but exact matches are more reliable
-7. **Consider date ranges** - Device data accumulates over decades; filter by date when appropriate
-8. **Cross-reference data** - Link adverse events to recalls and registrations for complete picture
-9. **Monitor recall status** - Recall statuses change from "Ongoing" to "Completed"
-10. **Check establishment registrations** - Facilities must register annually; check expiration dates
+1. **使用產品代碼** - 跨器材資料庫搜尋最有效的方式
+2. **檢查多個資料庫** - 器材資訊分佈在多個端點
+3. **處理大型結果集** - 器材資料庫可能非常大；使用分頁
+4. **驗證器材識別碼** - 確保 UDI、510(k) 編號和 PMA 編號格式正確
+5. **按器材類別過濾** - 相關時按風險分類縮小搜尋範圍
+6. **使用精確品牌名稱** - 萬用字元有效但精確匹配更可靠
+7. **考慮日期範圍** - 器材資料累積數十年；適時按日期過濾
+8. **交叉參考資料** - 連結不良事件與召回和註冊以取得完整圖像
+9. **監控召回狀態** - 召回狀態從「進行中」變更為「已完成」
+10. **檢查設施註冊** - 設施必須每年註冊；檢查到期日期
 
-## Additional Resources
+## 其他資源
 
-- OpenFDA Device API Documentation: https://open.fda.gov/apis/device/
-- Device Classification Database: https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpcd/classification.cfm
-- GUDID: https://accessgudid.nlm.nih.gov/
-- API Basics: See `api_basics.md` in this references directory
-- Python examples: See `scripts/fda_device_query.py`
+- OpenFDA 器材 API 文件：https://open.fda.gov/apis/device/
+- 器材分類資料庫：https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpcd/classification.cfm
+- GUDID：https://accessgudid.nlm.nih.gov/
+- API 基礎：請參閱本參考目錄中的 `api_basics.md`
+- Python 範例：請參閱 `scripts/fda_device_query.py`

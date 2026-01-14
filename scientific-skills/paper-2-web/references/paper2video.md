@@ -1,49 +1,49 @@
-# Paper2Video: Presentation Video Generation
+# Paper2Video：演示影片生成
 
-## Overview
+## 概述
 
-Paper2Video generates presentation videos from LaTeX sources, transforming academic papers into engaging video presentations. The system processes papers through multiple specialized modules to create professional presentation videos complete with slides, narration, and optional talking-head video.
+Paper2Video 從 LaTeX 源檔案生成演示影片，將學術論文轉換為引人入勝的影片演示。該系統通過多個專門模組處理論文，創建完整的專業演示影片，包含投影片、旁白和可選的虛擬主持人影片。
 
-## Core Components
+## 核心組件
 
-### 1. Slide Generation Module
-- Extracts key content from paper structure
-- Creates visually appealing presentation slides
-- Organizes content in logical flow
-- Includes figures, tables, and equations
-- Optimizes text density for readability
+### 1. 投影片生成模組
+- 從論文結構中提取關鍵內容
+- 創建視覺吸引力的演示投影片
+- 按邏輯流程組織內容
+- 包含圖表、表格和方程式
+- 最佳化文字密度以提高可讀性
 
-### 2. Subtitle Generation Module
-- Generates natural presentation script
-- Synchronizes text with slide transitions
-- Creates speaker notes and timing
-- Supports multiple languages
-- Optimizes for speech synthesis
+### 2. 字幕生成模組
+- 生成自然的演示稿
+- 將文字與投影片轉換同步
+- 創建講者備註和時間安排
+- 支援多種語言
+- 針對語音合成進行最佳化
 
-### 3. Speech Synthesis Module
-- Converts subtitles to natural-sounding speech
-- Supports multiple voices and accents
-- Controls pacing and emphasis
-- Generates audio track for video
-- Handles technical terminology
+### 3. 語音合成模組
+- 將字幕轉換為自然流暢的語音
+- 支援多種聲音和口音
+- 控制節奏和強調
+- 為影片生成音訊軌道
+- 處理技術術語
 
-### 4. Cursor Movement Module
-- Simulates presenter cursor movements
-- Highlights key points on slides
-- Guides viewer attention
-- Creates natural presentation flow
-- Synchronizes with narration
+### 4. 游標移動模組
+- 模擬演示者游標移動
+- 在投影片上突出顯示重點
+- 引導觀眾注意力
+- 創建自然的演示流程
+- 與旁白同步
 
-### 5. Talking-Head Video Generation (Optional)
-- Uses Hallo2 for realistic presenter video
-- Lip-syncs with generated audio
-- Requires reference image or video
-- GPU-intensive (NVIDIA A6000 48GB minimum)
-- Creates engaging presenter presence
+### 5. 虛擬主持人影片生成（可選）
+- 使用 Hallo2 生成逼真的演示者影片
+- 與生成的音訊同步口型
+- 需要參考圖像或影片
+- GPU 密集型（最低 NVIDIA A6000 48GB）
+- 創建引人入勝的演示者形象
 
-## Usage
+## 使用方法
 
-### Basic Video Generation (Without Talking-Head)
+### 基本影片生成（無虛擬主持人）
 
 ```bash
 python pipeline_light.py \
@@ -53,7 +53,7 @@ python pipeline_light.py \
   --paper_latex_root /path/to/paper
 ```
 
-### Full Video Generation (With Talking-Head)
+### 完整影片生成（有虛擬主持人）
 
 ```bash
 python pipeline_all.py \
@@ -63,243 +63,243 @@ python pipeline_all.py \
   --enable-talking-head
 ```
 
-### Parameters
+### 參數
 
-**Model Configuration:**
-- `--model_name_t`: Model for text/subtitle generation (default: gpt-4.1)
-- `--model_name_v`: Model for visual/slide generation (default: gpt-4.1)
-- `--model-choice`: Preset model configuration (1=GPT-4, 2=GPT-4.1)
+**模型配置：**
+- `--model_name_t`：文字/字幕生成的模型（預設：gpt-4.1）
+- `--model_name_v`：視覺/投影片生成的模型（預設：gpt-4.1）
+- `--model-choice`：預設模型配置（1=GPT-4，2=GPT-4.1）
 
-**Input/Output:**
-- `--paper_latex_root`: Root directory of LaTeX paper source
-- `--result_dir` or `--output-dir`: Output directory for generated videos
-- `--input-dir`: Directory containing multiple papers to process
+**輸入/輸出：**
+- `--paper_latex_root`：LaTeX 論文源檔案的根目錄
+- `--result_dir` 或 `--output-dir`：生成影片的輸出目錄
+- `--input-dir`：包含多篇待處理論文的目錄
 
-**Video Options:**
-- `--enable-talking-head`: Enable talking-head video generation (requires GPU)
-- `--video-duration`: Target video duration in seconds (default: auto-calculated)
-- `--slides-per-minute`: Control presentation pacing (default: 2-3)
-- `--voice`: Voice selection for speech synthesis
+**影片選項：**
+- `--enable-talking-head`：啟用虛擬主持人影片生成（需要 GPU）
+- `--video-duration`：目標影片時長（秒）（預設：自動計算）
+- `--slides-per-minute`：控制演示節奏（預設：2-3）
+- `--voice`：語音合成的聲音選擇
 
-**Quality Settings:**
-- `--video-resolution`: Output resolution (default: 1920x1080)
-- `--video-fps`: Frame rate (default: 30)
-- `--audio-quality`: Audio bitrate (default: 192kbps)
+**品質設定：**
+- `--video-resolution`：輸出解析度（預設：1920x1080）
+- `--video-fps`：幀率（預設：30）
+- `--audio-quality`：音訊位元率（預設：192kbps）
 
-## Input Requirements
+## 輸入要求
 
-### LaTeX Source Structure
+### LaTeX 源檔案結構
 ```
 paper_directory/
-├── main.tex              # Main paper file
-├── sections/             # Section files (if split)
+├── main.tex              # 主論文檔案
+├── sections/             # 章節檔案（如分開）
 │   ├── introduction.tex
 │   ├── methods.tex
 │   └── results.tex
-├── figures/              # Figure files
+├── figures/              # 圖像檔案
 │   ├── fig1.pdf
 │   ├── fig2.png
 │   └── ...
-├── tables/               # Table files
-└── bibliography.bib      # References
+├── tables/               # 表格檔案
+└── bibliography.bib      # 參考文獻
 ```
 
-### Required Elements
-- Valid LaTeX source that compiles
-- Proper section structure (abstract, introduction, methods, results, conclusion)
-- High-quality figures (vector formats preferred)
-- Complete bibliography
+### 必要元素
+- 可編譯的有效 LaTeX 源檔案
+- 正確的章節結構（摘要、引言、方法、結果、結論）
+- 高品質圖像（首選向量格式）
+- 完整的參考文獻
 
-### Optional Elements
-- Author photos for talking-head generation
-- Custom slide templates
-- Background music or sound effects
-- Institution branding assets
+### 可選元素
+- 用於虛擬主持人生成的作者照片
+- 自定義投影片模板
+- 背景音樂或音效
+- 機構品牌資源
 
-## Output Structure
+## 輸出結構
 
 ```
 output/paper_name/video/
-├── final_video.mp4           # Complete presentation video
-├── slides/                   # Generated slide images
+├── final_video.mp4           # 完整演示影片
+├── slides/                   # 生成的投影片圖像
 │   ├── slide_001.png
 │   ├── slide_002.png
 │   └── ...
-├── audio/                    # Audio components
-│   ├── narration.mp3         # Speech synthesis output
-│   └── background.mp3        # Optional background audio
-├── subtitles/                # Subtitle files
-│   ├── subtitles.srt         # Standard subtitle format
-│   └── subtitles.vtt         # WebVTT format
-├── script/                   # Presentation script
-│   ├── full_script.txt       # Complete narration text
-│   └── slide_notes.json      # Slide-by-slide notes
-└── metadata/                 # Video metadata
-    ├── timings.json          # Slide timing information
-    └── video_info.json       # Video properties
+├── audio/                    # 音訊組件
+│   ├── narration.mp3         # 語音合成輸出
+│   └── background.mp3        # 可選背景音訊
+├── subtitles/                # 字幕檔案
+│   ├── subtitles.srt         # 標準字幕格式
+│   └── subtitles.vtt         # WebVTT 格式
+├── script/                   # 演示稿
+│   ├── full_script.txt       # 完整旁白文字
+│   └── slide_notes.json      # 逐張投影片備註
+└── metadata/                 # 影片元資料
+    ├── timings.json          # 投影片時間資訊
+    └── video_info.json       # 影片屬性
 ```
 
-## Video Generation Process
+## 影片生成流程
 
-### Phase 1: Content Analysis
-1. Parse LaTeX source structure
-2. Extract key concepts and findings
-3. Identify important figures and equations
-4. Determine logical presentation flow
+### 階段 1：內容分析
+1. 解析 LaTeX 源檔案結構
+2. 提取關鍵概念和發現
+3. 識別重要圖像和方程式
+4. 確定邏輯演示流程
 
-### Phase 2: Slide Creation
-1. Design slide layouts based on content
-2. Allocate content across appropriate number of slides
-3. Incorporate figures and visual elements
-4. Apply consistent styling and branding
+### 階段 2：投影片創建
+1. 根據內容設計投影片版面
+2. 將內容分配到適當數量的投影片
+3. 整合圖像和視覺元素
+4. 應用一致的樣式和品牌
 
-### Phase 3: Script Generation
-1. Write natural presentation narration
-2. Time script sections to slides
-3. Add transitions and emphasis
-4. Optimize for speech synthesis
+### 階段 3：腳本生成
+1. 撰寫自然的演示旁白
+2. 將腳本各部分與投影片對應計時
+3. 添加轉場和強調
+4. 針對語音合成進行最佳化
 
-### Phase 4: Audio Production
-1. Generate speech from script
-2. Add emphasis and pacing
-3. Include pauses for slide transitions
-4. Mix with optional background audio
+### 階段 4：音訊製作
+1. 從腳本生成語音
+2. 添加強調和節奏
+3. 在投影片轉換處加入停頓
+4. 與可選背景音訊混合
 
-### Phase 5: Video Assembly
-1. Combine slides with timing information
-2. Synchronize audio track
-3. Add cursor movements and highlights
-4. Generate talking-head video (if enabled)
-5. Render final video file
+### 階段 5：影片組裝
+1. 將投影片與時間資訊結合
+2. 同步音訊軌道
+3. 添加游標移動和高亮顯示
+4. 生成虛擬主持人影片（如啟用）
+5. 渲染最終影片檔案
 
-## Customization Options
+## 自定義選項
 
-### Presentation Style
-- **Academic**: Formal, detailed, comprehensive
-- **Conference**: Focused on key findings, faster pace
-- **Public**: Simplified language, engaging storytelling
-- **Tutorial**: Step-by-step explanation, educational focus
+### 演示風格
+- **學術**：正式、詳細、全面
+- **會議**：聚焦關鍵發現、節奏較快
+- **大眾**：簡化語言、引人入勝的敘事
+- **教學**：逐步解釋、教育導向
 
-### Voice Configuration
-Available voice options (via speech synthesis):
-- Multiple languages and accents
-- Male/female voice selection
-- Speaking rate adjustment
-- Pitch and tone customization
+### 聲音配置
+可用的聲音選項（通過語音合成）：
+- 多種語言和口音
+- 男/女聲音選擇
+- 語速調整
+- 音調和語氣自定義
 
-### Visual Themes
-- Institution branding colors
-- Conference template matching
-- Custom backgrounds and fonts
-- Dark mode presentations
+### 視覺主題
+- 機構品牌顏色
+- 會議模板匹配
+- 自定義背景和字體
+- 深色模式演示
 
-## Quality Assessment
+## 品質評估
 
-### Content Quality Metrics
-- **Completeness**: Coverage of paper content
-- **Clarity**: Explanation quality and coherence
-- **Flow**: Logical progression of ideas
-- **Engagement**: Visual appeal and pacing
+### 內容品質指標
+- **完整性**：論文內容的覆蓋範圍
+- **清晰度**：解釋品質和連貫性
+- **流程**：想法的邏輯進展
+- **參與度**：視覺吸引力和節奏
 
-### Technical Quality Metrics
-- **Audio quality**: Speech clarity and naturalness
-- **Video quality**: Resolution and encoding
-- **Synchronization**: Audio-visual alignment
-- **Timing**: Appropriate slide duration
+### 技術品質指標
+- **音訊品質**：語音清晰度和自然度
+- **影片品質**：解析度和編碼
+- **同步**：音視訊對齊
+- **時間**：適當的投影片時長
 
-## Advanced Features
+## 進階功能
 
-### Multi-Language Support
-- Generate presentations in multiple languages
-- Automatic translation of script
-- Language-appropriate voice selection
-- Cultural adaptation of presentation style
+### 多語言支援
+- 生成多種語言的演示
+- 腳本自動翻譯
+- 選擇語言適當的聲音
+- 演示風格的文化適應
 
-### Talking-Head Generation with Hallo2
-Requires:
-- NVIDIA A6000 GPU (48GB minimum)
-- Reference image or short video of presenter
-- Additional processing time (2-3x longer)
+### 使用 Hallo2 生成虛擬主持人
+需要：
+- NVIDIA A6000 GPU（最低 48GB）
+- 演示者的參考圖像或短影片
+- 額外的處理時間（長 2-3 倍）
 
-Benefits:
-- More engaging presentation
-- Professional presenter appearance
-- Natural gestures and expressions
-- Lip-sync accuracy
+優點：
+- 更具吸引力的演示
+- 專業的演示者外觀
+- 自然的手勢和表情
+- 口型同步準確度
 
-### Interactive Elements
-- Embedded clickable links
-- Navigation menu
-- Chapter markers
-- Supplementary material links
+### 互動元素
+- 嵌入可點擊連結
+- 導航選單
+- 章節標記
+- 補充材料連結
 
-## Best Practices
+## 最佳實踐
 
-### Input Preparation
-1. **Clean LaTeX source**: Remove unnecessary comments and artifacts
-2. **High-quality figures**: Use vector formats when possible
-3. **Clear structure**: Well-organized sections and subsections
-4. **Complete content**: Include all necessary files and references
+### 輸入準備
+1. **乾淨的 LaTeX 源檔案**：移除不必要的註解和產物
+2. **高品質圖像**：盡可能使用向量格式
+3. **清晰結構**：組織良好的章節和小節
+4. **完整內容**：包含所有必要的檔案和參考文獻
 
-### Model Selection
-- **Text generation (model_name_t)**: GPT-4.1 for best script quality
-- **Visual generation (model_name_v)**: GPT-4.1 for optimal slide design
-- For faster processing with acceptable quality: GPT-3.5-turbo
+### 模型選擇
+- **文字生成（model_name_t）**：GPT-4.1 獲得最佳腳本品質
+- **視覺生成（model_name_v）**：GPT-4.1 獲得最佳投影片設計
+- 若需更快處理且品質可接受：GPT-3.5-turbo
 
-### Video Optimization
-1. **Target duration**: 10-15 minutes for conference talks, 30-45 for detailed presentations
-2. **Pacing**: 2-3 slides per minute for technical content
-3. **Resolution**: 1920x1080 for standard, 3840x2160 for high-quality
-4. **Audio**: 192kbps minimum for clear speech
+### 影片最佳化
+1. **目標時長**：會議報告 10-15 分鐘，詳細演示 30-45 分鐘
+2. **節奏**：技術內容每分鐘 2-3 張投影片
+3. **解析度**：標準 1920x1080，高品質 3840x2160
+4. **音訊**：清晰語音最低 192kbps
 
-### Quality Review
-Before finalizing:
-1. Watch entire video for content accuracy
-2. Check audio synchronization with slides
-3. Verify figure quality and readability
-4. Test subtitle accuracy and timing
-5. Review cursor movements for natural flow
+### 品質審核
+最終確定前：
+1. 觀看整個影片檢查內容準確性
+2. 檢查音訊與投影片的同步
+3. 驗證圖像品質和可讀性
+4. 測試字幕準確性和時間
+5. 審核游標移動的自然流程
 
-## Performance Considerations
+## 效能考量
 
-### Processing Time
-- **Without talking-head**: 10-30 minutes per paper (depending on length)
-- **With talking-head**: 30-120 minutes per paper
-- **Factors**: Paper length, figure count, model speed, GPU availability
+### 處理時間
+- **無虛擬主持人**：每篇論文 10-30 分鐘（取決於長度）
+- **有虛擬主持人**：每篇論文 30-120 分鐘
+- **影響因素**：論文長度、圖像數量、模型速度、GPU 可用性
 
-### Resource Requirements
-- **CPU**: Multi-core recommended for parallel processing
-- **RAM**: 16GB minimum, 32GB for large papers
-- **GPU**: Optional for standard, required for talking-head (A6000 48GB)
-- **Storage**: 1-5GB per video depending on length and quality
+### 資源需求
+- **CPU**：建議多核心用於並行處理
+- **RAM**：最低 16GB，大型論文建議 32GB
+- **GPU**：標準可選，虛擬主持人需要（A6000 48GB）
+- **儲存空間**：每個影片 1-5GB，取決於長度和品質
 
-## Troubleshooting
+## 故障排除
 
-### Common Issues
+### 常見問題
 
-**1. LaTeX parsing errors**
-- Ensure LaTeX source compiles successfully
-- Check for special packages or custom commands
-- Verify all referenced files are present
+**1. LaTeX 解析錯誤**
+- 確保 LaTeX 源檔案可成功編譯
+- 檢查特殊套件或自定義命令
+- 驗證所有引用的檔案是否存在
 
-**2. Speech synthesis problems**
-- Check audio quality settings
-- Verify text is properly formatted
-- Test with different voice options
+**2. 語音合成問題**
+- 檢查音訊品質設定
+- 驗證文字格式正確
+- 測試不同的聲音選項
 
-**3. Video rendering failures**
-- Check available disk space
-- Verify all dependencies are installed
-- Review error logs for specific issues
+**3. 影片渲染失敗**
+- 檢查可用磁碟空間
+- 驗證所有依賴項已安裝
+- 查看錯誤日誌了解具體問題
 
-**4. Talking-head generation errors**
-- Confirm GPU memory (48GB required)
-- Check CUDA drivers are up to date
-- Verify reference image quality and format
+**4. 虛擬主持人生成錯誤**
+- 確認 GPU 記憶體（需要 48GB）
+- 檢查 CUDA 驅動程式是否最新
+- 驗證參考圖像品質和格式
 
-## Integration with Other Components
+## 與其他組件的整合
 
-Combine Paper2Video with:
-- **Paper2Web**: Embed video in generated website
-- **Paper2Poster**: Use matching visual style
-- **AutoPR**: Create promotional clips from full video
+結合 Paper2Video 與：
+- **Paper2Web**：將影片嵌入生成的網站
+- **Paper2Poster**：使用匹配的視覺風格
+- **AutoPR**：從完整影片創建推廣片段

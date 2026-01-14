@@ -1,18 +1,18 @@
-# SimPy Events System
+# SimPy 事件系統
 
-This guide covers the event system in SimPy, which forms the foundation of discrete-event simulation.
+本指南涵蓋 SimPy 中的事件系統，這是離散事件模擬的基礎。
 
-## Event Basics
+## 事件基礎
 
-Events are the core mechanism for controlling simulation flow. Processes yield events and resume when those events are triggered.
+事件是控制模擬流程的核心機制。流程 yield 事件並在這些事件被觸發時恢復。
 
-### Event Lifecycle
+### 事件生命週期
 
-Events progress through three states:
+事件經過三個狀態：
 
-1. **Not triggered** - Initial state as memory objects
-2. **Triggered** - Scheduled in event queue; `triggered` property is `True`
-3. **Processed** - Removed from queue with callbacks executed; `processed` property is `True`
+1. **未觸發** - 作為記憶體物件的初始狀態
+2. **已觸發** - 已排入事件佇列；`triggered` 屬性為 `True`
+3. **已處理** - 從佇列移除並執行回調；`processed` 屬性為 `True`
 
 ```python
 import simpy
@@ -33,11 +33,11 @@ print(f'Triggered: {event.triggered}, Processed: {event.processed}')  # True, Tr
 print(f'Value: {event.value}')  # 'Event result'
 ```
 
-## Core Event Types
+## 核心事件類型
 
 ### Timeout
 
-Controls time progression in simulations. Most common event type.
+控制模擬中的時間進程。最常見的事件類型。
 
 ```python
 import simpy
@@ -56,13 +56,13 @@ env.process(process(env))
 env.run()
 ```
 
-**Usage:**
-- `env.timeout(delay)` - Wait for specified time
-- `env.timeout(delay, value=val)` - Wait and return value
+**使用方式：**
+- `env.timeout(delay)` - 等待指定時間
+- `env.timeout(delay, value=val)` - 等待並返回值
 
-### Process Events
+### Process 事件
 
-Processes themselves are events, allowing processes to wait for other processes to complete.
+流程本身就是事件，允許流程等待其他流程完成。
 
 ```python
 import simpy
@@ -93,7 +93,7 @@ env.run()
 
 ### Event
 
-Generic event that can be manually triggered.
+可以手動觸發的通用事件。
 
 ```python
 import simpy
@@ -115,11 +115,11 @@ env.process(triggerer(env, event))
 env.run()
 ```
 
-## Composite Events
+## 複合事件
 
-### AllOf - Wait for Multiple Events
+### AllOf - 等待多個事件
 
-Triggers when all specified events have occurred.
+當所有指定事件都發生時觸發。
 
 ```python
 import simpy
@@ -146,16 +146,16 @@ env.process(process(env))
 env.run()
 ```
 
-**Returns:** Dictionary mapping events to their values
+**返回值：** 將事件對應到其值的字典
 
-**Use cases:**
-- Parallel task completion
-- Barrier synchronization
-- Waiting for multiple resources
+**使用情境：**
+- 平行任務完成
+- 屏障同步
+- 等待多個資源
 
-### AnyOf - Wait for Any Event
+### AnyOf - 等待任一事件
 
-Triggers when at least one specified event has occurred.
+當至少一個指定事件發生時觸發。
 
 ```python
 import simpy
@@ -181,20 +181,20 @@ env.process(process(env))
 env.run()
 ```
 
-**Returns:** Dictionary with completed events and their values
+**返回值：** 包含已完成事件及其值的字典
 
-**Use cases:**
-- Racing conditions
-- Timeout mechanisms
-- First-to-respond scenarios
+**使用情境：**
+- 競爭條件
+- 超時機制
+- 先回應者情境
 
-## Event Triggering Methods
+## 事件觸發方法
 
-Events can be triggered in three ways:
+事件可以透過三種方式觸發：
 
 ### succeed(value=None)
 
-Marks event as successful.
+將事件標記為成功。
 
 ```python
 event = env.event()
@@ -203,7 +203,7 @@ event.succeed(value='Success!')
 
 ### fail(exception)
 
-Marks event as failed with an exception.
+將事件標記為失敗並帶有例外。
 
 ```python
 def process(env):
@@ -222,7 +222,7 @@ env.run()
 
 ### trigger(event)
 
-Copies another event's outcome.
+複製另一個事件的結果。
 
 ```python
 event1 = env.event()
@@ -232,9 +232,9 @@ event2 = env.event()
 event2.trigger(event1)  # event2 now has same outcome as event1
 ```
 
-## Callbacks
+## 回調
 
-Attach functions to execute when events are triggered.
+附加函式以在事件觸發時執行。
 
 ```python
 import simpy
@@ -252,11 +252,11 @@ env.process(process(env))
 env.run()
 ```
 
-**Note:** Yielding an event from a process automatically adds the process's resume method as a callback.
+**注意：** 從流程 yield 事件會自動將流程的恢復方法添加為回調。
 
-## Event Sharing
+## 事件共享
 
-Multiple processes can wait for the same event.
+多個流程可以等待同一個事件。
 
 ```python
 import simpy
@@ -281,14 +281,14 @@ env.process(trigger_event(env, shared_event))
 env.run()
 ```
 
-**Use cases:**
-- Broadcasting signals
-- Barrier synchronization
-- Coordinated process resumption
+**使用情境：**
+- 廣播信號
+- 屏障同步
+- 協調流程恢復
 
-## Advanced Event Patterns
+## 進階事件模式
 
-### Timeout with Cancellation
+### 帶取消的超時
 
 ```python
 import simpy
@@ -310,7 +310,7 @@ env.process(process_with_timeout(env))
 env.run()
 ```
 
-### Event Chaining
+### 事件鏈接
 
 ```python
 import simpy
@@ -344,7 +344,7 @@ env.process(event_chain(env))
 env.run()
 ```
 
-### Conditional Events
+### 條件事件
 
 ```python
 import simpy
@@ -364,11 +364,11 @@ env.process(conditional_process(env))
 env.run()
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Always yield events**: Processes must yield events to pause execution
-2. **Don't trigger events multiple times**: Events can only be triggered once
-3. **Handle failures**: Use try-except when yielding events that might fail
-4. **Composite events for parallelism**: Use AllOf/AnyOf for concurrent operations
-5. **Shared events for broadcasting**: Multiple processes can yield the same event
-6. **Event values for data passing**: Use event values to pass results between processes
+1. **始終 yield 事件**：流程必須 yield 事件以暫停執行
+2. **不要多次觸發事件**：事件只能觸發一次
+3. **處理失敗**：在 yield 可能失敗的事件時使用 try-except
+4. **使用複合事件實現平行性**：對並行操作使用 AllOf/AnyOf
+5. **使用共享事件進行廣播**：多個流程可以 yield 同一個事件
+6. **使用事件值傳遞資料**：使用事件值在流程之間傳遞結果

@@ -1,29 +1,29 @@
-# Basic GRN Inference with Arboreto
+# 使用 Arboreto 進行基本 GRN 推斷
 
-## Input Data Requirements
+## 輸入資料需求
 
-Arboreto requires gene expression data in one of two formats:
+Arboreto 需要以下兩種格式之一的基因表達資料：
 
-### Pandas DataFrame (Recommended)
-- **Rows**: Observations (cells, samples, conditions)
-- **Columns**: Genes (with gene names as column headers)
-- **Format**: Numeric expression values
+### Pandas DataFrame（推薦）
+- **列**：觀測值（細胞、樣本、條件）
+- **欄**：基因（以基因名稱作為欄位標題）
+- **格式**：數值表達值
 
-Example:
+範例：
 ```python
 import pandas as pd
 
-# Load expression matrix with genes as columns
+# 載入基因為欄位的表達矩陣
 expression_matrix = pd.read_csv('expression_data.tsv', sep='\t')
-# Columns: ['gene1', 'gene2', 'gene3', ...]
-# Rows: observation data
+# 欄位：['gene1', 'gene2', 'gene3', ...]
+# 列：觀測資料
 ```
 
-### NumPy Array
-- **Shape**: (observations, genes)
-- **Requirement**: Separately provide gene names list matching column order
+### NumPy 陣列
+- **形狀**：(觀測值, 基因)
+- **需求**：需另外提供與欄位順序相符的基因名稱清單
 
-Example:
+範例：
 ```python
 import numpy as np
 
@@ -34,25 +34,25 @@ with open('expression_data.tsv') as f:
 assert expression_matrix.shape[1] == len(gene_names)
 ```
 
-## Transcription Factors (TFs)
+## 轉錄因子（TF）
 
-Optionally provide a list of transcription factor names to restrict regulatory inference:
+可選擇提供轉錄因子名稱清單以限制調控推斷：
 
 ```python
 from arboreto.utils import load_tf_names
 
-# Load from file (one TF per line)
+# 從檔案載入（每行一個 TF）
 tf_names = load_tf_names('transcription_factors.txt')
 
-# Or define directly
+# 或直接定義
 tf_names = ['TF1', 'TF2', 'TF3']
 ```
 
-If not provided, all genes are considered potential regulators.
+如果未提供，所有基因都會被視為潛在調控者。
 
-## Basic Inference Workflow
+## 基本推斷工作流程
 
-### Using Pandas DataFrame
+### 使用 Pandas DataFrame
 
 ```python
 import pandas as pd
@@ -60,42 +60,42 @@ from arboreto.utils import load_tf_names
 from arboreto.algo import grnboost2
 
 if __name__ == '__main__':
-    # Load expression data
+    # 載入表達資料
     expression_matrix = pd.read_csv('expression_data.tsv', sep='\t')
 
-    # Load transcription factors (optional)
+    # 載入轉錄因子（可選）
     tf_names = load_tf_names('tf_list.txt')
 
-    # Run GRN inference
+    # 執行 GRN 推斷
     network = grnboost2(
         expression_data=expression_matrix,
-        tf_names=tf_names  # Optional
+        tf_names=tf_names  # 可選
     )
 
-    # Save results
+    # 儲存結果
     network.to_csv('network_output.tsv', sep='\t', index=False, header=False)
 ```
 
-**Critical**: The `if __name__ == '__main__':` guard is required because Dask spawns new processes internally.
+**重要**：`if __name__ == '__main__':` 保護是必要的，因為 Dask 會在內部產生新的行程。
 
-### Using NumPy Array
+### 使用 NumPy 陣列
 
 ```python
 import numpy as np
 from arboreto.algo import grnboost2
 
 if __name__ == '__main__':
-    # Load expression matrix
+    # 載入表達矩陣
     expression_matrix = np.genfromtxt('expression_data.tsv', delimiter='\t', skip_header=1)
 
-    # Extract gene names from header
+    # 從標題擷取基因名稱
     with open('expression_data.tsv') as f:
         gene_names = [gene.strip() for gene in f.readline().split('\t')]
 
-    # Verify dimensions match
+    # 驗證維度相符
     assert expression_matrix.shape[1] == len(gene_names)
 
-    # Run inference with explicit gene names
+    # 使用明確的基因名稱執行推斷
     network = grnboost2(
         expression_data=expression_matrix,
         gene_names=gene_names,
@@ -105,26 +105,26 @@ if __name__ == '__main__':
     network.to_csv('network_output.tsv', sep='\t', index=False, header=False)
 ```
 
-## Output Format
+## 輸出格式
 
-Arboreto returns a Pandas DataFrame with three columns:
+Arboreto 回傳包含三個欄位的 Pandas DataFrame：
 
-| Column | Description |
+| 欄位 | 說明 |
 |--------|-------------|
-| `TF` | Transcription factor (regulator) gene name |
-| `target` | Target gene name |
-| `importance` | Regulatory importance score (higher = stronger regulation) |
+| `TF` | 轉錄因子（調控者）基因名稱 |
+| `target` | 標靶基因名稱 |
+| `importance` | 調控重要性分數（越高 = 調控越強） |
 
-Example output:
+輸出範例：
 ```
 TF1    gene5    0.856
 TF2    gene12   0.743
 TF1    gene8    0.621
 ```
 
-## Setting Random Seed
+## 設定隨機種子
 
-For reproducible results, provide a seed parameter:
+為獲得可重現的結果，請提供 seed 參數：
 
 ```python
 network = grnboost2(
@@ -134,18 +134,18 @@ network = grnboost2(
 )
 ```
 
-## Algorithm Selection
+## 演算法選擇
 
-Use `grnboost2()` for most cases (faster, handles large datasets):
+大多數情況使用 `grnboost2()`（較快，可處理大型資料集）：
 ```python
 from arboreto.algo import grnboost2
 network = grnboost2(expression_data=expression_matrix)
 ```
 
-Use `genie3()` for comparison or specific requirements:
+用於比較或特定需求時使用 `genie3()`：
 ```python
 from arboreto.algo import genie3
 network = genie3(expression_data=expression_matrix)
 ```
 
-See `references/algorithms.md` for detailed algorithm comparison.
+詳細的演算法比較請參閱 `references/algorithms.md`。

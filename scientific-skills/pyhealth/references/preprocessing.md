@@ -1,66 +1,66 @@
-# PyHealth Data Preprocessing and Processors
+# PyHealth 資料預處理與處理器
 
-## Overview
+## 概述
 
-PyHealth provides comprehensive data processing utilities to transform raw healthcare data into model-ready formats. Processors handle feature extraction, sequence processing, signal transformation, and label preparation.
+PyHealth 提供全面的資料處理工具，將原始醫療資料轉換為模型可用的格式。處理器負責特徵提取、序列處理、訊號轉換和標籤準備。
 
-## Processor Base Class
+## 處理器基礎類別
 
-All processors inherit from `Processor` with standard interface:
+所有處理器繼承自 `Processor`，具有標準介面：
 
-**Key Methods:**
-- `__call__()`: Transform input data
-- `get_input_info()`: Return processed input schema
-- `get_output_info()`: Return processed output schema
+**關鍵方法：**
+- `__call__()`：轉換輸入資料
+- `get_input_info()`：回傳處理後的輸入 schema
+- `get_output_info()`：回傳處理後的輸出 schema
 
-## Core Processor Types
+## 核心處理器類型
 
-### Feature Processors
+### 特徵處理器
 
-**FeatureProcessor** (`FeatureProcessor`)
-- Base class for feature extraction
-- Handles vocabulary building
-- Embedding preparation
-- Feature encoding
+**FeatureProcessor**（`FeatureProcessor`）
+- 特徵提取的基礎類別
+- 處理詞彙表建構
+- 嵌入準備
+- 特徵編碼
 
-**Common Operations:**
-- Medical code tokenization
-- Categorical encoding
-- Feature normalization
-- Missing value handling
+**常見操作：**
+- 醫療代碼分詞
+- 類別編碼
+- 特徵標準化
+- 缺失值處理
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import FeatureProcessor
 
 processor = FeatureProcessor(
     vocabulary="diagnoses",
-    min_freq=5,  # Minimum code frequency
+    min_freq=5,  # 最小代碼頻率
     max_vocab_size=10000
 )
 
 processed_features = processor(raw_features)
 ```
 
-### Sequence Processors
+### 序列處理器
 
-**SequenceProcessor** (`SequenceProcessor`)
-- Processes sequential clinical events
-- Temporal ordering preservation
-- Sequence padding/truncation
-- Time gap encoding
+**SequenceProcessor**（`SequenceProcessor`）
+- 處理序列臨床事件
+- 保留時間順序
+- 序列填充/截斷
+- 時間間隔編碼
 
-**Key Features:**
-- Variable-length sequence handling
-- Temporal feature extraction
-- Sequence statistics computation
+**關鍵特徵：**
+- 變長序列處理
+- 時間特徵提取
+- 序列統計計算
 
-**Parameters:**
-- `max_seq_length`: Maximum sequence length (truncate if longer)
-- `padding`: Padding strategy ("pre" or "post")
-- `truncating`: Truncation strategy ("pre" or "post")
+**參數：**
+- `max_seq_length`：最大序列長度（超過則截斷）
+- `padding`：填充策略（"pre" 或 "post"）
+- `truncating`：截斷策略（"pre" 或 "post"）
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import SequenceProcessor
 
@@ -70,80 +70,80 @@ processor = SequenceProcessor(
     truncating="post"
 )
 
-# Process diagnosis sequences
+# 處理診斷序列
 processed_seq = processor(diagnosis_sequences)
 ```
 
-**NestedSequenceProcessor** (`NestedSequenceProcessor`)
-- Handles hierarchical sequences (e.g., visits containing events)
-- Two-level processing (visit-level and event-level)
-- Preserves nested structure
+**NestedSequenceProcessor**（`NestedSequenceProcessor`）
+- 處理階層序列（例如包含事件的就診）
+- 兩層處理（就診層級和事件層級）
+- 保留巢狀結構
 
-**Use Cases:**
-- EHR with visits containing multiple events
-- Multi-level temporal modeling
-- Hierarchical attention models
+**使用情境：**
+- 包含多個事件的 EHR 就診
+- 多層時間建模
+- 階層注意力模型
 
-**Structure:**
+**結構：**
 ```python
-# Input: [[visit1_events], [visit2_events], ...]
-# Output: Processed nested sequences with proper padding
+# 輸入：[[visit1_events], [visit2_events], ...]
+# 輸出：經適當填充的處理後巢狀序列
 ```
 
-### Numeric Data Processors
+### 數值資料處理器
 
-**NestedFloatsProcessor** (`NestedFloatsProcessor`)
-- Processes nested numeric arrays
-- Lab values, vital signs, measurements
-- Multi-level numeric features
+**NestedFloatsProcessor**（`NestedFloatsProcessor`）
+- 處理巢狀數值陣列
+- 檢驗值、生命徵象、測量值
+- 多層數值特徵
 
-**Operations:**
-- Normalization
-- Standardization
-- Missing value imputation
-- Outlier handling
+**操作：**
+- 標準化
+- 正規化
+- 缺失值填補
+- 離群值處理
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import NestedFloatsProcessor
 
 processor = NestedFloatsProcessor(
-    normalization="z-score",  # or "min-max"
-    fill_missing="mean"  # imputation strategy
+    normalization="z-score",  # 或 "min-max"
+    fill_missing="mean"  # 填補策略
 )
 
 processed_labs = processor(lab_values)
 ```
 
-**TensorProcessor** (`TensorProcessor`)
-- Converts data to PyTorch tensors
-- Type handling (long, float, etc.)
-- Device placement (CPU/GPU)
+**TensorProcessor**（`TensorProcessor`）
+- 將資料轉換為 PyTorch 張量
+- 類型處理（long、float 等）
+- 裝置配置（CPU/GPU）
 
-**Parameters:**
-- `dtype`: Tensor data type
-- `device`: Computation device
+**參數：**
+- `dtype`：張量資料類型
+- `device`：運算裝置
 
-### Time-Series Processors
+### 時間序列處理器
 
-**TimeseriesProcessor** (`TimeseriesProcessor`)
-- Handles temporal data with timestamps
-- Time gap computation
-- Temporal feature engineering
-- Irregular sampling handling
+**TimeseriesProcessor**（`TimeseriesProcessor`）
+- 處理帶時間戳記的時間資料
+- 時間間隔計算
+- 時間特徵工程
+- 不規則採樣處理
 
-**Extracted Features:**
-- Time since previous event
-- Time to next event
-- Event frequency
-- Temporal patterns
+**提取的特徵：**
+- 距前一事件的時間
+- 距下一事件的時間
+- 事件頻率
+- 時間模式
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import TimeseriesProcessor
 
 processor = TimeseriesProcessor(
-    time_unit="hour",  # "day", "hour", "minute"
+    time_unit="hour",  # "day"、"hour"、"minute"
     compute_gaps=True,
     compute_frequency=True
 )
@@ -151,67 +151,67 @@ processor = TimeseriesProcessor(
 processed_ts = processor(timestamps, events)
 ```
 
-**SignalProcessor** (`SignalProcessor`)
-- Physiological signal processing
-- EEG, ECG, PPG signals
-- Filtering and preprocessing
+**SignalProcessor**（`SignalProcessor`）
+- 生理訊號處理
+- EEG、ECG、PPG 訊號
+- 濾波與預處理
 
-**Operations:**
-- Bandpass filtering
-- Artifact removal
-- Segmentation
-- Feature extraction (frequency, amplitude)
+**操作：**
+- 帶通濾波
+- 偽影移除
+- 分段
+- 特徵提取（頻率、振幅）
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import SignalProcessor
 
 processor = SignalProcessor(
     sampling_rate=256,  # Hz
-    bandpass_filter=(0.5, 50),  # Hz range
-    segment_length=30  # seconds
+    bandpass_filter=(0.5, 50),  # Hz 範圍
+    segment_length=30  # 秒
 )
 
 processed_signal = processor(raw_eeg_signal)
 ```
 
-### Image Processors
+### 影像處理器
 
-**ImageProcessor** (`ImageProcessor`)
-- Medical image preprocessing
-- Normalization and resizing
-- Augmentation support
-- Format standardization
+**ImageProcessor**（`ImageProcessor`）
+- 醫學影像預處理
+- 標準化與調整大小
+- 資料增強支援
+- 格式標準化
 
-**Operations:**
-- Resize to standard dimensions
-- Normalization (mean/std)
-- Windowing (for CT/MRI)
-- Data augmentation
+**操作：**
+- 調整至標準尺寸
+- 標準化（均值/標準差）
+- 視窗調整（用於 CT/MRI）
+- 資料增強
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import ImageProcessor
 
 processor = ImageProcessor(
     image_size=(224, 224),
-    normalization="imagenet",  # or custom mean/std
+    normalization="imagenet",  # 或自訂均值/標準差
     augmentation=True
 )
 
 processed_image = processor(raw_image)
 ```
 
-## Label Processors
+## 標籤處理器
 
-### Binary Classification
+### 二元分類
 
-**BinaryLabelProcessor** (`BinaryLabelProcessor`)
-- Binary classification labels (0/1)
-- Handles positive/negative classes
-- Class weighting for imbalance
+**BinaryLabelProcessor**（`BinaryLabelProcessor`）
+- 二元分類標籤（0/1）
+- 處理正/負類別
+- 類別加權處理不平衡
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import BinaryLabelProcessor
 
@@ -223,100 +223,100 @@ processor = BinaryLabelProcessor(
 processed_labels = processor(raw_labels)
 ```
 
-### Multi-Class Classification
+### 多類別分類
 
-**MultiClassLabelProcessor** (`MultiClassLabelProcessor`)
-- Multi-class classification (mutually exclusive classes)
-- Label encoding
-- Class balancing
+**MultiClassLabelProcessor**（`MultiClassLabelProcessor`）
+- 多類別分類（互斥類別）
+- 標籤編碼
+- 類別平衡
 
-**Parameters:**
-- `num_classes`: Number of classes
-- `class_weight`: Weighting strategy
+**參數：**
+- `num_classes`：類別數量
+- `class_weight`：加權策略
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import MultiClassLabelProcessor
 
 processor = MultiClassLabelProcessor(
-    num_classes=5,  # e.g., sleep stages: W, N1, N2, N3, REM
+    num_classes=5,  # 例如睡眠階段：W、N1、N2、N3、REM
     class_weight="balanced"
 )
 
 processed_labels = processor(raw_labels)
 ```
 
-### Multi-Label Classification
+### 多標籤分類
 
-**MultiLabelProcessor** (`MultiLabelProcessor`)
-- Multi-label classification (multiple labels per sample)
-- Binary encoding for each label
-- Label co-occurrence handling
+**MultiLabelProcessor**（`MultiLabelProcessor`）
+- 多標籤分類（每個樣本多個標籤）
+- 每個標籤的二元編碼
+- 標籤共現處理
 
-**Use Cases:**
-- Drug recommendation (multiple drugs)
-- ICD coding (multiple diagnoses)
-- Comorbidity prediction
+**使用情境：**
+- 藥物推薦（多種藥物）
+- ICD 編碼（多個診斷）
+- 共病預測
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import MultiLabelProcessor
 
 processor = MultiLabelProcessor(
-    num_labels=100,  # total possible labels
-    threshold=0.5  # prediction threshold
+    num_labels=100,  # 可能的標籤總數
+    threshold=0.5  # 預測閾值
 )
 
 processed_labels = processor(raw_label_sets)
 ```
 
-### Regression
+### 迴歸
 
-**RegressionLabelProcessor** (`RegressionLabelProcessor`)
-- Continuous value prediction
-- Target scaling and normalization
-- Outlier handling
+**RegressionLabelProcessor**（`RegressionLabelProcessor`）
+- 連續值預測
+- 目標縮放與標準化
+- 離群值處理
 
-**Use Cases:**
-- Length of stay prediction
-- Lab value prediction
-- Risk score estimation
+**使用情境：**
+- 住院天數預測
+- 檢驗值預測
+- 風險分數估計
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import RegressionLabelProcessor
 
 processor = RegressionLabelProcessor(
-    normalization="z-score",  # or "min-max"
+    normalization="z-score",  # 或 "min-max"
     clip_outliers=True,
-    outlier_std=3  # clip at 3 standard deviations
+    outlier_std=3  # 在 3 個標準差處截斷
 )
 
 processed_targets = processor(raw_values)
 ```
 
-## Specialized Processors
+## 專門處理器
 
-### Text Processing
+### 文字處理
 
-**TextProcessor** (`TextProcessor`)
-- Clinical text preprocessing
-- Tokenization
-- Vocabulary building
-- Sequence encoding
+**TextProcessor**（`TextProcessor`）
+- 臨床文字預處理
+- 分詞
+- 詞彙表建構
+- 序列編碼
 
-**Operations:**
-- Lowercasing
-- Punctuation removal
-- Medical abbreviation handling
-- Token frequency filtering
+**操作：**
+- 轉小寫
+- 標點移除
+- 醫療縮寫處理
+- 詞頻過濾
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import TextProcessor
 
 processor = TextProcessor(
-    tokenizer="word",  # or "sentencepiece", "bpe"
+    tokenizer="word",  # 或 "sentencepiece"、"bpe"
     lowercase=True,
     max_vocab_size=50000,
     min_freq=5
@@ -325,14 +325,14 @@ processor = TextProcessor(
 processed_text = processor(clinical_notes)
 ```
 
-### Model-Specific Processors
+### 模型專用處理器
 
-**StageNetProcessor** (`StageNetProcessor`)
-- Specialized preprocessing for StageNet model
-- Chunk-based sequence processing
-- Stage-aware feature extraction
+**StageNetProcessor**（`StageNetProcessor`）
+- StageNet 模型專用預處理
+- 區塊式序列處理
+- 階段感知特徵提取
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import StageNetProcessor
 
@@ -344,39 +344,39 @@ processor = StageNetProcessor(
 processed_data = processor(sequential_data)
 ```
 
-**StageNetTensorProcessor** (`StageNetTensorProcessor`)
-- Tensor conversion for StageNet
-- Proper batching and padding
-- Stage mask generation
+**StageNetTensorProcessor**（`StageNetTensorProcessor`）
+- StageNet 的張量轉換
+- 適當的批次處理與填充
+- 階段遮罩生成
 
-### Raw Data Processing
+### 原始資料處理
 
-**RawProcessor** (`RawProcessor`)
-- Minimal preprocessing
-- Pass-through for pre-processed data
-- Custom preprocessing scenarios
+**RawProcessor**（`RawProcessor`）
+- 最小預處理
+- 預處理資料的直接傳遞
+- 自訂預處理場景
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import RawProcessor
 
 processor = RawProcessor()
-processed_data = processor(data)  # Minimal transformation
+processed_data = processor(data)  # 最小轉換
 ```
 
-## Sample-Level Processing
+## 樣本層級處理
 
-**SampleProcessor** (`SampleProcessor`)
-- Processes complete samples (input + output)
-- Coordinates multiple processors
-- End-to-end preprocessing pipeline
+**SampleProcessor**（`SampleProcessor`）
+- 處理完整樣本（輸入 + 輸出）
+- 協調多個處理器
+- 端到端預處理管線
 
-**Workflow:**
-1. Apply input processors to features
-2. Apply output processors to labels
-3. Combine into model-ready samples
+**工作流程：**
+1. 對特徵套用輸入處理器
+2. 對標籤套用輸出處理器
+3. 組合成模型可用的樣本
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import SampleProcessor
 
@@ -392,36 +392,36 @@ processor = SampleProcessor(
 processed_sample = processor(raw_sample)
 ```
 
-## Dataset-Level Processing
+## 資料集層級處理
 
-**DatasetProcessor** (`DatasetProcessor`)
-- Processes entire datasets
-- Batch processing
-- Parallel processing support
-- Caching for efficiency
+**DatasetProcessor**（`DatasetProcessor`）
+- 處理整個資料集
+- 批次處理
+- 平行處理支援
+- 快取提升效率
 
-**Operations:**
-- Apply processors to all samples
-- Generate vocabulary from dataset
-- Compute dataset statistics
-- Save processed data
+**操作：**
+- 對所有樣本套用處理器
+- 從資料集生成詞彙表
+- 計算資料集統計
+- 儲存處理後的資料
 
-**Usage:**
+**使用方式：**
 ```python
 from pyhealth.data import DatasetProcessor
 
 processor = DatasetProcessor(
     sample_processor=sample_processor,
-    num_workers=4,  # parallel processing
+    num_workers=4,  # 平行處理
     cache_dir="/path/to/cache"
 )
 
 processed_dataset = processor(raw_dataset)
 ```
 
-## Common Preprocessing Workflows
+## 常見預處理工作流程
 
-### Workflow 1: EHR Mortality Prediction
+### 工作流程 1：EHR 死亡率預測
 
 ```python
 from pyhealth.data import (
@@ -430,7 +430,7 @@ from pyhealth.data import (
     SampleProcessor
 )
 
-# Define processors
+# 定義處理器
 input_processors = {
     "diagnoses": SequenceProcessor(max_seq_length=50),
     "medications": SequenceProcessor(max_seq_length=30),
@@ -439,17 +439,17 @@ input_processors = {
 
 output_processor = BinaryLabelProcessor(class_weight="balanced")
 
-# Combine into sample processor
+# 組合成樣本處理器
 sample_processor = SampleProcessor(
     input_processors=input_processors,
     output_processor=output_processor
 )
 
-# Process dataset
+# 處理資料集
 processed_samples = [sample_processor(s) for s in raw_samples]
 ```
 
-### Workflow 2: Sleep Staging from EEG
+### 工作流程 2：腦電圖睡眠分期
 
 ```python
 from pyhealth.data import (
@@ -458,27 +458,27 @@ from pyhealth.data import (
     SampleProcessor
 )
 
-# Signal preprocessing
+# 訊號預處理
 signal_processor = SignalProcessor(
     sampling_rate=100,
-    bandpass_filter=(0.3, 35),  # EEG frequency range
-    segment_length=30  # 30-second epochs
+    bandpass_filter=(0.3, 35),  # EEG 頻率範圍
+    segment_length=30  # 30 秒 epoch
 )
 
-# Label processing
+# 標籤處理
 label_processor = MultiClassLabelProcessor(
-    num_classes=5,  # W, N1, N2, N3, REM
+    num_classes=5,  # W、N1、N2、N3、REM
     class_weight="balanced"
 )
 
-# Combine
+# 組合
 sample_processor = SampleProcessor(
     input_processors={"signal": signal_processor},
     output_processor=label_processor
 )
 ```
 
-### Workflow 3: Drug Recommendation
+### 工作流程 3：藥物推薦
 
 ```python
 from pyhealth.data import (
@@ -487,15 +487,15 @@ from pyhealth.data import (
     SampleProcessor
 )
 
-# Input processing
+# 輸入處理
 input_processors = {
     "diagnoses": SequenceProcessor(max_seq_length=50),
     "previous_medications": SequenceProcessor(max_seq_length=40)
 }
 
-# Multi-label output (multiple drugs)
+# 多標籤輸出（多種藥物）
 output_processor = MultiLabelProcessor(
-    num_labels=150,  # number of possible drugs
+    num_labels=150,  # 可能的藥物數量
     threshold=0.5
 )
 
@@ -505,7 +505,7 @@ sample_processor = SampleProcessor(
 )
 ```
 
-### Workflow 4: Length of Stay Prediction
+### 工作流程 4：住院天數預測
 
 ```python
 from pyhealth.data import (
@@ -515,7 +515,7 @@ from pyhealth.data import (
     SampleProcessor
 )
 
-# Process different feature types
+# 處理不同特徵類型
 input_processors = {
     "diagnoses": SequenceProcessor(max_seq_length=30),
     "procedures": SequenceProcessor(max_seq_length=20),
@@ -525,9 +525,9 @@ input_processors = {
     )
 }
 
-# Regression target
+# 迴歸目標
 output_processor = RegressionLabelProcessor(
-    normalization="log",  # log-transform LOS
+    normalization="log",  # 對住院天數進行對數轉換
     clip_outliers=True
 )
 
@@ -537,102 +537,102 @@ sample_processor = SampleProcessor(
 )
 ```
 
-## Best Practices
+## 最佳實務
 
-### Sequence Processing
+### 序列處理
 
-1. **Choose appropriate max_seq_length**: Balance between context and computation
-   - Short sequences (20-50): Fast, less context
-   - Medium sequences (50-100): Good balance
-   - Long sequences (100+): More context, slower
+1. **選擇適當的 max_seq_length**：平衡上下文與運算
+   - 短序列（20-50）：快速，較少上下文
+   - 中序列（50-100）：良好平衡
+   - 長序列（100+）：更多上下文，較慢
 
-2. **Truncation strategy**:
-   - "post": Keep most recent events (recommended for clinical prediction)
-   - "pre": Keep earliest events
+2. **截斷策略**：
+   - "post"：保留最近事件（推薦用於臨床預測）
+   - "pre"：保留最早事件
 
-3. **Padding strategy**:
-   - "post": Pad at end (standard)
-   - "pre": Pad at beginning
+3. **填充策略**：
+   - "post"：在末尾填充（標準）
+   - "pre"：在開頭填充
 
-### Feature Encoding
+### 特徵編碼
 
-1. **Vocabulary size**: Limit to frequent codes
-   - `min_freq=5`: Include codes appearing ≥5 times
-   - `max_vocab_size=10000`: Cap total vocabulary size
+1. **詞彙表大小**：限制為常見代碼
+   - `min_freq=5`：包含出現 ≥5 次的代碼
+   - `max_vocab_size=10000`：限制總詞彙表大小
 
-2. **Handle rare codes**: Group into "unknown" category
+2. **處理罕見代碼**：分組到「未知」類別
 
-3. **Missing values**:
-   - Imputation (mean, median, forward-fill)
-   - Indicator variables
-   - Special tokens
+3. **缺失值**：
+   - 填補（均值、中位數、前向填充）
+   - 指標變數
+   - 特殊 token
 
-### Normalization
+### 標準化
 
-1. **Numeric features**: Always normalize
-   - Z-score: Standard scaling (mean=0, std=1)
-   - Min-max: Range scaling [0, 1]
+1. **數值特徵**：務必標準化
+   - Z-score：標準縮放（均值=0，標準差=1）
+   - Min-max：範圍縮放 [0, 1]
 
-2. **Compute statistics on training set only**: Prevent data leakage
+2. **僅在訓練集上計算統計量**：防止資料洩漏
 
-3. **Apply same normalization to val/test sets**
+3. **對驗證/測試集套用相同標準化**
 
-### Class Imbalance
+### 類別不平衡
 
-1. **Use class weighting**: `class_weight="balanced"`
+1. **使用類別加權**：`class_weight="balanced"`
 
-2. **Consider oversampling**: For very rare positive cases
+2. **考慮過採樣**：用於極罕見的正例
 
-3. **Evaluate with appropriate metrics**: AUROC, AUPRC, F1
+3. **使用適當的指標評估**：AUROC、AUPRC、F1
 
-### Performance Optimization
+### 效能優化
 
-1. **Cache processed data**: Save preprocessing results
+1. **快取處理後的資料**：儲存預處理結果
 
-2. **Parallel processing**: Use `num_workers` for DataLoader
+2. **平行處理**：在 DataLoader 中使用 `num_workers`
 
-3. **Batch processing**: Process multiple samples at once
+3. **批次處理**：一次處理多個樣本
 
-4. **Feature selection**: Remove low-information features
+4. **特徵選擇**：移除低資訊特徵
 
-### Validation
+### 驗證
 
-1. **Check processed shapes**: Ensure correct dimensions
+1. **檢查處理後的形狀**：確保正確維度
 
-2. **Verify value ranges**: After normalization
+2. **驗證數值範圍**：標準化後
 
-3. **Inspect samples**: Manually review processed data
+3. **檢視樣本**：手動審查處理後的資料
 
-4. **Monitor memory usage**: Especially for large datasets
+4. **監控記憶體使用**：尤其是大型資料集
 
-## Troubleshooting
+## 疑難排解
 
-### Common Issues
+### 常見問題
 
-**Memory Error:**
-- Reduce `max_seq_length`
-- Use smaller batches
-- Process data in chunks
-- Enable caching to disk
+**記憶體錯誤：**
+- 降低 `max_seq_length`
+- 使用較小批次
+- 分塊處理資料
+- 啟用磁碟快取
 
-**Slow Processing:**
-- Enable parallel processing (`num_workers`)
-- Cache preprocessed data
-- Reduce feature dimensionality
-- Use more efficient data types
+**處理緩慢：**
+- 啟用平行處理（`num_workers`）
+- 快取預處理資料
+- 降低特徵維度
+- 使用更高效的資料類型
 
-**Shape Mismatch:**
-- Check sequence lengths
-- Verify padding configuration
-- Ensure consistent processor settings
+**形狀不匹配：**
+- 檢查序列長度
+- 驗證填充配置
+- 確保一致的處理器設定
 
-**NaN Values:**
-- Handle missing data explicitly
-- Check normalization parameters
-- Verify imputation strategy
+**NaN 值：**
+- 明確處理缺失資料
+- 檢查標準化參數
+- 驗證填補策略
 
-**Class Imbalance:**
-- Use class weighting
-- Consider oversampling
-- Adjust decision threshold
-- Use appropriate evaluation metrics
+**類別不平衡：**
+- 使用類別加權
+- 考慮過採樣
+- 調整決策閾值
+- 使用適當的評估指標

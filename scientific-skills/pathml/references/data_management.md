@@ -1,54 +1,54 @@
-# Data Management & Storage
+# 資料管理與儲存
 
-## Overview
+## 概述
 
-PathML provides efficient data management solutions for handling large-scale pathology datasets through HDF5 storage, tile management strategies, and optimized batch processing workflows. The framework enables seamless storage and retrieval of images, masks, features, and metadata in formats optimized for machine learning pipelines and downstream analysis.
+PathML 提供高效的資料管理解決方案，透過 HDF5 儲存、圖磚管理策略和最佳化批次處理工作流程來處理大規模病理資料集。該框架實現影像、遮罩、特徵和元資料的無縫儲存與檢索，其格式針對機器學習管線和下游分析進行了最佳化。
 
-## HDF5 Integration
+## HDF5 整合
 
-HDF5 (Hierarchical Data Format) is the primary storage format for processed PathML data, providing:
-- Efficient compression and chunked storage
-- Fast random access to subsets of data
-- Support for arbitrarily large datasets
-- Hierarchical organization of heterogeneous data types
-- Cross-platform compatibility
+HDF5（階層式資料格式）是處理過的 PathML 資料的主要儲存格式，提供：
+- 高效的壓縮和分塊儲存
+- 快速隨機存取資料子集
+- 支援任意大小的資料集
+- 異質資料類型的階層式組織
+- 跨平台相容性
 
-### Saving to HDF5
+### 儲存到 HDF5
 
-**Single slide:**
+**單一切片：**
 ```python
 from pathml.core import SlideData
 
-# Load and process slide
+# 載入並處理切片
 wsi = SlideData.from_slide("slide.svs")
 wsi.generate_tiles(level=1, tile_size=256, stride=256)
 
-# Run preprocessing pipeline
+# 執行預處理管道
 pipeline.run(wsi)
 
-# Save to HDF5
+# 儲存到 HDF5
 wsi.to_hdf5("processed_slide.h5")
 ```
 
-**Multiple slides (SlideDataset):**
+**多個切片（SlideDataset）：**
 ```python
 from pathml.core import SlideDataset
 import glob
 
-# Create dataset
+# 創建資料集
 slide_paths = glob.glob("data/*.svs")
 dataset = SlideDataset(slide_paths, tile_size=256, stride=256, level=1)
 
-# Process
+# 處理
 dataset.run(pipeline, distributed=True, n_workers=8)
 
-# Save entire dataset
+# 儲存整個資料集
 dataset.to_hdf5("processed_dataset.h5")
 ```
 
-### HDF5 File Structure
+### HDF5 檔案結構
 
-PathML HDF5 files are organized hierarchically:
+PathML HDF5 檔案以階層方式組織：
 
 ```
 processed_dataset.h5
@@ -60,7 +60,7 @@ processed_dataset.h5
 │   │   └── ...
 │   ├── tiles/
 │   │   ├── tile_0/
-│   │   │   ├── image  (H, W, C) array
+│   │   │   ├── image  (H, W, C) 陣列
 │   │   │   ├── coords  (x, y)
 │   │   │   └── masks/
 │   │   │       ├── tissue
@@ -75,161 +75,161 @@ processed_dataset.h5
 └── ...
 ```
 
-### Loading from HDF5
+### 從 HDF5 載入
 
-**Load entire slide:**
+**載入整個切片：**
 ```python
 from pathml.core import SlideData
 
-# Load from HDF5
+# 從 HDF5 載入
 wsi = SlideData.from_hdf5("processed_slide.h5")
 
-# Access tiles
+# 存取圖磚
 for tile in wsi.tiles:
     image = tile.image
     masks = tile.masks
-    # Process tile...
+    # 處理圖磚...
 ```
 
-**Load specific tiles:**
+**載入特定圖磚：**
 ```python
-# Load only tiles at specific indices
+# 僅載入特定索引的圖磚
 tile_indices = [0, 10, 20, 30]
 tiles = wsi.load_tiles_from_hdf5("processed_slide.h5", indices=tile_indices)
 
 for tile in tiles:
-    # Process subset...
+    # 處理子集...
     pass
 ```
 
-**Memory-mapped access:**
+**記憶體映射存取：**
 ```python
 import h5py
 
-# Open HDF5 file without loading into memory
+# 開啟 HDF5 檔案而不載入到記憶體
 with h5py.File("processed_dataset.h5", 'r') as f:
-    # Access specific data
+    # 存取特定資料
     tile_0_image = f['slide_0/tiles/tile_0/image'][:]
     tissue_mask = f['slide_0/tiles/tile_0/masks/tissue'][:]
 
-    # Iterate through tiles efficiently
+    # 高效遍歷圖磚
     for tile_key in f['slide_0/tiles'].keys():
         tile_image = f[f'slide_0/tiles/{tile_key}/image'][:]
-        # Process without loading all tiles...
+        # 無需載入所有圖磚即可處理...
 ```
 
-## Tile Management
+## 圖磚管理
 
-### Tile Generation Strategies
+### 圖磚生成策略
 
-**Fixed-size tiles with no overlap:**
+**固定大小圖磚無重疊：**
 ```python
 wsi.generate_tiles(
     level=1,
     tile_size=256,
-    stride=256,  # stride = tile_size → no overlap
-    pad=False  # Don't pad edge tiles
+    stride=256,  # stride = tile_size → 無重疊
+    pad=False  # 不填充邊緣圖磚
 )
 ```
-- **Use case:** Standard tile-based processing, classification
-- **Pros:** Simple, no redundancy, fast processing
-- **Cons:** Edge effects at tile boundaries
+- **使用場景：** 標準圖磚式處理、分類
+- **優點：** 簡單、無冗餘、處理快速
+- **缺點：** 圖磚邊界處的邊緣效應
 
-**Overlapping tiles:**
+**重疊圖磚：**
 ```python
 wsi.generate_tiles(
     level=1,
     tile_size=256,
-    stride=128,  # 50% overlap
+    stride=128,  # 50% 重疊
     pad=False
 )
 ```
-- **Use case:** Segmentation, detection (reduces boundary artifacts)
-- **Pros:** Better boundary handling, smoother stitching
-- **Cons:** More tiles, redundant computation
+- **使用場景：** 分割、檢測（減少邊界偽影）
+- **優點：** 更好的邊界處理、更平滑的拼接
+- **缺點：** 更多圖磚、冗餘計算
 
-**Adaptive tiling based on tissue content:**
+**基於組織內容的自適應圖磚：**
 ```python
 from pathml.utils import adaptive_tile_generation
 
-# Generate tiles only in tissue regions
+# 僅在組織區域生成圖磚
 wsi.generate_tiles(level=1, tile_size=256, stride=256)
 
-# Filter to keep only tiles with sufficient tissue
+# 篩選保留具有足夠組織的圖磚
 tissue_tiles = []
 for tile in wsi.tiles:
     if tile.masks.get('tissue') is not None:
         tissue_coverage = tile.masks['tissue'].sum() / (tile_size**2)
-        if tissue_coverage > 0.5:  # Keep tiles with >50% tissue
+        if tissue_coverage > 0.5:  # 保留組織覆蓋 >50% 的圖磚
             tissue_tiles.append(tile)
 
 wsi.tiles = tissue_tiles
 ```
-- **Use case:** Sparse tissue samples, efficiency
-- **Pros:** Reduces processing of background tiles
-- **Cons:** Requires tissue detection preprocessing step
+- **使用場景：** 稀疏組織樣本、效率最佳化
+- **優點：** 減少背景圖磚的處理
+- **缺點：** 需要組織檢測預處理步驟
 
-### Tile Stitching
+### 圖磚拼接
 
-Reconstruct full slide from processed tiles:
+從處理過的圖磚重建完整切片：
 
 ```python
 from pathml.utils import stitch_tiles
 
-# Process tiles
+# 處理圖磚
 for tile in wsi.tiles:
     tile.prediction = model.predict(tile.image)
 
-# Stitch predictions back to full resolution
+# 將預測結果拼接回完整解析度
 full_prediction_map = stitch_tiles(
     wsi.tiles,
-    output_shape=wsi.level_dimensions[1],  # Use level 1 dimensions
+    output_shape=wsi.level_dimensions[1],  # 使用層級 1 的維度
     tile_size=256,
     stride=256,
-    method='average'  # 'average', 'max', or 'first'
+    method='average'  # 'average'、'max' 或 'first'
 )
 
-# Visualize
+# 視覺化
 import matplotlib.pyplot as plt
 plt.figure(figsize=(15, 15))
 plt.imshow(full_prediction_map)
-plt.title('Stitched Prediction Map')
+plt.title('拼接預測圖')
 plt.axis('off')
 plt.show()
 ```
 
-**Stitching methods:**
-- `'average'`: Average overlapping regions (smooth transitions)
-- `'max'`: Maximum value in overlapping regions
-- `'first'`: Keep first tile's value (no blending)
-- `'weighted'`: Distance-weighted blending for smooth boundaries
+**拼接方法：**
+- `'average'`：重疊區域取平均值（平滑過渡）
+- `'max'`：重疊區域取最大值
+- `'first'`：保留第一個圖磚的值（無混合）
+- `'weighted'`：基於距離的加權混合，實現平滑邊界
 
-### Tile Caching
+### 圖磚快取
 
-Cache frequently accessed tiles for faster iteration:
+快取經常存取的圖磚以加快遍歷速度：
 
 ```python
 from pathml.utils import TileCache
 
-# Create cache
+# 創建快取
 cache = TileCache(max_size_gb=10)
 
-# Cache tiles during first iteration
+# 第一次遍歷時快取圖磚
 for i, tile in enumerate(wsi.tiles):
     cache.add(f'tile_{i}', tile.image)
-    # Process tile...
+    # 處理圖磚...
 
-# Subsequent iterations use cached data
+# 後續遍歷使用快取資料
 for i in range(len(wsi.tiles)):
     cached_image = cache.get(f'tile_{i}')
-    # Fast access...
+    # 快速存取...
 ```
 
-## Dataset Organization
+## 資料集組織
 
-### Directory Structure for Large Projects
+### 大型專案的目錄結構
 
-Organize pathology projects with consistent structure:
+使用一致的結構組織病理專案：
 
 ```
 project/
@@ -262,14 +262,14 @@ project/
     └── slide_manifest.csv
 ```
 
-### Metadata Management
+### 元資料管理
 
-Store slide-level and cohort-level metadata:
+儲存切片層級和群組層級的元資料：
 
 ```python
 import pandas as pd
 
-# Slide manifest
+# 切片清單
 manifest = pd.DataFrame({
     'slide_id': ['slide001', 'slide002', 'slide003'],
     'path': ['raw_slides/cohort1/slide001.svs', ...],
@@ -282,7 +282,7 @@ manifest = pd.DataFrame({
 
 manifest.to_csv('metadata/slide_manifest.csv', index=False)
 
-# Clinical data
+# 臨床資料
 clinical = pd.DataFrame({
     'slide_id': ['slide001', 'slide002', 'slide003'],
     'patient_id': ['P001', 'P002', 'P003'],
@@ -294,17 +294,17 @@ clinical = pd.DataFrame({
 
 clinical.to_csv('metadata/clinical_data.csv', index=False)
 
-# Load and merge
+# 載入並合併
 manifest = pd.read_csv('metadata/slide_manifest.csv')
 clinical = pd.read_csv('metadata/clinical_data.csv')
 data = manifest.merge(clinical, on='slide_id')
 ```
 
-## Batch Processing Strategies
+## 批次處理策略
 
-### Sequential Processing
+### 順序處理
 
-Process slides one at a time (memory-efficient):
+逐一處理切片（記憶體效率高）：
 
 ```python
 import glob
@@ -314,43 +314,43 @@ from pathml.preprocessing import Pipeline
 slide_paths = glob.glob('raw_slides/**/*.svs', recursive=True)
 
 for slide_path in slide_paths:
-    # Load slide
+    # 載入切片
     wsi = SlideData.from_slide(slide_path)
     wsi.generate_tiles(level=1, tile_size=256, stride=256)
 
-    # Process
+    # 處理
     pipeline.run(wsi)
 
-    # Save
+    # 儲存
     output_path = slide_path.replace('raw_slides', 'processed').replace('.svs', '.h5')
     wsi.to_hdf5(output_path)
 
-    print(f"Processed: {slide_path}")
+    print(f"已處理：{slide_path}")
 ```
 
-### Parallel Processing with Dask
+### 使用 Dask 並行處理
 
-Process multiple slides in parallel:
+並行處理多個切片：
 
 ```python
 from pathml.core import SlideDataset
 from dask.distributed import Client, LocalCluster
 from pathml.preprocessing import Pipeline
 
-# Start Dask cluster
+# 啟動 Dask 叢集
 cluster = LocalCluster(
     n_workers=8,
     threads_per_worker=2,
     memory_limit='8GB',
-    dashboard_address=':8787'  # View progress at localhost:8787
+    dashboard_address=':8787'  # 在 localhost:8787 查看進度
 )
 client = Client(cluster)
 
-# Create dataset
+# 創建資料集
 slide_paths = glob.glob('raw_slides/**/*.svs', recursive=True)
 dataset = SlideDataset(slide_paths, tile_size=256, stride=256, level=1)
 
-# Distribute processing
+# 分散式處理
 dataset.run(
     pipeline,
     distributed=True,
@@ -358,7 +358,7 @@ dataset.run(
     scheduler='distributed'
 )
 
-# Save results
+# 儲存結果
 for i, slide in enumerate(dataset):
     output_path = slide_paths[i].replace('raw_slides', 'processed').replace('.svs', '.h5')
     slide.to_hdf5(output_path)
@@ -367,9 +367,9 @@ client.close()
 cluster.close()
 ```
 
-### Batch Processing with Job Arrays
+### 使用作業陣列進行批次處理
 
-For HPC clusters (SLURM, PBS):
+用於 HPC 叢集（SLURM、PBS）：
 
 ```python
 # submit_jobs.py
@@ -378,12 +378,12 @@ import glob
 
 slide_paths = glob.glob('raw_slides/**/*.svs', recursive=True)
 
-# Write slide list
+# 寫入切片清單
 with open('slide_list.txt', 'w') as f:
     for path in slide_paths:
         f.write(path + '\n')
 
-# Create SLURM job script
+# 創建 SLURM 作業腳本
 slurm_script = """#!/bin/bash
 #SBATCH --array=1-{n_slides}
 #SBATCH --cpus-per-task=4
@@ -391,17 +391,17 @@ slurm_script = """#!/bin/bash
 #SBATCH --time=4:00:00
 #SBATCH --output=logs/slide_%A_%a.out
 
-# Get slide path for this array task
+# 取得此陣列任務的切片路徑
 SLIDE_PATH=$(sed -n "${{SLURM_ARRAY_TASK_ID}}p" slide_list.txt)
 
-# Run processing
+# 執行處理
 python process_slide.py --slide_path $SLIDE_PATH
 """.format(n_slides=len(slide_paths))
 
 with open('submit_jobs.sh', 'w') as f:
     f.write(slurm_script)
 
-# Submit: sbatch submit_jobs.sh
+# 提交：sbatch submit_jobs.sh
 ```
 
 ```python
@@ -414,64 +414,64 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--slide_path', type=str, required=True)
 args = parser.parse_args()
 
-# Load and process
+# 載入並處理
 wsi = SlideData.from_slide(args.slide_path)
 wsi.generate_tiles(level=1, tile_size=256, stride=256)
 
 pipeline = Pipeline([...])
 pipeline.run(wsi)
 
-# Save
+# 儲存
 output_path = args.slide_path.replace('raw_slides', 'processed').replace('.svs', '.h5')
 wsi.to_hdf5(output_path)
 
-print(f"Processed: {args.slide_path}")
+print(f"已處理：{args.slide_path}")
 ```
 
-## Feature Extraction and Storage
+## 特徵提取與儲存
 
-### Extracting Features
+### 提取特徵
 
 ```python
 from pathml.core import SlideData
 import torch
 import numpy as np
 
-# Load pre-trained model for feature extraction
+# 載入預訓練模型進行特徵提取
 model = torch.load('models/feature_extractor.pth')
 model.eval()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = model.to(device)
 
-# Load processed slide
+# 載入處理過的切片
 wsi = SlideData.from_hdf5('processed/slide001.h5')
 
-# Extract features for each tile
+# 為每個圖磚提取特徵
 features = []
 coords = []
 
 for tile in wsi.tiles:
-    # Preprocess tile
+    # 預處理圖磚
     tile_tensor = torch.from_numpy(tile.image).permute(2, 0, 1).unsqueeze(0).float()
     tile_tensor = tile_tensor.to(device)
 
-    # Extract features
+    # 提取特徵
     with torch.no_grad():
         feature_vec = model(tile_tensor).cpu().numpy().flatten()
 
     features.append(feature_vec)
     coords.append(tile.coords)
 
-features = np.array(features)  # Shape: (n_tiles, feature_dim)
-coords = np.array(coords)  # Shape: (n_tiles, 2)
+features = np.array(features)  # 形狀：(n_tiles, feature_dim)
+coords = np.array(coords)  # 形狀：(n_tiles, 2)
 ```
 
-### Storing Features in HDF5
+### 將特徵儲存到 HDF5
 
 ```python
 import h5py
 
-# Save features
+# 儲存特徵
 with h5py.File('features/slide001_features.h5', 'w') as f:
     f.create_dataset('features', data=features, compression='gzip')
     f.create_dataset('coords', data=coords)
@@ -479,17 +479,17 @@ with h5py.File('features/slide001_features.h5', 'w') as f:
     f.attrs['num_tiles'] = features.shape[0]
     f.attrs['model'] = 'resnet50'
 
-# Load features
+# 載入特徵
 with h5py.File('features/slide001_features.h5', 'r') as f:
     features = f['features'][:]
     coords = f['coords'][:]
     feature_dim = f.attrs['feature_dim']
 ```
 
-### Feature Database for Multiple Slides
+### 多個切片的特徵資料庫
 
 ```python
-# Create consolidated feature database
+# 創建合併的特徵資料庫
 import h5py
 import glob
 
@@ -503,64 +503,64 @@ with h5py.File('features/all_features.h5', 'w') as out_f:
             features = in_f['features'][:]
             coords = in_f['coords'][:]
 
-            # Store in consolidated file
+            # 儲存到合併檔案
             grp = out_f.create_group(f'slide_{i}')
             grp.create_dataset('features', data=features, compression='gzip')
             grp.create_dataset('coords', data=coords)
             grp.attrs['slide_name'] = slide_name
 
-# Query features from all slides
+# 從所有切片查詢特徵
 with h5py.File('features/all_features.h5', 'r') as f:
     for slide_key in f.keys():
         slide_name = f[slide_key].attrs['slide_name']
         features = f[f'{slide_key}/features'][:]
-        # Process...
+        # 處理...
 ```
 
-## Data Versioning
+## 資料版本控制
 
-### Version Control with DVC
+### 使用 DVC 進行版本控制
 
-Use Data Version Control (DVC) for large dataset management:
+使用資料版本控制（DVC）進行大型資料集管理：
 
 ```bash
-# Initialize DVC
+# 初始化 DVC
 dvc init
 
-# Add data directory
+# 新增資料目錄
 dvc add raw_slides/
 dvc add processed/
 
-# Commit to git
+# 提交到 git
 git add raw_slides.dvc processed.dvc .gitignore
 git commit -m "Add raw and processed slides"
 
-# Push data to remote storage (S3, GCS, etc.)
+# 推送資料到遠端儲存（S3、GCS 等）
 dvc remote add -d storage s3://my-bucket/pathml-data
 dvc push
 
-# Pull data on another machine
+# 在另一台機器上拉取資料
 git pull
 dvc pull
 ```
 
-### Checksums and Validation
+### 校驗碼和驗證
 
-Validate data integrity:
+驗證資料完整性：
 
 ```python
 import hashlib
 import pandas as pd
 
 def compute_checksum(file_path):
-    """Compute MD5 checksum of file."""
+    """計算檔案的 MD5 校驗碼。"""
     hash_md5 = hashlib.md5()
     with open(file_path, 'rb') as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-# Create checksum manifest
+# 創建校驗碼清單
 slide_paths = glob.glob('raw_slides/**/*.svs', recursive=True)
 checksums = []
 
@@ -575,38 +575,38 @@ for slide_path in slide_paths:
 checksum_df = pd.DataFrame(checksums)
 checksum_df.to_csv('metadata/checksums.csv', index=False)
 
-# Validate files
+# 驗證檔案
 def validate_files(manifest_path):
     manifest = pd.read_csv(manifest_path)
     for _, row in manifest.iterrows():
         current_checksum = compute_checksum(row['path'])
         if current_checksum != row['checksum']:
-            print(f"ERROR: Checksum mismatch for {row['path']}")
+            print(f"錯誤：{row['path']} 的校驗碼不匹配")
         else:
-            print(f"OK: {row['path']}")
+            print(f"正常：{row['path']}")
 
 validate_files('metadata/checksums.csv')
 ```
 
-## Performance Optimization
+## 效能最佳化
 
-### Compression Settings
+### 壓縮設定
 
-Optimize HDF5 compression for speed vs. size:
+最佳化 HDF5 壓縮以平衡速度和大小：
 
 ```python
 import h5py
 
-# Fast compression (less CPU, larger files)
+# 快速壓縮（較少 CPU，較大檔案）
 with h5py.File('output.h5', 'w') as f:
     f.create_dataset(
         'images',
         data=images,
         compression='gzip',
-        compression_opts=1  # Level 1-9, lower = faster
+        compression_opts=1  # 等級 1-9，越低越快
     )
 
-# Maximum compression (more CPU, smaller files)
+# 最大壓縮（較多 CPU，較小檔案）
 with h5py.File('output.h5', 'w') as f:
     f.create_dataset(
         'images',
@@ -615,51 +615,51 @@ with h5py.File('output.h5', 'w') as f:
         compression_opts=9
     )
 
-# Balanced (recommended)
+# 平衡（推薦）
 with h5py.File('output.h5', 'w') as f:
     f.create_dataset(
         'images',
         data=images,
         compression='gzip',
         compression_opts=4,
-        chunks=True  # Enable chunking for better I/O
+        chunks=True  # 啟用分塊以獲得更好的 I/O
     )
 ```
 
-### Chunking Strategy
+### 分塊策略
 
-Optimize chunked storage for access patterns:
+針對存取模式最佳化分塊儲存：
 
 ```python
-# For tile-based access (access one tile at a time)
+# 用於圖磚式存取（一次存取一個圖磚）
 with h5py.File('tiles.h5', 'w') as f:
     f.create_dataset(
         'tiles',
         shape=(n_tiles, 256, 256, 3),
         dtype='uint8',
-        chunks=(1, 256, 256, 3),  # One tile per chunk
+        chunks=(1, 256, 256, 3),  # 每個分塊一個圖磚
         compression='gzip'
     )
 
-# For channel-based access (access all tiles for one channel)
+# 用於通道式存取（存取一個通道的所有圖磚）
 with h5py.File('tiles.h5', 'w') as f:
     f.create_dataset(
         'tiles',
         shape=(n_tiles, 256, 256, 3),
         dtype='uint8',
-        chunks=(n_tiles, 256, 256, 1),  # All tiles for one channel
+        chunks=(n_tiles, 256, 256, 1),  # 一個通道的所有圖磚
         compression='gzip'
     )
 ```
 
-### Memory-Mapped Arrays
+### 記憶體映射陣列
 
-Use memory mapping for large arrays:
+使用記憶體映射處理大型陣列：
 
 ```python
 import numpy as np
 
-# Save as memory-mapped file
+# 儲存為記憶體映射檔案
 features_mmap = np.memmap(
     'features/features.mmap',
     dtype='float32',
@@ -667,14 +667,14 @@ features_mmap = np.memmap(
     shape=(n_tiles, feature_dim)
 )
 
-# Populate
+# 填充
 for i, tile in enumerate(wsi.tiles):
     features_mmap[i] = extract_features(tile)
 
-# Flush to disk
+# 刷新到磁碟
 features_mmap.flush()
 
-# Load without reading into memory
+# 載入但不讀入記憶體
 features_mmap = np.memmap(
     'features/features.mmap',
     dtype='float32',
@@ -682,61 +682,61 @@ features_mmap = np.memmap(
     shape=(n_tiles, feature_dim)
 )
 
-# Access subset efficiently
-subset = features_mmap[1000:2000]  # Only loads requested rows
+# 高效存取子集
+subset = features_mmap[1000:2000]  # 僅載入請求的列
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Use HDF5 for processed data:** Save preprocessed tiles and features to HDF5 for fast access
+1. **使用 HDF5 儲存處理過的資料：** 將預處理的圖磚和特徵儲存到 HDF5 以便快速存取
 
-2. **Separate raw and processed data:** Keep original slides separate from processed outputs
+2. **分離原始和處理過的資料：** 將原始切片與處理輸出分開保存
 
-3. **Maintain metadata:** Track slide provenance, processing parameters, and clinical annotations
+3. **維護元資料：** 追蹤切片來源、處理參數和臨床註釋
 
-4. **Implement checksums:** Validate data integrity, especially after transfers
+4. **實施校驗碼：** 驗證資料完整性，特別是在傳輸後
 
-5. **Version datasets:** Use DVC or similar tools to version large datasets
+5. **版本控制資料集：** 使用 DVC 或類似工具對大型資料集進行版本控制
 
-6. **Optimize storage:** Balance compression level with I/O performance
+6. **最佳化儲存：** 平衡壓縮等級和 I/O 效能
 
-7. **Organize by cohort:** Structure directories by study cohort for clarity
+7. **按群組組織：** 按研究群組結構化目錄以保持清晰
 
-8. **Regular backups:** Back up both data and metadata to remote storage
+8. **定期備份：** 將資料和元資料備份到遠端儲存
 
-9. **Document processing:** Keep logs of processing steps, parameters, and versions
+9. **記錄處理過程：** 保留處理步驟、參數和版本的日誌
 
-10. **Monitor disk usage:** Track storage consumption as datasets grow
+10. **監控磁碟使用：** 隨著資料集增長追蹤儲存消耗
 
-## Common Issues and Solutions
+## 常見問題與解決方案
 
-**Issue: HDF5 files very large**
-- Increase compression level: `compression_opts=9`
-- Store only necessary data (avoid redundant copies)
-- Use appropriate data types (uint8 for images vs. float64)
+**問題：HDF5 檔案非常大**
+- 提高壓縮等級：`compression_opts=9`
+- 僅儲存必要的資料（避免冗餘複製）
+- 使用適當的資料類型（影像用 uint8 而非 float64）
 
-**Issue: Slow HDF5 read/write**
-- Optimize chunk size for access pattern
-- Reduce compression level for faster I/O
-- Use SSD storage instead of HDD
-- Enable parallel HDF5 with MPI
+**問題：HDF5 讀寫緩慢**
+- 針對存取模式最佳化分塊大小
+- 降低壓縮等級以加快 I/O
+- 使用 SSD 儲存而非 HDD
+- 使用 MPI 啟用並行 HDF5
 
-**Issue: Running out of disk space**
-- Delete intermediate files after processing
-- Compress inactive datasets
-- Move old data to archival storage
-- Use cloud storage for less-accessed data
+**問題：磁碟空間不足**
+- 處理後刪除中間檔案
+- 壓縮非活動資料集
+- 將舊資料移至歸檔儲存
+- 使用雲端儲存存放較少存取的資料
 
-**Issue: Data corruption or loss**
-- Implement regular backups
-- Use RAID for redundancy
-- Validate checksums after transfers
-- Use version control (DVC)
+**問題：資料損壞或遺失**
+- 實施定期備份
+- 使用 RAID 進行冗餘
+- 傳輸後驗證校驗碼
+- 使用版本控制（DVC）
 
-## Additional Resources
+## 其他資源
 
-- **HDF5 Documentation:** https://www.hdfgroup.org/solutions/hdf5/
-- **h5py:** https://docs.h5py.org/
-- **DVC (Data Version Control):** https://dvc.org/
-- **Dask:** https://docs.dask.org/
-- **PathML Data Management API:** https://pathml.readthedocs.io/en/latest/api_data_reference.html
+- **HDF5 文件：** https://www.hdfgroup.org/solutions/hdf5/
+- **h5py：** https://docs.h5py.org/
+- **DVC（資料版本控制）：** https://dvc.org/
+- **Dask：** https://docs.dask.org/
+- **PathML 資料管理 API：** https://pathml.readthedocs.io/en/latest/api_data_reference.html

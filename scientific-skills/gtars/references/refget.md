@@ -1,116 +1,116 @@
-# Reference Sequence Management
+# 參考序列管理
 
-The refget module handles reference sequence retrieval and digest computation, following the refget protocol for sequence identification.
+refget 模組處理參考序列擷取和摘要計算，遵循用於序列識別的 refget 協定。
 
 ## RefgetStore
 
-RefgetStore manages reference sequences and their digests:
+RefgetStore 管理參考序列及其摘要：
 
 ```python
 import gtars
 
-# Create RefgetStore
+# 建立 RefgetStore
 store = gtars.RefgetStore()
 
-# Add sequence
+# 新增序列
 store.add_sequence("chr1", sequence_data)
 
-# Retrieve sequence
+# 擷取序列
 seq = store.get_sequence("chr1")
 
-# Get sequence digest
+# 取得序列摘要
 digest = store.get_digest("chr1")
 ```
 
-## Sequence Digests
+## 序列摘要
 
-Compute and verify sequence digests:
+計算和驗證序列摘要：
 
 ```python
-# Compute digest for sequence
+# 計算序列的摘要
 from gtars.refget import compute_digest
 
 digest = compute_digest(sequence_data)
 
-# Verify digest matches
+# 驗證摘要是否匹配
 is_valid = store.verify_digest("chr1", expected_digest)
 ```
 
-## Integration with Reference Genomes
+## 與參考基因體整合
 
-Work with standard reference genomes:
+使用標準參考基因體：
 
 ```python
-# Load reference genome
+# 載入參考基因體
 store = gtars.RefgetStore.from_fasta("hg38.fa")
 
-# Get chromosome sequences
+# 取得染色體序列
 chr1 = store.get_sequence("chr1")
 chr2 = store.get_sequence("chr2")
 
-# Get subsequence
+# 取得子序列
 region_seq = store.get_subsequence("chr1", 1000, 2000)
 ```
 
-## CLI Usage
+## CLI 使用
 
-Manage reference sequences from command line:
+從命令列管理參考序列：
 
 ```bash
-# Compute digest for FASTA file
+# 計算 FASTA 檔案的摘要
 gtars refget digest --input genome.fa --output digests.txt
 
-# Verify sequence digest
+# 驗證序列摘要
 gtars refget verify --sequence sequence.fa --digest expected_digest
 ```
 
-## Refget Protocol Compliance
+## Refget 協定相容性
 
-The refget module follows the GA4GH refget protocol:
+refget 模組遵循 GA4GH refget 協定：
 
-### Digest Computation
+### 摘要計算
 
-Digests are computed using SHA-512 truncated to 48 bytes:
+摘要使用 SHA-512 計算並截斷為 48 位元組：
 
 ```python
-# Compute refget-compliant digest
+# 計算符合 refget 的摘要
 digest = gtars.refget.compute_digest(sequence)
-# Returns: "SQ.abc123..."
+# 回傳："SQ.abc123..."
 ```
 
-### Sequence Retrieval
+### 序列擷取
 
-Retrieve sequences by digest:
+依摘要擷取序列：
 
 ```python
-# Get sequence by refget digest
+# 依 refget 摘要取得序列
 seq = store.get_sequence_by_digest("SQ.abc123...")
 ```
 
-## Use Cases
+## 使用案例
 
-### Reference Validation
+### 參考驗證
 
-Verify reference genome integrity:
+驗證參考基因體完整性：
 
 ```python
-# Compute digests for reference
+# 計算參考的摘要
 store = gtars.RefgetStore.from_fasta("reference.fa")
 digests = {chrom: store.get_digest(chrom) for chrom in store.chromosomes}
 
-# Compare with expected digests
+# 與預期摘要比較
 for chrom, expected in expected_digests.items():
     actual = digests[chrom]
     if actual != expected:
-        print(f"Mismatch for {chrom}: {actual} != {expected}")
+        print(f"{chrom} 不匹配：{actual} != {expected}")
 ```
 
-### Sequence Extraction
+### 序列提取
 
-Extract specific genomic regions:
+提取特定基因體區域：
 
 ```python
-# Extract regions of interest
+# 提取感興趣的區域
 store = gtars.RefgetStore.from_fasta("hg38.fa")
 
 regions = [
@@ -122,26 +122,26 @@ regions = [
 sequences = [store.get_subsequence(c, s, e) for c, s, e in regions]
 ```
 
-### Cross-Reference Comparison
+### 交叉參考比較
 
-Compare sequences across different references:
+比較不同參考版本之間的序列：
 
 ```python
-# Load two reference versions
+# 載入兩個參考版本
 hg19 = gtars.RefgetStore.from_fasta("hg19.fa")
 hg38 = gtars.RefgetStore.from_fasta("hg38.fa")
 
-# Compare digests
+# 比較摘要
 for chrom in hg19.chromosomes:
     digest_19 = hg19.get_digest(chrom)
     digest_38 = hg38.get_digest(chrom)
     if digest_19 != digest_38:
-        print(f"{chrom} differs between hg19 and hg38")
+        print(f"{chrom} 在 hg19 和 hg38 之間不同")
 ```
 
-## Performance Notes
+## 效能說明
 
-- Sequences loaded on demand
-- Digests cached after computation
-- Efficient subsequence extraction
-- Memory-mapped file support for large genomes
+- 序列按需載入
+- 摘要在計算後快取
+- 高效的子序列提取
+- 支援大型基因體的記憶體對映檔案

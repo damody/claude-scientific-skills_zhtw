@@ -1,109 +1,109 @@
-# Datamol I/O Module Reference
+# Datamol I/O 模組參考
 
-The `datamol.io` module provides comprehensive file handling for molecular data across multiple formats.
+`datamol.io` 模組提供跨多種格式的全面分子資料檔案處理。
 
-## Reading Molecular Files
+## 讀取分子檔案
 
 ### `dm.read_sdf(filename, sanitize=True, remove_hs=True, as_df=True, mol_column='mol', ...)`
-Read Structure-Data File (SDF) format.
-- **Parameters**:
-  - `filename`: Path to SDF file (supports local and remote paths via fsspec)
-  - `sanitize`: Apply sanitization to molecules
-  - `remove_hs`: Remove explicit hydrogens
-  - `as_df`: Return as DataFrame (True) or list of molecules (False)
-  - `mol_column`: Name of molecule column in DataFrame
-  - `n_jobs`: Enable parallel processing
-- **Returns**: DataFrame or list of molecules
-- **Example**: `df = dm.read_sdf("compounds.sdf")`
+讀取結構資料檔案（SDF）格式。
+- **參數**：
+  - `filename`：SDF 檔案路徑（通過 fsspec 支援本地和遠端路徑）
+  - `sanitize`：對分子應用清理
+  - `remove_hs`：移除顯式氫原子
+  - `as_df`：返回 DataFrame（True）或分子列表（False）
+  - `mol_column`：DataFrame 中分子欄的名稱
+  - `n_jobs`：啟用平行處理
+- **返回**：DataFrame 或分子列表
+- **範例**：`df = dm.read_sdf("compounds.sdf")`
 
 ### `dm.read_smi(filename, smiles_column='smiles', mol_column='mol', as_df=True, ...)`
-Read SMILES file (space-delimited by default).
-- **Common format**: SMILES followed by molecule ID/name
-- **Example**: `df = dm.read_smi("molecules.smi")`
+讀取 SMILES 檔案（預設空格分隔）。
+- **常見格式**：SMILES 後跟分子 ID/名稱
+- **範例**：`df = dm.read_smi("molecules.smi")`
 
 ### `dm.read_csv(filename, smiles_column='smiles', mol_column=None, ...)`
-Read CSV file with optional automatic SMILES-to-molecule conversion.
-- **Parameters**:
-  - `smiles_column`: Column containing SMILES strings
-  - `mol_column`: If specified, creates molecule objects from SMILES column
-- **Example**: `df = dm.read_csv("data.csv", smiles_column="SMILES", mol_column="mol")`
+讀取 CSV 檔案並可選擇自動進行 SMILES 到分子的轉換。
+- **參數**：
+  - `smiles_column`：包含 SMILES 字串的欄
+  - `mol_column`：若指定，則從 SMILES 欄建立分子物件
+- **範例**：`df = dm.read_csv("data.csv", smiles_column="SMILES", mol_column="mol")`
 
 ### `dm.read_excel(filename, sheet_name=0, smiles_column='smiles', mol_column=None, ...)`
-Read Excel files with molecule handling.
-- **Parameters**:
-  - `sheet_name`: Sheet to read (index or name)
-  - Other parameters similar to `read_csv`
-- **Example**: `df = dm.read_excel("compounds.xlsx", sheet_name="Sheet1")`
+讀取帶有分子處理的 Excel 檔案。
+- **參數**：
+  - `sheet_name`：要讀取的工作表（索引或名稱）
+  - 其他參數與 `read_csv` 類似
+- **範例**：`df = dm.read_excel("compounds.xlsx", sheet_name="Sheet1")`
 
 ### `dm.read_molblock(molblock, sanitize=True, remove_hs=True)`
-Parse MOL block string (molecular structure text representation).
+解析 MOL 區塊字串（分子結構文字表示）。
 
 ### `dm.read_mol2file(filename, sanitize=True, remove_hs=True, cleanupSubstructures=True)`
-Read Mol2 format files.
+讀取 Mol2 格式檔案。
 
 ### `dm.read_pdbfile(filename, sanitize=True, remove_hs=True, proximityBonding=True)`
-Read Protein Data Bank (PDB) format files.
+讀取蛋白質資料庫（PDB）格式檔案。
 
 ### `dm.read_pdbblock(pdbblock, sanitize=True, remove_hs=True, proximityBonding=True)`
-Parse PDB block string.
+解析 PDB 區塊字串。
 
 ### `dm.open_df(filename, ...)`
-Universal DataFrame reader - automatically detects format.
-- **Supported formats**: CSV, Excel, Parquet, JSON, SDF
-- **Example**: `df = dm.open_df("data.csv")` or `df = dm.open_df("molecules.sdf")`
+通用 DataFrame 讀取器 - 自動偵測格式。
+- **支援格式**：CSV、Excel、Parquet、JSON、SDF
+- **範例**：`df = dm.open_df("data.csv")` 或 `df = dm.open_df("molecules.sdf")`
 
-## Writing Molecular Files
+## 寫入分子檔案
 
 ### `dm.to_sdf(mols, filename, mol_column=None, ...)`
-Write molecules to SDF file.
-- **Input types**:
-  - List of molecules
-  - DataFrame with molecule column
-  - Sequence of molecules
-- **Parameters**:
-  - `mol_column`: Column name if input is DataFrame
-- **Example**:
+將分子寫入 SDF 檔案。
+- **輸入類型**：
+  - 分子列表
+  - 帶有分子欄的 DataFrame
+  - 分子序列
+- **參數**：
+  - `mol_column`：若輸入為 DataFrame 則為欄名稱
+- **範例**：
   ```python
   dm.to_sdf(mols, "output.sdf")
-  # or from DataFrame
+  # 或從 DataFrame
   dm.to_sdf(df, "output.sdf", mol_column="mol")
   ```
 
 ### `dm.to_smi(mols, filename, mol_column=None, ...)`
-Write molecules to SMILES file with optional validation.
-- **Format**: SMILES strings with optional molecule names/IDs
+將分子寫入 SMILES 檔案並進行可選驗證。
+- **格式**：SMILES 字串以及可選的分子名稱/ID
 
 ### `dm.to_xlsx(df, filename, mol_columns=None, ...)`
-Export DataFrame to Excel with rendered molecular images.
-- **Parameters**:
-  - `mol_columns`: Columns containing molecules to render as images
-- **Special feature**: Automatically renders molecules as images in Excel cells
-- **Example**: `dm.to_xlsx(df, "molecules.xlsx", mol_columns=["mol"])`
+將 DataFrame 匯出為 Excel 並渲染分子圖像。
+- **參數**：
+  - `mol_columns`：包含要渲染為圖像的分子欄
+- **特殊功能**：在 Excel 儲存格中自動將分子渲染為圖像
+- **範例**：`dm.to_xlsx(df, "molecules.xlsx", mol_columns=["mol"])`
 
 ### `dm.to_molblock(mol, ...)`
-Convert molecule to MOL block string.
+將分子轉換為 MOL 區塊字串。
 
 ### `dm.to_pdbblock(mol, ...)`
-Convert molecule to PDB block string.
+將分子轉換為 PDB 區塊字串。
 
 ### `dm.save_df(df, filename, ...)`
-Save DataFrame in multiple formats (CSV, Excel, Parquet, JSON).
+以多種格式儲存 DataFrame（CSV、Excel、Parquet、JSON）。
 
-## Remote File Support
+## 遠端檔案支援
 
-All I/O functions support remote file paths through fsspec integration:
-- **Supported protocols**: S3 (AWS), GCS (Google Cloud), Azure, HTTP/HTTPS
-- **Example**:
+所有 I/O 函數通過 fsspec 整合支援遠端檔案路徑：
+- **支援協定**：S3（AWS）、GCS（Google Cloud）、Azure、HTTP/HTTPS
+- **範例**：
   ```python
   dm.read_sdf("s3://bucket/compounds.sdf")
   dm.read_csv("https://example.com/data.csv")
   ```
 
-## Key Parameters Across Functions
+## 跨函數的關鍵參數
 
-- **`sanitize`**: Apply molecule sanitization (default: True)
-- **`remove_hs`**: Remove explicit hydrogens (default: True)
-- **`as_df`**: Return DataFrame vs list (default: True for most functions)
-- **`n_jobs`**: Enable parallel processing (None = all cores, 1 = sequential)
-- **`mol_column`**: Name of molecule column in DataFrames
-- **`smiles_column`**: Name of SMILES column in DataFrames
+- **`sanitize`**：應用分子清理（預設：True）
+- **`remove_hs`**：移除顯式氫原子（預設：True）
+- **`as_df`**：返回 DataFrame vs 列表（大多數函數預設：True）
+- **`n_jobs`**：啟用平行處理（None = 所有核心，1 = 順序）
+- **`mol_column`**：DataFrame 中分子欄的名稱
+- **`smiles_column`**：DataFrame 中 SMILES 欄的名稱

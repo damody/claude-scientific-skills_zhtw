@@ -1,187 +1,187 @@
-# Dask Best Practices
+# Dask 最佳實踐
 
-## Performance Optimization Principles
+## 效能優化原則
 
-### Start with Simpler Solutions First
+### 先從較簡單的解決方案開始
 
-Before implementing parallel computing with Dask, explore these alternatives:
-- Better algorithms for the specific problem
-- Efficient file formats (Parquet, HDF5, Zarr instead of CSV)
-- Compiled code via Numba or Cython
-- Data sampling for development and testing
+在使用 Dask 實作平行運算之前，探索這些替代方案：
+- 針對特定問題的更好演算法
+- 高效的檔案格式（用 Parquet、HDF5、Zarr 代替 CSV）
+- 透過 Numba 或 Cython 編譯程式碼
+- 用於開發和測試的資料抽樣
 
-These alternatives often provide better returns than distributed systems and should be exhausted before scaling to parallel computing.
+這些替代方案通常比分散式系統提供更好的回報，應該在擴展到平行運算之前充分探索。
 
-### Chunk Size Strategy
+### 分塊大小策略
 
-**Critical Rule**: Chunks should be small enough that many fit in a worker's available memory at once.
+**關鍵規則**：分塊應該足夠小，讓多個分塊可以同時放入 worker 的可用記憶體中。
 
-**Recommended Target**: Size chunks so workers can hold 10 chunks per core without exceeding available memory.
+**建議目標**：調整分塊大小，使 worker 可以在每個核心上容納 10 個分塊而不超出可用記憶體。
 
-**Why It Matters**:
-- Too large chunks: Memory overflow and inefficient parallelization
-- Too small chunks: Excessive scheduling overhead
+**重要性**：
+- 分塊太大：記憶體溢出和平行化效率低
+- 分塊太小：過多的排程開銷
 
-**Example Calculation**:
-- 8 cores with 32 GB RAM
-- Target: ~400 MB per chunk (32 GB / 8 cores / 10 chunks)
+**計算範例**：
+- 8 核心，32 GB RAM
+- 目標：每個分塊約 400 MB（32 GB / 8 核心 / 10 個分塊）
 
-### Monitor with the Dashboard
+### 使用儀表板監控
 
-The Dask dashboard provides essential visibility into:
-- Worker states and resource utilization
-- Task progress and bottlenecks
-- Memory usage patterns
-- Performance characteristics
+Dask 儀表板提供對以下方面的重要可見性：
+- Worker 狀態和資源使用率
+- 任務進度和瓶頸
+- 記憶體使用模式
+- 效能特徵
 
-Access the dashboard to understand what's actually slow in parallel workloads rather than guessing at optimizations.
+存取儀表板以了解平行工作負載中實際緩慢的部分，而不是猜測優化方向。
 
-## Critical Pitfalls to Avoid
+## 要避免的關鍵陷阱
 
-### 1. Don't Create Large Objects Locally Before Dask
+### 1. 不要在 Dask 之前在本地建立大型物件
 
-**Wrong Approach**:
+**錯誤方法**：
 ```python
 import pandas as pd
 import dask.dataframe as dd
 
-# Loads entire dataset into memory first
+# 首先將整個資料集載入記憶體
 df = pd.read_csv('large_file.csv')
 ddf = dd.from_pandas(df, npartitions=10)
 ```
 
-**Correct Approach**:
+**正確方法**：
 ```python
 import dask.dataframe as dd
 
-# Let Dask handle the loading
+# 讓 Dask 處理載入
 ddf = dd.read_csv('large_file.csv')
 ```
 
-**Why**: Loading data with pandas or NumPy first forces the scheduler to serialize and embed those objects in task graphs, defeating the purpose of parallel computing.
+**原因**：先用 pandas 或 NumPy 載入資料會強制排程器在任務圖中序列化和嵌入這些物件，這違背了平行運算的目的。
 
-**Key Principle**: Use Dask methods to load data and use Dask to control the results.
+**關鍵原則**：使用 Dask 方法來載入資料，並使用 Dask 來控制結果。
 
-### 2. Avoid Repeated compute() Calls
+### 2. 避免重複呼叫 compute()
 
-**Wrong Approach**:
+**錯誤方法**：
 ```python
 results = []
 for item in items:
-    result = dask_computation(item).compute()  # Each compute is separate
+    result = dask_computation(item).compute()  # 每次 compute 是獨立的
     results.append(result)
 ```
 
-**Correct Approach**:
+**正確方法**：
 ```python
 computations = [dask_computation(item) for item in items]
-results = dask.compute(*computations)  # Single compute for all
+results = dask.compute(*computations)  # 單次 compute 處理所有
 ```
 
-**Why**: Calling compute in loops prevents Dask from:
-- Parallelizing different computations
-- Sharing intermediate results
-- Optimizing the overall task graph
+**原因**：在迴圈中呼叫 compute 會阻止 Dask：
+- 平行化不同的運算
+- 共享中間結果
+- 優化整體任務圖
 
-### 3. Don't Build Excessively Large Task Graphs
+### 3. 不要建構過大的任務圖
 
-**Symptoms**:
-- Millions of tasks in a single computation
-- Severe scheduling overhead
-- Long delays before computation starts
+**症狀**：
+- 單一運算中有數百萬個任務
+- 嚴重的排程開銷
+- 運算開始前的長時間延遲
 
-**Solutions**:
-- Increase chunk sizes to reduce number of tasks
-- Use `map_partitions` or `map_blocks` to fuse operations
-- Break computations into smaller pieces with intermediate persists
-- Consider whether the problem truly requires distributed computing
+**解決方案**：
+- 增加分塊大小以減少任務數量
+- 使用 `map_partitions` 或 `map_blocks` 來融合操作
+- 將運算分解為較小的部分並進行中間持久化
+- 考慮問題是否真的需要分散式運算
 
-**Example Using map_partitions**:
+**使用 map_partitions 的範例**：
 ```python
-# Instead of applying function to each row
-ddf['result'] = ddf.apply(complex_function, axis=1)  # Many tasks
+# 不是對每一行應用函數
+ddf['result'] = ddf.apply(complex_function, axis=1)  # 很多任務
 
-# Apply to entire partitions at once
+# 而是一次對整個分區應用
 ddf = ddf.map_partitions(lambda df: df.assign(result=complex_function(df)))
 ```
 
-## Infrastructure Considerations
+## 基礎架構考量
 
-### Scheduler Selection
+### 排程器選擇
 
-**Use Threads For**:
-- Numeric work with GIL-releasing libraries (NumPy, Pandas, scikit-learn)
-- Operations that benefit from shared memory
-- Single-machine workloads with array/dataframe operations
+**使用執行緒的情況**：
+- 使用釋放 GIL 的函式庫進行數值運算（NumPy、Pandas、scikit-learn）
+- 受益於共享記憶體的操作
+- 使用陣列/dataframe 操作的單機工作負載
 
-**Use Processes For**:
-- Text processing and Python collection operations
-- Pure Python code that's GIL-bound
-- Operations that need process isolation
+**使用程序的情況**：
+- 文字處理和 Python 集合操作
+- 受 GIL 限制的純 Python 程式碼
+- 需要程序隔離的操作
 
-**Use Distributed Scheduler For**:
-- Multi-machine clusters
-- Need for diagnostic dashboard
-- Asynchronous APIs
-- Better data locality handling
+**使用分散式排程器的情況**：
+- 多機器叢集
+- 需要診斷儀表板
+- 非同步 API
+- 更好的資料局部性處理
 
-### Thread Configuration
+### 執行緒配置
 
-**Recommendation**: Aim for roughly 4 threads per process on numeric workloads.
+**建議**：數值工作負載中，目標是每個程序約 4 個執行緒。
 
-**Rationale**:
-- Balance between parallelism and overhead
-- Allows efficient use of CPU cores
-- Reduces context switching costs
+**理由**：
+- 平行性和開銷之間的平衡
+- 允許 CPU 核心的有效使用
+- 減少上下文切換成本
 
-### Memory Management
+### 記憶體管理
 
-**Persist Strategically**:
+**策略性持久化**：
 ```python
-# Persist intermediate results that are reused
+# 持久化重複使用的中間結果
 intermediate = expensive_computation(data).persist()
 result1 = intermediate.operation1().compute()
 result2 = intermediate.operation2().compute()
 ```
 
-**Clear Memory When Done**:
+**完成後清理記憶體**：
 ```python
-# Explicitly delete large objects
+# 明確刪除大型物件
 del intermediate
 ```
 
-## Data Loading Best Practices
+## 資料載入最佳實踐
 
-### Use Appropriate File Formats
+### 使用適當的檔案格式
 
-**For Tabular Data**:
-- Parquet: Columnar, compressed, fast filtering
-- CSV: Only for small data or initial ingestion
+**用於表格資料**：
+- Parquet：列式、壓縮、快速篩選
+- CSV：僅用於小資料或初始載入
 
-**For Array Data**:
-- HDF5: Good for numeric arrays
-- Zarr: Cloud-native, parallel-friendly
-- NetCDF: Scientific data with metadata
+**用於陣列資料**：
+- HDF5：適合數值陣列
+- Zarr：雲端原生、適合平行
+- NetCDF：帶有中繼資料的科學資料
 
-### Optimize Data Ingestion
+### 優化資料載入
 
-**Read Multiple Files Efficiently**:
+**高效讀取多個檔案**：
 ```python
-# Use glob patterns to read multiple files in parallel
+# 使用 glob 模式平行讀取多個檔案
 ddf = dd.read_parquet('data/year=2024/month=*/day=*.parquet')
 ```
 
-**Specify Useful Columns Early**:
+**儘早指定有用的欄位**：
 ```python
-# Only read needed columns
+# 只讀取需要的欄位
 ddf = dd.read_parquet('data.parquet', columns=['col1', 'col2', 'col3'])
 ```
 
-## Common Patterns and Solutions
+## 常見模式和解決方案
 
-### Pattern: Embarrassingly Parallel Problems
+### 模式：embarrassingly parallel 問題
 
-For independent computations, use Futures:
+對於獨立的運算，使用 Futures：
 ```python
 from dask.distributed import Client
 
@@ -190,88 +190,88 @@ futures = [client.submit(func, arg) for arg in args]
 results = client.gather(futures)
 ```
 
-### Pattern: Data Preprocessing Pipeline
+### 模式：資料前處理管道
 
-Use Bags for initial ETL, then convert to structured formats:
+使用 Bags 進行初始 ETL，然後轉換為結構化格式：
 ```python
 import dask.bag as db
 
-# Process raw JSON
+# 處理原始 JSON
 bag = db.read_text('logs/*.json').map(json.loads)
 bag = bag.filter(lambda x: x['status'] == 'success')
 
-# Convert to DataFrame for analysis
+# 轉換為 DataFrame 進行分析
 ddf = bag.to_dataframe()
 ```
 
-### Pattern: Iterative Algorithms
+### 模式：迭代演算法
 
-Persist data between iterations:
+在迭代之間持久化資料：
 ```python
 data = dd.read_parquet('data.parquet')
-data = data.persist()  # Keep in memory across iterations
+data = data.persist()  # 跨迭代保持在記憶體中
 
 for iteration in range(num_iterations):
     data = update_function(data)
-    data = data.persist()  # Persist updated version
+    data = data.persist()  # 持久化更新後的版本
 ```
 
-## Debugging Tips
+## 除錯技巧
 
-### Use Single-Threaded Scheduler
+### 使用單執行緒排程器
 
-For debugging with pdb or detailed error inspection:
+用於 pdb 除錯或詳細錯誤檢查：
 ```python
 import dask
 
 dask.config.set(scheduler='synchronous')
-result = computation.compute()  # Runs in single thread for debugging
+result = computation.compute()  # 在單執行緒中執行以便除錯
 ```
 
-### Check Task Graph Size
+### 檢查任務圖大小
 
-Before computing, check the number of tasks:
+計算前，檢查任務數量：
 ```python
-print(len(ddf.__dask_graph__()))  # Should be reasonable, not millions
+print(len(ddf.__dask_graph__()))  # 應該合理，不是數百萬
 ```
 
-### Validate on Small Data First
+### 先在小資料上驗證
 
-Test logic on small subset before scaling:
+在擴展前在小子集上測試邏輯：
 ```python
-# Test on first partition
+# 在第一個分區上測試
 sample = ddf.head(1000)
-# Validate results
-# Then scale to full dataset
+# 驗證結果
+# 然後擴展到完整資料集
 ```
 
-## Performance Troubleshooting
+## 效能故障排除
 
-### Symptom: Slow Computation Start
+### 症狀：運算啟動緩慢
 
-**Likely Cause**: Task graph is too large
-**Solution**: Increase chunk sizes or use map_partitions
+**可能原因**：任務圖太大
+**解決方案**：增加分塊大小或使用 map_partitions
 
-### Symptom: Memory Errors
+### 症狀：記憶體錯誤
 
-**Likely Causes**:
-- Chunks too large
-- Too many intermediate results
-- Memory leaks in user functions
+**可能原因**：
+- 分塊太大
+- 中間結果太多
+- 使用者函數中的記憶體洩漏
 
-**Solutions**:
-- Decrease chunk sizes
-- Use persist() strategically and delete when done
-- Profile user functions for memory issues
+**解決方案**：
+- 減小分塊大小
+- 策略性使用 persist() 並在完成後刪除
+- 分析使用者函數的記憶體問題
 
-### Symptom: Poor Parallelization
+### 症狀：平行化效果差
 
-**Likely Causes**:
-- Data dependencies preventing parallelism
-- Chunks too large (not enough tasks)
-- GIL contention with threads on Python code
+**可能原因**：
+- 資料依賴阻止平行化
+- 分塊太大（任務不夠）
+- 在 Python 程式碼上使用執行緒時的 GIL 競爭
 
-**Solutions**:
-- Restructure computation to reduce dependencies
-- Increase number of partitions
-- Switch to multiprocessing scheduler for Python code
+**解決方案**：
+- 重構運算以減少依賴
+- 增加分區數量
+- 對 Python 程式碼切換到多程序排程器

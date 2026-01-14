@@ -1,233 +1,233 @@
-# Medical Journal Writing Style Guide
+# 醫學期刊寫作風格指南
 
-Comprehensive writing guide for NEJM, Lancet, JAMA, BMJ, Annals of Internal Medicine, and other major medical journals.
+NEJM、Lancet、JAMA、BMJ、Annals of Internal Medicine 及其他主要醫學期刊的完整寫作指南。
 
-**Last Updated**: 2024
-
----
-
-## Overview
-
-Medical journals prioritize **clinical relevance**, **patient outcomes**, and **evidence-based practice**. Writing must be precise, evidence-focused, and directly applicable to clinical decision-making.
-
-### Key Philosophy
-
-> "Every sentence should help a clinician make better decisions for their patients."
-
-**Primary Goal**: Communicate research findings that can improve patient care and clinical practice.
+**最後更新**：2024
 
 ---
 
-## Audience and Tone
+## 概述
 
-### Target Reader
+醫學期刊優先考慮**臨床相關性（clinical relevance）**、**病人結果（patient outcomes）**和**實證醫學（evidence-based practice）**。寫作必須精確、以證據為基礎，並直接適用於臨床決策。
 
-- Practicing physicians and clinicians
-- Clinical researchers
-- Healthcare policymakers
-- Medical educators
-- Some public health and patient advocacy readers
+### 核心理念
 
-### Tone Characteristics
+> 「每一句話都應該幫助臨床醫師為病人做出更好的決策。」
 
-| Characteristic | Description |
+**主要目標**：傳達能夠改善病人照護和臨床實務的研究發現。
+
+---
+
+## 讀者與語氣
+
+### 目標讀者
+
+- 執業醫師和臨床醫師
+- 臨床研究人員
+- 醫療政策制定者
+- 醫學教育者
+- 部分公共衛生和病人權益倡導讀者
+
+### 語氣特徵
+
+| 特徵 | 說明 |
 |---------------|-------------|
-| **Evidence-focused** | Appropriate hedging based on study design |
-| **Patient-centered** | Focus on patient outcomes, not just biomarkers |
-| **Clinical** | Emphasize practical applicability |
-| **Precise** | Exact numbers, confidence intervals, NNT |
-| **Measured** | Claims match evidence strength |
+| **以證據為焦點** | 根據研究設計適當地保守措辭 |
+| **以病人為中心** | 聚焦病人結果，而非僅是生物標記 |
+| **臨床導向** | 強調實際適用性 |
+| **精確** | 精確數字、信賴區間、NNT |
+| **審慎** | 聲稱需符合證據強度 |
 
-### Voice
+### 語態
 
-- **Passive voice common**: "Patients were randomized to..."
-- **First person acceptable**: "We conducted a trial..."
-- **Third person for patients**: "Patients" not "subjects"
+- **被動語態常見**：「Patients were randomized to...」
+- **第一人稱可接受**：「We conducted a trial...」
+- **病人使用第三人稱**：「Patients」而非「subjects」
 
 ---
 
-## Abstract: Structured Format
+## 摘要：結構化格式
 
-### Overview
+### 概述
 
-Most major medical journals require **structured abstracts** with labeled sections. This is one of the few venues where structured abstracts are expected.
+大多數主要醫學期刊要求**結構化摘要（structured abstracts）**，帶有標籤的章節。這是少數要求結構化摘要的場所之一。
 
-### Standard Structure (IMRAD-based)
+### 標準結構（基於 IMRAD）
 
 ```
-Background: [Why this study was needed - 1-2 sentences]
+Background: [為何需要此研究 - 1-2 句]
 
-Methods: [Study design, setting, participants, intervention, 
-main outcomes - 2-4 sentences]
+Methods: [研究設計、場域、參與者、介入措施、
+主要結果 - 2-4 句]
 
-Results: [Primary and key secondary outcomes with statistics - 
-3-5 sentences]
+Results: [主要和關鍵次要結果及統計數據 -
+3-5 句]
 
-Conclusions: [Clinical implications, with appropriate hedging - 
-1-2 sentences]
+Conclusions: [臨床意涵，適當保守措辭 -
+1-2 句]
 ```
 
-### Word Limits by Journal
+### 各期刊字數限制
 
-| Journal | Abstract Limit |
+| 期刊 | 摘要限制 |
 |---------|---------------|
-| NEJM | 250 words |
-| Lancet | 300 words |
-| JAMA | 350 words |
-| BMJ | 300 words |
-| Annals | 325 words |
+| NEJM | 250 字 |
+| Lancet | 300 字 |
+| JAMA | 350 字 |
+| BMJ | 300 字 |
+| Annals | 325 字 |
 
-### Example Structured Abstract (NEJM Style)
+### 範例結構化摘要（NEJM 格式）
 
 ```
 BACKGROUND
-Type 2 diabetes is associated with increased cardiovascular risk, but 
-the effects of intensive glucose control on cardiovascular outcomes 
+Type 2 diabetes is associated with increased cardiovascular risk, but
+the effects of intensive glucose control on cardiovascular outcomes
 remain uncertain.
 
 METHODS
-We randomly assigned 10,251 patients with type 2 diabetes and established 
-cardiovascular disease to receive intensive glucose-lowering therapy 
-(target HbA1c <6.0%) or standard therapy (target HbA1c 7.0-7.9%). The 
-primary outcome was a composite of nonfatal myocardial infarction, 
+We randomly assigned 10,251 patients with type 2 diabetes and established
+cardiovascular disease to receive intensive glucose-lowering therapy
+(target HbA1c <6.0%) or standard therapy (target HbA1c 7.0-7.9%). The
+primary outcome was a composite of nonfatal myocardial infarction,
 nonfatal stroke, or death from cardiovascular causes.
 
 RESULTS
-After a median follow-up of 3.5 years, the primary outcome occurred in 
-352 patients (6.9%) in the intensive-therapy group and in 371 patients 
-(7.2%) in the standard-therapy group (hazard ratio, 0.90; 95% CI, 0.78 
-to 1.04; P=0.16). Severe hypoglycemia was more common with intensive 
-therapy (3.1% vs. 1.0%; P<0.001). All-cause mortality was similar 
+After a median follow-up of 3.5 years, the primary outcome occurred in
+352 patients (6.9%) in the intensive-therapy group and in 371 patients
+(7.2%) in the standard-therapy group (hazard ratio, 0.90; 95% CI, 0.78
+to 1.04; P=0.16). Severe hypoglycemia was more common with intensive
+therapy (3.1% vs. 1.0%; P<0.001). All-cause mortality was similar
 between groups (5.0% vs. 4.8%; hazard ratio, 1.04; 95% CI, 0.87 to 1.24).
 
 CONCLUSIONS
-In patients with type 2 diabetes and established cardiovascular disease, 
-intensive glucose lowering did not significantly reduce major 
-cardiovascular events compared with standard therapy and was associated 
+In patients with type 2 diabetes and established cardiovascular disease,
+intensive glucose lowering did not significantly reduce major
+cardiovascular events compared with standard therapy and was associated
 with increased severe hypoglycemia.
 ```
 
 ---
 
-## Evidence Language
+## 證據語言
 
-### The Cardinal Rule
+### 首要規則
 
-**Match your language to your evidence strength.**
+**使您的語言與證據強度相符。**
 
-### Language by Study Design
+### 依研究設計的語言
 
-| Study Design | Appropriate Language |
+| 研究設計 | 適當語言 |
 |-------------|---------------------|
-| **Meta-analysis of RCTs** | "Treatment X reduces mortality..." |
-| **Large RCT** | "Treatment X reduced mortality in this trial..." |
-| **Small RCT** | "Treatment X was associated with reduced mortality..." |
-| **Cohort study** | "Treatment X was associated with lower mortality..." |
-| **Case-control** | "Treatment X was associated with reduced odds of death..." |
-| **Cross-sectional** | "Treatment X use was associated with lower mortality..." |
-| **Case series** | "These cases suggest that treatment X may..." |
-| **Case report** | "This case illustrates that treatment X can..." |
+| **RCT 統合分析** | 「Treatment X reduces mortality...」 |
+| **大型 RCT** | 「Treatment X reduced mortality in this trial...」 |
+| **小型 RCT** | 「Treatment X was associated with reduced mortality...」 |
+| **世代研究** | 「Treatment X was associated with lower mortality...」 |
+| **病例對照** | 「Treatment X was associated with reduced odds of death...」 |
+| **橫斷面** | 「Treatment X use was associated with lower mortality...」 |
+| **病例系列** | 「These cases suggest that treatment X may...」 |
+| **個案報告** | 「This case illustrates that treatment X can...」 |
 
-### Causal Language Rules
+### 因果語言規則
 
-❌ **Never say** (unless RCT): "Treatment X prevents..." / "Treatment X causes..."
+❌ **絕對不說**（除非是 RCT）：「Treatment X prevents...」/「Treatment X causes...」
 
-✅ **Use for observational**: "Treatment X was associated with..." / "Treatment X was linked to..."
+✅ **觀察性研究使用**：「Treatment X was associated with...」/「Treatment X was linked to...」
 
-✅ **Use for RCTs**: "Treatment X resulted in..." / "Treatment X reduced..."
+✅ **RCT 使用**：「Treatment X resulted in...」/「Treatment X reduced...」
 
-### Hedging Phrases
+### 保守措辭用語
 
-| Certainty Level | Phrases |
+| 確定程度 | 用語 |
 |----------------|---------|
-| **High** | "demonstrates," "shows," "confirms" |
-| **Moderate** | "suggests," "indicates," "supports" |
-| **Low** | "may," "might," "could potentially" |
-| **Speculative** | "it is possible that," "one interpretation is" |
+| **高** | 「demonstrates」、「shows」、「confirms」 |
+| **中等** | 「suggests」、「indicates」、「supports」 |
+| **低** | 「may」、「might」、「could potentially」 |
+| **推測性** | 「it is possible that」、「one interpretation is」 |
 
 ---
 
-## Reporting Numbers
+## 報告數字
 
-### Absolute vs. Relative Risk
+### 絕對風險 vs. 相對風險
 
-**Always report both absolute and relative measures.**
+**務必同時報告絕對和相對測量值。**
 
-❌ **Incomplete**: "Treatment reduced mortality by 50%"
+❌ **不完整**：「Treatment reduced mortality by 50%」
 
-✅ **Complete**: "Treatment reduced relative mortality by 50% (absolute risk reduction, 2.5 percentage points; number needed to treat, 40)"
+✅ **完整**：「Treatment reduced relative mortality by 50% (absolute risk reduction, 2.5 percentage points; number needed to treat, 40)」
 
-### Confidence Intervals
+### 信賴區間
 
-**Always include 95% confidence intervals.**
+**務必包含 95% 信賴區間。**
 
-❌ "The hazard ratio was 0.75"
+❌ 「The hazard ratio was 0.75」
 
-✅ "The hazard ratio was 0.75 (95% CI, 0.62 to 0.91)"
+✅ 「The hazard ratio was 0.75 (95% CI, 0.62 to 0.91)」
 
-### P-values
+### P 值
 
-- Report exact P-values when possible: P=0.003
-- Use P<0.001 for very small values
-- Consider clinical significance alongside statistical significance
+- 可能時報告精確 P 值：P=0.003
+- 極小值使用 P<0.001
+- 考慮臨床顯著性與統計顯著性
 
-### Number Needed to Treat (NNT)
+### 治療所需人數（NNT）
 
-Include NNT for clinically important outcomes:
-
-```
-"The intervention prevented one additional death for every 40 patients 
-treated (NNT=40; 95% CI, 28 to 67)."
-```
-
----
-
-## Introduction
-
-### Length and Structure
-
-- **3-4 paragraphs** (500-700 words)
-- Focus on clinical problem and rationale
-
-### Paragraph Structure
-
-**Paragraph 1: Clinical Problem**
-- Burden of disease (incidence, prevalence, mortality)
-- Impact on patients and healthcare system
-- Why this matters clinically
+對於臨床重要結果包含 NNT：
 
 ```
-"Type 2 diabetes affects more than 450 million adults worldwide and is 
-a leading cause of cardiovascular disease, renal failure, and premature 
-death. Despite advances in glucose-lowering therapies, patients with 
-diabetes continue to face a two- to four-fold increased risk of 
-cardiovascular events compared with the general population."
-```
-
-**Paragraph 2: Current Knowledge and Limitations**
-- What treatments/approaches exist
-- What evidence gaps remain
-- Why more research was needed
-
-**Paragraph 3: Rationale and Objectives**
-- Why this study was conducted
-- Clear statement of objectives/hypothesis
-- Primary outcome stated
-
-```
-"We therefore conducted a randomized, controlled trial to evaluate 
-whether intensive glucose-lowering therapy, compared with standard 
-therapy, would reduce major cardiovascular events in patients with 
-type 2 diabetes and established cardiovascular disease."
+「The intervention prevented one additional death for every 40 patients
+treated (NNT=40; 95% CI, 28 to 67).」
 ```
 
 ---
 
-## Methods
+## 引言
 
-### Structure (CONSORT/STROBE Aligned)
+### 長度與結構
 
-Medical methods sections follow reporting guidelines:
+- **3-4 段**（500-700 字）
+- 聚焦臨床問題和理由
+
+### 段落結構
+
+**第 1 段：臨床問題**
+- 疾病負擔（發生率、盛行率、死亡率）
+- 對病人和醫療系統的影響
+- 為何這在臨床上重要
+
+```
+「Type 2 diabetes affects more than 450 million adults worldwide and is
+a leading cause of cardiovascular disease, renal failure, and premature
+death. Despite advances in glucose-lowering therapies, patients with
+diabetes continue to face a two- to four-fold increased risk of
+cardiovascular events compared with the general population.」
+```
+
+**第 2 段：目前知識與限制**
+- 現有治療/方法
+- 剩餘的證據缺口
+- 為何需要更多研究
+
+**第 3 段：理由與目標**
+- 為何進行此研究
+- 清楚陳述目標/假說
+- 說明主要結果
+
+```
+「We therefore conducted a randomized, controlled trial to evaluate
+whether intensive glucose-lowering therapy, compared with standard
+therapy, would reduce major cardiovascular events in patients with
+type 2 diabetes and established cardiovascular disease.」
+```
+
+---
+
+## 方法
+
+### 結構（符合 CONSORT/STROBE）
+
+醫學方法章節遵循報告指南：
 
 ```
 METHODS
@@ -235,7 +235,7 @@ METHODS
 ├── Setting and Participants
 │   ├── Eligibility Criteria
 │   └── Recruitment
-├── Randomization and Blinding (for RCTs)
+├── Randomization and Blinding（用於 RCT）
 ├── Interventions
 ├── Outcomes
 │   ├── Primary Outcome
@@ -246,203 +246,203 @@ METHODS
 └── Registration
 ```
 
-### Key Elements
+### 關鍵要素
 
-**Eligibility Criteria**
-- List inclusion and exclusion criteria explicitly
-- Be specific (age ranges, disease definitions, lab values)
+**納入標準**
+- 明確列出納入和排除標準
+- 具體說明（年齡範圍、疾病定義、實驗室數值）
 
-**Primary Outcome**
-- Define precisely, including timing of assessment
-- State how it was measured
+**主要結果**
+- 精確定義，包括評估時間
+- 說明如何測量
 
-**Statistical Analysis**
-- Pre-specified analysis plan
-- Handling of missing data
-- Subgroup analyses (pre-specified vs. exploratory)
+**統計分析**
+- 預先指定的分析計畫
+- 缺失資料處理
+- 亞組分析（預先指定 vs. 探索性）
 
-### Example Methods Paragraph
+### 範例方法段落
 
 ```
-We enrolled adults aged 40 years or older with type 2 diabetes (defined 
-as HbA1c ≥6.5% or use of glucose-lowering medication) and established 
-cardiovascular disease (previous myocardial infarction, stroke, or 
-revascularization procedure). Patients were excluded if they had an 
-HbA1c level below 7.5% or above 11.0%, estimated glomerular filtration 
-rate below 30 ml per minute per 1.73 m² of body-surface area, or a 
+We enrolled adults aged 40 years or older with type 2 diabetes (defined
+as HbA1c ≥6.5% or use of glucose-lowering medication) and established
+cardiovascular disease (previous myocardial infarction, stroke, or
+revascularization procedure). Patients were excluded if they had an
+HbA1c level below 7.5% or above 11.0%, estimated glomerular filtration
+rate below 30 ml per minute per 1.73 m² of body-surface area, or a
 cardiovascular event within the past 30 days.
 ```
 
 ---
 
-## Results
+## 結果
 
-### Structure
+### 結構
 
-**Opening: Participant Flow**
-- Screening, enrollment, randomization, follow-up, analysis
-- Reference CONSORT flow diagram
+**開頭：參與者流程**
+- 篩選、登記、隨機分配、追蹤、分析
+- 參照 CONSORT 流程圖
 
-**Baseline Characteristics**
-- Table 1: Baseline demographics and clinical characteristics
-- Note any imbalances
+**基線特徵**
+- 表 1：基線人口統計學和臨床特徵
+- 註明任何不平衡
 
-**Primary Outcome**
-- Report first and prominently
-- Include point estimate, CI, P-value
-- State clinical significance
+**主要結果**
+- 首先且顯著地報告
+- 包含點估計、CI、P 值
+- 說明臨床意義
 
-**Secondary Outcomes**
-- Report all pre-specified secondary outcomes
-- Be cautious about multiple comparisons
+**次要結果**
+- 報告所有預先指定的次要結果
+- 對於多重比較要謹慎
 
-**Adverse Events**
-- Report serious adverse events systematically
-- Include deaths, hospitalizations, SAEs by category
+**不良事件**
+- 系統性報告嚴重不良事件
+- 包含死亡、住院、依類別的 SAE
 
-### Example Results Paragraph
+### 範例結果段落
 
 ```
-Of 12,537 patients assessed for eligibility, 10,251 underwent 
-randomization: 5,128 were assigned to intensive therapy and 5,123 to 
-standard therapy (Figure 1). Baseline characteristics were similar 
-between groups (Table 1). Median follow-up was 3.5 years (interquartile 
+Of 12,537 patients assessed for eligibility, 10,251 underwent
+randomization: 5,128 were assigned to intensive therapy and 5,123 to
+standard therapy (Figure 1). Baseline characteristics were similar
+between groups (Table 1). Median follow-up was 3.5 years (interquartile
 range, 2.8 to 4.2), with vital status available for 99.2% of patients.
 
 The primary outcome occurred in 352 patients (6.9%) in the intensive-
-therapy group and 371 patients (7.2%) in the standard-therapy group 
-(hazard ratio, 0.90; 95% confidence interval [CI], 0.78 to 1.04; 
-P=0.16). The absolute difference was 0.3 percentage points (95% CI, 
--0.7 to 1.4). Results were consistent across pre-specified subgroups 
+therapy group and 371 patients (7.2%) in the standard-therapy group
+(hazard ratio, 0.90; 95% confidence interval [CI], 0.78 to 1.04;
+P=0.16). The absolute difference was 0.3 percentage points (95% CI,
+-0.7 to 1.4). Results were consistent across pre-specified subgroups
 (Figure 3).
 ```
 
 ---
 
-## Discussion
+## 討論
 
-### Structure
+### 結構
 
-**Paragraph 1: Summary of Main Findings**
-- Restate primary outcome result
-- State whether hypothesis was supported
+**第 1 段：主要發現摘要**
+- 重述主要結果
+- 說明假說是否獲得支持
 
-**Paragraphs 2-3: Interpretation and Context**
-- How do findings compare with prior evidence?
-- What mechanisms might explain findings?
-- Clinical interpretation
+**第 2-3 段：詮釋與背景**
+- 發現與先前證據如何比較？
+- 什麼機制可能解釋發現？
+- 臨床詮釋
 
-**Paragraph 4: Strengths**
-- Study design features
-- Generalizability
-- Completeness of follow-up
+**第 4 段：優勢**
+- 研究設計特點
+- 可推廣性
+- 追蹤完整性
 
-**Paragraph 5: Limitations**
-- Be specific and thoughtful
-- Discuss how limitations might affect interpretation
-- Avoid generic statements
+**第 5 段：限制**
+- 具體且深思熟慮
+- 討論限制如何影響詮釋
+- 避免泛泛陳述
 
-**Final Paragraph: Conclusions and Implications**
-- Clinical implications
-- Policy implications
-- Future research needs
+**最後一段：結論與意涵**
+- 臨床意涵
+- 政策意涵
+- 未來研究需求
 
-### Example Limitations Paragraph
+### 範例限制段落
 
 ```
-Our study has several limitations. First, despite randomization, we 
-cannot exclude residual confounding from unmeasured factors. Second, 
-the open-label design may have introduced bias in outcome assessment 
-for subjective endpoints, though the primary outcome of death was 
-objective. Third, our findings may not generalize to patients without 
-established cardiovascular disease or to healthcare settings with 
-different resources. Fourth, the 3.5-year follow-up may have been 
-insufficient to detect cardiovascular benefits that emerge over 
+Our study has several limitations. First, despite randomization, we
+cannot exclude residual confounding from unmeasured factors. Second,
+the open-label design may have introduced bias in outcome assessment
+for subjective endpoints, though the primary outcome of death was
+objective. Third, our findings may not generalize to patients without
+established cardiovascular disease or to healthcare settings with
+different resources. Fourth, the 3.5-year follow-up may have been
+insufficient to detect cardiovascular benefits that emerge over
 longer periods.
 ```
 
 ---
 
-## Journal-Specific Requirements
+## 各期刊特定要求
 
-### NEJM (New England Journal of Medicine)
+### NEJM（新英格蘭醫學雜誌）
 
-- **Word limit**: 2,700 words (excluding abstract, references)
-- **Abstract**: 250 words, structured
-- **References**: ~40-50 typical
-- **Figures/Tables**: 4-5 combined
-- **Style**: Definitive, authoritative
-- **Emphasis**: Major clinical trials, transformative research
+- **字數限制**：2,700 字（不含摘要、參考文獻）
+- **摘要**：250 字，結構化
+- **參考文獻**：通常 40-50 篇
+- **圖片/表格**：合計 4-5 個
+- **風格**：明確、權威
+- **重點**：重大臨床試驗、變革性研究
 
 ### Lancet
 
-- **Word limit**: 3,500 words for research articles
-- **Abstract**: 300 words, structured
-- **Summary box (Panel)**: Key messages highlighted
-- **Research in Context**: Required section explaining contribution
-- **Style**: Global health perspective valued
+- **字數限制**：研究文章 3,500 字
+- **摘要**：300 字，結構化
+- **摘要框（Panel）**：突顯關鍵訊息
+- **Research in Context**：必要章節說明貢獻
+- **風格**：重視全球健康觀點
 
-### JAMA (Journal of the American Medical Association)
+### JAMA（美國醫學會雜誌）
 
-- **Word limit**: 3,000 words for original investigations
-- **Abstract**: 350 words, structured
-- **Key Points box**: Required summary
-- **Visual abstract**: Encouraged
-- **Style**: Policy-relevant, public health focus
+- **字數限制**：原創研究 3,000 字
+- **摘要**：350 字，結構化
+- **Key Points 框**：必要摘要
+- **視覺摘要**：鼓勵提供
+- **風格**：政策相關、公共衛生焦點
 
-### BMJ (British Medical Journal)
+### BMJ（英國醫學雜誌）
 
-- **Word limit**: 3,000 words for research
-- **Abstract**: 300 words, structured
-- **What this paper adds**: Required box
-- **Strengths and limitations box**: Explicit section
-- **Style**: Practical, evidence-based
+- **字數限制**：研究 3,000 字
+- **摘要**：300 字，結構化
+- **What this paper adds**：必要框
+- **Strengths and limitations 框**：明確章節
+- **風格**：實用、實證導向
 
 ### Annals of Internal Medicine
 
-- **Word limit**: 3,000 words
-- **Abstract**: 325 words, structured
-- **Style**: Focused on internal medicine practice
-- **Clinical Trials and Meta-analyses**: Specialty
+- **字數限制**：3,000 字
+- **摘要**：325 字，結構化
+- **風格**：聚焦內科實務
+- **專長**：臨床試驗和統合分析
 
 ---
 
-## Reporting Guidelines Compliance
+## 報告指南合規性
 
-### CONSORT (RCTs)
+### CONSORT（RCT）
 
-**25-item checklist** including:
-- Trial design, randomization, blinding
-- Participant flow (diagram required)
-- All outcomes with effect sizes and CIs
-- Harms and adverse events
+**25 項檢核表**包含：
+- 試驗設計、隨機化、盲化
+- 參與者流程（需要圖表）
+- 所有結果及效果量和 CI
+- 危害和不良事件
 
-### STROBE (Observational)
+### STROBE（觀察性研究）
 
-**22-item checklist** for:
-- Cohort, case-control, cross-sectional studies
-- Setting, participants, variables, data sources
-- Bias assessment, sensitivity analyses
+**22 項檢核表**用於：
+- 世代、病例對照、橫斷面研究
+- 場域、參與者、變項、資料來源
+- 偏差評估、敏感度分析
 
-### PRISMA (Systematic Reviews)
+### PRISMA（系統性回顧）
 
-**27-item checklist** including:
-- Search strategy
-- Study selection process (diagram)
-- Risk of bias assessment
-- Synthesis methods
+**27 項檢核表**包含：
+- 搜尋策略
+- 研究選擇過程（圖表）
+- 偏差風險評估
+- 綜合方法
 
-### STARD (Diagnostic Studies)
+### STARD（診斷研究）
 
-**30 items** for diagnostic accuracy studies
+**30 項**用於診斷準確度研究
 
 ---
 
-## Tables and Figures
+## 表格與圖片
 
-### Table 1: Baseline Characteristics
+### 表 1：基線特徵
 
-Standard format:
+標準格式：
 ```
                               Intensive Therapy  Standard Therapy
                                   (N=5128)          (N=5123)
@@ -454,9 +454,9 @@ Duration of diabetes — yr       10.2 ± 7.8        10.1 ± 7.6
 Prior MI — no. (%)              2435 (47.5)       2411 (47.1)
 ```
 
-### CONSORT Flow Diagram
+### CONSORT 流程圖
 
-Required for RCTs:
+RCT 必須提供：
 ```
 Assessed for eligibility (n=12,537)
     │
@@ -476,60 +476,59 @@ Randomized (n=10,251)
           └─ Analyzed (n=5,075)
 ```
 
-### Kaplan-Meier Curves
+### Kaplan-Meier 曲線
 
-Standard presentation:
-- Survival curves with shaded confidence bands
-- Number at risk table below
-- Hazard ratio with 95% CI
-- Log-rank P-value
-
----
-
-## Common Mistakes in Medical Writing
-
-1. **Overclaiming causation**: Using "caused" for observational data
-2. **Relative risk only**: Not reporting absolute measures
-3. **Missing CIs**: Reporting point estimates without uncertainty
-4. **Vague limitations**: "Our study has limitations" without specifics
-5. **Ignoring negative results**: Selective reporting of outcomes
-6. **Clinical significance confusion**: Statistically significant ≠ clinically meaningful
-7. **Subgroup fishing**: Post-hoc subgroup analyses presented as confirmatory
-8. **Missing CONSORT/STROBE items**: Incomplete reporting
+標準呈現：
+- 帶陰影信賴區間的存活曲線
+- 下方的風險人數表
+- 風險比和 95% CI
+- Log-rank P 值
 
 ---
 
-## Pre-Submission Checklist
+## 醫學寫作常見錯誤
 
-### Required Elements
-- [ ] Structured abstract (journal-specific format)
-- [ ] Trial registration number (for RCTs)
-- [ ] Ethics committee approval statement
-- [ ] Conflict of interest disclosures
-- [ ] CONSORT/STROBE checklist completed
-
-### Statistical Reporting
-- [ ] Primary outcome reported with CI and P-value
-- [ ] Absolute and relative measures included
-- [ ] All pre-specified outcomes reported
-- [ ] NNT calculated for significant clinical outcomes
-
-### Evidence Language
-- [ ] Claims match study design
-- [ ] Appropriate hedging used
-- [ ] Causal language only for RCTs
-
-### Clinical Relevance
-- [ ] Clinical implications stated
-- [ ] Patient-centered outcomes emphasized
-- [ ] Generalizability discussed
+1. **過度聲稱因果關係**：對觀察性資料使用「caused」
+2. **僅報告相對風險**：未報告絕對測量值
+3. **缺少 CI**：報告點估計但無不確定性
+4. **限制說明模糊**：「Our study has limitations」但無具體說明
+5. **忽略陰性結果**：選擇性報告結果
+6. **臨床意義混淆**：統計顯著 ≠ 臨床有意義
+7. **亞組資料探勘**：事後亞組分析呈現為驗證性
+8. **缺少 CONSORT/STROBE 項目**：報告不完整
 
 ---
 
-## See Also
+## 投稿前檢核表
 
-- `venue_writing_styles.md` - Master style overview
-- `journals_formatting.md` - Technical formatting requirements
-- `reviewer_expectations.md` - What medical reviewers seek
-- Reporting guideline resources: consort-statement.org, strobe-statement.org
+### 必要元素
+- [ ] 結構化摘要（期刊特定格式）
+- [ ] 試驗註冊號（用於 RCT）
+- [ ] 倫理委員會核准聲明
+- [ ] 利益衝突揭露
+- [ ] CONSORT/STROBE 檢核表已完成
 
+### 統計報告
+- [ ] 主要結果已報告 CI 和 P 值
+- [ ] 包含絕對和相對測量值
+- [ ] 報告所有預先指定的結果
+- [ ] 顯著臨床結果已計算 NNT
+
+### 證據語言
+- [ ] 聲稱符合研究設計
+- [ ] 使用適當的保守措辭
+- [ ] 因果語言僅用於 RCT
+
+### 臨床相關性
+- [ ] 說明臨床意涵
+- [ ] 強調以病人為中心的結果
+- [ ] 討論可推廣性
+
+---
+
+## 另請參閱
+
+- `venue_writing_styles.md` - 主要風格概述
+- `journals_formatting.md` - 技術格式要求
+- `reviewer_expectations.md` - 醫學審稿人的期望
+- 報告指南資源：consort-statement.org、strobe-statement.org

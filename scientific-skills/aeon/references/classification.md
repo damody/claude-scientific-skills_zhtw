@@ -1,144 +1,144 @@
-# Time Series Classification
+# 時間序列分類
 
-Aeon provides 13 categories of time series classifiers with scikit-learn compatible APIs.
+Aeon 提供 13 類時間序列分類器，具有與 scikit-learn 相容的 API。
 
-## Convolution-Based Classifiers
+## 基於卷積的分類器
 
-Apply random convolutional transformations for efficient feature extraction:
+應用隨機卷積轉換進行高效特徵擷取：
 
-- `Arsenal` - Ensemble of ROCKET classifiers with varied kernels
-- `HydraClassifier` - Multi-resolution convolution with dilation
-- `RocketClassifier` - Random convolution kernels with ridge regression
-- `MiniRocketClassifier` - Simplified ROCKET variant for speed
-- `MultiRocketClassifier` - Combines multiple ROCKET variants
+- `Arsenal` - ROCKET 分類器的集成，使用不同的核心
+- `HydraClassifier` - 帶有膨脹的多解析度卷積
+- `RocketClassifier` - 隨機卷積核心搭配嶺迴歸
+- `MiniRocketClassifier` - 簡化的 ROCKET 變體，追求速度
+- `MultiRocketClassifier` - 結合多個 ROCKET 變體
 
-**Use when**: Need fast, scalable classification with strong performance across diverse datasets.
+**使用時機**：需要快速、可擴展的分類，在各種資料集上具有強大效能。
 
-## Deep Learning Classifiers
+## 深度學習分類器
 
-Neural network architectures optimized for temporal sequences:
+針對時間序列優化的神經網路架構：
 
-- `FCNClassifier` - Fully convolutional network
-- `ResNetClassifier` - Residual networks with skip connections
-- `InceptionTimeClassifier` - Multi-scale inception modules
-- `TimeCNNClassifier` - Standard CNN for time series
-- `MLPClassifier` - Multi-layer perceptron baseline
-- `EncoderClassifier` - Generic encoder wrapper
-- `DisjointCNNClassifier` - Shapelet-focused architecture
+- `FCNClassifier` - 全卷積網路
+- `ResNetClassifier` - 具有跳躍連接的殘差網路
+- `InceptionTimeClassifier` - 多尺度 Inception 模組
+- `TimeCNNClassifier` - 標準 CNN 用於時間序列
+- `MLPClassifier` - 多層感知器基準
+- `EncoderClassifier` - 通用編碼器包裝器
+- `DisjointCNNClassifier` - 聚焦 Shapelet 的架構
 
-**Use when**: Large datasets available, need end-to-end learning, or complex temporal patterns.
+**使用時機**：有大型資料集可用，需要端對端學習，或複雜的時間模式。
 
-## Dictionary-Based Classifiers
+## 基於字典的分類器
 
-Transform time series into symbolic representations:
+將時間序列轉換為符號表示：
 
-- `BOSSEnsemble` - Bag-of-SFA-Symbols with ensemble voting
-- `TemporalDictionaryEnsemble` - Multiple dictionary methods combined
-- `WEASEL` - Word ExtrAction for time SEries cLassification
-- `MrSEQLClassifier` - Multiple symbolic sequence learning
+- `BOSSEnsemble` - SFA 符號袋搭配集成投票
+- `TemporalDictionaryEnsemble` - 結合多種字典方法
+- `WEASEL` - 時間序列分類的詞擷取
+- `MrSEQLClassifier` - 多重符號序列學習
 
-**Use when**: Need interpretable models, sparse patterns, or symbolic reasoning.
+**使用時機**：需要可解釋模型、稀疏模式或符號推理。
 
-## Distance-Based Classifiers
+## 基於距離的分類器
 
-Leverage specialized time series distance metrics:
+利用專門的時間序列距離度量：
 
-- `KNeighborsTimeSeriesClassifier` - k-NN with temporal distances (DTW, LCSS, ERP, etc.)
-- `ElasticEnsemble` - Combines multiple elastic distance measures
-- `ProximityForest` - Tree ensemble using distance-based splits
+- `KNeighborsTimeSeriesClassifier` - 使用時間距離的 k-NN（DTW、LCSS、ERP 等）
+- `ElasticEnsemble` - 結合多種彈性距離測量
+- `ProximityForest` - 使用基於距離分割的樹集成
 
-**Use when**: Small datasets, need similarity-based classification, or interpretable decisions.
+**使用時機**：小型資料集，需要基於相似性的分類，或可解釋的決策。
 
-## Feature-Based Classifiers
+## 基於特徵的分類器
 
-Extract statistical and signature features before classification:
+在分類前擷取統計和簽名特徵：
 
-- `Catch22Classifier` - 22 canonical time-series characteristics
-- `TSFreshClassifier` - Automated feature extraction via tsfresh
-- `SignatureClassifier` - Path signature transformations
-- `SummaryClassifier` - Summary statistics extraction
-- `FreshPRINCEClassifier` - Combines multiple feature extractors
+- `Catch22Classifier` - 22 個典型的時間序列特徵
+- `TSFreshClassifier` - 透過 tsfresh 自動擷取特徵
+- `SignatureClassifier` - 路徑簽名轉換
+- `SummaryClassifier` - 摘要統計擷取
+- `FreshPRINCEClassifier` - 結合多個特徵擷取器
 
-**Use when**: Need interpretable features, domain expertise available, or feature engineering approach.
+**使用時機**：需要可解釋特徵、有領域專業知識，或特徵工程方法。
 
-## Interval-Based Classifiers
+## 基於區間的分類器
 
-Extract features from random or supervised intervals:
+從隨機或監督區間擷取特徵：
 
-- `CanonicalIntervalForestClassifier` - Random interval features with decision trees
-- `DrCIFClassifier` - Diverse Representation CIF with catch22 features
-- `TimeSeriesForestClassifier` - Random intervals with summary statistics
-- `RandomIntervalClassifier` - Simple interval-based approach
-- `RandomIntervalSpectralEnsembleClassifier` - Spectral features from intervals
-- `SupervisedTimeSeriesForest` - Supervised interval selection
+- `CanonicalIntervalForestClassifier` - 搭配決策樹的隨機區間特徵
+- `DrCIFClassifier` - 多樣表示 CIF 搭配 catch22 特徵
+- `TimeSeriesForestClassifier` - 搭配摘要統計的隨機區間
+- `RandomIntervalClassifier` - 簡單的基於區間方法
+- `RandomIntervalSpectralEnsembleClassifier` - 來自區間的頻譜特徵
+- `SupervisedTimeSeriesForest` - 監督區間選擇
 
-**Use when**: Discriminative patterns occur in specific time windows.
+**使用時機**：判別模式出現在特定時間視窗中。
 
-## Shapelet-Based Classifiers
+## 基於 Shapelet 的分類器
 
-Identify discriminative subsequences (shapelets):
+識別判別性子序列（shapelets）：
 
-- `ShapeletTransformClassifier` - Discovers and uses discriminative shapelets
-- `LearningShapeletClassifier` - Learns shapelets via gradient descent
-- `SASTClassifier` - Scalable approximate shapelet transform
-- `RDSTClassifier` - Random dilated shapelet transform
+- `ShapeletTransformClassifier` - 發現並使用判別性 shapelets
+- `LearningShapeletClassifier` - 透過梯度下降學習 shapelets
+- `SASTClassifier` - 可擴展的近似 shapelet 轉換
+- `RDSTClassifier` - 隨機膨脹 shapelet 轉換
 
-**Use when**: Need interpretable discriminative patterns or phase-invariant features.
+**使用時機**：需要可解釋的判別模式或相位不變特徵。
 
-## Hybrid Classifiers
+## 混合分類器
 
-Combine multiple classification paradigms:
+結合多種分類範式：
 
-- `HIVECOTEV1` - Hierarchical Vote Collective of Transformation-based Ensembles (version 1)
-- `HIVECOTEV2` - Enhanced version with updated components
+- `HIVECOTEV1` - 基於轉換的階層投票集成（第 1 版）
+- `HIVECOTEV2` - 增強版，具有更新的元件
 
-**Use when**: Maximum accuracy required, computational resources available.
+**使用時機**：需要最高準確度，有可用的計算資源。
 
-## Early Classification
+## 早期分類
 
-Make predictions before observing entire time series:
+在觀察完整時間序列之前做出預測：
 
-- `TEASER` - Two-tier Early and Accurate Series Classifier
-- `ProbabilityThresholdEarlyClassifier` - Prediction when confidence exceeds threshold
+- `TEASER` - 兩層早期且準確的序列分類器
+- `ProbabilityThresholdEarlyClassifier` - 當信心超過閾值時進行預測
 
-**Use when**: Real-time decisions needed, or observations have cost.
+**使用時機**：需要即時決策，或觀測有成本。
 
-## Ordinal Classification
+## 序數分類
 
-Handle ordered class labels:
+處理有序類別標籤：
 
-- `OrdinalTDE` - Temporal dictionary ensemble for ordinal outputs
+- `OrdinalTDE` - 用於序數輸出的時間字典集成
 
-**Use when**: Classes have natural ordering (e.g., severity levels).
+**使用時機**：類別具有自然順序（例如，嚴重程度等級）。
 
-## Composition Tools
+## 組合工具
 
-Build custom pipelines and ensembles:
+建立自訂流程和集成：
 
-- `ClassifierPipeline` - Chain transformers with classifiers
-- `WeightedEnsembleClassifier` - Weighted combination of classifiers
-- `SklearnClassifierWrapper` - Adapt sklearn classifiers for time series
+- `ClassifierPipeline` - 將轉換器與分類器串聯
+- `WeightedEnsembleClassifier` - 分類器的加權組合
+- `SklearnClassifierWrapper` - 將 sklearn 分類器適配用於時間序列
 
-## Quick Start
+## 快速開始
 
 ```python
 from aeon.classification.convolution_based import RocketClassifier
 from aeon.datasets import load_classification
 
-# Load data
+# 載入資料
 X_train, y_train = load_classification("GunPoint", split="train")
 X_test, y_test = load_classification("GunPoint", split="test")
 
-# Train and predict
+# 訓練並預測
 clf = RocketClassifier()
 clf.fit(X_train, y_train)
 accuracy = clf.score(X_test, y_test)
 ```
 
-## Algorithm Selection
+## 演算法選擇
 
-- **Speed priority**: MiniRocketClassifier, Arsenal
-- **Accuracy priority**: HIVECOTEV2, InceptionTimeClassifier
-- **Interpretability**: ShapeletTransformClassifier, Catch22Classifier
-- **Small data**: KNeighborsTimeSeriesClassifier, Distance-based methods
-- **Large data**: Deep learning classifiers, ROCKET variants
+- **速度優先**：MiniRocketClassifier、Arsenal
+- **準確度優先**：HIVECOTEV2、InceptionTimeClassifier
+- **可解釋性**：ShapeletTransformClassifier、Catch22Classifier
+- **小型資料**：KNeighborsTimeSeriesClassifier、基於距離的方法
+- **大型資料**：深度學習分類器、ROCKET 變體

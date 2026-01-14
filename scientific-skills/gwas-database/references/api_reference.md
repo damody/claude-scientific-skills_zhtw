@@ -1,60 +1,60 @@
-# GWAS Catalog API Reference
+# GWAS Catalog API 參考
 
-Comprehensive reference for the GWAS Catalog REST APIs, including endpoint specifications, query parameters, response formats, and advanced usage patterns.
+GWAS Catalog REST API 的全面參考，包括端點規格、查詢參數、回應格式和進階使用模式。
 
-## Table of Contents
+## 目錄
 
-- [API Overview](#api-overview)
-- [Authentication and Rate Limiting](#authentication-and-rate-limiting)
+- [API 概述](#api-概述)
+- [認證與速率限制](#認證與速率限制)
 - [GWAS Catalog REST API](#gwas-catalog-rest-api)
-- [Summary Statistics API](#summary-statistics-api)
-- [Response Formats](#response-formats)
-- [Error Handling](#error-handling)
-- [Advanced Query Patterns](#advanced-query-patterns)
-- [Integration Examples](#integration-examples)
+- [摘要統計 API](#摘要統計-api)
+- [回應格式](#回應格式)
+- [錯誤處理](#錯誤處理)
+- [進階查詢模式](#進階查詢模式)
+- [整合範例](#整合範例)
 
-## API Overview
+## API 概述
 
-The GWAS Catalog provides two complementary REST APIs:
+GWAS Catalog 提供兩個互補的 REST API：
 
-1. **GWAS Catalog REST API**: Access to curated SNP-trait associations, studies, and metadata
-2. **Summary Statistics API**: Access to full GWAS summary statistics (all tested variants)
+1. **GWAS Catalog REST API**：存取經策展的 SNP-性狀關聯、研究和中繼資料
+2. **摘要統計 API**：存取完整的 GWAS 摘要統計（所有測試的變異）
 
-Both APIs use RESTful design principles with JSON responses in HAL (Hypertext Application Language) format, which includes `_links` for resource navigation.
+兩個 API 都使用 RESTful 設計原則，回應採用 HAL（超文本應用語言）格式的 JSON，其中包含用於資源導航的 `_links`。
 
-### Base URLs
+### 基礎 URL
 
 ```
 GWAS Catalog API:         https://www.ebi.ac.uk/gwas/rest/api
 Summary Statistics API:   https://www.ebi.ac.uk/gwas/summary-statistics/api
 ```
 
-### Version Information
+### 版本資訊
 
-The GWAS Catalog REST API v2.0 was released in 2024, with significant improvements:
-- New endpoints (publications, genes, genomic context, ancestries)
-- Enhanced data exposure (cohorts, background traits, licenses)
-- Improved query capabilities
-- Better performance and documentation
+GWAS Catalog REST API v2.0 於 2024 年發布，有重大改進：
+- 新端點（出版物、基因、基因體脈絡、祖源）
+- 增強的資料公開（世代、背景性狀、授權）
+- 改進的查詢功能
+- 更好的效能和文件
 
-The previous API version remains available until May 2026 for backward compatibility.
+之前的 API 版本將持續可用至 2026 年 5 月以確保向後相容。
 
-## Authentication and Rate Limiting
+## 認證與速率限制
 
-### Authentication
+### 認證
 
-**No authentication required** - Both APIs are open access and do not require API keys or registration.
+**不需要認證** - 兩個 API 都是開放存取的，不需要 API 金鑰或註冊。
 
-### Rate Limiting
+### 速率限制
 
-While no explicit rate limits are documented, follow best practices:
-- Implement delays between consecutive requests (e.g., 0.1-0.5 seconds)
-- Use pagination for large result sets
-- Cache responses locally
-- Use bulk downloads (FTP) for genome-wide data
-- Avoid hammering the API with rapid consecutive requests
+雖然沒有明確記錄的速率限制，但請遵循最佳實踐：
+- 在連續請求之間實作延遲（例如 0.1-0.5 秒）
+- 對大型結果集使用分頁
+- 在本地快取回應
+- 使用批量下載（FTP）進行全基因體資料
+- 避免快速連續請求轟炸 API
 
-**Example with rate limiting:**
+**帶速率限制的範例：**
 ```python
 import requests
 from time import sleep
@@ -67,38 +67,38 @@ def query_with_rate_limit(url, delay=0.1):
 
 ## GWAS Catalog REST API
 
-The main API provides access to curated GWAS associations, studies, variants, and traits.
+主要 API 提供對經策展的 GWAS 關聯、研究、變異和性狀的存取。
 
-### Core Endpoints
+### 核心端點
 
-#### 1. Studies
+#### 1. 研究
 
-**Get all studies:**
+**取得所有研究：**
 ```
 GET /studies
 ```
 
-**Get specific study:**
+**取得特定研究：**
 ```
 GET /studies/{accessionId}
 ```
 
-**Search studies:**
+**搜尋研究：**
 ```
 GET /studies/search/findByPublicationIdPubmedId?pubmedId={pmid}
 GET /studies/search/findByDiseaseTrait?diseaseTrait={trait}
 ```
 
-**Query Parameters:**
-- `page`: Page number (0-indexed)
-- `size`: Results per page (default: 20)
-- `sort`: Sort field (e.g., `publicationDate,desc`)
+**查詢參數：**
+- `page`：頁碼（從 0 開始）
+- `size`：每頁結果數（預設：20）
+- `sort`：排序欄位（例如 `publicationDate,desc`）
 
-**Example:**
+**範例：**
 ```python
 import requests
 
-# Get a specific study
+# 取得特定研究
 url = "https://www.ebi.ac.uk/gwas/rest/api/studies/GCST001795"
 response = requests.get(url, headers={"Content-Type": "application/json"})
 study = response.json()
@@ -108,47 +108,47 @@ print(f"PMID: {study.get('publicationInfo', {}).get('pubmedId')}")
 print(f"Sample size: {study.get('initialSampleSize')}")
 ```
 
-**Response Fields:**
-- `accessionId`: Study identifier (GCST ID)
-- `title`: Study title
-- `publicationInfo`: Publication details including PMID
-- `initialSampleSize`: Discovery cohort description
-- `replicationSampleSize`: Replication cohort description
-- `ancestries`: Population ancestry information
-- `genotypingTechnologies`: Array or sequencing platforms
-- `_links`: Links to related resources
+**回應欄位：**
+- `accessionId`：研究識別碼（GCST ID）
+- `title`：研究標題
+- `publicationInfo`：出版詳情包括 PMID
+- `initialSampleSize`：發現世代描述
+- `replicationSampleSize`：複製世代描述
+- `ancestries`：族群祖源資訊
+- `genotypingTechnologies`：基因晶片或定序平台
+- `_links`：相關資源的連結
 
-#### 2. Associations
+#### 2. 關聯
 
-**Get all associations:**
+**取得所有關聯：**
 ```
 GET /associations
 ```
 
-**Get specific association:**
+**取得特定關聯：**
 ```
 GET /associations/{associationId}
 ```
 
-**Get associations for a trait:**
+**取得性狀的關聯：**
 ```
 GET /efoTraits/{efoId}/associations
 ```
 
-**Get associations for a variant:**
+**取得變異的關聯：**
 ```
 GET /singleNucleotidePolymorphisms/{rsId}/associations
 ```
 
-**Query Parameters:**
-- `projection`: Response projection (e.g., `associationBySnp`)
-- `page`, `size`, `sort`: Pagination controls
+**查詢參數：**
+- `projection`：回應投影（例如 `associationBySnp`）
+- `page`、`size`、`sort`：分頁控制
 
-**Example:**
+**範例：**
 ```python
 import requests
 
-# Find all associations for type 2 diabetes
+# 尋找第二型糖尿病的所有關聯
 trait_id = "EFO_0001360"
 url = f"https://www.ebi.ac.uk/gwas/rest/api/efoTraits/{trait_id}/associations"
 params = {"size": 100, "page": 0}
@@ -159,41 +159,41 @@ associations = data.get('_embedded', {}).get('associations', [])
 print(f"Found {len(associations)} associations")
 ```
 
-**Response Fields:**
-- `rsId`: Variant identifier
-- `strongestAllele`: Risk or effect allele
-- `pvalue`: Association p-value
-- `pvalueText`: P-value as reported (may include inequality)
-- `pvalueMantissa`: Mantissa of p-value
-- `pvalueExponent`: Exponent of p-value
-- `orPerCopyNum`: Odds ratio per allele copy
-- `betaNum`: Effect size (quantitative traits)
-- `betaUnit`: Unit of measurement
-- `range`: Confidence interval
-- `standardError`: Standard error
-- `efoTrait`: Trait name
-- `mappedLabel`: EFO standardized term
-- `studyId`: Associated study accession
+**回應欄位：**
+- `rsId`：變異識別碼
+- `strongestAllele`：風險或效應等位基因
+- `pvalue`：關聯 p 值
+- `pvalueText`：報告的 p 值（可能包含不等式）
+- `pvalueMantissa`：p 值的尾數
+- `pvalueExponent`：p 值的指數
+- `orPerCopyNum`：每等位基因複製的勝算比
+- `betaNum`：效應量（數量性狀）
+- `betaUnit`：測量單位
+- `range`：信賴區間
+- `standardError`：標準誤差
+- `efoTrait`：性狀名稱
+- `mappedLabel`：EFO 標準化術語
+- `studyId`：相關研究登錄號
 
-#### 3. Variants (Single Nucleotide Polymorphisms)
+#### 3. 變異（單核苷酸多態性）
 
-**Get variant details:**
+**取得變異詳情：**
 ```
 GET /singleNucleotidePolymorphisms/{rsId}
 ```
 
-**Search variants:**
+**搜尋變異：**
 ```
 GET /singleNucleotidePolymorphisms/search/findByRsId?rsId={rsId}
 GET /singleNucleotidePolymorphisms/search/findByChromBpLocationRange?chrom={chr}&bpStart={start}&bpEnd={end}
 GET /singleNucleotidePolymorphisms/search/findByGene?geneName={gene}
 ```
 
-**Example:**
+**範例：**
 ```python
 import requests
 
-# Get variant information
+# 取得變異資訊
 rs_id = "rs7903146"
 url = f"https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/{rs_id}"
 response = requests.get(url, headers={"Content-Type": "application/json"})
@@ -203,35 +203,35 @@ print(f"rsID: {variant.get('rsId')}")
 print(f"Location: chr{variant.get('locations', [{}])[0].get('chromosomeName')}:{variant.get('locations', [{}])[0].get('chromosomePosition')}")
 ```
 
-**Response Fields:**
-- `rsId`: rs number
-- `merged`: Indicates if variant merged with another
-- `functionalClass`: Variant consequence
-- `locations`: Array of genomic locations
-  - `chromosomeName`: Chromosome number
-  - `chromosomePosition`: Base pair position
-  - `region`: Genomic region information
-- `genomicContexts`: Nearby genes
-- `lastUpdateDate`: Last modification date
+**回應欄位：**
+- `rsId`：rs 編號
+- `merged`：指示變異是否已與另一個合併
+- `functionalClass`：變異後果
+- `locations`：基因體位置陣列
+  - `chromosomeName`：染色體編號
+  - `chromosomePosition`：鹼基對位置
+  - `region`：基因體區域資訊
+- `genomicContexts`：鄰近基因
+- `lastUpdateDate`：最後修改日期
 
-#### 4. Traits (EFO Terms)
+#### 4. 性狀（EFO 術語）
 
-**Get trait information:**
+**取得性狀資訊：**
 ```
 GET /efoTraits/{efoId}
 ```
 
-**Search traits:**
+**搜尋性狀：**
 ```
 GET /efoTraits/search/findByEfoUri?uri={efoUri}
 GET /efoTraits/search/findByTraitIgnoreCase?trait={traitName}
 ```
 
-**Example:**
+**範例：**
 ```python
 import requests
 
-# Get trait details
+# 取得性狀詳情
 trait_id = "EFO_0001360"
 url = f"https://www.ebi.ac.uk/gwas/rest/api/efoTraits/{trait_id}"
 response = requests.get(url, headers={"Content-Type": "application/json"})
@@ -241,33 +241,33 @@ print(f"Trait: {trait.get('trait')}")
 print(f"EFO URI: {trait.get('uri')}")
 ```
 
-#### 5. Publications
+#### 5. 出版物
 
-**Get publication information:**
+**取得出版物資訊：**
 ```
 GET /publications
 GET /publications/{publicationId}
 GET /publications/search/findByPubmedId?pubmedId={pmid}
 ```
 
-#### 6. Genes
+#### 6. 基因
 
-**Get gene information:**
+**取得基因資訊：**
 ```
 GET /genes
 GET /genes/{geneId}
 GET /genes/search/findByGeneName?geneName={symbol}
 ```
 
-### Pagination and Navigation
+### 分頁與導航
 
-All list endpoints support pagination:
+所有列表端點都支援分頁：
 
 ```python
 import requests
 
 def get_all_associations(trait_id):
-    """Retrieve all associations for a trait with pagination"""
+    """擷取性狀的所有關聯並進行分頁"""
     base_url = "https://www.ebi.ac.uk/gwas/rest/api"
     url = f"{base_url}/efoTraits/{trait_id}/associations"
     all_associations = []
@@ -292,69 +292,69 @@ def get_all_associations(trait_id):
     return all_associations
 ```
 
-### HAL Links
+### HAL 連結
 
-Responses include `_links` for resource navigation:
+回應包含用於資源導航的 `_links`：
 
 ```python
 import requests
 
-# Get study and follow links to associations
+# 取得研究並追蹤連結到關聯
 response = requests.get("https://www.ebi.ac.uk/gwas/rest/api/studies/GCST001795")
 study = response.json()
 
-# Follow link to associations
+# 追蹤到關聯的連結
 associations_url = study['_links']['associations']['href']
 associations_response = requests.get(associations_url)
 associations = associations_response.json()
 ```
 
-## Summary Statistics API
+## 摘要統計 API
 
-Access full GWAS summary statistics for studies that have deposited complete data.
+存取已存放完整資料的研究的完整 GWAS 摘要統計。
 
-### Base URL
+### 基礎 URL
 ```
 https://www.ebi.ac.uk/gwas/summary-statistics/api
 ```
 
-### Core Endpoints
+### 核心端點
 
-#### 1. Studies
+#### 1. 研究
 
-**Get all studies with summary statistics:**
+**取得所有具有摘要統計的研究：**
 ```
 GET /studies
 ```
 
-**Get specific study:**
+**取得特定研究：**
 ```
 GET /studies/{gcstId}
 ```
 
-#### 2. Traits
+#### 2. 性狀
 
-**Get trait information:**
+**取得性狀資訊：**
 ```
 GET /traits/{efoId}
 ```
 
-**Get associations for a trait:**
+**取得性狀的關聯：**
 ```
 GET /traits/{efoId}/associations
 ```
 
-**Query Parameters:**
-- `p_lower`: Lower p-value threshold
-- `p_upper`: Upper p-value threshold
-- `size`: Number of results
-- `page`: Page number
+**查詢參數：**
+- `p_lower`：p 值下限閾值
+- `p_upper`：p 值上限閾值
+- `size`：結果數量
+- `page`：頁碼
 
-**Example:**
+**範例：**
 ```python
 import requests
 
-# Find highly significant associations for a trait
+# 尋找性狀的高度顯著關聯
 trait_id = "EFO_0001360"
 base_url = "https://www.ebi.ac.uk/gwas/summary-statistics/api"
 url = f"{base_url}/traits/{trait_id}/associations"
@@ -366,23 +366,23 @@ response = requests.get(url, params=params)
 results = response.json()
 ```
 
-#### 3. Chromosomes
+#### 3. 染色體
 
-**Get associations by chromosome:**
+**依染色體取得關聯：**
 ```
 GET /chromosomes/{chromosome}/associations
 ```
 
-**Query by genomic region:**
+**依基因體區域查詢：**
 ```
 GET /chromosomes/{chromosome}/associations?start={start}&end={end}
 ```
 
-**Example:**
+**範例：**
 ```python
 import requests
 
-# Query variants in a specific region
+# 查詢特定區域中的變異
 chromosome = "10"
 start_pos = 114000000
 end_pos = 115000000
@@ -398,47 +398,47 @@ response = requests.get(url, params=params)
 variants = response.json()
 ```
 
-#### 4. Variants
+#### 4. 變異
 
-**Get specific variant across studies:**
+**跨研究取得特定變異：**
 ```
 GET /variants/{variantId}
 ```
 
-**Search by variant ID:**
+**依變異 ID 搜尋：**
 ```
 GET /variants/{variantId}/associations
 ```
 
-### Response Fields
+### 回應欄位
 
-**Association Fields:**
-- `variant_id`: Variant identifier
-- `chromosome`: Chromosome number
-- `base_pair_location`: Position (bp)
-- `effect_allele`: Effect allele
-- `other_allele`: Reference allele
-- `effect_allele_frequency`: Allele frequency
-- `beta`: Effect size
-- `standard_error`: Standard error
-- `p_value`: P-value
-- `ci_lower`: Lower confidence interval
-- `ci_upper`: Upper confidence interval
-- `odds_ratio`: Odds ratio (case-control studies)
-- `study_accession`: GCST ID
+**關聯欄位：**
+- `variant_id`：變異識別碼
+- `chromosome`：染色體編號
+- `base_pair_location`：位置（bp）
+- `effect_allele`：效應等位基因
+- `other_allele`：參考等位基因
+- `effect_allele_frequency`：等位基因頻率
+- `beta`：效應量
+- `standard_error`：標準誤差
+- `p_value`：p 值
+- `ci_lower`：信賴區間下限
+- `ci_upper`：信賴區間上限
+- `odds_ratio`：勝算比（病例對照研究）
+- `study_accession`：GCST ID
 
-## Response Formats
+## 回應格式
 
-### Content Type
+### 內容類型
 
-All API requests should include the header:
+所有 API 請求應包含標頭：
 ```
 Content-Type: application/json
 ```
 
-### HAL Format
+### HAL 格式
 
-Responses follow the HAL (Hypertext Application Language) specification:
+回應遵循 HAL（超文本應用語言）規範：
 
 ```json
 {
@@ -473,24 +473,24 @@ Responses follow the HAL (Hypertext Application Language) specification:
 }
 ```
 
-### Page Metadata
+### 頁面中繼資料
 
-Paginated responses include page information:
-- `size`: Items per page
-- `totalElements`: Total number of results
-- `totalPages`: Total number of pages
-- `number`: Current page number (0-indexed)
+分頁回應包含頁面資訊：
+- `size`：每頁項目數
+- `totalElements`：總結果數
+- `totalPages`：總頁數
+- `number`：當前頁碼（從 0 開始）
 
-## Error Handling
+## 錯誤處理
 
-### HTTP Status Codes
+### HTTP 狀態碼
 
-- `200 OK`: Successful request
-- `400 Bad Request`: Invalid parameters
-- `404 Not Found`: Resource not found
-- `500 Internal Server Error`: Server error
+- `200 OK`：請求成功
+- `400 Bad Request`：參數無效
+- `404 Not Found`：找不到資源
+- `500 Internal Server Error`：伺服器錯誤
 
-### Error Response Format
+### 錯誤回應格式
 
 ```json
 {
@@ -502,13 +502,13 @@ Paginated responses include page information:
 }
 ```
 
-### Error Handling Example
+### 錯誤處理範例
 
 ```python
 import requests
 
 def safe_api_request(url, params=None):
-    """Make API request with error handling"""
+    """帶錯誤處理的 API 請求"""
     try:
         response = requests.get(url, params=params, timeout=30)
         response.raise_for_status()
@@ -528,15 +528,15 @@ def safe_api_request(url, params=None):
         return None
 ```
 
-## Advanced Query Patterns
+## 進階查詢模式
 
-### 1. Cross-referencing Variants and Traits
+### 1. 變異和性狀的交叉參照
 
 ```python
 import requests
 
 def get_variant_pleiotropy(rs_id):
-    """Get all traits associated with a variant"""
+    """取得與變異相關的所有性狀"""
     base_url = "https://www.ebi.ac.uk/gwas/rest/api"
     url = f"{base_url}/singleNucleotidePolymorphisms/{rs_id}/associations"
     params = {"projection": "associationBySnp"}
@@ -554,19 +554,19 @@ def get_variant_pleiotropy(rs_id):
 
     return traits
 
-# Example usage
+# 使用範例
 pleiotropy = get_variant_pleiotropy('rs7903146')
 for trait, pval in sorted(pleiotropy.items(), key=lambda x: float(x[1])):
     print(f"{trait}: p={pval}")
 ```
 
-### 2. Filtering by P-value Threshold
+### 2. 依 p 值閾值篩選
 
 ```python
 import requests
 
 def get_significant_associations(trait_id, p_threshold=5e-8):
-    """Get genome-wide significant associations"""
+    """取得全基因體顯著關聯"""
     base_url = "https://www.ebi.ac.uk/gwas/rest/api"
     url = f"{base_url}/efoTraits/{trait_id}/associations"
 
@@ -596,26 +596,26 @@ def get_significant_associations(trait_id, p_threshold=5e-8):
     return results
 ```
 
-### 3. Combining Main and Summary Statistics APIs
+### 3. 結合主要和摘要統計 API
 
 ```python
 import requests
 
 def get_complete_variant_data(rs_id):
-    """Get variant data from both APIs"""
+    """從兩個 API 取得變異資料"""
     main_url = f"https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/{rs_id}"
 
-    # Get basic variant info
+    # 取得基本變異資訊
     response = requests.get(main_url, headers={"Content-Type": "application/json"})
     variant_info = response.json()
 
-    # Get associations
+    # 取得關聯
     assoc_url = f"{main_url}/associations"
     response = requests.get(assoc_url, headers={"Content-Type": "application/json"})
     associations = response.json()
 
-    # Could also query summary statistics API for this variant
-    # across all studies with summary data
+    # 也可以查詢摘要統計 API 以取得此變異
+    # 跨所有具有摘要資料的研究
 
     return {
         "variant": variant_info,
@@ -623,14 +623,14 @@ def get_complete_variant_data(rs_id):
     }
 ```
 
-### 4. Genomic Region Queries
+### 4. 基因體區域查詢
 
 ```python
 import requests
 
 def query_region(chromosome, start, end, p_threshold=None):
-    """Query variants in genomic region"""
-    # From main API
+    """查詢基因體區域中的變異"""
+    # 從主要 API
     base_url = "https://www.ebi.ac.uk/gwas/rest/api"
     url = f"{base_url}/singleNucleotidePolymorphisms/search/findByChromBpLocationRange"
     params = {
@@ -643,7 +643,7 @@ def query_region(chromosome, start, end, p_threshold=None):
     response = requests.get(url, params=params, headers={"Content-Type": "application/json"})
     variants = response.json()
 
-    # Can also query summary statistics API
+    # 也可以查詢摘要統計 API
     sumstats_url = f"https://www.ebi.ac.uk/gwas/summary-statistics/api/chromosomes/{chromosome}/associations"
     sumstats_params = {"start": start, "end": end, "size": 1000}
     if p_threshold:
@@ -658,9 +658,9 @@ def query_region(chromosome, start, end, p_threshold=None):
     }
 ```
 
-## Integration Examples
+## 整合範例
 
-### Complete Workflow: Disease Genetic Architecture
+### 完整工作流程：疾病遺傳架構
 
 ```python
 import requests
@@ -673,7 +673,7 @@ class GWASCatalogQuery:
         self.headers = {"Content-Type": "application/json"}
 
     def get_trait_associations(self, trait_id, p_threshold=5e-8):
-        """Get all associations for a trait"""
+        """取得性狀的所有關聯"""
         url = f"{self.base_url}/efoTraits/{trait_id}/associations"
         results = []
         page = 0
@@ -709,7 +709,7 @@ class GWASCatalogQuery:
         return pd.DataFrame(results)
 
     def get_variant_details(self, rs_id):
-        """Get detailed variant information"""
+        """取得詳細變異資訊"""
         url = f"{self.base_url}/singleNucleotidePolymorphisms/{rs_id}"
         response = requests.get(url, headers=self.headers)
 
@@ -718,7 +718,7 @@ class GWASCatalogQuery:
         return None
 
     def get_gene_associations(self, gene_name):
-        """Get variants associated with a gene"""
+        """取得與基因相關的變異"""
         url = f"{self.base_url}/singleNucleotidePolymorphisms/search/findByGene"
         params = {"geneName": gene_name}
         response = requests.get(url, params=params, headers=self.headers)
@@ -727,20 +727,20 @@ class GWASCatalogQuery:
             return response.json()
         return None
 
-# Example usage
+# 使用範例
 gwas = GWASCatalogQuery()
 
-# Query type 2 diabetes associations
+# 查詢第二型糖尿病關聯
 df = gwas.get_trait_associations('EFO_0001360')
 print(f"Found {len(df)} genome-wide significant associations")
 print(f"Unique variants: {df['rs_id'].nunique()}")
 
-# Get top variants
+# 取得頂端變異
 top_variants = df.nsmallest(10, 'pvalue')
 print("\nTop 10 variants:")
 print(top_variants[['rs_id', 'pvalue', 'risk_allele']])
 
-# Get details for top variant
+# 取得頂端變異的詳情
 if len(top_variants) > 0:
     top_rs = top_variants.iloc[0]['rs_id']
     variant_info = gwas.get_variant_details(top_rs)
@@ -749,18 +749,18 @@ if len(top_variants) > 0:
         print(f"\n{top_rs} location: chr{loc.get('chromosomeName')}:{loc.get('chromosomePosition')}")
 ```
 
-### FTP Download Integration
+### FTP 下載整合
 
 ```python
 import requests
 from pathlib import Path
 
 def download_summary_statistics(gcst_id, output_dir="."):
-    """Download summary statistics from FTP"""
-    # FTP URL pattern
+    """從 FTP 下載摘要統計"""
+    # FTP URL 模式
     ftp_base = "http://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics"
 
-    # Try harmonised file first
+    # 先嘗試協調檔案
     harmonised_url = f"{ftp_base}/{gcst_id}/harmonised/{gcst_id}-harmonised.tsv.gz"
 
     output_path = Path(output_dir) / f"{gcst_id}.tsv.gz"
@@ -780,14 +780,14 @@ def download_summary_statistics(gcst_id, output_dir="."):
         print(f"Harmonised file not found for {gcst_id}")
         return None
 
-# Example usage
+# 使用範例
 download_summary_statistics("GCST001234", output_dir="./sumstats")
 ```
 
-## Additional Resources
+## 額外資源
 
-- **Interactive API Documentation**: https://www.ebi.ac.uk/gwas/rest/docs/api
-- **Summary Statistics API Docs**: https://www.ebi.ac.uk/gwas/summary-statistics/docs/
-- **Workshop Materials**: https://github.com/EBISPOT/GWAS_Catalog-workshop
-- **Blog Post on API v2**: https://ebispot.github.io/gwas-blog/rest-api-v2-release/
-- **R Package (gwasrapidd)**: https://cran.r-project.org/package=gwasrapidd
+- **互動式 API 文件**：https://www.ebi.ac.uk/gwas/rest/docs/api
+- **摘要統計 API 文件**：https://www.ebi.ac.uk/gwas/summary-statistics/docs/
+- **工作坊材料**：https://github.com/EBISPOT/GWAS_Catalog-workshop
+- **API v2 部落格文章**：https://ebispot.github.io/gwas-blog/rest-api-v2-release/
+- **R 套件（gwasrapidd）**：https://cran.r-project.org/package=gwasrapidd

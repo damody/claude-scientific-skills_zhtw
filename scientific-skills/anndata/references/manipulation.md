@@ -1,34 +1,34 @@
-# Data Manipulation
+# 資料操作
 
-Operations for transforming, subsetting, and manipulating AnnData objects.
+用於轉換、子集和操作 AnnData 物件的操作。
 
-## Subsetting
+## 子集
 
-### By indices
+### 按索引
 ```python
 import anndata as ad
 import numpy as np
 
 adata = ad.AnnData(X=np.random.rand(1000, 2000))
 
-# Integer indices
-subset = adata[0:100, 0:500]  # First 100 obs, first 500 vars
+# 整數索引
+subset = adata[0:100, 0:500]  # 前 100 個觀測值，前 500 個變數
 
-# List of indices
+# 索引列表
 obs_indices = [0, 10, 20, 30, 40]
 var_indices = [0, 1, 2, 3, 4]
 subset = adata[obs_indices, var_indices]
 
-# Single observation or variable
+# 單個觀測值或變數
 single_obs = adata[0, :]
 single_var = adata[:, 0]
 ```
 
-### By names
+### 按名稱
 ```python
 import pandas as pd
 
-# Create with named indices
+# 使用命名索引建立
 obs_names = [f'cell_{i}' for i in range(1000)]
 var_names = [f'gene_{i}' for i in range(2000)]
 adata = ad.AnnData(
@@ -37,48 +37,48 @@ adata = ad.AnnData(
     var=pd.DataFrame(index=var_names)
 )
 
-# Subset by observation names
+# 按觀測名稱子集
 subset = adata[['cell_0', 'cell_1', 'cell_2'], :]
 
-# Subset by variable names
+# 按變數名稱子集
 subset = adata[:, ['gene_0', 'gene_10', 'gene_20']]
 
-# Both axes
+# 兩個軸
 subset = adata[['cell_0', 'cell_1'], ['gene_0', 'gene_1']]
 ```
 
-### By boolean masks
+### 按布林遮罩
 ```python
-# Create boolean masks
+# 建立布林遮罩
 high_count_obs = np.random.rand(1000) > 0.5
 high_var_genes = np.random.rand(2000) > 0.7
 
-# Subset using masks
+# 使用遮罩子集
 subset = adata[high_count_obs, :]
 subset = adata[:, high_var_genes]
 subset = adata[high_count_obs, high_var_genes]
 ```
 
-### By metadata conditions
+### 按中繼資料條件
 ```python
-# Add metadata
+# 添加中繼資料
 adata.obs['cell_type'] = np.random.choice(['A', 'B', 'C'], 1000)
 adata.obs['quality_score'] = np.random.rand(1000)
 adata.var['highly_variable'] = np.random.rand(2000) > 0.8
 
-# Filter by cell type
+# 按細胞類型過濾
 t_cells = adata[adata.obs['cell_type'] == 'A']
 
-# Filter by multiple conditions
+# 按多個條件過濾
 high_quality_a_cells = adata[
     (adata.obs['cell_type'] == 'A') &
     (adata.obs['quality_score'] > 0.7)
 ]
 
-# Filter by variable metadata
+# 按變數中繼資料過濾
 hv_genes = adata[:, adata.var['highly_variable']]
 
-# Complex conditions
+# 複雜條件
 filtered = adata[
     (adata.obs['quality_score'] > 0.5) &
     (adata.obs['cell_type'].isin(['A', 'B'])),
@@ -86,73 +86,73 @@ filtered = adata[
 ]
 ```
 
-## Transposition
+## 轉置
 
 ```python
-# Transpose AnnData object (swap observations and variables)
+# 轉置 AnnData 物件（交換觀測值和變數）
 adata_T = adata.T
 
-# Shape changes
+# 形狀改變
 print(adata.shape)    # (1000, 2000)
 print(adata_T.shape)  # (2000, 1000)
 
-# obs and var are swapped
-print(adata.obs.head())   # Observation metadata
-print(adata_T.var.head()) # Same data, now as variable metadata
+# obs 和 var 交換
+print(adata.obs.head())   # 觀測中繼資料
+print(adata_T.var.head()) # 相同資料，現在作為變數中繼資料
 
-# Useful when data is in opposite orientation
-# Common with some file formats where genes are rows
+# 當資料方向相反時有用
+# 常見於某些基因為列的檔案格式
 ```
 
-## Copying
+## 複製
 
-### Full copy
+### 完整複製
 ```python
-# Create independent copy
+# 建立獨立複製
 adata_copy = adata.copy()
 
-# Modifications to copy don't affect original
+# 對複製的修改不影響原始
 adata_copy.obs['new_column'] = 1
 print('new_column' in adata.obs.columns)  # False
 ```
 
-### Shallow copy
+### 淺複製
 ```python
-# View (doesn't copy data, modifications affect original)
+# 視圖（不複製資料，修改影響原始）
 adata_view = adata[0:100, :]
 
-# Check if object is a view
+# 檢查物件是否為視圖
 print(adata_view.is_view)  # True
 
-# Convert view to independent copy
+# 將視圖轉換為獨立複製
 adata_independent = adata_view.copy()
 print(adata_independent.is_view)  # False
 ```
 
-## Renaming
+## 重新命名
 
-### Rename observations and variables
+### 重新命名觀測值和變數
 ```python
-# Rename all observations
+# 重新命名所有觀測值
 adata.obs_names = [f'new_cell_{i}' for i in range(adata.n_obs)]
 
-# Rename all variables
+# 重新命名所有變數
 adata.var_names = [f'new_gene_{i}' for i in range(adata.n_vars)]
 
-# Make names unique (add suffix to duplicates)
+# 使名稱唯一（為重複項添加後綴）
 adata.obs_names_make_unique()
 adata.var_names_make_unique()
 ```
 
-### Rename categories
+### 重新命名類別
 ```python
-# Create categorical column
+# 建立類別欄位
 adata.obs['cell_type'] = pd.Categorical(['A', 'B', 'C'] * 333 + ['A'])
 
-# Rename categories
+# 重新命名類別
 adata.rename_categories('cell_type', ['Type_A', 'Type_B', 'Type_C'])
 
-# Or using dictionary
+# 或使用字典
 adata.rename_categories('cell_type', {
     'Type_A': 'T_cell',
     'Type_B': 'B_cell',
@@ -160,292 +160,292 @@ adata.rename_categories('cell_type', {
 })
 ```
 
-## Type Conversions
+## 類型轉換
 
-### Strings to categoricals
+### 字串轉類別
 ```python
-# Convert string columns to categorical (more memory efficient)
+# 將字串欄位轉換為類別（更節省記憶體）
 adata.obs['cell_type'] = ['TypeA', 'TypeB'] * 500
 adata.obs['tissue'] = ['brain', 'liver'] * 500
 
-# Convert all string columns to categorical
+# 將所有字串欄位轉換為類別
 adata.strings_to_categoricals()
 
 print(adata.obs['cell_type'].dtype)  # category
 print(adata.obs['tissue'].dtype)     # category
 ```
 
-### Sparse to dense and vice versa
+### 稀疏與密集互轉
 ```python
 from scipy.sparse import csr_matrix
 
-# Dense to sparse
+# 密集轉稀疏
 if not isinstance(adata.X, csr_matrix):
     adata.X = csr_matrix(adata.X)
 
-# Sparse to dense
+# 稀疏轉密集
 if isinstance(adata.X, csr_matrix):
     adata.X = adata.X.toarray()
 
-# Convert layer
+# 轉換圖層
 adata.layers['normalized'] = csr_matrix(adata.layers['normalized'])
 ```
 
-## Chunked Operations
+## 分塊操作
 
-Process large datasets in chunks:
+分塊處理大型資料集：
 
 ```python
-# Iterate through data in chunks
+# 分塊遍歷資料
 chunk_size = 100
 for chunk in adata.chunked_X(chunk_size):
-    # Process chunk
+    # 處理區塊
     result = process_chunk(chunk)
 ```
 
-## Extracting Vectors
+## 擷取向量
 
-### Get observation vectors
+### 取得觀測向量
 ```python
-# Get observation metadata as array
+# 取得觀測中繼資料為陣列
 cell_types = adata.obs_vector('cell_type')
 
-# Get gene expression across observations
-actb_expression = adata.obs_vector('ACTB')  # If ACTB in var_names
+# 取得跨觀測值的基因表達
+actb_expression = adata.obs_vector('ACTB')  # 如果 ACTB 在 var_names 中
 ```
 
-### Get variable vectors
+### 取得變數向量
 ```python
-# Get variable metadata as array
+# 取得變數中繼資料為陣列
 gene_names = adata.var_vector('gene_name')
 ```
 
-## Adding/Modifying Data
+## 添加/修改資料
 
-### Add observations
+### 添加觀測值
 ```python
-# Create new observations
+# 建立新觀測值
 new_obs = ad.AnnData(X=np.random.rand(100, adata.n_vars))
 new_obs.var_names = adata.var_names
 
-# Concatenate with existing
+# 與現有連接
 adata_extended = ad.concat([adata, new_obs], axis=0)
 ```
 
-### Add variables
+### 添加變數
 ```python
-# Create new variables
+# 建立新變數
 new_vars = ad.AnnData(X=np.random.rand(adata.n_obs, 100))
 new_vars.obs_names = adata.obs_names
 
-# Concatenate with existing
+# 與現有連接
 adata_extended = ad.concat([adata, new_vars], axis=1)
 ```
 
-### Add metadata columns
+### 添加中繼資料欄位
 ```python
-# Add observation annotation
+# 添加觀測註解
 adata.obs['new_score'] = np.random.rand(adata.n_obs)
 
-# Add variable annotation
+# 添加變數註解
 adata.var['new_label'] = ['label'] * adata.n_vars
 
-# Add from external data
+# 從外部資料添加
 external_data = pd.read_csv('metadata.csv', index_col=0)
 adata.obs['external_info'] = external_data.loc[adata.obs_names, 'column']
 ```
 
-### Add layers
+### 添加圖層
 ```python
-# Add new layer
+# 添加新圖層
 adata.layers['raw_counts'] = np.random.randint(0, 100, adata.shape)
 adata.layers['log_transformed'] = np.log1p(adata.X)
 
-# Replace layer
+# 替換圖層
 adata.layers['normalized'] = new_normalized_data
 ```
 
-### Add embeddings
+### 添加嵌入
 ```python
-# Add PCA
+# 添加 PCA
 adata.obsm['X_pca'] = np.random.rand(adata.n_obs, 50)
 
-# Add UMAP
+# 添加 UMAP
 adata.obsm['X_umap'] = np.random.rand(adata.n_obs, 2)
 
-# Add multiple embeddings
+# 添加多個嵌入
 adata.obsm['X_tsne'] = np.random.rand(adata.n_obs, 2)
 adata.obsm['X_diffmap'] = np.random.rand(adata.n_obs, 10)
 ```
 
-### Add pairwise relationships
+### 添加成對關係
 ```python
 from scipy.sparse import csr_matrix
 
-# Add nearest neighbor graph
+# 添加最近鄰圖
 n_obs = adata.n_obs
 knn_graph = csr_matrix(np.random.rand(n_obs, n_obs) > 0.95)
 adata.obsp['connectivities'] = knn_graph
 
-# Add distance matrix
+# 添加距離矩陣
 adata.obsp['distances'] = csr_matrix(np.random.rand(n_obs, n_obs))
 ```
 
-### Add unstructured data
+### 添加非結構化資料
 ```python
-# Add analysis parameters
+# 添加分析參數
 adata.uns['pca'] = {
     'variance': [0.2, 0.15, 0.1],
     'variance_ratio': [0.4, 0.3, 0.2],
     'params': {'n_comps': 50}
 }
 
-# Add color schemes
+# 添加色彩方案
 adata.uns['cell_type_colors'] = ['#FF0000', '#00FF00', '#0000FF']
 ```
 
-## Removing Data
+## 移除資料
 
-### Remove observations or variables
+### 移除觀測值或變數
 ```python
-# Keep only specific observations
+# 僅保留特定觀測值
 keep_obs = adata.obs['quality_score'] > 0.5
 adata = adata[keep_obs, :]
 
-# Remove specific variables
+# 移除特定變數
 remove_vars = adata.var['low_count']
 adata = adata[:, ~remove_vars]
 ```
 
-### Remove metadata columns
+### 移除中繼資料欄位
 ```python
-# Remove observation column
+# 移除觀測欄位
 adata.obs.drop('unwanted_column', axis=1, inplace=True)
 
-# Remove variable column
+# 移除變數欄位
 adata.var.drop('unwanted_column', axis=1, inplace=True)
 ```
 
-### Remove layers
+### 移除圖層
 ```python
-# Remove specific layer
+# 移除特定圖層
 del adata.layers['unwanted_layer']
 
-# Remove all layers
+# 移除所有圖層
 adata.layers = {}
 ```
 
-### Remove embeddings
+### 移除嵌入
 ```python
-# Remove specific embedding
+# 移除特定嵌入
 del adata.obsm['X_tsne']
 
-# Remove all embeddings
+# 移除所有嵌入
 adata.obsm = {}
 ```
 
-### Remove unstructured data
+### 移除非結構化資料
 ```python
-# Remove specific key
+# 移除特定鍵
 del adata.uns['unwanted_key']
 
-# Remove all unstructured data
+# 移除所有非結構化資料
 adata.uns = {}
 ```
 
-## Reordering
+## 重新排序
 
-### Sort observations
+### 排序觀測值
 ```python
-# Sort by observation metadata
+# 按觀測中繼資料排序
 adata = adata[adata.obs.sort_values('quality_score').index, :]
 
-# Sort by observation names
+# 按觀測名稱排序
 adata = adata[sorted(adata.obs_names), :]
 ```
 
-### Sort variables
+### 排序變數
 ```python
-# Sort by variable metadata
+# 按變數中繼資料排序
 adata = adata[:, adata.var.sort_values('gene_name').index]
 
-# Sort by variable names
+# 按變數名稱排序
 adata = adata[:, sorted(adata.var_names)]
 ```
 
-### Reorder to match external list
+### 重新排序以匹配外部列表
 ```python
-# Reorder observations to match external list
+# 重新排序觀測值以匹配外部列表
 desired_order = ['cell_10', 'cell_5', 'cell_20', ...]
 adata = adata[desired_order, :]
 
-# Reorder variables
+# 重新排序變數
 desired_genes = ['TP53', 'ACTB', 'GAPDH', ...]
 adata = adata[:, desired_genes]
 ```
 
-## Data Transformations
+## 資料轉換
 
-### Normalize
+### 標準化
 ```python
-# Total count normalization (CPM/TPM-like)
+# 總計數標準化（類似 CPM/TPM）
 total_counts = adata.X.sum(axis=1)
 adata.layers['normalized'] = adata.X / total_counts[:, np.newaxis] * 1e6
 
-# Log transformation
+# 對數轉換
 adata.layers['log1p'] = np.log1p(adata.X)
 
-# Z-score normalization
+# Z 分數標準化
 mean = adata.X.mean(axis=0)
 std = adata.X.std(axis=0)
 adata.layers['scaled'] = (adata.X - mean) / std
 ```
 
-### Filter
+### 過濾
 ```python
-# Filter cells by total counts
+# 按總計數過濾細胞
 total_counts = np.array(adata.X.sum(axis=1)).flatten()
 adata.obs['total_counts'] = total_counts
 adata = adata[adata.obs['total_counts'] > 1000, :]
 
-# Filter genes by detection rate
+# 按檢測率過濾基因
 detection_rate = (adata.X > 0).sum(axis=0) / adata.n_obs
 adata.var['detection_rate'] = np.array(detection_rate).flatten()
 adata = adata[:, adata.var['detection_rate'] > 0.01]
 ```
 
-## Working with Views
+## 處理視圖
 
-Views are lightweight references to subsets of data that don't copy the underlying matrix:
+視圖是資料子集的輕量參照，不複製底層矩陣：
 
 ```python
-# Create view
+# 建立視圖
 view = adata[0:100, 0:500]
 print(view.is_view)  # True
 
-# Views allow read access
+# 視圖允許讀取存取
 data = view.X
 
-# Modifying view data affects original
-# (Be careful!)
+# 修改視圖資料會影響原始
+# （要小心！）
 
-# Convert view to independent copy
+# 將視圖轉換為獨立複製
 independent = view.copy()
 
-# Force AnnData to be a copy, not a view
+# 強制 AnnData 為複製而非視圖
 adata = adata.copy()
 ```
 
-## Merging Metadata
+## 合併中繼資料
 
 ```python
-# Merge external metadata
+# 合併外部中繼資料
 external_metadata = pd.read_csv('additional_metadata.csv', index_col=0)
 
-# Join metadata (inner join on index)
+# 連接中繼資料（在索引上內連接）
 adata.obs = adata.obs.join(external_metadata)
 
-# Left join (keep all adata observations)
+# 左連接（保留所有 adata 觀測值）
 adata.obs = adata.obs.merge(
     external_metadata,
     left_index=True,
@@ -454,43 +454,43 @@ adata.obs = adata.obs.merge(
 )
 ```
 
-## Common Manipulation Patterns
+## 常見操作模式
 
-### Quality control filtering
+### 品質控制過濾
 ```python
-# Calculate QC metrics
+# 計算 QC 指標
 adata.obs['n_genes'] = (adata.X > 0).sum(axis=1)
 adata.obs['total_counts'] = adata.X.sum(axis=1)
 adata.var['n_cells'] = (adata.X > 0).sum(axis=0)
 
-# Filter low-quality cells
+# 過濾低品質細胞
 adata = adata[adata.obs['n_genes'] > 200, :]
 adata = adata[adata.obs['total_counts'] < 50000, :]
 
-# Filter rarely detected genes
+# 過濾很少檢測到的基因
 adata = adata[:, adata.var['n_cells'] >= 3]
 ```
 
-### Select highly variable genes
+### 選擇高變異基因
 ```python
-# Mark highly variable genes
+# 標記高變異基因
 gene_variance = np.var(adata.X, axis=0)
 adata.var['variance'] = np.array(gene_variance).flatten()
 adata.var['highly_variable'] = adata.var['variance'] > np.percentile(gene_variance, 90)
 
-# Subset to highly variable genes
+# 子集至高變異基因
 adata_hvg = adata[:, adata.var['highly_variable']].copy()
 ```
 
-### Downsample
+### 降抽樣
 ```python
-# Random sampling of observations
+# 觀測值的隨機抽樣
 np.random.seed(42)
 n_sample = 500
 sample_indices = np.random.choice(adata.n_obs, n_sample, replace=False)
 adata_downsampled = adata[sample_indices, :].copy()
 
-# Stratified sampling by cell type
+# 按細胞類型分層抽樣
 from sklearn.model_selection import train_test_split
 train_idx, test_idx = train_test_split(
     range(adata.n_obs),
@@ -501,9 +501,9 @@ adata_train = adata[train_idx, :].copy()
 adata_test = adata[test_idx, :].copy()
 ```
 
-### Split train/test
+### 分割訓練/測試
 ```python
-# Random train/test split
+# 隨機訓練/測試分割
 np.random.seed(42)
 n_obs = adata.n_obs
 train_size = int(0.8 * n_obs)

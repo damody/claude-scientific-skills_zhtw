@@ -1,165 +1,165 @@
-# I/O Operations
+# I/O 操作
 
-This reference covers file input/output operations, format conversions, export strategies, and working with various data formats in Vaex.
+本參考文件涵蓋 Vaex 中的檔案輸入/輸出操作、格式轉換、匯出策略，以及處理各種資料格式。
 
-## Overview
+## 概述
 
-Vaex supports multiple file formats with varying performance characteristics. The choice of format significantly impacts loading speed, memory usage, and overall performance.
+Vaex 支援多種檔案格式，每種格式有不同的效能特性。格式的選擇顯著影響載入速度、記憶體使用和整體效能。
 
-**Format recommendations:**
-- **HDF5** - Best for most use cases (instant loading, memory-mapped)
-- **Apache Arrow** - Best for interoperability (instant loading, columnar)
-- **Parquet** - Good for distributed systems (compressed, columnar)
-- **CSV** - Avoid for large datasets (slow loading, not memory-mapped)
+**格式建議：**
+- **HDF5** - 最適合大多數使用案例（即時載入，記憶體映射）
+- **Apache Arrow** - 最適合互通性（即時載入，欄式儲存）
+- **Parquet** - 適合分散式系統（壓縮，欄式儲存）
+- **CSV** - 避免用於大型資料集（載入緩慢，非記憶體映射）
 
-## Reading Data
+## 讀取資料
 
-### HDF5 Files (Recommended)
+### HDF5 檔案（推薦）
 
 ```python
 import vaex
 
-# Open HDF5 file (instant, memory-mapped)
+# 開啟 HDF5 檔案（即時，記憶體映射）
 df = vaex.open('data.hdf5')
 
-# Multiple files as one DataFrame
+# 多個檔案作為單一 DataFrame
 df = vaex.open('data_part*.hdf5')
 df = vaex.open(['data_2020.hdf5', 'data_2021.hdf5', 'data_2022.hdf5'])
 ```
 
-**Advantages:**
-- Instant loading (memory-mapped, no data read into RAM)
-- Optimal performance for Vaex operations
-- Supports compression
-- Random access patterns
+**優點：**
+- 即時載入（記憶體映射，無資料讀入 RAM）
+- Vaex 操作的最佳效能
+- 支援壓縮
+- 隨機存取模式
 
-### Apache Arrow Files
+### Apache Arrow 檔案
 
 ```python
-# Open Arrow file (instant, memory-mapped)
+# 開啟 Arrow 檔案（即時，記憶體映射）
 df = vaex.open('data.arrow')
-df = vaex.open('data.feather')  # Feather is Arrow format
+df = vaex.open('data.feather')  # Feather 是 Arrow 格式
 
-# Multiple Arrow files
+# 多個 Arrow 檔案
 df = vaex.open('data_*.arrow')
 ```
 
-**Advantages:**
-- Instant loading (memory-mapped)
-- Language-agnostic format
-- Excellent for data sharing
-- Zero-copy integration with Arrow ecosystem
+**優點：**
+- 即時載入（記憶體映射）
+- 語言無關格式
+- 適合資料共享
+- 與 Arrow 生態系統零複製整合
 
-### Parquet Files
+### Parquet 檔案
 
 ```python
-# Open Parquet file
+# 開啟 Parquet 檔案
 df = vaex.open('data.parquet')
 
-# Multiple Parquet files
+# 多個 Parquet 檔案
 df = vaex.open('data_*.parquet')
 
-# From cloud storage
+# 從雲端儲存
 df = vaex.open('s3://bucket/data.parquet')
 df = vaex.open('gs://bucket/data.parquet')
 ```
 
-**Advantages:**
-- Compressed by default
-- Columnar format
-- Wide ecosystem support
-- Good for distributed systems
+**優點：**
+- 預設壓縮
+- 欄式格式
+- 廣泛的生態系統支援
+- 適合分散式系統
 
-**Considerations:**
-- Slower than HDF5/Arrow for local files
-- May require full file read for some operations
+**注意事項：**
+- 本地檔案比 HDF5/Arrow 慢
+- 某些操作可能需要完整檔案讀取
 
-### CSV Files
+### CSV 檔案
 
 ```python
-# Simple CSV
+# 簡單 CSV
 df = vaex.from_csv('data.csv')
 
-# Large CSV with automatic chunking
+# 大型 CSV 自動分塊
 df = vaex.from_csv('large_data.csv', chunk_size=5_000_000)
 
-# CSV with conversion to HDF5
+# CSV 轉換為 HDF5
 df = vaex.from_csv('large_data.csv', convert='large_data.hdf5')
-# Creates HDF5 file for future fast loading
+# 建立 HDF5 檔案供未來快速載入
 
-# CSV with options
+# 帶選項的 CSV
 df = vaex.from_csv(
     'data.csv',
     sep=',',
     header=0,
     names=['col1', 'col2', 'col3'],
     dtype={'col1': 'int64', 'col2': 'float64'},
-    usecols=['col1', 'col2'],  # Only load specific columns
-    nrows=100000  # Limit number of rows
+    usecols=['col1', 'col2'],  # 只載入特定欄位
+    nrows=100000  # 限制列數
 )
 ```
 
-**Recommendations:**
-- **Always convert large CSVs to HDF5** for repeated use
-- Use `convert` parameter to create HDF5 automatically
-- CSV loading can take significant time for large files
+**建議：**
+- **總是將大型 CSV 轉換為 HDF5** 供重複使用
+- 使用 `convert` 參數自動建立 HDF5
+- 大型檔案的 CSV 載入可能需要大量時間
 
-### FITS Files (Astronomy)
+### FITS 檔案（天文學）
 
 ```python
-# Open FITS file
+# 開啟 FITS 檔案
 df = vaex.open('astronomical_data.fits')
 
-# Multiple FITS files
+# 多個 FITS 檔案
 df = vaex.open('survey_*.fits')
 ```
 
-## Writing/Exporting Data
+## 寫入/匯出資料
 
-### Export to HDF5
+### 匯出為 HDF5
 
 ```python
-# Export to HDF5 (recommended for Vaex)
+# 匯出為 HDF5（Vaex 推薦）
 df.export_hdf5('output.hdf5')
 
-# With progress bar
+# 帶進度條
 df.export_hdf5('output.hdf5', progress=True)
 
-# Export subset of columns
+# 匯出欄位子集
 df[['col1', 'col2', 'col3']].export_hdf5('subset.hdf5')
 
-# Export with compression
+# 帶壓縮匯出
 df.export_hdf5('compressed.hdf5', compression='gzip')
 ```
 
-### Export to Arrow
+### 匯出為 Arrow
 
 ```python
-# Export to Arrow format
+# 匯出為 Arrow 格式
 df.export_arrow('output.arrow')
 
-# Export to Feather (Arrow format)
+# 匯出為 Feather（Arrow 格式）
 df.export_feather('output.feather')
 ```
 
-### Export to Parquet
+### 匯出為 Parquet
 
 ```python
-# Export to Parquet
+# 匯出為 Parquet
 df.export_parquet('output.parquet')
 
-# With compression
+# 帶壓縮
 df.export_parquet('output.parquet', compression='snappy')
 df.export_parquet('output.parquet', compression='gzip')
 ```
 
-### Export to CSV
+### 匯出為 CSV
 
 ```python
-# Export to CSV (not recommended for large data)
+# 匯出為 CSV（不建議用於大型資料）
 df.export_csv('output.csv')
 
-# With options
+# 帶選項
 df.export_csv(
     'output.csv',
     sep=',',
@@ -168,95 +168,95 @@ df.export_csv(
     chunk_size=1_000_000
 )
 
-# Export subset
+# 匯出子集
 df[df.age > 25].export_csv('filtered_output.csv')
 ```
 
-## Format Conversion
+## 格式轉換
 
-### CSV to HDF5 (Most Common)
+### CSV 到 HDF5（最常見）
 
 ```python
 import vaex
 
-# Method 1: Automatic conversion during read
+# 方法 1：讀取時自動轉換
 df = vaex.from_csv('large.csv', convert='large.hdf5')
-# Creates large.hdf5, returns DataFrame pointing to it
+# 建立 large.hdf5，回傳指向它的 DataFrame
 
-# Method 2: Explicit conversion
+# 方法 2：明確轉換
 df = vaex.from_csv('large.csv')
 df.export_hdf5('large.hdf5')
 
-# Future loads (instant)
+# 未來載入（即時）
 df = vaex.open('large.hdf5')
 ```
 
-### HDF5 to Arrow
+### HDF5 到 Arrow
 
 ```python
-# Load HDF5
+# 載入 HDF5
 df = vaex.open('data.hdf5')
 
-# Export to Arrow
+# 匯出為 Arrow
 df.export_arrow('data.arrow')
 ```
 
-### Parquet to HDF5
+### Parquet 到 HDF5
 
 ```python
-# Load Parquet
+# 載入 Parquet
 df = vaex.open('data.parquet')
 
-# Export to HDF5
+# 匯出為 HDF5
 df.export_hdf5('data.hdf5')
 ```
 
-### Multiple CSV Files to Single HDF5
+### 多個 CSV 檔案到單一 HDF5
 
 ```python
 import vaex
 import glob
 
-# Find all CSV files
+# 找到所有 CSV 檔案
 csv_files = glob.glob('data_*.csv')
 
-# Load and concatenate
+# 載入並串接
 dfs = [vaex.from_csv(f) for f in csv_files]
 df_combined = vaex.concat(dfs)
 
-# Export as single HDF5
+# 匯出為單一 HDF5
 df_combined.export_hdf5('combined_data.hdf5')
 ```
 
-## Incremental/Chunked I/O
+## 增量/分塊 I/O
 
-### Processing Large CSV in Chunks
+### 分塊處理大型 CSV
 
 ```python
 import vaex
 
-# Process CSV in chunks
+# 分塊處理 CSV
 chunk_size = 1_000_000
 output_file = 'processed.hdf5'
 
 for i, df_chunk in enumerate(vaex.from_csv_chunked('huge.csv', chunk_size=chunk_size)):
-    # Process chunk
+    # 處理分塊
     df_chunk['new_col'] = df_chunk.x + df_chunk.y
 
-    # Append to HDF5
+    # 追加到 HDF5
     if i == 0:
         df_chunk.export_hdf5(output_file)
     else:
-        df_chunk.export_hdf5(output_file, mode='a')  # Append
+        df_chunk.export_hdf5(output_file, mode='a')  # 追加
 
-# Load final result
+# 載入最終結果
 df = vaex.open(output_file)
 ```
 
-### Exporting in Chunks
+### 分塊匯出
 
 ```python
-# Export large DataFrame in chunks (for CSV)
+# 分塊匯出大型 DataFrame（用於 CSV）
 chunk_size = 1_000_000
 
 for i in range(0, len(df), chunk_size):
@@ -265,152 +265,152 @@ for i in range(0, len(df), chunk_size):
     df_chunk.export_csv('large_output.csv', mode=mode, header=(i == 0))
 ```
 
-## Pandas Integration
+## Pandas 整合
 
-### From Pandas to Vaex
+### 從 Pandas 到 Vaex
 
 ```python
 import pandas as pd
 import vaex
 
-# Read with pandas
+# 使用 pandas 讀取
 pdf = pd.read_csv('data.csv')
 
-# Convert to Vaex
+# 轉換為 Vaex
 df = vaex.from_pandas(pdf, copy_index=False)
 
-# For better performance: Use Vaex directly
-df = vaex.from_csv('data.csv')  # Preferred
+# 為了更好的效能：直接使用 Vaex
+df = vaex.from_csv('data.csv')  # 偏好
 ```
 
-### From Vaex to Pandas
+### 從 Vaex 到 Pandas
 
 ```python
-# Full conversion (careful with large data!)
+# 完整轉換（大型資料要小心！）
 pdf = df.to_pandas_df()
 
-# Convert subset
+# 轉換子集
 pdf = df[['col1', 'col2']].to_pandas_df()
-pdf = df[:10000].to_pandas_df()  # First 10k rows
-pdf = df[df.age > 25].to_pandas_df()  # Filtered
+pdf = df[:10000].to_pandas_df()  # 前 10k 列
+pdf = df[df.age > 25].to_pandas_df()  # 篩選後
 
-# Sample for exploration
+# 抽樣用於探索
 pdf_sample = df.sample(n=10000).to_pandas_df()
 ```
 
-## Arrow Integration
+## Arrow 整合
 
-### From Arrow to Vaex
+### 從 Arrow 到 Vaex
 
 ```python
 import pyarrow as pa
 import vaex
 
-# From Arrow Table
+# 從 Arrow Table
 arrow_table = pa.table({
     'a': [1, 2, 3],
     'b': [4, 5, 6]
 })
 df = vaex.from_arrow_table(arrow_table)
 
-# From Arrow file
+# 從 Arrow 檔案
 arrow_table = pa.ipc.open_file('data.arrow').read_all()
 df = vaex.from_arrow_table(arrow_table)
 ```
 
-### From Vaex to Arrow
+### 從 Vaex 到 Arrow
 
 ```python
-# Convert to Arrow Table
+# 轉換為 Arrow Table
 arrow_table = df.to_arrow_table()
 
-# Write Arrow file
+# 寫入 Arrow 檔案
 import pyarrow as pa
 with pa.ipc.new_file('output.arrow', arrow_table.schema) as writer:
     writer.write_table(arrow_table)
 
-# Or use Vaex export
+# 或使用 Vaex 匯出
 df.export_arrow('output.arrow')
 ```
 
-## Remote and Cloud Storage
+## 遠端和雲端儲存
 
-### Reading from S3
+### 從 S3 讀取
 
 ```python
 import vaex
 
-# Read from S3 (requires s3fs)
+# 從 S3 讀取（需要 s3fs）
 df = vaex.open('s3://bucket-name/data.parquet')
 df = vaex.open('s3://bucket-name/data.hdf5')
 
-# With credentials
+# 使用憑證
 import s3fs
 fs = s3fs.S3FileSystem(key='access_key', secret='secret_key')
 df = vaex.open('s3://bucket-name/data.parquet', fs=fs)
 ```
 
-### Reading from Google Cloud Storage
+### 從 Google Cloud Storage 讀取
 
 ```python
-# Read from GCS (requires gcsfs)
+# 從 GCS 讀取（需要 gcsfs）
 df = vaex.open('gs://bucket-name/data.parquet')
 
-# With credentials
+# 使用憑證
 import gcsfs
 fs = gcsfs.GCSFileSystem(token='path/to/credentials.json')
 df = vaex.open('gs://bucket-name/data.parquet', fs=fs)
 ```
 
-### Reading from Azure
+### 從 Azure 讀取
 
 ```python
-# Read from Azure Blob Storage (requires adlfs)
+# 從 Azure Blob Storage 讀取（需要 adlfs）
 df = vaex.open('az://container-name/data.parquet')
 ```
 
-### Writing to Cloud Storage
+### 寫入雲端儲存
 
 ```python
-# Export to S3
+# 匯出到 S3
 df.export_parquet('s3://bucket-name/output.parquet')
 df.export_hdf5('s3://bucket-name/output.hdf5')
 
-# Export to GCS
+# 匯出到 GCS
 df.export_parquet('gs://bucket-name/output.parquet')
 ```
 
-## Database Integration
+## 資料庫整合
 
-### Reading from SQL Databases
+### 從 SQL 資料庫讀取
 
 ```python
 import vaex
 import pandas as pd
 from sqlalchemy import create_engine
 
-# Read with pandas, convert to Vaex
+# 使用 pandas 讀取，轉換為 Vaex
 engine = create_engine('postgresql://user:password@host:port/database')
 pdf = pd.read_sql('SELECT * FROM table', engine)
 df = vaex.from_pandas(pdf)
 
-# For large tables: Read in chunks
+# 對於大型表格：分塊讀取
 chunks = []
 for chunk in pd.read_sql('SELECT * FROM large_table', engine, chunksize=100000):
     chunks.append(vaex.from_pandas(chunk))
 df = vaex.concat(chunks)
 
-# Better: Export from database to CSV/Parquet, then load with Vaex
+# 更好：從資料庫匯出為 CSV/Parquet，然後用 Vaex 載入
 ```
 
-### Writing to SQL Databases
+### 寫入 SQL 資料庫
 
 ```python
-# Convert to pandas, then write
+# 轉換為 pandas，然後寫入
 pdf = df.to_pandas_df()
 pdf.to_sql('table_name', engine, if_exists='replace', index=False)
 
-# For large data: Write in chunks
+# 對於大型資料：分塊寫入
 chunk_size = 100000
 for i in range(0, len(df), chunk_size):
     chunk = df[i:i+chunk_size].to_pandas_df()
@@ -419,180 +419,180 @@ for i in range(0, len(df), chunk_size):
                  index=False)
 ```
 
-## Memory-Mapped Files
+## 記憶體映射檔案
 
-### Understanding Memory Mapping
+### 理解記憶體映射
 
 ```python
-# HDF5 and Arrow files are memory-mapped by default
-df = vaex.open('data.hdf5')  # No data loaded into RAM
+# HDF5 和 Arrow 檔案預設是記憶體映射的
+df = vaex.open('data.hdf5')  # 沒有資料載入 RAM
 
-# Data is read from disk on-demand
-mean = df.x.mean()  # Streams through data, minimal memory
+# 資料按需從磁碟讀取
+mean = df.x.mean()  # 串流處理資料，最小記憶體
 
-# Check if column is memory-mapped
-print(df.is_local('column_name'))  # False = memory-mapped
+# 檢查欄位是否是記憶體映射的
+print(df.is_local('column_name'))  # False = 記憶體映射
 ```
 
-### Forcing Data into Memory
+### 強制載入資料到記憶體
 
 ```python
-# If needed, load data into memory
+# 如果需要，將資料載入記憶體
 df_in_memory = df.copy()
 for col in df.get_column_names():
-    df_in_memory[col] = df[col].values  # Materializes in memory
+    df_in_memory[col] = df[col].values  # 實體化到記憶體
 ```
 
-## File Compression
+## 檔案壓縮
 
-### HDF5 Compression
+### HDF5 壓縮
 
 ```python
-# Export with compression
+# 帶壓縮匯出
 df.export_hdf5('compressed.hdf5', compression='gzip')
 df.export_hdf5('compressed.hdf5', compression='lzf')
 df.export_hdf5('compressed.hdf5', compression='blosc')
 
-# Trade-off: Smaller file size, slightly slower I/O
+# 權衡：較小的檔案大小，稍慢的 I/O
 ```
 
-### Parquet Compression
+### Parquet 壓縮
 
 ```python
-# Parquet is compressed by default
-df.export_parquet('data.parquet', compression='snappy')  # Fast
-df.export_parquet('data.parquet', compression='gzip')    # Better compression
-df.export_parquet('data.parquet', compression='brotli')  # Best compression
+# Parquet 預設是壓縮的
+df.export_parquet('data.parquet', compression='snappy')  # 快速
+df.export_parquet('data.parquet', compression='gzip')    # 更好的壓縮
+df.export_parquet('data.parquet', compression='brotli')  # 最佳壓縮
 ```
 
-## Vaex Server (Remote Data)
+## Vaex Server（遠端資料）
 
-### Starting Vaex Server
+### 啟動 Vaex Server
 
 ```bash
-# Start server
+# 啟動伺服器
 vaex-server data.hdf5 --host 0.0.0.0 --port 9000
 ```
 
-### Connecting to Remote Server
+### 連接到遠端伺服器
 
 ```python
 import vaex
 
-# Connect to remote Vaex server
+# 連接到遠端 Vaex 伺服器
 df = vaex.open('ws://hostname:9000/data')
 
-# Operations work transparently
-mean = df.x.mean()  # Computed on server
+# 操作透明運作
+mean = df.x.mean()  # 在伺服器上計算
 ```
 
-## State Files
+## 狀態檔案
 
-### Saving DataFrame State
+### 儲存 DataFrame 狀態
 
 ```python
-# Save state (includes virtual columns, selections, etc.)
+# 儲存狀態（包括虛擬欄、選擇等）
 df.state_write('state.json')
 
-# Includes:
-# - Virtual column definitions
-# - Active selections
-# - Variables
-# - Transformations (scalers, encoders, models)
+# 包括：
+# - 虛擬欄定義
+# - 活動選擇
+# - 變數
+# - 轉換器（縮放器、編碼器、模型）
 ```
 
-### Loading DataFrame State
+### 載入 DataFrame 狀態
 
 ```python
-# Load data
+# 載入資料
 df = vaex.open('data.hdf5')
 
-# Apply saved state
+# 套用儲存的狀態
 df.state_load('state.json')
 
-# All virtual columns, selections, and transformations restored
+# 所有虛擬欄、選擇和轉換都已還原
 ```
 
-## Best Practices
+## 最佳實務
 
-### 1. Choose the Right Format
+### 1. 選擇正確的格式
 
 ```python
-# For local work: HDF5
+# 本地工作：HDF5
 df.export_hdf5('data.hdf5')
 
-# For sharing/interoperability: Arrow
+# 共享/互通性：Arrow
 df.export_arrow('data.arrow')
 
-# For distributed systems: Parquet
+# 分散式系統：Parquet
 df.export_parquet('data.parquet')
 
-# Avoid CSV for large data
+# 避免大型資料使用 CSV
 ```
 
-### 2. Convert CSV Once
+### 2. 只轉換 CSV 一次
 
 ```python
-# One-time conversion
+# 一次性轉換
 df = vaex.from_csv('large.csv', convert='large.hdf5')
 
-# All future loads
-df = vaex.open('large.hdf5')  # Instant!
+# 所有未來載入
+df = vaex.open('large.hdf5')  # 即時！
 ```
 
-### 3. Materialize Before Export
+### 3. 匯出前實體化
 
 ```python
-# If DataFrame has many virtual columns
+# 如果 DataFrame 有許多虛擬欄
 df_materialized = df.materialize()
 df_materialized.export_hdf5('output.hdf5')
 
-# Faster exports and future loads
+# 更快的匯出和未來載入
 ```
 
-### 4. Use Compression Wisely
+### 4. 明智使用壓縮
 
 ```python
-# For archival or infrequently accessed data
+# 對於封存或不常存取的資料
 df.export_hdf5('archived.hdf5', compression='gzip')
 
-# For active work (faster I/O)
-df.export_hdf5('working.hdf5')  # No compression
+# 對於活躍工作（更快 I/O）
+df.export_hdf5('working.hdf5')  # 不壓縮
 ```
 
-### 5. Checkpoint Long Pipelines
+### 5. 為長管線建立檢查點
 
 ```python
-# After expensive preprocessing
+# 昂貴的預處理之後
 df_preprocessed = preprocess(df)
 df_preprocessed.export_hdf5('checkpoint_preprocessed.hdf5')
 
-# After feature engineering
+# 特徵工程之後
 df_features = engineer_features(df_preprocessed)
 df_features.export_hdf5('checkpoint_features.hdf5')
 
-# Enables resuming from checkpoints
+# 允許從檢查點繼續
 ```
 
-## Performance Comparisons
+## 效能比較
 
-### Format Loading Speed
+### 格式載入速度
 
 ```python
 import time
 import vaex
 
-# CSV (slowest)
+# CSV（最慢）
 start = time.time()
 df_csv = vaex.from_csv('data.csv')
 csv_time = time.time() - start
 
-# HDF5 (instant)
+# HDF5（即時）
 start = time.time()
 df_hdf5 = vaex.open('data.hdf5')
 hdf5_time = time.time() - start
 
-# Arrow (instant)
+# Arrow（即時）
 start = time.time()
 df_arrow = vaex.open('data.arrow')
 arrow_time = time.time() - start
@@ -602,102 +602,102 @@ print(f"HDF5: {hdf5_time:.4f}s")
 print(f"Arrow: {arrow_time:.4f}s")
 ```
 
-## Common Patterns
+## 常見模式
 
-### Pattern: Production Data Pipeline
+### 模式：生產資料管線
 
 ```python
 import vaex
 
-# Read from source (CSV, database export, etc.)
+# 從來源讀取（CSV、資料庫匯出等）
 df = vaex.from_csv('raw_data.csv')
 
-# Process
+# 處理
 df['cleaned'] = clean(df.raw_column)
 df['feature'] = engineer_feature(df)
 
-# Export for production use
+# 匯出供生產使用
 df.export_hdf5('production_data.hdf5')
 df.state_write('production_state.json')
 
-# In production: Fast loading
+# 在生產環境：快速載入
 df_prod = vaex.open('production_data.hdf5')
 df_prod.state_load('production_state.json')
 ```
 
-### Pattern: Archiving with Compression
+### 模式：帶壓縮的封存
 
 ```python
-# Archive old data with compression
+# 帶壓縮封存舊資料
 df_2020 = vaex.open('data_2020.hdf5')
 df_2020.export_hdf5('archive_2020.hdf5', compression='gzip')
 
-# Remove uncompressed original
+# 移除未壓縮的原始檔案
 import os
 os.remove('data_2020.hdf5')
 ```
 
-### Pattern: Multi-Source Data Loading
+### 模式：多來源資料載入
 
 ```python
 import vaex
 
-# Load from multiple sources
+# 從多個來源載入
 df_csv = vaex.from_csv('data.csv')
 df_hdf5 = vaex.open('data.hdf5')
 df_parquet = vaex.open('data.parquet')
 
-# Concatenate
+# 串接
 df_all = vaex.concat([df_csv, df_hdf5, df_parquet])
 
-# Export unified format
+# 匯出統一格式
 df_all.export_hdf5('unified.hdf5')
 ```
 
-## Troubleshooting
+## 疑難排解
 
-### Issue: CSV Loading Too Slow
+### 問題：CSV 載入太慢
 
 ```python
-# Solution: Convert to HDF5
+# 解決方案：轉換為 HDF5
 df = vaex.from_csv('large.csv', convert='large.hdf5')
-# Future: df = vaex.open('large.hdf5')
+# 未來：df = vaex.open('large.hdf5')
 ```
 
-### Issue: Out of Memory on Export
+### 問題：匯出時記憶體不足
 
 ```python
-# Solution: Export in chunks or materialize first
+# 解決方案：分塊匯出或先實體化
 df_materialized = df.materialize()
 df_materialized.export_hdf5('output.hdf5')
 ```
 
-### Issue: Can't Read File from Cloud
+### 問題：無法從雲端讀取檔案
 
 ```python
-# Install required libraries
+# 安裝必要的函式庫
 # pip install s3fs gcsfs adlfs
 
-# Verify credentials
+# 驗證憑證
 import s3fs
 fs = s3fs.S3FileSystem()
 fs.ls('s3://bucket-name/')
 ```
 
-## Format Feature Matrix
+## 格式功能對照表
 
-| Feature | HDF5 | Arrow | Parquet | CSV |
-|---------|------|-------|---------|-----|
-| Load Speed | Instant | Instant | Fast | Slow |
-| Memory-mapped | Yes | Yes | No | No |
-| Compression | Optional | No | Yes | No |
-| Columnar | Yes | Yes | Yes | No |
-| Portability | Good | Excellent | Excellent | Excellent |
-| File Size | Medium | Medium | Small | Large |
-| Best For | Vaex workflows | Interop | Distributed | Exchange |
+| 功能 | HDF5 | Arrow | Parquet | CSV |
+|------|------|-------|---------|-----|
+| 載入速度 | 即時 | 即時 | 快速 | 慢 |
+| 記憶體映射 | 是 | 是 | 否 | 否 |
+| 壓縮 | 可選 | 否 | 是 | 否 |
+| 欄式 | 是 | 是 | 是 | 否 |
+| 可攜性 | 良好 | 優秀 | 優秀 | 優秀 |
+| 檔案大小 | 中等 | 中等 | 小 | 大 |
+| 最適合 | Vaex 工作流程 | 互通 | 分散式 | 交換 |
 
-## Related Resources
+## 相關資源
 
-- For DataFrame creation: See `core_dataframes.md`
-- For performance optimization: See `performance.md`
-- For data processing: See `data_processing.md`
+- DataFrame 建立：參見 `core_dataframes.md`
+- 效能最佳化：參見 `performance.md`
+- 資料處理：參見 `data_processing.md`

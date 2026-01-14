@@ -1,10 +1,10 @@
-# Hypothesis Generation Report - Formatting Quick Reference
+# 假說生成報告 - 格式快速參考
 
-## Overview
+## 概述
 
-This guide provides quick reference for using the hypothesis generation LaTeX template and style package. For complete documentation, see `SKILL.md`.
+本指南提供使用假說生成 LaTeX 範本和樣式套件的快速參考。有關完整文件，請參閱 `SKILL.md`。
 
-## Quick Start
+## 快速開始
 
 ```latex
 % !TEX program = xelatex
@@ -19,7 +19,7 @@ This guide provides quick reference for using the hypothesis generation LaTeX te
 \end{document}
 ```
 
-**Compilation:** Use XeLaTeX or LuaLaTeX for best results
+**編譯：** 使用 XeLaTeX 或 LuaLaTeX 以獲得最佳結果
 ```bash
 xelatex your_document.tex
 bibtex your_document
@@ -27,24 +27,24 @@ xelatex your_document.tex
 xelatex your_document.tex
 ```
 
-## Color Scheme Reference
+## 配色方案參考
 
-### Hypothesis Colors
-- **Hypothesis 1**: Deep Blue (RGB: 0, 102, 153) - Use for first hypothesis
-- **Hypothesis 2**: Forest Green (RGB: 0, 128, 96) - Use for second hypothesis
-- **Hypothesis 3**: Royal Purple (RGB: 102, 51, 153) - Use for third hypothesis
-- **Hypothesis 4**: Teal (RGB: 0, 128, 128) - Use for fourth hypothesis (if needed)
-- **Hypothesis 5**: Burnt Orange (RGB: 204, 85, 0) - Use for fifth hypothesis (if needed)
+### 假說顏色
+- **假說 1**：深藍色（RGB: 0, 102, 153）- 用於第一個假說
+- **假說 2**：森林綠（RGB: 0, 128, 96）- 用於第二個假說
+- **假說 3**：皇家紫（RGB: 102, 51, 153）- 用於第三個假說
+- **假說 4**：青色（RGB: 0, 128, 128）- 用於第四個假說（如需要）
+- **假說 5**：焦橙色（RGB: 204, 85, 0）- 用於第五個假說（如需要）
 
-### Utility Colors
-- **Predictions**: Amber (RGB: 255, 191, 0) - For testable predictions
-- **Evidence**: Light Blue (RGB: 102, 178, 204) - For supporting evidence
-- **Comparisons**: Steel Gray (RGB: 108, 117, 125) - For critical comparisons
-- **Limitations**: Coral Red (RGB: 220, 53, 69) - For limitations/challenges
+### 工具顏色
+- **預測**：琥珀色（RGB: 255, 191, 0）- 用於可測試的預測
+- **證據**：淺藍色（RGB: 102, 178, 204）- 用於支持證據
+- **比較**：鋼灰色（RGB: 108, 117, 125）- 用於關鍵比較
+- **限制**：珊瑚紅（RGB: 220, 53, 69）- 用於限制/挑戰
 
-## Custom Box Environments
+## 自訂框環境
 
-### 1. Executive Summary Box
+### 1. 執行摘要框
 
 ```latex
 \begin{summarybox}[Executive Summary]
@@ -52,23 +52,23 @@ xelatex your_document.tex
 \end{summarybox}
 ```
 
-**Use for:** High-level overview at the beginning of the document
+**用於：** 文件開頭的高層概述
 
 ---
 
-### 2. Hypothesis Boxes (5 variants)
+### 2. 假說框（5 種變體）
 
 ```latex
 \begin{hypothesisbox1}[Hypothesis 1: Title]
   \textbf{Mechanistic Explanation:}
   [2-3 paragraphs explaining HOW and WHY]
-  
+
   \textbf{Key Supporting Evidence:}
   \begin{itemize}
     \item Evidence point 1 \citep{ref1}
     \item Evidence point 2 \citep{ref2}
   \end{itemize}
-  
+
   \textbf{Core Assumptions:}
   \begin{enumerate}
     \item Assumption 1
@@ -77,22 +77,22 @@ xelatex your_document.tex
 \end{hypothesisbox1}
 ```
 
-**Available boxes:** `hypothesisbox1`, `hypothesisbox2`, `hypothesisbox3`, `hypothesisbox4`, `hypothesisbox5`
+**可用框：** `hypothesisbox1`、`hypothesisbox2`、`hypothesisbox3`、`hypothesisbox4`、`hypothesisbox5`
 
-**Use for:** Presenting each competing hypothesis with its mechanism, evidence, and assumptions
+**用於：** 呈現每個競爭性假說及其機制、證據和假設
 
-**Best practices for 4-page main text:**
-- Keep mechanistic explanations to 1-2 brief paragraphs only (6-10 sentences max)
-- Include 2-3 most essential evidence points with citations
-- List 1-2 most critical assumptions
-- Ensure each hypothesis is genuinely distinct
-- All detailed explanations go to Appendix A
-- **Use `\newpage` before each hypothesis box to prevent overflow**
-- Each complete hypothesis box should be ≤0.6 pages
+**4 頁主文的最佳實踐：**
+- 將機制解釋保持在僅 1-2 個簡短段落（最多 6-10 句）
+- 包含 2-3 個最重要的證據點並附引用
+- 列出 1-2 個最關鍵的假設
+- 確保每個假說真正獨特
+- 所有詳細解釋放到附錄 A
+- **在每個假說框之前使用 `\newpage` 以防止溢出**
+- 每個完整的假說框應 ≤0.6 頁
 
 ---
 
-### 3. Prediction Box
+### 3. 預測框
 
 ```latex
 \begin{predictionbox}[Predictions: Hypothesis 1]
@@ -105,18 +105,18 @@ xelatex your_document.tex
 \end{predictionbox}
 ```
 
-**Use for:** Testable predictions derived from each hypothesis
+**用於：** 從每個假說得出的可測試預測
 
-**Best practices for 4-page main text:**
-- Make predictions specific and quantitative when possible
-- Clearly state conditions under which prediction should hold
-- Always specify falsification criteria
-- Include only 1-2 most critical predictions per hypothesis in main text
-- Additional predictions go to appendices
+**4 頁主文的最佳實踐：**
+- 盡可能使預測具體且量化
+- 清楚陳述預測應該成立的條件
+- 始終指定證偽標準
+- 在主文中每個假說僅包含 1-2 個最關鍵的預測
+- 額外預測放到附錄
 
 ---
 
-### 4. Evidence Box
+### 4. 證據框
 
 ```latex
 \begin{evidencebox}[Supporting Evidence]
@@ -124,25 +124,25 @@ xelatex your_document.tex
 \end{evidencebox}
 ```
 
-**Use for:** Highlighting key supporting evidence or literature synthesis
+**用於：** 突顯關鍵支持證據或文獻綜合
 
-**Best practices:**
-- Use sparingly in main text (detailed evidence goes in Appendix A)
-- Include citations for all evidence
-- Focus on most compelling evidence
+**最佳實踐：**
+- 在主文中謹慎使用（詳細證據放在附錄 A）
+- 為所有證據包含引用
+- 聚焦於最有說服力的證據
 
 ---
 
-### 5. Comparison Box
+### 5. 比較框
 
 ```latex
 \begin{comparisonbox}[H1 vs. H2: Key Distinction]
   \textbf{Fundamental Difference:}
   [Description of core difference]
-  
+
   \textbf{Discriminating Experiment:}
   [Description of experiment]
-  
+
   \textbf{Outcome Interpretation:}
   \begin{itemize}
     \item \textbf{If [Result A]:} H1 supported
@@ -151,17 +151,17 @@ xelatex your_document.tex
 \end{comparisonbox}
 ```
 
-**Use for:** Explaining how to distinguish between competing hypotheses
+**用於：** 解釋如何區分競爭性假說
 
-**Best practices:**
-- Focus on fundamental mechanistic differences
-- Propose clear, feasible discriminating experiments
-- Specify concrete outcome interpretations
-- Create comparisons for all major hypothesis pairs
+**最佳實踐：**
+- 聚焦於基本機制差異
+- 提出清晰、可行的區分實驗
+- 指定具體的結果解釋
+- 為所有主要假說配對建立比較
 
 ---
 
-### 6. Limitation Box
+### 6. 限制框
 
 ```latex
 \begin{limitationbox}[Limitations \& Challenges]
@@ -169,101 +169,101 @@ xelatex your_document.tex
 \end{limitationbox}
 ```
 
-**Use for:** Highlighting important limitations or challenges
+**用於：** 突顯重要的限制或挑戰
 
-**Best practices:**
-- Use when limitations are particularly important
-- Be honest about challenges
-- Suggest how limitations might be addressed
+**最佳實踐：**
+- 當限制特別重要時使用
+- 誠實面對挑戰
+- 建議如何解決限制
 
 ---
 
-## Document Structure
+## 文件結構
 
-### Main Text (Maximum 4 Pages - Highly Concise)
+### 主文（最多 4 頁 - 高度簡潔）
 
-1. **Executive Summary** (0.5-1 page)
-   - Use `summarybox`
-   - Brief phenomenon overview
-   - List all hypotheses in 1 sentence each
-   - Recommended approach
+1. **執行摘要**（0.5-1 頁）
+   - 使用 `summarybox`
+   - 簡要現象概述
+   - 每個假說用 1 句列出
+   - 建議方法
 
-2. **Competing Hypotheses** (2-2.5 pages)
-   - Use `hypothesisbox1`, `hypothesisbox2`, etc.
-   - One box per hypothesis
-   - Brief mechanistic explanation (1-2 paragraphs) + essential evidence (2-3 points) + key assumptions (1-2)
-   - Target: 3-5 hypotheses
-   - Keep highly concise - details go to appendices
+2. **競爭性假說**（2-2.5 頁）
+   - 使用 `hypothesisbox1`、`hypothesisbox2` 等
+   - 每個假說一個框
+   - 簡要機制解釋（1-2 段）+ 重要證據（2-3 點）+ 關鍵假設（1-2）
+   - 目標：3-5 個假說
+   - 保持高度簡潔 - 詳細內容放到附錄
 
-3. **Testable Predictions** (0.5-1 page)
-   - Use `predictionbox` for each hypothesis
-   - 1-2 most critical predictions per hypothesis only
-   - Very brief - full predictions in appendices
+3. **可測試的預測**（0.5-1 頁）
+   - 為每個假說使用 `predictionbox`
+   - 每個假說僅 1-2 個最關鍵的預測
+   - 非常簡短 - 完整預測在附錄
 
-4. **Critical Comparisons** (0.5-1 page)
-   - Use `comparisonbox` for highest priority comparison only
-   - Show how to distinguish top hypotheses
-   - Additional comparisons in appendices
+4. **關鍵比較**（0.5-1 頁）
+   - 僅為最高優先級的比較使用 `comparisonbox`
+   - 展示如何區分最佳假說
+   - 額外比較在附錄
 
-**Main text total: Maximum 4 pages - be extremely selective about what goes here**
+**主文總計：最多 4 頁 - 對於放在這裡的內容要極度選擇性**
 
-### Appendices (Comprehensive, Detailed)
+### 附錄（全面、詳細）
 
-**Appendix A: Comprehensive Literature Review**
-- Detailed background (extensive citations)
-- Current understanding
-- Evidence for each hypothesis (detailed)
-- Conflicting findings
-- Knowledge gaps
-- **Target: 40-60+ citations**
+**附錄 A：全面文獻回顧**
+- 詳細背景（大量引用）
+- 當前理解
+- 每個假說的證據（詳細）
+- 相互矛盾的發現
+- 知識差距
+- **目標：40-60+ 引用**
 
-**Appendix B: Detailed Experimental Designs**
-- Full protocols for each hypothesis
-- Methods, controls, sample sizes
-- Statistical approaches
-- Feasibility assessments
-- Timeline and resource requirements
+**附錄 B：詳細實驗設計**
+- 每個假說的完整方案
+- 方法、對照、樣本量
+- 統計方法
+- 可行性評估
+- 時間表和資源需求
 
-**Appendix C: Quality Assessment**
-- Detailed evaluation tables
-- Strengths and weaknesses analysis
-- Comparative scoring
-- Recommendations
+**附錄 C：品質評估**
+- 詳細評估表
+- 優勢和劣勢分析
+- 比較評分
+- 建議
 
-**Appendix D: Supplementary Evidence**
-- Analogous mechanisms
-- Preliminary data
-- Theoretical frameworks
-- Historical context
+**附錄 D：補充證據**
+- 類比機制
+- 初步資料
+- 理論框架
+- 歷史背景
 
-**References**
-- **Target: 50+ total references**
+**參考文獻**
+- **目標：總共 50+ 參考文獻**
 
-## Citation Best Practices
+## 引用最佳實踐
 
-### In Main Text
-- Cite 15-20 key papers
-- Use `\citep{author2023}` for parenthetical citations
-- Use `\citet{author2023}` for textual citations
-- Focus on most important/recent evidence
+### 在主文中
+- 引用 15-20 篇關鍵論文
+- 使用 `\citep{author2023}` 進行括號引用
+- 使用 `\citet{author2023}` 進行文字引用
+- 聚焦於最重要/最新的證據
 
-### In Appendices
-- Cite 40-60+ papers total
-- Comprehensive coverage of relevant literature
-- Include reviews, primary research, theoretical papers
-- Cite every claim and piece of evidence
+### 在附錄中
+- 總共引用 40-60+ 篇論文
+- 全面涵蓋相關文獻
+- 包含評論、原始研究、理論論文
+- 為每個主張和證據引用
 
-### Citation Density Guidelines
-- Main hypothesis boxes: 2-3 citations per box (most essential only)
-- Main text total: 10-15 citations maximum (keep concise)
-- Appendix A literature sections: 8-15 citations per subsection
-- Experimental designs: 2-5 citations for methods/precedents
-- Quality assessments: Citations as needed for evaluation criteria
-- Total document: 50+ citations (vast majority in appendices)
+### 引用密度指南
+- 主要假說框：每個框 2-3 個引用（僅最重要的）
+- 主文總計：最多 10-15 個引用（保持簡潔）
+- 附錄 A 文獻部分：每個子部分 8-15 個引用
+- 實驗設計：2-5 個引用用於方法/先例
+- 品質評估：根據評估標準需要的引用
+- 全文總計：50+ 引用（絕大多數在附錄）
 
-## Tables
+## 表格
 
-### Professional Table Formatting
+### 專業表格格式
 
 ```latex
 \begin{hypotable}{Caption}
@@ -282,15 +282,15 @@ Data row 2 & Data \\
 \end{hypotable}
 ```
 
-**Best practices:**
-- Use `\tableheadercolor` for header rows
-- Alternate `\tablerowcolor` for tables >3 rows
-- Keep tables readable (not too wide)
-- Use for quality assessments, comparisons
+**最佳實踐：**
+- 對表頭行使用 `\tableheadercolor`
+- 對超過 3 行的表格交替使用 `\tablerowcolor`
+- 保持表格可讀（不要太寬）
+- 用於品質評估、比較
 
-## Common Formatting Patterns
+## 常見格式模式
 
-### Hypothesis Section Pattern
+### 假說部分模式
 
 ```latex
 % Use \newpage before hypothesis box to prevent overflow
@@ -325,9 +325,9 @@ Data row 2 & Data \\
 \vspace{0.5cm}
 ```
 
-**Note:** The `\newpage` before the hypothesis box ensures it starts on a fresh page, preventing overflow. This is especially important when boxes contain substantial content.
+**注意：** 假說框之前的 `\newpage` 確保它從新頁面開始，防止溢出。當框包含大量內容時這特別重要。
 
-### Prediction Section Pattern
+### 預測部分模式
 
 ```latex
 \subsection*{Predictions from Hypothesis N}
@@ -349,7 +349,7 @@ Data row 2 & Data \\
 \end{predictionbox}
 ```
 
-### Comparison Section Pattern
+### 比較部分模式
 
 ```latex
 \subsection*{Distinguishing Hypothesis X vs. Hypothesis Y}
@@ -378,20 +378,20 @@ Data row 2 & Data \\
 \end{comparisonbox}
 ```
 
-## Spacing and Layout
+## 間距和版面配置
 
-### Vertical Spacing
-- `\vspace{0.3cm}` - Between elements within boxes
-- `\vspace{0.5cm}` - Between major sections or boxes
-- `\vspace{1cm}` - After title, before main content
+### 垂直間距
+- `\vspace{0.3cm}` - 框內元素之間
+- `\vspace{0.5cm}` - 主要部分或框之間
+- `\vspace{1cm}` - 標題之後、主要內容之前
 
-### Page Breaks and Overflow Prevention
+### 分頁符和溢出防止
 
-**CRITICAL: Prevent Content Overflow**
+**關鍵：防止內容溢出**
 
-LaTeX boxes (tcolorbox environments) do not automatically break across pages. Content that exceeds the remaining page space will overflow and cause formatting issues. Follow these guidelines:
+LaTeX 框（tcolorbox 環境）不會自動跨頁分割。超過剩餘頁面空間的內容將溢出並導致格式問題。請遵循這些指南：
 
-1. **Strategic Page Breaks Before Long Boxes:**
+1. **在長框之前使用策略性分頁符：**
 ```latex
 \newpage  % Start on fresh page if box will be long
 \begin{hypothesisbox1}[Hypothesis 1: Title]
@@ -399,42 +399,42 @@ LaTeX boxes (tcolorbox environments) do not automatically break across pages. Co
 \end{hypothesisbox1}
 ```
 
-2. **Monitor Box Content Length:**
-   - Each hypothesis box should be ≤0.7 pages maximum
-   - If mechanistic explanation + evidence + assumptions exceeds ~0.6 pages, content is too long
-   - Solution: Move detailed content to appendices, keep only essentials in main text boxes
+2. **監控框內容長度：**
+   - 每個假說框最多應為 ≤0.7 頁
+   - 如果機制解釋 + 證據 + 假設超過約 0.6 頁，內容太長
+   - 解決方案：將詳細內容移至附錄，僅保留主文框中的要點
 
-3. **When to Use `\newpage`:**
-   - Before any hypothesis box with >3 subsections or >15 lines of content
-   - Before comparison boxes with extensive experimental descriptions
-   - Between major appendix sections
-   - If less than 0.6 pages remain on current page before starting a new box
+3. **何時使用 `\newpage`：**
+   - 在具有 >3 個子部分或 >15 行內容的任何假說框之前
+   - 在具有大量實驗描述的比較框之前
+   - 在主要附錄部分之間
+   - 如果當前頁面在開始新框之前剩餘不到 0.6 頁
 
-4. **Content Length Guidelines for Main Text:**
-   - Executive summary box: 0.5-0.8 pages max
-   - Each hypothesis box: 0.4-0.6 pages max
-   - Each prediction box: 0.3-0.5 pages max
-   - Each comparison box: 0.4-0.6 pages max
+4. **主文內容長度指南：**
+   - 執行摘要框：最多 0.5-0.8 頁
+   - 每個假說框：最多 0.4-0.6 頁
+   - 每個預測框：最多 0.3-0.5 頁
+   - 每個比較框：最多 0.4-0.6 頁
 
-5. **Breaking Up Long Content:**
+5. **分割長內容：**
    ```latex
    % GOOD: Concise main text with page break
    \newpage
    \begin{hypothesisbox1}[Hypothesis 1: Brief Title]
    \textbf{Mechanistic Explanation:}
    Brief overview in 1-2 paragraphs (6-10 sentences).
-   
+
    \textbf{Key Supporting Evidence:}
    \begin{itemize}
      \item Evidence 1 \citep{ref1}
      \item Evidence 2 \citep{ref2}
    \end{itemize}
-   
+
    \textbf{Core Assumptions:}
    \begin{enumerate}
      \item Assumption 1
    \end{enumerate}
-   
+
    See Appendix A for detailed mechanism and comprehensive evidence.
    \end{hypothesisbox1}
    ```
@@ -451,29 +451,29 @@ LaTeX boxes (tcolorbox environments) do not automatically break across pages. Co
    \end{hypothesisbox1}
    ```
 
-6. **Page Break Commands:**
-   - `\newpage` - Force new page (recommended before long boxes)
-   - `\clearpage` - Force new page and flush floats (use before appendices)
+6. **分頁符命令：**
+   - `\newpage` - 強制新頁面（建議在長框之前使用）
+   - `\clearpage` - 強制新頁面並清除浮動物件（在附錄之前使用）
 
-### Section Spacing
-Already handled by style package, but you can adjust:
+### 部分間距
+已由樣式套件處理，但您可以調整：
 ```latex
 \vspace{0.5cm}  % Add extra space if needed
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Common Issues
+### 常見問題
 
-**Issue: "File hypothesis_generation.sty not found"**
-- Solution: Ensure the .sty file is in the same directory as your .tex file, or in your LaTeX path
+**問題：「找不到 hypothesis_generation.sty 檔案」**
+- 解決方案：確保 .sty 檔案與您的 .tex 檔案在同一目錄中，或在您的 LaTeX 路徑中
 
-**Issue: Boxes don't have colors**
-- Solution: Compile with XeLaTeX or LuaLaTeX, not pdfLaTeX
-- Command: `xelatex yourfile.tex`
+**問題：框沒有顏色**
+- 解決方案：使用 XeLaTeX 或 LuaLaTeX 編譯，而不是 pdfLaTeX
+- 命令：`xelatex yourfile.tex`
 
-**Issue: Citations show as [?]**
-- Solution: Run bibtex after first xelatex compilation
+**問題：引用顯示為 [?]**
+- 解決方案：在第一次 xelatex 編譯後運行 bibtex
 ```bash
 xelatex yourfile.tex
 bibtex yourfile
@@ -481,44 +481,44 @@ xelatex yourfile.tex
 xelatex yourfile.tex
 ```
 
-**Issue: Fonts not found**
-- Solution: Comment out font lines in the .sty file if custom fonts aren't installed
-- Lines to comment: `\setmainfont{...}` and `\setsansfont{...}`
+**問題：找不到字型**
+- 解決方案：如果未安裝自訂字型，請註解掉 .sty 檔案中的字型行
+- 要註解的行：`\setmainfont{...}` 和 `\setsansfont{...}`
 
-**Issue: Box titles overlap with content**
-- Solution: Add more vertical space with `\vspace{0.3cm}` after titles
+**問題：框標題與內容重疊**
+- 解決方案：在標題後添加更多垂直間距 `\vspace{0.3cm}`
 
-**Issue: Tables too wide**
-- Solution: Use `\small` or `\footnotesize` before tabular, or use `p{width}` column specs
+**問題：表格太寬**
+- 解決方案：在 tabular 之前使用 `\small` 或 `\footnotesize`，或使用 `p{width}` 列規格
 
-**Issue: Content overflowing off the page**
-- **Cause:** Boxes (tcolorbox environments) are too long to fit on remaining page space
-- **Solution 1:** Add `\newpage` before the box to start it on a fresh page
-- **Solution 2:** Reduce box content - move detailed information to appendices
-- **Solution 3:** Break content into multiple smaller boxes
-- **Prevention:** Keep each hypothesis box to 0.4-0.6 pages maximum; use `\newpage` liberally before boxes with substantial content
+**問題：內容溢出頁面**
+- **原因：** 框（tcolorbox 環境）太長無法放入剩餘頁面空間
+- **解決方案 1：** 在框之前添加 `\newpage` 以在新頁面開始
+- **解決方案 2：** 減少框內容 - 將詳細資訊移至附錄
+- **解決方案 3：** 將內容分成多個較小的框
+- **預防：** 將每個假說框保持在最多 0.4-0.6 頁；在具有大量內容的框之前自由使用 `\newpage`
 
-**Issue: Main text exceeds 4 pages**
-- **Cause:** Boxes contain too much detailed information
-- **Solution:** Aggressively move content to appendices - main text boxes should contain only:
-  - Brief mechanistic overview (1-2 paragraphs)
-  - 2-3 key evidence bullets
-  - 1-2 core assumptions
-- All detailed explanations, additional evidence, and comprehensive discussions belong in Appendix A
+**問題：主文超過 4 頁**
+- **原因：** 框包含太多詳細資訊
+- **解決方案：** 積極地將內容移至附錄 - 主文框應該只包含：
+  - 簡要機制概述（1-2 段）
+  - 2-3 個關鍵證據要點
+  - 1-2 個核心假設
+- 所有詳細解釋、額外證據和全面討論都屬於附錄 A
 
-### Package Requirements
+### 套件需求
 
-Ensure these packages are installed:
-- `tcolorbox` (with `most` option)
+確保安裝了這些套件：
+- `tcolorbox`（帶 `most` 選項）
 - `xcolor`
-- `fontspec` (for XeLaTeX/LuaLaTeX)
+- `fontspec`（用於 XeLaTeX/LuaLaTeX）
 - `fancyhdr`
 - `titlesec`
 - `enumitem`
 - `booktabs`
 - `natbib`
 
-Install missing packages:
+安裝缺失的套件：
 ```bash
 # For TeX Live
 tlmgr install tcolorbox xcolor fontspec fancyhdr titlesec enumitem booktabs natbib
@@ -527,64 +527,64 @@ tlmgr install tcolorbox xcolor fontspec fancyhdr titlesec enumitem booktabs natb
 # Use MiKTeX Package Manager GUI
 ```
 
-## Style Consistency Tips
+## 風格一致性提示
 
-1. **Color Usage**
-   - Always use the same color for each hypothesis throughout the document
-   - H1 = blue, H2 = green, H3 = purple, etc.
-   - Don't mix colors for the same hypothesis
+1. **顏色使用**
+   - 在整個文件中始終對每個假說使用相同的顏色
+   - H1 = 藍色，H2 = 綠色，H3 = 紫色，等等。
+   - 不要為同一假說混用顏色
 
-2. **Box Usage**
-   - Main text: Hypothesis boxes, prediction boxes, comparison boxes
-   - Appendix: Can use evidence boxes, limitation boxes as needed
-   - Don't overuse boxes - reserve for key content
+2. **框使用**
+   - 主文：假說框、預測框、比較框
+   - 附錄：根據需要可以使用證據框、限制框
+   - 不要過度使用框 - 保留給關鍵內容
 
-3. **Citation Style**
-   - Consistent citation format throughout
-   - Use `\citep{}` for most citations
-   - Group multiple citations: `\citep{ref1, ref2, ref3}`
+3. **引用風格**
+   - 全文一致的引用格式
+   - 大多數引用使用 `\citep{}`
+   - 組合多個引用：`\citep{ref1, ref2, ref3}`
 
-4. **Hypothesis Numbering**
-   - Number hypotheses consistently (H1, H2, H3, etc.)
-   - Use same numbering in predictions (P1.1, P1.2 for H1)
-   - Use same numbering in comparisons (H1 vs. H2)
+4. **假說編號**
+   - 一致地編號假說（H1、H2、H3 等）
+   - 在預測中使用相同編號（P1.1、P1.2 用於 H1）
+   - 在比較中使用相同編號（H1 vs. H2）
 
-5. **Language**
-   - Be precise and specific
-   - Avoid vague language ("may", "could", "possibly")
-   - Use active voice when possible
-   - Make predictions quantitative when feasible
+5. **語言**
+   - 精確和具體
+   - 避免模糊語言（「可能」、「或許」、「大概」）
+   - 盡可能使用主動語態
+   - 在可行時使預測量化
 
-## Quick Checklist
+## 快速檢查清單
 
-Before finalizing your document:
+在完成文件之前：
 
-- [ ] Title page has phenomenon name
-- [ ] **Main text is 4 pages maximum**
-- [ ] Executive summary is concise (0.5-1 page)
-- [ ] Each hypothesis in its own colored box
-- [ ] 3-5 hypotheses presented (not more)
-- [ ] Each hypothesis has brief mechanistic explanation (1-2 paragraphs)
-- [ ] Each hypothesis has 2-3 most essential evidence points with citations
-- [ ] Each hypothesis has 1-2 most critical assumptions
-- [ ] Predictions boxes with 1-2 key predictions per hypothesis
-- [ ] Priority comparison box in main text (others in appendix)
-- [ ] Priority experiments identified
-- [ ] **Page breaks (`\newpage`) used before long boxes to prevent overflow**
-- [ ] **No content overflows off page boundaries (check PDF carefully)**
-- [ ] **Each hypothesis box is ≤0.6 pages (if longer, move details to appendix)**
-- [ ] Appendix A has comprehensive literature review with detailed evidence
-- [ ] Appendix B has detailed experimental protocols
-- [ ] Appendix C has quality assessment tables
-- [ ] Appendix D has supplementary evidence
-- [ ] 10-15 citations in main text (selective)
-- [ ] 50+ total citations in full document
-- [ ] All boxes use correct colors
-- [ ] Document compiles without errors
-- [ ] References formatted correctly
-- [ ] **Compiled PDF checked visually for overflow issues**
+- [ ] 標題頁有現象名稱
+- [ ] **主文最多 4 頁**
+- [ ] 執行摘要簡潔（0.5-1 頁）
+- [ ] 每個假說在其自己的彩色框中
+- [ ] 呈現 3-5 個假說（不要更多）
+- [ ] 每個假說有簡要機制解釋（1-2 段）
+- [ ] 每個假說有 2-3 個最重要的證據點並附引用
+- [ ] 每個假說有 1-2 個最關鍵的假設
+- [ ] 預測框每個假說有 1-2 個關鍵預測
+- [ ] 主文中有優先比較框（其他在附錄）
+- [ ] 已識別優先實驗
+- [ ] **在長框之前使用分頁符（`\newpage`）以防止溢出**
+- [ ] **沒有內容溢出頁面邊界（仔細檢查 PDF）**
+- [ ] **每個假說框 ≤0.6 頁（如果更長，將詳細資訊移至附錄）**
+- [ ] 附錄 A 有包含詳細證據的全面文獻回顧
+- [ ] 附錄 B 有詳細實驗方案
+- [ ] 附錄 C 有品質評估表
+- [ ] 附錄 D 有補充證據
+- [ ] 主文中 10-15 個引用（選擇性）
+- [ ] 全文總共 50+ 引用
+- [ ] 所有框使用正確的顏色
+- [ ] 文件編譯無錯誤
+- [ ] 參考文獻格式正確
+- [ ] **已視覺檢查編譯的 PDF 是否有溢出問題**
 
-## Example Minimal Document
+## 最小範例文件
 
 ```latex
 % !TEX program = xelatex
@@ -656,17 +656,17 @@ Detailed literature review here.
 \end{document}
 ```
 
-**Key Points:**
-- `\newpage` used before each hypothesis box to ensure they start on fresh pages
-- This prevents content overflow issues
-- Main text boxes kept concise (1-2 paragraphs + bullet points)
-- Detailed content goes to appendices
+**關鍵要點：**
+- 在每個假說框之前使用 `\newpage` 以確保它們從新頁面開始
+- 這可以防止內容溢出問題
+- 主文框保持簡潔（1-2 段 + 要點）
+- 詳細內容放到附錄
 
-## Additional Resources
+## 額外資源
 
-- See `hypothesis_report_template.tex` for complete annotated template
-- See `SKILL.md` for workflow and methodology guidance
-- See `references/hypothesis_quality_criteria.md` for evaluation framework
-- See `references/experimental_design_patterns.md` for design guidance
-- See treatment-plans skill for additional LaTeX styling examples
+- 請參閱 `hypothesis_report_template.tex` 以獲取完整的註解範本
+- 請參閱 `SKILL.md` 以獲取工作流程和方法論指導
+- 請參閱 `references/hypothesis_quality_criteria.md` 以獲取評估框架
+- 請參閱 `references/experimental_design_patterns.md` 以獲取設計指導
+- 請參閱 treatment-plans 技能以獲取額外的 LaTeX 樣式範例
 

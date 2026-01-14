@@ -1,15 +1,15 @@
-# Hardware Integration
+# 硬體整合
 
-This guide covers running quantum circuits on real quantum hardware through Cirq's device interfaces and service providers.
+本指南涵蓋透過 Cirq 的裝置介面和服務供應商在真實量子硬體上執行量子電路。
 
-## Device Representation
+## 裝置表示
 
-### Device Classes
+### 裝置類別
 
 ```python
 import cirq
 
-# Define device with connectivity
+# 定義帶連接性的裝置
 class MyDevice(cirq.Device):
     def __init__(self, qubits, connectivity):
         self.qubits = qubits
@@ -23,50 +23,50 @@ class MyDevice(cirq.Device):
         )
 
     def validate_operation(self, operation):
-        # Check if operation is valid on this device
+        # 檢查操作是否在此裝置上有效
         if len(operation.qubits) == 2:
             q0, q1 = operation.qubits
             if (q0, q1) not in self.connectivity:
-                raise ValueError(f"Qubits {q0} and {q1} not connected")
+                raise ValueError(f"量子位元 {q0} 和 {q1} 未連接")
 ```
 
-### Device Constraints
+### 裝置約束
 
 ```python
-# Check device metadata
+# 檢查裝置元資料
 device = cirq_google.Sycamore
 
-# Get qubit topology
+# 取得量子位元拓撲
 qubits = device.metadata.qubit_set
-print(f"Available qubits: {len(qubits)}")
+print(f"可用量子位元：{len(qubits)}")
 
-# Check connectivity
+# 檢查連接性
 for q0 in qubits:
     neighbors = device.metadata.nx_graph.neighbors(q0)
-    print(f"{q0} connected to: {list(neighbors)}")
+    print(f"{q0} 連接到：{list(neighbors)}")
 
-# Validate circuit against device
+# 根據裝置驗證電路
 try:
     device.validate_circuit(circuit)
-    print("Circuit is valid for device")
+    print("電路對裝置有效")
 except ValueError as e:
-    print(f"Invalid circuit: {e}")
+    print(f"無效電路：{e}")
 ```
 
-## Qubit Selection
+## 量子位元選擇
 
-### Best Qubit Selection
+### 最佳量子位元選擇
 
 ```python
 import cirq_google
 
-# Get calibration metrics
+# 取得校準指標
 processor = cirq_google.get_engine().get_processor('weber')
 calibration = processor.get_current_calibration()
 
-# Find qubits with lowest error rates
+# 尋找錯誤率最低的量子位元
 def select_best_qubits(calibration, n_qubits):
-    """Select n qubits with best single-qubit gate fidelity."""
+    """選擇單量子位元閘保真度最佳的 n 個量子位元。"""
     qubit_fidelities = {}
 
     for qubit in calibration.keys():
@@ -74,7 +74,7 @@ def select_best_qubits(calibration, n_qubits):
             error = calibration[qubit]['single_qubit_rb_average_error_per_gate']
             qubit_fidelities[qubit] = 1 - error
 
-    # Sort by fidelity
+    # 依保真度排序
     best_qubits = sorted(
         qubit_fidelities.items(),
         key=lambda x: x[1],
@@ -86,55 +86,55 @@ def select_best_qubits(calibration, n_qubits):
 best_qubits = select_best_qubits(calibration, n_qubits=10)
 ```
 
-### Topology-Aware Selection
+### 拓撲感知選擇
 
 ```python
 def select_connected_qubits(device, n_qubits):
-    """Select connected qubits forming a path or grid."""
+    """選擇形成路徑或網格的連接量子位元。"""
     graph = device.metadata.nx_graph
 
-    # Find connected subgraph
+    # 尋找連接子圖
     import networkx as nx
     for node in graph.nodes():
         subgraph = nx.ego_graph(graph, node, radius=n_qubits)
         if len(subgraph) >= n_qubits:
             return list(subgraph.nodes())[:n_qubits]
 
-    raise ValueError(f"Could not find {n_qubits} connected qubits")
+    raise ValueError(f"找不到 {n_qubits} 個連接的量子位元")
 ```
 
-## Service Providers
+## 服務供應商
 
 ### Google Quantum AI (Cirq-Google)
 
-#### Setup
+#### 設定
 
 ```python
 import cirq_google
 
-# Authenticate (requires Google Cloud project)
-# Set environment variable: GOOGLE_CLOUD_PROJECT=your-project-id
+# 認證（需要 Google Cloud 專案）
+# 設定環境變數：GOOGLE_CLOUD_PROJECT=your-project-id
 
-# Get quantum engine
+# 取得量子引擎
 engine = cirq_google.get_engine()
 
-# List available processors
+# 列出可用處理器
 processors = engine.list_processors()
 for processor in processors:
-    print(f"Processor: {processor.processor_id}")
+    print(f"處理器：{processor.processor_id}")
 ```
 
-#### Running on Google Hardware
+#### 在 Google 硬體上執行
 
 ```python
-# Create circuit for Google device
+# 為 Google 裝置建立電路
 import cirq_google
 
-# Get processor
+# 取得處理器
 processor = engine.get_processor('weber')
 device = processor.get_device()
 
-# Create circuit on device qubits
+# 在裝置量子位元上建立電路
 qubits = sorted(device.metadata.qubit_set)[:5]
 circuit = cirq.Circuit(
     cirq.H(qubits[0]),
@@ -142,39 +142,39 @@ circuit = cirq.Circuit(
     cirq.measure(*qubits, key='result')
 )
 
-# Validate and run
+# 驗證並執行
 device.validate_circuit(circuit)
 job = processor.run(circuit, repetitions=1000)
 
-# Get results
+# 取得結果
 results = job.results()[0]
 print(results.histogram(key='result'))
 ```
 
 ### IonQ
 
-#### Setup
+#### 設定
 
 ```python
 import cirq_ionq
 
-# Set API key
-# Option 1: Environment variable
+# 設定 API 金鑰
+# 選項 1：環境變數
 # export IONQ_API_KEY=your_api_key
 
-# Option 2: In code
+# 選項 2：在程式碼中
 service = cirq_ionq.Service(api_key='your_api_key')
 ```
 
-#### Running on IonQ
+#### 在 IonQ 上執行
 
 ```python
 import cirq_ionq
 
-# Create service
+# 建立服務
 service = cirq_ionq.Service(api_key='your_api_key')
 
-# Create circuit (IonQ uses generic qubits)
+# 建立電路（IonQ 使用通用量子位元）
 qubits = cirq.LineQubit.range(3)
 circuit = cirq.Circuit(
     cirq.H(qubits[0]),
@@ -183,7 +183,7 @@ circuit = cirq.Circuit(
     cirq.measure(*qubits, key='result')
 )
 
-# Run on simulator
+# 在模擬器上執行
 result = service.run(
     circuit=circuit,
     repetitions=1000,
@@ -191,7 +191,7 @@ result = service.run(
 )
 print(result.histogram(key='result'))
 
-# Run on hardware
+# 在硬體上執行
 result = service.run(
     circuit=circuit,
     repetitions=1000,
@@ -199,68 +199,68 @@ result = service.run(
 )
 ```
 
-#### IonQ Job Management
+#### IonQ 作業管理
 
 ```python
-# Create job
+# 建立作業
 job = service.create_job(circuit, repetitions=1000, target='qpu')
 
-# Check job status
+# 檢查作業狀態
 status = job.status()
-print(f"Job status: {status}")
+print(f"作業狀態：{status}")
 
-# Wait for completion
+# 等待完成
 job.wait_until_complete()
 
-# Get results
+# 取得結果
 results = job.results()
 ```
 
-#### IonQ Calibration Data
+#### IonQ 校準資料
 
 ```python
-# Get current calibration
+# 取得當前校準
 calibration = service.get_current_calibration()
 
-# Access metrics
-print(f"Fidelity: {calibration['fidelity']}")
-print(f"Timing: {calibration['timing']}")
+# 存取指標
+print(f"保真度：{calibration['fidelity']}")
+print(f"時序：{calibration['timing']}")
 ```
 
 ### Azure Quantum
 
-#### Setup
+#### 設定
 
 ```python
 from azure.quantum import Workspace
 from azure.quantum.cirq import AzureQuantumService
 
-# Create workspace connection
+# 建立工作區連接
 workspace = Workspace(
     resource_id="/subscriptions/.../resourceGroups/.../providers/Microsoft.Quantum/Workspaces/...",
     location="eastus"
 )
 
-# Create Cirq service
+# 建立 Cirq 服務
 service = AzureQuantumService(workspace)
 ```
 
-#### Running on Azure Quantum (IonQ Backend)
+#### 在 Azure Quantum 上執行（IonQ 後端）
 
 ```python
-# List available targets
+# 列出可用目標
 targets = service.targets()
 for target in targets:
-    print(f"Target: {target.name}")
+    print(f"目標：{target.name}")
 
-# Run on IonQ simulator
+# 在 IonQ 模擬器上執行
 result = service.run(
     circuit=circuit,
     repetitions=1000,
     target='ionq.simulator'
 )
 
-# Run on IonQ QPU
+# 在 IonQ QPU 上執行
 result = service.run(
     circuit=circuit,
     repetitions=1000,
@@ -268,42 +268,42 @@ result = service.run(
 )
 ```
 
-#### Running on Azure Quantum (Honeywell Backend)
+#### 在 Azure Quantum 上執行（Honeywell 後端）
 
 ```python
-# Run on Honeywell System Model H1
+# 在 Honeywell System Model H1 上執行
 result = service.run(
     circuit=circuit,
     repetitions=1000,
     target='honeywell.hqs-lt-s1'
 )
 
-# Check Honeywell-specific options
+# 檢查 Honeywell 特定選項
 target_info = service.get_target('honeywell.hqs-lt-s1')
-print(f"Target info: {target_info}")
+print(f"目標資訊：{target_info}")
 ```
 
 ### AQT (Alpine Quantum Technologies)
 
-#### Setup
+#### 設定
 
 ```python
 import cirq_aqt
 
-# Set API token
+# 設定 API 權杖
 # export AQT_TOKEN=your_token
 
-# Create service
+# 建立服務
 service = cirq_aqt.AQTSampler(
     remote_host='https://gateway.aqt.eu',
     access_token='your_token'
 )
 ```
 
-#### Running on AQT
+#### 在 AQT 上執行
 
 ```python
-# Create circuit
+# 建立電路
 qubits = cirq.LineQubit.range(3)
 circuit = cirq.Circuit(
     cirq.H(qubits[0]),
@@ -311,14 +311,14 @@ circuit = cirq.Circuit(
     cirq.measure(*qubits, key='result')
 )
 
-# Run on simulator
+# 在模擬器上執行
 result = service.run(
     circuit,
     repetitions=1000,
     target='simulator'
 )
 
-# Run on device
+# 在裝置上執行
 result = service.run(
     circuit,
     repetitions=1000,
@@ -328,49 +328,49 @@ result = service.run(
 
 ### Pasqal
 
-#### Setup
+#### 設定
 
 ```python
 import cirq_pasqal
 
-# Create Pasqal device
+# 建立 Pasqal 裝置
 device = cirq_pasqal.PasqalDevice(qubits=cirq.LineQubit.range(10))
 ```
 
-#### Running on Pasqal
+#### 在 Pasqal 上執行
 
 ```python
-# Create sampler
+# 建立取樣器
 sampler = cirq_pasqal.PasqalSampler(
     remote_host='https://api.pasqal.cloud',
     access_token='your_token',
     device=device
 )
 
-# Run circuit
+# 執行電路
 result = sampler.run(circuit, repetitions=1000)
 ```
 
-## Hardware Best Practices
+## 硬體最佳實務
 
-### Circuit Optimization for Hardware
+### 為硬體優化電路
 
 ```python
 def optimize_for_hardware(circuit, device):
-    """Optimize circuit for specific hardware."""
+    """為特定硬體優化電路。"""
     from cirq.transformers import (
         optimize_for_target_gateset,
         merge_single_qubit_gates_to_phxz,
         drop_negligible_operations
     )
 
-    # Get device gateset
+    # 取得裝置閘集
     if hasattr(device, 'gateset'):
         gateset = device.gateset
     else:
-        gateset = cirq.CZTargetGateset()  # Default
+        gateset = cirq.CZTargetGateset()  # 預設
 
-    # Optimize
+    # 優化
     circuit = merge_single_qubit_gates_to_phxz(circuit)
     circuit = drop_negligible_operations(circuit)
     circuit = optimize_for_target_gateset(circuit, gateset=gateset)
@@ -378,13 +378,13 @@ def optimize_for_hardware(circuit, device):
     return circuit
 ```
 
-### Error Mitigation
+### 錯誤緩解
 
 ```python
 def run_with_readout_error_mitigation(circuit, sampler, repetitions):
-    """Mitigate readout errors using calibration."""
+    """使用校準緩解讀取錯誤。"""
 
-    # Measure readout error
+    # 測量讀取錯誤
     cal_circuits = []
     for state in range(2**len(circuit.qubits)):
         cal_circuit = cirq.Circuit()
@@ -394,26 +394,26 @@ def run_with_readout_error_mitigation(circuit, sampler, repetitions):
         cal_circuit.append(cirq.measure(*circuit.qubits, key='m'))
         cal_circuits.append(cal_circuit)
 
-    # Run calibration
+    # 執行校準
     cal_results = [sampler.run(c, repetitions=1000) for c in cal_circuits]
 
-    # Build confusion matrix
-    # ... (implementation details)
+    # 建構混淆矩陣
+    # ...（實作細節）
 
-    # Run actual circuit
+    # 執行實際電路
     result = sampler.run(circuit, repetitions=repetitions)
 
-    # Apply correction
-    # ... (apply inverse of confusion matrix)
+    # 應用校正
+    # ...（應用混淆矩陣的逆）
 
     return result
 ```
 
-### Job Management
+### 作業管理
 
 ```python
 def submit_jobs_in_batches(circuits, sampler, batch_size=10):
-    """Submit multiple circuits in batches."""
+    """分批提交多個電路。"""
     jobs = []
 
     for i in range(0, len(circuits), batch_size):
@@ -426,90 +426,90 @@ def submit_jobs_in_batches(circuits, sampler, batch_size=10):
 
         jobs.extend(job_ids)
 
-    # Wait for all jobs
+    # 等待所有作業
     results = [job.result() for job in jobs]
     return results
 ```
 
-## Device Specifications
+## 裝置規格
 
-### Checking Device Capabilities
+### 檢查裝置能力
 
 ```python
 def print_device_info(device):
-    """Print device capabilities and constraints."""
+    """列印裝置能力和約束。"""
 
-    print(f"Device: {device}")
-    print(f"Number of qubits: {len(device.metadata.qubit_set)}")
+    print(f"裝置：{device}")
+    print(f"量子位元數量：{len(device.metadata.qubit_set)}")
 
-    # Gate support
-    print("\nSupported gates:")
+    # 閘支援
+    print("\n支援的閘：")
     if hasattr(device, 'gateset'):
         for gate in device.gateset.gates:
             print(f"  - {gate}")
 
-    # Connectivity
-    print("\nConnectivity:")
+    # 連接性
+    print("\n連接性：")
     graph = device.metadata.nx_graph
-    print(f"  Edges: {graph.number_of_edges()}")
-    print(f"  Average degree: {sum(dict(graph.degree()).values()) / graph.number_of_nodes():.2f}")
+    print(f"  邊數：{graph.number_of_edges()}")
+    print(f"  平均度數：{sum(dict(graph.degree()).values()) / graph.number_of_nodes():.2f}")
 
-    # Duration constraints
+    # 持續時間約束
     if hasattr(device, 'gate_durations'):
-        print("\nGate durations:")
+        print("\n閘持續時間：")
         for gate, duration in device.gate_durations.items():
             print(f"  {gate}: {duration}")
 ```
 
-## Authentication and Access
+## 認證和存取
 
-### Setting Up Credentials
+### 設定憑證
 
-**Google Cloud:**
+**Google Cloud：**
 ```bash
-# Install gcloud CLI
-# Visit: https://cloud.google.com/sdk/docs/install
+# 安裝 gcloud CLI
+# 訪問：https://cloud.google.com/sdk/docs/install
 
-# Authenticate
+# 認證
 gcloud auth application-default login
 
-# Set project
+# 設定專案
 export GOOGLE_CLOUD_PROJECT=your-project-id
 ```
 
-**IonQ:**
+**IonQ：**
 ```bash
-# Set API key
+# 設定 API 金鑰
 export IONQ_API_KEY=your_api_key
 ```
 
-**Azure Quantum:**
+**Azure Quantum：**
 ```python
-# Use Azure CLI or workspace connection string
-# See: https://docs.microsoft.com/azure/quantum/
+# 使用 Azure CLI 或工作區連接字串
+# 參見：https://docs.microsoft.com/azure/quantum/
 ```
 
-**AQT:**
+**AQT：**
 ```bash
-# Request access token from AQT
+# 向 AQT 請求存取權杖
 export AQT_TOKEN=your_token
 ```
 
-**Pasqal:**
+**Pasqal：**
 ```bash
-# Request API access from Pasqal
+# 向 Pasqal 請求 API 存取
 export PASQAL_TOKEN=your_token
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Validate circuits before submission**: Use device.validate_circuit()
-2. **Optimize for target hardware**: Decompose to native gates
-3. **Select best qubits**: Use calibration data for qubit selection
-4. **Monitor job status**: Check job completion before retrieving results
-5. **Implement error mitigation**: Use readout error correction
-6. **Batch jobs efficiently**: Submit multiple circuits together
-7. **Respect rate limits**: Follow provider-specific API limits
-8. **Store results**: Save expensive hardware results immediately
-9. **Test on simulators first**: Validate on simulators before hardware
-10. **Keep circuits shallow**: Hardware has limited coherence times
+1. **提交前驗證電路**：使用 device.validate_circuit()
+2. **為目標硬體優化**：分解為原生閘
+3. **選擇最佳量子位元**：使用校準資料進行量子位元選擇
+4. **監控作業狀態**：擷取結果前檢查作業完成狀態
+5. **實施錯誤緩解**：使用讀取錯誤校正
+6. **有效率地批次作業**：一起提交多個電路
+7. **遵守速率限制**：遵循供應商特定的 API 限制
+8. **儲存結果**：立即儲存昂貴的硬體結果
+9. **先在模擬器測試**：在硬體執行前在模擬器上驗證
+10. **保持電路淺層**：硬體的相干時間有限

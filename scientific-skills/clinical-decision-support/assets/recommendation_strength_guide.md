@@ -1,328 +1,324 @@
-# Recommendation Strength Guide
+# 建議強度指南
 
-## GRADE Framework for Clinical Recommendations
+## 臨床建議的 GRADE 框架
 
-### Components of a Recommendation
+### 建議的組成部分
 
-Every clinical recommendation should address:
+每項臨床建議應處理：
 
-1. **Population**: Who should receive the intervention?
-2. **Intervention**: What specific treatment/action?
-3. **Comparator**: Compared to what alternative?
-4. **Outcome**: What are the expected results?
-5. **Strength**: How strong is the recommendation?
-6. **Quality of Evidence**: How confident are we in the evidence?
+1. **群體**：誰應該接受介入？
+2. **介入**：什麼具體治療/行動？
+3. **比較對象**：與什麼替代方案比較？
+4. **結果**：預期結果是什麼？
+5. **強度**：建議有多強？
+6. **證據品質**：我們對證據有多大信心？
 
-### Recommendation Strength (Grade 1 vs Grade 2)
+### 建議強度（Grade 1 vs Grade 2）
 
-#### Strong Recommendation (Grade 1)
+#### 強力建議（Grade 1）
 
-**When to Use**:
-- Desirable effects clearly outweigh undesirable effects (or vice versa)
-- High or moderate quality evidence
-- Values and preferences: Little variability expected
-- Resource implications: Cost-effective or cost considerations minor
+**何時使用**：
+- 期望效果明顯超過非期望效果（或反之）
+- 高或中等品質證據
+- 價值觀和偏好：預期變異性小
+- 資源影響：符合成本效益或成本考量次要
 
-**Wording**: "We recommend..." or "Clinicians should..."
+**用語**：「我們建議...」或「臨床醫師應該...」
 
-**Implications**:
-- Most patients should receive the recommended intervention
-- Adherence to recommendation could be a quality indicator
-- Policy-makers can adapt as performance measure
+**含義**：
+- 大多數病患應該接受建議的介入
+- 遵循建議可作為品質指標
+- 政策制定者可將其改編為績效測量
 
-**Examples**:
-
-```
-STRONG RECOMMENDATION FOR (Grade 1):
-
-"We recommend osimertinib 80 mg daily as first-line therapy for adults with 
-advanced NSCLC harboring EGFR exon 19 deletion or L858R mutation (Strong 
-recommendation, High-quality evidence - GRADE 1A)."
-
-Rationale:
-- Large PFS benefit: 18.9 vs 10.2 months (HR 0.46, p<0.001)
-- OS benefit: 38.6 vs 31.8 months (HR 0.80, p=0.046)  
-- Better tolerability: Lower grade 3-4 AEs
-- Evidence: High-quality (large RCT, low risk of bias)
-- Benefits clearly outweigh harms
-```
+**範例**：
 
 ```
-STRONG RECOMMENDATION AGAINST (Grade 1):
+強力建議為（Grade 1）：
 
-"We recommend against using bevacizumab in the first-line treatment of newly 
-diagnosed glioblastoma to improve overall survival (Strong recommendation against, 
-High-quality evidence - GRADE 1A)."
+「我們建議 osimertinib 80 mg 每日作為 EGFR exon 19 缺失或 L858R 突變
+的晚期 NSCLC 成人的第一線治療（強力建議，高品質證據 - GRADE 1A）。」
 
-Rationale:
-- No OS benefit: HR 0.88 (0.76-1.02), p=0.10 (AVAglio trial)
-- Toxicity: Increased grade ≥3 AEs (66% vs 52%)
-- Evidence: High-quality (two large phase 3 RCTs)
-- Harms outweigh lack of survival benefit
-```
-
-#### Conditional/Weak Recommendation (Grade 2)
-
-**When to Use**:
-- Desirable and undesirable effects closely balanced
-- Low or very low quality evidence
-- Values and preferences: Substantial variability
-- Resource implications: High cost or limited access
-
-**Wording**: "We suggest..." or "Clinicians might..."
-
-**Implications**:
-- Different choices will be appropriate for different patients
-- Shared decision-making essential
-- Policy-making requires substantial debate and stakeholder involvement
-
-**Examples**:
-
-```
-CONDITIONAL RECOMMENDATION FOR (Grade 2):
-
-"We suggest considering maintenance pemetrexed after first-line platinum-pemetrexed 
-chemotherapy for advanced non-squamous NSCLC in patients without disease progression 
-(Conditional recommendation, Moderate-quality evidence - GRADE 2B)."
-
-Rationale:
-- Modest PFS benefit: 4.0 vs 2.0 months (HR 0.62)
-- No OS benefit: 13.9 vs 11.0 months (HR 0.79, p=0.23)
-- Toxicity: Continued chemotherapy burden
-- Quality of life: Trade-off between symptom control and treatment side effects
-- Patient values: Some prioritize time off treatment, others prioritize disease control
-- Shared decision-making essential
+理由：
+- 大幅 PFS 益處：18.9 vs 10.2 個月（HR 0.46，p<0.001）
+- OS 益處：38.6 vs 31.8 個月（HR 0.80，p=0.046）
+- 較好的耐受性：較低的 3-4 級 AEs
+- 證據：高品質（大型 RCT，低偏誤風險）
+- 益處明顯超過危害
 ```
 
 ```
-CONDITIONAL RECOMMENDATION - EITHER OPTION ACCEPTABLE (Grade 2):
+強力建議反對（Grade 1）：
 
-"We suggest either pembrolizumab monotherapy OR pembrolizumab plus platinum-doublet 
-chemotherapy as first-line treatment for PD-L1 ≥50% NSCLC, based on patient 
-preferences and clinical factors (Conditional recommendation, High-quality evidence - 
-GRADE 2A)."
+「我們建議反對在新診斷膠質母細胞瘤的第一線治療中使用 bevacizumab 來
+改善整體存活（強力建議反對，高品質證據 - GRADE 1A）。」
 
-Rationale:
-- Both regimens NCCN Category 1 preferred
-- Monotherapy: Less toxicity, oral vs IV, better quality of life
-- Combination: Higher ORR (48% vs 39%), numerically longer PFS
-- OS: Similar between strategies
-- Patient values: Varies widely (tolerability vs response rate priority)
+理由：
+- 無 OS 益處：HR 0.88（0.76-1.02），p=0.10（AVAglio 試驗）
+- 毒性：增加 ≥3 級 AEs（66% vs 52%）
+- 證據：高品質（兩項大型第 3 期 RCTs）
+- 危害超過缺乏存活益處
 ```
 
-### Evidence Quality (⊕⊕⊕⊕ to ⊕○○○)
+#### 有條件/弱建議（Grade 2）
 
-#### High Quality (⊕⊕⊕⊕)
+**何時使用**：
+- 期望和非期望效果接近平衡
+- 低或極低品質證據
+- 價值觀和偏好：存在實質變異
+- 資源影響：高成本或有限可及性
 
-- Further research very unlikely to change confidence in effect estimate
-- Consistent results from well-designed RCTs
-- No serious limitations
-- Direct evidence (target population, intervention, outcomes)
-- Precise estimate (narrow CI)
+**用語**：「我們建議考慮...」或「臨床醫師可能...」
 
-**Example**: FLAURA trial for osimertinib in EGFR+ NSCLC - Large RCT, consistent results, low risk of bias, direct outcomes
+**含義**：
+- 不同選擇適合不同病患
+- 共同決策至關重要
+- 政策制定需實質討論和利害關係人參與
 
-#### Moderate Quality (⊕⊕⊕○)
-
-- Further research likely to impact confidence and may change estimate
-- RCTs with some limitations OR very strong evidence from observational studies
-- Some inconsistency, indirectness, imprecision, or publication bias
-
-**Example**: Single RCT with some limitations, or multiple RCTs with moderate heterogeneity
-
-#### Low Quality (⊕⊕○○)
-
-- Further research very likely to have important impact on confidence in estimate
-- Observational studies OR RCTs with serious limitations
-- Serious issues with consistency, directness, precision, or bias
-
-**Example**: Well-conducted cohort study, or RCT with high attrition and unclear allocation concealment
-
-#### Very Low Quality (⊕○○○)
-
-- Estimate of effect very uncertain
-- Case series, expert opinion, mechanistic reasoning
-- Very serious limitations
-
-**Example**: Retrospective case series, expert consensus without systematic review
-
-## Combining Strength and Quality
-
-### All Nine Possible Combinations
-
-| Evidence Quality | Strong For (↑↑) | Weak For (↑) | Strong Against (↓↓) | Weak Against (↓) |
-|-----------------|----------------|--------------|---------------------|------------------|
-| **High (⊕⊕⊕⊕)** | Grade 1A | Grade 2A | Grade 1A (against) | Grade 2A (against) |
-| **Moderate (⊕⊕⊕○)** | Grade 1B | Grade 2B | Grade 1B (against) | Grade 2B (against) |
-| **Low (⊕⊕○○)** | Grade 1C* | Grade 2C | Grade 1C (against)* | Grade 2C (against) |
-| **Very Low (⊕○○○)** | Grade 1D* | Grade 2D | Grade 1D (against)* | Grade 2D (against) |
-
-*Rare: Strong recommendations usually require at least moderate-quality evidence
-
-### Unusual Combinations (When They Occur)
-
-**Strong Recommendation with Low Quality Evidence (Grade 1C)**
-
-Rare, but can occur when:
-- Large magnitude of effect from observational data (RR >5 or <0.2)
-- Low quality evidence, but clear benefit-harm balance
-- Example: Anticoagulation for atrial fibrillation (before RCTs, strong observational data)
-
-**Weak Recommendation with High Quality Evidence (Grade 2A)**
-
-Occurs when:
-- Benefits and harms closely balanced
-- Patient values highly variable
-- Example: Aspirin for primary prevention in low-risk individuals (benefits small, bleeding risk present, patient values vary)
-
-## Wording Templates
-
-### Strong Recommendations
-
-**FOR (↑↑)**:
-- "We recommend [intervention] for [population]."
-- "Clinicians should [action]."
-- "[Intervention] is recommended."
-
-**AGAINST (↓↓)**:
-- "We recommend against [intervention] for [population]."
-- "Clinicians should not [action]."
-- "[Intervention] is not recommended."
-
-### Conditional/Weak Recommendations
-
-**FOR (↑)**:
-- "We suggest [intervention] for [population]."
-- "Clinicians might consider [action]."
-- "[Intervention] may be considered for selected patients."
-
-**AGAINST (↓)**:
-- "We suggest not using [intervention] for [population]."
-- "Clinicians might avoid [action]."
-- "[Intervention] is generally not recommended."
-
-**EITHER ACCEPTABLE**:
-- "We suggest either [option A] or [option B] based on patient preferences."
-- "Either approach is reasonable."
-
-## Color Coding for Visual Documents
-
-**Strong Recommendations (Green Background)**:
-- RGB(0, 153, 76) or #009954
-- Clear visual priority
-- Use for Grade 1A, 1B
-
-**Conditional Recommendations (Yellow Background)**:
-- RGB(255, 193, 7) or #FFC107
-- Indicates discussion needed
-- Use for Grade 2A, 2B, 2C
-
-**Research/Investigational (Blue Background)**:
-- RGB(33, 150, 243) or #2196F3
-- Clinical trial consideration
-- Insufficient evidence for standard care
-
-**Not Recommended (Red Border/Background)**:
-- RGB(220, 20, 60) or #DC143C
-- Strong recommendation against
-- Evidence of harm or no benefit
-
-## Common Scenarios
-
-### Scenario 1: Strong Evidence, Clear Benefit-Harm Balance
-
-**Example**: Pembrolizumab for PD-L1 ≥50% NSCLC
-
-- Evidence: Large phase 3 RCT (KEYNOTE-024), n=305, well-designed
-- Results: PFS HR 0.50 (0.37-0.68), OS HR 0.60 (0.41-0.89)
-- Toxicity: Lower grade 3-5 AEs than chemotherapy (27% vs 53%)
-- Patient values: Most prioritize efficacy and tolerability
-
-**Recommendation**: STRONG FOR (Grade 1A)
-
-### Scenario 2: Moderate Evidence, Balanced Trade-Offs
-
-**Example**: Adjuvant immunotherapy for resected melanoma
-
-- Evidence: RCT showing relapse-free survival benefit, OS data immature
-- Results: Recurrence risk reduced but ongoing toxicity
-- Toxicity: Immune-related AEs requiring steroids (some severe)
-- Cost: High annual cost for 12 months treatment
-- Patient values: Variable (some prioritize recurrence prevention, others avoid toxicity)
-
-**Recommendation**: CONDITIONAL FOR (Grade 2B)
-
-### Scenario 3: Low Evidence, but Severe Consequence
-
-**Example**: Anticoagulation for prosthetic heart valve
-
-- Evidence: No RCTs (would be unethical), observational data and mechanistic reasoning
-- Consequence: Very high thromboembolic risk without anticoagulation
-- Benefit-harm: Clear despite low quality evidence
-
-**Recommendation**: STRONG FOR (Grade 1C)
-
-### Scenario 4: High Evidence, but Patient Preferences Vary
-
-**Example**: Breast reconstruction after mastectomy
-
-- Evidence: High-quality data on outcomes and satisfaction
-- Trade-offs: Cosmetic benefit vs additional surgery, recovery time
-- Values: Highly personal decision, wide preference variability
-
-**Recommendation**: CONDITIONAL (Grade 2A) - discuss options, patient decides
-
-## Documentation Template
+**範例**：
 
 ```
-RECOMMENDATION: [State recommendation clearly]
+有條件建議為（Grade 2）：
 
-Strength: [STRONG / CONDITIONAL]
-Quality of Evidence: [HIGH / MODERATE / LOW / VERY LOW]
-GRADE: [1A / 1B / 2A / 2B / 2C]
+「我們建議考慮在第一線 platinum-pemetrexed 化療後對無疾病惡化的
+晚期非鱗狀 NSCLC 進行維持性 pemetrexed 治療（有條件建議，
+中等品質證據 - GRADE 2B）。」
 
-Evidence Summary:
-- Primary study: [Citation]
-- Design: [RCT / Observational / Meta-analysis]
-- Sample size: n = [X]
-- Results: [Primary outcome with effect size, CI, p-value]
-- Quality assessment: [Strengths and limitations]
-
-Benefits:
-- [Quantified benefit 1]
-- [Quantified benefit 2]
-
-Harms:
-- [Quantified harm 1]
-- [Quantified harm 2]
-
-Balance: [Benefits clearly outweigh harms / Close balance requiring discussion / etc.]
-
-Values and Preferences: [Little variability / Substantial variability]
-
-Cost Considerations: [If relevant]
-
-Guideline Concordance:
-- NCCN: [Category and recommendation]
-- ASCO: [Recommendation]
-- ESMO: [Grade and recommendation]
+理由：
+- 適度 PFS 益處：4.0 vs 2.0 個月（HR 0.62）
+- 無 OS 益處：13.9 vs 11.0 個月（HR 0.79，p=0.23）
+- 毒性：持續化療負擔
+- 生活品質：症狀控制與治療副作用的權衡
+- 病患價值觀：有些優先考慮停止治療的時間，有些優先考慮疾病控制
+- 共同決策至關重要
 ```
 
-## Quality Checklist
+```
+有條件建議 - 兩種選項均可接受（Grade 2）：
 
-Before finalizing recommendations, verify:
+「我們建議 PD-L1 ≥50% NSCLC 第一線治療可選擇 pembrolizumab 單藥治療
+或 pembrolizumab 加 platinum-doublet 化療，基於病患偏好和臨床因素
+（有條件建議，高品質證據 - GRADE 2A）。」
 
-- [ ] Recommendation statement is clear and actionable
-- [ ] Strength is explicitly stated (strong vs conditional)
-- [ ] Quality of evidence is graded (high/moderate/low/very low)
-- [ ] GRADE notation provided (1A, 1B, 2A, 2B, 2C)
-- [ ] Evidence is cited with specific study results
-- [ ] Benefits are quantified (effect sizes with CIs)
-- [ ] Harms are quantified (AE rates)
-- [ ] Balance of benefits/harms is explained
-- [ ] Patient values consideration is addressed (if conditional)
-- [ ] Alternative options are mentioned
-- [ ] Guideline concordance is documented
-- [ ] Special populations are addressed (elderly, renal/hepatic impairment)
-- [ ] Monitoring requirements are specified
+理由：
+- 兩種方案均為 NCCN Category 1 首選
+- 單藥治療：毒性較低，口服 vs 靜脈注射，較好的生活品質
+- 組合治療：較高 ORR（48% vs 39%），數值上較長 PFS
+- OS：策略間相似
+- 病患價值觀：差異很大（耐受性 vs 反應率優先）
+```
 
+### 證據品質（⊕⊕⊕⊕ 到 ⊕○○○）
+
+#### 高品質（⊕⊕⊕⊕）
+
+- 進一步研究不太可能改變對效應估計的信心
+- 來自設計良好的 RCTs 的一致結果
+- 無嚴重限制
+- 直接證據（目標群體、介入、結果）
+- 精確估計（窄 CI）
+
+**範例**：FLAURA 試驗用於 EGFR+ NSCLC 的 osimertinib - 大型 RCT，一致結果，低偏誤風險，直接結果
+
+#### 中等品質（⊕⊕⊕○）
+
+- 進一步研究可能影響信心並可能改變估計
+- 有些限制的 RCTs 或來自觀察性研究的非常強證據
+- 某些不一致性、間接性、不精確性或發表偏誤
+
+**範例**：有些限制的單一 RCT，或有中等異質性的多個 RCTs
+
+#### 低品質（⊕⊕○○）
+
+- 進一步研究很可能對估計信心有重要影響
+- 觀察性研究或有嚴重限制的 RCTs
+- 一致性、直接性、精確性或偏誤有嚴重問題
+
+**範例**：執行良好的世代研究，或有高流失率和不清楚分配隱匿的 RCT
+
+#### 極低品質（⊕○○○）
+
+- 效應估計非常不確定
+- 病例系列、專家意見、機制推理
+- 非常嚴重的限制
+
+**範例**：回顧性病例系列、無系統性回顧的專家共識
+
+## 組合強度和品質
+
+### 所有九種可能組合
+
+| 證據品質 | 強力為（↑↑）| 弱為（↑）| 強力反對（↓↓）| 弱反對（↓）|
+|---------|------------|---------|--------------|-----------|
+| **高（⊕⊕⊕⊕）** | Grade 1A | Grade 2A | Grade 1A（反對）| Grade 2A（反對）|
+| **中等（⊕⊕⊕○）** | Grade 1B | Grade 2B | Grade 1B（反對）| Grade 2B（反對）|
+| **低（⊕⊕○○）** | Grade 1C* | Grade 2C | Grade 1C（反對）* | Grade 2C（反對）|
+| **極低（⊕○○○）** | Grade 1D* | Grade 2D | Grade 1D（反對）* | Grade 2D（反對）|
+
+*罕見：強力建議通常需要至少中等品質證據
+
+### 不尋常組合（何時發生）
+
+**強力建議搭配低品質證據（Grade 1C）**
+
+罕見，但可發生於：
+- 來自觀察性資料的大幅效應（RR >5 或 <0.2）
+- 低品質證據，但清晰的益處-危害平衡
+- 範例：心房顫動的抗凝治療（RCTs 之前，強觀察性資料）
+
+**弱建議搭配高品質證據（Grade 2A）**
+
+發生於：
+- 益處和危害接近平衡
+- 病患價值觀高度變異
+- 範例：低風險個體的阿斯匹林初級預防（益處小，出血風險存在，病患價值觀不同）
+
+## 用語範本
+
+### 強力建議
+
+**為（↑↑）**：
+- 「我們建議 [介入] 用於 [群體]。」
+- 「臨床醫師應該 [行動]。」
+- 「[介入] 是建議的。」
+
+**反對（↓↓）**：
+- 「我們建議反對 [介入] 用於 [群體]。」
+- 「臨床醫師不應該 [行動]。」
+- 「[介入] 不建議。」
+
+### 有條件/弱建議
+
+**為（↑）**：
+- 「我們建議考慮 [介入] 用於 [群體]。」
+- 「臨床醫師可能考慮 [行動]。」
+- 「[介入] 可考慮用於選定病患。」
+
+**反對（↓）**：
+- 「我們建議不使用 [介入] 用於 [群體]。」
+- 「臨床醫師可能避免 [行動]。」
+- 「[介入] 一般不建議。」
+
+**兩者均可接受**：
+- 「我們建議 [選項 A] 或 [選項 B] 均可，基於病患偏好。」
+- 「兩種方法都是合理的。」
+
+## 視覺文件的顏色編碼
+
+**強力建議（綠色背景）**：
+- RGB(0, 153, 76) 或 #009954
+- 清晰的視覺優先性
+- 用於 Grade 1A、1B
+
+**有條件建議（黃色背景）**：
+- RGB(255, 193, 7) 或 #FFC107
+- 表示需要討論
+- 用於 Grade 2A、2B、2C
+
+**研究/探索性（藍色背景）**：
+- RGB(33, 150, 243) 或 #2196F3
+- 臨床試驗考慮
+- 證據不足以納入標準照護
+
+**不建議（紅色邊框/背景）**：
+- RGB(220, 20, 60) 或 #DC143C
+- 強力建議反對
+- 有危害或無益處的證據
+
+## 常見情境
+
+### 情境 1：強證據，清晰的益處-危害平衡
+
+**範例**：PD-L1 ≥50% NSCLC 的 Pembrolizumab
+
+- 證據：大型第 3 期 RCT（KEYNOTE-024），n=305，設計良好
+- 結果：PFS HR 0.50（0.37-0.68），OS HR 0.60（0.41-0.89）
+- 毒性：低於化療的 3-5 級 AEs（27% vs 53%）
+- 病患價值觀：大多數優先考慮療效和耐受性
+
+**建議**：強力為（Grade 1A）
+
+### 情境 2：中等證據，平衡的權衡
+
+**範例**：切除黑色素瘤的輔助免疫治療
+
+- 證據：顯示無復發存活益處的 RCT，OS 資料尚未成熟
+- 結果：降低復發風險但持續毒性
+- 毒性：需類固醇的免疫相關 AEs（有些嚴重）
+- 成本：12 個月治療的高年度成本
+- 病患價值觀：變異（有些優先考慮預防復發，有些避免毒性）
+
+**建議**：有條件為（Grade 2B）
+
+### 情境 3：低證據，但嚴重後果
+
+**範例**：人工心臟瓣膜的抗凝治療
+
+- 證據：無 RCTs（將是不道德的），觀察性資料和機制推理
+- 後果：無抗凝的極高血栓栓塞風險
+- 益處-危害：儘管低品質證據仍清晰
+
+**建議**：強力為（Grade 1C）
+
+### 情境 4：高證據，但病患偏好不同
+
+**範例**：乳房切除術後的乳房重建
+
+- 證據：關於結果和滿意度的高品質資料
+- 權衡：美容益處 vs 額外手術、恢復時間
+- 價值觀：高度個人化決定，偏好變異大
+
+**建議**：有條件（Grade 2A）- 討論選項，病患決定
+
+## 文件範本
+
+```
+建議：[明確陳述建議]
+
+強度：[強力 / 有條件]
+證據品質：[高 / 中等 / 低 / 極低]
+GRADE：[1A / 1B / 2A / 2B / 2C]
+
+證據摘要：
+- 主要研究：[引用]
+- 設計：[RCT / 觀察性 / 統合分析]
+- 樣本量：n = [X]
+- 結果：[主要結果含效應量、CI、p 值]
+- 品質評估：[優勢和限制]
+
+益處：
+- [量化的益處 1]
+- [量化的益處 2]
+
+危害：
+- [量化的危害 1]
+- [量化的危害 2]
+
+平衡：[益處明顯超過危害 / 需討論的接近平衡 / 等]
+
+價值觀和偏好：[變異性小 / 存在實質變異]
+
+成本考量：[如相關]
+
+指南一致性：
+- NCCN：[類別和建議]
+- ASCO：[建議]
+- ESMO：[等級和建議]
+```
+
+## 品質檢核表
+
+在最終確定建議之前，確認：
+
+- [ ] 建議陳述清晰且可行動
+- [ ] 明確說明強度（強力 vs 有條件）
+- [ ] 證據品質已分級（高/中等/低/極低）
+- [ ] 提供 GRADE 標記（1A、1B、2A、2B、2C）
+- [ ] 引用證據含具體研究結果
+- [ ] 益處已量化（效應量含 CIs）
+- [ ] 危害已量化（AE 率）
+- [ ] 說明益處/危害平衡
+- [ ] 處理病患價值觀考量（如有條件）
+- [ ] 提及替代選項
+- [ ] 記錄指南一致性
+- [ ] 處理特殊群體（老年人、腎/肝功能不全）
+- [ ] 指定監測要求

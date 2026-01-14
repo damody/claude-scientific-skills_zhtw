@@ -1,196 +1,196 @@
-# Parameter Configuration
+# 參數設定
 
-## Parameters Object
+## Parameters 物件
 
-The `Parameters` object is hierarchical and organized into logical groups. Access using dot notation:
+`Parameters` 物件是層次結構的，並組織成邏輯群組。使用點記法存取：
 
 ```python
 params = Simul.create_default_params()
 params.group.subgroup.parameter = value
 ```
 
-## Key Parameter Groups
+## 主要參數群組
 
-### Operators (`params.oper`)
+### 運算子（`params.oper`）
 
-Define domain and resolution:
-
-```python
-params.oper.nx = 256  # number of grid points in x
-params.oper.ny = 256  # number of grid points in y
-params.oper.nz = 128  # number of grid points in z (3D only)
-
-params.oper.Lx = 2 * pi  # domain length in x
-params.oper.Ly = 2 * pi  # domain length in y
-params.oper.Lz = pi      # domain length in z (3D only)
-
-params.oper.coef_dealiasing = 2./3.  # dealiasing cutoff (default 2/3)
-```
-
-**Resolution guidance**: Use powers of 2 for optimal FFT performance (128, 256, 512, 1024, etc.)
-
-### Physical Parameters
-
-#### Viscosity
+定義域和解析度：
 
 ```python
-params.nu_2 = 1e-3  # Laplacian viscosity (negative Laplacian)
-params.nu_4 = 0     # hyperviscosity (optional)
-params.nu_8 = 0     # hyper-hyperviscosity (very high wavenumber damping)
+params.oper.nx = 256  # x 方向的網格點數
+params.oper.ny = 256  # y 方向的網格點數
+params.oper.nz = 128  # z 方向的網格點數（僅 3D）
+
+params.oper.Lx = 2 * pi  # x 方向的域長度
+params.oper.Ly = 2 * pi  # y 方向的域長度
+params.oper.Lz = pi      # z 方向的域長度（僅 3D）
+
+params.oper.coef_dealiasing = 2./3.  # 去混疊截止（預設 2/3）
 ```
 
-Higher-order viscosity (`nu_4`, `nu_8`) damps high wavenumbers without affecting large scales.
+**解析度指南**：使用 2 的冪次以獲得最佳 FFT 效能（128、256、512、1024 等）
 
-#### Stratification (Stratified Solvers)
+### 物理參數
+
+#### 黏度
 
 ```python
-params.N = 1.0  # Brunt-Väisälä frequency (buoyancy frequency)
+params.nu_2 = 1e-3  # 拉普拉斯黏度（負拉普拉斯）
+params.nu_4 = 0     # 超黏度（可選）
+params.nu_8 = 0     # 超超黏度（非常高波數阻尼）
 ```
 
-#### Rotation (Shallow Water)
+高階黏度（`nu_4`、`nu_8`）阻尼高波數而不影響大尺度。
+
+#### 分層（分層求解器）
 
 ```python
-params.f = 1.0  # Coriolis parameter
-params.c2 = 10.0  # squared phase velocity (gravity wave speed)
+params.N = 1.0  # Brunt-Väisälä 頻率（浮力頻率）
 ```
 
-### Time Stepping (`params.time_stepping`)
+#### 旋轉（淺水）
 
 ```python
-params.time_stepping.t_end = 10.0  # simulation end time
-params.time_stepping.it_end = 100  # or maximum iterations
-
-params.time_stepping.deltat0 = 0.01  # initial time step
-params.time_stepping.USE_CFL = True  # adaptive CFL-based time step
-params.time_stepping.CFL = 0.5  # CFL number (if USE_CFL=True)
-
-params.time_stepping.type_time_scheme = "RK4"  # or "RK2", "Euler"
+params.f = 1.0  # 科里奧利參數
+params.c2 = 10.0  # 相速度平方（重力波速度）
 ```
 
-**Recommended**: Use `USE_CFL=True` with `CFL=0.5` for adaptive time stepping.
-
-### Initial Fields (`params.init_fields`)
+### 時間步進（`params.time_stepping`）
 
 ```python
-params.init_fields.type = "noise"  # initialization method
+params.time_stepping.t_end = 10.0  # 模擬結束時間
+params.time_stepping.it_end = 100  # 或最大迭代次數
+
+params.time_stepping.deltat0 = 0.01  # 初始時間步長
+params.time_stepping.USE_CFL = True  # 自適應 CFL 基礎時間步長
+params.time_stepping.CFL = 0.5  # CFL 數（如果 USE_CFL=True）
+
+params.time_stepping.type_time_scheme = "RK4"  # 或 "RK2"、"Euler"
 ```
 
-**Available types**:
-- `"noise"`: Random noise
-- `"dipole"`: Vortex dipole
-- `"vortex"`: Single vortex
-- `"taylor_green"`: Taylor-Green vortex
-- `"from_file"`: Load from file
-- `"in_script"`: Define in script
+**建議**：使用 `USE_CFL=True` 搭配 `CFL=0.5` 進行自適應時間步進。
 
-#### From File
+### 初始場（`params.init_fields`）
+
+```python
+params.init_fields.type = "noise"  # 初始化方法
+```
+
+**可用類型**：
+- `"noise"`：隨機噪聲
+- `"dipole"`：渦流偶極
+- `"vortex"`：單渦流
+- `"taylor_green"`：Taylor-Green 渦流
+- `"from_file"`：從檔案載入
+- `"in_script"`：在腳本中定義
+
+#### 從檔案
 
 ```python
 params.init_fields.type = "from_file"
 params.init_fields.from_file.path = "path/to/state_file.h5"
 ```
 
-#### In Script
+#### 在腳本中
 
 ```python
 params.init_fields.type = "in_script"
 
-# Define initialization after creating sim
+# 建立 sim 後定義初始化
 sim = Simul(params)
 
-# Access state fields
+# 存取狀態場
 vx = sim.state.state_phys.get_var("vx")
 vy = sim.state.state_phys.get_var("vy")
 
-# Set fields
+# 設定場
 X, Y = sim.oper.get_XY_loc()
 vx[:] = np.sin(X) * np.cos(Y)
 vy[:] = -np.cos(X) * np.sin(Y)
 
-# Run simulation
+# 執行模擬
 sim.time_stepping.start()
 ```
 
-### Output Settings (`params.output`)
+### 輸出設定（`params.output`）
 
-#### Output Directory
+#### 輸出目錄
 
 ```python
 params.output.sub_directory = "my_simulation"
 ```
 
-Directory created within `$FLUIDSIM_PATH` or current directory.
+目錄建立在 `$FLUIDSIM_PATH` 或目前目錄內。
 
-#### Save Periods
+#### 儲存週期
 
 ```python
-params.output.periods_save.phys_fields = 1.0  # save fields every 1.0 time units
-params.output.periods_save.spectra = 0.5      # save spectra
-params.output.periods_save.spatial_means = 0.1  # save spatial averages
-params.output.periods_save.spect_energy_budg = 0.5  # spectral energy budget
+params.output.periods_save.phys_fields = 1.0  # 每 1.0 時間單位儲存場
+params.output.periods_save.spectra = 0.5      # 儲存頻譜
+params.output.periods_save.spatial_means = 0.1  # 儲存空間平均
+params.output.periods_save.spect_energy_budg = 0.5  # 頻譜能量預算
 ```
 
-Set to `0` to disable a particular output type.
+設為 `0` 以停用特定輸出類型。
 
-#### Print Control
+#### 列印控制
 
 ```python
-params.output.periods_print.print_stdout = 0.5  # print status every 0.5 time units
+params.output.periods_print.print_stdout = 0.5  # 每 0.5 時間單位列印狀態
 ```
 
-#### Online Plotting
+#### 線上繪圖
 
 ```python
-params.output.periods_plot.phys_fields = 2.0  # plot every 2.0 time units
+params.output.periods_plot.phys_fields = 2.0  # 每 2.0 時間單位繪圖
 
-# Must also enable the output module
+# 必須同時啟用輸出模組
 params.output.ONLINE_PLOT_OK = True
-params.output.phys_fields.field_to_plot = "vorticity"  # or "vx", "vy", etc.
+params.output.phys_fields.field_to_plot = "vorticity"  # 或 "vx"、"vy" 等
 ```
 
-### Forcing (`params.forcing`)
+### 強制（`params.forcing`）
 
-Add forcing terms to maintain energy:
+添加強制項以維持能量：
 
 ```python
 params.forcing.enable = True
-params.forcing.type = "tcrandom"  # time-correlated random forcing
+params.forcing.type = "tcrandom"  # 時間相關隨機強制
 
-# Forcing parameters
-params.forcing.nkmax_forcing = 5  # maximum forced wavenumber
-params.forcing.nkmin_forcing = 2  # minimum forced wavenumber
-params.forcing.forcing_rate = 1.0  # energy injection rate
+# 強制參數
+params.forcing.nkmax_forcing = 5  # 最大強制波數
+params.forcing.nkmin_forcing = 2  # 最小強制波數
+params.forcing.forcing_rate = 1.0  # 能量注入率
 ```
 
-**Common forcing types**:
-- `"tcrandom"`: Time-correlated random forcing
-- `"proportional"`: Proportional forcing (maintains specific spectrum)
-- `"in_script"`: Custom forcing defined in script
+**常見強制類型**：
+- `"tcrandom"`：時間相關隨機強制
+- `"proportional"`：比例強制（維持特定頻譜）
+- `"in_script"`：在腳本中定義的自訂強制
 
-## Parameter Safety
+## 參數安全性
 
-The Parameters object raises `AttributeError` when accessing non-existent parameters:
+Parameters 物件在存取不存在的參數時會引發 `AttributeError`：
 
 ```python
-params.nu_2 = 1e-3  # OK
-params.nu2 = 1e-3   # ERROR: AttributeError
+params.nu_2 = 1e-3  # 正確
+params.nu2 = 1e-3   # 錯誤：AttributeError
 ```
 
-This prevents typos that would be silently ignored in text-based configuration files.
+這防止了在文字基礎設定檔中會被靜默忽略的拼寫錯誤。
 
-## Viewing All Parameters
+## 檢視所有參數
 
 ```python
-# Print all parameters
+# 列印所有參數
 params._print_as_xml()
 
-# Get as dictionary
+# 取得為字典
 param_dict = params._make_dict()
 ```
 
-## Saving Parameter Configuration
+## 儲存參數設定
 
-Parameters are automatically saved with simulation output:
+參數會自動與模擬輸出一起儲存：
 
 ```python
 params._save_as_xml("simulation_params.xml")

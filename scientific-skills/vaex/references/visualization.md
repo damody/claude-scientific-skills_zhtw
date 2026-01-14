@@ -1,21 +1,21 @@
-# Data Visualization
+# 資料視覺化
 
-This reference covers Vaex's visualization capabilities for creating plots, heatmaps, and interactive visualizations of large datasets.
+本參考文件涵蓋 Vaex 的視覺化功能，用於建立大型資料集的圖表、熱圖和互動式視覺化。
 
-## Overview
+## 概述
 
-Vaex excels at visualizing datasets with billions of rows through efficient binning and aggregation. The visualization system works directly with large data without sampling, providing accurate representations of the entire dataset.
+Vaex 透過高效的分箱和聚合，擅長視覺化數十億列的資料集。視覺化系統直接處理大型資料而無需抽樣，提供整個資料集的準確表示。
 
-**Key features:**
-- Visualize billion-row datasets interactively
-- No sampling required - uses all data
-- Automatic binning and aggregation
-- Integration with matplotlib
-- Interactive widgets for Jupyter
+**主要功能：**
+- 互動式視覺化十億列資料集
+- 不需要抽樣 - 使用所有資料
+- 自動分箱和聚合
+- 與 matplotlib 整合
+- Jupyter 的互動式小工具
 
-## Basic Plotting
+## 基本繪圖
 
-### 1D Histograms
+### 1D 直方圖
 
 ```python
 import vaex
@@ -23,13 +23,13 @@ import matplotlib.pyplot as plt
 
 df = vaex.open('data.hdf5')
 
-# Simple histogram
+# 簡單直方圖
 df.plot1d(df.age)
 
-# With customization
+# 帶自訂選項
 df.plot1d(df.age,
           limits=[0, 100],
-          shape=50,              # Number of bins
+          shape=50,              # 分箱數量
           figsize=(10, 6),
           xlabel='Age',
           ylabel='Count')
@@ -37,130 +37,130 @@ df.plot1d(df.age,
 plt.show()
 ```
 
-### 2D Density Plots (Heatmaps)
+### 2D 密度圖（熱圖）
 
 ```python
-# Basic 2D plot
+# 基本 2D 圖
 df.plot(df.x, df.y)
 
-# With limits
+# 帶限制
 df.plot(df.x, df.y, limits=[[0, 10], [0, 10]])
 
-# Auto limits using percentiles
-df.plot(df.x, df.y, limits='99.7%')  # 3-sigma limits
+# 使用百分位數自動限制
+df.plot(df.x, df.y, limits='99.7%')  # 3-sigma 限制
 
-# Customize shape (resolution)
+# 自訂形狀（解析度）
 df.plot(df.x, df.y, shape=(512, 512))
 
-# Logarithmic color scale
+# 對數色標
 df.plot(df.x, df.y, f='log')
 ```
 
-### Scatter Plots (Small Data)
+### 散點圖（小資料）
 
 ```python
-# For smaller datasets or samples
+# 用於較小資料集或樣本
 df_sample = df.sample(n=1000)
 
 df_sample.scatter(df_sample.x, df_sample.y,
                   alpha=0.5,
-                  s=10)  # Point size
+                  s=10)  # 點大小
 
 plt.show()
 ```
 
-## Advanced Visualization Options
+## 進階視覺化選項
 
-### Color Scales and Normalization
+### 色標和正規化
 
 ```python
-# Linear scale (default)
+# 線性尺度（預設）
 df.plot(df.x, df.y, f='identity')
 
-# Logarithmic scale
+# 對數尺度
 df.plot(df.x, df.y, f='log')
 df.plot(df.x, df.y, f='log10')
 
-# Square root scale
+# 平方根尺度
 df.plot(df.x, df.y, f='sqrt')
 
-# Custom colormap
+# 自訂色圖
 df.plot(df.x, df.y, colormap='viridis')
 df.plot(df.x, df.y, colormap='plasma')
 df.plot(df.x, df.y, colormap='hot')
 ```
 
-### Limits and Ranges
+### 限制和範圍
 
 ```python
-# Manual limits
+# 手動限制
 df.plot(df.x, df.y, limits=[[xmin, xmax], [ymin, ymax]])
 
-# Percentile-based limits
+# 基於百分位數的限制
 df.plot(df.x, df.y, limits='99.7%')  # 3-sigma
 df.plot(df.x, df.y, limits='95%')
-df.plot(df.x, df.y, limits='minmax')  # Full range
+df.plot(df.x, df.y, limits='minmax')  # 完整範圍
 
-# Mixed limits
+# 混合限制
 df.plot(df.x, df.y, limits=[[0, 100], 'minmax'])
 ```
 
-### Resolution Control
+### 解析度控制
 
 ```python
-# Higher resolution (more bins)
+# 更高解析度（更多分箱）
 df.plot(df.x, df.y, shape=(1024, 1024))
 
-# Lower resolution (faster)
+# 較低解析度（更快）
 df.plot(df.x, df.y, shape=(128, 128))
 
-# Different resolutions per axis
+# 每軸不同解析度
 df.plot(df.x, df.y, shape=(512, 256))
 ```
 
-## Statistical Visualizations
+## 統計視覺化
 
-### Visualizing Aggregations
+### 視覺化聚合
 
 ```python
-# Mean on a grid
+# 網格上的平均值
 df.plot(df.x, df.y, what=df.z.mean(),
         limits=[[0, 10], [0, 10]],
         shape=(100, 100),
         colormap='viridis')
 
-# Standard deviation
+# 標準差
 df.plot(df.x, df.y, what=df.z.std())
 
-# Sum
+# 總和
 df.plot(df.x, df.y, what=df.z.sum())
 
-# Count (default)
+# 計數（預設）
 df.plot(df.x, df.y, what='count')
 ```
 
-### Multiple Statistics
+### 多個統計
 
 ```python
-# Create figure with subplots
+# 建立帶子圖的圖形
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-# Count
+# 計數
 df.plot(df.x, df.y, what='count',
         ax=axes[0, 0], show=False)
 axes[0, 0].set_title('Count')
 
-# Mean
+# 平均值
 df.plot(df.x, df.y, what=df.z.mean(),
         ax=axes[0, 1], show=False)
 axes[0, 1].set_title('Mean of z')
 
-# Std
+# 標準差
 df.plot(df.x, df.y, what=df.z.std(),
         ax=axes[1, 0], show=False)
 axes[1, 0].set_title('Std of z')
 
-# Min
+# 最小值
 df.plot(df.x, df.y, what=df.z.min(),
         ax=axes[1, 1], show=False)
 axes[1, 1].set_title('Min of z')
@@ -169,9 +169,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Working with Selections
+## 使用選擇
 
-Visualize different segments of data simultaneously:
+同時視覺化資料的不同區段：
 
 ```python
 import vaex
@@ -179,27 +179,27 @@ import matplotlib.pyplot as plt
 
 df = vaex.open('data.hdf5')
 
-# Create selections
+# 建立選擇
 df.select(df.category == 'A', name='group_a')
 df.select(df.category == 'B', name='group_b')
 
-# Plot both selections
+# 繪製兩個選擇
 df.plot1d(df.value, selection='group_a', label='Group A')
 df.plot1d(df.value, selection='group_b', label='Group B')
 plt.legend()
 plt.show()
 
-# 2D plot with selection
+# 帶選擇的 2D 圖
 df.plot(df.x, df.y, selection='group_a')
 ```
 
-### Overlay Multiple Selections
+### 疊加多個選擇
 
 ```python
-# Create base plot
+# 建立基本圖
 fig, ax = plt.subplots(figsize=(10, 8))
 
-# Plot each selection with different colors
+# 用不同顏色繪製每個選擇
 df.plot(df.x, df.y, selection='group_a',
         ax=ax, show=False, colormap='Reds', alpha=0.5)
 df.plot(df.x, df.y, selection='group_b',
@@ -209,17 +209,17 @@ ax.set_title('Overlaid Selections')
 plt.show()
 ```
 
-## Subplots and Layouts
+## 子圖和版面配置
 
-### Creating Multiple Plots
+### 建立多個圖
 
 ```python
 import matplotlib.pyplot as plt
 
-# Create subplot grid
+# 建立子圖網格
 fig, axes = plt.subplots(2, 3, figsize=(15, 10))
 
-# Plot different variables
+# 繪製不同變數
 variables = ['x', 'y', 'z', 'a', 'b', 'c']
 for idx, var in enumerate(variables):
     row = idx // 3
@@ -231,10 +231,10 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Faceted Plots
+### 分面圖
 
 ```python
-# Plot by category
+# 按類別繪圖
 categories = df.category.unique()
 
 fig, axes = plt.subplots(1, len(categories), figsize=(15, 5))
@@ -249,39 +249,39 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interactive Widgets (Jupyter)
+## 互動式小工具（Jupyter）
 
-Create interactive visualizations in Jupyter notebooks:
+在 Jupyter notebook 中建立互動式視覺化：
 
-### Selection Widget
+### 選擇小工具
 
 ```python
-# Interactive selection
+# 互動式選擇
 df.widget.selection_expression()
 ```
 
-### Histogram Widget
+### 直方圖小工具
 
 ```python
-# Interactive histogram with selection
+# 帶選擇的互動式直方圖
 df.plot_widget(df.x, df.y)
 ```
 
-### Scatter Widget
+### 散點圖小工具
 
 ```python
-# Interactive scatter plot
+# 互動式散點圖
 df.scatter_widget(df.x, df.y)
 ```
 
-## Customization
+## 自訂
 
-### Styling Plots
+### 設定圖表樣式
 
 ```python
 import matplotlib.pyplot as plt
 
-# Create plot with custom styling
+# 建立帶自訂樣式的圖
 fig, ax = plt.subplots(figsize=(12, 8))
 
 df.plot(df.x, df.y,
@@ -291,34 +291,34 @@ df.plot(df.x, df.y,
         ax=ax,
         show=False)
 
-# Customize axes
+# 自訂軸
 ax.set_xlabel('X Variable', fontsize=14, fontweight='bold')
 ax.set_ylabel('Y Variable', fontsize=14, fontweight='bold')
 ax.set_title('Custom Density Plot', fontsize=16, fontweight='bold')
 ax.grid(alpha=0.3)
 
-# Add colorbar
+# 加入色條
 plt.colorbar(ax.collections[0], ax=ax, label='Density')
 
 plt.tight_layout()
 plt.show()
 ```
 
-### Figure Size and DPI
+### 圖形大小和 DPI
 
 ```python
-# High-resolution plot
+# 高解析度圖
 df.plot(df.x, df.y,
         figsize=(12, 10),
         dpi=300)
 ```
 
-## Specialized Visualizations
+## 專門視覺化
 
-### Hexbin Plots
+### 六角形分箱圖
 
 ```python
-# Alternative to heatmap using hexagonal bins
+# 使用六角形分箱的熱圖替代方案
 plt.figure(figsize=(10, 8))
 plt.hexbin(df.x.values[:100000], df.y.values[:100000],
            gridsize=50, cmap='viridis')
@@ -328,17 +328,17 @@ plt.ylabel('Y')
 plt.show()
 ```
 
-### Contour Plots
+### 等高線圖
 
 ```python
 import numpy as np
 
-# Get 2D histogram data
+# 取得 2D 直方圖資料
 counts = df.count(binby=[df.x, df.y],
                   limits=[[0, 10], [0, 10]],
                   shape=(100, 100))
 
-# Create contour plot
+# 建立等高線圖
 x = np.linspace(0, 10, 100)
 y = np.linspace(0, 10, 100)
 plt.contourf(x, y, counts.T, levels=20, cmap='viridis')
@@ -349,10 +349,10 @@ plt.title('Contour Plot')
 plt.show()
 ```
 
-### Vector Field Overlay
+### 向量場疊加
 
 ```python
-# Compute mean vectors on grid
+# 在網格上計算平均向量
 mean_vx = df.mean(df.vx, binby=[df.x, df.y],
                   limits=[[0, 10], [0, 10]],
                   shape=(20, 20))
@@ -360,47 +360,47 @@ mean_vy = df.mean(df.vy, binby=[df.x, df.y],
                   limits=[[0, 10], [0, 10]],
                   shape=(20, 20))
 
-# Create grid
+# 建立網格
 x = np.linspace(0, 10, 20)
 y = np.linspace(0, 10, 20)
 X, Y = np.meshgrid(x, y)
 
-# Plot
+# 繪圖
 fig, ax = plt.subplots(figsize=(10, 8))
 
-# Base heatmap
+# 基底熱圖
 df.plot(df.x, df.y, ax=ax, show=False)
 
-# Vector overlay
+# 向量疊加
 ax.quiver(X, Y, mean_vx.T, mean_vy.T, alpha=0.7, color='white')
 
 plt.show()
 ```
 
-## Performance Considerations
+## 效能考量
 
-### Optimizing Large Visualizations
+### 最佳化大型視覺化
 
 ```python
-# For very large datasets, reduce shape
-df.plot(df.x, df.y, shape=(256, 256))  # Fast
+# 對於非常大的資料集，減少形狀
+df.plot(df.x, df.y, shape=(256, 256))  # 快速
 
-# For publication quality
-df.plot(df.x, df.y, shape=(1024, 1024))  # Higher quality
+# 出版品質
+df.plot(df.x, df.y, shape=(1024, 1024))  # 更高品質
 
-# Balance quality and performance
-df.plot(df.x, df.y, shape=(512, 512))  # Good balance
+# 平衡品質和效能
+df.plot(df.x, df.y, shape=(512, 512))  # 良好平衡
 ```
 
-### Caching Visualization Data
+### 快取視覺化資料
 
 ```python
-# Compute once, plot multiple times
+# 計算一次，繪製多次
 counts = df.count(binby=[df.x, df.y],
                   limits=[[0, 10], [0, 10]],
                   shape=(512, 512))
 
-# Use in different plots
+# 在不同圖中使用
 plt.figure()
 plt.imshow(counts.T, origin='lower', cmap='viridis')
 plt.colorbar()
@@ -412,26 +412,26 @@ plt.colorbar()
 plt.show()
 ```
 
-## Export and Saving
+## 匯出和儲存
 
-### Saving Figures
+### 儲存圖形
 
 ```python
-# Save as PNG
+# 儲存為 PNG
 df.plot(df.x, df.y)
 plt.savefig('plot.png', dpi=300, bbox_inches='tight')
 
-# Save as PDF (vector)
+# 儲存為 PDF（向量）
 plt.savefig('plot.pdf', bbox_inches='tight')
 
-# Save as SVG
+# 儲存為 SVG
 plt.savefig('plot.svg', bbox_inches='tight')
 ```
 
-### Batch Plotting
+### 批次繪圖
 
 ```python
-# Generate multiple plots
+# 產生多個圖
 variables = ['x', 'y', 'z']
 
 for var in variables:
@@ -442,17 +442,17 @@ for var in variables:
     plt.close()
 ```
 
-## Common Patterns
+## 常見模式
 
-### Pattern: Exploratory Data Analysis
+### 模式：探索性資料分析
 
 ```python
 import matplotlib.pyplot as plt
 
-# Create comprehensive visualization
+# 建立全面視覺化
 fig = plt.figure(figsize=(16, 12))
 
-# 1D histograms
+# 1D 直方圖
 ax1 = plt.subplot(3, 3, 1)
 df.plot1d(df.x, ax=ax1, show=False)
 ax1.set_title('X Distribution')
@@ -465,7 +465,7 @@ ax3 = plt.subplot(3, 3, 3)
 df.plot1d(df.z, ax=ax3, show=False)
 ax3.set_title('Z Distribution')
 
-# 2D plots
+# 2D 圖
 ax4 = plt.subplot(3, 3, 4)
 df.plot(df.x, df.y, ax=ax4, show=False)
 ax4.set_title('X vs Y')
@@ -478,7 +478,7 @@ ax6 = plt.subplot(3, 3, 6)
 df.plot(df.y, df.z, ax=ax6, show=False)
 ax6.set_title('Y vs Z')
 
-# Statistics on grids
+# 網格上的統計
 ax7 = plt.subplot(3, 3, 7)
 df.plot(df.x, df.y, what=df.z.mean(), ax=ax7, show=False)
 ax7.set_title('Mean Z on X-Y grid')
@@ -488,10 +488,10 @@ plt.savefig('eda_summary.png', dpi=300, bbox_inches='tight')
 plt.show()
 ```
 
-### Pattern: Comparison Across Groups
+### 模式：跨組比較
 
 ```python
-# Compare distributions by category
+# 按類別比較分布
 categories = df.category.unique()
 
 fig, axes = plt.subplots(len(categories), 2,
@@ -500,12 +500,12 @@ fig, axes = plt.subplots(len(categories), 2,
 for idx, cat in enumerate(categories):
     df.select(df.category == cat, name=f'cat_{cat}')
 
-    # 1D histogram
+    # 1D 直方圖
     df.plot1d(df.value, selection=f'cat_{cat}',
               ax=axes[idx, 0], show=False)
     axes[idx, 0].set_title(f'Category {cat} - Distribution')
 
-    # 2D plot
+    # 2D 圖
     df.plot(df.x, df.y, selection=f'cat_{cat}',
             ax=axes[idx, 1], show=False)
     axes[idx, 1].set_title(f'Category {cat} - X vs Y')
@@ -514,14 +514,14 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Pattern: Time Series Visualization
+### 模式：時間序列視覺化
 
 ```python
-# Aggregate by time bins
+# 按時間分箱聚合
 df['year'] = df.timestamp.dt.year
 df['month'] = df.timestamp.dt.month
 
-# Plot time series
+# 繪製時間序列
 monthly_sales = df.groupby(['year', 'month']).agg({'sales': 'sum'})
 
 plt.figure(figsize=(14, 6))
@@ -533,29 +533,29 @@ plt.grid(alpha=0.3)
 plt.show()
 ```
 
-## Integration with Other Libraries
+## 與其他函式庫整合
 
-### Plotly for Interactivity
+### Plotly 用於互動性
 
 ```python
 import plotly.graph_objects as go
 
-# Get data from Vaex
+# 從 Vaex 取得資料
 counts = df.count(binby=[df.x, df.y], shape=(100, 100))
 
-# Create plotly figure
+# 建立 plotly 圖形
 fig = go.Figure(data=go.Heatmap(z=counts.T))
 fig.update_layout(title='Interactive Heatmap')
 fig.show()
 ```
 
-### Seaborn Style
+### Seaborn 樣式
 
 ```python
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Use seaborn styling
+# 使用 seaborn 樣式
 sns.set_style('darkgrid')
 sns.set_palette('husl')
 
@@ -563,51 +563,51 @@ df.plot1d(df.value)
 plt.show()
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use appropriate shape** - Balance resolution and performance (256-512 for exploration, 1024+ for publication)
-2. **Apply sensible limits** - Use percentile-based limits ('99%', '99.7%') to handle outliers
-3. **Choose color scales wisely** - Log scale for wide-ranging counts, linear for uniform data
-4. **Leverage selections** - Compare subsets without creating new DataFrames
-5. **Cache aggregations** - Compute once if creating multiple similar plots
-6. **Use vector formats for publication** - Save as PDF or SVG for scalable figures
-7. **Avoid sampling** - Vaex visualizations use all data, no sampling needed
+1. **使用適當的形狀** - 平衡解析度和效能（探索用 256-512，出版用 1024+）
+2. **套用合理的限制** - 使用基於百分位數的限制（'99%', '99.7%'）處理離群值
+3. **明智選擇色標** - 對範圍廣泛的計數使用對數尺度，對均勻資料使用線性
+4. **利用選擇** - 不建立新 DataFrame 就能比較子集
+5. **快取聚合** - 如果建立多個類似圖，只計算一次
+6. **出版用向量格式** - 儲存為 PDF 或 SVG 以獲得可縮放圖形
+7. **避免抽樣** - Vaex 視覺化使用所有資料，不需要抽樣
 
-## Troubleshooting
+## 疑難排解
 
-### Issue: Empty or Sparse Plot
+### 問題：空白或稀疏圖
 
 ```python
-# Problem: Limits don't match data range
+# 問題：限制不匹配資料範圍
 df.plot(df.x, df.y, limits=[[0, 10], [0, 10]])
 
-# Solution: Use automatic limits
+# 解決方案：使用自動限制
 df.plot(df.x, df.y, limits='minmax')
 df.plot(df.x, df.y, limits='99%')
 ```
 
-### Issue: Plot Too Slow
+### 問題：圖太慢
 
 ```python
-# Problem: Too high resolution
+# 問題：解析度太高
 df.plot(df.x, df.y, shape=(2048, 2048))
 
-# Solution: Reduce shape
+# 解決方案：減少形狀
 df.plot(df.x, df.y, shape=(512, 512))
 ```
 
-### Issue: Can't See Low-Density Regions
+### 問題：看不到低密度區域
 
 ```python
-# Problem: Linear scale overwhelmed by high-density areas
+# 問題：線性尺度被高密度區域淹沒
 df.plot(df.x, df.y, f='identity')
 
-# Solution: Use logarithmic scale
+# 解決方案：使用對數尺度
 df.plot(df.x, df.y, f='log')
 ```
 
-## Related Resources
+## 相關資源
 
-- For data aggregation: See `data_processing.md`
-- For performance optimization: See `performance.md`
-- For DataFrame basics: See `core_dataframes.md`
+- 資料聚合：參見 `data_processing.md`
+- 效能最佳化：參見 `performance.md`
+- DataFrame 基礎：參見 `core_dataframes.md`

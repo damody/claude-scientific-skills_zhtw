@@ -1,87 +1,87 @@
 # Dask Bags
 
-## Overview
+## 概述
 
-Dask Bag implements functional operations including `map`, `filter`, `fold`, and `groupby` on generic Python objects. It processes data in parallel while maintaining a small memory footprint through Python iterators. Bags function as "a parallel version of PyToolz or a Pythonic version of the PySpark RDD."
+Dask Bag 在通用 Python 物件上實作函數式操作，包括 `map`、`filter`、`fold` 和 `groupby`。它透過 Python 迭代器平行處理資料，同時維持較小的記憶體佔用。Bags 的功能類似於「PyToolz 的平行版本或 PySpark RDD 的 Pythonic 版本」。
 
-## Core Concept
+## 核心概念
 
-A Dask Bag is a collection of Python objects distributed across partitions:
-- Each partition contains generic Python objects
-- Operations use functional programming patterns
-- Processing uses streaming/iterators for memory efficiency
-- Ideal for unstructured or semi-structured data
+Dask Bag 是分散在多個分區中的 Python 物件集合：
+- 每個分區包含通用 Python 物件
+- 操作使用函數式程式設計模式
+- 處理使用串流/迭代器以提高記憶體效率
+- 適合非結構化或半結構化資料
 
-## Key Capabilities
+## 主要功能
 
-### Functional Operations
-- `map`: Transform each element
-- `filter`: Select elements based on condition
-- `fold`: Reduce elements with combining function
-- `groupby`: Group elements by key
-- `pluck`: Extract fields from records
-- `flatten`: Flatten nested structures
+### 函數式操作
+- `map`：轉換每個元素
+- `filter`：根據條件選擇元素
+- `fold`：使用組合函數歸約元素
+- `groupby`：按鍵分組元素
+- `pluck`：從記錄中提取欄位
+- `flatten`：展平巢狀結構
 
-### Use Cases
-- Text processing and log analysis
-- JSON record processing
-- ETL on unstructured data
-- Data cleaning before structured analysis
+### 使用情境
+- 文字處理和日誌分析
+- JSON 記錄處理
+- 非結構化資料的 ETL
+- 結構化分析前的資料清理
 
-## When to Use Dask Bags
+## 何時使用 Dask Bags
 
-**Use Bags When**:
-- Working with general Python objects requiring flexible computation
-- Data doesn't fit structured array or tabular formats
-- Processing text, JSON, or custom Python objects
-- Initial data cleaning and ETL is needed
-- Memory-efficient streaming is important
+**使用 Bags 的情況**：
+- 處理需要靈活運算的通用 Python 物件
+- 資料不適合結構化陣列或表格格式
+- 處理文字、JSON 或自訂 Python 物件
+- 需要初始資料清理和 ETL
+- 記憶體高效的串流很重要
 
-**Use Other Collections When**:
-- Data is structured (use DataFrames instead)
-- Numeric computing (use Arrays instead)
-- Operations require complex groupby or shuffles (use DataFrames)
+**使用其他集合的情況**：
+- 資料是結構化的（改用 DataFrames）
+- 數值運算（改用 Arrays）
+- 操作需要複雜的 groupby 或 shuffle（改用 DataFrames）
 
-**Key Recommendation**: Use Bag to clean and process data, then transform it into an array or DataFrame before embarking on more complex operations that require shuffle steps.
+**關鍵建議**：使用 Bag 來清理和處理資料，然後在進行需要 shuffle 步驟的更複雜操作之前將其轉換為陣列或 DataFrame。
 
-## Important Limitations
+## 重要限制
 
-Bags sacrifice performance for generality:
-- Rely on multiprocessing scheduling (not threads)
-- Remain immutable (create new bags for changes)
-- Operate slower than array/DataFrame equivalents
-- Handle `groupby` inefficiently (use `foldby` when possible)
-- Operations requiring substantial inter-worker communication are slow
+Bags 為了通用性犧牲了效能：
+- 依賴多程序排程（非執行緒）
+- 保持不可變（變更會建立新的 bags）
+- 比陣列/DataFrame 等效操作慢
+- `groupby` 處理效率低（盡可能使用 `foldby`）
+- 需要大量工作者間通訊的操作較慢
 
-## Creating Bags
+## 建立 Bags
 
-### From Sequences
+### 從序列建立
 ```python
 import dask.bag as db
 
-# From Python list
+# 從 Python 列表建立
 bag = db.from_sequence([1, 2, 3, 4, 5], partition_size=2)
 
-# From range
+# 從 range 建立
 bag = db.from_sequence(range(10000), partition_size=1000)
 ```
 
-### From Text Files
+### 從文字檔案建立
 ```python
-# Single file
+# 單一檔案
 bag = db.read_text('data.txt')
 
-# Multiple files with glob
+# 使用 glob 處理多個檔案
 bag = db.read_text('data/*.txt')
 
-# With encoding
+# 指定編碼
 bag = db.read_text('data/*.txt', encoding='utf-8')
 
-# Custom line processing
+# 自訂行處理
 bag = db.read_text('logs/*.log', blocksize='64MB')
 ```
 
-### From Delayed Objects
+### 從 Delayed 物件建立
 ```python
 import dask
 
@@ -95,35 +95,35 @@ partitions = [load_data(f) for f in files]
 bag = db.from_delayed(partitions)
 ```
 
-### From Custom Sources
+### 從自訂來源建立
 ```python
-# From any iterable-producing function
+# 從任何產生可迭代物件的函數
 def read_json_files():
     import json
     for filename in glob.glob('data/*.json'):
         with open(filename) as f:
             yield json.load(f)
 
-# Create bag from generator
+# 從生成器建立 bag
 bag = db.from_sequence(read_json_files(), partition_size=10)
 ```
 
-## Common Operations
+## 常見操作
 
-### Map (Transform)
+### Map（轉換）
 ```python
 import dask.bag as db
 
 bag = db.read_text('data/*.json')
 
-# Parse JSON
+# 解析 JSON
 import json
 parsed = bag.map(json.loads)
 
-# Extract field
+# 提取欄位
 values = parsed.map(lambda x: x['value'])
 
-# Complex transformation
+# 複雜轉換
 def process_record(record):
     return {
         'id': record['id'],
@@ -136,59 +136,59 @@ processed = parsed.map(process_record)
 
 ### Filter
 ```python
-# Filter by condition
+# 按條件篩選
 valid = parsed.filter(lambda x: x['status'] == 'valid')
 
-# Multiple conditions
+# 多個條件
 filtered = parsed.filter(lambda x: x['value'] > 100 and x['year'] == 2024)
 
-# Filter with custom function
+# 使用自訂函數篩選
 def is_valid_record(record):
     return record.get('status') == 'valid' and record.get('value') is not None
 
 valid_records = parsed.filter(is_valid_record)
 ```
 
-### Pluck (Extract Fields)
+### Pluck（提取欄位）
 ```python
-# Extract single field
+# 提取單一欄位
 ids = parsed.pluck('id')
 
-# Extract multiple fields (creates tuples)
+# 提取多個欄位（建立元組）
 key_pairs = parsed.pluck(['id', 'value'])
 ```
 
 ### Flatten
 ```python
-# Flatten nested lists
+# 展平巢狀列表
 nested = db.from_sequence([[1, 2], [3, 4], [5, 6]])
 flat = nested.flatten()  # [1, 2, 3, 4, 5, 6]
 
-# Flatten after map
+# 在 map 後展平
 bag = db.read_text('data/*.txt')
-words = bag.map(str.split).flatten()  # All words from all files
+words = bag.map(str.split).flatten()  # 所有檔案中的所有單詞
 ```
 
-### GroupBy (Expensive)
+### GroupBy（昂貴操作）
 ```python
-# Group by key (requires shuffle)
+# 按鍵分組（需要 shuffle）
 grouped = parsed.groupby(lambda x: x['category'])
 
-# Aggregate after grouping
+# 分組後聚合
 counts = grouped.map(lambda key_items: (key_items[0], len(list(key_items[1]))))
 result = counts.compute()
 ```
 
-### FoldBy (Preferred for Aggregations)
+### FoldBy（聚合的首選方式）
 ```python
-# FoldBy is more efficient than groupby for aggregations
+# FoldBy 對於聚合比 groupby 更高效
 def add(acc, item):
     return acc + item['value']
 
 def combine(acc1, acc2):
     return acc1 + acc2
 
-# Sum values by category
+# 按類別加總值
 sums = parsed.foldby(
     key='category',
     binop=add,
@@ -199,15 +199,15 @@ sums = parsed.foldby(
 result = sums.compute()
 ```
 
-### Reductions
+### 歸約操作
 ```python
-# Count elements
+# 計算元素數量
 count = bag.count().compute()
 
-# Get all distinct values (requires memory)
+# 取得所有不重複值（需要記憶體）
 distinct = bag.distinct().compute()
 
-# Take first n elements
+# 取前 n 個元素
 first_ten = bag.take(10)
 
 # Fold/reduce
@@ -218,66 +218,66 @@ total = bag.fold(
 ).compute()
 ```
 
-## Converting to Other Collections
+## 轉換為其他集合
 
-### To DataFrame
+### 轉為 DataFrame
 ```python
 import dask.bag as db
 import dask.dataframe as dd
 
-# Bag of dictionaries
+# 字典組成的 Bag
 bag = db.read_text('data/*.json').map(json.loads)
 
-# Convert to DataFrame
+# 轉換為 DataFrame
 ddf = bag.to_dataframe()
 
-# With explicit columns
+# 指定明確的欄位
 ddf = bag.to_dataframe(meta={'id': int, 'value': float, 'category': str})
 ```
 
-### To List/Compute
+### 轉為列表/Compute
 ```python
-# Compute to Python list (loads all in memory)
+# 計算為 Python 列表（載入所有到記憶體）
 result = bag.compute()
 
-# Take sample
+# 取樣本
 sample = bag.take(100)
 ```
 
-## Common Patterns
+## 常見模式
 
-### JSON Processing
+### JSON 處理
 ```python
 import dask.bag as db
 import json
 
-# Read and parse JSON files
+# 讀取並解析 JSON 檔案
 bag = db.read_text('logs/*.json')
 parsed = bag.map(json.loads)
 
-# Filter valid records
+# 篩選有效記錄
 valid = parsed.filter(lambda x: x.get('status') == 'success')
 
-# Extract relevant fields
+# 提取相關欄位
 processed = valid.map(lambda x: {
     'user_id': x['user']['id'],
     'timestamp': x['timestamp'],
     'value': x['metrics']['value']
 })
 
-# Convert to DataFrame for analysis
+# 轉換為 DataFrame 進行分析
 ddf = processed.to_dataframe()
 
-# Analyze
+# 分析
 summary = ddf.groupby('user_id')['value'].mean().compute()
 ```
 
-### Log Analysis
+### 日誌分析
 ```python
-# Read log files
+# 讀取日誌檔案
 logs = db.read_text('logs/*.log')
 
-# Parse log lines
+# 解析日誌行
 def parse_log_line(line):
     parts = line.split(' ')
     return {
@@ -288,10 +288,10 @@ def parse_log_line(line):
 
 parsed_logs = logs.map(parse_log_line)
 
-# Filter errors
+# 篩選錯誤
 errors = parsed_logs.filter(lambda x: x['level'] == 'ERROR')
 
-# Count by message pattern
+# 按訊息模式計數
 error_counts = errors.foldby(
     key='message',
     binop=lambda acc, x: acc + 1,
@@ -302,15 +302,15 @@ error_counts = errors.foldby(
 result = error_counts.compute()
 ```
 
-### Text Processing
+### 文字處理
 ```python
-# Read text files
+# 讀取文字檔案
 text = db.read_text('documents/*.txt')
 
-# Split into words
+# 分割為單詞
 words = text.map(str.lower).map(str.split).flatten()
 
-# Count word frequencies
+# 計算單詞頻率
 def increment(acc, word):
     return acc + 1
 
@@ -324,25 +324,25 @@ word_counts = words.foldby(
     combine=combine_counts
 )
 
-# Get top words
+# 取得最常見的單詞
 top_words = word_counts.compute()
 sorted_words = sorted(top_words, key=lambda x: x[1], reverse=True)[:100]
 ```
 
-### Data Cleaning Pipeline
+### 資料清理管道
 ```python
 import dask.bag as db
 import json
 
-# Read raw data
+# 讀取原始資料
 raw = db.read_text('raw_data/*.json').map(json.loads)
 
-# Validation function
+# 驗證函數
 def is_valid(record):
     required_fields = ['id', 'timestamp', 'value']
     return all(field in record for field in required_fields)
 
-# Cleaning function
+# 清理函數
 def clean_record(record):
     return {
         'id': int(record['id']),
@@ -352,92 +352,92 @@ def clean_record(record):
         'tags': record.get('tags', [])
     }
 
-# Pipeline
+# 管道
 cleaned = (raw
     .filter(is_valid)
     .map(clean_record)
     .filter(lambda x: x['value'] > 0)
 )
 
-# Convert to DataFrame
+# 轉換為 DataFrame
 ddf = cleaned.to_dataframe()
 
-# Save cleaned data
+# 儲存清理後的資料
 ddf.to_parquet('cleaned_data/')
 ```
 
-## Performance Considerations
+## 效能考量
 
-### Efficient Operations
-- Map, filter, pluck: Very efficient (streaming)
-- Flatten: Efficient
-- FoldBy with good key distribution: Reasonable
-- Take and head: Efficient (only processes needed partitions)
+### 高效操作
+- Map、filter、pluck：非常高效（串流）
+- Flatten：高效
+- FoldBy 搭配良好的鍵分佈：合理
+- Take 和 head：高效（僅處理需要的分區）
 
-### Expensive Operations
-- GroupBy: Requires shuffle, can be slow
-- Distinct: Requires collecting all unique values
-- Operations requiring full data materialization
+### 昂貴操作
+- GroupBy：需要 shuffle，可能很慢
+- Distinct：需要收集所有唯一值
+- 需要完整資料具體化的操作
 
-### Optimization Tips
+### 優化技巧
 
-**1. Use FoldBy Instead of GroupBy**
+**1. 使用 FoldBy 代替 GroupBy**
 ```python
-# Better: Use foldby for aggregations
+# 較佳：使用 foldby 進行聚合
 result = bag.foldby(key='category', binop=add, initial=0, combine=sum)
 
-# Worse: GroupBy then reduce
+# 較差：GroupBy 然後 reduce
 result = bag.groupby('category').map(lambda x: (x[0], sum(x[1])))
 ```
 
-**2. Convert to DataFrame Early**
+**2. 儘早轉換為 DataFrame**
 ```python
-# For structured operations, convert to DataFrame
+# 對於結構化操作，轉換為 DataFrame
 bag = db.read_text('data/*.json').map(json.loads)
 bag = bag.filter(lambda x: x['status'] == 'valid')
-ddf = bag.to_dataframe()  # Now use efficient DataFrame operations
+ddf = bag.to_dataframe()  # 現在使用高效的 DataFrame 操作
 ```
 
-**3. Control Partition Size**
+**3. 控制分區大小**
 ```python
-# Balance between too many and too few partitions
-bag = db.read_text('data/*.txt', blocksize='64MB')  # Reasonable partition size
+# 在過多和過少分區之間取得平衡
+bag = db.read_text('data/*.txt', blocksize='64MB')  # 合理的分區大小
 ```
 
-**4. Use Lazy Evaluation**
+**4. 使用延遲求值**
 ```python
-# Chain operations before computing
+# 在計算前串連操作
 result = (bag
     .map(process1)
     .filter(condition)
     .map(process2)
-    .compute()  # Single compute at the end
+    .compute()  # 最後單次 compute
 )
 ```
 
-## Debugging Tips
+## 除錯技巧
 
-### Inspect Partitions
+### 檢查分區
 ```python
-# Get number of partitions
+# 取得分區數量
 print(bag.npartitions)
 
-# Take sample
+# 取樣本
 sample = bag.take(10)
 print(sample)
 ```
 
-### Validate on Small Data
+### 在小資料上驗證
 ```python
-# Test logic on small subset
+# 在小子集上測試邏輯
 small_bag = db.from_sequence(sample_data, partition_size=10)
 result = process_pipeline(small_bag).compute()
-# Validate results, then scale
+# 驗證結果，然後擴展
 ```
 
-### Check Intermediate Results
+### 檢查中間結果
 ```python
-# Compute intermediate steps to debug
+# 計算中間步驟以除錯
 step1 = bag.map(parse).take(5)
 print("After parsing:", step1)
 
@@ -445,24 +445,24 @@ step2 = bag.map(parse).filter(validate).take(5)
 print("After filtering:", step2)
 ```
 
-## Memory Management
+## 記憶體管理
 
-Bags are designed for memory-efficient processing:
+Bags 設計用於記憶體高效的處理：
 
 ```python
-# Streaming processing - doesn't load all in memory
-bag = db.read_text('huge_file.txt')  # Lazy
-processed = bag.map(process_line)     # Still lazy
-result = processed.compute()          # Processes in chunks
+# 串流處理 - 不會將所有資料載入記憶體
+bag = db.read_text('huge_file.txt')  # 延遲
+processed = bag.map(process_line)     # 仍然延遲
+result = processed.compute()          # 分塊處理
 ```
 
-For very large results, avoid computing to memory:
+對於非常大的結果，避免計算到記憶體：
 
 ```python
-# Don't compute huge results to memory
-# result = bag.compute()  # Could overflow memory
+# 不要將巨大的結果計算到記憶體
+# result = bag.compute()  # 可能會溢出記憶體
 
-# Instead, convert and save to disk
+# 相反，轉換並儲存到磁碟
 ddf = bag.to_dataframe()
 ddf.to_parquet('output/')
 ```

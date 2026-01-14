@@ -1,51 +1,51 @@
-# DeepChem Workflows
+# DeepChem 工作流程
 
-This document provides detailed workflows for common DeepChem use cases.
+本文件提供常見 DeepChem 使用案例的詳細工作流程。
 
-## Workflow 1: Molecular Property Prediction from SMILES
+## 工作流程 1：從 SMILES 進行分子屬性預測
 
-**Goal**: Predict molecular properties (e.g., solubility, toxicity, activity) from SMILES strings.
+**目標**：從 SMILES 字串預測分子屬性（例如溶解度、毒性、活性）。
 
-### Step-by-Step Process
+### 逐步流程
 
-#### 1. Prepare Your Data
-Data should be in CSV format with at minimum:
-- A column with SMILES strings
-- One or more columns with property values (targets)
+#### 1. 準備資料
+資料應為 CSV 格式，至少包含：
+- 包含 SMILES 字串的欄位
+- 一個或多個包含屬性值（目標）的欄位
 
-Example CSV structure:
+CSV 結構範例：
 ```csv
 smiles,solubility,toxicity
 CCO,-0.77,0
 CC(=O)OC1=CC=CC=C1C(=O)O,-1.19,1
 ```
 
-#### 2. Choose Featurizer
-Decision tree:
-- **Small dataset (<1K)**: Use `CircularFingerprint` or `RDKitDescriptors`
-- **Medium dataset (1K-100K)**: Use `CircularFingerprint` or `MolGraphConvFeaturizer`
-- **Large dataset (>100K)**: Use graph-based featurizers (`MolGraphConvFeaturizer`, `DMPNNFeaturizer`)
-- **Transfer learning**: Use pretrained model featurizers (`GroverFeaturizer`)
+#### 2. 選擇特徵化器
+決策樹：
+- **小型資料集（<1K）**：使用 `CircularFingerprint` 或 `RDKitDescriptors`
+- **中型資料集（1K-100K）**：使用 `CircularFingerprint` 或 `MolGraphConvFeaturizer`
+- **大型資料集（>100K）**：使用基於圖的特徵化器（`MolGraphConvFeaturizer`、`DMPNNFeaturizer`）
+- **遷移學習**：使用預訓練模型特徵化器（`GroverFeaturizer`）
 
-#### 3. Load and Featurize Data
+#### 3. 載入並特徵化資料
 ```python
 import deepchem as dc
 
-# For fingerprint-based
+# 用於基於指紋的
 featurizer = dc.feat.CircularFingerprint(radius=2, size=2048)
-# OR for graph-based
+# 或用於基於圖的
 featurizer = dc.feat.MolGraphConvFeaturizer()
 
 loader = dc.data.CSVLoader(
-    tasks=['solubility', 'toxicity'],  # column names to predict
-    feature_field='smiles',             # column with SMILES
+    tasks=['solubility', 'toxicity'],  # 要預測的欄位名稱
+    feature_field='smiles',             # 包含 SMILES 的欄位
     featurizer=featurizer
 )
 dataset = loader.create_dataset('data.csv')
 ```
 
-#### 4. Split Data
-**Critical**: Use `ScaffoldSplitter` for drug discovery to prevent data leakage.
+#### 4. 分割資料
+**關鍵**：藥物發現使用 `ScaffoldSplitter` 以防止資料洩漏。
 
 ```python
 splitter = dc.splits.ScaffoldSplitter()
@@ -57,7 +57,7 @@ train, valid, test = splitter.train_valid_test_split(
 )
 ```
 
-#### 5. Transform Data (Optional but Recommended)
+#### 5. 轉換資料（可選但建議）
 ```python
 transformers = [
     dc.trans.NormalizationTransformer(
@@ -72,18 +72,18 @@ for transformer in transformers:
     test = transformer.transform(test)
 ```
 
-#### 6. Select and Train Model
+#### 6. 選擇並訓練模型
 ```python
-# For fingerprints
+# 用於指紋
 model = dc.models.MultitaskRegressor(
-    n_tasks=2,                    # number of properties to predict
-    n_features=2048,              # fingerprint size
-    layer_sizes=[1000, 500],      # hidden layer sizes
+    n_tasks=2,                    # 要預測的屬性數量
+    n_features=2048,              # 指紋大小
+    layer_sizes=[1000, 500],      # 隱藏層大小
     dropouts=0.25,
     learning_rate=0.001
 )
 
-# OR for graphs
+# 或用於圖
 model = dc.models.GCNModel(
     n_tasks=2,
     mode='regression',
@@ -91,31 +91,31 @@ model = dc.models.GCNModel(
     learning_rate=0.001
 )
 
-# Train
+# 訓練
 model.fit(train, nb_epoch=50)
 ```
 
-#### 7. Evaluate
+#### 7. 評估
 ```python
 metric = dc.metrics.Metric(dc.metrics.r2_score)
 train_score = model.evaluate(train, [metric])
 valid_score = model.evaluate(valid, [metric])
 test_score = model.evaluate(test, [metric])
 
-print(f"Train R²: {train_score}")
-print(f"Valid R²: {valid_score}")
-print(f"Test R²: {test_score}")
+print(f"訓練 R²：{train_score}")
+print(f"驗證 R²：{valid_score}")
+print(f"測試 R²：{test_score}")
 ```
 
-#### 8. Make Predictions
+#### 8. 進行預測
 ```python
-# Predict on new molecules
+# 對新分子進行預測
 new_smiles = ['CCO', 'CC(C)O', 'c1ccccc1']
 new_featurizer = dc.feat.CircularFingerprint(radius=2, size=2048)
 new_features = new_featurizer.featurize(new_smiles)
 new_dataset = dc.data.NumpyDataset(X=new_features)
 
-# Apply same transformations
+# 應用相同的轉換
 for transformer in transformers:
     new_dataset = transformer.transform(new_dataset)
 
@@ -124,74 +124,74 @@ predictions = model.predict(new_dataset)
 
 ---
 
-## Workflow 2: Using MoleculeNet Benchmark Datasets
+## 工作流程 2：使用 MoleculeNet 基準資料集
 
-**Goal**: Quickly train and evaluate models on standard benchmarks.
+**目標**：在標準基準上快速訓練和評估模型。
 
-### Quick Start
+### 快速開始
 ```python
 import deepchem as dc
 
-# Load benchmark dataset
+# 載入基準資料集
 tasks, datasets, transformers = dc.molnet.load_tox21(
     featurizer='GraphConv',
     splitter='scaffold'
 )
 train, valid, test = datasets
 
-# Train model
+# 訓練模型
 model = dc.models.GCNModel(
     n_tasks=len(tasks),
     mode='classification'
 )
 model.fit(train, nb_epoch=50)
 
-# Evaluate
+# 評估
 metric = dc.metrics.Metric(dc.metrics.roc_auc_score)
 test_score = model.evaluate(test, [metric])
-print(f"Test ROC-AUC: {test_score}")
+print(f"測試 ROC-AUC：{test_score}")
 ```
 
-### Available Featurizer Options
-When calling `load_*()` functions:
-- `'ECFP'`: Extended-connectivity fingerprints (circular fingerprints)
-- `'GraphConv'`: Graph convolution features
-- `'Weave'`: Weave features
-- `'Raw'`: Raw SMILES strings
-- `'smiles2img'`: 2D molecular images
+### 可用特徵化器選項
+呼叫 `load_*()` 函數時：
+- `'ECFP'`：擴展連接指紋（環形指紋）
+- `'GraphConv'`：圖卷積特徵
+- `'Weave'`：Weave 特徵
+- `'Raw'`：原始 SMILES 字串
+- `'smiles2img'`：2D 分子影像
 
-### Available Splitter Options
-- `'scaffold'`: Scaffold-based splitting (recommended for drug discovery)
-- `'random'`: Random splitting
-- `'stratified'`: Stratified splitting (preserves class distributions)
-- `'butina'`: Butina clustering-based splitting
+### 可用分割器選項
+- `'scaffold'`：基於骨架的分割（藥物發現建議使用）
+- `'random'`：隨機分割
+- `'stratified'`：分層分割（保留類別分佈）
+- `'butina'`：基於 Butina 聚類的分割
 
 ---
 
-## Workflow 3: Hyperparameter Optimization
+## 工作流程 3：超參數優化
 
-**Goal**: Find optimal model hyperparameters systematically.
+**目標**：系統性地找到最佳模型超參數。
 
-### Using GridHyperparamOpt
+### 使用 GridHyperparamOpt
 ```python
 import deepchem as dc
 import numpy as np
 
-# Load data
+# 載入資料
 tasks, datasets, transformers = dc.molnet.load_bbbp(
     featurizer='ECFP',
     splitter='scaffold'
 )
 train, valid, test = datasets
 
-# Define parameter grid
+# 定義參數網格
 params_dict = {
     'layer_sizes': [[1000], [1000, 500], [1000, 1000]],
     'dropouts': [0.0, 0.25, 0.5],
     'learning_rate': [0.001, 0.0001]
 }
 
-# Define model builder function
+# 定義模型建構函數
 def model_builder(model_params, model_dir):
     return dc.models.MultitaskClassifier(
         n_tasks=len(tasks),
@@ -199,11 +199,11 @@ def model_builder(model_params, model_dir):
         **model_params
     )
 
-# Setup optimizer
+# 設定優化器
 metric = dc.metrics.Metric(dc.metrics.roc_auc_score)
 optimizer = dc.hyper.GridHyperparamOpt(model_builder)
 
-# Run optimization
+# 執行優化
 best_model, best_params, all_results = optimizer.hyperparam_search(
     params_dict,
     train,
@@ -212,86 +212,86 @@ best_model, best_params, all_results = optimizer.hyperparam_search(
     transformers=transformers
 )
 
-print(f"Best parameters: {best_params}")
-print(f"Best validation score: {all_results['best_validation_score']}")
+print(f"最佳參數：{best_params}")
+print(f"最佳驗證分數：{all_results['best_validation_score']}")
 ```
 
 ---
 
-## Workflow 4: Transfer Learning with Pretrained Models
+## 工作流程 4：使用預訓練模型的遷移學習
 
-**Goal**: Leverage pretrained models for improved performance on small datasets.
+**目標**：利用預訓練模型改善小型資料集的效能。
 
-### Using ChemBERTa
+### 使用 ChemBERTa
 ```python
 import deepchem as dc
 from transformers import AutoTokenizer
 
-# Load your data
+# 載入資料
 loader = dc.data.CSVLoader(
     tasks=['activity'],
     feature_field='smiles',
-    featurizer=dc.feat.DummyFeaturizer()  # ChemBERTa handles featurization
+    featurizer=dc.feat.DummyFeaturizer()  # ChemBERTa 處理特徵化
 )
 dataset = loader.create_dataset('data.csv')
 
-# Split data
+# 分割資料
 splitter = dc.splits.ScaffoldSplitter()
 train, test = splitter.train_test_split(dataset)
 
-# Load pretrained ChemBERTa
+# 載入預訓練 ChemBERTa
 model = dc.models.HuggingFaceModel(
     model='seyonec/ChemBERTa-zinc-base-v1',
     task='regression',
     n_tasks=1
 )
 
-# Fine-tune
+# 微調
 model.fit(train, nb_epoch=10)
 
-# Evaluate
+# 評估
 predictions = model.predict(test)
 ```
 
-### Using GROVER
+### 使用 GROVER
 ```python
-# GROVER: pre-trained on molecular graphs
+# GROVER：在分子圖上預訓練
 model = dc.models.GroverModel(
     task='classification',
     n_tasks=1,
     model_dir='./grover_model'
 )
 
-# Fine-tune on your data
+# 在您的資料上微調
 model.fit(train_dataset, nb_epoch=20)
 ```
 
 ---
 
-## Workflow 5: Molecular Generation with GANs
+## 工作流程 5：使用 GAN 的分子生成
 
-**Goal**: Generate novel molecules with desired properties.
+**目標**：生成具有所需屬性的新穎分子。
 
-### Basic MolGAN
+### 基本 MolGAN
 ```python
 import deepchem as dc
 
-# Load training data (molecules for the generator to learn from)
+# 載入訓練資料（供生成器學習的分子）
 tasks, datasets, _ = dc.molnet.load_qm9(
     featurizer='GraphConv',
     splitter='random'
 )
 train, _, _ = datasets
 
-# Create and train MolGAN
+# 建立並訓練 MolGAN
 gan = dc.models.BasicMolGANModel(
     learning_rate=0.001,
-    vertices=9,  # max atoms in molecule
-    edges=5,     # max bonds
+    vertices=9,  # 分子中最大原子數
+    edges=5,     # 最大鍵數
     nodes=[128, 256, 512]
 )
 
-# Train
+# 訓練
 gan.fit_gan(
     train,
     nb_epoch=100,
@@ -299,25 +299,25 @@ gan.fit_gan(
     checkpoint_interval=10
 )
 
-# Generate new molecules
+# 生成新分子
 generated_molecules = gan.predict_gan_generator(1000)
 ```
 
-### Conditional Generation
+### 條件生成
 ```python
-# For property-targeted generation
+# 用於屬性導向生成
 from deepchem.models.optimizers import ExponentialDecay
 
 gan = dc.models.BasicMolGANModel(
     learning_rate=ExponentialDecay(0.001, 0.9, 1000),
-    conditional=True  # enable conditional generation
+    conditional=True  # 啟用條件生成
 )
 
-# Train with properties
+# 使用屬性訓練
 gan.fit_gan(train, nb_epoch=100)
 
-# Generate molecules with target properties
-target_properties = np.array([[5.0, 300.0]])  # e.g., [logP, MW]
+# 生成具有目標屬性的分子
+target_properties = np.array([[5.0, 300.0]])  # 例如 [logP, MW]
 molecules = gan.predict_gan_generator(
     1000,
     conditional_inputs=target_properties
@@ -326,23 +326,23 @@ molecules = gan.predict_gan_generator(
 
 ---
 
-## Workflow 6: Materials Property Prediction
+## 工作流程 6：材料屬性預測
 
-**Goal**: Predict properties of crystalline materials.
+**目標**：預測晶態材料的屬性。
 
-### Using Crystal Graph Convolutional Networks
+### 使用晶體圖卷積網路
 ```python
 import deepchem as dc
 
-# Load materials data (structure files in CIF format)
+# 載入材料資料（CIF 格式的結構檔案）
 loader = dc.data.CIFLoader()
 dataset = loader.create_dataset('materials.csv')
 
-# Split data
+# 分割資料
 splitter = dc.splits.RandomSplitter()
 train, test = splitter.train_test_split(dataset)
 
-# Create CGCNN model
+# 建立 CGCNN 模型
 model = dc.models.CGCNNModel(
     n_tasks=1,
     mode='regression',
@@ -350,75 +350,75 @@ model = dc.models.CGCNNModel(
     learning_rate=0.001
 )
 
-# Train
+# 訓練
 model.fit(train, nb_epoch=100)
 
-# Evaluate
+# 評估
 metric = dc.metrics.Metric(dc.metrics.mae_score)
 test_score = model.evaluate(test, [metric])
 ```
 
 ---
 
-## Workflow 7: Protein Sequence Analysis
+## 工作流程 7：蛋白質序列分析
 
-**Goal**: Predict protein properties from sequences.
+**目標**：從序列預測蛋白質屬性。
 
-### Using ProtBERT
+### 使用 ProtBERT
 ```python
 import deepchem as dc
 
-# Load protein sequence data
+# 載入蛋白質序列資料
 loader = dc.data.FASTALoader()
 dataset = loader.create_dataset('proteins.fasta')
 
-# Use ProtBERT
+# 使用 ProtBERT
 model = dc.models.HuggingFaceModel(
     model='Rostlab/prot_bert',
     task='classification',
     n_tasks=1
 )
 
-# Split and train
+# 分割並訓練
 splitter = dc.splits.RandomSplitter()
 train, test = splitter.train_test_split(dataset)
 model.fit(train, nb_epoch=5)
 
-# Predict
+# 預測
 predictions = model.predict(test)
 ```
 
 ---
 
-## Workflow 8: Custom Model Integration
+## 工作流程 8：自訂模型整合
 
-**Goal**: Use your own PyTorch/scikit-learn models with DeepChem.
+**目標**：使用您自己的 PyTorch/scikit-learn 模型與 DeepChem。
 
-### Wrapping Scikit-Learn Models
+### 包裝 Scikit-Learn 模型
 ```python
 from sklearn.ensemble import RandomForestRegressor
 import deepchem as dc
 
-# Create scikit-learn model
+# 建立 scikit-learn 模型
 sklearn_model = RandomForestRegressor(
     n_estimators=100,
     max_depth=10,
     random_state=42
 )
 
-# Wrap in DeepChem
+# 包裝在 DeepChem 中
 model = dc.models.SklearnModel(model=sklearn_model)
 
-# Use with DeepChem datasets
+# 與 DeepChem 資料集一起使用
 model.fit(train)
 predictions = model.predict(test)
 
-# Evaluate
+# 評估
 metric = dc.metrics.Metric(dc.metrics.r2_score)
 score = model.evaluate(test, [metric])
 ```
 
-### Creating Custom PyTorch Models
+### 建立自訂 PyTorch 模型
 ```python
 import torch
 import torch.nn as nn
@@ -440,52 +440,52 @@ class CustomNetwork(nn.Module):
         x = self.dropout(x)
         return self.fc3(x)
 
-# Wrap in DeepChem TorchModel
+# 包裝在 DeepChem TorchModel 中
 model = dc.models.TorchModel(
     model=CustomNetwork(n_features=2048, n_tasks=1),
     loss=nn.MSELoss(),
     output_types=['prediction']
 )
 
-# Train
+# 訓練
 model.fit(train, nb_epoch=50)
 ```
 
 ---
 
-## Common Pitfalls and Solutions
+## 常見陷阱和解決方案
 
-### Issue 1: Data Leakage in Drug Discovery
-**Problem**: Using random splitting allows similar molecules in train and test sets.
-**Solution**: Always use `ScaffoldSplitter` for molecular datasets.
+### 問題 1：藥物發現中的資料洩漏
+**問題**：使用隨機分割允許訓練和測試集中存在相似分子。
+**解決方案**：始終對分子資料集使用 `ScaffoldSplitter`。
 
-### Issue 2: Imbalanced Classification
-**Problem**: Poor performance on minority class.
-**Solution**: Use `BalancingTransformer` or weighted metrics.
+### 問題 2：不平衡分類
+**問題**：少數類別效能差。
+**解決方案**：使用 `BalancingTransformer` 或加權指標。
 ```python
 transformer = dc.trans.BalancingTransformer(dataset=train)
 train = transformer.transform(train)
 ```
 
-### Issue 3: Memory Issues with Large Datasets
-**Problem**: Dataset doesn't fit in memory.
-**Solution**: Use `DiskDataset` instead of `NumpyDataset`.
+### 問題 3：大型資料集的記憶體問題
+**問題**：資料集無法載入記憶體。
+**解決方案**：使用 `DiskDataset` 而非 `NumpyDataset`。
 ```python
 dataset = dc.data.DiskDataset.from_numpy(X, y, w, ids)
 ```
 
-### Issue 4: Overfitting on Small Datasets
-**Problem**: Model memorizes training data.
-**Solutions**:
-1. Use stronger regularization (increase dropout)
-2. Use simpler models (Random Forest, Ridge)
-3. Apply transfer learning (pretrained models)
-4. Collect more data
+### 問題 4：小型資料集上的過擬合
+**問題**：模型記住訓練資料。
+**解決方案**：
+1. 使用更強的正則化（增加 dropout）
+2. 使用更簡單的模型（Random Forest、Ridge）
+3. 應用遷移學習（預訓練模型）
+4. 收集更多資料
 
-### Issue 5: Poor Graph Neural Network Performance
-**Problem**: GNN performs worse than fingerprints.
-**Solutions**:
-1. Check if dataset is large enough (GNNs need >10K samples typically)
-2. Increase training epochs
-3. Try different GNN architectures (AttentiveFP, DMPNN)
-4. Use pretrained models (GROVER)
+### 問題 5：圖神經網路效能差
+**問題**：GNN 效能比指紋差。
+**解決方案**：
+1. 檢查資料集是否足夠大（GNN 通常需要 >10K 樣本）
+2. 增加訓練輪數
+3. 嘗試不同的 GNN 架構（AttentiveFP、DMPNN）
+4. 使用預訓練模型（GROVER）

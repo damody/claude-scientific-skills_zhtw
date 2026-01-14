@@ -1,22 +1,22 @@
-# Qiskit Setup and Installation
+# Qiskit 設定和安裝
 
-## Installation
+## 安裝
 
-Install Qiskit using uv:
+使用 uv 安裝 Qiskit：
 
 ```bash
 uv pip install qiskit
 ```
 
-For visualization capabilities:
+若需視覺化功能：
 
 ```bash
 uv pip install "qiskit[visualization]" matplotlib
 ```
 
-## Python Environment Setup
+## Python 環境設定
 
-Create and activate a virtual environment to isolate dependencies:
+建立並啟動虛擬環境以隔離相依性：
 
 ```bash
 # macOS/Linux
@@ -28,48 +28,48 @@ python -m venv .venv
 .venv\Scripts\activate
 ```
 
-## Supported Python Versions
+## 支援的 Python 版本
 
-Check the [Qiskit PyPI page](https://pypi.org/project/qiskit/) for currently supported Python versions. As of 2025, Qiskit typically supports Python 3.8+.
+請查看 [Qiskit PyPI 頁面](https://pypi.org/project/qiskit/) 了解目前支援的 Python 版本。截至 2025 年，Qiskit 通常支援 Python 3.8+。
 
-## IBM Quantum Account Setup
+## IBM Quantum 帳戶設定
 
-To run circuits on real IBM Quantum hardware, you need an IBM Quantum account and API token.
+要在真實的 IBM Quantum 硬體上執行電路，您需要 IBM Quantum 帳戶和 API 令牌。
 
-### Creating an Account
+### 建立帳戶
 
-1. Visit [IBM Quantum Platform](https://quantum.ibm.com/)
-2. Sign up for a free account
-3. Navigate to your account settings to retrieve your API token
+1. 造訪 [IBM Quantum Platform](https://quantum.ibm.com/)
+2. 註冊免費帳戶
+3. 前往您的帳戶設定以取得 API 令牌
 
-### Configuring Authentication
+### 配置認證
 
-Save your IBM Quantum credentials:
+儲存您的 IBM Quantum 憑證：
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
 
-# Save credentials (first time only)
+# 儲存憑證（僅首次需要）
 QiskitRuntimeService.save_account(
     channel="ibm_quantum",
     token="YOUR_IBM_QUANTUM_TOKEN"
 )
 
-# Later sessions - load saved credentials
+# 後續會話 - 載入已儲存的憑證
 service = QiskitRuntimeService()
 ```
 
-### Environment Variable Method
+### 環境變數方法
 
-Alternatively, set the API token as an environment variable:
+或者，將 API 令牌設為環境變數：
 
 ```bash
 export QISKIT_IBM_TOKEN="YOUR_IBM_QUANTUM_TOKEN"
 ```
 
-## Local Development (No Account Required)
+## 本地開發（無需帳戶）
 
-You can build and test quantum circuits locally without an IBM Quantum account using simulators:
+您可以使用模擬器在本地建構和測試量子電路，無需 IBM Quantum 帳戶：
 
 ```python
 from qiskit import QuantumCircuit
@@ -80,14 +80,14 @@ qc.h(0)
 qc.cx(0, 1)
 qc.measure_all()
 
-# Run locally with simulator
+# 使用模擬器在本地執行
 sampler = StatevectorSampler()
 result = sampler.run([qc], shots=1024).result()
 ```
 
-## Verifying Installation
+## 驗證安裝
 
-Test your installation:
+測試您的安裝：
 
 ```python
 import qiskit
@@ -95,5 +95,5 @@ print(qiskit.__version__)
 
 from qiskit import QuantumCircuit
 qc = QuantumCircuit(2)
-print("Qiskit installed successfully!")
+print("Qiskit 安裝成功！")
 ```

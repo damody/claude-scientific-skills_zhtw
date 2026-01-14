@@ -1,314 +1,314 @@
-# Citation Validation Guide
+# 引用文獻驗證指南
 
-Comprehensive guide to validating citation accuracy, completeness, and formatting in BibTeX files.
+驗證 BibTeX 檔案中引用文獻準確性、完整性和格式的完整指南。
 
-## Overview
+## 概述
 
-Citation validation ensures:
-- All citations are accurate and complete
-- DOIs resolve correctly
-- Required fields are present
-- No duplicate entries
-- Proper formatting and syntax
-- Links are accessible
+引用文獻驗證確保：
+- 所有引用文獻準確且完整
+- DOI 正確解析
+- 必填欄位存在
+- 無重複條目
+- 格式和語法正確
+- 連結可存取
 
-Validation should be performed:
-- After extracting metadata
-- Before manuscript submission
-- After manual edits to BibTeX files
-- Periodically for maintained bibliographies
+驗證應在以下時機執行：
+- 擷取後設資料後
+- 手稿提交前
+- 手動編輯 BibTeX 檔案後
+- 定期維護參考書目時
 
-## Validation Categories
+## 驗證類別
 
-### 1. DOI Verification
+### 1. DOI 驗證
 
-**Purpose**: Ensure DOIs are valid and resolve correctly.
+**目的**：確保 DOI 有效且正確解析。
 
-#### What to Check
+#### 檢查項目
 
-**DOI format**:
+**DOI 格式**：
 ```
-Valid:   10.1038/s41586-021-03819-2
-Valid:   10.1126/science.aam9317
-Invalid: 10.1038/invalid
-Invalid: doi:10.1038/... (should omit "doi:" prefix in BibTeX)
+有效：   10.1038/s41586-021-03819-2
+有效：   10.1126/science.aam9317
+無效：   10.1038/invalid
+無效：   doi:10.1038/...（BibTeX 中應省略「doi:」前綴）
 ```
 
-**DOI resolution**:
-- DOI should resolve via https://doi.org/
-- Should redirect to actual article
-- Should not return 404 or error
+**DOI 解析**：
+- DOI 應透過 https://doi.org/ 解析
+- 應重新導向到實際文章
+- 不應返回 404 或錯誤
 
-**Metadata consistency**:
-- CrossRef metadata should match BibTeX
-- Author names should align
-- Title should match
-- Year should match
+**後設資料一致性**：
+- CrossRef 後設資料應與 BibTeX 相符
+- 作者姓名應一致
+- 標題應相符
+- 年份應相符
 
-#### How to Validate
+#### 如何驗證
 
-**Manual check**:
-1. Copy DOI from BibTeX
-2. Visit https://doi.org/10.1038/nature12345
-3. Verify it redirects to correct article
-4. Check metadata matches
+**手動檢查**：
+1. 從 BibTeX 複製 DOI
+2. 造訪 https://doi.org/10.1038/nature12345
+3. 驗證重新導向到正確文章
+4. 檢查後設資料相符
 
-**Automated check** (recommended):
+**自動檢查**（建議）：
 ```bash
 python scripts/validate_citations.py references.bib --check-dois
 ```
 
-**Process**:
-1. Extract all DOIs from BibTeX file
-2. Query doi.org resolver for each
-3. Query CrossRef API for metadata
-4. Compare metadata with BibTeX entry
-5. Report discrepancies
+**處理流程**：
+1. 從 BibTeX 檔案擷取所有 DOI
+2. 對每個 DOI 查詢 doi.org 解析器
+3. 查詢 CrossRef API 取得後設資料
+4. 比較後設資料與 BibTeX 條目
+5. 報告差異
 
-#### Common Issues
+#### 常見問題
 
-**Broken DOIs**:
-- Typos in DOI
-- Publisher changed DOI (rare)
-- Article retracted
-- Solution: Find correct DOI from publisher site
+**損壞的 DOI**：
+- DOI 中有打字錯誤
+- 出版商更改了 DOI（罕見）
+- 文章被撤回
+- 解決方案：從出版商網站尋找正確的 DOI
 
-**Mismatched metadata**:
-- BibTeX has old/incorrect information
-- Solution: Re-extract metadata from CrossRef
+**後設資料不符**：
+- BibTeX 有舊的/不正確的資訊
+- 解決方案：從 CrossRef 重新擷取後設資料
 
-**Missing DOIs**:
-- Older articles may not have DOIs
-- Acceptable for pre-2000 publications
-- Add URL or PMID instead
+**遺失的 DOI**：
+- 較舊的文章可能沒有 DOI
+- 2000 年前的出版物可接受
+- 改為添加 URL 或 PMID
 
-### 2. Required Fields
+### 2. 必填欄位
 
-**Purpose**: Ensure all necessary information is present.
+**目的**：確保所有必要資訊都存在。
 
-#### Required by Entry Type
+#### 各條目類型的必填欄位
 
-**@article**:
+**@article**：
 ```bibtex
-author   % REQUIRED
-title    % REQUIRED
-journal  % REQUIRED
-year     % REQUIRED
-volume   % Highly recommended
-pages    % Highly recommended
-doi      % Highly recommended for modern papers
+author   % 必填
+title    % 必填
+journal  % 必填
+year     % 必填
+volume   % 強烈建議
+pages    % 強烈建議
+doi      % 現代論文強烈建議
 ```
 
-**@book**:
+**@book**：
 ```bibtex
-author OR editor  % REQUIRED (at least one)
-title            % REQUIRED
-publisher        % REQUIRED
-year             % REQUIRED
-isbn             % Recommended
+author 或 editor  % 必填（至少一個）
+title            % 必填
+publisher        % 必填
+year             % 必填
+isbn             % 建議
 ```
 
-**@inproceedings**:
+**@inproceedings**：
 ```bibtex
-author     % REQUIRED
-title      % REQUIRED
-booktitle  % REQUIRED (conference/proceedings name)
-year       % REQUIRED
-pages      % Recommended
+author     % 必填
+title      % 必填
+booktitle  % 必填（會議/論文集名稱）
+year       % 必填
+pages      % 建議
 ```
 
-**@incollection** (book chapter):
+**@incollection**（書籍章節）：
 ```bibtex
-author     % REQUIRED
-title      % REQUIRED (chapter title)
-booktitle  % REQUIRED (book title)
-publisher  % REQUIRED
-year       % REQUIRED
-editor     % Recommended
-pages      % Recommended
+author     % 必填
+title      % 必填（章節標題）
+booktitle  % 必填（書名）
+publisher  % 必填
+year       % 必填
+editor     % 建議
+pages      % 建議
 ```
 
-**@phdthesis**:
+**@phdthesis**：
 ```bibtex
-author  % REQUIRED
-title   % REQUIRED
-school  % REQUIRED
-year    % REQUIRED
+author  % 必填
+title   % 必填
+school  % 必填
+year    % 必填
 ```
 
-**@misc** (preprints, datasets, etc.):
+**@misc**（預印本、資料集等）：
 ```bibtex
-author  % REQUIRED
-title   % REQUIRED
-year    % REQUIRED
-howpublished  % Recommended (bioRxiv, Zenodo, etc.)
-doi OR url    % At least one required
+author  % 必填
+title   % 必填
+year    % 必填
+howpublished  % 建議（bioRxiv、Zenodo 等）
+doi 或 url    % 至少需要一個
 ```
 
-#### Validation Script
+#### 驗證腳本
 
 ```bash
 python scripts/validate_citations.py references.bib --check-required-fields
 ```
 
-**Output**:
+**輸出**：
 ```
 Error: Entry 'Smith2024' missing required field 'journal'
 Error: Entry 'Doe2023' missing required field 'year'
 Warning: Entry 'Jones2022' missing recommended field 'volume'
 ```
 
-### 3. Author Name Formatting
+### 3. 作者姓名格式
 
-**Purpose**: Ensure consistent, correct author name formatting.
+**目的**：確保作者姓名格式一致、正確。
 
-#### Proper Format
+#### 正確格式
 
-**Recommended BibTeX format**:
+**建議的 BibTeX 格式**：
 ```bibtex
 author = {Last1, First1 and Last2, First2 and Last3, First3}
 ```
 
-**Examples**:
+**範例**：
 ```bibtex
-% Correct
+% 正確
 author = {Smith, John}
 author = {Smith, John A.}
 author = {Smith, John Andrew}
 author = {Smith, John and Doe, Jane}
 author = {Smith, John and Doe, Jane and Johnson, Mary}
 
-% For many authors
+% 多位作者
 author = {Smith, John and Doe, Jane and others}
 
-% Incorrect
-author = {John Smith}  % First Last format (not recommended)
-author = {Smith, J.; Doe, J.}  % Semicolon separator (wrong)
-author = {Smith J, Doe J}  % Missing commas
+% 不正確
+author = {John Smith}  % First Last 格式（不建議）
+author = {Smith, J.; Doe, J.}  % 分號分隔（錯誤）
+author = {Smith J, Doe J}  % 遺失逗號
 ```
 
-#### Special Cases
+#### 特殊情況
 
-**Suffixes (Jr., III, etc.)**:
+**後綴（Jr.、III 等）**：
 ```bibtex
 author = {King, Jr., Martin Luther}
 ```
 
-**Multiple surnames (hyphenated)**:
+**多姓氏（連字符）**：
 ```bibtex
 author = {Smith-Jones, Mary}
 ```
 
-**Van, von, de, etc.**:
+**Van、von、de 等**：
 ```bibtex
 author = {van der Waals, Johannes}
 author = {de Broglie, Louis}
 ```
 
-**Organizations as authors**:
+**組織作為作者**：
 ```bibtex
 author = {{World Health Organization}}
-% Double braces treat as single author
+% 雙大括號視為單一作者
 ```
 
-#### Validation Checks
+#### 驗證檢查
 
-**Automated validation**:
+**自動化驗證**：
 ```bash
 python scripts/validate_citations.py references.bib --check-authors
 ```
 
-**Checks for**:
-- Proper separator (and, not &, ; , etc.)
-- Comma placement
-- Empty author fields
-- Malformed names
+**檢查項目**：
+- 正確的分隔符（and，而非 &、; 等）
+- 逗號位置
+- 空的作者欄位
+- 格式錯誤的姓名
 
-### 4. Data Consistency
+### 4. 資料一致性
 
-**Purpose**: Ensure all fields contain valid, reasonable values.
+**目的**：確保所有欄位包含有效、合理的值。
 
-#### Year Validation
+#### 年份驗證
 
-**Valid years**:
+**有效年份**：
 ```bibtex
-year = {2024}    % Current/recent
-year = {1953}    % Watson & Crick DNA structure (historical)
-year = {1665}    % Hooke's Micrographia (very old)
+year = {2024}    % 當前/近期
+year = {1953}    % Watson & Crick DNA 結構（歷史性）
+year = {1665}    % Hooke 的 Micrographia（非常舊）
 ```
 
-**Invalid years**:
+**無效年份**：
 ```bibtex
-year = {24}      % Two digits (ambiguous)
-year = {202}     % Typo
-year = {2025}    % Future (unless accepted/in press)
-year = {0}       % Obviously wrong
+year = {24}      % 兩位數（模糊）
+year = {202}     % 打字錯誤
+year = {2025}    % 未來（除非已接受/付印中）
+year = {0}       % 明顯錯誤
 ```
 
-**Check**:
-- Four digits
-- Reasonable range (1600-current+1)
-- Not all zeros
+**檢查**：
+- 四位數
+- 合理範圍（1600-當前+1）
+- 不全為零
 
-#### Volume/Number Validation
+#### 卷號/期號驗證
 
 ```bibtex
-volume = {123}      % Numeric
-volume = {12}       % Valid
-number = {3}        % Valid
-number = {S1}       % Supplement issue (valid)
+volume = {123}      % 數值
+volume = {12}       % 有效
+number = {3}        % 有效
+number = {S1}       % 增刊期（有效）
 ```
 
-**Invalid**:
+**無效**：
 ```bibtex
-volume = {Vol. 123}  % Should be just number
-number = {Issue 3}   % Should be just number
+volume = {Vol. 123}  % 應只是數字
+number = {Issue 3}   % 應只是數字
 ```
 
-#### Page Range Validation
+#### 頁碼範圍驗證
 
-**Correct format**:
+**正確格式**：
 ```bibtex
-pages = {123--145}    % En-dash (two hyphens)
-pages = {e0123456}    % PLOS-style article ID
-pages = {123}         % Single page
+pages = {123--145}    % 長破折號（雙連字符）
+pages = {e0123456}    % PLOS 風格文章 ID
+pages = {123}         % 單頁
 ```
 
-**Incorrect format**:
+**不正確格式**：
 ```bibtex
-pages = {123-145}     % Single hyphen (use --)
-pages = {pp. 123-145} % Remove "pp."
-pages = {123–145}     % Unicode en-dash (may cause issues)
+pages = {123-145}     % 單連字符（使用 --）
+pages = {pp. 123-145} % 移除「pp.」
+pages = {123–145}     % Unicode 長破折號（可能導致問題）
 ```
 
-#### URL Validation
+#### URL 驗證
 
-**Check**:
-- URLs are accessible (return 200 status)
-- HTTPS when available
-- No obvious typos
-- Permanent links (not temporary)
+**檢查**：
+- URL 可存取（返回 200 狀態）
+- 可用時使用 HTTPS
+- 無明顯打字錯誤
+- 永久連結（非臨時）
 
-**Valid**:
+**有效**：
 ```bibtex
 url = {https://www.nature.com/articles/nature12345}
 url = {https://arxiv.org/abs/2103.14030}
 ```
 
-**Questionable**:
+**可疑**：
 ```bibtex
-url = {http://...}  % HTTP instead of HTTPS
-url = {file:///...} % Local file path
-url = {bit.ly/...}  % URL shortener (not permanent)
+url = {http://...}  % HTTP 而非 HTTPS
+url = {file:///...} % 本地檔案路徑
+url = {bit.ly/...}  % URL 縮短服務（非永久）
 ```
 
-### 5. Duplicate Detection
+### 5. 重複檢測
 
-**Purpose**: Find and remove duplicate entries.
+**目的**：尋找並移除重複條目。
 
-#### Types of Duplicates
+#### 重複類型
 
-**Exact duplicates** (same DOI):
+**完全重複**（相同 DOI）：
 ```bibtex
 @article{Smith2024a,
   doi = {10.1038/nature12345},
@@ -316,12 +316,12 @@ url = {bit.ly/...}  % URL shortener (not permanent)
 }
 
 @article{Smith2024b,
-  doi = {10.1038/nature12345},  % Same DOI!
+  doi = {10.1038/nature12345},  % 相同 DOI！
   ...
 }
 ```
 
-**Near duplicates** (similar title/authors):
+**近似重複**（相似標題/作者）：
 ```bibtex
 @article{Smith2024,
   title = {Machine Learning for Drug Discovery},
@@ -329,12 +329,12 @@ url = {bit.ly/...}  % URL shortener (not permanent)
 }
 
 @article{Smith2024method,
-  title = {Machine learning for drug discovery},  % Same, different case
+  title = {Machine learning for drug discovery},  % 相同，不同大小寫
   ...
 }
 ```
 
-**Preprint + Published**:
+**預印本 + 已發表**：
 ```bibtex
 @misc{Smith2023arxiv,
   title = {AlphaFold Results},
@@ -343,34 +343,34 @@ url = {bit.ly/...}  % URL shortener (not permanent)
 }
 
 @article{Smith2024,
-  title = {AlphaFold Results},  % Same paper, now published
+  title = {AlphaFold Results},  % 同一論文，現已發表
   journal = {Nature},
   ...
 }
-% Keep published version only
+% 僅保留已發表版本
 ```
 
-#### Detection Methods
+#### 檢測方法
 
-**By DOI** (most reliable):
-- Same DOI = exact duplicate
-- Keep one, remove other
+**按 DOI**（最可靠）：
+- 相同 DOI = 完全重複
+- 保留一個，移除另一個
 
-**By title similarity**:
-- Normalize: lowercase, remove punctuation
-- Calculate similarity (e.g., Levenshtein distance)
-- Flag if >90% similar
+**按標題相似度**：
+- 標準化：小寫，移除標點符號
+- 計算相似度（例如 Levenshtein 距離）
+- 如相似度 >90% 則標記
 
-**By author-year-title**:
-- Same first author + year + similar title
-- Likely duplicate
+**按作者-年份-標題**：
+- 相同第一作者 + 年份 + 相似標題
+- 可能重複
 
-**Automated detection**:
+**自動檢測**：
 ```bash
 python scripts/validate_citations.py references.bib --check-duplicates
 ```
 
-**Output**:
+**輸出**：
 ```
 Warning: Possible duplicate entries:
   - Smith2024a (DOI: 10.1038/nature12345)
@@ -378,53 +378,53 @@ Warning: Possible duplicate entries:
   Recommendation: Keep one entry, remove the other.
 ```
 
-### 6. Format and Syntax
+### 6. 格式和語法
 
-**Purpose**: Ensure valid BibTeX syntax.
+**目的**：確保有效的 BibTeX 語法。
 
-#### Common Syntax Errors
+#### 常見語法錯誤
 
-**Missing commas**:
+**遺失逗號**：
 ```bibtex
 @article{Smith2024,
-  author = {Smith, John}   % Missing comma!
+  author = {Smith, John}   % 遺失逗號！
   title = {Title}
 }
-% Should be:
-  author = {Smith, John},  % Comma after each field
+% 應為：
+  author = {Smith, John},  % 每個欄位後有逗號
 ```
 
-**Unbalanced braces**:
+**大括號不平衡**：
 ```bibtex
-title = {Title with {Protected} Text  % Missing closing brace
-% Should be:
+title = {Title with {Protected} Text  % 遺失右大括號
+% 應為：
 title = {Title with {Protected} Text}
 ```
 
-**Missing closing brace for entry**:
+**條目遺失右大括號**：
 ```bibtex
 @article{Smith2024,
   author = {Smith, John},
   title = {Title}
-  % Missing closing brace!
-% Should end with:
+  % 遺失右大括號！
+% 應以此結尾：
 }
 ```
 
-**Invalid characters in keys**:
+**引用鍵中的無效字元**：
 ```bibtex
-@article{Smith&Doe2024,  % & not allowed in key
+@article{Smith&Doe2024,  % 引用鍵中不允許 &
   ...
 }
-% Use:
+% 使用：
 @article{SmithDoe2024,
   ...
 }
 ```
 
-#### BibTeX Syntax Rules
+#### BibTeX 語法規則
 
-**Entry structure**:
+**條目結構**：
 ```bibtex
 @TYPE{citationkey,
   field1 = {value1},
@@ -434,57 +434,57 @@ title = {Title with {Protected} Text}
 }
 ```
 
-**Citation keys**:
-- Alphanumeric and some punctuation (-, _, ., :)
-- No spaces
-- Case-sensitive
-- Unique within file
+**引用鍵**：
+- 英數字和一些標點符號（-、_、.、:）
+- 無空格
+- 區分大小寫
+- 檔案內唯一
 
-**Field values**:
-- Enclosed in {braces} or "quotes"
-- Braces preferred for complex text
-- Numbers can be unquoted: `year = 2024`
+**欄位值**：
+- 用 {大括號} 或 "引號" 括起
+- 複雜文字建議用大括號
+- 數字可不加引號：`year = 2024`
 
-**Special characters**:
-- `{` and `}` for grouping
-- `\` for LaTeX commands
-- Protect capitalization: `{AlphaFold}`
-- Accents: `{\"u}`, `{\'e}`, `{\aa}`
+**特殊字元**：
+- `{` 和 `}` 用於分組
+- `\` 用於 LaTeX 命令
+- 保護大小寫：`{AlphaFold}`
+- 重音：`{\"u}`、`{\'e}`、`{\aa}`
 
-#### Validation
+#### 驗證
 
 ```bash
 python scripts/validate_citations.py references.bib --check-syntax
 ```
 
-**Checks**:
-- Valid BibTeX structure
-- Balanced braces
-- Proper commas
-- Valid entry types
-- Unique citation keys
+**檢查**：
+- 有效的 BibTeX 結構
+- 大括號平衡
+- 正確的逗號
+- 有效的條目類型
+- 唯一的引用鍵
 
-## Validation Workflow
+## 驗證工作流程
 
-### Step 1: Basic Validation
+### 步驟 1：基本驗證
 
-Run comprehensive validation:
+執行全面驗證：
 
 ```bash
 python scripts/validate_citations.py references.bib
 ```
 
-**Checks all**:
-- DOI resolution
-- Required fields
-- Author formatting
-- Data consistency
-- Duplicates
-- Syntax
+**檢查所有項目**：
+- DOI 解析
+- 必填欄位
+- 作者格式
+- 資料一致性
+- 重複項
+- 語法
 
-### Step 2: Review Report
+### 步驟 2：檢閱報告
 
-Examine validation report:
+檢查驗證報告：
 
 ```json
 {
@@ -522,26 +522,26 @@ Examine validation report:
 }
 ```
 
-### Step 3: Fix Issues
+### 步驟 3：修復問題
 
-**High-priority** (errors):
-1. Add missing required fields
-2. Fix broken DOIs
-3. Remove duplicates
-4. Correct syntax errors
+**高優先順序**（錯誤）：
+1. 添加遺失的必填欄位
+2. 修復損壞的 DOI
+3. 移除重複項
+4. 更正語法錯誤
 
-**Medium-priority** (warnings):
-1. Add recommended fields
-2. Improve author formatting
-3. Fix page ranges
+**中優先順序**（警告）：
+1. 添加建議欄位
+2. 改進作者格式
+3. 修復頁碼範圍
 
-**Low-priority**:
-1. Standardize formatting
-2. Add URLs for accessibility
+**低優先順序**：
+1. 標準化格式
+2. 添加 URL 以提高可存取性
 
-### Step 4: Auto-Fix
+### 步驟 4：自動修復
 
-Use auto-fix for safe corrections:
+對安全的更正使用自動修復：
 
 ```bash
 python scripts/validate_citations.py references.bib \
@@ -549,39 +549,39 @@ python scripts/validate_citations.py references.bib \
   --output fixed_references.bib
 ```
 
-**Auto-fix can**:
-- Fix page range format (- to --)
-- Remove "pp." from pages
-- Standardize author separators
-- Fix common syntax errors
-- Normalize field order
+**自動修復可以**：
+- 修復頁碼範圍格式（- 改為 --）
+- 從 pages 移除「pp.」
+- 標準化作者分隔符
+- 修復常見語法錯誤
+- 標準化欄位順序
 
-**Auto-fix cannot**:
-- Add missing information
-- Find correct DOIs
-- Determine which duplicate to keep
-- Fix semantic errors
+**自動修復無法**：
+- 添加遺失的資訊
+- 尋找正確的 DOI
+- 決定保留哪個重複項
+- 修復語義錯誤
 
-### Step 5: Manual Review
+### 步驟 5：手動檢閱
 
-Review auto-fixed file:
+檢閱自動修復的檔案：
 ```bash
-# Check what changed
+# 檢查變更內容
 diff references.bib fixed_references.bib
 
-# Review specific entries that had errors
+# 檢閱有錯誤的特定條目
 grep -A 10 "Smith2024" fixed_references.bib
 ```
 
-### Step 6: Re-Validate
+### 步驟 6：重新驗證
 
-Validate after fixes:
+修復後驗證：
 
 ```bash
 python scripts/validate_citations.py fixed_references.bib --verbose
 ```
 
-Should show:
+應顯示：
 ```
 ✓ All DOIs valid
 ✓ All required fields present
@@ -590,99 +590,99 @@ Should show:
 ✓ 150/150 entries valid
 ```
 
-## Validation Checklist
+## 驗證檢查清單
 
-Use this checklist before final submission:
+最終提交前使用此檢查清單：
 
-### DOI Validation
-- [ ] All DOIs resolve correctly
-- [ ] Metadata matches between BibTeX and CrossRef
-- [ ] No broken or invalid DOIs
+### DOI 驗證
+- [ ] 所有 DOI 正確解析
+- [ ] BibTeX 和 CrossRef 之間的後設資料相符
+- [ ] 無損壞或無效的 DOI
 
-### Completeness
-- [ ] All entries have required fields
-- [ ] Modern papers (2000+) have DOIs
-- [ ] Authors properly formatted
-- [ ] Journals/conferences properly named
+### 完整性
+- [ ] 所有條目都有必填欄位
+- [ ] 現代論文（2000 年以後）有 DOI
+- [ ] 作者格式正確
+- [ ] 期刊/會議名稱正確
 
-### Consistency
-- [ ] Years are 4-digit numbers
-- [ ] Page ranges use -- not -
-- [ ] Volume/number are numeric
-- [ ] URLs are accessible
+### 一致性
+- [ ] 年份是 4 位數數字
+- [ ] 頁碼範圍使用 -- 而非 -
+- [ ] 卷號/期號是數值
+- [ ] URL 可存取
 
-### Duplicates
-- [ ] No entries with same DOI
-- [ ] No near-duplicate titles
-- [ ] Preprints updated to published versions
+### 重複項
+- [ ] 無相同 DOI 的條目
+- [ ] 無近似重複的標題
+- [ ] 預印本已更新為已發表版本
 
-### Formatting
-- [ ] Valid BibTeX syntax
-- [ ] Balanced braces
-- [ ] Proper commas
-- [ ] Unique citation keys
+### 格式
+- [ ] 有效的 BibTeX 語法
+- [ ] 大括號平衡
+- [ ] 正確的逗號
+- [ ] 唯一的引用鍵
 
-### Final Checks
-- [ ] Bibliography compiles without errors
-- [ ] All citations in text appear in bibliography
-- [ ] All bibliography entries cited in text
-- [ ] Citation style matches journal requirements
+### 最終檢查
+- [ ] 參考書目編譯無錯誤
+- [ ] 文中所有引用都在參考書目中
+- [ ] 參考書目中所有條目都在文中被引用
+- [ ] 引用文獻樣式符合期刊要求
 
-## Best Practices
+## 最佳實務
 
-### 1. Validate Early and Often
+### 1. 儘早並經常驗證
 
 ```bash
-# After extraction
+# 擷取後
 python scripts/extract_metadata.py --doi ... --output refs.bib
 python scripts/validate_citations.py refs.bib
 
-# After manual edits
+# 手動編輯後
 python scripts/validate_citations.py refs.bib
 
-# Before submission
+# 提交前
 python scripts/validate_citations.py refs.bib --strict
 ```
 
-### 2. Use Automated Tools
+### 2. 使用自動化工具
 
-Don't validate manually - use scripts:
-- Faster
-- More comprehensive
-- Catches errors humans miss
-- Generates reports
+不要手動驗證 - 使用腳本：
+- 更快
+- 更全面
+- 捕捉人工遺漏的錯誤
+- 產生報告
 
-### 3. Keep Backup
+### 3. 保留備份
 
 ```bash
-# Before auto-fix
+# 自動修復前
 cp references.bib references_backup.bib
 
-# Run auto-fix
+# 執行自動修復
 python scripts/validate_citations.py references.bib \
   --auto-fix \
   --output references_fixed.bib
 
-# Review changes
+# 檢閱變更
 diff references.bib references_fixed.bib
 
-# If satisfied, replace
+# 如滿意，替換
 mv references_fixed.bib references.bib
 ```
 
-### 4. Fix High-Priority First
+### 4. 先修復高優先順序
 
-**Priority order**:
-1. Syntax errors (prevent compilation)
-2. Missing required fields (incomplete citations)
-3. Broken DOIs (broken links)
-4. Duplicates (confusion, wasted space)
-5. Missing recommended fields
-6. Formatting inconsistencies
+**優先順序**：
+1. 語法錯誤（阻止編譯）
+2. 遺失的必填欄位（不完整的引用文獻）
+3. 損壞的 DOI（損壞的連結）
+4. 重複項（混淆、浪費空間）
+5. 遺失的建議欄位
+6. 格式不一致
 
-### 5. Document Exceptions
+### 5. 記錄例外
 
-For entries that can't be fixed:
+對於無法修復的條目：
 
 ```bibtex
 @article{Old1950,
@@ -696,99 +696,98 @@ For entries that can't be fixed:
 }
 ```
 
-### 6. Validate Against Journal Requirements
+### 6. 根據期刊要求驗證
 
-Different journals have different requirements:
-- Citation style (numbered, author-year)
-- Abbreviations (journal names)
-- Maximum reference count
-- Format (BibTeX, EndNote, manual)
+不同期刊有不同要求：
+- 引用文獻樣式（編號、作者-年份）
+- 縮寫（期刊名稱）
+- 最大參考文獻數量
+- 格式（BibTeX、EndNote、手動）
 
-Check journal author guidelines!
+查看期刊作者指南！
 
-## Common Validation Issues
+## 常見驗證問題
 
-### Issue 1: Metadata Mismatch
+### 問題 1：後設資料不符
 
-**Problem**: BibTeX says 2023, CrossRef says 2024.
+**問題**：BibTeX 顯示 2023，CrossRef 顯示 2024。
 
-**Cause**:
-- Online-first vs print publication
-- Correction/update
-- Extraction error
+**原因**：
+- 線上優先與紙本出版
+- 更正/更新
+- 擷取錯誤
 
-**Solution**:
-1. Check actual article
-2. Use more recent/accurate date
-3. Update BibTeX entry
-4. Re-validate
+**解決方案**：
+1. 檢查實際文章
+2. 使用更新/準確的日期
+3. 更新 BibTeX 條目
+4. 重新驗證
 
-### Issue 2: Special Characters
+### 問題 2：特殊字元
 
-**Problem**: LaTeX compilation fails on special characters.
+**問題**：LaTeX 編譯因特殊字元失敗。
 
-**Cause**:
-- Accented characters (é, ü, ñ)
-- Chemical formulas (H₂O)
-- Math symbols (α, β, ±)
+**原因**：
+- 重音字元（é、ü、ñ）
+- 化學公式（H₂O）
+- 數學符號（α、β、±）
 
-**Solution**:
+**解決方案**：
 ```bibtex
-% Use LaTeX commands
+% 使用 LaTeX 命令
 author = {M{\"u}ller, Hans}  % Müller
 title = {Study of H\textsubscript{2}O}  % H₂O
-% Or use UTF-8 with proper LaTeX packages
+% 或使用 UTF-8 配合適當的 LaTeX 套件
 ```
 
-### Issue 3: Incomplete Extraction
+### 問題 3：不完整的擷取
 
-**Problem**: Extracted metadata missing fields.
+**問題**：擷取的後設資料遺失欄位。
 
-**Cause**:
-- Source doesn't provide all metadata
-- Extraction error
-- Incomplete record
+**原因**：
+- 來源未提供所有後設資料
+- 擷取錯誤
+- 不完整的記錄
 
-**Solution**:
-1. Check original article
-2. Manually add missing fields
-3. Use alternative source (PubMed vs CrossRef)
+**解決方案**：
+1. 檢查原始文章
+2. 手動添加遺失的欄位
+3. 使用替代來源（PubMed vs CrossRef）
 
-### Issue 4: Cannot Find Duplicate
+### 問題 4：無法找到重複項
 
-**Problem**: Same paper appears twice, not detected.
+**問題**：同一論文出現兩次，未被檢測到。
 
-**Cause**:
-- Different DOIs (should be rare)
-- Different titles (abbreviated, typo)
-- Different citation keys
+**原因**：
+- 不同的 DOI（應該很少見）
+- 不同的標題（縮寫、打字錯誤）
+- 不同的引用鍵
 
-**Solution**:
-- Manual search for author + year
-- Check for similar titles
-- Remove manually
+**解決方案**：
+- 手動搜尋作者 + 年份
+- 檢查相似標題
+- 手動移除
 
-## Summary
+## 總結
 
-Validation ensures citation quality:
+驗證確保引用文獻品質：
 
-✓ **Accuracy**: DOIs resolve, metadata correct  
-✓ **Completeness**: All required fields present  
-✓ **Consistency**: Proper formatting throughout  
-✓ **No duplicates**: Each paper cited once  
-✓ **Valid syntax**: BibTeX compiles without errors  
+✓ **準確性**：DOI 解析，後設資料正確
+✓ **完整性**：所有必填欄位存在
+✓ **一致性**：全程格式正確
+✓ **無重複**：每篇論文只引用一次
+✓ **有效語法**：BibTeX 編譯無錯誤
 
-**Always validate** before final submission!
+**最終提交前務必驗證**！
 
-Use automated tools:
+使用自動化工具：
 ```bash
 python scripts/validate_citations.py references.bib
 ```
 
-Follow workflow:
-1. Extract metadata
-2. Validate
-3. Fix errors
-4. Re-validate
-5. Submit
-
+遵循工作流程：
+1. 擷取後設資料
+2. 驗證
+3. 修復錯誤
+4. 重新驗證
+5. 提交

@@ -1,129 +1,129 @@
-# Statistical Test Selection Guide
+# 統計檢定選擇指南
 
-This guide provides a decision tree for selecting appropriate statistical tests based on research questions, data types, and study designs.
+本指南提供根據研究問題、資料類型和研究設計選擇適當統計檢定的決策樹。
 
-## Decision Tree for Test Selection
+## 檢定選擇決策樹
 
-### 1. Comparing Groups
+### 1. 比較組別
 
-#### Two Independent Groups
-- **Continuous outcome, normally distributed**: Independent samples t-test
-- **Continuous outcome, non-normal**: Mann-Whitney U test (Wilcoxon rank-sum test)
-- **Binary outcome**: Chi-square test or Fisher's exact test (if expected counts < 5)
-- **Ordinal outcome**: Mann-Whitney U test
+#### 兩個獨立組
+- **連續結果、常態分布**：獨立樣本 t 檢定
+- **連續結果、非常態**：Mann-Whitney U 檢定（Wilcoxon 等級和檢定）
+- **二元結果**：卡方檢定或 Fisher 精確檢定（如果期望次數 < 5）
+- **序數結果**：Mann-Whitney U 檢定
 
-#### Two Paired/Dependent Groups
-- **Continuous outcome, normally distributed**: Paired t-test
-- **Continuous outcome, non-normal**: Wilcoxon signed-rank test
-- **Binary outcome**: McNemar's test
-- **Ordinal outcome**: Wilcoxon signed-rank test
+#### 兩個配對/相依組
+- **連續結果、常態分布**：配對 t 檢定
+- **連續結果、非常態**：Wilcoxon 符號等級檢定
+- **二元結果**：McNemar 檢定
+- **序數結果**：Wilcoxon 符號等級檢定
 
-#### Three or More Independent Groups
-- **Continuous outcome, normally distributed, equal variances**: One-way ANOVA
-- **Continuous outcome, normally distributed, unequal variances**: Welch's ANOVA
-- **Continuous outcome, non-normal**: Kruskal-Wallis H test
-- **Binary/categorical outcome**: Chi-square test
-- **Ordinal outcome**: Kruskal-Wallis H test
+#### 三組以上獨立組
+- **連續結果、常態分布、變異數相等**：單因子變異數分析
+- **連續結果、常態分布、變異數不等**：Welch 變異數分析
+- **連續結果、非常態**：Kruskal-Wallis H 檢定
+- **二元/類別結果**：卡方檢定
+- **序數結果**：Kruskal-Wallis H 檢定
 
-#### Three or More Paired/Dependent Groups
-- **Continuous outcome, normally distributed**: Repeated measures ANOVA
-- **Continuous outcome, non-normal**: Friedman test
-- **Binary outcome**: Cochran's Q test
+#### 三組以上配對/相依組
+- **連續結果、常態分布**：重複測量變異數分析
+- **連續結果、非常態**：Friedman 檢定
+- **二元結果**：Cochran's Q 檢定
 
-#### Multiple Factors (Factorial Designs)
-- **Continuous outcome**: Two-way ANOVA (or higher-way ANOVA)
-- **With covariates**: ANCOVA
-- **Mixed within and between factors**: Mixed ANOVA
+#### 多因子（因子設計）
+- **連續結果**：雙因子變異數分析（或更高階變異數分析）
+- **含共變數**：共變數分析（ANCOVA）
+- **混合組內和組間因子**：混合變異數分析
 
-### 2. Relationships Between Variables
+### 2. 變數間的關係
 
-#### Two Continuous Variables
-- **Linear relationship, bivariate normal**: Pearson correlation
-- **Monotonic relationship or non-normal**: Spearman rank correlation
-- **Rank-based data**: Spearman or Kendall's tau
+#### 兩個連續變數
+- **線性關係、雙變量常態**：Pearson 相關
+- **單調關係或非常態**：Spearman 等級相關
+- **等級資料**：Spearman 或 Kendall's tau
 
-#### One Continuous Outcome, One or More Predictors
-- **Single continuous predictor**: Simple linear regression
-- **Multiple continuous/categorical predictors**: Multiple linear regression
-- **Categorical predictors**: ANOVA/ANCOVA framework
-- **Non-linear relationships**: Polynomial regression or generalized additive models (GAM)
+#### 一個連續結果、一個或多個預測變數
+- **單一連續預測變數**：簡單線性迴歸
+- **多個連續/類別預測變數**：多元線性迴歸
+- **類別預測變數**：變異數分析/共變數分析框架
+- **非線性關係**：多項式迴歸或廣義加法模型（GAM）
 
-#### Binary Outcome
-- **Single predictor**: Logistic regression
-- **Multiple predictors**: Multiple logistic regression
-- **Rare events**: Exact logistic regression or Firth's method
+#### 二元結果
+- **單一預測變數**：邏輯斯迴歸
+- **多個預測變數**：多元邏輯斯迴歸
+- **稀有事件**：精確邏輯斯迴歸或 Firth 方法
 
-#### Count Outcome
-- **Poisson-distributed**: Poisson regression
-- **Overdispersed counts**: Negative binomial regression
-- **Zero-inflated**: Zero-inflated Poisson/negative binomial
+#### 計數結果
+- **Poisson 分布**：Poisson 迴歸
+- **過度離散計數**：負二項迴歸
+- **零膨脹**：零膨脹 Poisson/負二項迴歸
 
-#### Time-to-Event Outcome
-- **Comparing survival curves**: Log-rank test
-- **Modeling with covariates**: Cox proportional hazards regression
-- **Parametric survival models**: Weibull, exponential, log-normal
+#### 事件-時間結果
+- **比較存活曲線**：Log-rank 檢定
+- **含共變數的建模**：Cox 比例風險迴歸
+- **參數存活模型**：Weibull、指數、對數常態
 
-### 3. Agreement and Reliability
+### 3. 一致性和信度
 
-#### Inter-Rater Reliability
-- **Categorical ratings, 2 raters**: Cohen's kappa
-- **Categorical ratings, >2 raters**: Fleiss' kappa or Krippendorff's alpha
-- **Continuous ratings**: Intraclass correlation coefficient (ICC)
+#### 評分者間信度
+- **類別評分、2 位評分者**：Cohen's kappa
+- **類別評分、>2 位評分者**：Fleiss' kappa 或 Krippendorff's alpha
+- **連續評分**：組內相關係數（ICC）
 
-#### Test-Retest Reliability
-- **Continuous measurements**: ICC or Pearson correlation
-- **Internal consistency**: Cronbach's alpha
+#### 重測信度
+- **連續測量**：ICC 或 Pearson 相關
+- **內部一致性**：Cronbach's alpha
 
-#### Agreement Between Methods
-- **Continuous measurements**: Bland-Altman analysis
-- **Categorical classifications**: Cohen's kappa
+#### 方法間一致性
+- **連續測量**：Bland-Altman 分析
+- **類別分類**：Cohen's kappa
 
-### 4. Categorical Data Analysis
+### 4. 類別資料分析
 
-#### Contingency Tables
-- **2x2 table**: Chi-square test or Fisher's exact test
-- **Larger than 2x2**: Chi-square test
-- **Ordered categories**: Cochran-Armitage trend test
-- **Paired categories**: McNemar's test (2x2) or McNemar-Bowker test (larger)
+#### 列聯表
+- **2x2 表**：卡方檢定或 Fisher 精確檢定
+- **大於 2x2**：卡方檢定
+- **有序類別**：Cochran-Armitage 趨勢檢定
+- **配對類別**：McNemar 檢定（2x2）或 McNemar-Bowker 檢定（較大）
 
-### 5. Bayesian Alternatives
+### 5. 貝氏替代方法
 
-Any of the above tests can be performed using Bayesian methods:
-- **Group comparisons**: Bayesian t-test, Bayesian ANOVA
-- **Correlations**: Bayesian correlation
-- **Regression**: Bayesian linear/logistic regression
+以上任何檢定都可以使用貝氏方法執行：
+- **組別比較**：貝氏 t 檢定、貝氏變異數分析
+- **相關**：貝氏相關
+- **迴歸**：貝氏線性/邏輯斯迴歸
 
-**Advantages of Bayesian approaches:**
-- Provides probability of hypotheses given data
-- Naturally incorporates prior information
-- Provides credible intervals instead of confidence intervals
-- No p-value interpretation issues
+**貝氏方法的優勢：**
+- 提供給定資料下假設的機率
+- 自然地納入先驗資訊
+- 提供可信區間而非信賴區間
+- 沒有 p 值解讀問題
 
-## Key Considerations
+## 關鍵考量
 
-### Sample Size
-- Small samples (n < 30): Consider non-parametric tests or exact methods
-- Very large samples: Even small effects may be statistically significant; focus on effect sizes
+### 樣本大小
+- 小樣本（n < 30）：考慮無母數檢定或精確方法
+- 非常大的樣本：即使是小效果也可能統計顯著；關注效果量
 
-### Multiple Comparisons
-- When conducting multiple tests, adjust for multiple comparisons using:
-  - Bonferroni correction (conservative)
-  - Holm-Bonferroni (less conservative)
-  - False Discovery Rate (FDR) control (Benjamini-Hochberg)
-  - Tukey HSD for post-hoc ANOVA comparisons
+### 多重比較
+- 進行多個檢定時，調整多重比較使用：
+  - Bonferroni 校正（保守）
+  - Holm-Bonferroni（較不保守）
+  - 偽發現率（FDR）控制（Benjamini-Hochberg）
+  - Tukey HSD 用於變異數分析事後比較
 
-### Missing Data
-- Complete case analysis (listwise deletion)
-- Multiple imputation
-- Maximum likelihood methods
-- Ensure missing data mechanism is understood (MCAR, MAR, MNAR)
+### 缺失資料
+- 完整案例分析（逐列刪除）
+- 多重插補
+- 最大概似法
+- 確保了解缺失資料機制（MCAR、MAR、MNAR）
 
-### Effect Sizes
-- Always report effect sizes alongside p-values
-- See `effect_sizes_and_power.md` for guidance
+### 效果量
+- 始終報告效果量連同 p 值
+- 參見 `effect_sizes_and_power.md` 獲取指南
 
-### Study Design Considerations
-- Randomized controlled trials: Standard parametric/non-parametric tests
-- Observational studies: Consider confounding and use regression/matching
-- Clustered/nested data: Use mixed-effects models or GEE
-- Time series: Use time series methods (ARIMA, etc.)
+### 研究設計考量
+- 隨機對照試驗：標準母數/無母數檢定
+- 觀察性研究：考慮混淆並使用迴歸/配對
+- 群集/巢狀資料：使用混合效果模型或 GEE
+- 時間序列：使用時間序列方法（ARIMA 等）

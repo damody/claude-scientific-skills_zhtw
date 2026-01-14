@@ -1,378 +1,378 @@
-# NetworkX Graph Generators
+# NetworkX 圖生成器
 
-## Classic Graphs
+## 經典圖
 
-### Complete Graphs
+### 完全圖
 ```python
-# Complete graph (all nodes connected to all others)
+# 完全圖（所有節點相互連接）
 G = nx.complete_graph(n=10)
 
-# Complete bipartite graph
+# 完全二部圖
 G = nx.complete_bipartite_graph(n1=5, n2=7)
 
-# Complete multipartite graph
-G = nx.complete_multipartite_graph(3, 4, 5)  # Three partitions
+# 完全多部圖
+G = nx.complete_multipartite_graph(3, 4, 5)  # 三個分區
 ```
 
-### Cycle and Path Graphs
+### 環圖和路徑圖
 ```python
-# Cycle graph (nodes arranged in circle)
+# 環圖（節點排列成圓形）
 G = nx.cycle_graph(n=20)
 
-# Path graph (linear chain)
+# 路徑圖（線性鏈）
 G = nx.path_graph(n=15)
 
-# Circular ladder graph
+# 圓形梯子圖
 G = nx.circular_ladder_graph(n=10)
 ```
 
-### Regular Graphs
+### 正則圖
 ```python
-# Empty graph (no edges)
+# 空圖（無邊）
 G = nx.empty_graph(n=10)
 
-# Null graph (no nodes)
+# 零圖（無節點）
 G = nx.null_graph()
 
-# Star graph (one central node connected to all others)
-G = nx.star_graph(n=19)  # Creates 20-node star
+# 星形圖（一個中心節點連接所有其他節點）
+G = nx.star_graph(n=19)  # 建立 20 節點星形
 
-# Wheel graph (cycle with central hub)
+# 輪形圖（帶中心軸的環）
 G = nx.wheel_graph(n=10)
 ```
 
-### Special Named Graphs
+### 特殊命名圖
 ```python
-# Bull graph
+# 牛頭圖
 G = nx.bull_graph()
 
-# Chvatal graph
+# Chvatal 圖
 G = nx.chvatal_graph()
 
-# Cubical graph
+# 立方體圖
 G = nx.cubical_graph()
 
-# Diamond graph
+# 菱形圖
 G = nx.diamond_graph()
 
-# Dodecahedral graph
+# 正十二面體圖
 G = nx.dodecahedral_graph()
 
-# Heawood graph
+# Heawood 圖
 G = nx.heawood_graph()
 
-# House graph
+# 房屋圖
 G = nx.house_graph()
 
-# Petersen graph
+# Petersen 圖
 G = nx.petersen_graph()
 
-# Karate club graph (classic social network)
+# 空手道俱樂部圖（經典社交網路）
 G = nx.karate_club_graph()
 ```
 
-## Random Graphs
+## 隨機圖
 
-### Erdős-Rényi Graphs
+### Erdős-Rényi 圖
 ```python
-# G(n, p) model: n nodes, edge probability p
+# G(n, p) 模型：n 個節點，邊機率 p
 G = nx.erdos_renyi_graph(n=100, p=0.1, seed=42)
 
-# G(n, m) model: n nodes, exactly m edges
+# G(n, m) 模型：n 個節點，剛好 m 條邊
 G = nx.gnm_random_graph(n=100, m=500, seed=42)
 
-# Fast version (for large sparse graphs)
+# 快速版本（用於大型稀疏圖）
 G = nx.fast_gnp_random_graph(n=10000, p=0.0001, seed=42)
 ```
 
-### Watts-Strogatz Small-World
+### Watts-Strogatz 小世界
 ```python
-# Small-world network with rewiring
-# n nodes, k nearest neighbors, rewiring probability p
+# 帶重連的小世界網路
+# n 個節點，k 個最近鄰，重連機率 p
 G = nx.watts_strogatz_graph(n=100, k=6, p=0.1, seed=42)
 
-# Connected version (guarantees connectivity)
+# 連通版本（保證連通性）
 G = nx.connected_watts_strogatz_graph(n=100, k=6, p=0.1, tries=100, seed=42)
 ```
 
-### Barabási-Albert Preferential Attachment
+### Barabási-Albert 優先附著
 ```python
-# Scale-free network (power-law degree distribution)
-# n nodes, m edges to attach from new node
+# 無標度網路（冪律度分佈）
+# n 個節點，新節點附著 m 條邊
 G = nx.barabasi_albert_graph(n=100, m=3, seed=42)
 
-# Extended version with parameters
+# 帶參數的擴展版本
 G = nx.extended_barabasi_albert_graph(n=100, m=3, p=0.5, q=0.2, seed=42)
 ```
 
-### Power Law Degree Sequence
+### 冪律度序列
 ```python
-# Power law cluster graph
+# 冪律聚類圖
 G = nx.powerlaw_cluster_graph(n=100, m=3, p=0.1, seed=42)
 
-# Random power law tree
+# 隨機冪律樹
 G = nx.random_powerlaw_tree(n=100, gamma=3, seed=42, tries=1000)
 ```
 
-### Configuration Model
+### 配置模型
 ```python
-# Graph with specified degree sequence
+# 指定度序列的圖
 degree_sequence = [3, 3, 3, 3, 2, 2, 2, 1, 1, 1]
 G = nx.configuration_model(degree_sequence, seed=42)
 
-# Remove self-loops and parallel edges
+# 移除自環和平行邊
 G = nx.Graph(G)
 G.remove_edges_from(nx.selfloop_edges(G))
 ```
 
-### Random Geometric Graphs
+### 隨機幾何圖
 ```python
-# Nodes in unit square, edges if distance < radius
+# 單位正方形中的節點，距離 < 半徑則連邊
 G = nx.random_geometric_graph(n=100, radius=0.2, seed=42)
 
-# With positions
+# 帶位置
 pos = nx.get_node_attributes(G, 'pos')
 ```
 
-### Random Regular Graphs
+### 隨機正則圖
 ```python
-# Every node has exactly d neighbors
+# 每個節點剛好有 d 個鄰居
 G = nx.random_regular_graph(d=3, n=100, seed=42)
 ```
 
-### Stochastic Block Model
+### 隨機區塊模型
 ```python
-# Community structure model
-sizes = [50, 50, 50]  # Three communities
-probs = [[0.25, 0.05, 0.02],  # Within and between community probabilities
+# 社群結構模型
+sizes = [50, 50, 50]  # 三個社群
+probs = [[0.25, 0.05, 0.02],  # 社群內和社群間機率
          [0.05, 0.35, 0.07],
          [0.02, 0.07, 0.40]]
 G = nx.stochastic_block_model(sizes, probs, seed=42)
 ```
 
-## Lattice and Grid Graphs
+## 格子和網格圖
 
-### Grid Graphs
+### 網格圖
 ```python
-# 2D grid
-G = nx.grid_2d_graph(m=5, n=7)  # 5x7 grid
+# 2D 網格
+G = nx.grid_2d_graph(m=5, n=7)  # 5x7 網格
 
-# 3D grid
-G = nx.grid_graph(dim=[5, 7, 3])  # 5x7x3 grid
+# 3D 網格
+G = nx.grid_graph(dim=[5, 7, 3])  # 5x7x3 網格
 
-# Hexagonal lattice
+# 六邊形格子
 G = nx.hexagonal_lattice_graph(m=5, n=7)
 
-# Triangular lattice
+# 三角形格子
 G = nx.triangular_lattice_graph(m=5, n=7)
 ```
 
-### Hypercube
+### 超立方體
 ```python
-# n-dimensional hypercube
+# n 維超立方體
 G = nx.hypercube_graph(n=4)
 ```
 
-## Tree Graphs
+## 樹形圖
 
-### Random Trees
+### 隨機樹
 ```python
-# Random tree with n nodes
+# n 個節點的隨機樹
 G = nx.random_tree(n=100, seed=42)
 
-# Prefix tree (tries)
+# 前綴樹（字典樹）
 G = nx.prefix_tree([[0, 1, 2], [0, 1, 3], [0, 4]])
 ```
 
-### Balanced Trees
+### 平衡樹
 ```python
-# Balanced r-ary tree of height h
-G = nx.balanced_tree(r=2, h=5)  # Binary tree, height 5
+# 高度為 h 的平衡 r 分樹
+G = nx.balanced_tree(r=2, h=5)  # 二元樹，高度 5
 
-# Full r-ary tree with n nodes
-G = nx.full_rary_tree(r=3, n=100)  # Ternary tree
+# n 個節點的完全 r 分樹
+G = nx.full_rary_tree(r=3, n=100)  # 三元樹
 ```
 
-### Barbell and Lollipop Graphs
+### 啞鈴圖和棒棒糖圖
 ```python
-# Two complete graphs connected by path
-G = nx.barbell_graph(m1=5, m2=3)  # Two K_5 graphs with 3-node path
+# 兩個完全圖由路徑連接
+G = nx.barbell_graph(m1=5, m2=3)  # 兩個 K_5 圖由 3 節點路徑連接
 
-# Complete graph connected to path
-G = nx.lollipop_graph(m=7, n=5)  # K_7 with 5-node path
+# 完全圖連接路徑
+G = nx.lollipop_graph(m=7, n=5)  # K_7 連接 5 節點路徑
 ```
 
-## Social Network Models
+## 社交網路模型
 
-### Karate Club
+### 空手道俱樂部
 ```python
-# Zachary's karate club (classic social network)
+# Zachary 空手道俱樂部（經典社交網路）
 G = nx.karate_club_graph()
 ```
 
-### Davis Southern Women
+### 戴維斯南方婦女
 ```python
-# Bipartite social network
+# 二部社交網路
 G = nx.davis_southern_women_graph()
 ```
 
-### Florentine Families
+### 佛羅倫斯家族
 ```python
-# Historical marriage and business networks
+# 歷史婚姻和商業網路
 G = nx.florentine_families_graph()
 ```
 
-### Les Misérables
+### 悲慘世界
 ```python
-# Character co-occurrence network
+# 角色共現網路
 G = nx.les_miserables_graph()
 ```
 
-## Directed Graph Generators
+## 有向圖生成器
 
-### Random Directed Graphs
+### 隨機有向圖
 ```python
-# Directed Erdős-Rényi
+# 有向 Erdős-Rényi
 G = nx.gnp_random_graph(n=100, p=0.1, directed=True, seed=42)
 
-# Scale-free directed
+# 無標度有向圖
 G = nx.scale_free_graph(n=100, seed=42)
 ```
 
-### DAG (Directed Acyclic Graph)
+### DAG（有向無環圖）
 ```python
-# Random DAG
+# 隨機 DAG
 G = nx.gnp_random_graph(n=20, p=0.2, directed=True, seed=42)
-G = nx.DiGraph([(u, v) for (u, v) in G.edges() if u < v])  # Remove backward edges
+G = nx.DiGraph([(u, v) for (u, v) in G.edges() if u < v])  # 移除反向邊
 ```
 
-### Tournament Graphs
+### 競賽圖
 ```python
-# Random tournament (complete directed graph)
+# 隨機競賽（完全有向圖）
 G = nx.random_tournament(n=10, seed=42)
 ```
 
-## Duplication-Divergence Models
+## 複製分歧模型
 
-### Duplication Divergence Graph
+### 複製分歧圖
 ```python
-# Biological network model (protein interaction networks)
+# 生物網路模型（蛋白質交互作用網路）
 G = nx.duplication_divergence_graph(n=100, p=0.5, seed=42)
 ```
 
-## Degree Sequence Generators
+## 度序列生成器
 
-### Valid Degree Sequences
+### 有效度序列
 ```python
-# Check if degree sequence is valid (graphical)
+# 檢查度序列是否有效（可圖化）
 sequence = [3, 3, 3, 3, 2, 2, 2, 1, 1, 1]
 is_valid = nx.is_graphical(sequence)
 
-# For directed graphs
+# 對於有向圖
 in_sequence = [2, 2, 2, 1, 1]
 out_sequence = [2, 2, 1, 2, 1]
 is_valid = nx.is_digraphical(in_sequence, out_sequence)
 ```
 
-### Creating from Degree Sequence
+### 從度序列建立
 ```python
-# Havel-Hakimi algorithm
+# Havel-Hakimi 演算法
 G = nx.havel_hakimi_graph(degree_sequence)
 
-# Configuration model (allows multi-edges/self-loops)
+# 配置模型（允許多邊/自環）
 G = nx.configuration_model(degree_sequence)
 
-# Directed configuration model
+# 有向配置模型
 G = nx.directed_configuration_model(in_degree_sequence, out_degree_sequence)
 ```
 
-## Bipartite Graphs
+## 二部圖
 
-### Random Bipartite
+### 隨機二部圖
 ```python
-# Random bipartite with two node sets
+# 具有兩個節點集的隨機二部圖
 G = nx.bipartite.random_graph(n=50, m=30, p=0.1, seed=42)
 
-# Configuration model for bipartite
+# 二部圖的配置模型
 G = nx.bipartite.configuration_model(deg1=[3, 3, 2], deg2=[2, 2, 2, 2], seed=42)
 ```
 
-### Bipartite Generators
+### 二部圖生成器
 ```python
-# Complete bipartite
+# 完全二部圖
 G = nx.complete_bipartite_graph(n1=5, n2=7)
 
-# Gnmk random bipartite (n, m nodes, k edges)
+# Gnmk 隨機二部圖（n、m 節點，k 條邊）
 G = nx.bipartite.gnmk_random_graph(n=10, m=8, k=20, seed=42)
 ```
 
-## Operators on Graphs
+## 圖運算子
 
-### Graph Operations
+### 圖運算
 ```python
-# Union
+# 聯集
 G = nx.union(G1, G2)
 
-# Disjoint union
+# 不相交聯集
 G = nx.disjoint_union(G1, G2)
 
-# Compose (overlay)
+# 組合（疊加）
 G = nx.compose(G1, G2)
 
-# Complement
+# 補圖
 G = nx.complement(G1)
 
-# Cartesian product
+# 笛卡爾積
 G = nx.cartesian_product(G1, G2)
 
-# Tensor (Kronecker) product
+# 張量（Kronecker）積
 G = nx.tensor_product(G1, G2)
 
-# Strong product
+# 強積
 G = nx.strong_product(G1, G2)
 ```
 
-## Customization and Seeding
+## 自訂和種子
 
-### Setting Random Seed
-Always set seed for reproducible graphs:
+### 設定隨機種子
+始終設定種子以獲得可重現的圖：
 ```python
 G = nx.erdos_renyi_graph(n=100, p=0.1, seed=42)
 ```
 
-### Converting Graph Types
+### 轉換圖類型
 ```python
-# Convert to specific type
+# 轉換為特定類型
 G_directed = G.to_directed()
 G_undirected = G.to_undirected()
 G_multi = nx.MultiGraph(G)
 ```
 
-## Performance Considerations
+## 效能考量
 
-### Fast Generators
-For large graphs, use optimized generators:
+### 快速生成器
+對於大型圖，使用優化的生成器：
 ```python
-# Fast ER graph (sparse)
+# 快速 ER 圖（稀疏）
 G = nx.fast_gnp_random_graph(n=10000, p=0.0001, seed=42)
 ```
 
-### Memory Efficiency
-Some generators create graphs incrementally to save memory. For very large graphs, consider:
-- Using sparse representations
-- Generating subgraphs as needed
-- Working with adjacency lists or edge lists instead of full graphs
+### 記憶體效率
+某些生成器增量建立圖以節省記憶體。對於非常大的圖，考慮：
+- 使用稀疏表示
+- 根據需要生成子圖
+- 使用鄰接列表或邊列表而非完整圖
 
-## Validation and Properties
+## 驗證和屬性
 
-### Checking Generated Graphs
+### 檢查生成的圖
 ```python
-# Verify properties
+# 驗證屬性
 print(f"Nodes: {G.number_of_nodes()}")
 print(f"Edges: {G.number_of_edges()}")
 print(f"Density: {nx.density(G)}")
 print(f"Connected: {nx.is_connected(G)}")
 
-# Degree distribution
+# 度分佈
 degree_sequence = sorted([d for n, d in G.degree()], reverse=True)
 ```

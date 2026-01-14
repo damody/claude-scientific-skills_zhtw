@@ -1,548 +1,548 @@
-# Data Analysis Patterns for Market Research
+# 市場研究資料分析模式
 
-Templates and frameworks for conducting rigorous market analysis.
-
----
-
-## Market Sizing Frameworks
-
-### TAM/SAM/SOM Analysis
-
-**Total Addressable Market (TAM)** represents the total revenue opportunity if 100% market share was achieved.
-
-#### Top-Down Approach
-```
-TAM = Total Industry Revenue (from market research reports)
-
-Example:
-- Global AI Software Market (2024): $184 billion
-- Source: Gartner, IDC, or similar
-```
-
-#### Bottom-Up Approach
-```
-TAM = Number of Potential Customers × Average Revenue per Customer
-
-Example:
-- Number of enterprises globally: 400 million
-- Target segment (large enterprises): 50,000
-- Average annual spend on solution: $500,000
-- TAM = 50,000 × $500,000 = $25 billion
-```
-
-**Serviceable Addressable Market (SAM)** represents the portion of TAM that can be served given product/service capabilities.
-
-```
-SAM = TAM × Applicable Segment %
-
-Example:
-- TAM: $25 billion
-- Geographic constraint (North America only): 40%
-- Product fit (enterprise only): 60%
-- SAM = $25B × 40% × 60% = $6 billion
-```
-
-**Serviceable Obtainable Market (SOM)** represents realistic market share capture.
-
-```
-SOM = SAM × Achievable Market Share %
-
-Example:
-- SAM: $6 billion
-- Conservative market share (5%): $300 million
-- Base case market share (10%): $600 million
-- Optimistic market share (15%): $900 million
-```
-
-### Growth Rate Calculation
-
-#### CAGR (Compound Annual Growth Rate)
-```
-CAGR = (End Value / Start Value)^(1/n) - 1
-
-Where n = number of years
-
-Example:
-- 2020 market size: $10 billion
-- 2024 market size: $18 billion
-- n = 4 years
-- CAGR = (18/10)^(1/4) - 1 = 15.8%
-```
-
-#### Year-over-Year Growth
-```
-YoY Growth = (Current Year - Previous Year) / Previous Year × 100
-
-Example:
-- 2023: $15 billion
-- 2024: $18 billion
-- YoY Growth = (18-15)/15 × 100 = 20%
-```
+進行嚴謹市場分析的範本和框架。
 
 ---
 
-## Porter's Five Forces Analysis
+## 市場規模評估框架
 
-### Framework Template
+### TAM/SAM/SOM 分析
 
-For each force, assess: **HIGH**, **MEDIUM**, or **LOW**
+**總潛在市場（TAM）** 代表如果達到 100% 市場份額時可獲得的總營收機會。
 
-#### 1. Threat of New Entrants
+#### 自上而下方法
+```
+TAM = 總產業營收（來自市場研究報告）
 
-**Factors to evaluate:**
-| Factor | Assessment | Notes |
+範例：
+- 全球 AI 軟體市場（2024 年）：1840 億美元
+- 來源：Gartner、IDC 或類似機構
+```
+
+#### 自下而上方法
+```
+TAM = 潛在客戶數量 × 平均每客戶營收
+
+範例：
+- 全球企業數量：4 億
+- 目標區隔（大型企業）：50,000
+- 年均解決方案支出：50 萬美元
+- TAM = 50,000 × 50 萬美元 = 250 億美元
+```
+
+**可服務潛在市場（SAM）** 代表考量產品/服務能力後可服務的 TAM 部分。
+
+```
+SAM = TAM × 適用區隔百分比
+
+範例：
+- TAM：250 億美元
+- 地理限制（僅北美）：40%
+- 產品適配（僅企業）：60%
+- SAM = 250 億美元 × 40% × 60% = 60 億美元
+```
+
+**可獲得服務市場（SOM）** 代表實際可獲得的市場份額。
+
+```
+SOM = SAM × 可達成市場份額百分比
+
+範例：
+- SAM：60 億美元
+- 保守市場份額（5%）：3 億美元
+- 基本情境市場份額（10%）：6 億美元
+- 樂觀市場份額（15%）：9 億美元
+```
+
+### 成長率計算
+
+#### 年複合成長率（CAGR）
+```
+CAGR = (期末值 / 期初值)^(1/n) - 1
+
+其中 n = 年數
+
+範例：
+- 2020 年市場規模：100 億美元
+- 2024 年市場規模：180 億美元
+- n = 4 年
+- CAGR = (180/100)^(1/4) - 1 = 15.8%
+```
+
+#### 年增率
+```
+年增率 = (當年 - 前一年) / 前一年 × 100
+
+範例：
+- 2023 年：150 億美元
+- 2024 年：180 億美元
+- 年增率 = (180-150)/150 × 100 = 20%
+```
+
+---
+
+## 波特五力分析
+
+### 框架範本
+
+對每一力量評估：**高**、**中** 或 **低**
+
+#### 1. 新進入者威脅
+
+**評估因素：**
+| 因素 | 評估 | 備註 |
 |--------|------------|-------|
-| Capital requirements | High/Med/Low | $ required to enter |
-| Economies of scale | Strong/Moderate/Weak | Incumbent advantages |
-| Brand loyalty | High/Med/Low | Customer switching cost |
-| Access to distribution | Easy/Moderate/Difficult | Channel availability |
-| Regulatory barriers | High/Med/Low | Licensing, certifications |
-| Proprietary technology | Critical/Important/Minor | IP and know-how |
-| Expected retaliation | Aggressive/Moderate/Passive | Incumbent response |
+| 資本需求 | 高/中/低 | 進入所需資金 |
+| 規模經濟 | 強/中/弱 | 既有者優勢 |
+| 品牌忠誠度 | 高/中/低 | 客戶轉換成本 |
+| 通路取得 | 容易/中等/困難 | 管道可及性 |
+| 法規障礙 | 高/中/低 | 許可、認證 |
+| 專有技術 | 關鍵/重要/次要 | 智慧財產和專業知識 |
+| 預期報復 | 積極/中等/被動 | 既有者回應 |
 
-**Overall Assessment:** [HIGH/MEDIUM/LOW]
+**整體評估：**【高/中/低】
 
-**Key Insights:** [Summary of implications]
+**關鍵洞察：**【意涵摘要】
 
-#### 2. Bargaining Power of Suppliers
+#### 2. 供應商議價能力
 
-**Factors to evaluate:**
-| Factor | Assessment | Notes |
+**評估因素：**
+| 因素 | 評估 | 備註 |
 |--------|------------|-------|
-| Supplier concentration | High/Med/Low | Number of suppliers |
-| Switching costs | High/Med/Low | Cost to change suppliers |
-| Supplier differentiation | High/Med/Low | Uniqueness of inputs |
-| Forward integration threat | High/Med/Low | Can suppliers compete? |
-| Importance to supplier | Critical/Important/Minor | Your share of their revenue |
-| Substitute inputs | Many/Some/Few | Alternatives available |
+| 供應商集中度 | 高/中/低 | 供應商數量 |
+| 轉換成本 | 高/中/低 | 更換供應商成本 |
+| 供應商差異化 | 高/中/低 | 投入獨特性 |
+| 前向整合威脅 | 高/中/低 | 供應商能否競爭？ |
+| 對供應商重要性 | 關鍵/重要/次要 | 您佔其營收份額 |
+| 替代投入 | 多/部分/少 | 可用替代品 |
 
-**Overall Assessment:** [HIGH/MEDIUM/LOW]
+**整體評估：**【高/中/低】
 
-#### 3. Bargaining Power of Buyers
+#### 3. 買家議價能力
 
-**Factors to evaluate:**
-| Factor | Assessment | Notes |
+**評估因素：**
+| 因素 | 評估 | 備註 |
 |--------|------------|-------|
-| Buyer concentration | High/Med/Low | Few large vs. many small |
-| Purchase volume | Large/Medium/Small | Relative importance |
-| Switching costs | Low/Med/High | Cost to change vendors |
-| Price sensitivity | High/Med/Low | Focus on price vs. value |
-| Backward integration threat | High/Med/Low | Can buyers self-supply? |
-| Information availability | Full/Partial/Limited | Market transparency |
+| 買家集中度 | 高/中/低 | 少數大買家 vs. 眾多小買家 |
+| 購買量 | 大/中/小 | 相對重要性 |
+| 轉換成本 | 低/中/高 | 更換供應商成本 |
+| 價格敏感度 | 高/中/低 | 注重價格 vs. 價值 |
+| 後向整合威脅 | 高/中/低 | 買家能否自行供應？ |
+| 資訊可及性 | 完整/部分/有限 | 市場透明度 |
 
-**Overall Assessment:** [HIGH/MEDIUM/LOW]
+**整體評估：**【高/中/低】
 
-#### 4. Threat of Substitutes
+#### 4. 替代品威脅
 
-**Factors to evaluate:**
-| Factor | Assessment | Notes |
+**評估因素：**
+| 因素 | 評估 | 備註 |
 |--------|------------|-------|
-| Substitute availability | Many/Some/Few | Number of alternatives |
-| Price-performance ratio | Better/Same/Worse | Value comparison |
-| Switching costs | Low/Med/High | Friction to substitute |
-| Buyer propensity to switch | High/Med/Low | Willingness to change |
-| Perceived differentiation | Low/Med/High | Unique value |
+| 替代品可及性 | 多/部分/少 | 替代品數量 |
+| 價格效能比 | 較佳/相同/較差 | 價值比較 |
+| 轉換成本 | 低/中/高 | 替代阻力 |
+| 買家轉換傾向 | 高/中/低 | 改變意願 |
+| 感知差異化 | 低/中/高 | 獨特價值 |
 
-**Overall Assessment:** [HIGH/MEDIUM/LOW]
+**整體評估：**【高/中/低】
 
-#### 5. Competitive Rivalry
+#### 5. 競爭對抗
 
-**Factors to evaluate:**
-| Factor | Assessment | Notes |
+**評估因素：**
+| 因素 | 評估 | 備註 |
 |--------|------------|-------|
-| Number of competitors | Many/Several/Few | Market fragmentation |
-| Industry growth | Slow/Moderate/Fast | Growth rate impact |
-| Fixed costs | High/Med/Low | Pressure to fill capacity |
-| Product differentiation | Low/Med/High | Commoditization level |
-| Exit barriers | High/Med/Low | Difficulty leaving market |
-| Strategic stakes | High/Med/Low | Importance to competitors |
+| 競爭者數量 | 多/數個/少 | 市場分散程度 |
+| 產業成長 | 慢/中等/快 | 成長率影響 |
+| 固定成本 | 高/中/低 | 填滿產能壓力 |
+| 產品差異化 | 低/中/高 | 商品化程度 |
+| 退出障礙 | 高/中/低 | 離開市場難度 |
+| 策略利害關係 | 高/中/低 | 對競爭者的重要性 |
 
-**Overall Assessment:** [HIGH/MEDIUM/LOW]
+**整體評估：**【高/中/低】
 
-### Five Forces Summary Table
+### 五力分析摘要表
 
-| Force | Rating | Key Drivers | Implications |
+| 力量 | 評級 | 關鍵驅動因素 | 意涵 |
 |-------|--------|-------------|--------------|
-| New Entrants | [H/M/L] | [Top factors] | [Strategic impact] |
-| Supplier Power | [H/M/L] | [Top factors] | [Strategic impact] |
-| Buyer Power | [H/M/L] | [Top factors] | [Strategic impact] |
-| Substitutes | [H/M/L] | [Top factors] | [Strategic impact] |
-| Rivalry | [H/M/L] | [Top factors] | [Strategic impact] |
+| 新進入者 | [高/中/低] | [主要因素] | [策略影響] |
+| 供應商能力 | [高/中/低] | [主要因素] | [策略影響] |
+| 買家能力 | [高/中/低] | [主要因素] | [策略影響] |
+| 替代品 | [高/中/低] | [主要因素] | [策略影響] |
+| 對抗 | [高/中/低] | [主要因素] | [策略影響] |
 
-**Overall Industry Attractiveness:** [ATTRACTIVE / MODERATE / UNATTRACTIVE]
-
----
-
-## PESTLE Analysis
-
-### Framework Template
-
-#### Political Factors
-
-| Factor | Current State | Trend | Impact | Time Horizon |
-|--------|---------------|-------|--------|--------------|
-| Government stability | | ↑ ↓ → | H/M/L | Short/Med/Long |
-| Trade policies | | ↑ ↓ → | H/M/L | |
-| Tax regulations | | ↑ ↓ → | H/M/L | |
-| Government support | | ↑ ↓ → | H/M/L | |
-| Political relations | | ↑ ↓ → | H/M/L | |
-
-**Key Political Implications:** [Summary]
-
-#### Economic Factors
-
-| Factor | Current State | Trend | Impact | Time Horizon |
-|--------|---------------|-------|--------|--------------|
-| GDP growth | X.X% | ↑ ↓ → | H/M/L | |
-| Interest rates | X.X% | ↑ ↓ → | H/M/L | |
-| Inflation | X.X% | ↑ ↓ → | H/M/L | |
-| Exchange rates | | ↑ ↓ → | H/M/L | |
-| Consumer spending | | ↑ ↓ → | H/M/L | |
-| Unemployment | X.X% | ↑ ↓ → | H/M/L | |
-
-**Key Economic Implications:** [Summary]
-
-#### Social Factors
-
-| Factor | Current State | Trend | Impact | Time Horizon |
-|--------|---------------|-------|--------|--------------|
-| Demographics | | ↑ ↓ → | H/M/L | |
-| Cultural attitudes | | ↑ ↓ → | H/M/L | |
-| Consumer behavior | | ↑ ↓ → | H/M/L | |
-| Education levels | | ↑ ↓ → | H/M/L | |
-| Health consciousness | | ↑ ↓ → | H/M/L | |
-| Work-life balance | | ↑ ↓ → | H/M/L | |
-
-**Key Social Implications:** [Summary]
-
-#### Technological Factors
-
-| Factor | Current State | Trend | Impact | Time Horizon |
-|--------|---------------|-------|--------|--------------|
-| R&D activity | | ↑ ↓ → | H/M/L | |
-| Technology adoption | | ↑ ↓ → | H/M/L | |
-| Automation | | ↑ ↓ → | H/M/L | |
-| Digital infrastructure | | ↑ ↓ → | H/M/L | |
-| Innovation rate | | ↑ ↓ → | H/M/L | |
-| Disruptive tech | | ↑ ↓ → | H/M/L | |
-
-**Key Technological Implications:** [Summary]
-
-#### Legal Factors
-
-| Factor | Current State | Trend | Impact | Time Horizon |
-|--------|---------------|-------|--------|--------------|
-| Industry regulations | | ↑ ↓ → | H/M/L | |
-| Data protection | | ↑ ↓ → | H/M/L | |
-| Employment law | | ↑ ↓ → | H/M/L | |
-| Consumer protection | | ↑ ↓ → | H/M/L | |
-| IP rights | | ↑ ↓ → | H/M/L | |
-| Antitrust | | ↑ ↓ → | H/M/L | |
-
-**Key Legal Implications:** [Summary]
-
-#### Environmental Factors
-
-| Factor | Current State | Trend | Impact | Time Horizon |
-|--------|---------------|-------|--------|--------------|
-| Climate change | | ↑ ↓ → | H/M/L | |
-| Sustainability reqs | | ↑ ↓ → | H/M/L | |
-| Resource availability | | ↑ ↓ → | H/M/L | |
-| Waste management | | ↑ ↓ → | H/M/L | |
-| Carbon regulations | | ↑ ↓ → | H/M/L | |
-| Environmental awareness | | ↑ ↓ → | H/M/L | |
-
-**Key Environmental Implications:** [Summary]
+**整體產業吸引力：**【有吸引力 / 中等 / 無吸引力】
 
 ---
 
-## SWOT Analysis
+## PESTLE 分析
 
-### Framework Template
+### 框架範本
 
-#### Strengths (Internal, Positive)
-| Strength | Evidence | Strategic Value |
+#### 政治因素
+
+| 因素 | 目前狀態 | 趨勢 | 影響 | 時間範圍 |
+|--------|---------------|-------|--------|--------------|
+| 政府穩定性 | | ↑ ↓ → | 高/中/低 | 短/中/長 |
+| 貿易政策 | | ↑ ↓ → | 高/中/低 | |
+| 稅務法規 | | ↑ ↓ → | 高/中/低 | |
+| 政府支持 | | ↑ ↓ → | 高/中/低 | |
+| 政治關係 | | ↑ ↓ → | 高/中/低 | |
+
+**關鍵政治意涵：**【摘要】
+
+#### 經濟因素
+
+| 因素 | 目前狀態 | 趨勢 | 影響 | 時間範圍 |
+|--------|---------------|-------|--------|--------------|
+| GDP 成長 | X.X% | ↑ ↓ → | 高/中/低 | |
+| 利率 | X.X% | ↑ ↓ → | 高/中/低 | |
+| 通貨膨脹 | X.X% | ↑ ↓ → | 高/中/低 | |
+| 匯率 | | ↑ ↓ → | 高/中/低 | |
+| 消費支出 | | ↑ ↓ → | 高/中/低 | |
+| 失業率 | X.X% | ↑ ↓ → | 高/中/低 | |
+
+**關鍵經濟意涵：**【摘要】
+
+#### 社會因素
+
+| 因素 | 目前狀態 | 趨勢 | 影響 | 時間範圍 |
+|--------|---------------|-------|--------|--------------|
+| 人口結構 | | ↑ ↓ → | 高/中/低 | |
+| 文化態度 | | ↑ ↓ → | 高/中/低 | |
+| 消費者行為 | | ↑ ↓ → | 高/中/低 | |
+| 教育程度 | | ↑ ↓ → | 高/中/低 | |
+| 健康意識 | | ↑ ↓ → | 高/中/低 | |
+| 工作生活平衡 | | ↑ ↓ → | 高/中/低 | |
+
+**關鍵社會意涵：**【摘要】
+
+#### 技術因素
+
+| 因素 | 目前狀態 | 趨勢 | 影響 | 時間範圍 |
+|--------|---------------|-------|--------|--------------|
+| 研發活動 | | ↑ ↓ → | 高/中/低 | |
+| 技術採用 | | ↑ ↓ → | 高/中/低 | |
+| 自動化 | | ↑ ↓ → | 高/中/低 | |
+| 數位基礎設施 | | ↑ ↓ → | 高/中/低 | |
+| 創新率 | | ↑ ↓ → | 高/中/低 | |
+| 顛覆性技術 | | ↑ ↓ → | 高/中/低 | |
+
+**關鍵技術意涵：**【摘要】
+
+#### 法律因素
+
+| 因素 | 目前狀態 | 趨勢 | 影響 | 時間範圍 |
+|--------|---------------|-------|--------|--------------|
+| 產業法規 | | ↑ ↓ → | 高/中/低 | |
+| 資料保護 | | ↑ ↓ → | 高/中/低 | |
+| 勞動法 | | ↑ ↓ → | 高/中/低 | |
+| 消費者保護 | | ↑ ↓ → | 高/中/低 | |
+| 智慧財產權 | | ↑ ↓ → | 高/中/低 | |
+| 反壟斷 | | ↑ ↓ → | 高/中/低 | |
+
+**關鍵法律意涵：**【摘要】
+
+#### 環境因素
+
+| 因素 | 目前狀態 | 趨勢 | 影響 | 時間範圍 |
+|--------|---------------|-------|--------|--------------|
+| 氣候變遷 | | ↑ ↓ → | 高/中/低 | |
+| 永續性要求 | | ↑ ↓ → | 高/中/低 | |
+| 資源可及性 | | ↑ ↓ → | 高/中/低 | |
+| 廢棄物管理 | | ↑ ↓ → | 高/中/低 | |
+| 碳法規 | | ↑ ↓ → | 高/中/低 | |
+| 環境意識 | | ↑ ↓ → | 高/中/低 | |
+
+**關鍵環境意涵：**【摘要】
+
+---
+
+## SWOT 分析
+
+### 框架範本
+
+#### 優勢（內部、正面）
+| 優勢 | 證據 | 策略價值 |
 |----------|----------|-----------------|
-| [Strength 1] | [Data/proof] | High/Med/Low |
-| [Strength 2] | [Data/proof] | High/Med/Low |
-| [Strength 3] | [Data/proof] | High/Med/Low |
+| [優勢 1] | [資料/證明] | 高/中/低 |
+| [優勢 2] | [資料/證明] | 高/中/低 |
+| [優勢 3] | [資料/證明] | 高/中/低 |
 
-**Core Strengths Summary:** [2-3 sentence synthesis]
+**核心優勢摘要：**【2-3 句綜合】
 
-#### Weaknesses (Internal, Negative)
-| Weakness | Evidence | Severity |
+#### 劣勢（內部、負面）
+| 劣勢 | 證據 | 嚴重性 |
 |----------|----------|----------|
-| [Weakness 1] | [Data/proof] | Critical/Moderate/Minor |
-| [Weakness 2] | [Data/proof] | Critical/Moderate/Minor |
-| [Weakness 3] | [Data/proof] | Critical/Moderate/Minor |
+| [劣勢 1] | [資料/證明] | 關鍵/中等/輕微 |
+| [劣勢 2] | [資料/證明] | 關鍵/中等/輕微 |
+| [劣勢 3] | [資料/證明] | 關鍵/中等/輕微 |
 
-**Key Vulnerabilities Summary:** [2-3 sentence synthesis]
+**關鍵弱點摘要：**【2-3 句綜合】
 
-#### Opportunities (External, Positive)
-| Opportunity | Size/Potential | Timeframe |
+#### 機會（外部、正面）
+| 機會 | 規模/潛力 | 時間框架 |
 |-------------|----------------|-----------|
-| [Opportunity 1] | $X / High/Med/Low | Short/Med/Long |
-| [Opportunity 2] | $X / High/Med/Low | Short/Med/Long |
-| [Opportunity 3] | $X / High/Med/Low | Short/Med/Long |
+| [機會 1] | $X / 高/中/低 | 短/中/長 |
+| [機會 2] | $X / 高/中/低 | 短/中/長 |
+| [機會 3] | $X / 高/中/低 | 短/中/長 |
 
-**Priority Opportunities Summary:** [2-3 sentence synthesis]
+**優先機會摘要：**【2-3 句綜合】
 
-#### Threats (External, Negative)
-| Threat | Likelihood | Impact |
+#### 威脅（外部、負面）
+| 威脅 | 可能性 | 影響 |
 |--------|------------|--------|
-| [Threat 1] | High/Med/Low | High/Med/Low |
-| [Threat 2] | High/Med/Low | High/Med/Low |
-| [Threat 3] | High/Med/Low | High/Med/Low |
+| [威脅 1] | 高/中/低 | 高/中/低 |
+| [威脅 2] | 高/中/低 | 高/中/低 |
+| [威脅 3] | 高/中/低 | 高/中/低 |
 
-**Critical Threats Summary:** [2-3 sentence synthesis]
+**關鍵威脅摘要：**【2-3 句綜合】
 
-### SWOT Strategy Matrix
+### SWOT 策略矩陣
 
-| | **Strengths** | **Weaknesses** |
+| | **優勢** | **劣勢** |
 |---|---------------|----------------|
-| **Opportunities** | **SO Strategies** (use strengths to capture opportunities) | **WO Strategies** (overcome weaknesses to capture opportunities) |
-| **Threats** | **ST Strategies** (use strengths to mitigate threats) | **WT Strategies** (minimize weaknesses and avoid threats) |
+| **機會** | **SO 策略**（利用優勢把握機會） | **WO 策略**（克服劣勢把握機會） |
+| **威脅** | **ST 策略**（利用優勢緩解威脅） | **WT 策略**（最小化劣勢並避免威脅） |
 
 ---
 
-## BCG Growth-Share Matrix
+## BCG 成長-份額矩陣
 
-### Framework Template
+### 框架範本
 
-**Axes:**
-- X-axis: Relative Market Share (High → Low, logarithmic scale)
-- Y-axis: Market Growth Rate (High → Low, typically 10% as midpoint)
+**軸向：**
+- X 軸：相對市場份額（高 → 低，對數刻度）
+- Y 軸：市場成長率（高 → 低，通常 10% 為中點）
 
-### Quadrant Definitions
+### 象限定義
 
-| Quadrant | Growth | Share | Characteristics | Strategy |
+| 象限 | 成長 | 份額 | 特徵 | 策略 |
 |----------|--------|-------|-----------------|----------|
-| **Stars** | High | High | Market leaders in growing markets | Invest to maintain position |
-| **Cash Cows** | Low | High | Market leaders in mature markets | Harvest for cash flow |
-| **Question Marks** | High | Low | Small share in growing markets | Invest selectively or divest |
-| **Dogs** | Low | Low | Small share in mature markets | Divest or minimize investment |
+| **明星** | 高 | 高 | 成長市場的領導者 | 投資維持地位 |
+| **金牛** | 低 | 高 | 成熟市場的領導者 | 收割現金流 |
+| **問號** | 高 | 低 | 成長市場的小份額 | 選擇性投資或退出 |
+| **瘦狗** | 低 | 低 | 成熟市場的小份額 | 退出或最小化投資 |
 
-### Product/Business Unit Analysis
+### 產品/事業單位分析
 
-| Product/BU | Market Growth | Relative Share | Quadrant | Recommended Strategy |
+| 產品/事業單位 | 市場成長 | 相對份額 | 象限 | 建議策略 |
 |------------|---------------|----------------|----------|---------------------|
-| [Product A] | X.X% | X.X | Star/Cow/QM/Dog | [Strategy] |
-| [Product B] | X.X% | X.X | Star/Cow/QM/Dog | [Strategy] |
-| [Product C] | X.X% | X.X | Star/Cow/QM/Dog | [Strategy] |
+| [產品 A] | X.X% | X.X | 明星/金牛/問號/瘦狗 | [策略] |
+| [產品 B] | X.X% | X.X | 明星/金牛/問號/瘦狗 | [策略] |
+| [產品 C] | X.X% | X.X | 明星/金牛/問號/瘦狗 | [策略] |
 
-### Portfolio Balance Assessment
+### 產品組合平衡評估
 
-| Quadrant | Number of Products | Revenue % | Investment Priority |
+| 象限 | 產品數量 | 營收佔比 | 投資優先順序 |
 |----------|-------------------|-----------|---------------------|
-| Stars | X | X% | High |
-| Cash Cows | X | X% | Maintain |
-| Question Marks | X | X% | Selective |
-| Dogs | X | X% | Low/Divest |
+| 明星 | X | X% | 高 |
+| 金牛 | X | X% | 維持 |
+| 問號 | X | X% | 選擇性 |
+| 瘦狗 | X | X% | 低/退出 |
 
 ---
 
-## Value Chain Analysis
+## 價值鏈分析
 
-### Framework Template
+### 框架範本
 
-#### Primary Activities
+#### 主要活動
 
-| Activity | Description | Value Created | Cost | Competitive Position |
+| 活動 | 說明 | 創造價值 | 成本 | 競爭地位 |
 |----------|-------------|---------------|------|---------------------|
-| **Inbound Logistics** | Receiving, storing, inventory | | $X | Strong/Average/Weak |
-| **Operations** | Manufacturing, assembly | | $X | Strong/Average/Weak |
-| **Outbound Logistics** | Distribution, delivery | | $X | Strong/Average/Weak |
-| **Marketing & Sales** | Promotion, sales force | | $X | Strong/Average/Weak |
-| **Service** | Installation, support, repair | | $X | Strong/Average/Weak |
+| **進貨物流** | 接收、儲存、庫存 | | $X | 強/一般/弱 |
+| **營運** | 製造、組裝 | | $X | 強/一般/弱 |
+| **出貨物流** | 配送、交付 | | $X | 強/一般/弱 |
+| **行銷與銷售** | 推廣、銷售團隊 | | $X | 強/一般/弱 |
+| **服務** | 安裝、支援、維修 | | $X | 強/一般/弱 |
 
-#### Support Activities
+#### 支援活動
 
-| Activity | Description | Value Created | Cost | Competitive Position |
+| 活動 | 說明 | 創造價值 | 成本 | 競爭地位 |
 |----------|-------------|---------------|------|---------------------|
-| **Infrastructure** | Management, finance, legal | | $X | Strong/Average/Weak |
-| **HR Management** | Recruiting, training, comp | | $X | Strong/Average/Weak |
-| **Technology Dev** | R&D, process improvement | | $X | Strong/Average/Weak |
-| **Procurement** | Purchasing, supplier mgmt | | $X | Strong/Average/Weak |
+| **基礎設施** | 管理、財務、法務 | | $X | 強/一般/弱 |
+| **人力資源管理** | 招聘、培訓、薪酬 | | $X | 強/一般/弱 |
+| **技術開發** | 研發、流程改善 | | $X | 強/一般/弱 |
+| **採購** | 採購、供應商管理 | | $X | 強/一般/弱 |
 
-### Value Chain Margin Analysis
+### 價值鏈利潤率分析
 
 ```
-Total Revenue:           $XXX
-- Inbound Logistics:     ($XX)
-- Operations:            ($XX)
-- Outbound Logistics:    ($XX)
-- Marketing & Sales:     ($XX)
-- Service:               ($XX)
-- Support Activities:    ($XX)
-= Margin:                $XX (X%)
+總營收：           $XXX
+- 進貨物流：     ($XX)
+- 營運：            ($XX)
+- 出貨物流：    ($XX)
+- 行銷與銷售：     ($XX)
+- 服務：               ($XX)
+- 支援活動：    ($XX)
+= 利潤率：                $XX (X%)
 ```
 
-### Competitive Comparison
+### 競爭比較
 
-| Activity | Company | Industry Avg | Best-in-Class | Gap |
+| 活動 | 公司 | 產業平均 | 最佳實務 | 差距 |
 |----------|---------|--------------|---------------|-----|
-| [Activity] | X% | Y% | Z% | +/-X% |
+| [活動] | X% | Y% | Z% | +/-X% |
 
 ---
 
-## Competitive Positioning Analysis
+## 競爭定位分析
 
-### Framework Template
+### 框架範本
 
-#### Positioning Dimensions
+#### 定位維度
 
-Common positioning dimension pairs:
-- Price vs. Quality
-- Market Focus (Niche vs. Broad)
-- Solution Type (Product vs. Platform)
-- Geographic Scope (Regional vs. Global)
-- Customer Focus (Enterprise vs. SMB vs. Consumer)
-- Innovation Level (Leader vs. Follower)
+常見定位維度配對：
+- 價格 vs. 品質
+- 市場聚焦（利基 vs. 廣泛）
+- 解決方案類型（產品 vs. 平台）
+- 地理範圍（區域 vs. 全球）
+- 客戶聚焦（企業 vs. 中小企業 vs. 消費者）
+- 創新水準（領導者 vs. 跟隨者）
 
-#### Competitor Mapping
+#### 競爭者繪製
 
-| Competitor | Dimension 1 Score (1-10) | Dimension 2 Score (1-10) | Market Share | Notes |
+| 競爭者 | 維度 1 分數（1-10） | 維度 2 分數（1-10） | 市場份額 | 備註 |
 |------------|-------------------------|-------------------------|--------------|-------|
-| Company A | X | X | X% | [Position description] |
-| Company B | X | X | X% | [Position description] |
-| Company C | X | X | X% | [Position description] |
+| 公司 A | X | X | X% | [定位描述] |
+| 公司 B | X | X | X% | [定位描述] |
+| 公司 C | X | X | X% | [定位描述] |
 
-#### Strategic Group Identification
+#### 策略群組識別
 
-| Strategic Group | Companies | Characteristics | Market Share |
+| 策略群組 | 公司 | 特徵 | 市場份額 |
 |-----------------|-----------|-----------------|--------------|
-| Group 1: [Name] | A, B, C | [Description] | X% |
-| Group 2: [Name] | D, E | [Description] | X% |
-| Group 3: [Name] | F, G, H | [Description] | X% |
+| 群組 1：[名稱] | A, B, C | [描述] | X% |
+| 群組 2：[名稱] | D, E | [描述] | X% |
+| 群組 3：[名稱] | F, G, H | [描述] | X% |
 
 ---
 
-## Risk Assessment Framework
+## 風險評估框架
 
-### Risk Identification
+### 風險識別
 
-#### Risk Categories
-1. **Market Risks**: Demand changes, price pressure, market shifts
-2. **Competitive Risks**: New entrants, competitor moves, disruption
-3. **Regulatory Risks**: New regulations, compliance requirements
-4. **Technology Risks**: Obsolescence, security, integration
-5. **Operational Risks**: Supply chain, quality, capacity
-6. **Financial Risks**: Currency, interest rates, credit
-7. **Reputational Risks**: Brand damage, social media, ethics
+#### 風險類別
+1. **市場風險**：需求變化、價格壓力、市場轉移
+2. **競爭風險**：新進入者、競爭者動態、顛覆
+3. **法規風險**：新法規、合規要求
+4. **技術風險**：過時、安全、整合
+5. **營運風險**：供應鏈、品質、產能
+6. **財務風險**：匯率、利率、信用
+7. **聲譽風險**：品牌損害、社群媒體、道德
 
-### Risk Assessment Matrix
+### 風險評估矩陣
 
-| Risk ID | Risk Description | Category | Probability | Impact | Score | Priority |
+| 風險編號 | 風險描述 | 類別 | 機率 | 影響 | 分數 | 優先順序 |
 |---------|------------------|----------|-------------|--------|-------|----------|
-| R1 | [Description] | Market | 1-5 | 1-5 | P×I | H/M/L |
-| R2 | [Description] | Competitive | 1-5 | 1-5 | P×I | H/M/L |
+| R1 | [描述] | 市場 | 1-5 | 1-5 | 機率×影響 | 高/中/低 |
+| R2 | [描述] | 競爭 | 1-5 | 1-5 | 機率×影響 | 高/中/低 |
 
-**Scoring Guide:**
-- Probability: 1=Very Unlikely, 2=Unlikely, 3=Possible, 4=Likely, 5=Very Likely
-- Impact: 1=Minimal, 2=Minor, 3=Moderate, 4=Major, 5=Severe
-- Priority: Score 15-25=High, 8-14=Medium, 1-7=Low
+**評分指南：**
+- 機率：1=極不可能、2=不太可能、3=可能、4=很可能、5=非常可能
+- 影響：1=極小、2=輕微、3=中等、4=重大、5=嚴重
+- 優先順序：分數 15-25=高、8-14=中、1-7=低
 
-### Risk Mitigation Planning
+### 風險緩解規劃
 
-| Risk ID | Risk | Mitigation Strategy | Owner | Timeline | Cost |
+| 風險編號 | 風險 | 緩解策略 | 負責人 | 時程 | 成本 |
 |---------|------|---------------------|-------|----------|------|
-| R1 | [Risk] | [Prevention + Response] | [Name] | [Date] | $X |
+| R1 | [風險] | [預防 + 回應] | [姓名] | [日期] | $X |
 
 ---
 
-## Financial Analysis Patterns
+## 財務分析模式
 
-### Revenue Projection Model
+### 營收預測模型
 
 ```
-Year N Revenue = Year N-1 Revenue × (1 + Growth Rate)
+第 N 年營收 = 第 N-1 年營收 × (1 + 成長率)
 
-Or bottom-up:
-Revenue = Customers × Revenue per Customer × Retention Rate
-        + New Customers × Revenue per Customer × (1 - Churn Rate)
+或自下而上：
+營收 = 客戶數 × 每客戶營收 × 留存率
+        + 新客戶數 × 每客戶營收 × (1 - 流失率)
 ```
 
-### Scenario Analysis Template
+### 情境分析範本
 
-| Metric | Conservative | Base Case | Optimistic |
+| 指標 | 保守 | 基本情境 | 樂觀 |
 |--------|--------------|-----------|------------|
-| Market Growth | X% | Y% | Z% |
-| Market Share | X% | Y% | Z% |
-| Pricing | $X | $Y | $Z |
-| Gross Margin | X% | Y% | Z% |
-| **Revenue Y5** | $X | $Y | $Z |
-| **EBITDA Y5** | $X | $Y | $Z |
+| 市場成長 | X% | Y% | Z% |
+| 市場份額 | X% | Y% | Z% |
+| 定價 | $X | $Y | $Z |
+| 毛利率 | X% | Y% | Z% |
+| **第 5 年營收** | $X | $Y | $Z |
+| **第 5 年 EBITDA** | $X | $Y | $Z |
 
-### Key Financial Metrics
+### 關鍵財務指標
 
-| Metric | Formula | Target |
+| 指標 | 公式 | 目標 |
 |--------|---------|--------|
-| Gross Margin | (Revenue - COGS) / Revenue | X% |
-| EBITDA Margin | EBITDA / Revenue | X% |
-| Customer Acquisition Cost | Sales & Marketing / New Customers | $X |
-| Lifetime Value | ARPU × Gross Margin × Lifetime | $X |
-| LTV/CAC Ratio | LTV / CAC | >3x |
-| Payback Period | CAC / (ARPU × Gross Margin × 12) | <X months |
+| 毛利率 | (營收 - 銷貨成本) / 營收 | X% |
+| EBITDA 利潤率 | EBITDA / 營收 | X% |
+| 客戶獲取成本 | 銷售與行銷 / 新客戶數 | $X |
+| 終身價值 | 每用戶平均營收 × 毛利率 × 生命週期 | $X |
+| LTV/CAC 比率 | LTV / CAC | >3x |
+| 回收期 | CAC / (每用戶平均營收 × 毛利率 × 12) | <X 個月 |
 
 ---
 
-## Data Collection Checklist
+## 資料蒐集檢核清單
 
-### Market Size Data
-- [ ] Current market size (with year and source)
-- [ ] Historical market size (5-10 years)
-- [ ] Market growth projections (5-10 years)
-- [ ] CAGR (historical and projected)
-- [ ] Regional breakdown
-- [ ] Segment breakdown
+### 市場規模資料
+- [ ] 目前市場規模（附年份和來源）
+- [ ] 歷史市場規模（5-10 年）
+- [ ] 市場成長預測（5-10 年）
+- [ ] 年複合成長率（歷史和預測）
+- [ ] 區域分布
+- [ ] 區隔分布
 
-### Competitive Data
-- [ ] Market share by company (top 10)
-- [ ] Revenue by competitor
-- [ ] Growth rates by competitor
-- [ ] Strategic moves (M&A, partnerships, launches)
-- [ ] Pricing information
-- [ ] Product/service offerings
+### 競爭資料
+- [ ] 各公司市場份額（前 10 名）
+- [ ] 各競爭者營收
+- [ ] 各競爭者成長率
+- [ ] 策略動態（併購、合作、產品發布）
+- [ ] 定價資訊
+- [ ] 產品/服務項目
 
-### Customer Data
-- [ ] Customer segments and sizes
-- [ ] Segment growth rates
-- [ ] Average deal size by segment
-- [ ] Customer acquisition cost
-- [ ] Customer lifetime value
-- [ ] Churn rates
+### 客戶資料
+- [ ] 客戶區隔和規模
+- [ ] 區隔成長率
+- [ ] 各區隔平均交易規模
+- [ ] 客戶獲取成本
+- [ ] 客戶終身價值
+- [ ] 流失率
 
-### Industry Data
-- [ ] Key industry trends
-- [ ] Regulatory developments
-- [ ] Technology trends
-- [ ] Economic indicators
-- [ ] Demographic trends
+### 產業資料
+- [ ] 關鍵產業趨勢
+- [ ] 法規發展
+- [ ] 技術趨勢
+- [ ] 經濟指標
+- [ ] 人口結構趨勢
 
 ---
 
-## Research Sources
+## 研究來源
 
-### Primary Research
-- Customer interviews
-- Expert interviews
-- Surveys
-- Focus groups
+### 初級研究
+- 客戶訪談
+- 專家訪談
+- 問卷調查
+- 焦點小組
 
-### Secondary Research
-- Market research reports (Gartner, Forrester, IDC, McKinsey)
-- Industry associations
-- Government statistics
-- Company annual reports
-- SEC filings (10-K, 10-Q)
-- Earnings call transcripts
-- Trade publications
-- Academic journals
-- News articles
+### 次級研究
+- 市場研究報告（Gartner、Forrester、IDC、麥肯錫）
+- 產業協會
+- 政府統計
+- 公司年報
+- SEC 申報文件（10-K、10-Q）
+- 財報電話會議紀錄
+- 行業出版物
+- 學術期刊
+- 新聞報導
 
-### Data Validation
-- Cross-reference multiple sources
-- Check date currency (prefer <2 years old)
-- Verify methodology
-- Note confidence levels
-- Document assumptions
+### 資料驗證
+- 交叉參考多個來源
+- 檢查資料時效性（優先 <2 年）
+- 驗證方法論
+- 註明信心水準
+- 記錄假設

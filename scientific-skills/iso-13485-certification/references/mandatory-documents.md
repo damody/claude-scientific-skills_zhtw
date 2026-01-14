@@ -1,606 +1,606 @@
-# ISO 13485:2016 Mandatory Documents and Records
+# ISO 13485:2016 強制性文件和記錄
 
-This document provides a complete list of all mandatory documents and records required by ISO 13485:2016 for medical device Quality Management Systems.
+本文件提供 ISO 13485:2016 醫療器材品質管理系統所需的所有強制性文件和記錄的完整清單。
 
-## Overview
+## 概述
 
-ISO 13485:2016 requires organizations to establish and maintain **31 documented procedures** along with a **Quality Manual** and **Medical Device Files**. Additionally, numerous **records** must be maintained to provide evidence of conformity.
+ISO 13485:2016 要求組織建立並維護 **31 個文件化程序**，以及**品質手冊**和**醫療器材檔案**。此外，必須維護許多**記錄**以提供符合性證據。
 
-**Important Notes:**
-- The 31 documented procedures do not need to be 31 separate documents
-- Multiple procedures can be combined into one document
-- One procedure can be split across multiple documents
-- Not all procedures may be applicable to every organization (exclusions must be justified)
-- Additional documentation may be required by applicable regulatory requirements
+**重要說明：**
+- 31 個文件化程序不需要是 31 個獨立的文件
+- 多個程序可以合併成一個文件
+- 一個程序可以分散在多個文件中
+- 並非所有程序都適用於每個組織（排除項目必須說明理由）
+- 適用的法規要求可能需要額外的文件
 
-## 1. Quality Manual (Required by 4.2.2)
+## 1. 品質手冊（第 4.2.2 條要求）
 
-**Description:** Foundational QMS document
+**描述：** QMS 基礎文件
 
-**Must Include:**
-- Scope of QMS with justified exclusions
-- Documented procedures or references to them
-- Description of interaction between QMS processes
-- Structure of documentation used in QMS
+**必須包含：**
+- QMS 範圍並說明排除項目的理由
+- 文件化程序或其參照
+- QMS 流程間交互作用的描述
+- QMS 中使用的文件結構
 
-**Applicable To:** All organizations
-
----
-
-## 2. Medical Device File (Required by 4.2.3)
-
-**Description:** File for each medical device type or family
-
-**Must Include:**
-- General description and intended use
-- Label and instructions for use specifications
-- Product and/or manufacturing specifications
-- Procedures for purchasing, manufacturing, servicing
-- Measuring and monitoring procedures
-- Installation requirements (if applicable)
-- Risk management file(s)
-- Verification and validation information
-- Design and development file(s) when applicable
-
-**Applicable To:** All organizations for each device type/family
+**適用於：** 所有組織
 
 ---
 
-## 3. The 31 Documented Procedures
+## 2. 醫療器材檔案（第 4.2.3 條要求）
 
-### Clause 4: Quality Management System
+**描述：** 每種醫療器材類型或系列的檔案
 
-#### 1. Risk Management Procedures (4.1.5)
-**Description:** Requirements for risk management throughout product realization
-**Must Address:**
-- Risk management methodology
-- Risk analysis and evaluation
-- Risk control measures
-- Risk acceptability criteria
-- Risk management review
-**Referenced Standard:** ISO 14971
+**必須包含：**
+- 一般描述和預期用途
+- 標籤和使用說明規格
+- 產品和/或製造規格
+- 採購、製造、服務程序
+- 量測和監測程序
+- 安裝要求（如適用）
+- 風險管理檔案
+- 驗證和確效資訊
+- 設計和開發檔案（當適用時）
 
-#### 2. Software Validation Procedure (4.1.6)
-**Description:** Validation of computer software applications used in QMS
-**Must Address:**
-- Risk assessment of software
-- Validation approach and activities
-- Acceptance criteria
-- User responsibilities
-- Validation before initial use and after changes
-- Revalidation criteria
-
-#### 3. Control of Documents Procedure (4.2.4)
-**Description:** Control of all QMS documents
-**Must Address:**
-- Document approval before issue
-- Document review and update
-- Identification of changes and revision status
-- Availability of relevant document versions
-- Document legibility and identification
-- Control of external documents
-- Prevention of obsolete document use
-- Identification of retained obsolete documents
-
-#### 4. Control of Records Procedure (4.2.5)
-**Description:** Control of all QMS records
-**Must Address:**
-- Record identification
-- Storage and security
-- Integrity protection
-- Retrieval procedures
-- Retention time determination
-- Record disposition
-- Legibility requirements
-- Change identification
-
-### Clause 5: Management Responsibility
-
-#### 5. Management Review Procedure (5.6.1)
-**Description:** Systematic review of QMS by top management
-**Must Address:**
-- Review frequency (at least annually)
-- Review agenda and inputs
-- Review outputs and actions
-- Attendee requirements
-- Record-keeping requirements
-
-#### 6. Internal Communication Procedure (5.5.3)
-**Description:** Communication regarding QMS effectiveness
-**Must Address:**
-- Communication channels
-- Communication frequency
-- Responsible parties
-- Topics to be communicated
-- Documentation of communications
-
-### Clause 6: Resource Management
-
-#### 7. Human Resources/Competence Procedure (6.2)
-**Description:** Ensuring personnel competence
-**Must Address:**
-- Competence requirements determination
-- Training needs identification
-- Training provision and evaluation
-- Education, training, skills, and experience requirements
-- Competence records maintenance
-- Awareness of personnel contributions
-
-#### 8. Infrastructure Maintenance Procedure (6.3)
-**Description:** Maintenance of facilities and equipment (when affecting quality)
-**Must Address:**
-- Maintenance activities definition
-- Maintenance scheduling
-- Maintenance records
-- Impact on product quality
-- Verification after maintenance
-
-#### 9. Contamination Control Procedure (6.4.2)
-**Description:** Control of contaminated or potentially contaminated product (when applicable)
-**Must Address:**
-- Contamination identification
-- Contaminated product handling
-- Segregation requirements
-- Decontamination procedures
-- Special arrangements for control
-
-### Clause 7: Product Realization
-
-#### 10. Customer Communication Procedure (7.2.3)
-**Description:** Communication with customers
-**Must Address:**
-- Product information provision
-- Inquiry, contract, order handling
-- Customer feedback including complaints
-- Advisory notices
-- Communication channels and responsibilities
-
-#### 11. Design and Development Procedures (7.3.1 - 7.3.10)
-**Description:** Control of design and development process
-**Must Address:**
-- Design and development planning
-- Input determination and review
-- Output provision and approval
-- Design reviews at suitable stages
-- Verification against inputs
-- Validation for intended use
-- Transfer to manufacturing
-- Change control
-- Design file maintenance
-
-#### 12. Purchasing Procedures (7.4.1)
-**Description:** Control of purchasing process
-**Must Address:**
-- Supplier evaluation and selection criteria
-- Supplier monitoring and re-evaluation
-- Supplier performance tracking
-- Purchasing controls
-- Supplier notification of changes
-- Communication to sub-tier suppliers
-
-#### 13. Verification of Purchased Product Procedure (7.4.3)
-**Description:** Verification that purchased product meets requirements
-**Must Address:**
-- Verification activities
-- Extent of verification
-- Method of product release
-- Verification at supplier's premises (if applicable)
-- Customer verification arrangements (if applicable)
-
-#### 14. Production and Service Provision Control Procedures (7.5.1)
-**Description:** Control of production and service activities
-**Must Address:**
-- Work instructions and documented procedures
-- Use of suitable equipment
-- Monitoring and measuring activities
-- Release, delivery, and post-delivery activities
-- Labelling and packaging operations
-- Servicing procedures (if applicable)
-
-#### 15. Product Cleanliness Procedures (7.5.2)
-**Description:** Control of product cleanliness (when applicable)
-**Must Address:**
-- Cleaning requirements and specifications
-- Cleaning before sterilization
-- Uncleanable product handling
-- Hygiene requirements in manufacturing
-- Cleaning verification
-
-#### 16. Installation and Verification Procedures (7.5.3)
-**Description:** Installation activities (when applicable)
-**Must Address:**
-- Installation requirements
-- Installation instructions
-- Verification of installation
-- Installation records
-- Responsible parties
-
-#### 17. Servicing Procedures (7.5.4)
-**Description:** Servicing activities (when applicable)
-**Must Address:**
-- Servicing requirements
-- Reference materials and measurements
-- Feedback analysis from servicing
-- Servicing records
-- Servicing notification to regulatory authorities
-
-#### 18. Process Validation Procedure (7.5.6)
-**Description:** Validation of processes where output cannot be verified
-**Must Address:**
-- Process validation for manufacturing
-- Computer software validation for production
-- Sterilization process validation
-- Aseptic processing validation
-- Clean room validation (if applicable)
-- Criteria for review and approval
-- Equipment approval and personnel qualification
-- Revalidation criteria and triggers
-
-#### 19. Sterilization and Sterile Barrier System Validation (7.5.7)
-**Description:** Validation of sterilization processes (when applicable)
-**Must Address:**
-- Sterilization method validation
-- Sterile barrier system validation
-- Process parameters for each batch
-- Validation of changes to sterilization
-- Maintenance of validation records
-
-#### 20. Product Identification and Traceability Procedures (7.5.8, 7.5.9)
-**Description:** Identification and traceability throughout realization
-**Must Address:**
-- Identification methods throughout realization
-- Traceability extent definition
-- Distribution and location tracking
-- Consignee identification
-- Quantity shipped identification
-- Retention period requirements
-- Applicable regulatory traceability requirements
-
-#### 21. Customer Property Procedure (7.5.10)
-**Description:** Control of customer-provided property
-**Must Address:**
-- Customer property identification
-- Verification of customer property
-- Protection and safeguarding
-- Loss, damage, or unsuitability reporting
-- Records of customer property
-
-#### 22. Preservation of Product Procedure (7.5.11)
-**Description:** Product preservation during processing and delivery
-**Must Address:**
-- Identification requirements
-- Handling requirements
-- Packaging requirements
-- Storage requirements
-- Protection requirements
-- Special handling (if applicable)
-- Application to constituent parts
-
-#### 23. Control of Monitoring and Measuring Equipment Procedure (7.6)
-**Description:** Calibration and control of measuring equipment
-**Must Address:**
-- Equipment identification
-- Calibration or verification intervals
-- Calibration methods and standards
-- Adjustment procedures
-- Identification of calibration status
-- Protection from invalid adjustments
-- Protection from damage
-- Assessment when found non-conforming
-- Computer software confirmation
-
-### Clause 8: Measurement, Analysis and Improvement
-
-#### 24. Feedback Procedure (8.2.1)
-**Description:** Post-production information system
-**Must Address:**
-- Early warning system for quality issues
-- Post-production information collection
-- Complaint handling linkage
-- Reporting to regulatory authorities
-- Input to risk management
-- Input to corrective and preventive action
-- Feedback sources and channels
-
-#### 25. Complaint Handling Procedure (8.2.2)
-**Description:** Timely handling of complaints
-**Must Address:**
-- Complaint receipt and recording
-- Complaint evaluation and investigation
-- Determination of need for reporting to authorities
-- Determination of need for advisory notices
-- Information to customer about actions taken
-- Transfer of complaint information not directly handled
-- Complaint trending and analysis
-
-#### 26. Reporting to Regulatory Authorities Procedure (8.2.3)
-**Description:** Notification to regulatory authorities
-**Must Address:**
-- Determination of reportable events
-- Notification timeframes
-- Notification content requirements
-- Advisory notice requirements
-- Applicable regulatory requirements by region
-- Responsible parties for reporting
-
-#### 27. Internal Audit Procedure (8.2.4)
-**Description:** Conduct of internal audits
-**Must Address:**
-- Audit program planning
-- Audit criteria, scope, frequency, methods
-- Auditor selection and impartiality
-- Audit responsibilities and requirements
-- Audit reporting
-- Records of audits
-- Follow-up activities
-
-#### 28. Process Monitoring and Measurement Procedures (8.2.5)
-**Description:** Monitoring and measurement of QMS processes
-**Must Address:**
-- Process monitoring methods
-- Process measurement methods
-- Demonstration of achieving planned results
-- Implementation of corrections when needed
-- Corrective actions when processes fail
-
-#### 29. Product Monitoring and Measurement Procedures (8.2.6)
-**Description:** Monitoring and measurement of product
-**Must Address:**
-- Product acceptance criteria
-- Measurement at appropriate stages
-- Release authority identification
-- Release procedures
-- Records of conformity to criteria
-- Traceability to measuring authority
-
-#### 30. Control of Nonconforming Product Procedure (8.3)
-**Description:** Identification and control of nonconforming product
-**Must Address:**
-- Identification of nonconformity
-- Documentation requirements
-- Evaluation of nonconformity
-- Segregation of nonconforming product
-- Disposition of nonconforming product
-- Notification to external parties
-- Concession process (if applicable)
-- Rework procedures
-- Actions for nonconformity detected before delivery
-- Actions for nonconformity detected after delivery
-- Reporting requirements
-
-#### 31A. Corrective Action Procedure (8.5.2)
-**Description:** Elimination of causes of nonconformities
-**Must Address:**
-- Review of nonconformities including complaints
-- Cause determination methodology
-- Evaluation of need for action
-- Planning and documentation of actions
-- Implementation of actions
-- Effectiveness review of actions
-- Records of investigation and follow-up
-
-#### 31B. Preventive Action Procedure (8.5.3)
-**Description:** Elimination of causes of potential nonconformities
-**Must Address:**
-- Determination of potential nonconformities
-- Evaluation of need for action
-- Planning and documentation of actions
-- Implementation of actions
-- Effectiveness review of actions
-- Sources of information for preventive action
-- Records of investigation and follow-up
+**適用於：** 所有組織，針對每種器材類型/系列
 
 ---
 
-## Additional Required Documentation
+## 3. 31 個文件化程序
 
-### Analysis of Data Procedure (8.4)
-While not explicitly called out as requiring a "documented procedure," organizations must establish processes for:
-- Data determination, collection, and analysis
-- Evaluation of continual improvement opportunities
-- Statistical techniques (if applicable)
-- Analysis of:
-  - Customer satisfaction
-  - Conformity to product requirements
-  - Process and product characteristics and trends
-  - Suppliers
-  - Other relevant data including feedback and risk management outputs
+### 第 4 條：品質管理系統
+
+#### 1. 風險管理程序（4.1.5）
+**描述：** 整個產品實現過程中的風險管理要求
+**必須處理：**
+- 風險管理方法論
+- 風險分析和評估
+- 風險控制措施
+- 風險可接受準則
+- 風險管理審查
+**參考標準：** ISO 14971
+
+#### 2. 軟體驗證程序（4.1.6）
+**描述：** QMS 中使用的電腦軟體應用程式驗證
+**必須處理：**
+- 軟體風險評估
+- 驗證方法和活動
+- 驗收準則
+- 使用者責任
+- 初次使用前和變更後的驗證
+- 再驗證準則
+
+#### 3. 文件管制程序（4.2.4）
+**描述：** 所有 QMS 文件的管制
+**必須處理：**
+- 發佈前的文件核准
+- 文件審查和更新
+- 變更和版次狀態識別
+- 相關文件版本的可用性
+- 文件可讀性和識別
+- 外部文件管制
+- 防止使用作廢文件
+- 保留的作廢文件識別
+
+#### 4. 記錄管制程序（4.2.5）
+**描述：** 所有 QMS 記錄的管制
+**必須處理：**
+- 記錄識別
+- 儲存和安全
+- 完整性保護
+- 檢索程序
+- 保留時間確定
+- 記錄處置
+- 可讀性要求
+- 變更識別
+
+### 第 5 條：管理責任
+
+#### 5. 管理審查程序（5.6.1）
+**描述：** 最高管理層對 QMS 的系統審查
+**必須處理：**
+- 審查頻率（至少每年）
+- 審查議程和輸入
+- 審查輸出和行動
+- 出席人員要求
+- 記錄保存要求
+
+#### 6. 內部溝通程序（5.5.3）
+**描述：** 關於 QMS 有效性的溝通
+**必須處理：**
+- 溝通管道
+- 溝通頻率
+- 負責人員
+- 需溝通的主題
+- 溝通記錄
+
+### 第 6 條：資源管理
+
+#### 7. 人力資源/能力程序（6.2）
+**描述：** 確保人員能力
+**必須處理：**
+- 能力要求確定
+- 培訓需求識別
+- 培訓提供和評估
+- 教育、培訓、技能和經驗要求
+- 能力記錄維護
+- 人員貢獻認知
+
+#### 8. 基礎設施維護程序（6.3）
+**描述：** 設施和設備維護（當影響品質時）
+**必須處理：**
+- 維護活動定義
+- 維護排程
+- 維護記錄
+- 對產品品質的影響
+- 維護後驗證
+
+#### 9. 汙染控制程序（6.4.2）
+**描述：** 受汙染或可能受汙染產品的管制（當適用時）
+**必須處理：**
+- 汙染識別
+- 受汙染產品處理
+- 隔離要求
+- 去汙染程序
+- 管制的特殊安排
+
+### 第 7 條：產品實現
+
+#### 10. 客戶溝通程序（7.2.3）
+**描述：** 與客戶的溝通
+**必須處理：**
+- 產品資訊提供
+- 詢價、合約、訂單處理
+- 客戶回饋包括抱怨
+- 諮詢通知
+- 溝通管道和責任
+
+#### 11. 設計和開發程序（7.3.1 - 7.3.10）
+**描述：** 設計和開發流程管制
+**必須處理：**
+- 設計和開發規劃
+- 輸入確定和審查
+- 輸出提供和核准
+- 適當階段的設計審查
+- 對照輸入的驗證
+- 預期用途確效
+- 轉移至製造
+- 變更管制
+- 設計檔案維護
+
+#### 12. 採購程序（7.4.1）
+**描述：** 採購流程管制
+**必須處理：**
+- 供應商評估和選擇標準
+- 供應商監測和重新評估
+- 供應商績效追蹤
+- 採購管制
+- 供應商變更通知
+- 對次級供應商的溝通
+
+#### 13. 採購產品驗證程序（7.4.3）
+**描述：** 驗證採購產品符合要求
+**必須處理：**
+- 驗證活動
+- 驗證範圍
+- 產品放行方法
+- 供應商場所驗證（如適用）
+- 客戶驗證安排（如適用）
+
+#### 14. 生產和服務提供管制程序（7.5.1）
+**描述：** 生產和服務活動管制
+**必須處理：**
+- 工作指導書和文件化程序
+- 適當設備使用
+- 監測和量測活動
+- 放行、交付和交付後活動
+- 標籤和包裝操作
+- 服務程序（如適用）
+
+#### 15. 產品清潔度程序（7.5.2）
+**描述：** 產品清潔度管制（當適用時）
+**必須處理：**
+- 清潔要求和規格
+- 滅菌前清潔
+- 無法清潔產品處理
+- 製造衛生要求
+- 清潔驗證
+
+#### 16. 安裝和驗證程序（7.5.3）
+**描述：** 安裝活動（當適用時）
+**必須處理：**
+- 安裝要求
+- 安裝說明
+- 安裝驗證
+- 安裝記錄
+- 負責人員
+
+#### 17. 服務程序（7.5.4）
+**描述：** 服務活動（當適用時）
+**必須處理：**
+- 服務要求
+- 參考資料和量測
+- 服務回饋分析
+- 服務記錄
+- 向法規機關通報服務
+
+#### 18. 製程驗證程序（7.5.6）
+**描述：** 無法驗證輸出的製程驗證
+**必須處理：**
+- 製造製程驗證
+- 生產電腦軟體驗證
+- 滅菌製程驗證
+- 無菌製程驗證
+- 潔淨室驗證（如適用）
+- 審查和核准標準
+- 設備核准和人員資格
+- 再驗證準則和觸發條件
+
+#### 19. 滅菌和無菌屏障系統驗證（7.5.7）
+**描述：** 滅菌製程驗證（當適用時）
+**必須處理：**
+- 滅菌方法驗證
+- 無菌屏障系統驗證
+- 每批次製程參數
+- 滅菌變更驗證
+- 驗證記錄維護
+
+#### 20. 產品識別和追溯性程序（7.5.8, 7.5.9）
+**描述：** 整個實現過程的識別和追溯性
+**必須處理：**
+- 整個實現過程的識別方法
+- 追溯性範圍定義
+- 配送和位置追蹤
+- 收貨人識別
+- 出貨數量識別
+- 保留期限要求
+- 適用的法規追溯性要求
+
+#### 21. 客戶財產程序（7.5.10）
+**描述：** 客戶提供財產的管制
+**必須處理：**
+- 客戶財產識別
+- 客戶財產驗證
+- 保護和保障
+- 遺失、損壞或不適用通報
+- 客戶財產記錄
+
+#### 22. 產品保存程序（7.5.11）
+**描述：** 加工和交付期間的產品保存
+**必須處理：**
+- 識別要求
+- 搬運要求
+- 包裝要求
+- 儲存要求
+- 保護要求
+- 特殊搬運（如適用）
+- 適用於組成零件
+
+#### 23. 監測量測設備管制程序（7.6）
+**描述：** 量測設備的校正和管制
+**必須處理：**
+- 設備識別
+- 校正或驗證間隔
+- 校正方法和標準
+- 調整程序
+- 校正狀態識別
+- 防止無效調整
+- 防止損壞
+- 發現不合格時的評估
+- 電腦軟體確認
+
+### 第 8 條：量測、分析和改進
+
+#### 24. 回饋程序（8.2.1）
+**描述：** 上市後資訊系統
+**必須處理：**
+- 品質問題早期預警系統
+- 上市後資訊收集
+- 抱怨處理連結
+- 向法規機關報告
+- 風險管理輸入
+- 矯正和預防措施輸入
+- 回饋來源和管道
+
+#### 25. 抱怨處理程序（8.2.2）
+**描述：** 及時處理抱怨
+**必須處理：**
+- 抱怨接收和記錄
+- 抱怨評估和調查
+- 確定是否需要向主管機關報告
+- 確定是否需要諮詢通知
+- 通知客戶採取的行動
+- 非直接處理抱怨資訊的轉移
+- 抱怨趨勢和分析
+
+#### 26. 向法規機關報告程序（8.2.3）
+**描述：** 向法規機關通報
+**必須處理：**
+- 應報告事件確定
+- 通報時程
+- 通報內容要求
+- 諮詢通知要求
+- 各地區適用法規要求
+- 報告負責人員
+
+#### 27. 內部稽核程序（8.2.4）
+**描述：** 內部稽核進行
+**必須處理：**
+- 稽核方案規劃
+- 稽核準則、範圍、頻率、方法
+- 稽核員選擇和公正性
+- 稽核責任和要求
+- 稽核報告
+- 稽核記錄
+- 後續活動
+
+#### 28. 製程監測和量測程序（8.2.5）
+**描述：** QMS 製程的監測和量測
+**必須處理：**
+- 製程監測方法
+- 製程量測方法
+- 達成計畫結果的證明
+- 需要時實施矯正
+- 製程失效時的矯正措施
+
+#### 29. 產品監測和量測程序（8.2.6）
+**描述：** 產品的監測和量測
+**必須處理：**
+- 產品驗收準則
+- 適當階段的量測
+- 放行權責識別
+- 放行程序
+- 符合準則的記錄
+- 量測權責的追溯性
+
+#### 30. 不合格產品管制程序（8.3）
+**描述：** 不合格產品的識別和管制
+**必須處理：**
+- 不合格識別
+- 文件要求
+- 不合格評估
+- 不合格產品隔離
+- 不合格產品處置
+- 外部相關方通知
+- 特許流程（如適用）
+- 返工程序
+- 交付前發現不合格的行動
+- 交付後發現不合格的行動
+- 報告要求
+
+#### 31A. 矯正措施程序（8.5.2）
+**描述：** 消除不合格原因
+**必須處理：**
+- 審查不合格包括抱怨
+- 原因確定方法論
+- 行動需求評估
+- 行動規劃和記錄
+- 行動實施
+- 矯正措施有效性審查
+- 調查和後續追蹤記錄
+
+#### 31B. 預防措施程序（8.5.3）
+**描述：** 消除潛在不合格原因
+**必須處理：**
+- 確定潛在不合格
+- 行動需求評估
+- 行動規劃和記錄
+- 行動實施
+- 預防措施有效性審查
+- 預防措施資訊來源
+- 調查和後續追蹤記錄
 
 ---
 
-## Required Records by Clause
+## 額外需要的文件
 
-### Clause 4 Records
-- Software validation records (4.1.6)
-- Risk management records (4.1.5)
-- All records specified in documented procedures and work instructions
-- All records required by applicable regulatory requirements
-
-### Clause 5 Records
-- Management review records (5.6.1)
-- Evidence of personnel competence (6.2)
-
-### Clause 6 Records
-- Infrastructure maintenance records (6.3)
-- Personnel training and competence records (6.2)
-
-### Clause 7 Records
-- Product requirements review and follow-up actions (7.2.2)
-- Design and development files (7.3.10) including:
-  - Design and development plans
-  - Design inputs
-  - Design outputs
-  - Design review records
-  - Design verification records
-  - Design validation records
-  - Design change records
-  - Risk management file
-- Design and development transfer records (7.3.8)
-- Supplier evaluation, selection, and monitoring (7.4.1)
-- Verification of purchased product (7.4.3)
-- Cleanliness of product records (7.5.2)
-- Installation and verification records (7.5.3)
-- Servicing activity records (7.5.4)
-- Sterilization process parameter records for each batch (7.5.5, 7.5.7)
-- Process validation records (7.5.6)
-- Product identification and traceability records (7.5.8, 7.5.9)
-  - Including distribution records with consignee name/address and quantity (7.5.9.2)
-- Customer property records (7.5.10)
-- Calibration and verification records (7.6)
-
-### Clause 8 Records
-- Post-production feedback and complaints (8.2.1, 8.2.2)
-- Complaint investigations (8.2.2)
-- Regulatory authority reporting (8.2.3)
-- Internal audit records (8.2.4)
-- Process monitoring and measurement results (8.2.5)
-- Product monitoring and measurement records (8.2.6)
-- Product release authority (8.2.6)
-- Nonconforming product records (8.3.1)
-- Concession records and authority (8.3.2)
-- Nonconforming product actions after delivery (8.3.3)
-- Rework procedures and results (8.3.4)
-- Data analysis results (8.4)
-- Corrective action records including investigation and follow-up (8.5.2)
-- Preventive action records including investigation and follow-up (8.5.3)
+### 資料分析程序（8.4）
+雖然未明確要求「文件化程序」，但組織必須建立以下流程：
+- 資料確定、收集和分析
+- 持續改進機會評估
+- 統計技術（如適用）
+- 分析：
+  - 客戶滿意度
+  - 產品要求符合性
+  - 製程和產品特性與趨勢
+  - 供應商
+  - 其他相關資料包括回饋和風險管理輸出
 
 ---
 
-## Documentation Matrix
+## 按條款的必要記錄
 
-| Clause | Document Type | Document Name | Mandatory? | Records Required? |
-|--------|--------------|---------------|------------|-------------------|
-| 4.2.2 | Manual | Quality Manual | Yes | No |
-| 4.2.3 | File | Medical Device File | Yes (per device) | Yes |
-| 4.1.5 | Procedure | Risk Management | Yes | Yes |
-| 4.1.6 | Procedure | Software Validation | Yes | Yes |
-| 4.2.4 | Procedure | Control of Documents | Yes | No |
-| 4.2.5 | Procedure | Control of Records | Yes | No |
-| 5.5.3 | Procedure | Internal Communication | Yes | No |
-| 5.6.1 | Procedure | Management Review | Yes | Yes |
-| 6.2 | Procedure | Competence/Training | Yes | Yes |
-| 6.3 | Procedure | Infrastructure Maintenance | When applicable | Yes |
-| 6.4.2 | Procedure | Contamination Control | When applicable | Yes |
-| 7.2.3 | Procedure | Customer Communication | Yes | Yes |
-| 7.3.1-10 | Procedures | Design and Development | When applicable | Yes |
-| 7.4.1 | Procedure | Purchasing | Yes | Yes |
-| 7.4.3 | Procedure | Verification of Purchased Product | Yes | Yes |
-| 7.5.1 | Procedures | Production Control | Yes | Yes |
-| 7.5.2 | Procedure | Product Cleanliness | When applicable | Yes |
-| 7.5.3 | Procedure | Installation | When applicable | Yes |
-| 7.5.4 | Procedure | Servicing | When applicable | Yes |
-| 7.5.6 | Procedure | Process Validation | When applicable | Yes |
-| 7.5.7 | Procedure | Sterilization Validation | When applicable | Yes |
-| 7.5.8 | Procedure | Product Identification | Yes | Yes |
-| 7.5.9 | Procedure | Traceability | Yes | Yes |
-| 7.5.10 | Procedure | Customer Property | When applicable | Yes |
-| 7.5.11 | Procedure | Preservation of Product | Yes | Yes |
-| 7.6 | Procedure | Control of M&M Equipment | Yes | Yes |
-| 8.2.1 | Procedure | Feedback | Yes | Yes |
-| 8.2.2 | Procedure | Complaint Handling | Yes | Yes |
-| 8.2.3 | Procedure | Regulatory Reporting | Yes | Yes |
-| 8.2.4 | Procedure | Internal Audit | Yes | Yes |
-| 8.2.5 | Procedure | Process Monitoring | Yes | Yes |
-| 8.2.6 | Procedure | Product Monitoring | Yes | Yes |
-| 8.3 | Procedure | Control of Nonconforming Product | Yes | Yes |
-| 8.4 | Process | Analysis of Data | Yes | Yes |
-| 8.5.2 | Procedure | Corrective Action | Yes | Yes |
-| 8.5.3 | Procedure | Preventive Action | Yes | Yes |
+### 第 4 條記錄
+- 軟體驗證記錄（4.1.6）
+- 風險管理記錄（4.1.5）
+- 文件化程序和工作指導書中規定的所有記錄
+- 適用法規要求所需的所有記錄
 
----
+### 第 5 條記錄
+- 管理審查記錄（5.6.1）
+- 人員能力證據（6.2）
 
-## Common Additional Documents (Not Required by ISO 13485 but Often Needed)
+### 第 6 條記錄
+- 基礎設施維護記錄（6.3）
+- 人員培訓和能力記錄（6.2）
 
-While not explicitly required by ISO 13485, the following documents are commonly needed for effective QMS operation and regulatory compliance:
+### 第 7 條記錄
+- 產品要求審查和後續行動（7.2.2）
+- 設計和開發檔案（7.3.10）包括：
+  - 設計和開發計畫
+  - 設計輸入
+  - 設計輸出
+  - 設計審查記錄
+  - 設計驗證記錄
+  - 設計確效記錄
+  - 設計變更記錄
+  - 風險管理檔案
+- 設計和開發轉移記錄（7.3.8）
+- 供應商評估、選擇和監測（7.4.1）
+- 採購產品驗證（7.4.3）
+- 產品清潔度記錄（7.5.2）
+- 安裝和驗證記錄（7.5.3）
+- 服務活動記錄（7.5.4）
+- 每批次滅菌製程參數記錄（7.5.5, 7.5.7）
+- 製程驗證記錄（7.5.6）
+- 產品識別和追溯性記錄（7.5.8, 7.5.9）
+  - 包括配送記錄，含收貨人名稱/地址和數量（7.5.9.2）
+- 客戶財產記錄（7.5.10）
+- 校正和驗證記錄（7.6）
 
-### Work Instructions
-- Manufacturing work instructions
-- Testing work instructions
-- Inspection work instructions
-- Cleaning instructions
-- Equipment operation instructions
-
-### Forms and Templates
-- Training records forms
-- Calibration forms
-- Audit checklists
-- Complaint forms
-- CAPA forms
-- Change request forms
-- Document review forms
-- Supplier evaluation forms
-
-### Additional Plans
-- Quality plan
-- Product realization plan
-- Validation plans
-- Clinical evaluation plans
-- Post-market surveillance plans
-
-### Technical Documentation
-- Product specifications
-- Material specifications
-- Test methods and protocols
-- Packaging specifications
-- Labeling artwork
-- Instructions for use
-
-### Regulatory Documentation
-- Technical files (EU MDR/IVDR)
-- 510(k) submissions (FDA)
-- Clinical evaluation reports
-- Post-market surveillance reports
-- Periodic safety update reports
+### 第 8 條記錄
+- 上市後回饋和抱怨（8.2.1, 8.2.2）
+- 抱怨調查（8.2.2）
+- 法規機關報告（8.2.3）
+- 內部稽核記錄（8.2.4）
+- 製程監測和量測結果（8.2.5）
+- 產品監測和量測記錄（8.2.6）
+- 產品放行權責（8.2.6）
+- 不合格產品記錄（8.3.1）
+- 特許記錄和權責（8.3.2）
+- 交付後不合格產品行動（8.3.3）
+- 返工程序和結果（8.3.4）
+- 資料分析結果（8.4）
+- 矯正措施記錄包括調查和後續追蹤（8.5.2）
+- 預防措施記錄包括調查和後續追蹤（8.5.3）
 
 ---
 
-## Tips for Document Management
+## 文件矩陣
 
-### Combining Procedures
-Multiple procedures can be combined into single documents, such as:
-- "Corrective and Preventive Action (CAPA) Procedure" (combines 8.5.2 and 8.5.3)
-- "Document and Record Control Procedure" (combines 4.2.4 and 4.2.5)
-- "Monitoring and Measurement Procedure" (combines 8.2.5 and 8.2.6)
-- "Product Identification and Traceability Procedure" (combines 7.5.8 and 7.5.9)
-
-### Determining Applicability
-Not all procedures apply to all organizations. Common exclusions include:
-- Design and development (when only manufacturing per customer specifications)
-- Installation (when product doesn't require installation)
-- Servicing (when not offered)
-- Sterilization (when product is non-sterile)
-- Contamination control (when not applicable to product type)
-
-All exclusions must be justified in the Quality Manual.
-
-### Regulatory Requirements
-Remember that applicable regulatory requirements may mandate additional documentation beyond ISO 13485, including:
-- FDA regulations (21 CFR Part 820 / QMSR)
-- EU MDR/IVDR requirements
-- Health Canada requirements
-- Other regional regulatory requirements
+| 條款 | 文件類型 | 文件名稱 | 強制性？ | 需要記錄？ |
+|------|----------|----------|----------|------------|
+| 4.2.2 | 手冊 | 品質手冊 | 是 | 否 |
+| 4.2.3 | 檔案 | 醫療器材檔案 | 是（每種器材） | 是 |
+| 4.1.5 | 程序 | 風險管理 | 是 | 是 |
+| 4.1.6 | 程序 | 軟體驗證 | 是 | 是 |
+| 4.2.4 | 程序 | 文件管制 | 是 | 否 |
+| 4.2.5 | 程序 | 記錄管制 | 是 | 否 |
+| 5.5.3 | 程序 | 內部溝通 | 是 | 否 |
+| 5.6.1 | 程序 | 管理審查 | 是 | 是 |
+| 6.2 | 程序 | 能力/培訓 | 是 | 是 |
+| 6.3 | 程序 | 基礎設施維護 | 當適用時 | 是 |
+| 6.4.2 | 程序 | 汙染控制 | 當適用時 | 是 |
+| 7.2.3 | 程序 | 客戶溝通 | 是 | 是 |
+| 7.3.1-10 | 程序 | 設計和開發 | 當適用時 | 是 |
+| 7.4.1 | 程序 | 採購 | 是 | 是 |
+| 7.4.3 | 程序 | 採購產品驗證 | 是 | 是 |
+| 7.5.1 | 程序 | 生產管制 | 是 | 是 |
+| 7.5.2 | 程序 | 產品清潔度 | 當適用時 | 是 |
+| 7.5.3 | 程序 | 安裝 | 當適用時 | 是 |
+| 7.5.4 | 程序 | 服務 | 當適用時 | 是 |
+| 7.5.6 | 程序 | 製程驗證 | 當適用時 | 是 |
+| 7.5.7 | 程序 | 滅菌驗證 | 當適用時 | 是 |
+| 7.5.8 | 程序 | 產品識別 | 是 | 是 |
+| 7.5.9 | 程序 | 追溯性 | 是 | 是 |
+| 7.5.10 | 程序 | 客戶財產 | 當適用時 | 是 |
+| 7.5.11 | 程序 | 產品保存 | 是 | 是 |
+| 7.6 | 程序 | 監測量測設備管制 | 是 | 是 |
+| 8.2.1 | 程序 | 回饋 | 是 | 是 |
+| 8.2.2 | 程序 | 抱怨處理 | 是 | 是 |
+| 8.2.3 | 程序 | 法規通報 | 是 | 是 |
+| 8.2.4 | 程序 | 內部稽核 | 是 | 是 |
+| 8.2.5 | 程序 | 製程監測 | 是 | 是 |
+| 8.2.6 | 程序 | 產品監測 | 是 | 是 |
+| 8.3 | 程序 | 不合格產品管制 | 是 | 是 |
+| 8.4 | 流程 | 資料分析 | 是 | 是 |
+| 8.5.2 | 程序 | 矯正措施 | 是 | 是 |
+| 8.5.3 | 程序 | 預防措施 | 是 | 是 |
 
 ---
 
-## Record Retention
+## 常見額外文件（ISO 13485 未要求但通常需要）
 
-Per ISO 13485:2016 (4.2.5), records must be retained for:
-- **Minimum:** The lifetime of the medical device as defined by the organization
-- **Additional:** Not less than the retention period of any resulting record
-- **Regulatory:** As specified by applicable regulatory requirements
+雖然 ISO 13485 未明確要求，但以下文件通常是有效 QMS 運作和法規合規所需：
 
-Organizations must define the "lifetime" of their medical devices and establish retention times that meet or exceed:
-- ISO 13485 minimum requirements
-- Applicable regulatory requirements (often 5-10 years minimum)
-- Any customer contractual requirements
+### 工作指導書
+- 製造工作指導書
+- 測試工作指導書
+- 檢驗工作指導書
+- 清潔指導書
+- 設備操作指導書
+
+### 表單和範本
+- 培訓記錄表單
+- 校正表單
+- 稽核檢查清單
+- 抱怨表單
+- CAPA 表單
+- 變更申請表單
+- 文件審查表單
+- 供應商評估表單
+
+### 額外計畫
+- 品質計畫
+- 產品實現計畫
+- 驗證計畫
+- 臨床評估計畫
+- 上市後監督計畫
+
+### 技術文件
+- 產品規格
+- 物料規格
+- 測試方法和協議
+- 包裝規格
+- 標籤圖稿
+- 使用說明
+
+### 法規文件
+- 技術檔案（EU MDR/IVDR）
+- 510(k) 送審（FDA）
+- 臨床評估報告
+- 上市後監督報告
+- 週期安全更新報告
 
 ---
 
-## Transition to Medical Device File (MDF)
+## 文件管理技巧
 
-With FDA QMSR harmonization (effective February 2, 2026), organizations should prepare for transitioning from separate files to a unified Medical Device File (MDF) that replaces:
-- **DHF** (Design History File)
-- **DMR** (Device Master Record)
-- **DHR** (Device History Record)
+### 合併程序
+多個程序可以合併為單一文件，例如：
+- 「矯正和預防措施（CAPA）程序」（合併 8.5.2 和 8.5.3）
+- 「文件和記錄管制程序」（合併 4.2.4 和 4.2.5）
+- 「監測和量測程序」（合併 8.2.5 和 8.2.6）
+- 「產品識別和追溯性程序」（合併 7.5.8 和 7.5.9）
 
-The MDF approach aligns with ISO 13485:2016 requirements and provides a more unified documentation structure.
+### 確定適用性
+並非所有程序都適用於所有組織。常見排除項目包括：
+- 設計和開發（當僅按客戶規格製造時）
+- 安裝（當產品不需要安裝時）
+- 服務（當不提供服務時）
+- 滅菌（當產品為非無菌時）
+- 汙染控制（當不適用於產品類型時）
+
+所有排除項目必須在品質手冊中說明理由。
+
+### 法規要求
+請記住，適用法規要求可能規定 ISO 13485 以外的額外文件，包括：
+- FDA 法規（21 CFR Part 820 / QMSR）
+- EU MDR/IVDR 要求
+- 加拿大衛生部要求
+- 其他區域法規要求
+
+---
+
+## 記錄保留
+
+根據 ISO 13485:2016（4.2.5），記錄必須保留：
+- **最短期限：** 組織定義的醫療器材壽命
+- **額外：** 不少於任何產生記錄的保留期限
+- **法規：** 適用法規要求規定的期限
+
+組織必須定義其醫療器材的「壽命」並建立達到或超過以下的保留時間：
+- ISO 13485 最低要求
+- 適用法規要求（通常最少 5-10 年）
+- 任何客戶合約要求
+
+---
+
+## 過渡至醫療器材檔案（MDF）
+
+隨著 FDA QMSR 協調（2026 年 2 月 2 日生效），組織應準備從分開的檔案過渡至統一的醫療器材檔案（MDF），取代：
+- **DHF**（設計歷史檔案）
+- **DMR**（器材主記錄）
+- **DHR**（器材歷史記錄）
+
+MDF 方法與 ISO 13485:2016 要求一致，提供更統一的文件結構。

@@ -1,46 +1,46 @@
-# GEO Database Reference Documentation
+# GEO 資料庫參考文件
 
-## Complete E-utilities API Specifications
+## 完整 E-utilities API 規格
 
-### Overview
+### 概述
 
-The NCBI Entrez Programming Utilities (E-utilities) provide programmatic access to GEO metadata through a set of nine server-side programs. All E-utilities return results in XML format by default.
+NCBI Entrez 程式設計公用程式（E-utilities）透過一組九個伺服器端程式提供對 GEO 元資料的程式化存取。所有 E-utilities 預設以 XML 格式返回結果。
 
-### Base URL
+### 基礎 URL
 
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/
 ```
 
-### Core E-utility Programs
+### 核心 E-utility 程式
 
-#### eSearch - Text Query to ID List
+#### eSearch - 文字查詢到 ID 列表
 
-**Purpose:** Search a database and return a list of UIDs matching the query.
+**用途：** 搜尋資料庫並返回符合查詢的 UID 列表。
 
-**URL Pattern:**
+**URL 模式：**
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi
 ```
 
-**Parameters:**
-- `db` (required): Database to search (e.g., "gds", "geoprofiles")
-- `term` (required): Search query string
-- `retmax`: Maximum number of UIDs to return (default: 20, max: 10000)
-- `retstart`: Starting position in result set (for pagination)
-- `usehistory`: Set to "y" to store results on history server
-- `sort`: Sort order (e.g., "relevance", "pub_date")
-- `field`: Limit search to specific field
-- `datetype`: Type of date to limit by
-- `reldate`: Limit to items within N days of today
-- `mindate`, `maxdate`: Date range limits (YYYY/MM/DD)
+**參數：**
+- `db`（必要）：要搜尋的資料庫（例如 "gds"、"geoprofiles"）
+- `term`（必要）：搜尋查詢字串
+- `retmax`：返回的最大 UID 數量（預設：20，最大：10000）
+- `retstart`：結果集中的起始位置（用於分頁）
+- `usehistory`：設為 "y" 將結果儲存到歷史伺服器
+- `sort`：排序順序（例如 "relevance"、"pub_date"）
+- `field`：限制搜尋到特定欄位
+- `datetype`：限制的日期類型
+- `reldate`：限制為今天起 N 天內的項目
+- `mindate`、`maxdate`：日期範圍限制（YYYY/MM/DD）
 
-**Example:**
+**範例：**
 ```python
 from Bio import Entrez
 Entrez.email = "your@email.com"
 
-# Basic search
+# 基本搜尋
 handle = Entrez.esearch(
     db="gds",
     term="breast cancer AND Homo sapiens",
@@ -50,36 +50,36 @@ handle = Entrez.esearch(
 results = Entrez.read(handle)
 handle.close()
 
-# Results contain:
-# - Count: Total number of matches
-# - RetMax: Number of UIDs returned
-# - RetStart: Starting position
-# - IdList: List of UIDs
-# - QueryKey: Key for history server (if usehistory="y")
-# - WebEnv: Web environment string (if usehistory="y")
+# 結果包含：
+# - Count：符合的總數量
+# - RetMax：返回的 UID 數量
+# - RetStart：起始位置
+# - IdList：UID 列表
+# - QueryKey：歷史伺服器的鍵值（如果 usehistory="y"）
+# - WebEnv：網頁環境字串（如果 usehistory="y"）
 ```
 
-#### eSummary - Document Summaries
+#### eSummary - 文件摘要
 
-**Purpose:** Retrieve document summaries for a list of UIDs.
+**用途：** 取得 UID 列表的文件摘要。
 
-**URL Pattern:**
+**URL 模式：**
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi
 ```
 
-**Parameters:**
-- `db` (required): Database
-- `id` (required): Comma-separated list of UIDs or query_key+WebEnv
-- `retmode`: Return format ("xml" or "json")
-- `version`: Summary version ("2.0" recommended)
+**參數：**
+- `db`（必要）：資料庫
+- `id`（必要）：逗號分隔的 UID 列表或 query_key+WebEnv
+- `retmode`：返回格式（"xml" 或 "json"）
+- `version`：摘要版本（建議使用 "2.0"）
 
-**Example:**
+**範例：**
 ```python
 from Bio import Entrez
 Entrez.email = "your@email.com"
 
-# Get summaries for multiple IDs
+# 取得多個 ID 的摘要
 handle = Entrez.esummary(
     db="gds",
     id="200000001,200000002",
@@ -89,37 +89,37 @@ handle = Entrez.esummary(
 summaries = Entrez.read(handle)
 handle.close()
 
-# Summary fields for GEO DataSets:
-# - Accession: GDS accession
-# - title: Dataset title
-# - summary: Dataset description
-# - PDAT: Publication date
-# - n_samples: Number of samples
-# - Organism: Source organism
-# - PubMedIds: Associated PubMed IDs
+# GEO DataSets 的摘要欄位：
+# - Accession：GDS 登錄號
+# - title：資料集標題
+# - summary：資料集描述
+# - PDAT：發布日期
+# - n_samples：樣本數量
+# - Organism：來源生物
+# - PubMedIds：關聯的 PubMed ID
 ```
 
-#### eFetch - Full Records
+#### eFetch - 完整記錄
 
-**Purpose:** Retrieve full records for a list of UIDs.
+**用途：** 取得 UID 列表的完整記錄。
 
-**URL Pattern:**
+**URL 模式：**
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi
 ```
 
-**Parameters:**
-- `db` (required): Database
-- `id` (required): Comma-separated list of UIDs
-- `retmode`: Return format ("xml", "text")
-- `rettype`: Record type (database-specific)
+**參數：**
+- `db`（必要）：資料庫
+- `id`（必要）：逗號分隔的 UID 列表
+- `retmode`：返回格式（"xml"、"text"）
+- `rettype`：記錄類型（資料庫特定）
 
-**Example:**
+**範例：**
 ```python
 from Bio import Entrez
 Entrez.email = "your@email.com"
 
-# Fetch full records
+# 取得完整記錄
 handle = Entrez.efetch(
     db="gds",
     id="200000001",
@@ -129,32 +129,32 @@ records = Entrez.read(handle)
 handle.close()
 ```
 
-#### eLink - Cross-Database Linking
+#### eLink - 跨資料庫連結
 
-**Purpose:** Find related records in same or different databases.
+**用途：** 在相同或不同資料庫中查找相關記錄。
 
-**URL Pattern:**
+**URL 模式：**
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi
 ```
 
-**Parameters:**
-- `dbfrom` (required): Source database
-- `db` (required): Target database
-- `id` (required): UID from source database
-- `cmd`: Link command type
-  - "neighbor": Return linked UIDs (default)
-  - "neighbor_score": Return scored links
-  - "acheck": Check for links
-  - "ncheck": Count links
-  - "llinks": Return URLs to LinkOut resources
+**參數：**
+- `dbfrom`（必要）：來源資料庫
+- `db`（必要）：目標資料庫
+- `id`（必要）：來源資料庫的 UID
+- `cmd`：連結命令類型
+  - "neighbor"：返回連結的 UID（預設）
+  - "neighbor_score"：返回評分連結
+  - "acheck"：檢查連結
+  - "ncheck"：計算連結
+  - "llinks"：返回 LinkOut 資源的 URL
 
-**Example:**
+**範例：**
 ```python
 from Bio import Entrez
 Entrez.email = "your@email.com"
 
-# Find PubMed articles linked to a GEO dataset
+# 查找與 GEO 資料集連結的 PubMed 文章
 handle = Entrez.elink(
     dbfrom="gds",
     db="pubmed",
@@ -164,93 +164,93 @@ links = Entrez.read(handle)
 handle.close()
 ```
 
-#### ePost - Upload UID List
+#### ePost - 上傳 UID 列表
 
-**Purpose:** Upload a list of UIDs to the history server for use in subsequent requests.
+**用途：** 將 UID 列表上傳到歷史伺服器以供後續請求使用。
 
-**URL Pattern:**
+**URL 模式：**
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi
 ```
 
-**Parameters:**
-- `db` (required): Database
-- `id` (required): Comma-separated list of UIDs
+**參數：**
+- `db`（必要）：資料庫
+- `id`（必要）：逗號分隔的 UID 列表
 
-**Example:**
+**範例：**
 ```python
 from Bio import Entrez
 Entrez.email = "your@email.com"
 
-# Post large list of IDs
+# 發布大量 ID 列表
 large_id_list = [str(i) for i in range(200000001, 200000101)]
 handle = Entrez.epost(db="gds", id=",".join(large_id_list))
 result = Entrez.read(handle)
 handle.close()
 
-# Use returned QueryKey and WebEnv in subsequent calls
+# 在後續呼叫中使用返回的 QueryKey 和 WebEnv
 query_key = result["QueryKey"]
 webenv = result["WebEnv"]
 ```
 
-#### eInfo - Database Information
+#### eInfo - 資料庫資訊
 
-**Purpose:** Get information about available databases and their fields.
+**用途：** 取得可用資料庫及其欄位的資訊。
 
-**URL Pattern:**
+**URL 模式：**
 ```
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi
 ```
 
-**Parameters:**
-- `db`: Database name (omit to get list of all databases)
-- `version`: Set to "2.0" for detailed field information
+**參數：**
+- `db`：資料庫名稱（省略以取得所有資料庫列表）
+- `version`：設為 "2.0" 以獲取詳細欄位資訊
 
-**Example:**
+**範例：**
 ```python
 from Bio import Entrez
 Entrez.email = "your@email.com"
 
-# Get information about gds database
+# 取得 gds 資料庫的資訊
 handle = Entrez.einfo(db="gds", version="2.0")
 info = Entrez.read(handle)
 handle.close()
 
-# Returns:
-# - Database description
-# - Last update date
-# - Record count
-# - Available search fields
-# - Link information
+# 返回：
+# - 資料庫描述
+# - 最後更新日期
+# - 記錄數量
+# - 可用的搜尋欄位
+# - 連結資訊
 ```
 
-### Search Field Qualifiers for GEO
+### GEO 的搜尋欄位限定符
 
-Common search fields for building targeted queries:
+用於建構目標查詢的常見搜尋欄位：
 
-**General Fields:**
-- `[Accession]`: GEO accession number
-- `[Title]`: Dataset title
-- `[Author]`: Author name
-- `[Organism]`: Source organism
-- `[Entry Type]`: Type of entry (e.g., "Expression profiling by array")
-- `[Platform]`: Platform accession or name
-- `[PubMed ID]`: Associated PubMed ID
+**一般欄位：**
+- `[Accession]`：GEO 登錄號
+- `[Title]`：資料集標題
+- `[Author]`：作者名稱
+- `[Organism]`：來源生物
+- `[Entry Type]`：條目類型（例如 "Expression profiling by array"）
+- `[Platform]`：平台登錄號或名稱
+- `[PubMed ID]`：關聯的 PubMed ID
 
-**Date Fields:**
-- `[Publication Date]`: Publication date (YYYY or YYYY/MM/DD)
-- `[Submission Date]`: Submission date
-- `[Modification Date]`: Last modification date
+**日期欄位：**
+- `[Publication Date]`：發布日期（YYYY 或 YYYY/MM/DD）
+- `[Submission Date]`：提交日期
+- `[Modification Date]`：最後修改日期
 
-**MeSH Terms:**
-- `[MeSH Terms]`: Medical Subject Headings
-- `[MeSH Major Topic]`: Major MeSH topics
+**MeSH 詞彙：**
+- `[MeSH Terms]`：醫學主題詞
+- `[MeSH Major Topic]`：主要 MeSH 主題
 
-**Study Type Fields:**
-- `[DataSet Type]`: Type of study (e.g., "RNA-seq", "ChIP-seq")
-- `[Sample Type]`: Sample type
+**研究類型欄位：**
+- `[DataSet Type]`：研究類型（例如 "RNA-seq"、"ChIP-seq"）
+- `[Sample Type]`：樣本類型
 
-**Example Complex Query:**
+**複雜查詢範例：**
 ```python
 query = """
     (breast cancer[MeSH] OR breast neoplasms[Title]) AND
@@ -261,32 +261,32 @@ query = """
 """
 ```
 
-## SOFT File Format Specification
+## SOFT 檔案格式規格
 
-### Overview
+### 概述
 
-SOFT (Simple Omnibus Format in Text) is GEO's primary data exchange format. Files are structured as key-value pairs with data tables.
+SOFT（Simple Omnibus Format in Text，簡易綜合文字格式）是 GEO 的主要資料交換格式。檔案以鍵值對和資料表格結構化。
 
-### File Types
+### 檔案類型
 
-**Family SOFT Files:**
-- Filename: `GSExxxxx_family.soft.gz`
-- Contains: Complete series with all samples and platforms
-- Size: Can be very large (100s of MB compressed)
-- Use: Complete data extraction
+**Family SOFT 檔案：**
+- 檔名：`GSExxxxx_family.soft.gz`
+- 包含：具有所有樣本和平台的完整系列
+- 大小：可能非常大（壓縮後數百 MB）
+- 用途：完整資料擷取
 
-**Series Matrix Files:**
-- Filename: `GSExxxxx_series_matrix.txt.gz`
-- Contains: Expression matrix with minimal metadata
-- Size: Smaller than family files
-- Use: Quick access to expression data
+**Series Matrix 檔案：**
+- 檔名：`GSExxxxx_series_matrix.txt.gz`
+- 包含：具有最少元資料的表達矩陣
+- 大小：比 family 檔案小
+- 用途：快速存取表達資料
 
-**Platform SOFT Files:**
-- Filename: `GPLxxxxx.soft`
-- Contains: Platform annotation and probe information
-- Use: Mapping probes to genes
+**Platform SOFT 檔案：**
+- 檔名：`GPLxxxxx.soft`
+- 包含：平台註解和探針資訊
+- 用途：將探針對應到基因
 
-### SOFT File Structure
+### SOFT 檔案結構
 
 ```
 ^DATABASE = GeoMiame
@@ -345,36 +345,36 @@ ID_REF    VALUE
 !sample_table_end
 ```
 
-### Parsing SOFT Files
+### 解析 SOFT 檔案
 
-**With GEOparse:**
+**使用 GEOparse：**
 ```python
 import GEOparse
 
-# Parse series
+# 解析系列
 gse = GEOparse.get_GEO(filepath="GSE123456_family.soft.gz")
 
-# Access metadata
+# 存取元資料
 metadata = gse.metadata
 phenotype_data = gse.phenotype_data
 
-# Access samples
+# 存取樣本
 for gsm_name, gsm in gse.gsms.items():
     sample_data = gsm.table
     sample_metadata = gsm.metadata
 
-# Access platforms
+# 存取平台
 for gpl_name, gpl in gse.gpls.items():
     platform_table = gpl.table
     platform_metadata = gpl.metadata
 ```
 
-**Manual Parsing:**
+**手動解析：**
 ```python
 import gzip
 
 def parse_soft_file(filename):
-    """Basic SOFT file parser"""
+    """基本 SOFT 檔案解析器"""
     sections = {}
     current_section = None
     current_metadata = {}
@@ -385,7 +385,7 @@ def parse_soft_file(filename):
         for line in f:
             line = line.strip()
 
-            # New section
+            # 新區段
             if line.startswith('^'):
                 if current_section:
                     sections[current_section] = {
@@ -398,7 +398,7 @@ def parse_soft_file(filename):
                 current_table = []
                 in_table = False
 
-            # Metadata
+            # 元資料
             elif line.startswith('!'):
                 if in_table:
                     in_table = False
@@ -413,7 +413,7 @@ def parse_soft_file(filename):
                     else:
                         current_metadata[key] = value
 
-            # Table data
+            # 表格資料
             elif line.startswith('#') or in_table:
                 in_table = True
                 current_table.append(line)
@@ -421,13 +421,13 @@ def parse_soft_file(filename):
     return sections
 ```
 
-## MINiML File Format
+## MINiML 檔案格式
 
-### Overview
+### 概述
 
-MINiML (MIAME Notation in Markup Language) is GEO's XML-based format for data exchange.
+MINiML（MIAME Notation in Markup Language，MIAME 標記語言表示法）是 GEO 基於 XML 的資料交換格式。
 
-### File Structure
+### 檔案結構
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -495,29 +495,29 @@ MINiML (MIAME Notation in Markup Language) is GEO's XML-based format for data ex
 </MINiML>
 ```
 
-## FTP Directory Structure
+## FTP 目錄結構
 
-### Series Files
+### Series 檔案
 
-**Pattern:**
+**模式：**
 ```
 ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE{nnn}nnn/GSE{xxxxx}/
 ```
 
-Where `{nnn}` represents replacing last 3 digits with "nnn" and `{xxxxx}` is the full accession.
+其中 `{nnn}` 代表將最後 3 位數字替換為 "nnn"，`{xxxxx}` 是完整登錄號。
 
-**Example:**
+**範例：**
 - GSE123456 → `/geo/series/GSE123nnn/GSE123456/`
 - GSE1234 → `/geo/series/GSE1nnn/GSE1234/`
 - GSE100001 → `/geo/series/GSE100nnn/GSE100001/`
 
-**Subdirectories:**
-- `/matrix/` - Series matrix files
-- `/soft/` - Family SOFT files
-- `/miniml/` - MINiML XML files
-- `/suppl/` - Supplementary files
+**子目錄：**
+- `/matrix/` - Series matrix 檔案
+- `/soft/` - Family SOFT 檔案
+- `/miniml/` - MINiML XML 檔案
+- `/suppl/` - 補充檔案
 
-**File Types:**
+**檔案類型：**
 ```
 matrix/
   └── GSE123456_series_matrix.txt.gz
@@ -531,27 +531,27 @@ miniml/
 suppl/
   ├── GSE123456_RAW.tar
   ├── filelist.txt
-  └── [various supplementary files]
+  └── [各種補充檔案]
 ```
 
-### Sample Files
+### Sample 檔案
 
-**Pattern:**
+**模式：**
 ```
 ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM{nnn}nnn/GSM{xxxxx}/
 ```
 
-**Subdirectories:**
-- `/suppl/` - Sample-specific supplementary files
+**子目錄：**
+- `/suppl/` - 樣本特定的補充檔案
 
-### Platform Files
+### Platform 檔案
 
-**Pattern:**
+**模式：**
 ```
 ftp://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL{nnn}nnn/GPL{xxxxx}/
 ```
 
-**File Types:**
+**檔案類型：**
 ```
 soft/
   └── GPL570.soft.gz
@@ -560,35 +560,35 @@ miniml/
   └── GPL570.xml
 
 annot/
-  └── GPL570.annot.gz  # Enhanced annotation (if available)
+  └── GPL570.annot.gz  # 增強註解（如果可用）
 ```
 
-## Advanced GEOparse Usage
+## 進階 GEOparse 使用
 
-### Custom Parsing Options
+### 自訂解析選項
 
 ```python
 import GEOparse
 
-# Parse with custom options
+# 使用自訂選項解析
 gse = GEOparse.get_GEO(
     geo="GSE123456",
     destdir="./data",
-    silent=False,  # Show progress
-    how="full",  # Parse mode: "full", "quick", "brief"
-    annotate_gpl=True,  # Include platform annotation
-    geotype="GSE"  # Explicit type
+    silent=False,  # 顯示進度
+    how="full",  # 解析模式："full"、"quick"、"brief"
+    annotate_gpl=True,  # 包含平台註解
+    geotype="GSE"  # 明確類型
 )
 
-# Access specific sample
+# 存取特定樣本
 gsm = gse.gsms['GSM1234567']
 
-# Get expression values for specific probe
+# 取得特定探針的表達值
 probe_id = "1007_s_at"
 if hasattr(gsm, 'table'):
     probe_data = gsm.table[gsm.table['ID_REF'] == probe_id]
 
-# Get all characteristics
+# 取得所有特徵
 characteristics = {}
 for key, values in gsm.metadata.items():
     if key.startswith('characteristics'):
@@ -598,7 +598,7 @@ for key, values in gsm.metadata.items():
                 characteristics[char_key.strip()] = char_value.strip()
 ```
 
-### Working with Platform Annotations
+### 處理平台註解
 
 ```python
 import GEOparse
@@ -606,29 +606,29 @@ import pandas as pd
 
 gse = GEOparse.get_GEO(geo="GSE123456", destdir="./data")
 
-# Get platform
+# 取得平台
 gpl = list(gse.gpls.values())[0]
 
-# Extract annotation table
+# 擷取註解表格
 if hasattr(gpl, 'table'):
     annotation = gpl.table
 
-    # Common annotation columns:
-    # - ID: Probe identifier
-    # - Gene Symbol: Gene symbol
-    # - Gene Title: Gene description
-    # - GB_ACC: GenBank accession
-    # - Gene ID: Entrez Gene ID
-    # - RefSeq: RefSeq accession
-    # - UniGene: UniGene cluster
+    # 常見註解欄位：
+    # - ID：探針識別碼
+    # - Gene Symbol：基因符號
+    # - Gene Title：基因描述
+    # - GB_ACC：GenBank 登錄號
+    # - Gene ID：Entrez Gene ID
+    # - RefSeq：RefSeq 登錄號
+    # - UniGene：UniGene 叢集
 
-    # Map probes to genes
+    # 將探針對應到基因
     probe_to_gene = dict(zip(
         annotation['ID'],
         annotation['Gene Symbol']
     ))
 
-    # Handle multiple probes per gene
+    # 處理每個基因多個探針的情況
     gene_to_probes = {}
     for probe, gene in probe_to_gene.items():
         if gene and gene != '---':
@@ -637,7 +637,7 @@ if hasattr(gpl, 'table'):
             gene_to_probes[gene].append(probe)
 ```
 
-### Handling Large Datasets
+### 處理大型資料集
 
 ```python
 import GEOparse
@@ -645,54 +645,54 @@ import pandas as pd
 import numpy as np
 
 def process_large_gse(gse_id, chunk_size=1000):
-    """Process large GEO series in chunks"""
+    """分塊處理大型 GEO 系列"""
     gse = GEOparse.get_GEO(geo=gse_id, destdir="./data")
 
-    # Get sample list
+    # 取得樣本列表
     sample_list = list(gse.gsms.keys())
 
-    # Process in chunks
+    # 分塊處理
     for i in range(0, len(sample_list), chunk_size):
         chunk_samples = sample_list[i:i+chunk_size]
 
-        # Extract data for chunk
+        # 擷取分塊資料
         chunk_data = {}
         for gsm_id in chunk_samples:
             gsm = gse.gsms[gsm_id]
             if hasattr(gsm, 'table'):
                 chunk_data[gsm_id] = gsm.table['VALUE']
 
-        # Process chunk
+        # 處理分塊
         chunk_df = pd.DataFrame(chunk_data)
 
-        # Save chunk results
+        # 儲存分塊結果
         chunk_df.to_csv(f"chunk_{i//chunk_size}.csv")
 
-        print(f"Processed {i+len(chunk_samples)}/{len(sample_list)} samples")
+        print(f"已處理 {i+len(chunk_samples)}/{len(sample_list)} 個樣本")
 ```
 
-## Troubleshooting Common Issues
+## 常見問題疑難排解
 
-### Issue: GEOparse Fails to Download
+### 問題：GEOparse 下載失敗
 
-**Symptoms:** Timeout errors, connection failures
+**症狀：** 逾時錯誤、連線失敗
 
-**Solutions:**
-1. Check internet connection
-2. Try downloading directly via FTP first
-3. Parse local files:
+**解決方案：**
+1. 檢查網路連線
+2. 嘗試先透過 FTP 直接下載
+3. 解析本地檔案：
 ```python
 gse = GEOparse.get_GEO(filepath="./local/GSE123456_family.soft.gz")
 ```
-4. Increase timeout (modify GEOparse source if needed)
+4. 增加逾時（如需要可修改 GEOparse 原始碼）
 
-### Issue: Missing Expression Data
+### 問題：缺少表達資料
 
-**Symptoms:** `pivot_samples()` fails or returns empty
+**症狀：** `pivot_samples()` 失敗或返回空值
 
-**Cause:** Not all series have series matrix files (older submissions)
+**原因：** 並非所有系列都有 series matrix 檔案（較舊的提交）
 
-**Solution:** Parse individual sample tables:
+**解決方案：** 解析個別樣本表格：
 ```python
 expression_data = {}
 for gsm_name, gsm in gse.gsms.items():
@@ -702,21 +702,21 @@ for gsm_name, gsm in gse.gsms.items():
 expression_df = pd.DataFrame(expression_data)
 ```
 
-### Issue: Inconsistent Probe IDs
+### 問題：探針 ID 不一致
 
-**Symptoms:** Probe IDs don't match between samples
+**症狀：** 樣本間探針 ID 不匹配
 
-**Cause:** Different platform versions or sample processing
+**原因：** 不同平台版本或樣本處理方式
 
-**Solution:** Standardize using platform annotation:
+**解決方案：** 使用平台註解標準化：
 ```python
-# Get common probe set
+# 取得共同探針集
 all_probes = set()
 for gsm in gse.gsms.values():
     if hasattr(gsm, 'table'):
         all_probes.update(gsm.table['ID_REF'].values)
 
-# Create standardized matrix
+# 建立標準化矩陣
 standardized_data = {}
 for gsm_name, gsm in gse.gsms.items():
     if hasattr(gsm, 'table'):
@@ -726,13 +726,13 @@ for gsm_name, gsm in gse.gsms.items():
 expression_df = pd.DataFrame(standardized_data)
 ```
 
-### Issue: E-utilities Rate Limiting
+### 問題：E-utilities 速率限制
 
-**Symptoms:** HTTP 429 errors, slow responses
+**症狀：** HTTP 429 錯誤、回應緩慢
 
-**Solution:**
-1. Get an API key from NCBI
-2. Implement rate limiting:
+**解決方案：**
+1. 從 NCBI 取得 API 金鑰
+2. 實作速率限制：
 ```python
 import time
 from functools import wraps
@@ -763,67 +763,67 @@ def safe_esearch(query):
     return results
 ```
 
-### Issue: Memory Errors with Large Datasets
+### 問題：大型資料集記憶體錯誤
 
-**Symptoms:** MemoryError, system slowdown
+**症狀：** MemoryError、系統變慢
 
-**Solution:**
-1. Process data in chunks
-2. Use sparse matrices for expression data
-3. Load only necessary columns
-4. Use memory-efficient data types:
+**解決方案：**
+1. 分塊處理資料
+2. 對表達資料使用稀疏矩陣
+3. 僅載入必要欄位
+4. 使用記憶體效率較高的資料類型：
 ```python
 import pandas as pd
 
-# Read with specific dtypes
+# 使用特定 dtype 讀取
 expression_df = pd.read_csv(
     "expression_matrix.csv",
-    dtype={'ID': str, 'GSM1': np.float32}  # Use float32 instead of float64
+    dtype={'ID': str, 'GSM1': np.float32}  # 使用 float32 而非 float64
 )
 
-# Or use sparse format for mostly-zero data
+# 或對大部分為零的資料使用稀疏格式
 import scipy.sparse as sp
 sparse_matrix = sp.csr_matrix(expression_df.values)
 ```
 
-## Platform-Specific Considerations
+## 平台特定考量
 
-### Affymetrix Arrays
+### Affymetrix 晶片
 
-- Probe IDs format: `1007_s_at`, `1053_at`
-- Multiple probe sets per gene common
-- Check for `_at`, `_s_at`, `_x_at` suffixes
-- May need RMA or MAS5 normalization
+- 探針 ID 格式：`1007_s_at`、`1053_at`
+- 每個基因多個探針集很常見
+- 檢查 `_at`、`_s_at`、`_x_at` 後綴
+- 可能需要 RMA 或 MAS5 正規化
 
-### Illumina Arrays
+### Illumina 晶片
 
-- Probe IDs format: `ILMN_1234567`
-- Watch for duplicate probes
-- BeadChip-specific processing may be needed
+- 探針 ID 格式：`ILMN_1234567`
+- 注意重複探針
+- 可能需要 BeadChip 特定處理
 
 ### RNA-seq
 
-- May not have traditional "probes"
-- Check for gene IDs (Ensembl, Entrez)
-- Counts vs. FPKM/TPM values
-- May need separate count files
+- 可能沒有傳統的「探針」
+- 檢查基因 ID（Ensembl、Entrez）
+- 計數值 vs. FPKM/TPM 值
+- 可能需要單獨的計數檔案
 
-### Two-Channel Arrays
+### 雙通道晶片
 
-- Look for `_ch1` and `_ch2` suffixes in metadata
-- VALUE_ch1, VALUE_ch2 columns
-- May need ratio or intensity values
-- Check dye-swap experiments
+- 在元資料中尋找 `_ch1` 和 `_ch2` 後綴
+- VALUE_ch1、VALUE_ch2 欄位
+- 可能需要比值或強度值
+- 檢查染料交換實驗
 
-## Best Practices Summary
+## 最佳實踐摘要
 
-1. **Always set Entrez.email** before using E-utilities
-2. **Use API key** for better rate limits
-3. **Cache downloaded files** locally
-4. **Check data quality** before analysis
-5. **Verify platform annotations** are current
-6. **Document data processing** steps
-7. **Cite original studies** when using data
-8. **Check for batch effects** in meta-analyses
-9. **Validate results** with independent datasets
-10. **Follow NCBI usage guidelines**
+1. **在使用 E-utilities 之前務必設定 Entrez.email**
+2. **使用 API 金鑰**以獲得更好的速率限制
+3. **在本地快取下載的檔案**
+4. **在分析前檢查資料品質**
+5. **驗證平台註解**是最新的
+6. **記錄資料處理**步驟
+7. **引用原始研究**當使用資料時
+8. **檢查批次效應**在整合分析中
+9. **使用獨立資料集驗證結果**
+10. **遵循 NCBI 使用指南**

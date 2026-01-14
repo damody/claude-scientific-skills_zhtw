@@ -1,87 +1,87 @@
-# Coverage Analysis with Uniwig
+# 使用 Uniwig 進行涵蓋度分析
 
-The uniwig module generates coverage tracks from sequencing data, providing efficient conversion of genomic intervals to coverage profiles.
+uniwig 模組從定序資料產生涵蓋度軌跡，提供將基因體區間高效轉換為涵蓋度圖譜的功能。
 
-## Coverage Track Generation
+## 涵蓋度軌跡產生
 
-Create coverage tracks from BED files:
+從 BED 檔案建立涵蓋度軌跡：
 
 ```python
 import gtars
 
-# Generate coverage from BED file
+# 從 BED 檔案產生涵蓋度
 coverage = gtars.uniwig.coverage_from_bed("fragments.bed")
 
-# Generate coverage with specific resolution
+# 使用特定解析度產生涵蓋度
 coverage = gtars.uniwig.coverage_from_bed("fragments.bed", resolution=10)
 
-# Generate strand-specific coverage
+# 產生鏈特異性涵蓋度
 fwd_coverage = gtars.uniwig.coverage_from_bed("fragments.bed", strand="+")
 rev_coverage = gtars.uniwig.coverage_from_bed("fragments.bed", strand="-")
 ```
 
-## CLI Usage
+## CLI 使用
 
-Generate coverage tracks from command line:
+從命令列產生涵蓋度軌跡：
 
 ```bash
-# Generate coverage track
+# 產生涵蓋度軌跡
 gtars uniwig generate --input fragments.bed --output coverage.wig
 
-# Specify resolution
+# 指定解析度
 gtars uniwig generate --input fragments.bed --output coverage.wig --resolution 10
 
-# Generate BigWig format
+# 產生 BigWig 格式
 gtars uniwig generate --input fragments.bed --output coverage.bw --format bigwig
 
-# Strand-specific coverage
+# 鏈特異性涵蓋度
 gtars uniwig generate --input fragments.bed --output forward.wig --strand +
 gtars uniwig generate --input fragments.bed --output reverse.wig --strand -
 ```
 
-## Working with Coverage Data
+## 使用涵蓋度資料
 
-### Accessing Coverage Values
+### 存取涵蓋度值
 
-Query coverage at specific positions:
+查詢特定位置的涵蓋度：
 
 ```python
-# Get coverage at position
+# 取得位置的涵蓋度
 cov = coverage.get_coverage("chr1", 1000)
 
-# Get coverage over range
+# 取得範圍的涵蓋度
 cov_array = coverage.get_coverage_range("chr1", 1000, 2000)
 
-# Get coverage statistics
+# 取得涵蓋度統計
 mean_cov = coverage.mean_coverage("chr1", 1000, 2000)
 max_cov = coverage.max_coverage("chr1", 1000, 2000)
 ```
 
-### Coverage Operations
+### 涵蓋度操作
 
-Perform operations on coverage tracks:
+對涵蓋度軌跡執行操作：
 
 ```python
-# Normalize coverage
+# 正規化涵蓋度
 normalized = coverage.normalize()
 
-# Smooth coverage
+# 平滑涵蓋度
 smoothed = coverage.smooth(window_size=10)
 
-# Combine coverage tracks
+# 合併涵蓋度軌跡
 combined = coverage1.add(coverage2)
 
-# Compute coverage difference
+# 計算涵蓋度差異
 diff = coverage1.subtract(coverage2)
 ```
 
-## Output Formats
+## 輸出格式
 
-Uniwig supports multiple output formats:
+Uniwig 支援多種輸出格式：
 
-### WIG Format
+### WIG 格式
 
-Standard wiggle format:
+標準 wiggle 格式：
 ```
 fixedStep chrom=chr1 start=1000 step=1
 12
@@ -91,82 +91,82 @@ fixedStep chrom=chr1 start=1000 step=1
 ...
 ```
 
-### BigWig Format
+### BigWig 格式
 
-Binary format for efficient storage and access:
+用於高效儲存和存取的二進位格式：
 ```bash
-# Generate BigWig
+# 產生 BigWig
 gtars uniwig generate --input fragments.bed --output coverage.bw --format bigwig
 ```
 
-### BedGraph Format
+### BedGraph 格式
 
-Flexible format for variable coverage:
+可變涵蓋度的彈性格式：
 ```
 chr1    1000    1001    12
 chr1    1001    1002    15
 chr1    1002    1003    18
 ```
 
-## Use Cases
+## 使用案例
 
-### ATAC-seq Analysis
+### ATAC-seq 分析
 
-Generate chromatin accessibility profiles:
+產生染色質可及性圖譜：
 
 ```python
-# Generate ATAC-seq coverage
+# 產生 ATAC-seq 涵蓋度
 atac_fragments = gtars.RegionSet.from_bed("atac_fragments.bed")
 coverage = gtars.uniwig.coverage_from_bed("atac_fragments.bed", resolution=1)
 
-# Identify accessible regions
+# 識別可及區域
 peaks = coverage.call_peaks(threshold=10)
 ```
 
-### ChIP-seq Peak Visualization
+### ChIP-seq 峰視覺化
 
-Create coverage tracks for ChIP-seq data:
+為 ChIP-seq 資料建立涵蓋度軌跡：
 
 ```bash
-# Generate coverage for visualization
+# 產生用於視覺化的涵蓋度
 gtars uniwig generate --input chip_seq_fragments.bed \
                       --output chip_coverage.bw \
                       --format bigwig
 ```
 
-### RNA-seq Coverage
+### RNA-seq 涵蓋度
 
-Compute read coverage for RNA-seq:
+計算 RNA-seq 的讀取涵蓋度：
 
 ```python
-# Generate strand-specific RNA-seq coverage
+# 產生鏈特異性 RNA-seq 涵蓋度
 fwd = gtars.uniwig.coverage_from_bed("rnaseq.bed", strand="+")
 rev = gtars.uniwig.coverage_from_bed("rnaseq.bed", strand="-")
 
-# Export for IGV
+# 匯出供 IGV 使用
 fwd.to_bigwig("rnaseq_fwd.bw")
 rev.to_bigwig("rnaseq_rev.bw")
 ```
 
-### Differential Coverage Analysis
+### 差異涵蓋度分析
 
-Compare coverage between samples:
+比較樣本之間的涵蓋度：
 
 ```python
-# Generate coverage for two samples
+# 為兩個樣本產生涵蓋度
 control = gtars.uniwig.coverage_from_bed("control.bed")
 treatment = gtars.uniwig.coverage_from_bed("treatment.bed")
 
-# Compute fold change
+# 計算倍數變化
 fold_change = treatment.divide(control)
 
-# Find differential regions
+# 尋找差異區域
 diff_regions = fold_change.find_regions(threshold=2.0)
 ```
 
-## Performance Optimization
+## 效能最佳化
 
-- Use appropriate resolution for data scale
-- BigWig format recommended for large datasets
-- Parallel processing available for multiple chromosomes
-- Memory-efficient streaming for large files
+- 根據資料規模使用適當的解析度
+- 建議大型資料集使用 BigWig 格式
+- 多染色體可使用平行處理
+- 大型檔案可使用記憶體高效的串流處理

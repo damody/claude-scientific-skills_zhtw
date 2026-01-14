@@ -1,48 +1,48 @@
-# Cosmological Calculations (astropy.cosmology)
+# 宇宙學計算（astropy.cosmology）
 
-The `astropy.cosmology` subpackage provides tools for cosmological calculations based on various cosmological models.
+`astropy.cosmology` 子套件提供基於各種宇宙學模型進行宇宙學計算的工具。
 
-## Using Built-in Cosmologies
+## 使用內建宇宙學模型
 
-Preloaded cosmologies based on WMAP and Planck observations:
+基於 WMAP 和 Planck 觀測的預載宇宙學模型：
 
 ```python
 from astropy.cosmology import Planck18, Planck15, Planck13
 from astropy.cosmology import WMAP9, WMAP7, WMAP5
 from astropy import units as u
 
-# Use Planck 2018 cosmology
+# 使用 Planck 2018 宇宙學模型
 cosmo = Planck18
 
-# Calculate distance to z=4
+# 計算到 z=4 的距離
 d = cosmo.luminosity_distance(4)
-print(f"Luminosity distance at z=4: {d}")
+print(f"z=4 處的光度距離: {d}")
 
-# Age of universe at z=0
+# z=0 時的宇宙年齡
 age = cosmo.age(0)
-print(f"Current age of universe: {age.to(u.Gyr)}")
+print(f"目前宇宙年齡: {age.to(u.Gyr)}")
 ```
 
-## Creating Custom Cosmologies
+## 建立自訂宇宙學模型
 
-### FlatLambdaCDM (Most Common)
+### FlatLambdaCDM（最常用）
 
-Flat universe with cosmological constant:
+具有宇宙學常數的平坦宇宙：
 
 ```python
 from astropy.cosmology import FlatLambdaCDM
 
-# Define cosmology
+# 定義宇宙學模型
 cosmo = FlatLambdaCDM(
-    H0=70 * u.km / u.s / u.Mpc,  # Hubble constant at z=0
-    Om0=0.3,                      # Matter density parameter at z=0
-    Tcmb0=2.725 * u.K             # CMB temperature (optional)
+    H0=70 * u.km / u.s / u.Mpc,  # z=0 時的 Hubble 常數
+    Om0=0.3,                      # z=0 時的物質密度參數
+    Tcmb0=2.725 * u.K             # CMB 溫度（可選）
 )
 ```
 
-### LambdaCDM (Non-Flat)
+### LambdaCDM（非平坦）
 
-Non-flat universe with cosmological constant:
+具有宇宙學常數的非平坦宇宙：
 
 ```python
 from astropy.cosmology import LambdaCDM
@@ -50,162 +50,162 @@ from astropy.cosmology import LambdaCDM
 cosmo = LambdaCDM(
     H0=70 * u.km / u.s / u.Mpc,
     Om0=0.3,
-    Ode0=0.7  # Dark energy density parameter
+    Ode0=0.7  # 暗能量密度參數
 )
 ```
 
-### wCDM and w0wzCDM
+### wCDM 和 w0wzCDM
 
-Dark energy with equation of state parameter:
+具有狀態方程式參數的暗能量：
 
 ```python
 from astropy.cosmology import FlatwCDM, w0wzCDM
 
-# Constant w
+# 常數 w
 cosmo_w = FlatwCDM(H0=70 * u.km/u.s/u.Mpc, Om0=0.3, w0=-0.9)
 
-# Evolving w(z) = w0 + wz * z
+# 演化 w(z) = w0 + wz * z
 cosmo_wz = w0wzCDM(H0=70 * u.km/u.s/u.Mpc, Om0=0.3, Ode0=0.7,
                    w0=-1.0, wz=0.1)
 ```
 
-## Distance Calculations
+## 距離計算
 
-### Comoving Distance
+### 共動距離
 
-Line-of-sight comoving distance:
+視線方向的共動距離：
 
 ```python
 d_c = cosmo.comoving_distance(z)
 ```
 
-### Luminosity Distance
+### 光度距離
 
-Distance for calculating luminosity from observed flux:
+用於從觀測流量計算光度的距離：
 
 ```python
 d_L = cosmo.luminosity_distance(z)
 
-# Calculate absolute magnitude from apparent magnitude
+# 從視星等計算絕對星等
 M = m - 5*np.log10(d_L.to(u.pc).value) + 5
 ```
 
-### Angular Diameter Distance
+### 角直徑距離
 
-Distance for calculating physical size from angular size:
+用於從角大小計算物理大小的距離：
 
 ```python
 d_A = cosmo.angular_diameter_distance(z)
 
-# Calculate physical size from angular size
-theta = 10 * u.arcsec  # Angular size
+# 從角大小計算物理大小
+theta = 10 * u.arcsec  # 角大小
 physical_size = d_A * theta.to(u.radian).value
 ```
 
-### Comoving Transverse Distance
+### 共動橫向距離
 
-Transverse comoving distance (equals comoving distance in flat universe):
+共動橫向距離（在平坦宇宙中等於共動距離）：
 
 ```python
 d_M = cosmo.comoving_transverse_distance(z)
 ```
 
-### Distance Modulus
+### 距離模數
 
 ```python
 dm = cosmo.distmod(z)
-# Relates apparent and absolute magnitudes: m - M = dm
+# 關聯視星等和絕對星等：m - M = dm
 ```
 
-## Scale Calculations
+## 尺度計算
 
-### kpc per Arcminute
+### 每角分的 kpc
 
-Physical scale at a given redshift:
+給定紅移處的物理尺度：
 
 ```python
 scale = cosmo.kpc_proper_per_arcmin(z)
-# e.g., "50 kpc per arcminute at z=1"
+# 例如「z=1 時每角分 50 kpc」
 ```
 
-### Comoving Volume
+### 共動體積
 
-Volume element for survey volume calculations:
+用於巡天體積計算的體積元：
 
 ```python
-vol = cosmo.comoving_volume(z)  # Total volume to redshift z
+vol = cosmo.comoving_volume(z)  # 到紅移 z 的總體積
 vol_element = cosmo.differential_comoving_volume(z)  # dV/dz
 ```
 
-## Time Calculations
+## 時間計算
 
-### Age of Universe
+### 宇宙年齡
 
-Age at a given redshift:
+給定紅移處的年齡：
 
 ```python
 age = cosmo.age(z)
-age_now = cosmo.age(0)  # Current age
-age_at_z1 = cosmo.age(1)  # Age at z=1
+age_now = cosmo.age(0)  # 目前年齡
+age_at_z1 = cosmo.age(1)  # z=1 時的年齡
 ```
 
-### Lookback Time
+### 回溯時間
 
-Time since photons were emitted:
+自光子發射以來的時間：
 
 ```python
 t_lookback = cosmo.lookback_time(z)
-# Time between z and z=0
+# z 到 z=0 之間的時間
 ```
 
-## Hubble Parameter
+## Hubble 參數
 
-Hubble parameter as function of redshift:
+Hubble 參數隨紅移的函數：
 
 ```python
-H_z = cosmo.H(z)  # H(z) in km/s/Mpc
+H_z = cosmo.H(z)  # H(z)，單位 km/s/Mpc
 E_z = cosmo.efunc(z)  # E(z) = H(z)/H0
 ```
 
-## Density Parameters
+## 密度參數
 
-Evolution of density parameters with redshift:
-
-```python
-Om_z = cosmo.Om(z)        # Matter density at z
-Ode_z = cosmo.Ode(z)      # Dark energy density at z
-Ok_z = cosmo.Ok(z)        # Curvature density at z
-Ogamma_z = cosmo.Ogamma(z)  # Photon density at z
-Onu_z = cosmo.Onu(z)      # Neutrino density at z
-```
-
-## Critical and Characteristic Densities
+密度參數隨紅移的演化：
 
 ```python
-rho_c = cosmo.critical_density(z)  # Critical density at z
-rho_m = cosmo.critical_density(z) * cosmo.Om(z)  # Matter density
+Om_z = cosmo.Om(z)        # z 處的物質密度
+Ode_z = cosmo.Ode(z)      # z 處的暗能量密度
+Ok_z = cosmo.Ok(z)        # z 處的曲率密度
+Ogamma_z = cosmo.Ogamma(z)  # z 處的光子密度
+Onu_z = cosmo.Onu(z)      # z 處的微中子密度
 ```
 
-## Inverse Calculations
+## 臨界密度和特徵密度
 
-Find redshift corresponding to a specific value:
+```python
+rho_c = cosmo.critical_density(z)  # z 處的臨界密度
+rho_m = cosmo.critical_density(z) * cosmo.Om(z)  # 物質密度
+```
+
+## 反向計算
+
+找出對應特定值的紅移：
 
 ```python
 from astropy.cosmology import z_at_value
 
-# Find z at specific lookback time
+# 找出特定回溯時間的 z
 z = z_at_value(cosmo.lookback_time, 10*u.Gyr)
 
-# Find z at specific luminosity distance
+# 找出特定光度距離的 z
 z = z_at_value(cosmo.luminosity_distance, 1000*u.Mpc)
 
-# Find z at specific age
+# 找出特定年齡的 z
 z = z_at_value(cosmo.age, 1*u.Gyr)
 ```
 
-## Array Operations
+## 陣列操作
 
-All methods accept array inputs:
+所有方法都接受陣列輸入：
 
 ```python
 import numpy as np
@@ -216,82 +216,82 @@ H_array = cosmo.H(z_array)
 age_array = cosmo.age(z_array)
 ```
 
-## Neutrino Effects
+## 微中子效應
 
-Include massive neutrinos:
+包含具有質量的微中子：
 
 ```python
 from astropy.cosmology import FlatLambdaCDM
 
-# With massive neutrinos
+# 帶有質量微中子
 cosmo = FlatLambdaCDM(
     H0=70 * u.km/u.s/u.Mpc,
     Om0=0.3,
     Tcmb0=2.725 * u.K,
-    Neff=3.04,  # Effective number of neutrino species
-    m_nu=[0., 0., 0.06] * u.eV  # Neutrino masses
+    Neff=3.04,  # 有效微中子種類數
+    m_nu=[0., 0., 0.06] * u.eV  # 微中子質量
 )
 ```
 
-Note: Massive neutrinos reduce performance by 3-4x but provide more accurate results.
+注意：具有質量的微中子會使效能降低 3-4 倍，但提供更準確的結果。
 
-## Cloning and Modifying Cosmologies
+## 複製和修改宇宙學模型
 
-Cosmology objects are immutable. Create modified copies:
+宇宙學物件是不可變的。建立修改過的副本：
 
 ```python
-# Clone with different H0
+# 使用不同的 H0 複製
 cosmo_new = cosmo.clone(H0=72 * u.km/u.s/u.Mpc)
 
-# Clone with modified name
+# 使用修改後的名稱複製
 cosmo_named = cosmo.clone(name="My Custom Cosmology")
 ```
 
-## Common Use Cases
+## 常見使用案例
 
-### Calculating Absolute Magnitude
+### 計算絕對星等
 
 ```python
-# From apparent magnitude and redshift
+# 從視星等和紅移
 z = 1.5
-m_app = 24.5  # Apparent magnitude
+m_app = 24.5  # 視星等
 d_L = cosmo.luminosity_distance(z)
 M_abs = m_app - cosmo.distmod(z).value
 ```
 
-### Survey Volume Calculations
+### 巡天體積計算
 
 ```python
-# Volume between two redshifts
+# 兩個紅移之間的體積
 z_min, z_max = 0.5, 1.5
 volume = cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min)
 
-# Convert to Gpc^3
+# 轉換為 Gpc^3
 volume_gpc3 = volume.to(u.Gpc**3)
 ```
 
-### Physical Size from Angular Size
+### 從角大小計算物理大小
 
 ```python
-theta = 1 * u.arcsec  # Angular size
+theta = 1 * u.arcsec  # 角大小
 z = 2.0
 d_A = cosmo.angular_diameter_distance(z)
 size_kpc = (d_A * theta.to(u.radian)).to(u.kpc)
 ```
 
-### Time Since Big Bang
+### 自大霹靂以來的時間
 
 ```python
-# Age at specific redshift
+# 特定紅移處的年齡
 z_formation = 6
 age_at_formation = cosmo.age(z_formation)
 time_since_formation = cosmo.age(0) - age_at_formation
 ```
 
-## Comparison of Cosmologies
+## 宇宙學模型比較
 
 ```python
-# Compare different models
+# 比較不同模型
 from astropy.cosmology import Planck18, WMAP9
 
 z = 1.0
@@ -299,9 +299,9 @@ print(f"Planck18 d_L: {Planck18.luminosity_distance(z)}")
 print(f"WMAP9 d_L: {WMAP9.luminosity_distance(z)}")
 ```
 
-## Performance Considerations
+## 效能考量
 
-- Calculations are fast for most purposes
-- Massive neutrinos reduce speed significantly
-- Array operations are vectorized and efficient
-- Results valid for z < 5000-6000 (depends on model)
+- 對大多數用途計算速度很快
+- 具有質量的微中子會顯著降低速度
+- 陣列操作是向量化且高效的
+- 結果在 z < 5000-6000 範圍內有效（取決於模型）

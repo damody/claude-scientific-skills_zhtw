@@ -1,54 +1,54 @@
-# USPTO Trademark APIs Reference
+# USPTO 商標 API 參考
 
-## Overview
+## 概述
 
-USPTO provides two main APIs for trademark data:
+USPTO 提供兩個主要的商標資料 API：
 
-1. **Trademark Status & Document Retrieval (TSDR)** - Retrieve trademark case status and documents
-2. **Trademark Assignment Search** - Search trademark assignment records
+1. **商標狀態與文件檢索（TSDR）** - 檢索商標案件狀態和文件
+2. **商標轉讓搜尋** - 搜尋商標轉讓記錄
 
-## 1. Trademark Status & Document Retrieval (TSDR) API
+## 1. 商標狀態與文件檢索（TSDR）API
 
-### Overview
+### 概述
 
-TSDR enables programmatic retrieval of trademark case status documents and information.
+TSDR 支援程式化檢索商標案件狀態文件和資訊。
 
-**API Version:** v1.0
+**API 版本：** v1.0
 
-**Base URL:** `https://tsdrapi.uspto.gov/ts/cd/`
+**基礎 URL：** `https://tsdrapi.uspto.gov/ts/cd/`
 
-### Authentication
+### 認證
 
-Requires API key registration at: https://account.uspto.gov/api-manager/
+需要在以下網址註冊 API 金鑰：https://account.uspto.gov/api-manager/
 
-Include API key in request header:
+在請求標頭中包含 API 金鑰：
 ```
 X-Api-Key: YOUR_API_KEY
 ```
 
-### Endpoints
+### 端點
 
-#### Get Trademark Status by Serial Number
+#### 按序號取得商標狀態
 
 ```
 GET /ts/cd/casedocs/sn{serial_number}/info.json
 ```
 
-**Example:**
+**範例：**
 ```bash
 curl -H "X-Api-Key: YOUR_KEY" \
   "https://tsdrapi.uspto.gov/ts/cd/casedocs/sn87654321/info.json"
 ```
 
-#### Get Trademark Status by Registration Number
+#### 按註冊號取得商標狀態
 
 ```
 GET /ts/cd/casedocs/rn{registration_number}/info.json
 ```
 
-### Response Format
+### 回應格式
 
-Returns JSON with comprehensive trademark information:
+回傳包含完整商標資訊的 JSON：
 
 ```json
 {
@@ -67,49 +67,49 @@ Returns JSON with comprehensive trademark information:
 }
 ```
 
-### Key Data Fields
+### 關鍵資料欄位
 
-- **Application Information:**
-  - `ApplicationNumber` - Serial number
-  - `ApplicationDate` - Filing date
-  - `ApplicationType` - Type (TEAS Plus, TEAS Standard, etc.)
+- **申請資訊：**
+  - `ApplicationNumber` - 序號
+  - `ApplicationDate` - 申請日期
+  - `ApplicationType` - 類型（TEAS Plus、TEAS Standard 等）
 
-- **Registration Information:**
-  - `RegistrationNumber` - Registration number (if registered)
-  - `RegistrationDate` - Registration date
+- **註冊資訊：**
+  - `RegistrationNumber` - 註冊號（如已註冊）
+  - `RegistrationDate` - 註冊日期
 
-- **Mark Information:**
-  - `MarkVerbalElementText` - Text of the mark
-  - `MarkCurrentStatusExternalDescriptionText` - Current status
-  - `MarkCurrentStatusDate` - Status date
-  - `MarkDrawingCode` - Type of mark (words, design, etc.)
+- **商標資訊：**
+  - `MarkVerbalElementText` - 商標文字
+  - `MarkCurrentStatusExternalDescriptionText` - 目前狀態
+  - `MarkCurrentStatusDate` - 狀態日期
+  - `MarkDrawingCode` - 商標類型（文字、設計等）
 
-- **Classification:**
-  - `GoodsAndServices` - Array of goods/services with classes
+- **分類：**
+  - `GoodsAndServices` - 商品/服務陣列及類別
 
-- **Owner Information:**
-  - `Owners` - Array of trademark owners/applicants
+- **所有權人資訊：**
+  - `Owners` - 商標所有權人/申請人陣列
 
-- **Prosecution History:**
-  - `ProsecutionHistoryEntry` - Array of events in prosecution
+- **審查歷史：**
+  - `ProsecutionHistoryEntry` - 審查事件陣列
 
-### Common Status Values
+### 常見狀態值
 
-- **REGISTERED** - Mark is registered and active
-- **PENDING** - Application under examination
-- **ABANDONED** - Application/registration abandoned
-- **CANCELLED** - Registration cancelled
-- **SUSPENDED** - Examination suspended
-- **PUBLISHED FOR OPPOSITION** - Published, in opposition period
-- **REGISTERED AND RENEWED** - Registration renewed
+- **REGISTERED** - 商標已註冊且有效
+- **PENDING** - 申請審查中
+- **ABANDONED** - 申請/註冊已放棄
+- **CANCELLED** - 註冊已取消
+- **SUSPENDED** - 審查暫停
+- **PUBLISHED FOR OPPOSITION** - 已公告，在異議期內
+- **REGISTERED AND RENEWED** - 註冊已續展
 
-### Python Example
+### Python 範例
 
 ```python
 import requests
 
 def get_trademark_status(serial_number, api_key):
-    """Retrieve trademark status by serial number."""
+    """按序號檢索商標狀態。"""
     url = f"https://tsdrapi.uspto.gov/ts/cd/casedocs/sn{serial_number}/info.json"
     headers = {"X-Api-Key": api_key}
 
@@ -117,57 +117,57 @@ def get_trademark_status(serial_number, api_key):
     if response.status_code == 200:
         return response.json()
     else:
-        raise Exception(f"API error: {response.status_code}")
+        raise Exception(f"API 錯誤：{response.status_code}")
 
-# Usage
+# 使用方式
 data = get_trademark_status("87654321", "YOUR_API_KEY")
 trademark = data['TradeMarkAppln']
 
-print(f"Mark: {trademark['MarkVerbalElementText']}")
-print(f"Status: {trademark['MarkCurrentStatusExternalDescriptionText']}")
-print(f"Application Date: {trademark['ApplicationDate']}")
+print(f"商標：{trademark['MarkVerbalElementText']}")
+print(f"狀態：{trademark['MarkCurrentStatusExternalDescriptionText']}")
+print(f"申請日期：{trademark['ApplicationDate']}")
 if 'RegistrationNumber' in trademark:
-    print(f"Registration #: {trademark['RegistrationNumber']}")
+    print(f"註冊號：{trademark['RegistrationNumber']}")
 ```
 
-## 2. Trademark Assignment Search API
+## 2. 商標轉讓搜尋 API
 
-### Overview
+### 概述
 
-Retrieves trademark assignment records from the USPTO assignment database. Shows ownership transfers and security interests.
+從 USPTO 轉讓資料庫檢索商標轉讓記錄。顯示所有權轉移和擔保權益。
 
-**API Version:** v1.4
+**API 版本：** v1.4
 
-**Base URL:** `https://assignment-api.uspto.gov/trademark/`
+**基礎 URL：** `https://assignment-api.uspto.gov/trademark/`
 
-### Authentication
+### 認證
 
-Requires API key in header:
+需要在標頭中包含 API 金鑰：
 ```
 X-Api-Key: YOUR_API_KEY
 ```
 
-### Search Methods
+### 搜尋方法
 
-#### By Registration Number
+#### 按註冊號
 
 ```
 GET /v1.4/assignment/application/{registration_number}
 ```
 
-#### By Serial Number
+#### 按序號
 
 ```
 GET /v1.4/assignment/application/{serial_number}
 ```
 
-#### By Assignee Name
+#### 按受讓人名稱
 
 ```
 POST /v1.4/assignment/search
 ```
 
-**Request body:**
+**請求主體：**
 ```json
 {
   "criteria": {
@@ -176,9 +176,9 @@ POST /v1.4/assignment/search
 }
 ```
 
-### Response Format
+### 回應格式
 
-Returns XML containing assignment records:
+回傳包含轉讓記錄的 XML：
 
 ```xml
 <assignments>
@@ -201,42 +201,42 @@ Returns XML containing assignment records:
 </assignments>
 ```
 
-### Key Fields
+### 關鍵欄位
 
-- `reelFrame` - USPTO reel and frame number
-- `conveyanceText` - Type of transaction
-- `recordedDate` - Date recorded at USPTO
-- `executionDate` - Date document was executed
-- `assignors` - Original owners
-- `assignees` - New owners
-- `propertyNumbers` - Affected serial/registration numbers
+- `reelFrame` - USPTO 捲軸和畫面編號
+- `conveyanceText` - 交易類型
+- `recordedDate` - USPTO 記錄日期
+- `executionDate` - 文件執行日期
+- `assignors` - 原所有權人
+- `assignees` - 新所有權人
+- `propertyNumbers` - 受影響的序號/註冊號
 
-### Common Conveyance Types
+### 常見轉讓類型
 
-- **ASSIGNMENT OF ASSIGNORS INTEREST** - Ownership transfer
-- **SECURITY AGREEMENT** - Collateral/security interest
-- **MERGER** - Corporate merger
-- **CHANGE OF NAME** - Name change
-- **ASSIGNMENT OF PARTIAL INTEREST** - Partial ownership transfer
+- **ASSIGNMENT OF ASSIGNORS INTEREST** - 所有權轉移
+- **SECURITY AGREEMENT** - 抵押/擔保權益
+- **MERGER** - 公司合併
+- **CHANGE OF NAME** - 名稱變更
+- **ASSIGNMENT OF PARTIAL INTEREST** - 部分所有權轉移
 
-### Python Example
+### Python 範例
 
 ```python
 import requests
 import xml.etree.ElementTree as ET
 
 def search_trademark_assignments(registration_number, api_key):
-    """Search assignments for a trademark registration."""
+    """搜尋商標註冊的轉讓記錄。"""
     url = f"https://assignment-api.uspto.gov/trademark/v1.4/assignment/application/{registration_number}"
     headers = {"X-Api-Key": api_key}
 
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return response.text  # Returns XML
+        return response.text  # 回傳 XML
     else:
-        raise Exception(f"API error: {response.status_code}")
+        raise Exception(f"API 錯誤：{response.status_code}")
 
-# Usage
+# 使用方式
 xml_data = search_trademark_assignments("5678901", "YOUR_API_KEY")
 root = ET.fromstring(xml_data)
 
@@ -248,20 +248,20 @@ for assignment in root.findall('.//assignment'):
     assignor = assignment.find('.//assignor/name').text
     assignee = assignment.find('.//assignee/name').text
 
-    print(f"{recorded_date}: {assignor} -> {assignee}")
-    print(f"  Type: {conveyance}")
-    print(f"  Reel/Frame: {reel_frame}\n")
+    print(f"{recorded_date}：{assignor} -> {assignee}")
+    print(f"  類型：{conveyance}")
+    print(f"  捲軸/畫面：{reel_frame}\n")
 ```
 
-## Use Cases
+## 使用案例
 
-### 1. Monitor Trademark Status
+### 1. 監控商標狀態
 
-Check status of pending applications or registrations:
+檢查待審申請或註冊的狀態：
 
 ```python
 def check_trademark_health(serial_number, api_key):
-    """Check if trademark needs attention."""
+    """檢查商標是否需要注意。"""
     data = get_trademark_status(serial_number, api_key)
     tm = data['TradeMarkAppln']
 
@@ -269,24 +269,24 @@ def check_trademark_health(serial_number, api_key):
     alerts = []
 
     if 'ABANDON' in status:
-        alerts.append("⚠️ ABANDONED")
+        alerts.append("警告：已放棄")
     elif 'PUBLISHED' in status:
-        alerts.append("📢 In opposition period")
+        alerts.append("通知：在異議期內")
     elif 'SUSPENDED' in status:
-        alerts.append("⏸️ Examination suspended")
+        alerts.append("暫停：審查暫停")
     elif 'REGISTERED' in status:
-        alerts.append("✅ Active")
+        alerts.append("正常：有效")
 
     return alerts
 ```
 
-### 2. Track Ownership Changes
+### 2. 追蹤所有權變更
 
-Monitor assignment records for ownership changes:
+監控轉讓記錄的所有權變更：
 
 ```python
 def get_current_owner(registration_number, api_key):
-    """Find current trademark owner from assignment records."""
+    """從轉讓記錄尋找目前商標所有權人。"""
     xml_data = search_trademark_assignments(registration_number, api_key)
     root = ET.fromstring(xml_data)
 
@@ -296,20 +296,20 @@ def get_current_owner(registration_number, api_key):
         assignee = assignment.find('.//assignee/name').text
         assignments.append((date, assignee))
 
-    # Most recent assignment
+    # 最近的轉讓
     if assignments:
         assignments.sort(reverse=True)
         return assignments[0][1]
     return None
 ```
 
-### 3. Portfolio Management
+### 3. 商標組合管理
 
-Analyze trademark portfolio:
+分析商標組合：
 
 ```python
 def analyze_portfolio(serial_numbers, api_key):
-    """Analyze status of multiple trademarks."""
+    """分析多個商標的狀態。"""
     results = {
         'active': 0,
         'pending': 0,
@@ -333,26 +333,26 @@ def analyze_portfolio(serial_numbers, api_key):
     return results
 ```
 
-## Rate Limits and Best Practices
+## 速率限制和最佳實務
 
-1. **Respect rate limits** - Implement retry logic with exponential backoff
-2. **Cache responses** - Trademark data changes infrequently
-3. **Batch processing** - Spread requests over time for large portfolios
-4. **Error handling** - Handle missing data gracefully (not all marks have all fields)
-5. **Data validation** - Verify serial/registration numbers before API calls
+1. **遵守速率限制** - 實作具有指數退避的重試邏輯
+2. **快取回應** - 商標資料不常變更
+3. **批次處理** - 對大型組合分散請求時間
+4. **錯誤處理** - 優雅處理缺失資料（並非所有商標都有所有欄位）
+5. **資料驗證** - 在 API 呼叫前驗證序號/註冊號格式
 
-## Integration with Other Data
+## 與其他資料整合
 
-Combine trademark data with other sources:
+結合商標資料與其他來源：
 
-- **TSDR + Assignment** - Current status + ownership history
-- **Multiple marks** - Analyze related marks in a family
-- **Patent data** - Cross-reference IP portfolio
+- **TSDR + 轉讓** - 目前狀態 + 所有權歷史
+- **多個商標** - 分析家族中的相關商標
+- **專利資料** - 交叉參考智慧財產權組合
 
-## Resources
+## 資源
 
-- **TSDR API**: https://developer.uspto.gov/api-catalog/tsdr-data-api
-- **Assignment API**: https://developer.uspto.gov/api-catalog/trademark-assignment-search-data-api
-- **API Key Registration**: https://account.uspto.gov/api-manager/
-- **Trademark Search**: https://tmsearch.uspto.gov/
-- **Swagger Documentation**: https://developer.uspto.gov/swagger/tsdr-api-v1
+- **TSDR API**：https://developer.uspto.gov/api-catalog/tsdr-data-api
+- **轉讓 API**：https://developer.uspto.gov/api-catalog/trademark-assignment-search-data-api
+- **API 金鑰註冊**：https://account.uspto.gov/api-manager/
+- **商標搜尋**：https://tmsearch.uspto.gov/
+- **Swagger 文件**：https://developer.uspto.gov/swagger/tsdr-api-v1

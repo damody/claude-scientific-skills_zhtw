@@ -1,170 +1,170 @@
-# Matchms Importing and Exporting Reference
+# Matchms 匯入和匯出參考
 
-This document details all file format support in matchms for loading and saving mass spectrometry data.
+本文件詳細說明 matchms 中用於載入和儲存質譜資料的所有檔案格式支援。
 
-## Importing Spectra
+## 匯入質譜
 
-Matchms provides dedicated functions for loading spectra from various file formats. All import functions return generators for memory-efficient processing of large files.
+Matchms 提供專用函數從各種檔案格式載入質譜。所有匯入函數都返回生成器，以實現大型檔案的記憶體高效處理。
 
-### Common Import Pattern
+### 常見匯入模式
 
 ```python
 from matchms.importing import load_from_mgf
 
-# Load spectra (returns generator)
+# 載入質譜（返回生成器）
 spectra_generator = load_from_mgf("spectra.mgf")
 
-# Convert to list for processing
+# 轉換為列表進行處理
 spectra = list(spectra_generator)
 ```
 
-## Supported Import Formats
+## 支援的匯入格式
 
-### MGF (Mascot Generic Format)
+### MGF（Mascot 通用格式）
 
-**Function**: `load_from_mgf(filename, metadata_harmonization=True)`
+**函數**：`load_from_mgf(filename, metadata_harmonization=True)`
 
-**Description**: Loads spectra from MGF files, a common format for mass spectrometry data exchange.
+**描述**：從 MGF 檔案載入質譜，這是質譜資料交換的常見格式。
 
-**Parameters**:
-- `filename` (str): Path to MGF file
-- `metadata_harmonization` (bool, default=True): Apply automatic metadata key harmonization
+**參數**：
+- `filename` (str)：MGF 檔案路徑
+- `metadata_harmonization` (bool, 預設=True)：應用自動元資料鍵協調
 
-**Example**:
+**範例**：
 ```python
 from matchms.importing import load_from_mgf
 
-# Load with metadata harmonization
+# 帶元資料協調載入
 spectra = list(load_from_mgf("data.mgf"))
 
-# Load without harmonization
+# 不帶協調載入
 spectra = list(load_from_mgf("data.mgf", metadata_harmonization=False))
 ```
 
-**MGF Format**: Text-based format with BEGIN IONS/END IONS blocks containing metadata and peak lists.
+**MGF 格式**：基於文字的格式，包含 BEGIN IONS/END IONS 區塊，內含元資料和峰值列表。
 
 ---
 
-### MSP (NIST Mass Spectral Library Format)
+### MSP（NIST 質譜庫格式）
 
-**Function**: `load_from_msp(filename, metadata_harmonization=True)`
+**函數**：`load_from_msp(filename, metadata_harmonization=True)`
 
-**Description**: Loads spectra from MSP files, commonly used for spectral libraries.
+**描述**：從 MSP 檔案載入質譜，常用於質譜庫。
 
-**Parameters**:
-- `filename` (str): Path to MSP file
-- `metadata_harmonization` (bool, default=True): Apply automatic metadata harmonization
+**參數**：
+- `filename` (str)：MSP 檔案路徑
+- `metadata_harmonization` (bool, 預設=True)：應用自動元資料協調
 
-**Example**:
+**範例**：
 ```python
 from matchms.importing import load_from_msp
 
 spectra = list(load_from_msp("library.msp"))
 ```
 
-**MSP Format**: Text-based format with Name/MW/Comment fields followed by peak lists.
+**MSP 格式**：基於文字的格式，包含 Name/MW/Comment 欄位，後接峰值列表。
 
 ---
 
-### mzML (Mass Spectrometry Markup Language)
+### mzML（質譜標記語言）
 
-**Function**: `load_from_mzml(filename, ms_level=2, metadata_harmonization=True)`
+**函數**：`load_from_mzml(filename, ms_level=2, metadata_harmonization=True)`
 
-**Description**: Loads spectra from mzML files, the standard XML-based format for raw mass spectrometry data.
+**描述**：從 mzML 檔案載入質譜，這是原始質譜資料的標準 XML 格式。
 
-**Parameters**:
-- `filename` (str): Path to mzML file
-- `ms_level` (int, default=2): MS level to extract (1 for MS1, 2 for MS2/tandem)
-- `metadata_harmonization` (bool, default=True): Apply automatic metadata harmonization
+**參數**：
+- `filename` (str)：mzML 檔案路徑
+- `ms_level` (int, 預設=2)：要擷取的 MS 層級（1 表示 MS1，2 表示 MS2/串聯）
+- `metadata_harmonization` (bool, 預設=True)：應用自動元資料協調
 
-**Example**:
+**範例**：
 ```python
 from matchms.importing import load_from_mzml
 
-# Load MS2 spectra (default)
+# 載入 MS2 質譜（預設）
 ms2_spectra = list(load_from_mzml("data.mzML"))
 
-# Load MS1 spectra
+# 載入 MS1 質譜
 ms1_spectra = list(load_from_mzml("data.mzML", ms_level=1))
 ```
 
-**mzML Format**: XML-based standard format containing raw instrument data and rich metadata.
+**mzML 格式**：基於 XML 的標準格式，包含原始儀器資料和豐富的元資料。
 
 ---
 
 ### mzXML
 
-**Function**: `load_from_mzxml(filename, ms_level=2, metadata_harmonization=True)`
+**函數**：`load_from_mzxml(filename, ms_level=2, metadata_harmonization=True)`
 
-**Description**: Loads spectra from mzXML files, an earlier XML-based format for mass spectrometry data.
+**描述**：從 mzXML 檔案載入質譜，這是較早的質譜資料 XML 格式。
 
-**Parameters**:
-- `filename` (str): Path to mzXML file
-- `ms_level` (int, default=2): MS level to extract
-- `metadata_harmonization` (bool, default=True): Apply automatic metadata harmonization
+**參數**：
+- `filename` (str)：mzXML 檔案路徑
+- `ms_level` (int, 預設=2)：要擷取的 MS 層級
+- `metadata_harmonization` (bool, 預設=True)：應用自動元資料協調
 
-**Example**:
+**範例**：
 ```python
 from matchms.importing import load_from_mzxml
 
 spectra = list(load_from_mzxml("data.mzXML"))
 ```
 
-**mzXML Format**: XML-based format, predecessor to mzML.
+**mzXML 格式**：基於 XML 的格式，mzML 的前身。
 
 ---
 
-### JSON (GNPS Format)
+### JSON（GNPS 格式）
 
-**Function**: `load_from_json(filename, metadata_harmonization=True)`
+**函數**：`load_from_json(filename, metadata_harmonization=True)`
 
-**Description**: Loads spectra from JSON files, particularly GNPS-compatible JSON format.
+**描述**：從 JSON 檔案載入質譜，特別是 GNPS 相容的 JSON 格式。
 
-**Parameters**:
-- `filename` (str): Path to JSON file
-- `metadata_harmonization` (bool, default=True): Apply automatic metadata harmonization
+**參數**：
+- `filename` (str)：JSON 檔案路徑
+- `metadata_harmonization` (bool, 預設=True)：應用自動元資料協調
 
-**Example**:
+**範例**：
 ```python
 from matchms.importing import load_from_json
 
 spectra = list(load_from_json("spectra.json"))
 ```
 
-**JSON Format**: Structured JSON with spectrum metadata and peak arrays.
+**JSON 格式**：結構化 JSON，包含質譜元資料和峰值陣列。
 
 ---
 
-### Pickle (Python Serialization)
+### Pickle（Python 序列化）
 
-**Function**: `load_from_pickle(filename)`
+**函數**：`load_from_pickle(filename)`
 
-**Description**: Loads previously saved matchms Spectrum objects from pickle files. Fast loading of preprocessed spectra.
+**描述**：從 pickle 檔案載入先前儲存的 matchms Spectrum 物件。快速載入預處理的質譜。
 
-**Parameters**:
-- `filename` (str): Path to pickle file
+**參數**：
+- `filename` (str)：pickle 檔案路徑
 
-**Example**:
+**範例**：
 ```python
 from matchms.importing import load_from_pickle
 
 spectra = list(load_from_pickle("processed_spectra.pkl"))
 ```
 
-**Use case**: Saving and loading preprocessed spectra for faster subsequent analyses.
+**使用案例**：儲存和載入預處理質譜以加快後續分析。
 
 ---
 
-### USI (Universal Spectrum Identifier)
+### USI（通用質譜識別碼）
 
-**Function**: `load_from_usi(usi)`
+**函數**：`load_from_usi(usi)`
 
-**Description**: Loads a single spectrum from a metabolomics USI reference.
+**描述**：從代謝體學 USI 參考載入單一質譜。
 
-**Parameters**:
-- `usi` (str): Universal Spectrum Identifier string
+**參數**：
+- `usi` (str)：通用質譜識別碼字串
 
-**Example**:
+**範例**：
 ```python
 from matchms.importing import load_from_usi
 
@@ -172,26 +172,26 @@ usi = "mzspec:GNPS:TASK-...:spectrum..."
 spectrum = load_from_usi(usi)
 ```
 
-**USI Format**: Standardized identifier for accessing spectra from online repositories.
+**USI 格式**：用於從線上儲存庫存取質譜的標準化識別碼。
 
 ---
 
-## Exporting Spectra
+## 匯出質譜
 
-Matchms provides functions to save processed spectra to various formats for sharing and archival.
+Matchms 提供函數將處理後的質譜儲存為各種格式以供分享和存檔。
 
-### MGF Export
+### MGF 匯出
 
-**Function**: `save_as_mgf(spectra, filename, write_mode='w')`
+**函數**：`save_as_mgf(spectra, filename, write_mode='w')`
 
-**Description**: Saves spectra to MGF format.
+**描述**：將質譜儲存為 MGF 格式。
 
-**Parameters**:
-- `spectra` (list): List of Spectrum objects to save
-- `filename` (str): Output file path
-- `write_mode` (str, default='w'): File write mode ('w' for write, 'a' for append)
+**參數**：
+- `spectra` (list)：要儲存的 Spectrum 物件列表
+- `filename` (str)：輸出檔案路徑
+- `write_mode` (str, 預設='w')：檔案寫入模式（'w' 為寫入，'a' 為附加）
 
-**Example**:
+**範例**：
 ```python
 from matchms.exporting import save_as_mgf
 
@@ -200,18 +200,18 @@ save_as_mgf(processed_spectra, "output.mgf")
 
 ---
 
-### MSP Export
+### MSP 匯出
 
-**Function**: `save_as_msp(spectra, filename, write_mode='w')`
+**函數**：`save_as_msp(spectra, filename, write_mode='w')`
 
-**Description**: Saves spectra to MSP format.
+**描述**：將質譜儲存為 MSP 格式。
 
-**Parameters**:
-- `spectra` (list): List of Spectrum objects to save
-- `filename` (str): Output file path
-- `write_mode` (str, default='w'): File write mode
+**參數**：
+- `spectra` (list)：要儲存的 Spectrum 物件列表
+- `filename` (str)：輸出檔案路徑
+- `write_mode` (str, 預設='w')：檔案寫入模式
 
-**Example**:
+**範例**：
 ```python
 from matchms.exporting import save_as_msp
 
@@ -220,18 +220,18 @@ save_as_msp(library_spectra, "library.msp")
 
 ---
 
-### JSON Export
+### JSON 匯出
 
-**Function**: `save_as_json(spectra, filename, write_mode='w')`
+**函數**：`save_as_json(spectra, filename, write_mode='w')`
 
-**Description**: Saves spectra to JSON format (GNPS-compatible).
+**描述**：將質譜儲存為 JSON 格式（GNPS 相容）。
 
-**Parameters**:
-- `spectra` (list): List of Spectrum objects to save
-- `filename` (str): Output file path
-- `write_mode` (str, default='w'): File write mode
+**參數**：
+- `spectra` (list)：要儲存的 Spectrum 物件列表
+- `filename` (str)：輸出檔案路徑
+- `write_mode` (str, 預設='w')：檔案寫入模式
 
-**Example**:
+**範例**：
 ```python
 from matchms.exporting import save_as_json
 
@@ -240,38 +240,38 @@ save_as_json(spectra, "spectra.json")
 
 ---
 
-### Pickle Export
+### Pickle 匯出
 
-**Function**: `save_as_pickle(spectra, filename)`
+**函數**：`save_as_pickle(spectra, filename)`
 
-**Description**: Saves spectra as Python pickle file. Preserves all Spectrum attributes and is fastest for loading.
+**描述**：將質譜儲存為 Python pickle 檔案。保留所有 Spectrum 屬性，載入速度最快。
 
-**Parameters**:
-- `spectra` (list): List of Spectrum objects to save
-- `filename` (str): Output file path
+**參數**：
+- `spectra` (list)：要儲存的 Spectrum 物件列表
+- `filename` (str)：輸出檔案路徑
 
-**Example**:
+**範例**：
 ```python
 from matchms.exporting import save_as_pickle
 
 save_as_pickle(processed_spectra, "processed.pkl")
 ```
 
-**Advantages**:
-- Fast save and load
-- Preserves exact Spectrum state
-- No format conversion overhead
+**優點**：
+- 快速儲存和載入
+- 保留精確的 Spectrum 狀態
+- 無格式轉換開銷
 
-**Disadvantages**:
-- Not human-readable
-- Python-specific (not portable to other languages)
-- Pickle format may not be compatible across Python versions
+**缺點**：
+- 非人類可讀
+- Python 特定（不可移植到其他語言）
+- Pickle 格式可能在不同 Python 版本間不相容
 
 ---
 
-## Complete Import/Export Workflow
+## 完整匯入/匯出工作流程
 
-### Preprocessing and Saving Pipeline
+### 預處理和儲存流程
 
 ```python
 from matchms.importing import load_from_mgf
@@ -279,10 +279,10 @@ from matchms.exporting import save_as_mgf, save_as_pickle
 from matchms.filtering import default_filters, normalize_intensities
 from matchms.filtering import select_by_relative_intensity
 
-# Load raw spectra
+# 載入原始質譜
 spectra = list(load_from_mgf("raw_data.mgf"))
 
-# Process spectra
+# 處理質譜
 processed = []
 for spectrum in spectra:
     spectrum = default_filters(spectrum)
@@ -291,34 +291,34 @@ for spectrum in spectra:
     if spectrum is not None:
         processed.append(spectrum)
 
-# Save processed spectra (MGF for sharing)
+# 儲存處理後的質譜（MGF 用於分享）
 save_as_mgf(processed, "processed_data.mgf")
 
-# Save as pickle for fast reloading
+# 儲存為 pickle 以便快速重新載入
 save_as_pickle(processed, "processed_data.pkl")
 ```
 
-### Format Conversion
+### 格式轉換
 
 ```python
 from matchms.importing import load_from_mzml
 from matchms.exporting import save_as_mgf, save_as_msp
 
-# Convert mzML to MGF
+# 將 mzML 轉換為 MGF
 spectra = list(load_from_mzml("data.mzML", ms_level=2))
 save_as_mgf(spectra, "data.mgf")
 
-# Convert to MSP library format
+# 轉換為 MSP 庫格式
 save_as_msp(spectra, "data.msp")
 ```
 
-### Loading from Multiple Files
+### 從多個檔案載入
 
 ```python
 from matchms.importing import load_from_mgf
 import glob
 
-# Load all MGF files in directory
+# 載入目錄中的所有 MGF 檔案
 all_spectra = []
 for mgf_file in glob.glob("data/*.mgf"):
     spectra = list(load_from_mgf(mgf_file))
@@ -327,90 +327,91 @@ for mgf_file in glob.glob("data/*.mgf"):
 print(f"Loaded {len(all_spectra)} spectra from multiple files")
 ```
 
-### Memory-Efficient Processing
+### 記憶體高效處理
 
 ```python
 from matchms.importing import load_from_mgf
 from matchms.exporting import save_as_mgf
 from matchms.filtering import default_filters, normalize_intensities
 
-# Process large file without loading all into memory
+# 處理大型檔案而不全部載入記憶體
 def process_spectrum(spectrum):
     spectrum = default_filters(spectrum)
     spectrum = normalize_intensities(spectrum)
     return spectrum
 
-# Stream processing
+# 串流處理
 with open("output.mgf", 'w') as outfile:
     for spectrum in load_from_mgf("large_file.mgf"):
         processed = process_spectrum(spectrum)
         if processed is not None:
-            # Write immediately without storing in memory
+            # 立即寫入而不儲存在記憶體中
             save_as_mgf([processed], outfile, write_mode='a')
 ```
 
-## Format Selection Guidelines
+## 格式選擇指南
 
-**MGF**:
-- ✓ Widely supported
-- ✓ Human-readable
-- ✓ Good for data sharing
-- ✓ Moderate file size
-- Best for: Data exchange, GNPS uploads, publication data
+**MGF**：
+- ✓ 廣泛支援
+- ✓ 人類可讀
+- ✓ 適合資料分享
+- ✓ 中等檔案大小
+- 最適用於：資料交換、GNPS 上傳、發表資料
 
-**MSP**:
-- ✓ Spectral library standard
-- ✓ Human-readable
-- ✓ Good metadata support
-- Best for: Reference libraries, NIST format compatibility
+**MSP**：
+- ✓ 質譜庫標準
+- ✓ 人類可讀
+- ✓ 良好的元資料支援
+- 最適用於：參考庫、NIST 格式相容性
 
-**JSON**:
-- ✓ Structured format
-- ✓ GNPS compatible
-- ✓ Easy to parse programmatically
-- Best for: Web applications, GNPS integration, structured data
+**JSON**：
+- ✓ 結構化格式
+- ✓ GNPS 相容
+- ✓ 易於程式解析
+- 最適用於：網頁應用程式、GNPS 整合、結構化資料
 
-**Pickle**:
-- ✓ Fastest save/load
-- ✓ Preserves exact state
-- ✗ Not portable to other languages
-- ✗ Not human-readable
-- Best for: Intermediate processing, Python-only workflows
+**Pickle**：
+- ✓ 最快的儲存/載入
+- ✓ 保留精確狀態
+- ✗ 不可移植到其他語言
+- ✗ 非人類可讀
+- 最適用於：中間處理、僅限 Python 的工作流程
 
-**mzML/mzXML**:
-- ✓ Raw instrument data
-- ✓ Rich metadata
-- ✓ Industry standard
-- ✗ Large file size
-- ✗ Slower to parse
-- Best for: Raw data archival, multi-level MS data
+**mzML/mzXML**：
+- ✓ 原始儀器資料
+- ✓ 豐富的元資料
+- ✓ 產業標準
+- ✗ 大檔案大小
+- ✗ 解析較慢
+- 最適用於：原始資料存檔、多層級 MS 資料
 
-## Metadata Harmonization
+## 元資料協調
 
-The `metadata_harmonization` parameter (available in most import functions) automatically standardizes metadata keys:
+`metadata_harmonization` 參數（在大多數匯入函數中可用）自動標準化元資料鍵：
 
 ```python
-# Without harmonization
+# 不帶協調
 spectrum = load_from_mgf("data.mgf", metadata_harmonization=False)
-# May have: "PRECURSOR_MZ", "Precursor_mz", "precursormz"
+# 可能有："PRECURSOR_MZ"、"Precursor_mz"、"precursormz"
 
-# With harmonization (default)
+# 帶協調（預設）
 spectrum = load_from_mgf("data.mgf", metadata_harmonization=True)
-# Standardized to: "precursor_mz"
+# 標準化為："precursor_mz"
 ```
 
-**Recommended**: Keep harmonization enabled (default) for consistent metadata access across different data sources.
+**建議**：保持協調啟用（預設），以便在不同資料來源之間一致存取元資料。
 
-## File Format Specifications
+## 檔案格式規格
 
-For detailed format specifications:
-- **MGF**: http://www.matrixscience.com/help/data_file_help.html
-- **MSP**: https://chemdata.nist.gov/mass-spc/ms-search/
-- **mzML**: http://www.psidev.info/mzML
-- **GNPS JSON**: https://gnps.ucsd.edu/
+有關詳細的格式規格：
+- **MGF**：http://www.matrixscience.com/help/data_file_help.html
+- **MSP**：https://chemdata.nist.gov/mass-spc/ms-search/
+- **mzML**：http://www.psidev.info/mzML
+- **GNPS JSON**：https://gnps.ucsd.edu/
 
-## Further Reading
+## 進一步閱讀
 
-For complete API documentation:
+有關完整的 API 文件：
 https://matchms.readthedocs.io/en/latest/api/matchms.importing.html
 https://matchms.readthedocs.io/en/latest/api/matchms.exporting.html
+

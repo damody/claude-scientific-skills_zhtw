@@ -1,107 +1,107 @@
-# Data Access & Retrieval
+# 資料存取與擷取
 
-This reference covers navigating OMERO's hierarchical data structure and retrieving objects.
+此參考涵蓋瀏覽 OMERO 的階層式資料結構和擷取物件。
 
-## OMERO Data Hierarchy
+## OMERO 資料階層
 
-### Standard Hierarchy
-
-```
-Project
-  └─ Dataset
-       └─ Image
-```
-
-### Screening Hierarchy
+### 標準階層
 
 ```
-Screen
-  └─ Plate
-       └─ Well
-            └─ WellSample
-                 └─ Image
+Project（專案）
+  └─ Dataset（資料集）
+       └─ Image（影像）
 ```
 
-## Listing Objects
+### 篩選階層
 
-### List Projects
+```
+Screen（篩選器）
+  └─ Plate（板）
+       └─ Well（孔）
+            └─ WellSample（孔樣本）
+                 └─ Image（影像）
+```
+
+## 列出物件
+
+### 列出專案
 
 ```python
-# List all projects for current user
+# 列出當前使用者的所有專案
 for project in conn.listProjects():
     print(f"Project: {project.getName()} (ID: {project.getId()})")
 ```
 
-### List Projects with Filtering
+### 使用篩選器列出專案
 
 ```python
-# Get current user and group
+# 取得當前使用者和群組
 my_exp_id = conn.getUser().getId()
 default_group_id = conn.getEventContext().groupId
 
-# List projects with filters
+# 使用篩選器列出專案
 for project in conn.getObjects("Project", opts={
-    'owner': my_exp_id,                    # Filter by owner
-    'group': default_group_id,             # Filter by group
-    'order_by': 'lower(obj.name)',         # Sort alphabetically
-    'limit': 10,                           # Limit results
-    'offset': 0                            # Pagination offset
+    'owner': my_exp_id,                    # 按所有者篩選
+    'group': default_group_id,             # 按群組篩選
+    'order_by': 'lower(obj.name)',         # 按字母順序排序
+    'limit': 10,                           # 限制結果
+    'offset': 0                            # 分頁偏移
 }):
     print(f"Project: {project.getName()}")
 ```
 
-### List Datasets
+### 列出資料集
 
 ```python
-# List all datasets
+# 列出所有資料集
 for dataset in conn.getObjects("Dataset"):
     print(f"Dataset: {dataset.getName()} (ID: {dataset.getId()})")
 
-# List orphaned datasets (not in any project)
+# 列出孤立資料集（不在任何專案中）
 for dataset in conn.getObjects("Dataset", opts={'orphaned': True}):
     print(f"Orphaned Dataset: {dataset.getName()}")
 ```
 
-### List Images
+### 列出影像
 
 ```python
-# List all images
+# 列出所有影像
 for image in conn.getObjects("Image"):
     print(f"Image: {image.getName()} (ID: {image.getId()})")
 
-# List images in specific dataset
+# 列出特定資料集中的影像
 dataset_id = 123
 for image in conn.getObjects("Image", opts={'dataset': dataset_id}):
     print(f"Image: {image.getName()}")
 
-# List orphaned images
+# 列出孤立影像
 for image in conn.getObjects("Image", opts={'orphaned': True}):
     print(f"Orphaned Image: {image.getName()}")
 ```
 
-## Retrieving Objects by ID
+## 透過 ID 擷取物件
 
-### Get Single Object
+### 取得單一物件
 
 ```python
-# Get project by ID
+# 透過 ID 取得專案
 project = conn.getObject("Project", project_id)
 if project:
     print(f"Project: {project.getName()}")
 else:
     print("Project not found")
 
-# Get dataset by ID
+# 透過 ID 取得資料集
 dataset = conn.getObject("Dataset", dataset_id)
 
-# Get image by ID
+# 透過 ID 取得影像
 image = conn.getObject("Image", image_id)
 ```
 
-### Get Multiple Objects by ID
+### 透過 ID 取得多個物件
 
 ```python
-# Get multiple projects at once
+# 一次取得多個專案
 project_ids = [1, 2, 3, 4, 5]
 projects = conn.getObjects("Project", project_ids)
 
@@ -109,9 +109,9 @@ for project in projects:
     print(f"Project: {project.getName()}")
 ```
 
-### Supported Object Types
+### 支援的物件類型
 
-The `getObject()` and `getObjects()` methods support:
+`getObject()` 和 `getObjects()` 方法支援：
 - `"Project"`
 - `"Dataset"`
 - `"Image"`
@@ -119,47 +119,47 @@ The `getObject()` and `getObjects()` methods support:
 - `"Plate"`
 - `"Well"`
 - `"Roi"`
-- `"Annotation"` (and specific types: `"TagAnnotation"`, `"FileAnnotation"`, etc.)
+- `"Annotation"`（以及特定類型：`"TagAnnotation"`、`"FileAnnotation"` 等）
 - `"Experimenter"`
 - `"ExperimenterGroup"`
 - `"Fileset"`
 
-## Query by Attributes
+## 按屬性查詢
 
-### Query Objects by Name
+### 按名稱查詢物件
 
 ```python
-# Find images with specific name
+# 尋找具有特定名稱的影像
 images = conn.getObjects("Image", attributes={"name": "sample_001.tif"})
 
 for image in images:
     print(f"Found image: {image.getName()} (ID: {image.getId()})")
 
-# Find datasets with specific name
+# 尋找具有特定名稱的資料集
 datasets = conn.getObjects("Dataset", attributes={"name": "Control Group"})
 ```
 
-### Query Annotations by Value
+### 按值查詢註解
 
 ```python
-# Find tags with specific text value
+# 尋找具有特定文字值的標籤
 tags = conn.getObjects("TagAnnotation",
                       attributes={"textValue": "experiment_tag"})
 
 for tag in tags:
     print(f"Tag: {tag.getValue()}")
 
-# Find map annotations
+# 尋找對應註解
 map_anns = conn.getObjects("MapAnnotation",
                           attributes={"ns": "custom.namespace"})
 ```
 
-## Navigating Hierarchies
+## 瀏覽階層
 
-### Navigate Down (Parent to Children)
+### 向下瀏覽（父到子）
 
 ```python
-# Project → Datasets → Images
+# 專案 → 資料集 → 影像
 project = conn.getObject("Project", project_id)
 
 for dataset in project.listChildren():
@@ -169,27 +169,27 @@ for dataset in project.listChildren():
         print(f"  Image: {image.getName()}")
 ```
 
-### Navigate Up (Child to Parent)
+### 向上瀏覽（子到父）
 
 ```python
-# Image → Dataset → Project
+# 影像 → 資料集 → 專案
 image = conn.getObject("Image", image_id)
 
-# Get parent dataset
+# 取得父資料集
 dataset = image.getParent()
 if dataset:
     print(f"Dataset: {dataset.getName()}")
 
-    # Get parent project
+    # 取得父專案
     project = dataset.getParent()
     if project:
         print(f"Project: {project.getName()}")
 ```
 
-### Complete Hierarchy Traversal
+### 完整階層遍歷
 
 ```python
-# Traverse complete project hierarchy
+# 遍歷完整專案階層
 for project in conn.getObjects("Project", opts={'order_by': 'lower(obj.name)'}):
     print(f"Project: {project.getName()} (ID: {project.getId()})")
 
@@ -203,89 +203,89 @@ for project in conn.getObjects("Project", opts={'order_by': 'lower(obj.name)'}):
             print(f"      Channels: {image.getSizeC()}")
 ```
 
-## Screening Data Access
+## 篩選資料存取
 
-### List Screens and Plates
+### 列出篩選器和板
 
 ```python
-# List all screens
+# 列出所有篩選器
 for screen in conn.getObjects("Screen"):
     print(f"Screen: {screen.getName()} (ID: {screen.getId()})")
 
-    # List plates in screen
+    # 列出篩選器中的板
     for plate in screen.listChildren():
         print(f"  Plate: {plate.getName()} (ID: {plate.getId()})")
 ```
 
-### Access Plate Wells
+### 存取板的孔
 
 ```python
-# Get plate
+# 取得板
 plate = conn.getObject("Plate", plate_id)
 
-# Plate metadata
+# 板中繼資料
 print(f"Plate: {plate.getName()}")
-print(f"Grid size: {plate.getGridSize()}")  # e.g., (8, 12) for 96-well
+print(f"Grid size: {plate.getGridSize()}")  # 例如 96 孔板的 (8, 12)
 print(f"Number of fields: {plate.getNumberOfFields()}")
 
-# Iterate through wells
+# 遍歷孔
 for well in plate.listChildren():
     print(f"Well at row {well.row}, column {well.column}")
 
-    # Count images in well (fields)
+    # 計算孔中的影像（視野）
     field_count = well.countWellSample()
     print(f"  Number of fields: {field_count}")
 
-    # Access images in well
+    # 存取孔中的影像
     for index in range(field_count):
         image = well.getImage(index)
         print(f"    Field {index}: {image.getName()}")
 ```
 
-### Direct Well Access
+### 直接孔存取
 
 ```python
-# Get specific well by row and column
-well = plate.getWell(row=0, column=0)  # Top-left well
+# 透過行和列取得特定孔
+well = plate.getWell(row=0, column=0)  # 左上角孔
 
-# Get image from well
+# 從孔取得影像
 if well.countWellSample() > 0:
-    image = well.getImage(0)  # First field
+    image = well.getImage(0)  # 第一個視野
     print(f"Image: {image.getName()}")
 ```
 
-### Well Sample Access
+### 孔樣本存取
 
 ```python
-# Access well samples directly
+# 直接存取孔樣本
 for well in plate.listChildren():
     for ws in well.listChildren():  # ws = WellSample
         image = ws.getImage()
         print(f"WellSample {ws.getId()}: {image.getName()}")
 ```
 
-## Image Properties
+## 影像屬性
 
-### Basic Dimensions
+### 基本尺寸
 
 ```python
 image = conn.getObject("Image", image_id)
 
-# Pixel dimensions
+# 像素尺寸
 print(f"X: {image.getSizeX()}")
 print(f"Y: {image.getSizeY()}")
 print(f"Z: {image.getSizeZ()} (Z-sections)")
 print(f"C: {image.getSizeC()} (Channels)")
 print(f"T: {image.getSizeT()} (Time points)")
 
-# Image type
-print(f"Type: {image.getPixelsType()}")  # e.g., 'uint16', 'uint8'
+# 影像類型
+print(f"Type: {image.getPixelsType()}")  # 例如 'uint16'、'uint8'
 ```
 
-### Physical Dimensions
+### 物理尺寸
 
 ```python
-# Get pixel sizes with units (OMERO 5.1.0+)
+# 取得具有單位的像素大小（OMERO 5.1.0+）
 size_x_obj = image.getPixelSizeX(units=True)
 size_y_obj = image.getPixelSizeY(units=True)
 size_z_obj = image.getPixelSizeZ(units=True)
@@ -294,16 +294,16 @@ print(f"Pixel Size X: {size_x_obj.getValue()} {size_x_obj.getSymbol()}")
 print(f"Pixel Size Y: {size_y_obj.getValue()} {size_y_obj.getSymbol()}")
 print(f"Pixel Size Z: {size_z_obj.getValue()} {size_z_obj.getSymbol()}")
 
-# Get as floats (micrometers)
-size_x = image.getPixelSizeX()  # Returns float in µm
+# 取得浮點數（微米）
+size_x = image.getPixelSizeX()  # 以 µm 為單位傳回浮點數
 size_y = image.getPixelSizeY()
 size_z = image.getPixelSizeZ()
 ```
 
-### Channel Information
+### 通道資訊
 
 ```python
-# Iterate through channels
+# 遍歷通道
 for channel in image.getChannels():
     print(f"Channel {channel.getLabel()}:")
     print(f"  Color: {channel.getColor().getRGB()}")
@@ -311,20 +311,20 @@ for channel in image.getChannels():
     print(f"  Wavelength: {channel.getEmissionWave()}")
 ```
 
-### Image Metadata
+### 影像中繼資料
 
 ```python
-# Acquisition date
+# 擷取日期
 acquired = image.getAcquisitionDate()
 if acquired:
     print(f"Acquired: {acquired}")
 
-# Description
+# 描述
 description = image.getDescription()
 if description:
     print(f"Description: {description}")
 
-# Owner and group
+# 所有者和群組
 details = image.getDetails()
 print(f"Owner: {details.getOwner().getFullName()}")
 print(f"Username: {details.getOwner().getOmeName()}")
@@ -332,12 +332,12 @@ print(f"Group: {details.getGroup().getName()}")
 print(f"Created: {details.getCreationEvent().getTime()}")
 ```
 
-## Object Ownership and Permissions
+## 物件所有權和權限
 
-### Get Owner Information
+### 取得所有者資訊
 
 ```python
-# Get object owner
+# 取得物件所有者
 obj = conn.getObject("Dataset", dataset_id)
 owner = obj.getDetails().getOwner()
 
@@ -347,20 +347,20 @@ print(f"Full Name: {owner.getFullName()}")
 print(f"Email: {owner.getEmail()}")
 ```
 
-### Get Group Information
+### 取得群組資訊
 
 ```python
-# Get object's group
+# 取得物件的群組
 obj = conn.getObject("Image", image_id)
 group = obj.getDetails().getGroup()
 
 print(f"Group: {group.getName()} (ID: {group.getId()})")
 ```
 
-### Filter by Owner
+### 按所有者篩選
 
 ```python
-# Get objects for specific user
+# 取得特定使用者的物件
 user_id = 5
 datasets = conn.getObjects("Dataset", opts={'owner': user_id})
 
@@ -368,12 +368,12 @@ for dataset in datasets:
     print(f"Dataset: {dataset.getName()}")
 ```
 
-## Advanced Queries
+## 進階查詢
 
-### Pagination
+### 分頁
 
 ```python
-# Paginate through large result sets
+# 分頁瀏覽大型結果集
 page_size = 50
 offset = 0
 
@@ -393,29 +393,29 @@ while True:
     offset += page_size
 ```
 
-### Sorting Results
+### 排序結果
 
 ```python
-# Sort by name (case-insensitive)
+# 按名稱排序（不區分大小寫）
 projects = conn.getObjects("Project", opts={
     'order_by': 'lower(obj.name)'
 })
 
-# Sort by ID (ascending)
+# 按 ID 排序（升序）
 datasets = conn.getObjects("Dataset", opts={
     'order_by': 'obj.id'
 })
 
-# Sort by name (descending)
+# 按名稱排序（降序）
 images = conn.getObjects("Image", opts={
     'order_by': 'lower(obj.name) desc'
 })
 ```
 
-### Combining Filters
+### 組合篩選器
 
 ```python
-# Complex query with multiple filters
+# 使用多個篩選器的複雜查詢
 my_exp_id = conn.getUser().getId()
 default_group_id = conn.getEventContext().groupId
 
@@ -429,37 +429,37 @@ images = conn.getObjects("Image", opts={
 })
 ```
 
-## Counting Objects
+## 計算物件
 
-### Count Children
+### 計算子物件
 
 ```python
-# Count images in dataset
+# 計算資料集中的影像
 dataset = conn.getObject("Dataset", dataset_id)
 image_count = dataset.countChildren()
 print(f"Dataset contains {image_count} images")
 
-# Count datasets in project
+# 計算專案中的資料集
 project = conn.getObject("Project", project_id)
 dataset_count = project.countChildren()
 print(f"Project contains {dataset_count} datasets")
 ```
 
-### Count Annotations
+### 計算註解
 
 ```python
-# Count annotations on object
+# 計算物件上的註解
 image = conn.getObject("Image", image_id)
 annotation_count = image.countAnnotations()
 print(f"Image has {annotation_count} annotations")
 ```
 
-## Orphaned Objects
+## 孤立物件
 
-### Find Orphaned Datasets
+### 尋找孤立資料集
 
 ```python
-# Datasets not linked to any project
+# 未連結到任何專案的資料集
 orphaned_datasets = conn.getObjects("Dataset", opts={'orphaned': True})
 
 print("Orphaned Datasets:")
@@ -469,10 +469,10 @@ for dataset in orphaned_datasets:
     print(f"    Images: {dataset.countChildren()}")
 ```
 
-### Find Orphaned Images
+### 尋找孤立影像
 
 ```python
-# Images not in any dataset
+# 不在任何資料集中的影像
 orphaned_images = conn.getObjects("Image", opts={'orphaned': True})
 
 print("Orphaned Images:")
@@ -480,37 +480,37 @@ for image in orphaned_images:
     print(f"  {image.getName()} (ID: {image.getId()})")
 ```
 
-### Find Orphaned Plates
+### 尋找孤立板
 
 ```python
-# Plates not in any screen
+# 不在任何篩選器中的板
 orphaned_plates = conn.getObjects("Plate", opts={'orphaned': True})
 
 for plate in orphaned_plates:
     print(f"Orphaned Plate: {plate.getName()}")
 ```
 
-## Complete Example
+## 完整範例
 
 ```python
 from omero.gateway import BlitzGateway
 
-# Connection details
+# 連線詳情
 HOST = 'omero.example.com'
 PORT = 4064
 USERNAME = 'user'
 PASSWORD = 'pass'
 
-# Connect and query data
+# 連線並查詢資料
 with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
-    # Get user context
+    # 取得使用者上下文
     user = conn.getUser()
     group = conn.getGroupFromContext()
 
     print(f"Connected as {user.getName()} in group {group.getName()}")
     print()
 
-    # List projects with datasets and images
+    # 列出專案及其資料集和影像
     for project in conn.getObjects("Project", opts={'limit': 5}):
         print(f"Project: {project.getName()} (ID: {project.getId()})")
 
@@ -518,7 +518,7 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
             image_count = dataset.countChildren()
             print(f"  Dataset: {dataset.getName()} ({image_count} images)")
 
-            # Show first 3 images
+            # 顯示前 3 張影像
             for idx, image in enumerate(dataset.listChildren()):
                 if idx >= 3:
                     print(f"    ... and {image_count - 3} more")
@@ -530,15 +530,15 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
         print()
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use Context Managers**: Always use `with` statements for automatic connection cleanup
-2. **Limit Results**: Use `limit` and `offset` for large datasets
-3. **Filter Early**: Apply filters to reduce data transfer
-4. **Check for None**: Always check if `getObject()` returns None before using
-5. **Efficient Traversal**: Use `listChildren()` instead of querying separately
-6. **Count Before Loading**: Use `countChildren()` to decide whether to load data
-7. **Group Context**: Set appropriate group context before cross-group queries
-8. **Pagination**: Implement pagination for large result sets
-9. **Object Reuse**: Cache frequently accessed objects to reduce queries
-10. **Error Handling**: Wrap queries in try-except blocks for robustness
+1. **使用上下文管理器**：務必使用 `with` 陳述式進行自動連線清理
+2. **限制結果**：對大型資料集使用 `limit` 和 `offset`
+3. **提早篩選**：應用篩選器以減少資料傳輸
+4. **檢查 None**：在使用前務必檢查 `getObject()` 是否傳回 None
+5. **高效遍歷**：使用 `listChildren()` 而非單獨查詢
+6. **載入前計數**：使用 `countChildren()` 決定是否載入資料
+7. **群組上下文**：在跨群組查詢前設定適當的群組上下文
+8. **分頁**：對大型結果集實作分頁
+9. **物件重用**：快取經常存取的物件以減少查詢
+10. **錯誤處理**：將查詢包裝在 try-except 區塊中以確保穩健性

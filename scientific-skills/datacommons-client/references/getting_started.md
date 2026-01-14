@@ -1,63 +1,63 @@
-# Getting Started with Data Commons
+# Data Commons 入門指南
 
-## Quick Start Guide
+## 快速入門
 
-This guide provides end-to-end examples for common Data Commons workflows.
+本指南提供常見 Data Commons 工作流程的端到端範例。
 
-## Installation and Setup
+## 安裝與設定
 
 ```bash
-# Install with Pandas support
+# 安裝具有 Pandas 支援的版本
 pip install "datacommons-client[Pandas]"
 
-# Set up API key for datacommons.org
+# 為 datacommons.org 設定 API 金鑰
 export DC_API_KEY="your_api_key_here"
 ```
 
-Request an API key at: https://apikeys.datacommons.org/
+在此申請 API 金鑰：https://apikeys.datacommons.org/
 
-## Example 1: Basic Population Query
+## 範例 1：基本人口查詢
 
-Query current population for specific places:
+查詢特定地點的當前人口：
 
 ```python
 from datacommons_client import DataCommonsClient
 
-# Initialize client
+# 初始化 client
 client = DataCommonsClient()
 
-# Step 1: Resolve place names to DCIDs
+# 步驟 1：將地名解析為 DCIDs
 places = ["California", "Texas", "New York"]
 resolve_response = client.resolve.fetch_dcids_by_name(
     names=places,
     entity_type="State"
 )
 
-# Extract DCIDs
+# 提取 DCIDs
 dcids = []
 for name, result in resolve_response.to_dict().items():
     if result["candidates"]:
         dcids.append(result["candidates"][0]["dcid"])
         print(f"{name}: {result['candidates'][0]['dcid']}")
 
-# Step 2: Query population data
+# 步驟 2：查詢人口資料
 response = client.observation.fetch(
     variable_dcids=["Count_Person"],
     entity_dcids=dcids,
     date="latest"
 )
 
-# Step 3: Display results
+# 步驟 3：顯示結果
 data = response.to_dict()
 for variable, entities in data.items():
     for entity, observations in entities.items():
         for obs in observations:
-            print(f"{entity}: {obs['value']:,} people ({obs['date']})")
+            print(f"{entity}: {obs['value']:,} 人 ({obs['date']})")
 ```
 
-## Example 2: Time Series Analysis
+## 範例 2：時間序列分析
 
-Retrieve and plot historical unemployment rates:
+取得並繪製歷史失業率：
 
 ```python
 import pandas as pd
@@ -65,68 +65,68 @@ import matplotlib.pyplot as plt
 
 client = DataCommonsClient()
 
-# Query unemployment rate over time
+# 查詢隨時間變化的失業率
 response = client.observation.fetch(
     variable_dcids=["UnemploymentRate_Person"],
     entity_dcids=["country/USA"],
-    date="all"  # Get all historical data
+    date="all"  # 取得所有歷史資料
 )
 
-# Convert to DataFrame
+# 轉換為 DataFrame
 df = response.to_observations_as_records()
 
-# Plot
+# 繪圖
 df = df.sort_values('date')
 plt.figure(figsize=(12, 6))
 plt.plot(df['date'], df['value'])
-plt.title('US Unemployment Rate Over Time')
-plt.xlabel('Year')
-plt.ylabel('Unemployment Rate (%)')
+plt.title('美國失業率隨時間變化')
+plt.xlabel('年份')
+plt.ylabel('失業率 (%)')
 plt.grid(True)
 plt.show()
 ```
 
-## Example 3: Geographic Hierarchy Query
+## 範例 3：地理階層查詢
 
-Get data for all counties within a state:
+取得州內所有縣的資料：
 
 ```python
 client = DataCommonsClient()
 
-# Query median income for all California counties
+# 查詢加州所有縣的家庭收入中位數
 response = client.observation.fetch(
     variable_dcids=["Median_Income_Household"],
     entity_expression="geoId/06<-containedInPlace+{typeOf:County}",
     date="2020"
 )
 
-# Convert to DataFrame and sort
+# 轉換為 DataFrame 並排序
 df = response.to_observations_as_records()
 
-# Get county names
+# 取得縣名
 county_dcids = df['entity'].unique().tolist()
 names = client.node.fetch_entity_names(node_dcids=county_dcids)
 
-# Add names to dataframe
+# 將名稱加入 dataframe
 df['name'] = df['entity'].map(names)
 
-# Display top 10 by income
+# 顯示收入前 10 名
 top_counties = df.nlargest(10, 'value')[['name', 'value']]
-print("\nTop 10 California Counties by Median Household Income:")
+print("\n加州家庭收入中位數前 10 名的縣：")
 for idx, row in top_counties.iterrows():
     print(f"{row['name']}: ${row['value']:,.0f}")
 ```
 
-## Example 4: Multi-Variable Comparison
+## 範例 4：多變數比較
 
-Compare multiple statistics across entities:
+比較多個實體的多項統計資料：
 
 ```python
 import pandas as pd
 
 client = DataCommonsClient()
 
-# Define places
+# 定義地點
 places = ["California", "Texas", "Florida", "New York"]
 resolve_response = client.resolve.fetch_dcids_by_name(names=places)
 
@@ -138,7 +138,7 @@ for name, result in resolve_response.to_dict().items():
         dcids.append(dcid)
         name_map[dcid] = name
 
-# Query multiple variables
+# 查詢多個變數
 variables = [
     "Count_Person",
     "Median_Income_Household",
@@ -152,84 +152,84 @@ response = client.observation.fetch(
     date="latest"
 )
 
-# Convert to DataFrame
+# 轉換為 DataFrame
 df = response.to_observations_as_records()
 
-# Add readable names
+# 加入可讀的名稱
 df['state'] = df['entity'].map(name_map)
 
-# Pivot for comparison
+# 樞紐以進行比較
 pivot = df.pivot_table(
     values='value',
     index='state',
     columns='variable'
 )
 
-print("\nState Comparison:")
+print("\n州別比較：")
 print(pivot.to_string())
 ```
 
-## Example 5: Coordinate-Based Query
+## 範例 5：座標查詢
 
-Find and query data for a location by coordinates:
+根據座標尋找並查詢該位置的資料：
 
 ```python
 client = DataCommonsClient()
 
-# User provides coordinates (e.g., from GPS)
-latitude, longitude = 37.7749, -122.4194  # San Francisco
+# 使用者提供座標（例如來自 GPS）
+latitude, longitude = 37.7749, -122.4194  # 舊金山
 
-# Step 1: Resolve coordinates to place
+# 步驟 1：將座標解析為地點
 dcid = client.resolve.fetch_dcid_by_coordinates(
     latitude=latitude,
     longitude=longitude
 )
 
-# Step 2: Get place name
+# 步驟 2：取得地點名稱
 name = client.node.fetch_entity_names(node_dcids=[dcid])
-print(f"Location: {name[dcid]}")
+print(f"位置：{name[dcid]}")
 
-# Step 3: Check available variables
+# 步驟 3：檢查可用變數
 available_vars = client.observation.fetch_available_statistical_variables(
     entity_dcids=[dcid]
 )
 
-print(f"\nAvailable variables: {len(available_vars[dcid])} found")
-print("First 10:", list(available_vars[dcid])[:10])
+print(f"\n可用變數：找到 {len(available_vars[dcid])} 個")
+print("前 10 個：", list(available_vars[dcid])[:10])
 
-# Step 4: Query specific variables
+# 步驟 4：查詢特定變數
 response = client.observation.fetch(
     variable_dcids=["Count_Person", "Median_Income_Household"],
     entity_dcids=[dcid],
     date="latest"
 )
 
-# Display results
+# 顯示結果
 df = response.to_observations_as_records()
-print("\nStatistics:")
+print("\n統計資料：")
 for _, row in df.iterrows():
     print(f"{row['variable']}: {row['value']}")
 ```
 
-## Example 6: Data Source Filtering
+## 範例 6：資料來源篩選
 
-Query data from specific sources for consistency:
+從特定來源查詢資料以確保一致性：
 
 ```python
 client = DataCommonsClient()
 
-# Query with facet filtering
+# 使用 facet 篩選查詢
 response = client.observation.fetch(
     variable_dcids=["Count_Person"],
     entity_dcids=["country/USA"],
     date="all",
-    filter_facet_domains=["census.gov"]  # Only US Census data
+    filter_facet_domains=["census.gov"]  # 僅使用美國人口普查資料
 )
 
 df = response.to_observations_as_records()
-print(f"Found {len(df)} observations from census.gov")
+print(f"從 census.gov 找到 {len(df)} 筆觀測值")
 
-# Compare with all sources
+# 與所有來源比較
 response_all = client.observation.fetch(
     variable_dcids=["Count_Person"],
     entity_dcids=["country/USA"],
@@ -237,70 +237,70 @@ response_all = client.observation.fetch(
 )
 
 df_all = response_all.to_observations_as_records()
-print(f"Found {len(df_all)} observations from all sources")
+print(f"從所有來源找到 {len(df_all)} 筆觀測值")
 ```
 
-## Example 7: Exploring the Knowledge Graph
+## 範例 7：探索知識圖譜
 
-Discover entity properties and relationships:
+發現實體屬性和關係：
 
 ```python
 client = DataCommonsClient()
 
-# Step 1: Explore what properties exist
-entity = "geoId/06"  # California
+# 步驟 1：探索存在哪些屬性
+entity = "geoId/06"  # 加州
 
-# Get outgoing properties
+# 取得傳出屬性
 out_props = client.node.fetch_property_labels(
     node_dcids=[entity],
     out=True
 )
 
-print(f"Outgoing properties for California:")
+print(f"加州的傳出屬性：")
 print(out_props[entity])
 
-# Get incoming properties
+# 取得傳入屬性
 in_props = client.node.fetch_property_labels(
     node_dcids=[entity],
     out=False
 )
 
-print(f"\nIncoming properties for California:")
+print(f"\n加州的傳入屬性：")
 print(in_props[entity])
 
-# Step 2: Get specific property values
+# 步驟 2：取得特定屬性值
 name_response = client.node.fetch_property_values(
     node_dcids=[entity],
     property="name",
     out=True
 )
 
-print(f"\nName property value:")
+print(f"\n名稱屬性值：")
 print(name_response.to_dict())
 
-# Step 3: Explore hierarchy
+# 步驟 3：探索階層
 children = client.node.fetch_place_children(node_dcids=[entity])
-print(f"\nNumber of child places: {len(children[entity])}")
+print(f"\n子地點數量：{len(children[entity])}")
 
-# Get names for first 5 children
+# 取得前 5 個子項目的名稱
 if children[entity]:
     child_sample = children[entity][:5]
     child_names = client.node.fetch_entity_names(node_dcids=child_sample)
-    print("\nSample child places:")
+    print("\n子地點範例：")
     for dcid, name in child_names.items():
         print(f"  {name}")
 ```
 
-## Example 8: Batch Processing Multiple Queries
+## 範例 8：批次處理多個查詢
 
-Efficiently query data for many entities:
+高效查詢多個實體的資料：
 
 ```python
 import pandas as pd
 
 client = DataCommonsClient()
 
-# List of cities to analyze
+# 要分析的城市列表
 cities = [
     "San Francisco, CA",
     "Los Angeles, CA",
@@ -309,13 +309,13 @@ cities = [
     "San Jose, CA"
 ]
 
-# Resolve all cities
+# 解析所有城市
 resolve_response = client.resolve.fetch_dcids_by_name(
     names=cities,
     entity_type="City"
 )
 
-# Build mapping
+# 建立對應
 city_dcids = []
 dcid_to_name = {}
 for name, result in resolve_response.to_dict().items():
@@ -324,7 +324,7 @@ for name, result in resolve_response.to_dict().items():
         city_dcids.append(dcid)
         dcid_to_name[dcid] = name
 
-# Query multiple variables at once
+# 一次查詢多個變數
 variables = [
     "Count_Person",
     "Median_Income_Household",
@@ -337,11 +337,11 @@ response = client.observation.fetch(
     date="latest"
 )
 
-# Process into a comparison table
+# 處理成比較表
 df = response.to_observations_as_records()
 df['city'] = df['entity'].map(dcid_to_name)
 
-# Create comparison table
+# 建立比較表
 comparison = df.pivot_table(
     values='value',
     index='city',
@@ -349,69 +349,69 @@ comparison = df.pivot_table(
     aggfunc='first'
 )
 
-print("\nCalifornia Cities Comparison:")
+print("\n加州城市比較：")
 print(comparison.to_string())
 
-# Export to CSV
+# 匯出為 CSV
 comparison.to_csv('ca_cities_comparison.csv')
-print("\nData exported to ca_cities_comparison.csv")
+print("\n資料已匯出至 ca_cities_comparison.csv")
 ```
 
-## Common Patterns Summary
+## 常見模式摘要
 
-### Pattern 1: Name → DCID → Data
+### 模式 1：名稱 → DCID → 資料
 ```python
 names = ["California"]
 dcids = resolve_names(names)
 data = query_observations(dcids, variables)
 ```
 
-### Pattern 2: Coordinates → DCID → Data
+### 模式 2：座標 → DCID → 資料
 ```python
 dcid = resolve_coordinates(lat, lon)
 data = query_observations([dcid], variables)
 ```
 
-### Pattern 3: Parent → Children → Data
+### 模式 3：父項目 → 子項目 → 資料
 ```python
 children = get_place_children(parent_dcid)
 data = query_observations(children, variables)
 ```
 
-### Pattern 4: Explore → Select → Query
+### 模式 4：探索 → 選擇 → 查詢
 ```python
 available_vars = check_available_variables(dcids)
 selected_vars = filter_relevant(available_vars)
 data = query_observations(dcids, selected_vars)
 ```
 
-## Error Handling Best Practices
+## 錯誤處理最佳實踐
 
 ```python
 client = DataCommonsClient()
 
-# Always check for candidates
+# 始終檢查候選項
 resolve_response = client.resolve.fetch_dcids_by_name(names=["Unknown Place"])
 result = resolve_response.to_dict()["Unknown Place"]
 
 if not result["candidates"]:
-    print("No matches found - try a more specific name")
-    # Handle error appropriately
+    print("找不到匹配項 - 嘗試更具體的名稱")
+    # 適當處理錯誤
 else:
     dcid = result["candidates"][0]["dcid"]
-    # Proceed with query
+    # 繼續查詢
 
-# Check for multiple candidates (ambiguity)
+# 檢查多個候選項（模糊）
 if len(result["candidates"]) > 1:
-    print(f"Multiple matches found: {len(result['candidates'])}")
+    print(f"找到多個匹配項：{len(result['candidates'])}")
     for candidate in result["candidates"]:
         print(f"  {candidate['dcid']} ({candidate.get('dominantType', 'N/A')})")
-    # Let user select or use additional filtering
+    # 讓使用者選擇或使用額外篩選
 ```
 
-## Next Steps
+## 下一步
 
-1. Explore available statistical variables: https://datacommons.org/tools/statvar
-2. Browse the knowledge graph: https://datacommons.org/browser/
-3. Read detailed endpoint documentation in `references/` directory
-4. Check official documentation: https://docs.datacommons.org/api/python/v2/
+1. 探索可用的統計變數：https://datacommons.org/tools/statvar
+2. 瀏覽知識圖譜：https://datacommons.org/browser/
+3. 閱讀 `references/` 目錄中的詳細端點文件
+4. 查看官方文件：https://docs.datacommons.org/api/python/v2/

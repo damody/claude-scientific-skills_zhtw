@@ -1,116 +1,116 @@
-# Standard Neuropixels Analysis Workflow
+# 標準 Neuropixels 分析工作流程
 
-Complete step-by-step guide for analyzing Neuropixels recordings from raw data to curated units.
+從原始資料到篩選單元的完整逐步分析指南。
 
-## Overview
+## 概述
 
-This reference documents the complete analysis pipeline:
+本參考文件記錄完整的分析流程：
 
 ```
-Raw Recording → Preprocessing → Motion Correction → Spike Sorting →
-Postprocessing → Quality Metrics → Curation → Export
+原始記錄 → 預處理 → 運動修正 → 尖峰分選 →
+後處理 → 品質指標 → 篩選 → 匯出
 ```
 
-## 1. Data Loading
+## 1. 資料載入
 
-### Supported Formats
+### 支援的格式
 
 ```python
 import spikeinterface.full as si
 import neuropixels_analysis as npa
 
-# SpikeGLX (most common)
+# SpikeGLX（最常見）
 recording = si.read_spikeglx('/path/to/run/', stream_id='imec0.ap')
 
 # Open Ephys
 recording = si.read_openephys('/path/to/experiment/')
 
-# NWB format
+# NWB 格式
 recording = si.read_nwb('/path/to/file.nwb')
 
-# Or use our convenience wrapper
+# 或使用我們的便利包裝器
 recording = npa.load_recording('/path/to/data/', format='spikeglx')
 ```
 
-### Verify Recording Properties
+### 驗證記錄屬性
 
 ```python
-# Basic properties
+# 基本屬性
 print(f"Channels: {recording.get_num_channels()}")
 print(f"Duration: {recording.get_total_duration():.1f}s")
 print(f"Sampling rate: {recording.get_sampling_frequency()}Hz")
 
-# Probe geometry
+# 探針幾何
 print(f"Probe: {recording.get_probe().name}")
 
-# Channel locations
+# 通道位置
 locations = recording.get_channel_locations()
 ```
 
-## 2. Preprocessing
+## 2. 預處理
 
-### Standard Preprocessing Chain
+### 標準預處理鏈
 
 ```python
-# Option 1: Full pipeline (recommended)
+# 選項 1：完整流程（建議）
 rec_preprocessed = npa.preprocess(recording)
 
-# Option 2: Step-by-step control
+# 選項 2：逐步控制
 rec = si.bandpass_filter(recording, freq_min=300, freq_max=6000)
-rec = si.phase_shift(rec)  # Correct ADC phase
+rec = si.phase_shift(rec)  # 修正 ADC 相位
 bad_channels = si.detect_bad_channels(rec)
 rec = rec.remove_channels(bad_channels)
 rec = si.common_reference(rec, operator='median')
 rec_preprocessed = rec
 ```
 
-### IBL-Style Destriping
+### IBL 風格去條紋
 
-For recordings with strong artifacts:
+對於有強烈偽影的記錄：
 
 ```python
 from ibldsp.voltage import decompress_destripe_cbin
 
-# IBL destriping (very effective)
+# IBL 去條紋（非常有效）
 rec = si.highpass_filter(recording, freq_min=400)
 rec = si.phase_shift(rec)
-rec = si.highpass_spatial_filter(rec)  # Destriping
+rec = si.highpass_spatial_filter(rec)  # 去條紋
 rec = si.common_reference(rec, reference='global', operator='median')
 ```
 
-### Save Preprocessed Data
+### 儲存預處理資料
 
 ```python
-# Save for reuse (speeds up iteration)
+# 儲存以供重複使用（加速迭代）
 rec_preprocessed.save(folder='preprocessed/', n_jobs=4)
 ```
 
-## 3. Motion/Drift Correction
+## 3. 運動/漂移修正
 
-### Check if Correction Needed
+### 檢查是否需要修正
 
 ```python
-# Estimate motion
+# 估計運動
 motion_info = npa.estimate_motion(rec_preprocessed, preset='kilosort_like')
 
-# Visualize drift
+# 視覺化漂移
 npa.plot_drift(rec_preprocessed, motion_info, output='drift_map.png')
 
-# Check magnitude
-if motion_info['motion'].max() > 10:  # microns
+# 檢查幅度
+if motion_info['motion'].max() > 10:  # 微米
     print("Significant drift detected - correction recommended")
 ```
 
-### Apply Correction
+### 套用修正
 
 ```python
-# DREDge-based correction (default)
+# 基於 DREDge 的修正（預設）
 rec_corrected = npa.correct_motion(
     rec_preprocessed,
-    preset='nonrigid_accurate',  # or 'kilosort_like' for speed
+    preset='nonrigid_accurate',  # 或 'kilosort_like' 以加快速度
 )
 
-# Or full control
+# 或完全控制
 from spikeinterface.preprocessing import correct_motion
 
 rec_corrected = correct_motion(
@@ -121,103 +121,103 @@ rec_corrected = correct_motion(
 )
 ```
 
-## 4. Spike Sorting
+## 4. 尖峰分選
 
-### Recommended: Kilosort4
+### 建議：Kilosort4
 
 ```python
-# Run Kilosort4 (requires GPU)
+# 執行 Kilosort4（需要 GPU）
 sorting = npa.run_sorting(
     rec_corrected,
     sorter='kilosort4',
     output_folder='sorting_KS4/',
 )
 
-# With custom parameters
+# 使用自訂參數
 sorting = npa.run_sorting(
     rec_corrected,
     sorter='kilosort4',
     output_folder='sorting_KS4/',
     sorter_params={
         'batch_size': 30000,
-        'nblocks': 5,  # For nonrigid drift
-        'Th_learned': 8,  # Detection threshold
+        'nblocks': 5,  # 用於非剛性漂移
+        'Th_learned': 8,  # 偵測閾值
     },
 )
 ```
 
-### Alternative Sorters
+### 替代分選器
 
 ```python
-# SpykingCircus2 (CPU-based)
+# SpykingCircus2（基於 CPU）
 sorting = npa.run_sorting(rec_corrected, sorter='spykingcircus2')
 
-# Mountainsort5 (fast, good for short recordings)
+# Mountainsort5（快速，適合短記錄）
 sorting = npa.run_sorting(rec_corrected, sorter='mountainsort5')
 ```
 
-### Compare Multiple Sorters
+### 比較多個分選器
 
 ```python
-# Run multiple sorters
+# 執行多個分選器
 sortings = {}
 for sorter in ['kilosort4', 'spykingcircus2']:
     sortings[sorter] = npa.run_sorting(rec_corrected, sorter=sorter)
 
-# Compare results
+# 比較結果
 comparison = npa.compare_sorters(list(sortings.values()))
 agreement_matrix = comparison.get_agreement_matrix()
 ```
 
-## 5. Postprocessing
+## 5. 後處理
 
-### Create Analyzer
+### 建立分析器
 
 ```python
-# Create sorting analyzer (central object for all postprocessing)
+# 建立分選分析器（所有後處理的核心物件）
 analyzer = npa.create_analyzer(
     sorting,
     rec_corrected,
     output_folder='analyzer/',
 )
 
-# Compute all standard extensions
+# 計算所有標準擴充功能
 analyzer = npa.postprocess(
     sorting,
     rec_corrected,
     output_folder='analyzer/',
-    compute_all=True,  # Waveforms, templates, metrics, etc.
+    compute_all=True,  # 波形、範本、指標等
 )
 ```
 
-### Compute Individual Extensions
+### 計算個別擴充功能
 
 ```python
-# Waveforms
+# 波形
 analyzer.compute('waveforms', ms_before=1.0, ms_after=2.0, max_spikes_per_unit=500)
 
-# Templates
+# 範本
 analyzer.compute('templates', operators=['average', 'std'])
 
-# Spike amplitudes
+# 尖峰振幅
 analyzer.compute('spike_amplitudes')
 
-# Correlograms
+# 相關圖
 analyzer.compute('correlograms', window_ms=50.0, bin_ms=1.0)
 
-# Unit locations
+# 單元位置
 analyzer.compute('unit_locations', method='monopolar_triangulation')
 
-# Spike locations
+# 尖峰位置
 analyzer.compute('spike_locations', method='center_of_mass')
 ```
 
-## 6. Quality Metrics
+## 6. 品質指標
 
-### Compute All Metrics
+### 計算所有指標
 
 ```python
-# Compute comprehensive metrics
+# 計算綜合指標
 metrics = npa.compute_quality_metrics(
     analyzer,
     metric_names=[
@@ -233,32 +233,32 @@ metrics = npa.compute_quality_metrics(
     ],
 )
 
-# View metrics
+# 查看指標
 print(metrics.head())
 ```
 
-### Key Metrics Explained
+### 關鍵指標說明
 
-| Metric | Good Value | Description |
+| 指標 | 良好值 | 描述 |
 |--------|------------|-------------|
-| `snr` | > 5 | Signal-to-noise ratio |
-| `isi_violations_ratio` | < 0.01 | Refractory period violations |
-| `presence_ratio` | > 0.9 | Fraction of recording with spikes |
-| `amplitude_cutoff` | < 0.1 | Estimated missed spikes |
-| `firing_rate` | > 0.1 Hz | Average firing rate |
+| `snr` | > 5 | 訊雜比 |
+| `isi_violations_ratio` | < 0.01 | 反應期違規 |
+| `presence_ratio` | > 0.9 | 有尖峰的記錄比例 |
+| `amplitude_cutoff` | < 0.1 | 估計遺漏的尖峰 |
+| `firing_rate` | > 0.1 Hz | 平均放電率 |
 
-## 7. Curation
+## 7. 篩選
 
-### Automated Curation
+### 自動篩選
 
 ```python
-# Allen Institute criteria
+# Allen Institute 標準
 labels = npa.curate(metrics, method='allen')
 
-# IBL criteria
+# IBL 標準
 labels = npa.curate(metrics, method='ibl')
 
-# Custom thresholds
+# 自訂閾值
 labels = npa.curate(
     metrics,
     snr_threshold=5,
@@ -267,15 +267,15 @@ labels = npa.curate(
 )
 ```
 
-### AI-Assisted Curation
+### AI 輔助篩選
 
 ```python
 from anthropic import Anthropic
 
-# Setup API
+# 設定 API
 client = Anthropic()
 
-# Visual analysis for uncertain units
+# 對不確定單元進行視覺分析
 uncertain = metrics.query('snr > 3 and snr < 8').index.tolist()
 
 for unit_id in uncertain:
@@ -283,29 +283,29 @@ for unit_id in uncertain:
     labels[unit_id] = result['classification']
 ```
 
-### Interactive Curation Session
+### 互動式篩選會話
 
 ```python
-# Create session
+# 建立會話
 session = npa.CurationSession.create(analyzer, output_dir='curation/')
 
-# Review units
+# 審查單元
 while session.current_unit():
     unit = session.current_unit()
     report = npa.generate_unit_report(analyzer, unit.unit_id)
 
-    # Your decision
+    # 您的決策
     decision = input(f"Unit {unit.unit_id}: ")
     session.set_decision(unit.unit_id, decision)
     session.next_unit()
 
-# Export
+# 匯出
 labels = session.get_final_labels()
 ```
 
-## 8. Export Results
+## 8. 匯出結果
 
-### Export to Phy
+### 匯出至 Phy
 
 ```python
 from spikeinterface.exporters import export_to_phy
@@ -317,7 +317,7 @@ export_to_phy(
 )
 ```
 
-### Export to NWB
+### 匯出至 NWB
 
 ```python
 from spikeinterface.exporters import export_to_nwb
@@ -332,54 +332,54 @@ export_to_nwb(
 )
 ```
 
-### Save Quality Summary
+### 儲存品質摘要
 
 ```python
-# Save metrics CSV
+# 儲存指標 CSV
 metrics.to_csv('quality_metrics.csv')
 
-# Save labels
+# 儲存標籤
 import json
 with open('curation_labels.json', 'w') as f:
     json.dump(labels, f, indent=2)
 
-# Generate summary report
+# 產生摘要報告
 npa.plot_quality_metrics(analyzer, metrics, output='quality_summary.png')
 ```
 
-## Full Pipeline Example
+## 完整流程範例
 
 ```python
 import neuropixels_analysis as npa
 
-# Load
+# 載入
 recording = npa.load_recording('/data/experiment/', format='spikeglx')
 
-# Preprocess
+# 預處理
 rec = npa.preprocess(recording)
 
-# Motion correction
+# 運動修正
 rec = npa.correct_motion(rec)
 
-# Sort
+# 分選
 sorting = npa.run_sorting(rec, sorter='kilosort4')
 
-# Postprocess
+# 後處理
 analyzer, metrics = npa.postprocess(sorting, rec)
 
-# Curate
+# 篩選
 labels = npa.curate(metrics, method='allen')
 
-# Export good units
+# 匯出良好單元
 good_units = [uid for uid, label in labels.items() if label == 'good']
 print(f"Good units: {len(good_units)}/{len(labels)}")
 ```
 
-## Tips for Success
+## 成功秘訣
 
-1. **Always visualize drift** before deciding on motion correction
-2. **Save preprocessed data** to avoid recomputing
-3. **Compare multiple sorters** for critical experiments
-4. **Review uncertain units manually** - don't trust automated curation blindly
-5. **Document your parameters** for reproducibility
-6. **Use GPU** for Kilosort4 (10-50x faster than CPU alternatives)
+1. **務必視覺化漂移** - 決定運動修正前先檢查
+2. **儲存預處理資料** - 避免重複計算
+3. **比較多個分選器** - 對關鍵實驗尤其重要
+4. **手動審查不確定單元** - 不要盲目信任自動篩選
+5. **記錄您的參數** - 確保可重現性
+6. **使用 GPU** 執行 Kilosort4（比 CPU 替代方案快 10-50 倍）

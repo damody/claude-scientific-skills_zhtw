@@ -1,307 +1,307 @@
-# QuTiP Analysis and Measurement
+# QuTiP 分析和測量
 
-## Expectation Values
+## 期望值
 
-### Basic Expectation Values
+### 基本期望值
 
 ```python
 from qutip import *
 import numpy as np
 
-# Single operator
+# 單一運算子
 psi = coherent(N, 2)
 n_avg = expect(num(N), psi)
 
-# Multiple operators
+# 多個運算子
 ops = [num(N), destroy(N), create(N)]
-results = expect(ops, psi)  # Returns list
+results = expect(ops, psi)  # 返回列表
 ```
 
-### Expectation Values for Density Matrices
+### 密度矩陣的期望值
 
 ```python
-# Works with both pure states and density matrices
+# 適用於純態和密度矩陣
 rho = thermal_dm(N, 2)
 n_avg = expect(num(N), rho)
 ```
 
-### Variance
+### 變異數
 
 ```python
-# Calculate variance of observable
+# 計算可觀測量的變異數
 var_n = variance(num(N), psi)
 
-# Manual calculation
+# 手動計算
 var_n = expect(num(N)**2, psi) - expect(num(N), psi)**2
 ```
 
-### Time-Dependent Expectation Values
+### 時間相依期望值
 
 ```python
-# During time evolution
+# 時間演化期間
 result = mesolve(H, psi0, tlist, c_ops, e_ops=[num(N)])
-n_t = result.expect[0]  # Array of ⟨n⟩ at each time
+n_t = result.expect[0]  # 每個時間的 ⟨n⟩ 陣列
 ```
 
-## Entropy Measures
+## 熵度量
 
-### Von Neumann Entropy
+### von Neumann 熵
 
 ```python
 from qutip import entropy_vn
 
-# Density matrix entropy
+# 密度矩陣熵
 rho = thermal_dm(N, 2)
-S = entropy_vn(rho)  # Returns S = -Tr(ρ log₂ ρ)
+S = entropy_vn(rho)  # 返回 S = -Tr(ρ log₂ ρ)
 ```
 
-### Linear Entropy
+### 線性熵
 
 ```python
 from qutip import entropy_linear
 
-# Linear entropy S_L = 1 - Tr(ρ²)
+# 線性熵 S_L = 1 - Tr(ρ²)
 S_L = entropy_linear(rho)
 ```
 
-### Entanglement Entropy
+### 糾纏熵
 
 ```python
-# For bipartite systems
+# 用於雙分系統
 psi = bell_state('00')
 rho = psi.proj()
 
-# Trace out subsystem B to get reduced density matrix
+# 對子系統 B 取偏跡以取得約化密度矩陣
 rho_A = ptrace(rho, 0)
 
-# Entanglement entropy
+# 糾纏熵
 S_ent = entropy_vn(rho_A)
 ```
 
-### Mutual Information
+### 互資訊
 
 ```python
 from qutip import entropy_mutual
 
-# For bipartite state ρ_AB
+# 對於雙分態 ρ_AB
 I = entropy_mutual(rho, [0, 1])  # I(A:B) = S(A) + S(B) - S(AB)
 ```
 
-### Conditional Entropy
+### 條件熵
 
 ```python
 from qutip import entropy_conditional
 
 # S(A|B) = S(AB) - S(B)
-S_cond = entropy_conditional(rho, 0)  # Entropy of subsystem 0 given subsystem 1
+S_cond = entropy_conditional(rho, 0)  # 給定子系統 1 的子系統 0 的熵
 ```
 
-## Fidelity and Distance Measures
+## 保真度和距離度量
 
-### State Fidelity
+### 態保真度
 
 ```python
 from qutip import fidelity
 
-# Fidelity between two states
+# 兩個態之間的保真度
 psi1 = coherent(N, 2)
 psi2 = coherent(N, 2.1)
 
-F = fidelity(psi1, psi2)  # Returns value in [0, 1]
+F = fidelity(psi1, psi2)  # 返回 [0, 1] 中的值
 ```
 
-### Process Fidelity
+### 過程保真度
 
 ```python
 from qutip import process_fidelity
 
-# Fidelity between two processes (superoperators)
+# 兩個過程（超運算子）之間的保真度
 U_ideal = (-1j * H * t).expm()
 U_actual = mesolve(H, basis(N, 0), [0, t], c_ops).states[-1]
 
 F_proc = process_fidelity(U_ideal, U_actual)
 ```
 
-### Trace Distance
+### 跡距離
 
 ```python
 from qutip import tracedist
 
-# Trace distance D = (1/2) Tr|ρ₁ - ρ₂|
+# 跡距離 D = (1/2) Tr|ρ₁ - ρ₂|
 rho1 = coherent_dm(N, 2)
 rho2 = thermal_dm(N, 2)
 
-D = tracedist(rho1, rho2)  # Returns value in [0, 1]
+D = tracedist(rho1, rho2)  # 返回 [0, 1] 中的值
 ```
 
-### Hilbert-Schmidt Distance
+### Hilbert-Schmidt 距離
 
 ```python
 from qutip import hilbert_dist
 
-# Hilbert-Schmidt distance
+# Hilbert-Schmidt 距離
 D_HS = hilbert_dist(rho1, rho2)
 ```
 
-### Bures Distance
+### Bures 距離
 
 ```python
 from qutip import bures_dist
 
-# Bures distance
+# Bures 距離
 D_B = bures_dist(rho1, rho2)
 ```
 
-### Bures Angle
+### Bures 角
 
 ```python
 from qutip import bures_angle
 
-# Bures angle
+# Bures 角
 angle = bures_angle(rho1, rho2)
 ```
 
-## Entanglement Measures
+## 糾纏度量
 
-### Concurrence
+### 糾纏度（Concurrence）
 
 ```python
 from qutip import concurrence
 
-# For two-qubit states
+# 用於兩量子位元態
 psi = bell_state('00')
 rho = psi.proj()
 
-C = concurrence(rho)  # C = 1 for maximally entangled states
+C = concurrence(rho)  # 最大糾纏態 C = 1
 ```
 
-### Negativity
+### 負性（Negativity）
 
 ```python
 from qutip import negativity
 
-# Negativity (partial transpose criterion)
-N_ent = negativity(rho, 0)  # Partial transpose w.r.t. subsystem 0
+# 負性（部分轉置準則）
+N_ent = negativity(rho, 0)  # 對子系統 0 的部分轉置
 
-# Logarithmic negativity
+# 對數負性
 from qutip import logarithmic_negativity
 E_N = logarithmic_negativity(rho, 0)
 ```
 
-### Entangling Power
+### 糾纏能力
 
 ```python
 from qutip import entangling_power
 
-# For unitary gates
+# 用於么正閘
 U = cnot()
 E_pow = entangling_power(U)
 ```
 
-## Purity Measures
+## 純度度量
 
-### Purity
+### 純度
 
 ```python
-# Purity P = Tr(ρ²)
+# 純度 P = Tr(ρ²)
 P = (rho * rho).tr()
 
-# For pure states: P = 1
-# For maximally mixed: P = 1/d
+# 純態：P = 1
+# 最大混合態：P = 1/d
 ```
 
-### Checking State Properties
+### 檢查態屬性
 
 ```python
-# Is state pure?
+# 態是純態嗎？
 is_pure = abs((rho * rho).tr() - 1.0) < 1e-10
 
-# Is operator Hermitian?
+# 運算子是厄米的嗎？
 H.isherm
 
-# Is operator unitary?
+# 運算子是么正的嗎？
 U.check_isunitary()
 ```
 
-## Measurement
+## 測量
 
-### Projective Measurement
+### 投影測量
 
 ```python
 from qutip import measurement
 
-# Measure in computational basis
+# 在計算基底中測量
 psi = (basis(2, 0) + basis(2, 1)).unit()
 
-# Perform measurement
-result, state_after = measurement.measure(psi, None)  # Random outcome
+# 執行測量
+result, state_after = measurement.measure(psi, None)  # 隨機結果
 
-# Specific measurement operator
+# 特定測量運算子
 M = basis(2, 0).proj()
 prob = measurement.measure_povm(psi, [M, qeye(2) - M])
 ```
 
-### Measurement Statistics
+### 測量統計
 
 ```python
 from qutip import measurement_statistics
 
-# Get all possible outcomes and probabilities
+# 取得所有可能結果和機率
 outcomes, probabilities = measurement_statistics(psi, [M0, M1])
 ```
 
-### Observable Measurement
+### 可觀測量測量
 
 ```python
 from qutip import measure_observable
 
-# Measure observable and get result + collapsed state
+# 測量可觀測量並取得結果 + 坍縮態
 result, state_collapsed = measure_observable(psi, sigmaz())
 ```
 
-### POVM Measurements
+### POVM 測量
 
 ```python
 from qutip import measure_povm
 
-# Positive Operator-Valued Measure
+# 正值運算子度量
 E_0 = Qobj([[0.8, 0], [0, 0.2]])
 E_1 = Qobj([[0.2, 0], [0, 0.8]])
 
 result, state_after = measure_povm(psi, [E_0, E_1])
 ```
 
-## Coherence Measures
+## 相干度量
 
-### l1-norm Coherence
+### l1-範數相干
 
 ```python
 from qutip import coherence_l1norm
 
-# l1-norm of off-diagonal elements
+# 非對角元素的 l1-範數
 C_l1 = coherence_l1norm(rho)
 ```
 
-## Correlation Functions
+## 關聯函數
 
-### Two-Time Correlation
+### 雙時關聯
 
 ```python
 from qutip import correlation_2op_1t, correlation_2op_2t
 
-# Single-time correlation ⟨A(t+τ)B(t)⟩
+# 單時關聯 ⟨A(t+τ)B(t)⟩
 A = destroy(N)
 B = create(N)
 taulist = np.linspace(0, 10, 200)
 
 corr = correlation_2op_1t(H, rho0, taulist, c_ops, A, B)
 
-# Two-time correlation ⟨A(t)B(τ)⟩
+# 雙時關聯 ⟨A(t)B(τ)⟩
 tlist = np.linspace(0, 10, 100)
 corr_2t = correlation_2op_2t(H, rho0, tlist, taulist, c_ops, A, B)
 ```
 
-### Three-Operator Correlation
+### 三運算子關聯
 
 ```python
 from qutip import correlation_3op_1t
@@ -311,7 +311,7 @@ C_op = num(N)
 corr_3 = correlation_3op_1t(H, rho0, taulist, c_ops, A, B, C_op)
 ```
 
-### Four-Operator Correlation
+### 四運算子關聯
 
 ```python
 from qutip import correlation_4op_1t
@@ -321,203 +321,203 @@ D_op = create(N)
 corr_4 = correlation_4op_1t(H, rho0, taulist, c_ops, A, B, C_op, D_op)
 ```
 
-## Spectrum Analysis
+## 頻譜分析
 
-### FFT Spectrum
+### FFT 頻譜
 
 ```python
 from qutip import spectrum_correlation_fft
 
-# Power spectrum from correlation function
+# 從關聯函數計算功率譜
 w, S = spectrum_correlation_fft(taulist, corr)
 ```
 
-### Direct Spectrum Calculation
+### 直接頻譜計算
 
 ```python
 from qutip import spectrum
 
-# Emission/absorption spectrum
+# 發射/吸收頻譜
 wlist = np.linspace(0, 2, 200)
 spec = spectrum(H, wlist, c_ops, A, B)
 ```
 
-### Pseudo-Modes
+### 偽模式
 
 ```python
 from qutip import spectrum_pi
 
-# Spectrum with pseudo-mode decomposition
+# 帶偽模式分解的頻譜
 spec_pi = spectrum_pi(H, rho0, wlist, c_ops, A, B)
 ```
 
-## Steady State Analysis
+## 穩態分析
 
-### Finding Steady State
+### 尋找穩態
 
 ```python
 from qutip import steadystate
 
-# Find steady state ∂ρ/∂t = 0
+# 尋找穩態 ∂ρ/∂t = 0
 rho_ss = steadystate(H, c_ops)
 
-# Different methods
-rho_ss = steadystate(H, c_ops, method='direct')  # Default
-rho_ss = steadystate(H, c_ops, method='eigen')   # Eigenvalue
+# 不同方法
+rho_ss = steadystate(H, c_ops, method='direct')  # 預設
+rho_ss = steadystate(H, c_ops, method='eigen')   # 本徵值
 rho_ss = steadystate(H, c_ops, method='svd')     # SVD
-rho_ss = steadystate(H, c_ops, method='power')   # Power method
+rho_ss = steadystate(H, c_ops, method='power')   # 冪法
 ```
 
-### Steady State Properties
+### 穩態屬性
 
 ```python
-# Verify it's steady
+# 驗證它是穩態
 L = liouvillian(H, c_ops)
 assert (L * operator_to_vector(rho_ss)).norm() < 1e-10
 
-# Compute steady-state expectation values
+# 計算穩態期望值
 n_ss = expect(num(N), rho_ss)
 ```
 
-## Quantum Fisher Information
+## 量子 Fisher 資訊
 
 ```python
 from qutip import qfisher
 
-# Quantum Fisher information
-F_Q = qfisher(rho, num(N))  # w.r.t. generator num(N)
+# 量子 Fisher 資訊
+F_Q = qfisher(rho, num(N))  # 相對於生成元 num(N)
 ```
 
-## Matrix Analysis
+## 矩陣分析
 
-### Eigenanalysis
+### 本徵分析
 
 ```python
-# Eigenvalues and eigenvectors
+# 本徵值和本徵向量
 evals, ekets = H.eigenstates()
 
-# Just eigenvalues
+# 只有本徵值
 evals = H.eigenenergies()
 
-# Ground state
+# 基態
 E0, psi0 = H.groundstate()
 ```
 
-### Matrix Functions
+### 矩陣函數
 
 ```python
-# Matrix exponential
+# 矩陣指數
 U = (H * t).expm()
 
-# Matrix logarithm
+# 矩陣對數
 log_rho = rho.logm()
 
-# Matrix square root
+# 矩陣平方根
 sqrt_rho = rho.sqrtm()
 
-# Matrix power
+# 矩陣冪
 rho_squared = rho ** 2
 ```
 
-### Singular Value Decomposition
+### 奇異值分解
 
 ```python
-# SVD of operator
+# 運算子的 SVD
 U, S, Vh = H.svd()
 ```
 
-### Permutations
+### 置換
 
 ```python
 from qutip import permute
 
-# Permute subsystems
-rho_permuted = permute(rho, [1, 0])  # Swap subsystems
+# 置換子系統
+rho_permuted = permute(rho, [1, 0])  # 交換子系統
 ```
 
-## Partial Operations
+## 偏操作
 
-### Partial Trace
+### 偏跡
 
 ```python
-# Reduce to subsystem
-rho_A = ptrace(rho_AB, 0)  # Keep subsystem 0
-rho_B = ptrace(rho_AB, 1)  # Keep subsystem 1
+# 約化到子系統
+rho_A = ptrace(rho_AB, 0)  # 保留子系統 0
+rho_B = ptrace(rho_AB, 1)  # 保留子系統 1
 
-# Keep multiple subsystems
-rho_AC = ptrace(rho_ABC, [0, 2])  # Keep 0 and 2, trace out 1
+# 保留多個子系統
+rho_AC = ptrace(rho_ABC, [0, 2])  # 保留 0 和 2，對 1 取跡
 ```
 
-### Partial Transpose
+### 偏轉置
 
 ```python
 from qutip import partial_transpose
 
-# Partial transpose (for entanglement detection)
-rho_pt = partial_transpose(rho, [0, 1])  # Transpose subsystem 0
+# 偏轉置（用於糾纏偵測）
+rho_pt = partial_transpose(rho, [0, 1])  # 轉置子系統 0
 
-# Check if entangled (PPT criterion)
+# 檢查是否糾纏（PPT 準則）
 evals = rho_pt.eigenenergies()
 is_entangled = any(evals < -1e-10)
 ```
 
-## Quantum State Tomography
+## 量子態層析
 
-### State Reconstruction
+### 態重建
 
 ```python
 from qutip_qip.tomography import state_tomography
 
-# Prepare measurement results
-# measurements = ... (experimental data)
+# 準備測量結果
+# measurements = ... （實驗資料）
 
-# Reconstruct density matrix
+# 重建密度矩陣
 rho_reconstructed = state_tomography(measurements, basis='Pauli')
 ```
 
-### Process Tomography
+### 過程層析
 
 ```python
 from qutip_qip.tomography import qpt
 
-# Characterize quantum process
-chi = qpt(U_gate, method='lstsq')  # Chi matrix representation
+# 表徵量子過程
+chi = qpt(U_gate, method='lstsq')  # Chi 矩陣表示
 ```
 
-## Random Quantum Objects
+## 隨機量子物件
 
-Useful for testing and Monte Carlo simulations.
+用於測試和蒙地卡羅模擬。
 
 ```python
-# Random state vector
+# 隨機態向量
 psi_rand = rand_ket(N)
 
-# Random density matrix
+# 隨機密度矩陣
 rho_rand = rand_dm(N)
 
-# Random Hermitian operator
+# 隨機厄米運算子
 H_rand = rand_herm(N)
 
-# Random unitary
+# 隨機么正
 U_rand = rand_unitary(N)
 
-# With specific properties
-rho_rank2 = rand_dm(N, rank=2)  # Rank-2 density matrix
-H_sparse = rand_herm(N, density=0.1)  # 10% non-zero elements
+# 具有特定屬性
+rho_rank2 = rand_dm(N, rank=2)  # 秩為 2 的密度矩陣
+H_sparse = rand_herm(N, density=0.1)  # 10% 非零元素
 ```
 
-## Useful Checks
+## 有用的檢查
 
 ```python
-# Check if operator is Hermitian
+# 檢查運算子是否厄米
 H.isherm
 
-# Check if state is normalized
+# 檢查態是否正規化
 abs(psi.norm() - 1.0) < 1e-10
 
-# Check if density matrix is physical
+# 檢查密度矩陣是否物理
 rho.tr() ≈ 1 and all(rho.eigenenergies() >= 0)
 
-# Check if operators commute
+# 檢查運算子是否對易
 commutator(A, B).norm() < 1e-10
 ```

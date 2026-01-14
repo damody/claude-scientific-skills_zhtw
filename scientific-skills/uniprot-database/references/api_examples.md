@@ -1,14 +1,14 @@
-# UniProt API Examples
+# UniProt API 範例
 
-Practical code examples for interacting with the UniProt REST API in multiple languages.
+與 UniProt REST API 互動的多種程式語言實用程式碼範例。
 
-## Python Examples
+## Python 範例
 
-### Example 1: Basic Search
+### 範例 1：基本搜尋
 ```python
 import requests
 
-# Search for human insulin proteins
+# 搜尋人類胰島素蛋白質
 url = "https://rest.uniprot.org/uniprotkb/search"
 params = {
     "query": "insulin AND organism_id:9606 AND reviewed:true",
@@ -23,11 +23,11 @@ for result in data['results']:
     print(f"{result['primaryAccession']}: {result['proteinDescription']['recommendedName']['fullName']['value']}")
 ```
 
-### Example 2: Retrieve Protein Sequence
+### 範例 2：檢索蛋白質序列
 ```python
 import requests
 
-# Get human insulin sequence in FASTA format
+# 以 FASTA 格式取得人類胰島素序列
 accession = "P01308"
 url = f"https://rest.uniprot.org/uniprotkb/{accession}.fasta"
 
@@ -35,11 +35,11 @@ response = requests.get(url)
 print(response.text)
 ```
 
-### Example 3: Custom Fields
+### 範例 3：自訂欄位
 ```python
 import requests
 
-# Get specific fields only
+# 只取得特定欄位
 url = "https://rest.uniprot.org/uniprotkb/search"
 params = {
     "query": "gene:BRCA1 AND reviewed:true",
@@ -51,13 +51,13 @@ response = requests.get(url, params=params)
 print(response.text)
 ```
 
-### Example 4: ID Mapping
+### 範例 4：ID 映射
 ```python
 import requests
 import time
 
 def map_uniprot_ids(ids, from_db, to_db):
-    # Submit job
+    # 提交作業
     submit_url = "https://rest.uniprot.org/idmapping/run"
     data = {
         "from": from_db,
@@ -68,7 +68,7 @@ def map_uniprot_ids(ids, from_db, to_db):
     response = requests.post(submit_url, data=data)
     job_id = response.json()["jobId"]
 
-    # Poll for completion
+    # 輪詢完成狀態
     status_url = f"https://rest.uniprot.org/idmapping/status/{job_id}"
     while True:
         response = requests.get(status_url)
@@ -77,22 +77,22 @@ def map_uniprot_ids(ids, from_db, to_db):
             break
         time.sleep(3)
 
-    # Get results
+    # 取得結果
     results_url = f"https://rest.uniprot.org/idmapping/results/{job_id}"
     response = requests.get(results_url)
     return response.json()
 
-# Map UniProt IDs to PDB
+# 將 UniProt ID 映射到 PDB
 ids = ["P01308", "P04637"]
 mapping = map_uniprot_ids(ids, "UniProtKB_AC-ID", "PDB")
 print(mapping)
 ```
 
-### Example 5: Stream Large Results
+### 範例 5：串流大型結果
 ```python
 import requests
 
-# Stream all reviewed human proteins
+# 串流所有已審核的人類蛋白質
 url = "https://rest.uniprot.org/uniprotkb/stream"
 params = {
     "query": "organism_id:9606 AND reviewed:true",
@@ -101,26 +101,26 @@ params = {
 
 response = requests.get(url, params=params, stream=True)
 
-# Process in chunks
+# 分塊處理
 with open("human_proteins.fasta", "w") as f:
     for chunk in response.iter_content(chunk_size=8192, decode_unicode=True):
         if chunk:
             f.write(chunk)
 ```
 
-### Example 6: Pagination
+### 範例 6：分頁
 ```python
 import requests
 
 def get_all_results(query, fields=None):
-    """Get all results with pagination"""
+    """取得所有分頁結果"""
     url = "https://rest.uniprot.org/uniprotkb/search"
     all_results = []
 
     params = {
         "query": query,
         "format": "json",
-        "size": 500  # Max size per page
+        "size": 500  # 每頁最大筆數
     }
 
     if fields:
@@ -131,7 +131,7 @@ def get_all_results(query, fields=None):
         data = response.json()
         all_results.extend(data['results'])
 
-        # Check for next page
+        # 檢查是否有下一頁
         if 'next' in data:
             url = data['next']
         else:
@@ -139,63 +139,63 @@ def get_all_results(query, fields=None):
 
     return all_results
 
-# Get all human kinases
+# 取得所有人類激酶
 results = get_all_results(
     "protein_name:kinase AND organism_id:9606 AND reviewed:true",
     fields=["accession", "gene_names", "protein_name"]
 )
-print(f"Found {len(results)} proteins")
+print(f"找到 {len(results)} 個蛋白質")
 ```
 
-## cURL Examples
+## cURL 範例
 
-### Example 1: Simple Search
+### 範例 1：簡單搜尋
 ```bash
-# Search for insulin proteins
+# 搜尋胰島素蛋白質
 curl "https://rest.uniprot.org/uniprotkb/search?query=insulin&format=json&size=5"
 ```
 
-### Example 2: Get Protein Entry
+### 範例 2：取得蛋白質條目
 ```bash
-# Get human insulin in FASTA format
+# 以 FASTA 格式取得人類胰島素
 curl "https://rest.uniprot.org/uniprotkb/P01308.fasta"
 ```
 
-### Example 3: Custom Fields
+### 範例 3：自訂欄位
 ```bash
-# Get specific fields in TSV format
+# 以 TSV 格式取得特定欄位
 curl "https://rest.uniprot.org/uniprotkb/search?query=gene:BRCA1&format=tsv&fields=accession,gene_names,length"
 ```
 
-### Example 4: ID Mapping - Submit Job
+### 範例 4：ID 映射 - 提交作業
 ```bash
-# Submit mapping job
+# 提交映射作業
 curl -X POST "https://rest.uniprot.org/idmapping/run" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "from=UniProtKB_AC-ID&to=PDB&ids=P01308,P04637"
 ```
 
-### Example 5: ID Mapping - Get Results
+### 範例 5：ID 映射 - 取得結果
 ```bash
-# Get mapping results (replace JOB_ID)
+# 取得映射結果（替換 JOB_ID）
 curl "https://rest.uniprot.org/idmapping/results/JOB_ID"
 ```
 
-### Example 6: Download All Results
+### 範例 6：下載所有結果
 ```bash
-# Download all human reviewed proteins
+# 下載所有人類已審核蛋白質
 curl "https://rest.uniprot.org/uniprotkb/stream?query=organism_id:9606+AND+reviewed:true&format=fasta" \
   -o human_proteins.fasta
 ```
 
-## R Examples
+## R 範例
 
-### Example 1: Basic Search
+### 範例 1：基本搜尋
 ```r
 library(httr)
 library(jsonlite)
 
-# Search for insulin proteins
+# 搜尋胰島素蛋白質
 url <- "https://rest.uniprot.org/uniprotkb/search"
 query_params <- list(
   query = "insulin AND organism_id:9606",
@@ -206,16 +206,16 @@ query_params <- list(
 response <- GET(url, query = query_params)
 data <- fromJSON(content(response, "text"))
 
-# Extract accessions and names
+# 提取登錄號和名稱
 proteins <- data$results[, c("primaryAccession", "proteinDescription")]
 print(proteins)
 ```
 
-### Example 2: Get Sequences
+### 範例 2：取得序列
 ```r
 library(httr)
 
-# Get protein sequence
+# 取得蛋白質序列
 accession <- "P01308"
 url <- paste0("https://rest.uniprot.org/uniprotkb/", accession, ".fasta")
 
@@ -224,12 +224,12 @@ sequence <- content(response, "text")
 cat(sequence)
 ```
 
-### Example 3: Download to Data Frame
+### 範例 3：下載到資料框
 ```r
 library(httr)
 library(readr)
 
-# Get data as TSV
+# 以 TSV 格式取得資料
 url <- "https://rest.uniprot.org/uniprotkb/search"
 query_params <- list(
   query = "gene:BRCA1 AND reviewed:true",
@@ -242,11 +242,11 @@ data <- read_tsv(content(response, "text"))
 print(data)
 ```
 
-## JavaScript Examples
+## JavaScript 範例
 
-### Example 1: Fetch API
+### 範例 1：Fetch API
 ```javascript
-// Search for proteins
+// 搜尋蛋白質
 async function searchUniProt(query) {
   const url = `https://rest.uniprot.org/uniprotkb/search?query=${encodeURIComponent(query)}&format=json&size=10`;
 
@@ -256,12 +256,12 @@ async function searchUniProt(query) {
   return data.results;
 }
 
-// Usage
+// 使用方式
 searchUniProt("insulin AND organism_id:9606")
   .then(results => console.log(results));
 ```
 
-### Example 2: Get Protein Entry
+### 範例 2：取得蛋白質條目
 ```javascript
 async function getProtein(accession, format = "json") {
   const url = `https://rest.uniprot.org/uniprotkb/${accession}.${format}`;
@@ -275,15 +275,15 @@ async function getProtein(accession, format = "json") {
   }
 }
 
-// Usage
+// 使用方式
 getProtein("P01308", "fasta")
   .then(sequence => console.log(sequence));
 ```
 
-### Example 3: ID Mapping
+### 範例 3：ID 映射
 ```javascript
 async function mapIds(ids, fromDb, toDb) {
-  // Submit job
+  // 提交作業
   const submitUrl = "https://rest.uniprot.org/idmapping/run";
   const formData = new URLSearchParams({
     from: fromDb,
@@ -297,7 +297,7 @@ async function mapIds(ids, fromDb, toDb) {
   });
   const { jobId } = await submitResponse.json();
 
-  // Poll for completion
+  // 輪詢完成狀態
   const statusUrl = `https://rest.uniprot.org/idmapping/status/${jobId}`;
   while (true) {
     const statusResponse = await fetch(statusUrl);
@@ -310,20 +310,20 @@ async function mapIds(ids, fromDb, toDb) {
     await new Promise(resolve => setTimeout(resolve, 3000));
   }
 
-  // Get results
+  // 取得結果
   const resultsUrl = `https://rest.uniprot.org/idmapping/results/${jobId}`;
   const resultsResponse = await fetch(resultsUrl);
   return await resultsResponse.json();
 }
 
-// Usage
+// 使用方式
 mapIds(["P01308", "P04637"], "UniProtKB_AC-ID", "PDB")
   .then(mapping => console.log(mapping));
 ```
 
-## Advanced Examples
+## 進階範例
 
-### Example: Batch Processing with Rate Limiting
+### 範例：具有速率限制的批次處理
 ```python
 import requests
 import time
@@ -336,7 +336,7 @@ class UniProtClient:
         self.last_request = 0
 
     def _rate_limit(self):
-        """Enforce rate limiting"""
+        """強制執行速率限制"""
         elapsed = time.time() - self.last_request
         if elapsed < self.rate_limit:
             time.sleep(self.rate_limit - elapsed)
@@ -344,7 +344,7 @@ class UniProtClient:
 
     def batch_get_proteins(self, accessions: List[str],
                           batch_size: int = 100) -> List[Dict]:
-        """Get proteins in batches"""
+        """批次取得蛋白質"""
         results = []
 
         for i in range(0, len(accessions), batch_size):
@@ -366,23 +366,23 @@ class UniProtClient:
                 data = response.json()
                 results.extend(data.get('results', []))
             else:
-                print(f"Error in batch {i//batch_size}: {response.status_code}")
+                print(f"批次 {i//batch_size} 發生錯誤：{response.status_code}")
 
         return results
 
-# Usage
+# 使用方式
 client = UniProtClient(rate_limit=0.5)
 accessions = ["P01308", "P04637", "P12345", "Q9Y6K9"]
 proteins = client.batch_get_proteins(accessions)
 ```
 
-### Example: Download with Progress Bar
+### 範例：具有進度條的下載
 ```python
 import requests
 from tqdm import tqdm
 
 def download_with_progress(query, output_file, format="fasta"):
-    """Download results with progress bar"""
+    """具有進度條的結果下載"""
     url = "https://rest.uniprot.org/uniprotkb/stream"
     params = {
         "query": query,
@@ -398,16 +398,16 @@ def download_with_progress(query, output_file, format="fasta"):
             f.write(chunk)
             pbar.update(len(chunk))
 
-# Usage
+# 使用方式
 download_with_progress(
     "organism_id:9606 AND reviewed:true",
     "human_proteome.fasta"
 )
 ```
 
-## Resources
+## 資源
 
-- API Documentation: https://www.uniprot.org/help/api
-- Interactive API Explorer: https://www.uniprot.org/api-documentation
-- Python client (Unipressed): https://github.com/multimeric/Unipressed
-- Bioservices package: https://bioservices.readthedocs.io/
+- API 文件：https://www.uniprot.org/help/api
+- 互動式 API 探索器：https://www.uniprot.org/api-documentation
+- Python 客戶端（Unipressed）：https://github.com/multimeric/Unipressed
+- Bioservices 套件：https://bioservices.readthedocs.io/

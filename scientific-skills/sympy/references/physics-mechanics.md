@@ -1,28 +1,28 @@
-# SymPy Physics and Mechanics
+# SymPy 物理和力學
 
-This document covers SymPy's physics modules including classical mechanics, quantum mechanics, vector analysis, units, optics, continuum mechanics, and control systems.
+本文件涵蓋 SymPy 的物理模組，包括古典力學、量子力學、向量分析、單位、光學、連續介質力學和控制系統。
 
-## Vector Analysis
+## 向量分析
 
-### Creating Reference Frames and Vectors
+### 建立參考座標系和向量
 
 ```python
 from sympy.physics.vector import ReferenceFrame, dynamicsymbols
 
-# Create reference frames
-N = ReferenceFrame('N')  # Inertial frame
-B = ReferenceFrame('B')  # Body frame
+# 建立參考座標系
+N = ReferenceFrame('N')  # 慣性座標系
+B = ReferenceFrame('B')  # 本體座標系
 
-# Create vectors
+# 建立向量
 v = 3*N.x + 4*N.y + 5*N.z
 
-# Time-varying quantities
+# 時變量
 t = dynamicsymbols._t
-x = dynamicsymbols('x')  # Function of time
-v = x.diff(t) * N.x  # Velocity vector
+x = dynamicsymbols('x')  # 時間的函數
+v = x.diff(t) * N.x  # 速度向量
 ```
 
-### Vector Operations
+### 向量運算
 
 ```python
 from sympy.physics.vector import dot, cross
@@ -30,251 +30,251 @@ from sympy.physics.vector import dot, cross
 v1 = 3*N.x + 4*N.y
 v2 = 1*N.x + 2*N.y + 3*N.z
 
-# Dot product
+# 內積
 d = dot(v1, v2)
 
-# Cross product
+# 外積
 c = cross(v1, v2)
 
-# Magnitude
+# 大小
 mag = v1.magnitude()
 
-# Normalize
+# 正規化
 v1_norm = v1.normalize()
 ```
 
-### Frame Orientation
+### 座標系方位
 
 ```python
-# Rotate frame B relative to N
+# 相對於 N 旋轉座標系 B
 from sympy import symbols, cos, sin
 theta = symbols('theta')
 
-# Simple rotation about z-axis
+# 繞 z 軸簡單旋轉
 B.orient(N, 'Axis', [theta, N.z])
 
-# Direction cosine matrix (DCM)
+# 方向餘弦矩陣（DCM）
 dcm = N.dcm(B)
 
-# Angular velocity of B in N
+# B 在 N 中的角速度
 omega = B.ang_vel_in(N)
 ```
 
-### Points and Kinematics
+### 點和運動學
 
 ```python
 from sympy.physics.vector import Point
 
-# Create points
-O = Point('O')  # Origin
+# 建立點
+O = Point('O')  # 原點
 P = Point('P')
 
-# Set position
+# 設定位置
 P.set_pos(O, 3*N.x + 4*N.y)
 
-# Set velocity
+# 設定速度
 P.set_vel(N, 5*N.x + 2*N.y)
 
-# Get velocity of P in frame N
+# 取得 P 在座標系 N 中的速度
 v = P.vel(N)
 
-# Get acceleration
+# 取得加速度
 a = P.acc(N)
 ```
 
-## Classical Mechanics
+## 古典力學
 
-### Lagrangian Mechanics
+### 拉格朗日力學
 
 ```python
 from sympy import symbols, Function
 from sympy.physics.mechanics import dynamicsymbols, LagrangesMethod
 
-# Define generalized coordinates
+# 定義廣義座標
 q = dynamicsymbols('q')
-qd = dynamicsymbols('q', 1)  # q dot (velocity)
+qd = dynamicsymbols('q', 1)  # q 點（速度）
 
-# Define Lagrangian (L = T - V)
+# 定義拉格朗日量（L = T - V）
 from sympy import Rational
 m, g, l = symbols('m g l')
-T = Rational(1, 2) * m * (l * qd)**2  # Kinetic energy
-V = m * g * l * (1 - cos(q))           # Potential energy
+T = Rational(1, 2) * m * (l * qd)**2  # 動能
+V = m * g * l * (1 - cos(q))           # 位能
 L = T - V
 
-# Apply Lagrange's method
+# 應用拉格朗日方法
 LM = LagrangesMethod(L, [q])
 LM.form_lagranges_equations()
-eqs = LM.rhs()  # Right-hand side of equations of motion
+eqs = LM.rhs()  # 運動方程式的右邊
 ```
 
-### Kane's Method
+### Kane 方法
 
 ```python
 from sympy.physics.mechanics import KanesMethod, ReferenceFrame, Point
 from sympy.physics.vector import dynamicsymbols
 
-# Define system
+# 定義系統
 N = ReferenceFrame('N')
 q = dynamicsymbols('q')
-u = dynamicsymbols('u')  # Generalized speed
+u = dynamicsymbols('u')  # 廣義速度
 
-# Create Kane's equations
-kd = [u - q.diff()]  # Kinematic differential equations
+# 建立 Kane 方程式
+kd = [u - q.diff()]  # 運動微分方程式
 KM = KanesMethod(N, [q], [u], kd)
 
-# Define forces and bodies
-# ... (define particles, forces, etc.)
+# 定義力和物體
+# ...（定義粒子、力等）
 # KM.kanes_equations(bodies, loads)
 ```
 
-### System Bodies and Inertias
+### 系統本體和慣量
 
 ```python
 from sympy.physics.mechanics import RigidBody, Inertia, Point, ReferenceFrame
 from sympy import symbols
 
-# Mass and inertia parameters
+# 質量和慣量參數
 m = symbols('m')
 Ixx, Iyy, Izz = symbols('I_xx I_yy I_zz')
 
-# Create reference frame and mass center
+# 建立參考座標系和質心
 A = ReferenceFrame('A')
 P = Point('P')
 
-# Define inertia dyadic
+# 定義慣量並矢
 I = Inertia(A, Ixx, Iyy, Izz)
 
-# Create rigid body
+# 建立剛體
 body = RigidBody('Body', P, A, m, (I, P))
 ```
 
-### Joints Framework
+### 關節框架
 
 ```python
 from sympy.physics.mechanics import Body, PinJoint, PrismaticJoint
 
-# Create bodies
+# 建立本體
 parent = Body('P')
 child = Body('C')
 
-# Create pin (revolute) joint
+# 建立銷（旋轉）關節
 pin = PinJoint('pin', parent, child)
 
-# Create prismatic (sliding) joint
+# 建立滑動（移動）關節
 slider = PrismaticJoint('slider', parent, child, axis=parent.frame.z)
 ```
 
-### Linearization
+### 線性化
 
 ```python
-# Linearize equations of motion about an equilibrium
-operating_point = {q: 0, u: 0}  # Equilibrium point
+# 在平衡點附近線性化運動方程式
+operating_point = {q: 0, u: 0}  # 平衡點
 A, B = KM.linearize(q_ind=[q], u_ind=[u],
                      A_and_B=True,
                      op_point=operating_point)
-# A: state matrix, B: input matrix
+# A：狀態矩陣，B：輸入矩陣
 ```
 
-## Quantum Mechanics
+## 量子力學
 
-### States and Operators
+### 態和算符
 
 ```python
 from sympy.physics.quantum import Ket, Bra, Operator, Dagger
 
-# Define states
+# 定義態
 psi = Ket('psi')
 phi = Ket('phi')
 
-# Bra states
+# 左矢態
 bra_psi = Bra('psi')
 
-# Operators
+# 算符
 A = Operator('A')
 B = Operator('B')
 
-# Hermitian conjugate
+# Hermitian 共軛
 A_dag = Dagger(A)
 
-# Inner product
+# 內積
 inner = bra_psi * psi
 ```
 
-### Commutators and Anti-commutators
+### 對易子和反對易子
 
 ```python
 from sympy.physics.quantum import Commutator, AntiCommutator
 
-# Commutator [A, B] = AB - BA
+# 對易子 [A, B] = AB - BA
 comm = Commutator(A, B)
 comm.doit()
 
-# Anti-commutator {A, B} = AB + BA
+# 反對易子 {A, B} = AB + BA
 anti = AntiCommutator(A, B)
 anti.doit()
 ```
 
-### Quantum Harmonic Oscillator
+### 量子諧振子
 
 ```python
 from sympy.physics.quantum.qho_1d import RaisingOp, LoweringOp, NumberOp
 
-# Creation and annihilation operators
-a_dag = RaisingOp('a')  # Creation operator
-a = LoweringOp('a')      # Annihilation operator
-N = NumberOp('N')        # Number operator
+# 產生和湮滅算符
+a_dag = RaisingOp('a')  # 產生算符
+a = LoweringOp('a')      # 湮滅算符
+N = NumberOp('N')        # 數算符
 
-# Number states
+# 數態
 from sympy.physics.quantum.qho_1d import Ket as QHOKet
 n = QHOKet('n')
 ```
 
-### Spin Systems
+### 自旋系統
 
 ```python
 from sympy.physics.quantum.spin import (
-    JzKet, JxKet, JyKet,  # Spin states
-    Jz, Jx, Jy,            # Spin operators
-    J2                     # Total angular momentum squared
+    JzKet, JxKet, JyKet,  # 自旋態
+    Jz, Jx, Jy,            # 自旋算符
+    J2                     # 總角動量平方
 )
 
-# Spin-1/2 state
+# 自旋 1/2 態
 from sympy import Rational
 psi = JzKet(Rational(1, 2), Rational(1, 2))  # |1/2, 1/2⟩
 
-# Apply operator
+# 應用算符
 result = Jz * psi
 ```
 
-### Quantum Gates
+### 量子閘
 
 ```python
 from sympy.physics.quantum.gate import (
-    H,      # Hadamard gate
-    X, Y, Z,  # Pauli gates
-    CNOT,    # Controlled-NOT
-    SWAP     # Swap gate
+    H,      # Hadamard 閘
+    X, Y, Z,  # Pauli 閘
+    CNOT,    # 受控非閘
+    SWAP     # 交換閘
 )
 
-# Apply gate to quantum state
+# 將閘應用於量子態
 from sympy.physics.quantum.qubit import Qubit
 q = Qubit('01')
-result = H(0) * q  # Apply Hadamard to qubit 0
+result = H(0) * q  # 將 Hadamard 應用於量子位元 0
 ```
 
-### Quantum Algorithms
+### 量子演算法
 
 ```python
 from sympy.physics.quantum.grover import grover_iteration, OracleGate
 
-# Grover's algorithm components available
+# Grover 演算法元件可用
 # from sympy.physics.quantum.shor import <components>
-# Shor's algorithm components available
+# Shor 演算法元件可用
 ```
 
-## Units and Dimensions
+## 單位和維度
 
-### Working with Units
+### 使用單位
 
 ```python
 from sympy.physics.units import (
@@ -283,55 +283,55 @@ from sympy.physics.units import (
     convert_to
 )
 
-# Define quantities
+# 定義量
 distance = 5 * meter
 mass = 10 * kilogram
 time = 2 * second
 
-# Calculate force
+# 計算力
 force = mass * distance / time**2
 
-# Convert units
+# 轉換單位
 force_in_newtons = convert_to(force, newton)
 ```
 
-### Unit Systems
+### 單位系統
 
 ```python
 from sympy.physics.units import SI, gravitational_constant, speed_of_light
 
-# SI units
-print(SI._base_units)  # Base SI units
+# SI 單位
+print(SI._base_units)  # 基本 SI 單位
 
-# Physical constants
+# 物理常數
 G = gravitational_constant
 c = speed_of_light
 ```
 
-### Custom Units
+### 自訂單位
 
 ```python
 from sympy.physics.units import Quantity, meter, second
 
-# Define custom unit
+# 定義自訂單位
 parsec = Quantity('parsec')
 parsec.set_global_relative_scale_factor(3.0857e16 * meter, meter)
 ```
 
-### Dimensional Analysis
+### 維度分析
 
 ```python
 from sympy.physics.units import Dimension, length, time, mass
 
-# Check dimensions
+# 檢查維度
 from sympy.physics.units import convert_to, meter, second
 velocity = 10 * meter / second
 print(velocity.dimension)  # Dimension(length/time)
 ```
 
-## Optics
+## 光學
 
-### Gaussian Optics
+### 高斯光學
 
 ```python
 from sympy.physics.optics import (
@@ -342,105 +342,105 @@ from sympy.physics.optics import (
     ThinLens
 )
 
-# Gaussian beam parameter
+# 高斯光束參數
 q = BeamParameter(wavelen=532e-9, z=0, w=1e-3)
 
-# Propagation through free space
+# 通過自由空間傳播
 q_new = FreeSpace(1) * q
 
-# Thin lens
+# 薄透鏡
 q_focused = ThinLens(f=0.1) * q
 ```
 
-### Waves and Polarization
+### 波和偏振
 
 ```python
 from sympy.physics.optics import TWave
 
-# Plane wave
+# 平面波
 wave = TWave(amplitude=1, frequency=5e14, phase=0)
 
-# Medium properties (refractive index, etc.)
+# 介質性質（折射率等）
 from sympy.physics.optics import Medium
 medium = Medium('glass', permittivity=2.25)
 ```
 
-## Continuum Mechanics
+## 連續介質力學
 
-### Beam Analysis
+### 梁分析
 
 ```python
 from sympy.physics.continuum_mechanics.beam import Beam
 from sympy import symbols
 
-# Define beam
-E, I = symbols('E I', positive=True)  # Young's modulus, moment of inertia
+# 定義梁
+E, I = symbols('E I', positive=True)  # 楊氏模數、慣性矩
 length = 10
 
 beam = Beam(length, E, I)
 
-# Apply loads
+# 施加載荷
 from sympy.physics.continuum_mechanics.beam import Beam
-beam.apply_load(-1000, 5, -1)  # Point load of -1000 at x=5
+beam.apply_load(-1000, 5, -1)  # 在 x=5 處施加 -1000 的點載荷
 
-# Calculate reactions
+# 計算反力
 beam.solve_for_reaction_loads()
 
-# Get shear force, bending moment, deflection
+# 取得剪力、彎矩、撓度
 x = symbols('x')
 shear = beam.shear_force()
 moment = beam.bending_moment()
 deflection = beam.deflection()
 ```
 
-### Truss Analysis
+### 桁架分析
 
 ```python
 from sympy.physics.continuum_mechanics.truss import Truss
 
-# Create truss
+# 建立桁架
 truss = Truss()
 
-# Add nodes
+# 添加節點
 truss.add_node(('A', 0, 0), ('B', 4, 0), ('C', 2, 3))
 
-# Add members
+# 添加構件
 truss.add_member(('AB', 'A', 'B'), ('BC', 'B', 'C'))
 
-# Apply loads
-truss.apply_load(('C', 1000, 270))  # 1000 N at 270° at node C
+# 施加載荷
+truss.apply_load(('C', 1000, 270))  # 在節點 C 施加 1000 N 於 270° 方向
 
-# Solve
+# 求解
 truss.solve()
 ```
 
-### Cable Analysis
+### 纜索分析
 
 ```python
 from sympy.physics.continuum_mechanics.cable import Cable
 
-# Create cable
+# 建立纜索
 cable = Cable(('A', 0, 10), ('B', 10, 10))
 
-# Apply loads
-cable.apply_load(-1, 5)  # Distributed load
+# 施加載荷
+cable.apply_load(-1, 5)  # 分布載荷
 
-# Solve for tension and shape
+# 求解張力和形狀
 cable.solve()
 ```
 
-## Control Systems
+## 控制系統
 
-### Transfer Functions and State Space
+### 轉移函數和狀態空間
 
 ```python
 from sympy.physics.control import TransferFunction, StateSpace
 from sympy.abc import s
 
-# Transfer function
+# 轉移函數
 tf = TransferFunction(s + 1, s**2 + 2*s + 1, s)
 
-# State-space representation
+# 狀態空間表示
 A = [[0, 1], [-1, -2]]
 B = [[0], [1]]
 C = [[1, 0]]
@@ -448,28 +448,28 @@ D = [[0]]
 
 ss = StateSpace(A, B, C, D)
 
-# Convert between representations
+# 表示間轉換
 ss_from_tf = tf.to_statespace()
 tf_from_ss = ss.to_TransferFunction()
 ```
 
-### System Analysis
+### 系統分析
 
 ```python
-# Poles and zeros
+# 極點和零點
 poles = tf.poles()
 zeros = tf.zeros()
 
-# Stability
+# 穩定性
 is_stable = tf.is_stable()
 
-# Step response, impulse response, etc.
-# (Often requires numerical evaluation)
+# 步階響應、脈衝響應等
+# （通常需要數值評估）
 ```
 
-## Biomechanics
+## 生物力學
 
-### Musculotendon Models
+### 肌腱模型
 
 ```python
 from sympy.physics.biomechanics import (
@@ -477,84 +477,84 @@ from sympy.physics.biomechanics import (
     FirstOrderActivationDeGroote2016
 )
 
-# Create musculotendon model
+# 建立肌腱模型
 mt = MusculotendonDeGroote2016('muscle')
 
-# Activation dynamics
+# 活化動力學
 activation = FirstOrderActivationDeGroote2016('muscle_activation')
 ```
 
-## High Energy Physics
+## 高能物理
 
-### Particle Physics
+### 粒子物理
 
 ```python
-# Gamma matrices and Dirac equations
+# Gamma 矩陣和 Dirac 方程式
 from sympy.physics.hep.gamma_matrices import GammaMatrix
 
 gamma0 = GammaMatrix(0)
 gamma1 = GammaMatrix(1)
 ```
 
-## Common Physics Patterns
+## 常見物理模式
 
-### Pattern 1: Setting Up a Mechanics Problem
+### 模式 1：設定力學問題
 
 ```python
 from sympy.physics.mechanics import dynamicsymbols, ReferenceFrame, Point
 from sympy import symbols
 
-# 1. Define reference frame
+# 1. 定義參考座標系
 N = ReferenceFrame('N')
 
-# 2. Define generalized coordinates
+# 2. 定義廣義座標
 q = dynamicsymbols('q')
 q_dot = dynamicsymbols('q', 1)
 
-# 3. Define points and vectors
+# 3. 定義點和向量
 O = Point('O')
 P = Point('P')
 
-# 4. Set kinematics
+# 4. 設定運動學
 P.set_pos(O, length * N.x)
 P.set_vel(N, length * q_dot * N.x)
 
-# 5. Define forces and apply Lagrange or Kane method
+# 5. 定義力並應用拉格朗日或 Kane 方法
 ```
 
-### Pattern 2: Quantum State Manipulation
+### 模式 2：量子態操作
 
 ```python
 from sympy.physics.quantum import Ket, Operator, qapply
 
-# Define state
+# 定義態
 psi = Ket('psi')
 
-# Define operator
+# 定義算符
 H = Operator('H')  # Hamiltonian
 
-# Apply operator
+# 應用算符
 result = qapply(H * psi)
 ```
 
-### Pattern 3: Unit Conversion Workflow
+### 模式 3：單位轉換工作流程
 
 ```python
 from sympy.physics.units import convert_to, meter, foot, second, minute
 
-# Define quantity with units
+# 定義含單位的量
 distance = 100 * meter
 time = 5 * minute
 
-# Perform calculation
+# 執行計算
 speed = distance / time
 
-# Convert to desired units
+# 轉換為所需單位
 speed_m_per_s = convert_to(speed, meter/second)
 speed_ft_per_min = convert_to(speed, foot/minute)
 ```
 
-### Pattern 4: Beam Deflection Analysis
+### 模式 4：梁撓度分析
 
 ```python
 from sympy.physics.continuum_mechanics.beam import Beam
@@ -563,30 +563,30 @@ from sympy import symbols
 E, I = symbols('E I', positive=True, real=True)
 beam = Beam(10, E, I)
 
-# Apply boundary conditions
+# 施加邊界條件
 beam.apply_support(0, 'pin')
 beam.apply_support(10, 'roller')
 
-# Apply loads
-beam.apply_load(-1000, 5, -1)  # Point load
-beam.apply_load(-50, 0, 0, 10)  # Distributed load
+# 施加載荷
+beam.apply_load(-1000, 5, -1)  # 點載荷
+beam.apply_load(-50, 0, 0, 10)  # 分布載荷
 
-# Solve
+# 求解
 beam.solve_for_reaction_loads()
 
-# Get results at specific locations
+# 取得特定位置的結果
 x = 5
 deflection_at_mid = beam.deflection().subs(symbols('x'), x)
 ```
 
-## Important Notes
+## 重要注意事項
 
-1. **Time-dependent variables:** Use `dynamicsymbols()` for time-varying quantities in mechanics problems.
+1. **時變變數：**在力學問題中使用 `dynamicsymbols()` 表示時變量。
 
-2. **Units:** Always specify units explicitly using the `sympy.physics.units` module for physics calculations.
+2. **單位：**始終使用 `sympy.physics.units` 模組明確指定物理計算的單位。
 
-3. **Reference frames:** Clearly define reference frames and their relative orientations for vector analysis.
+3. **參考座標系：**清楚定義參考座標系及其相對方位以進行向量分析。
 
-4. **Numerical evaluation:** Many physics calculations require numerical evaluation. Use `evalf()` or convert to NumPy for numerical work.
+4. **數值評估：**許多物理計算需要數值評估。使用 `evalf()` 或轉換為 NumPy 進行數值工作。
 
-5. **Assumptions:** Use appropriate assumptions for symbols (e.g., `positive=True`, `real=True`) to help SymPy simplify physics expressions correctly.
+5. **假設：**使用適當的符號假設（例如 `positive=True`、`real=True`）幫助 SymPy 正確簡化物理運算式。

@@ -1,291 +1,291 @@
-# Mathematics Reference
+# 數學參考
 
-## Table of Contents
-1. [Linear Algebra](#linear-algebra)
-2. [Elementary Math](#elementary-math)
-3. [Calculus and Integration](#calculus-and-integration)
-4. [Differential Equations](#differential-equations)
-5. [Optimization](#optimization)
-6. [Statistics](#statistics)
-7. [Signal Processing](#signal-processing)
-8. [Interpolation and Fitting](#interpolation-and-fitting)
+## 目錄
+1. [線性代數](#線性代數)
+2. [基本數學](#基本數學)
+3. [微積分與積分](#微積分與積分)
+4. [微分方程](#微分方程)
+5. [最佳化](#最佳化)
+6. [統計學](#統計學)
+7. [訊號處理](#訊號處理)
+8. [內插與擬合](#內插與擬合)
 
-## Linear Algebra
+## 線性代數
 
-### Solving Linear Systems
+### 求解線性系統
 
 ```matlab
 % Ax = b
-x = A \ b;                      % Preferred method (mldivide)
-x = linsolve(A, b);             % With options
-x = inv(A) * b;                 % Less efficient, avoid
+x = A \ b;                      % 建議方法（mldivide）
+x = linsolve(A, b);             % 帶選項
+x = inv(A) * b;                 % 效率較低，避免使用
 
-% Options for linsolve
-opts.LT = true;                 % Lower triangular
-opts.UT = true;                 % Upper triangular
-opts.SYM = true;                % Symmetric
-opts.POSDEF = true;             % Positive definite
+% linsolve 的選項
+opts.LT = true;                 % 下三角
+opts.UT = true;                 % 上三角
+opts.SYM = true;                % 對稱
+opts.POSDEF = true;             % 正定
 x = linsolve(A, b, opts);
 
 % xA = b
 x = b / A;                      % mrdivide
 
-% Least squares (overdetermined system)
-x = A \ b;                      % Minimum norm solution
-x = lsqminnorm(A, b);           % Explicit minimum norm
+% 最小平方（超定系統）
+x = A \ b;                      % 最小範數解
+x = lsqminnorm(A, b);           % 明確最小範數
 
-% Nonnegative least squares
-x = lsqnonneg(A, b);            % x >= 0 constraint
+% 非負最小平方
+x = lsqnonneg(A, b);            % x >= 0 約束
 ```
 
-### Matrix Decompositions
+### 矩陣分解
 
 ```matlab
-% LU decomposition: A = L*U or P*A = L*U
-[L, U] = lu(A);                 % L may not be lower triangular
+% LU 分解：A = L*U 或 P*A = L*U
+[L, U] = lu(A);                 % L 可能不是下三角
 [L, U, P] = lu(A);              % P*A = L*U
 
-% QR decomposition: A = Q*R
-[Q, R] = qr(A);                 % Full decomposition
-[Q, R] = qr(A, 0);              % Economy size
-[Q, R, P] = qr(A);              % Column pivoting: A*P = Q*R
+% QR 分解：A = Q*R
+[Q, R] = qr(A);                 % 完整分解
+[Q, R] = qr(A, 0);              % 經濟大小
+[Q, R, P] = qr(A);              % 欄樞軸：A*P = Q*R
 
-% Cholesky: A = R'*R (symmetric positive definite)
-R = chol(A);                    % Upper triangular
-L = chol(A, 'lower');           % Lower triangular
+% Cholesky：A = R'*R（對稱正定）
+R = chol(A);                    % 上三角
+L = chol(A, 'lower');           % 下三角
 
-% LDL': A = L*D*L' (symmetric)
+% LDL'：A = L*D*L'（對稱）
 [L, D] = ldl(A);
 
-% Schur decomposition: A = U*T*U'
-[U, T] = schur(A);              % T is quasi-triangular
-[U, T] = schur(A, 'complex');   % T is triangular
+% Schur 分解：A = U*T*U'
+[U, T] = schur(A);              % T 是準三角
+[U, T] = schur(A, 'complex');   % T 是三角
 ```
 
-### Eigenvalues and Eigenvectors
+### 特徵值與特徵向量
 
 ```matlab
-% Eigenvalues
-e = eig(A);                     % Eigenvalues only
-[V, D] = eig(A);                % V: eigenvectors, D: diagonal eigenvalues
+% 特徵值
+e = eig(A);                     % 僅特徵值
+[V, D] = eig(A);                % V：特徵向量，D：對角特徵值
                                 % A*V = V*D
 
-% Generalized eigenvalues: A*v = lambda*B*v
+% 廣義特徵值：A*v = lambda*B*v
 e = eig(A, B);
 [V, D] = eig(A, B);
 
-% Sparse/large matrices (subset of eigenvalues)
-e = eigs(A, k);                 % k largest magnitude
-e = eigs(A, k, 'smallestabs');  % k smallest magnitude
+% 稀疏/大矩陣（特徵值子集）
+e = eigs(A, k);                 % k 個最大模
+e = eigs(A, k, 'smallestabs');  % k 個最小模
 [V, D] = eigs(A, k, 'largestreal');
 ```
 
-### Singular Value Decomposition
+### 奇異值分解
 
 ```matlab
-% SVD: A = U*S*V'
-[U, S, V] = svd(A);             % Full decomposition
-[U, S, V] = svd(A, 'econ');     % Economy size
-s = svd(A);                     % Singular values only
+% SVD：A = U*S*V'
+[U, S, V] = svd(A);             % 完整分解
+[U, S, V] = svd(A, 'econ');     % 經濟大小
+s = svd(A);                     % 僅奇異值
 
-% Sparse/large matrices
-[U, S, V] = svds(A, k);         % k largest singular values
+% 稀疏/大矩陣
+[U, S, V] = svds(A, k);         % k 個最大奇異值
 
-% Applications
-r = rank(A);                    % Rank (count nonzero singular values)
-p = pinv(A);                    % Pseudoinverse (via SVD)
-n = norm(A, 2);                 % 2-norm = largest singular value
-c = cond(A);                    % Condition number = ratio of largest/smallest
+% 應用
+r = rank(A);                    % 秩（計算非零奇異值）
+p = pinv(A);                    % 偽逆（經由 SVD）
+n = norm(A, 2);                 % 2-範數 = 最大奇異值
+c = cond(A);                    % 條件數 = 最大/最小比值
 ```
 
-### Matrix Properties
+### 矩陣性質
 
 ```matlab
-d = det(A);                     % Determinant
-t = trace(A);                   % Trace (sum of diagonal)
-r = rank(A);                    % Rank
-n = norm(A);                    % 2-norm (default)
-n = norm(A, 1);                 % 1-norm (max column sum)
-n = norm(A, inf);               % Inf-norm (max row sum)
-n = norm(A, 'fro');             % Frobenius norm
-c = cond(A);                    % Condition number
-c = rcond(A);                   % Reciprocal condition (fast estimate)
+d = det(A);                     % 行列式
+t = trace(A);                   % 跡（對角線總和）
+r = rank(A);                    % 秩
+n = norm(A);                    % 2-範數（預設）
+n = norm(A, 1);                 % 1-範數（最大欄總和）
+n = norm(A, inf);               % 無窮範數（最大列總和）
+n = norm(A, 'fro');             % Frobenius 範數
+c = cond(A);                    % 條件數
+c = rcond(A);                   % 倒數條件數（快速估計）
 ```
 
-## Elementary Math
+## 基本數學
 
-### Trigonometric Functions
+### 三角函數
 
 ```matlab
-% Radians
+% 弧度
 y = sin(x);   y = cos(x);   y = tan(x);
 y = asin(x);  y = acos(x);  y = atan(x);
-y = atan2(y, x);            % Four-quadrant arctangent
+y = atan2(y, x);            % 四象限反正切
 
-% Degrees
+% 角度
 y = sind(x);  y = cosd(x);  y = tand(x);
 y = asind(x); y = acosd(x); y = atand(x);
 
-% Hyperbolic
+% 雙曲
 y = sinh(x);  y = cosh(x);  y = tanh(x);
 y = asinh(x); y = acosh(x); y = atanh(x);
 
-% Secant, cosecant, cotangent
+% 正割、餘割、餘切
 y = sec(x);   y = csc(x);   y = cot(x);
 ```
 
-### Exponentials and Logarithms
+### 指數與對數
 
 ```matlab
 y = exp(x);                     % e^x
-y = log(x);                     % Natural log (ln)
-y = log10(x);                   % Log base 10
-y = log2(x);                    % Log base 2
-y = log1p(x);                   % log(1+x), accurate for small x
+y = log(x);                     % 自然對數（ln）
+y = log10(x);                   % 以 10 為底對數
+y = log2(x);                    % 以 2 為底對數
+y = log1p(x);                   % log(1+x)，小 x 時精確
 [F, E] = log2(x);               % F * 2^E = x
 
-y = sqrt(x);                    % Square root
-y = nthroot(x, n);              % Real n-th root
-y = realsqrt(x);                % Real square root (error if x < 0)
+y = sqrt(x);                    % 平方根
+y = nthroot(x, n);              % 實數 n 次方根
+y = realsqrt(x);                % 實數平方根（若 x < 0 則錯誤）
 
 y = pow2(x);                    % 2^x
-y = x .^ y;                     % Element-wise power
+y = x .^ y;                     % 逐元素乘冪
 ```
 
-### Complex Numbers
+### 複數
 
 ```matlab
 z = complex(a, b);              % a + bi
-z = 3 + 4i;                     % Direct creation
+z = 3 + 4i;                     % 直接建立
 
-r = real(z);                    % Real part
-i = imag(z);                    % Imaginary part
-m = abs(z);                     % Magnitude
-p = angle(z);                   % Phase angle (radians)
-c = conj(z);                    % Complex conjugate
+r = real(z);                    % 實部
+i = imag(z);                    % 虛部
+m = abs(z);                     % 模
+p = angle(z);                   % 相角（弧度）
+c = conj(z);                    % 共軛複數
 
-[theta, rho] = cart2pol(x, y);  % Cartesian to polar
-[x, y] = pol2cart(theta, rho);  % Polar to Cartesian
+[theta, rho] = cart2pol(x, y);  % 直角座標轉極座標
+[x, y] = pol2cart(theta, rho);  % 極座標轉直角座標
 ```
 
-### Rounding and Remainders
+### 捨入與餘數
 
 ```matlab
-y = round(x);                   % Round to nearest integer
-y = round(x, n);                % Round to n decimal places
-y = floor(x);                   % Round toward -infinity
-y = ceil(x);                    % Round toward +infinity
-y = fix(x);                     % Round toward zero
+y = round(x);                   % 四捨五入到最近整數
+y = round(x, n);                % 四捨五入到 n 位小數
+y = floor(x);                   % 向 -infinity 捨入
+y = ceil(x);                    % 向 +infinity 捨入
+y = fix(x);                     % 向零捨入
 
-y = mod(x, m);                  % Modulo (sign of m)
-y = rem(x, m);                  % Remainder (sign of x)
-[q, r] = deconv(x, m);          % Quotient and remainder
+y = mod(x, m);                  % 模（m 的符號）
+y = rem(x, m);                  % 餘數（x 的符號）
+[q, r] = deconv(x, m);          % 商和餘數
 
-y = sign(x);                    % Sign (-1, 0, or 1)
-y = abs(x);                     % Absolute value
+y = sign(x);                    % 符號（-1、0 或 1）
+y = abs(x);                     % 絕對值
 ```
 
-### Special Functions
+### 特殊函數
 
 ```matlab
-y = gamma(x);                   % Gamma function
-y = gammaln(x);                 % Log gamma (avoid overflow)
+y = gamma(x);                   % Gamma 函數
+y = gammaln(x);                 % 對數 gamma（避免溢位）
 y = factorial(n);               % n!
-y = nchoosek(n, k);             % Binomial coefficient
+y = nchoosek(n, k);             % 二項式係數
 
-y = erf(x);                     % Error function
-y = erfc(x);                    % Complementary error function
-y = erfcinv(x);                 % Inverse complementary error function
+y = erf(x);                     % 誤差函數
+y = erfc(x);                    % 互補誤差函數
+y = erfcinv(x);                 % 反互補誤差函數
 
 y = besselj(nu, x);             % Bessel J
 y = bessely(nu, x);             % Bessel Y
-y = besseli(nu, x);             % Modified Bessel I
-y = besselk(nu, x);             % Modified Bessel K
+y = besseli(nu, x);             % 修正 Bessel I
+y = besselk(nu, x);             % 修正 Bessel K
 
-y = legendre(n, x);             % Legendre polynomials
+y = legendre(n, x);             % Legendre 多項式
 ```
 
-## Calculus and Integration
+## 微積分與積分
 
-### Numerical Integration
+### 數值積分
 
 ```matlab
-% Definite integrals
-q = integral(fun, a, b);        % Integrate fun from a to b
-q = integral(@(x) x.^2, 0, 1);  % Example: integral of x^2
+% 定積分
+q = integral(fun, a, b);        % 從 a 到 b 積分 fun
+q = integral(@(x) x.^2, 0, 1);  % 範例：x^2 的積分
 
-% Options
+% 選項
 q = integral(fun, a, b, 'AbsTol', 1e-10);
 q = integral(fun, a, b, 'RelTol', 1e-6);
 
-% Improper integrals
-q = integral(fun, 0, Inf);      % Integrate to infinity
-q = integral(fun, -Inf, Inf);   % Full real line
+% 瑕積分
+q = integral(fun, 0, Inf);      % 積分到無窮大
+q = integral(fun, -Inf, Inf);   % 整個實數線
 
-% Multidimensional
-q = integral2(fun, xa, xb, ya, yb);  % Double integral
-q = integral3(fun, xa, xb, ya, yb, za, zb);  % Triple integral
+% 多維
+q = integral2(fun, xa, xb, ya, yb);  % 雙重積分
+q = integral3(fun, xa, xb, ya, yb, za, zb);  % 三重積分
 
-% From discrete data
-q = trapz(x, y);                % Trapezoidal rule
-q = trapz(y);                   % Unit spacing
-q = cumtrapz(x, y);             % Cumulative integral
+% 從離散資料
+q = trapz(x, y);                % 梯形法則
+q = trapz(y);                   % 單位間距
+q = cumtrapz(x, y);             % 累積積分
 ```
 
-### Numerical Differentiation
+### 數值微分
 
 ```matlab
-% Finite differences
-dy = diff(y);                   % First differences
-dy = diff(y, n);                % n-th differences
-dy = diff(y, n, dim);           % Along dimension
+% 有限差分
+dy = diff(y);                   % 一階差分
+dy = diff(y, n);                % n 階差分
+dy = diff(y, n, dim);           % 沿維度
 
-% Gradient (numerical derivative)
-g = gradient(y);                % dy/dx, unit spacing
-g = gradient(y, h);             % dy/dx, spacing h
-[gx, gy] = gradient(Z, hx, hy); % Gradient of 2D data
+% 梯度（數值導數）
+g = gradient(y);                % dy/dx，單位間距
+g = gradient(y, h);             % dy/dx，間距 h
+[gx, gy] = gradient(Z, hx, hy); % 2D 資料的梯度
 ```
 
-## Differential Equations
+## 微分方程
 
-### ODE Solvers
+### ODE 求解器
 
 ```matlab
-% Standard form: dy/dt = f(t, y)
-odefun = @(t, y) -2*y;          % Example: dy/dt = -2y
+% 標準形式：dy/dt = f(t, y)
+odefun = @(t, y) -2*y;          % 範例：dy/dt = -2y
 [t, y] = ode45(odefun, tspan, y0);
 
-% Solver selection:
-% ode45  - Nonstiff, medium accuracy (default choice)
-% ode23  - Nonstiff, low accuracy
-% ode113 - Nonstiff, variable order
-% ode15s - Stiff, variable order (try if ode45 is slow)
-% ode23s - Stiff, low order
-% ode23t - Moderately stiff, trapezoidal
-% ode23tb - Stiff, TR-BDF2
+% 求解器選擇：
+% ode45  - 非剛性，中等精度（預設選擇）
+% ode23  - 非剛性，低精度
+% ode113 - 非剛性，變階
+% ode15s - 剛性，變階（若 ode45 慢則嘗試）
+% ode23s - 剛性，低階
+% ode23t - 中等剛性，梯形
+% ode23tb - 剛性，TR-BDF2
 
-% With options
+% 帶選項
 options = odeset('RelTol', 1e-6, 'AbsTol', 1e-9);
 options = odeset('MaxStep', 0.1);
-options = odeset('Events', @myEventFcn);  % Stop conditions
+options = odeset('Events', @myEventFcn);  % 停止條件
 [t, y] = ode45(odefun, tspan, y0, options);
 ```
 
-### Higher-Order ODEs
+### 高階 ODE
 
 ```matlab
 % y'' + 2y' + y = 0, y(0) = 1, y'(0) = 0
-% Convert to system: y1 = y, y2 = y'
+% 轉換為系統：y1 = y, y2 = y'
 % y1' = y2
 % y2' = -2*y2 - y1
 
 odefun = @(t, y) [y(2); -2*y(2) - y(1)];
 y0 = [1; 0];                    % [y(0); y'(0)]
 [t, y] = ode45(odefun, [0 10], y0);
-plot(t, y(:,1));                % Plot y (first component)
+plot(t, y(:,1));                % 繪製 y（第一分量）
 ```
 
-### Boundary Value Problems
+### 邊界值問題
 
 ```matlab
 % y'' + |y| = 0, y(0) = 0, y(4) = -2
@@ -301,253 +301,253 @@ function res = bcfun(ya, yb)
 end
 ```
 
-## Optimization
+## 最佳化
 
-### Unconstrained Optimization
+### 無約束最佳化
 
 ```matlab
-% Single variable, bounded
+% 單變數，有界
 [x, fval] = fminbnd(fun, x1, x2);
 [x, fval] = fminbnd(@(x) x.^2 - 4*x, 0, 5);
 
-% Multivariable, unconstrained
+% 多變數，無約束
 [x, fval] = fminsearch(fun, x0);
 options = optimset('TolX', 1e-8, 'TolFun', 1e-8);
 [x, fval] = fminsearch(fun, x0, options);
 
-% Display iterations
+% 顯示迭代
 options = optimset('Display', 'iter');
 ```
 
-### Root Finding
+### 求根
 
 ```matlab
-% Find where f(x) = 0
-x = fzero(fun, x0);             % Near x0
-x = fzero(fun, [x1 x2]);        % In interval [x1, x2]
+% 找 f(x) = 0 的位置
+x = fzero(fun, x0);             % 在 x0 附近
+x = fzero(fun, [x1 x2]);        % 在區間 [x1, x2]
 x = fzero(@(x) cos(x) - x, 0.5);
 
-% Polynomial roots
-r = roots([1 0 -4]);            % Roots of x^2 - 4 = 0
-                                % Returns [2; -2]
+% 多項式根
+r = roots([1 0 -4]);            % x^2 - 4 = 0 的根
+                                % 返回 [2; -2]
 ```
 
-### Least Squares
+### 最小平方
 
 ```matlab
-% Linear least squares: minimize ||Ax - b||
-x = A \ b;                      % Standard solution
-x = lsqminnorm(A, b);           % Minimum norm solution
+% 線性最小平方：最小化 ||Ax - b||
+x = A \ b;                      % 標準解
+x = lsqminnorm(A, b);           % 最小範數解
 
-% Nonnegative least squares
+% 非負最小平方
 x = lsqnonneg(A, b);            % x >= 0
 
-% Nonlinear least squares
-x = lsqnonlin(fun, x0);         % Minimize sum(fun(x).^2)
-x = lsqcurvefit(fun, x0, xdata, ydata);  % Curve fitting
+% 非線性最小平方
+x = lsqnonlin(fun, x0);         % 最小化 sum(fun(x).^2)
+x = lsqcurvefit(fun, x0, xdata, ydata);  % 曲線擬合
 ```
 
-## Statistics
+## 統計學
 
-### Descriptive Statistics
+### 描述統計
 
 ```matlab
-% Central tendency
-m = mean(x);                    % Arithmetic mean
-m = mean(x, 'all');             % Mean of all elements
-m = mean(x, dim);               % Mean along dimension
-m = mean(x, 'omitnan');         % Ignore NaN values
-gm = geomean(x);                % Geometric mean
-hm = harmmean(x);               % Harmonic mean
-med = median(x);                % Median
-mo = mode(x);                   % Mode
+% 集中趨勢
+m = mean(x);                    % 算術平均
+m = mean(x, 'all');             % 所有元素的平均
+m = mean(x, dim);               % 沿維度的平均
+m = mean(x, 'omitnan');         % 忽略 NaN 值
+gm = geomean(x);                % 幾何平均
+hm = harmmean(x);               % 調和平均
+med = median(x);                % 中位數
+mo = mode(x);                   % 眾數
 
-% Dispersion
-s = std(x);                     % Standard deviation (N-1)
-s = std(x, 1);                  % Population std (N)
-v = var(x);                     % Variance
+% 離散程度
+s = std(x);                     % 標準差（N-1）
+s = std(x, 1);                  % 母體標準差（N）
+v = var(x);                     % 變異數
 r = range(x);                   % max - min
-iqr_val = iqr(x);               % Interquartile range
+iqr_val = iqr(x);               % 四分位距
 
-% Extremes
+% 極值
 [minv, mini] = min(x);
 [maxv, maxi] = max(x);
-[lo, hi] = bounds(x);           % Min and max together
+[lo, hi] = bounds(x);           % 最小和最大一起
 ```
 
-### Correlation and Covariance
+### 相關與共變異
 
 ```matlab
-% Correlation
-R = corrcoef(X, Y);             % Correlation matrix
-r = corrcoef(x, y);             % Correlation coefficient
+% 相關
+R = corrcoef(X, Y);             % 相關矩陣
+r = corrcoef(x, y);             % 相關係數
 
-% Covariance
-C = cov(X, Y);                  % Covariance matrix
-c = cov(x, y);                  % Covariance
+% 共變異
+C = cov(X, Y);                  % 共變異矩陣
+c = cov(x, y);                  % 共變異
 
-% Cross-correlation (signal processing)
-[r, lags] = xcorr(x, y);        % Cross-correlation
-[r, lags] = xcorr(x, y, 'coeff');  % Normalized
+% 互相關（訊號處理）
+[r, lags] = xcorr(x, y);        % 互相關
+[r, lags] = xcorr(x, y, 'coeff');  % 正規化
 ```
 
-### Percentiles and Quantiles
+### 百分位數與分位數
 
 ```matlab
-p = prctile(x, [25 50 75]);     % Percentiles
-q = quantile(x, [0.25 0.5 0.75]);  % Quantiles
+p = prctile(x, [25 50 75]);     % 百分位數
+q = quantile(x, [0.25 0.5 0.75]);  % 分位數
 ```
 
-### Moving Statistics
+### 移動統計
 
 ```matlab
-y = movmean(x, k);              % k-point moving average
-y = movmedian(x, k);            % Moving median
-y = movstd(x, k);               % Moving standard deviation
-y = movvar(x, k);               % Moving variance
-y = movmin(x, k);               % Moving minimum
-y = movmax(x, k);               % Moving maximum
-y = movsum(x, k);               % Moving sum
+y = movmean(x, k);              % k 點移動平均
+y = movmedian(x, k);            % 移動中位數
+y = movstd(x, k);               % 移動標準差
+y = movvar(x, k);               % 移動變異數
+y = movmin(x, k);               % 移動最小
+y = movmax(x, k);               % 移動最大
+y = movsum(x, k);               % 移動總和
 
-% Window options
-y = movmean(x, [kb kf]);        % kb back, kf forward
-y = movmean(x, k, 'omitnan');   % Ignore NaN
+% 視窗選項
+y = movmean(x, [kb kf]);        % kb 向後，kf 向前
+y = movmean(x, k, 'omitnan');   % 忽略 NaN
 ```
 
-### Histograms and Distributions
+### 直方圖與分佈
 
 ```matlab
-% Histogram counts
-[N, edges] = histcounts(x);     % Automatic binning
-[N, edges] = histcounts(x, nbins);  % Specify number of bins
-[N, edges] = histcounts(x, edges);  % Specify edges
+% 直方圖計數
+[N, edges] = histcounts(x);     % 自動分組
+[N, edges] = histcounts(x, nbins);  % 指定分組數
+[N, edges] = histcounts(x, edges);  % 指定邊界
 
-% Probability/normalized
+% 機率/正規化
 [N, edges] = histcounts(x, 'Normalization', 'probability');
 [N, edges] = histcounts(x, 'Normalization', 'pdf');
 
-% 2D histogram
+% 2D 直方圖
 [N, xedges, yedges] = histcounts2(x, y);
 ```
 
-## Signal Processing
+## 訊號處理
 
-### Fourier Transform
+### 傅立葉變換
 
 ```matlab
 % FFT
 Y = fft(x);                     % 1D FFT
-Y = fft(x, n);                  % n-point FFT (zero-pad/truncate)
+Y = fft(x, n);                  % n 點 FFT（補零/截斷）
 Y = fft2(X);                    % 2D FFT
 Y = fftn(X);                    % N-D FFT
 
-% Inverse FFT
+% 逆 FFT
 x = ifft(Y);
 X = ifft2(Y);
 X = ifftn(Y);
 
-% Shift zero-frequency to center
+% 將零頻率移到中心
 Y_shifted = fftshift(Y);
 Y = ifftshift(Y_shifted);
 
-% Frequency axis
+% 頻率軸
 n = length(x);
-fs = 1000;                      % Sampling frequency
-f = (0:n-1) * fs / n;           % Frequency vector
-f = (-n/2:n/2-1) * fs / n;      % Centered frequency vector
+fs = 1000;                      % 取樣頻率
+f = (0:n-1) * fs / n;           % 頻率向量
+f = (-n/2:n/2-1) * fs / n;      % 中心化頻率向量
 ```
 
-### Filtering
+### 濾波
 
 ```matlab
-% 1D filtering
-y = filter(b, a, x);            % Apply IIR/FIR filter
-y = filtfilt(b, a, x);          % Zero-phase filtering
+% 1D 濾波
+y = filter(b, a, x);            % 應用 IIR/FIR 濾波器
+y = filtfilt(b, a, x);          % 零相位濾波
 
-% Simple moving average
+% 簡單移動平均
 b = ones(1, k) / k;
 y = filter(b, 1, x);
 
-% Convolution
-y = conv(x, h);                 % Full convolution
-y = conv(x, h, 'same');         % Same size as x
-y = conv(x, h, 'valid');        % Valid part only
+% 卷積
+y = conv(x, h);                 % 完整卷積
+y = conv(x, h, 'same');         % 與 x 相同大小
+y = conv(x, h, 'valid');        % 僅有效部分
 
-% Deconvolution
+% 反卷積
 [q, r] = deconv(y, h);          % y = conv(q, h) + r
 
-% 2D filtering
-Y = filter2(H, X);              % 2D filter
-Y = conv2(X, H, 'same');        % 2D convolution
+% 2D 濾波
+Y = filter2(H, X);              % 2D 濾波器
+Y = conv2(X, H, 'same');        % 2D 卷積
 ```
 
-## Interpolation and Fitting
+## 內插與擬合
 
-### Interpolation
+### 內插
 
 ```matlab
-% 1D interpolation
-yi = interp1(x, y, xi);         % Linear (default)
-yi = interp1(x, y, xi, 'spline');  % Spline
-yi = interp1(x, y, xi, 'pchip');   % Piecewise cubic
-yi = interp1(x, y, xi, 'nearest'); % Nearest neighbor
+% 1D 內插
+yi = interp1(x, y, xi);         % 線性（預設）
+yi = interp1(x, y, xi, 'spline');  % 樣條
+yi = interp1(x, y, xi, 'pchip');   % 分段三次
+yi = interp1(x, y, xi, 'nearest'); % 最近鄰
 
-% 2D interpolation
+% 2D 內插
 zi = interp2(X, Y, Z, xi, yi);
 zi = interp2(X, Y, Z, xi, yi, 'spline');
 
-% 3D interpolation
+% 3D 內插
 vi = interp3(X, Y, Z, V, xi, yi, zi);
 
-% Scattered data
+% 散佈資料
 F = scatteredInterpolant(x, y, v);
 vi = F(xi, yi);
 ```
 
-### Polynomial Fitting
+### 多項式擬合
 
 ```matlab
-% Polynomial fit
-p = polyfit(x, y, n);           % Fit degree-n polynomial
+% 多項式擬合
+p = polyfit(x, y, n);           % 擬合 n 階多項式
                                 % p = [p1, p2, ..., pn+1]
                                 % y = p1*x^n + p2*x^(n-1) + ... + pn+1
 
-% Evaluate polynomial
+% 評估多項式
 yi = polyval(p, xi);
 
-% With fit quality
+% 帶擬合品質
 [p, S] = polyfit(x, y, n);
-[yi, delta] = polyval(p, xi, S);  % delta = error estimate
+[yi, delta] = polyval(p, xi, S);  % delta = 誤差估計
 
-% Polynomial operations
-r = roots(p);                   % Find roots
-p = poly(r);                    % Polynomial from roots
-q = polyder(p);                 % Derivative
-q = polyint(p);                 % Integral
-c = conv(p1, p2);               % Multiply polynomials
-[q, r] = deconv(p1, p2);        % Divide polynomials
+% 多項式運算
+r = roots(p);                   % 求根
+p = poly(r);                    % 從根建立多項式
+q = polyder(p);                 % 導數
+q = polyint(p);                 % 積分
+c = conv(p1, p2);               % 多項式相乘
+[q, r] = deconv(p1, p2);        % 多項式相除
 ```
 
-### Curve Fitting
+### 曲線擬合
 
 ```matlab
-% Using fit function (Curve Fitting Toolbox or basic forms)
-% Linear: y = a*x + b
+% 使用 fit 函數（曲線擬合工具箱或基本形式）
+% 線性：y = a*x + b
 p = polyfit(x, y, 1);
 a = p(1); b = p(2);
 
-% Exponential: y = a*exp(b*x)
-% Linearize: log(y) = log(a) + b*x
+% 指數：y = a*exp(b*x)
+% 線性化：log(y) = log(a) + b*x
 p = polyfit(x, log(y), 1);
 b = p(1); a = exp(p(2));
 
-% Power: y = a*x^b
-% Linearize: log(y) = log(a) + b*log(x)
+% 冪次：y = a*x^b
+% 線性化：log(y) = log(a) + b*log(x)
 p = polyfit(log(x), log(y), 1);
 b = p(1); a = exp(p(2));
 
-% General nonlinear fitting with lsqcurvefit
-model = @(p, x) p(1)*exp(-p(2)*x);  % Example: a*exp(-b*x)
-p0 = [1, 1];                        % Initial guess
+% 使用 lsqcurvefit 的一般非線性擬合
+model = @(p, x) p(1)*exp(-p(2)*x);  % 範例：a*exp(-b*x)
+p0 = [1, 1];                        % 初始猜測
 p = lsqcurvefit(model, p0, xdata, ydata);
 ```

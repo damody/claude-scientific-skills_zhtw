@@ -1,12 +1,12 @@
-# Training and Fine-Tuning
+# 訓練和微調
 
-## Overview
+## 概述
 
-Fine-tune pre-trained models on custom datasets using the Trainer API. The Trainer handles training loops, gradient accumulation, mixed precision, logging, and checkpointing.
+使用 Trainer API 在自訂資料集上微調預訓練模型。Trainer 處理訓練迴圈、梯度累積、混合精度、日誌記錄和檢查點儲存。
 
-## Basic Fine-Tuning Workflow
+## 基本微調工作流程
 
-### Step 1: Load and Preprocess Data
+### 步驟 1：載入和預處理資料
 
 ```python
 from datasets import load_dataset
@@ -33,7 +33,7 @@ train_dataset = train_dataset.map(tokenize_function, batched=True)
 eval_dataset = eval_dataset.map(tokenize_function, batched=True)
 ```
 
-### Step 2: Load Model
+### 步驟 2：載入模型
 
 ```python
 from transformers import AutoModelForSequenceClassification
@@ -44,7 +44,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 )
 ```
 
-### Step 3: Define Metrics
+### 步驟 3：定義指標
 
 ```python
 import evaluate
@@ -58,7 +58,7 @@ def compute_metrics(eval_pred):
     return metric.compute(predictions=predictions, references=labels)
 ```
 
-### Step 4: Configure Training
+### 步驟 4：配置訓練
 
 ```python
 from transformers import TrainingArguments
@@ -79,7 +79,7 @@ training_args = TrainingArguments(
 )
 ```
 
-### Step 5: Create Trainer and Train
+### 步驟 5：建立 Trainer 並訓練
 
 ```python
 from transformers import Trainer
@@ -100,7 +100,7 @@ results = trainer.evaluate()
 print(results)
 ```
 
-### Step 6: Save Model
+### 步驟 6：儲存模型
 
 ```python
 trainer.save_model("./fine_tuned_model")
@@ -110,89 +110,89 @@ tokenizer.save_pretrained("./fine_tuned_model")
 trainer.push_to_hub("username/my-finetuned-model")
 ```
 
-## TrainingArguments Parameters
+## TrainingArguments 參數
 
-### Essential Parameters
+### 基本參數
 
-**output_dir**: Directory for checkpoints and logs
+**output_dir**：檢查點和日誌的目錄
 ```python
 output_dir="./results"
 ```
 
-**num_train_epochs**: Number of training epochs
+**num_train_epochs**：訓練週期數
 ```python
 num_train_epochs=3
 ```
 
-**per_device_train_batch_size**: Batch size per GPU/CPU
+**per_device_train_batch_size**：每個 GPU/CPU 的批次大小
 ```python
 per_device_train_batch_size=8
 ```
 
-**learning_rate**: Optimizer learning rate
+**learning_rate**：最佳化器學習率
 ```python
 learning_rate=2e-5  # Common for BERT-style models
 learning_rate=5e-5  # Common for smaller models
 ```
 
-**weight_decay**: L2 regularization
+**weight_decay**：L2 正則化
 ```python
 weight_decay=0.01
 ```
 
-### Evaluation and Saving
+### 評估和儲存
 
-**eval_strategy**: When to evaluate ("no", "steps", "epoch")
+**eval_strategy**：何時評估（"no"、"steps"、"epoch"）
 ```python
 eval_strategy="epoch"  # Evaluate after each epoch
 eval_strategy="steps"  # Evaluate every eval_steps
 ```
 
-**save_strategy**: When to save checkpoints
+**save_strategy**：何時儲存檢查點
 ```python
 save_strategy="epoch"
 save_strategy="steps"
 save_steps=500
 ```
 
-**load_best_model_at_end**: Load best checkpoint after training
+**load_best_model_at_end**：訓練後載入最佳檢查點
 ```python
 load_best_model_at_end=True
 metric_for_best_model="accuracy"  # Metric to compare
 ```
 
-### Optimization
+### 最佳化
 
-**gradient_accumulation_steps**: Accumulate gradients over multiple steps
+**gradient_accumulation_steps**：跨多步累積梯度
 ```python
 gradient_accumulation_steps=4  # Effective batch size = batch_size * 4
 ```
 
-**fp16**: Enable mixed precision (NVIDIA GPUs)
+**fp16**：啟用混合精度（NVIDIA GPU）
 ```python
 fp16=True
 ```
 
-**bf16**: Enable bfloat16 (newer GPUs)
+**bf16**：啟用 bfloat16（較新 GPU）
 ```python
 bf16=True
 ```
 
-**gradient_checkpointing**: Trade compute for memory
+**gradient_checkpointing**：以計算換取記憶體
 ```python
 gradient_checkpointing=True  # Slower but uses less memory
 ```
 
-**optim**: Optimizer choice
+**optim**：最佳化器選擇
 ```python
 optim="adamw_torch"  # Default
 optim="adamw_8bit"    # 8-bit Adam (requires bitsandbytes)
 optim="adafactor"     # Memory-efficient alternative
 ```
 
-### Learning Rate Scheduling
+### 學習率排程
 
-**lr_scheduler_type**: Learning rate schedule
+**lr_scheduler_type**：學習率排程
 ```python
 lr_scheduler_type="linear"       # Linear decay
 lr_scheduler_type="cosine"       # Cosine annealing
@@ -200,51 +200,51 @@ lr_scheduler_type="constant"     # No decay
 lr_scheduler_type="constant_with_warmup"
 ```
 
-**warmup_steps** or **warmup_ratio**: Warmup period
+**warmup_steps** 或 **warmup_ratio**：預熱期間
 ```python
 warmup_steps=500
 # Or
 warmup_ratio=0.1  # 10% of total steps
 ```
 
-### Logging
+### 日誌記錄
 
-**logging_dir**: TensorBoard logs directory
+**logging_dir**：TensorBoard 日誌目錄
 ```python
 logging_dir="./logs"
 ```
 
-**logging_steps**: Log every N steps
+**logging_steps**：每 N 步記錄
 ```python
 logging_steps=10
 ```
 
-**report_to**: Logging integrations
+**report_to**：日誌整合
 ```python
 report_to=["tensorboard"]
 report_to=["wandb"]
 report_to=["tensorboard", "wandb"]
 ```
 
-### Distributed Training
+### 分散式訓練
 
-**ddp_backend**: Distributed backend
+**ddp_backend**：分散式後端
 ```python
 ddp_backend="nccl"  # For multi-GPU
 ```
 
-**deepspeed**: DeepSpeed config file
+**deepspeed**：DeepSpeed 配置檔案
 ```python
 deepspeed="ds_config.json"
 ```
 
-## Data Collators
+## 資料整理器（Data Collators）
 
-Handle dynamic padding and special preprocessing:
+處理動態填充和特殊預處理：
 
 ### DataCollatorWithPadding
 
-Pad sequences to longest in batch:
+將序列填充到批次中最長的：
 ```python
 from transformers import DataCollatorWithPadding
 
@@ -260,7 +260,7 @@ trainer = Trainer(
 
 ### DataCollatorForLanguageModeling
 
-For masked language modeling:
+用於遮罩語言模型：
 ```python
 from transformers import DataCollatorForLanguageModeling
 
@@ -273,7 +273,7 @@ data_collator = DataCollatorForLanguageModeling(
 
 ### DataCollatorForSeq2Seq
 
-For sequence-to-sequence tasks:
+用於序列到序列任務：
 ```python
 from transformers import DataCollatorForSeq2Seq
 
@@ -284,11 +284,11 @@ data_collator = DataCollatorForSeq2Seq(
 )
 ```
 
-## Custom Training
+## 自訂訓練
 
-### Custom Trainer
+### 自訂 Trainer
 
-Override methods for custom behavior:
+覆寫方法以實現自訂行為：
 
 ```python
 from transformers import Trainer
@@ -306,9 +306,9 @@ class CustomTrainer(Trainer):
         return (loss, outputs) if return_outputs else loss
 ```
 
-### Custom Callbacks
+### 自訂回呼
 
-Monitor and control training:
+監控和控制訓練：
 
 ```python
 from transformers import TrainerCallback
@@ -327,11 +327,11 @@ trainer = Trainer(
 )
 ```
 
-## Advanced Training Techniques
+## 進階訓練技術
 
-### Parameter-Efficient Fine-Tuning (PEFT)
+### 參數高效微調（PEFT）
 
-Use LoRA for efficient fine-tuning:
+使用 LoRA 進行高效微調：
 
 ```python
 from peft import LoraConfig, get_peft_model
@@ -353,9 +353,9 @@ trainer = Trainer(model=model, args=training_args, ...)
 trainer.train()
 ```
 
-### Gradient Checkpointing
+### 梯度檢查點
 
-Reduce memory at cost of speed:
+以速度換取記憶體：
 
 ```python
 model.gradient_checkpointing_enable()
@@ -366,7 +366,7 @@ training_args = TrainingArguments(
 )
 ```
 
-### Mixed Precision Training
+### 混合精度訓練
 
 ```python
 training_args = TrainingArguments(
@@ -377,9 +377,9 @@ training_args = TrainingArguments(
 )
 ```
 
-### DeepSpeed Integration
+### DeepSpeed 整合
 
-For very large models:
+用於非常大的模型：
 
 ```python
 # ds_config.json
@@ -408,17 +408,17 @@ training_args = TrainingArguments(
 )
 ```
 
-## Training Tips
+## 訓練技巧
 
-### Hyperparameter Tuning
+### 超參數調整
 
-Common starting points:
-- **Learning rate**: 2e-5 to 5e-5 for BERT-like models, 1e-4 to 1e-3 for smaller models
-- **Batch size**: 8-32 depending on GPU memory
-- **Epochs**: 2-4 for fine-tuning, more for domain adaptation
-- **Warmup**: 10% of total steps
+常見起點：
+- **學習率**：BERT 類模型 2e-5 至 5e-5，較小模型 1e-4 至 1e-3
+- **批次大小**：根據 GPU 記憶體 8-32
+- **週期數**：微調 2-4，領域適應更多
+- **預熱**：總步數的 10%
 
-Use Optuna for hyperparameter search:
+使用 Optuna 進行超參數搜尋：
 
 ```python
 def model_init():
@@ -443,14 +443,14 @@ best_trial = trainer.hyperparameter_search(
 )
 ```
 
-### Monitoring Training
+### 監控訓練
 
-Use TensorBoard:
+使用 TensorBoard：
 ```bash
 tensorboard --logdir ./logs
 ```
 
-Or Weights & Biases:
+或 Weights & Biases：
 ```python
 import wandb
 wandb.init(project="my-project")
@@ -461,40 +461,40 @@ training_args = TrainingArguments(
 )
 ```
 
-### Resume Training
+### 恢復訓練
 
-Resume from checkpoint:
+從檢查點恢復：
 ```python
 trainer.train(resume_from_checkpoint="./results/checkpoint-1000")
 ```
 
-## Common Issues
+## 常見問題
 
-**CUDA out of memory:**
-- Reduce batch size
-- Enable gradient checkpointing
-- Use gradient accumulation
-- Use 8-bit optimizers
+**CUDA 記憶體不足：**
+- 減少批次大小
+- 啟用梯度檢查點
+- 使用梯度累積
+- 使用 8 位元最佳化器
 
-**Overfitting:**
-- Increase weight_decay
-- Add dropout
-- Use early stopping
-- Reduce model size or training epochs
+**過擬合：**
+- 增加 weight_decay
+- 添加 dropout
+- 使用早停
+- 減少模型大小或訓練週期數
 
-**Slow training:**
-- Increase batch size
-- Enable mixed precision (fp16/bf16)
-- Use multiple GPUs
-- Optimize data loading
+**訓練緩慢：**
+- 增加批次大小
+- 啟用混合精度（fp16/bf16）
+- 使用多 GPU
+- 最佳化資料載入
 
-## Best Practices
+## 最佳實踐
 
-1. **Start small**: Test on small dataset subset first
-2. **Use evaluation**: Monitor validation metrics
-3. **Save checkpoints**: Enable save_strategy
-4. **Log extensively**: Use TensorBoard or W&B
-5. **Try different learning rates**: Start with 2e-5
-6. **Use warmup**: Helps training stability
-7. **Enable mixed precision**: Faster training
-8. **Consider PEFT**: For large models with limited resources
+1. **從小處開始**：先在小型資料集子集上測試
+2. **使用評估**：監控驗證指標
+3. **儲存檢查點**：啟用 save_strategy
+4. **廣泛記錄**：使用 TensorBoard 或 W&B
+5. **嘗試不同學習率**：從 2e-5 開始
+6. **使用預熱**：有助於訓練穩定性
+7. **啟用混合精度**：更快的訓練
+8. **考慮 PEFT**：用於資源有限的大型模型

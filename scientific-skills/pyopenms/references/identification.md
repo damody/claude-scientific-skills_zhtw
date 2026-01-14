@@ -1,29 +1,29 @@
-# Peptide and Protein Identification
+# 肽段和蛋白質鑑定
 
-## Overview
+## 概述
 
-PyOpenMS supports peptide/protein identification through integration with search engines and provides tools for post-processing identification results including FDR control, protein inference, and annotation.
+PyOpenMS 透過與搜尋引擎的整合支援肽段/蛋白質鑑定，並提供後處理鑑定結果的工具，包括 FDR 控制、蛋白質推斷和註釋。
 
-## Supported Search Engines
+## 支援的搜尋引擎
 
-PyOpenMS integrates with these search engines:
+PyOpenMS 整合這些搜尋引擎：
 
-- **Comet**: Fast tandem MS search
-- **Mascot**: Commercial search engine
-- **MSGFPlus**: Spectral probability-based search
-- **XTandem**: Open-source search tool
-- **OMSSA**: NCBI search engine
-- **Myrimatch**: High-throughput search
-- **MSFragger**: Ultra-fast search
+- **Comet**：快速串聯質譜搜尋
+- **Mascot**：商業搜尋引擎
+- **MSGFPlus**：基於光譜機率的搜尋
+- **XTandem**：開源搜尋工具
+- **OMSSA**：NCBI 搜尋引擎
+- **Myrimatch**：高通量搜尋
+- **MSFragger**：超快速搜尋
 
-## Reading Identification Data
+## 讀取鑑定資料
 
-### idXML Format
+### idXML 格式
 
 ```python
 import pyopenms as ms
 
-# Load identification results
+# 載入鑑定結果
 protein_ids = []
 peptide_ids = []
 
@@ -33,16 +33,16 @@ print(f"Protein identifications: {len(protein_ids)}")
 print(f"Peptide identifications: {len(peptide_ids)}")
 ```
 
-### Access Peptide Identifications
+### 存取肽段鑑定
 
 ```python
-# Iterate through peptide IDs
+# 迭代肽段 ID
 for peptide_id in peptide_ids:
-    # Spectrum metadata
+    # 光譜中繼資料
     print(f"RT: {peptide_id.getRT():.2f}")
     print(f"m/z: {peptide_id.getMZ():.4f}")
 
-    # Get peptide hits (ranked by score)
+    # 取得肽段命中（按分數排序）
     hits = peptide_id.getHits()
     print(f"Number of hits: {len(hits)}")
 
@@ -53,7 +53,7 @@ for peptide_id in peptide_ids:
         print(f"  Charge: {hit.getCharge()}")
         print(f"  Mass error (ppm): {hit.getMetaValue('mass_error_ppm')}")
 
-        # Get modifications
+        # 取得修飾
         if sequence.isModified():
             for i in range(sequence.size()):
                 residue = sequence.getResidue(i)
@@ -61,17 +61,17 @@ for peptide_id in peptide_ids:
                     print(f"    Modification at position {i}: {residue.getModificationName()}")
 ```
 
-### Access Protein Identifications
+### 存取蛋白質鑑定
 
 ```python
-# Access protein-level information
+# 存取蛋白質層級資訊
 for protein_id in protein_ids:
-    # Search parameters
+    # 搜尋參數
     search_params = protein_id.getSearchParameters()
     print(f"Search engine: {protein_id.getSearchEngine()}")
     print(f"Database: {search_params.db}")
 
-    # Protein hits
+    # 蛋白質命中
     hits = protein_id.getHits()
     for hit in hits:
         print(f"  Accession: {hit.getAccession()}")
@@ -80,28 +80,28 @@ for protein_id in protein_ids:
         print(f"  Sequence: {hit.getSequence()}")
 ```
 
-## False Discovery Rate (FDR)
+## 偽陽性率（FDR）
 
-### FDR Filtering
+### FDR 過濾
 
-Apply FDR filtering to control false positives:
+應用 FDR 過濾以控制偽陽性：
 
 ```python
-# Create FDR object
+# 建立 FDR 物件
 fdr = ms.FalseDiscoveryRate()
 
-# Apply FDR at PSM level
+# 在 PSM 層級應用 FDR
 fdr.apply(peptide_ids)
 
-# Filter by FDR threshold
+# 按 FDR 閾值過濾
 fdr_threshold = 0.01  # 1% FDR
 filtered_peptide_ids = []
 
 for peptide_id in peptide_ids:
-    # Keep hits below FDR threshold
+    # 保留低於 FDR 閾值的命中
     filtered_hits = []
     for hit in peptide_id.getHits():
-        if hit.getScore() <= fdr_threshold:  # Lower score = better
+        if hit.getScore() <= fdr_threshold:  # 分數越低越好
             filtered_hits.append(hit)
 
     if filtered_hits:
@@ -111,39 +111,39 @@ for peptide_id in peptide_ids:
 print(f"Peptides passing FDR: {len(filtered_peptide_ids)}")
 ```
 
-### Score Transformation
+### 分數轉換
 
-Convert scores to q-values:
+將分數轉換為 q 值：
 
 ```python
-# Apply score transformation
+# 應用分數轉換
 fdr.apply(peptide_ids)
 
-# Access q-values
+# 存取 q 值
 for peptide_id in peptide_ids:
     for hit in peptide_id.getHits():
         q_value = hit.getMetaValue("q-value")
         print(f"Sequence: {hit.getSequence().toString()}, q-value: {q_value}")
 ```
 
-## Protein Inference
+## 蛋白質推斷
 
-### ID Mapper
+### ID 映射器
 
-Map peptide identifications to proteins:
+將肽段鑑定映射到蛋白質：
 
 ```python
-# Create mapper
+# 建立映射器
 mapper = ms.IDMapper()
 
-# Map to features
+# 映射到特徵
 feature_map = ms.FeatureMap()
 ms.FeatureXMLFile().load("features.featureXML", feature_map)
 
-# Annotate features with IDs
+# 使用 ID 註釋特徵
 mapper.annotate(feature_map, peptide_ids, protein_ids)
 
-# Check annotated features
+# 檢查註釋的特徵
 for feature in feature_map:
     pep_ids = feature.getPeptideIdentifications()
     if pep_ids:
@@ -152,18 +152,18 @@ for feature in feature_map:
                 print(f"Feature {feature.getMZ():.4f}: {hit.getSequence().toString()}")
 ```
 
-### Protein Grouping
+### 蛋白質分組
 
-Group proteins by shared peptides:
+按共享肽段分組蛋白質：
 
 ```python
-# Create protein inference algorithm
+# 建立蛋白質推斷演算法
 inference = ms.BasicProteinInferenceAlgorithm()
 
-# Run inference
+# 執行推斷
 inference.run(peptide_ids, protein_ids)
 
-# Access protein groups
+# 存取蛋白質群組
 for protein_id in protein_ids:
     hits = protein_id.getHits()
     if len(hits) > 1:
@@ -172,14 +172,14 @@ for protein_id in protein_ids:
             print(f"  {hit.getAccession()}")
 ```
 
-## Peptide Sequence Handling
+## 肽段序列處理
 
-### AASequence Object
+### AASequence 物件
 
-Work with peptide sequences:
+處理肽段序列：
 
 ```python
-# Create peptide sequence
+# 建立肽段序列
 seq = ms.AASequence.fromString("PEPTIDE")
 
 print(f"Sequence: {seq.toString()}")
@@ -187,27 +187,27 @@ print(f"Monoisotopic mass: {seq.getMonoWeight():.4f}")
 print(f"Average mass: {seq.getAverageWeight():.4f}")
 print(f"Length: {seq.size()}")
 
-# Access individual amino acids
+# 存取個別胺基酸
 for i in range(seq.size()):
     residue = seq.getResidue(i)
     print(f"Position {i}: {residue.getOneLetterCode()}, mass: {residue.getMonoWeight():.4f}")
 ```
 
-### Modified Sequences
+### 修飾序列
 
-Handle post-translational modifications:
+處理轉譯後修飾：
 
 ```python
-# Sequence with modifications
+# 帶修飾的序列
 mod_seq = ms.AASequence.fromString("PEPTIDEM(Oxidation)K")
 
 print(f"Modified sequence: {mod_seq.toString()}")
 print(f"Mass with mods: {mod_seq.getMonoWeight():.4f}")
 
-# Check if modified
+# 檢查是否修飾
 print(f"Is modified: {mod_seq.isModified()}")
 
-# Get modification info
+# 取得修飾資訊
 for i in range(mod_seq.size()):
     residue = mod_seq.getResidue(i)
     if residue.isModified():
@@ -215,75 +215,75 @@ for i in range(mod_seq.size()):
         print(f"  Modification: {residue.getModificationName()}")
 ```
 
-### Peptide Digestion
+### 肽段消化
 
-Simulate enzymatic digestion:
+模擬酵素消化：
 
 ```python
-# Create digestion enzyme
+# 建立消化酵素
 enzyme = ms.ProteaseDigestion()
 enzyme.setEnzyme("Trypsin")
 
-# Set missed cleavages
+# 設定漏切位點
 enzyme.setMissedCleavages(2)
 
-# Digest protein sequence
+# 消化蛋白質序列
 protein_seq = "MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVVHSLAKWKRQTLGQHDFSAGEGLYTHMKALRPDEDRLSPLHSVYVDQWDWERVMGDGERQFSTLKSTVEAIWAGIKATEAAVSEEFGLAPFLPDQIHFVHSQELLSRYPDLDAKGRERAIAKDLGAVFLVGIGGKLSDGHRHDVRAPDYDDWSTPSELGHAGLNGDILVWNPVLEDAFELSSMGIRVDADTLKHQLALTGDEDRLELEWHQALLRGEMPQTIGGGIGQSRLTMLLLQLPHIGQVQAGVWPAAVRESVPSLL"
 
-# Get peptides
+# 取得肽段
 peptides = []
 enzyme.digest(ms.AASequence.fromString(protein_seq), peptides)
 
 print(f"Generated {len(peptides)} peptides")
-for peptide in peptides[:5]:  # Show first 5
+for peptide in peptides[:5]:  # 顯示前 5 個
     print(f"  {peptide.toString()}, mass: {peptide.getMonoWeight():.2f}")
 ```
 
-## Theoretical Spectrum Generation
+## 理論光譜生成
 
-### Fragment Ion Calculation
+### 碎片離子計算
 
-Generate theoretical fragment ions:
+生成理論碎片離子：
 
 ```python
-# Create peptide
+# 建立肽段
 peptide = ms.AASequence.fromString("PEPTIDE")
 
-# Generate b and y ions
+# 生成 b 和 y 離子
 fragments = []
 ms.TheoreticalSpectrumGenerator().getSpectrum(fragments, peptide, 1, 1)
 
 print(f"Generated {fragments.size()} fragment ions")
 
-# Access fragments
+# 存取碎片
 mz, intensity = fragments.get_peaks()
-for m, i in zip(mz[:10], intensity[:10]):  # Show first 10
+for m, i in zip(mz[:10], intensity[:10]):  # 顯示前 10 個
     print(f"m/z: {m:.4f}, intensity: {i}")
 ```
 
-## Complete Identification Workflow
+## 完整鑑定工作流程
 
-### End-to-End Example
+### 端到端範例
 
 ```python
 import pyopenms as ms
 
 def identification_workflow(spectrum_file, fasta_file, output_file):
     """
-    Complete identification workflow with FDR control.
+    具有 FDR 控制的完整鑑定工作流程。
 
     Args:
-        spectrum_file: Input mzML file
-        fasta_file: Protein database (FASTA)
-        output_file: Output idXML file
+        spectrum_file: 輸入 mzML 檔案
+        fasta_file: 蛋白質資料庫（FASTA）
+        output_file: 輸出 idXML 檔案
     """
 
-    # Step 1: Load spectra
+    # 步驟 1：載入光譜
     exp = ms.MSExperiment()
     ms.MzMLFile().load(spectrum_file, exp)
     print(f"Loaded {exp.getNrSpectra()} spectra")
 
-    # Step 2: Configure search parameters
+    # 步驟 2：設定搜尋參數
     search_params = ms.SearchParameters()
     search_params.db = fasta_file
     search_params.precursor_mass_tolerance = 10.0  # ppm
@@ -292,23 +292,23 @@ def identification_workflow(spectrum_file, fasta_file, output_file):
     search_params.missed_cleavages = 2
     search_params.modifications = ["Oxidation (M)", "Carbamidomethyl (C)"]
 
-    # Step 3: Run search (example with Comet adapter)
-    # Note: Requires search engine to be installed
+    # 步驟 3：執行搜尋（Comet 適配器範例）
+    # 注意：需要安裝搜尋引擎
     # comet = ms.CometAdapter()
     # protein_ids, peptide_ids = comet.search(exp, search_params)
 
-    # For this example, load pre-computed results
+    # 此範例載入預先計算的結果
     protein_ids = []
     peptide_ids = []
     ms.IdXMLFile().load("raw_identifications.idXML", protein_ids, peptide_ids)
 
     print(f"Initial peptide IDs: {len(peptide_ids)}")
 
-    # Step 4: Apply FDR filtering
+    # 步驟 4：應用 FDR 過濾
     fdr = ms.FalseDiscoveryRate()
     fdr.apply(peptide_ids)
 
-    # Filter by 1% FDR
+    # 按 1% FDR 過濾
     filtered_peptide_ids = []
     for peptide_id in peptide_ids:
         filtered_hits = []
@@ -323,19 +323,19 @@ def identification_workflow(spectrum_file, fasta_file, output_file):
 
     print(f"Peptides after FDR (1%): {len(filtered_peptide_ids)}")
 
-    # Step 5: Protein inference
+    # 步驟 5：蛋白質推斷
     inference = ms.BasicProteinInferenceAlgorithm()
     inference.run(filtered_peptide_ids, protein_ids)
 
     print(f"Identified proteins: {len(protein_ids)}")
 
-    # Step 6: Save results
+    # 步驟 6：儲存結果
     ms.IdXMLFile().store(output_file, protein_ids, filtered_peptide_ids)
     print(f"Results saved to {output_file}")
 
     return protein_ids, filtered_peptide_ids
 
-# Run workflow
+# 執行工作流程
 protein_ids, peptide_ids = identification_workflow(
     "spectra.mzML",
     "database.fasta",
@@ -343,21 +343,21 @@ protein_ids, peptide_ids = identification_workflow(
 )
 ```
 
-## Spectral Library Search
+## 光譜庫搜尋
 
-### Library Matching
+### 庫匹配
 
 ```python
-# Load spectral library
+# 載入光譜庫
 library = ms.MSPFile()
 library_spectra = []
 library.load("spectral_library.msp", library_spectra)
 
-# Load experimental spectra
+# 載入實驗光譜
 exp = ms.MSExperiment()
 ms.MzMLFile().load("data.mzML", exp)
 
-# Compare spectra
+# 比較光譜
 spectra_compare = ms.SpectraSTSimilarityScore()
 
 for exp_spec in exp:
@@ -371,52 +371,52 @@ for exp_spec in exp:
                 best_match_score = score
                 best_match_lib = lib_spec
 
-        if best_match_score > 0.7:  # Threshold
+        if best_match_score > 0.7:  # 閾值
             print(f"Match found: score {best_match_score:.3f}")
 ```
 
-## Best Practices
+## 最佳實務
 
-### Decoy Database
+### 誘餌資料庫
 
-Use target-decoy approach for FDR calculation:
+使用靶標-誘餌方法計算 FDR：
 
 ```python
-# Generate decoy database
+# 生成誘餌資料庫
 decoy_generator = ms.DecoyGenerator()
 
-# Load target database
+# 載入靶標資料庫
 fasta_entries = []
 ms.FASTAFile().load("target.fasta", fasta_entries)
 
-# Generate decoys
+# 生成誘餌
 decoy_entries = []
 for entry in fasta_entries:
     decoy_entry = decoy_generator.reverseProtein(entry)
     decoy_entries.append(decoy_entry)
 
-# Save combined database
+# 儲存組合資料庫
 all_entries = fasta_entries + decoy_entries
 ms.FASTAFile().store("target_decoy.fasta", all_entries)
 ```
 
-### Score Interpretation
+### 分數解讀
 
-Understand score types from different engines:
+了解不同引擎的分數類型：
 
 ```python
-# Interpret scores based on search engine
+# 根據搜尋引擎解讀分數
 for peptide_id in peptide_ids:
     search_engine = peptide_id.getIdentifier()
 
     for hit in peptide_id.getHits():
         score = hit.getScore()
 
-        # Score interpretation varies by engine
+        # 分數解讀因引擎而異
         if "Comet" in search_engine:
-            # Comet: higher E-value = worse
+            # Comet：E 值越高越差
             print(f"E-value: {score}")
         elif "Mascot" in search_engine:
-            # Mascot: higher score = better
+            # Mascot：分數越高越好
             print(f"Ion score: {score}")
 ```

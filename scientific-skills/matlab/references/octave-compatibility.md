@@ -1,20 +1,20 @@
-# GNU Octave Compatibility Reference
+# GNU Octave 相容性參考
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Syntax Differences](#syntax-differences)
-3. [Operator Differences](#operator-differences)
-4. [Function Differences](#function-differences)
-5. [Features Unique to Octave](#features-unique-to-octave)
-6. [Features Missing in Octave](#features-missing-in-octave)
-7. [Writing Compatible Code](#writing-compatible-code)
-8. [Octave Packages](#octave-packages)
+## 目錄
+1. [概述](#概述)
+2. [語法差異](#語法差異)
+3. [運算子差異](#運算子差異)
+4. [函數差異](#函數差異)
+5. [Octave 獨有功能](#octave-獨有功能)
+6. [Octave 缺少的功能](#octave-缺少的功能)
+7. [撰寫相容程式碼](#撰寫相容程式碼)
+8. [Octave 套件](#octave-套件)
 
-## Overview
+## 概述
 
-GNU Octave is a free, open-source alternative to MATLAB with high compatibility. Most MATLAB scripts run in Octave with no or minimal modifications. However, there are some differences to be aware of.
+GNU Octave 是 MATLAB 的免費、開源替代品，具有高度相容性。大多數 MATLAB 腳本可以在 Octave 中執行，無需或只需極少修改。但是，仍有一些需要注意的差異。
 
-### Installation
+### 安裝
 
 ```bash
 # macOS (Homebrew)
@@ -27,256 +27,256 @@ sudo apt install octave
 sudo dnf install octave
 
 # Windows
-# Download installer from https://octave.org/download
+# 從 https://octave.org/download 下載安裝程式
 ```
 
-### Running Octave
+### 執行 Octave
 
 ```bash
-# Interactive mode
+# 互動模式
 octave
 
-# Run script
+# 執行腳本
 octave script.m
 octave --eval "disp('Hello')"
 
-# GUI mode
+# GUI 模式
 octave --gui
 
-# Command-line only (no graphics)
+# 僅命令列（無圖形）
 octave --no-gui
 octave-cli
 ```
 
-## Syntax Differences
+## 語法差異
 
-### Comments
+### 註解
 
 ```matlab
-% MATLAB style (works in both)
-% This is a comment
+% MATLAB 風格（兩者皆可）
+% 這是一個註解
 
-# Octave style (Octave only)
-# This is also a comment in Octave
+# Octave 風格（僅 Octave）
+# 這在 Octave 中也是註解
 
-% For compatibility, always use %
+% 為了相容性，請始終使用 %
 ```
 
-### String Quotes
+### 字串引號
 
 ```matlab
-% MATLAB: Single quotes only (char arrays)
-str = 'Hello';              % char array
-str = "Hello";              % string (R2017a+)
+% MATLAB：僅單引號（字元陣列）
+str = 'Hello';              % 字元陣列
+str = "Hello";              % 字串（R2017a+）
 
-% Octave: Both work, but different behavior
-str1 = 'Hello';             % char array, no escape sequences
-str2 = "Hello\n";           % Interprets \n as newline
+% Octave：兩者皆可，但行為不同
+str1 = 'Hello';             % 字元陣列，無跳脫序列
+str2 = "Hello\n";           % 將 \n 解譯為換行
 
-% For compatibility, use single quotes for char arrays
-% Avoid double quotes with escape sequences
+% 為了相容性，字元陣列請使用單引號
+% 避免帶跳脫序列的雙引號
 ```
 
-### Line Continuation
+### 行續接
 
 ```matlab
-% MATLAB style (works in both)
+% MATLAB 風格（兩者皆可）
 x = 1 + 2 + 3 + ...
     4 + 5;
 
-% Octave also accepts backslash
+% Octave 也接受反斜線
 x = 1 + 2 + 3 + \
     4 + 5;
 
-% For compatibility, use ...
+% 為了相容性，請使用 ...
 ```
 
-### Block Terminators
+### 區塊終止符
 
 ```matlab
-% MATLAB style (works in both)
+% MATLAB 風格（兩者皆可）
 if condition
-    % code
+    % 程式碼
 end
 
 for i = 1:10
-    % code
+    % 程式碼
 end
 
-% Octave also accepts specific terminators
+% Octave 也接受特定終止符
 if condition
-    # code
+    # 程式碼
 endif
 
 for i = 1:10
-    # code
+    # 程式碼
 endfor
 
 while condition
-    # code
+    # 程式碼
 endwhile
 
-% For compatibility, always use 'end'
+% 為了相容性，請始終使用 'end'
 ```
 
-### Function Definitions
+### 函數定義
 
 ```matlab
-% MATLAB requires function in file with same name
-% Octave allows command-line function definitions
+% MATLAB 要求函數放在同名檔案中
+% Octave 允許命令列函數定義
 
-% Octave command-line function
+% Octave 命令列函數
 function y = f(x)
     y = x^2;
 endfunction
 
-% For compatibility, define functions in .m files
+% 為了相容性，請在 .m 檔案中定義函數
 ```
 
-## Operator Differences
+## 運算子差異
 
-### Increment/Decrement Operators
+### 遞增/遞減運算子
 
 ```matlab
-% Octave has C-style operators (MATLAB does not)
+% Octave 有 C 風格運算子（MATLAB 沒有）
 x++;                        % x = x + 1
 x--;                        % x = x - 1
-++x;                        % Pre-increment
---x;                        % Pre-decrement
+++x;                        % 前置遞增
+--x;                        % 前置遞減
 
-% For compatibility, use explicit assignment
+% 為了相容性，請使用明確賦值
 x = x + 1;
 x = x - 1;
 ```
 
-### Compound Assignment
+### 複合賦值
 
 ```matlab
-% Octave supports (MATLAB does not)
+% Octave 支援（MATLAB 不支援）
 x += 5;                     % x = x + 5
 x -= 3;                     % x = x - 3
 x *= 2;                     % x = x * 2
 x /= 4;                     % x = x / 4
 x ^= 2;                     % x = x ^ 2
 
-% Element-wise versions
+% 逐元素版本
 x .+= y;
 x .-= y;
 x .*= y;
 x ./= y;
 x .^= y;
 
-% For compatibility, use explicit assignment
+% 為了相容性，請使用明確賦值
 x = x + 5;
 x = x .* y;
 ```
 
-### Logical Operators
+### 邏輯運算子
 
 ```matlab
-% Both support
+% 兩者皆支援
 & | ~ && ||
 
-% Short-circuit behavior difference:
-% MATLAB: & and | short-circuit in if/while conditions
-% Octave: Only && and || short-circuit
+% 短路行為差異：
+% MATLAB：& 和 | 在 if/while 條件中會短路
+% Octave：僅 && 和 || 短路
 
-% For predictable behavior, use:
-% && || for scalar short-circuit logic
-% & | for element-wise operations
+% 為了可預測行為，請使用：
+% && || 用於純量短路邏輯
+% & | 用於逐元素運算
 ```
 
-### Indexing After Expression
+### 運算式後立即索引
 
 ```matlab
-% Octave allows indexing immediately after expression
-result = sin(x)(1:10);      % First 10 elements of sin(x)
-value = func(arg).field;    % Access field of returned struct
+% Octave 允許運算式後立即索引
+result = sin(x)(1:10);      % sin(x) 的前 10 個元素
+value = func(arg).field;    % 存取回傳結構體的欄位
 
-% MATLAB requires intermediate variable
+% MATLAB 需要中間變數
 temp = sin(x);
 result = temp(1:10);
 
 temp = func(arg);
 value = temp.field;
 
-% For compatibility, use intermediate variables
+% 為了相容性，請使用中間變數
 ```
 
-## Function Differences
+## 函數差異
 
-### Built-in Functions
+### 內建函數
 
-Most basic functions are compatible. Some differences:
+大多數基本函數是相容的。一些差異：
 
 ```matlab
-% Function name differences
-% MATLAB          Octave Alternative
+% 函數名稱差異
+% MATLAB          Octave 替代
 % ------          ------------------
-% inputname       (not available)
-% inputParser     (partial support)
-% validateattributes  (partial support)
+% inputname       （不可用）
+% inputParser     （部分支援）
+% validateattributes  （部分支援）
 
-% Behavior differences in edge cases
-% Check documentation for specific functions
+% 邊界情況的行為差異
+% 請查閱特定函數的文件
 ```
 
-### Random Number Generation
+### 隨機數生成
 
 ```matlab
-% Both use Mersenne Twister by default
-% Seed setting is similar
+% 兩者預設使用 Mersenne Twister
+% 種子設定類似
 rng(42);                    % MATLAB
-rand('seed', 42);           % Octave (also accepts rng syntax)
+rand('seed', 42);           % Octave（也接受 rng 語法）
 
-% For compatibility
-rng(42);                    % Works in modern Octave
+% 為了相容性
+rng(42);                    % 在現代 Octave 中可用
 ```
 
-### Graphics
+### 圖形
 
 ```matlab
-% Basic plotting is compatible
+% 基本繪圖是相容的
 plot(x, y);
 xlabel('X'); ylabel('Y');
-title('Title');
-legend('Data');
+title('標題');
+legend('資料');
 
-% Some advanced features differ
-% - Octave uses gnuplot or Qt graphics
-% - Some property names may differ
-% - Animation/GUI features vary
+% 一些進階功能不同
+% - Octave 使用 gnuplot 或 Qt 圖形
+% - 某些屬性名稱可能不同
+% - 動畫/GUI 功能有所差異
 
-% Test graphics code in both environments
+% 在兩個環境中測試圖形程式碼
 ```
 
-### File I/O
+### 檔案 I/O
 
 ```matlab
-% Basic I/O is compatible
+% 基本 I/O 是相容的
 save('file.mat', 'x', 'y');
 load('file.mat');
 dlmread('file.txt');
 dlmwrite('file.txt', data);
 
-% MAT-file versions
-save('file.mat', '-v7');    % Compatible format
-save('file.mat', '-v7.3');  % HDF5 format (partial Octave support)
+% MAT 檔案版本
+save('file.mat', '-v7');    % 相容格式
+save('file.mat', '-v7.3');  % HDF5 格式（Octave 部分支援）
 
-% For compatibility, use -v7 or -v6
+% 為了相容性，請使用 -v7 或 -v6
 ```
 
-## Features Unique to Octave
+## Octave 獨有功能
 
-### do-until Loop
+### do-until 迴圈
 
 ```matlab
-% Octave only
+% 僅 Octave
 do
     x = x + 1;
 until (x > 10)
 
-% Equivalent MATLAB/compatible code
+% 等效的 MATLAB/相容程式碼
 x = x + 1;
 while x <= 10
     x = x + 1;
@@ -286,66 +286,66 @@ end
 ### unwind_protect
 
 ```matlab
-% Octave only - guaranteed cleanup
+% 僅 Octave - 保證清理
 unwind_protect
-    % code that might error
+    % 可能出錯的程式碼
     result = risky_operation();
 unwind_protect_cleanup
-    % always executed (like finally)
+    % 始終執行（類似 finally）
     cleanup();
 end_unwind_protect
 
-% MATLAB equivalent
+% MATLAB 等效
 try
     result = risky_operation();
 catch
 end
-cleanup();  % Not guaranteed if error not caught
+cleanup();  % 若錯誤未捕獲則不保證
 ```
 
-### Built-in Documentation
+### 內建文件
 
 ```matlab
-% Octave supports Texinfo documentation in functions
+% Octave 支援函數中的 Texinfo 文件
 function y = myfunction(x)
     %% -*- texinfo -*-
     %% @deftypefn {Function File} {@var{y} =} myfunction (@var{x})
-    %% Description of myfunction.
+    %% myfunction 的描述。
     %% @end deftypefn
     y = x.^2;
 endfunction
 ```
 
-### Package System
+### 套件系統
 
 ```matlab
-% Octave Forge packages
+% Octave Forge 套件
 pkg install -forge control
 pkg load control
 
-% List installed packages
+% 列出已安裝套件
 pkg list
 
-% For MATLAB compatibility, use equivalent toolboxes
-% or include package functionality directly
+% 為了 MATLAB 相容性，請使用等效工具箱
+% 或直接包含套件功能
 ```
 
-## Features Missing in Octave
+## Octave 缺少的功能
 
 ### Simulink
 
 ```matlab
-% No Octave equivalent
-% Simulink models (.slx, .mdl) cannot run in Octave
+% 無 Octave 等效物
+% Simulink 模型（.slx、.mdl）無法在 Octave 中執行
 ```
 
-### MATLAB Toolboxes
+### MATLAB 工具箱
 
 ```matlab
-% Many toolbox functions not available
-% Some have Octave Forge equivalents:
+% 許多工具箱函數不可用
+% 某些有 Octave Forge 等效物：
 
-% MATLAB Toolbox        Octave Forge Package
+% MATLAB 工具箱        Octave Forge 套件
 % ---------------       --------------------
 % Control System        control
 % Signal Processing     signal
@@ -353,192 +353,192 @@ pkg list
 % Statistics            statistics
 % Optimization          optim
 
-% Check pkg list for available packages
+% 使用 pkg list 查看可用套件
 ```
 
 ### App Designer / GUIDE
 
 ```matlab
-% MATLAB GUI tools not available in Octave
-% Octave has basic UI functions:
-uicontrol, uimenu, figure properties
+% MATLAB GUI 工具在 Octave 中不可用
+% Octave 有基本 UI 函數：
+uicontrol, uimenu, figure 屬性
 
-% For cross-platform GUIs, consider:
-% - Web-based interfaces
-% - Qt (via Octave's Qt graphics)
+% 對於跨平台 GUI，請考慮：
+% - 基於 Web 的介面
+% - Qt（透過 Octave 的 Qt 圖形）
 ```
 
-### Object-Oriented Programming
+### 物件導向程式設計
 
 ```matlab
-% Octave has partial classdef support
-% Some features missing or behave differently:
-% - Handle class events
-% - Property validation
-% - Some access modifiers
+% Octave 有部分 classdef 支援
+% 某些功能缺少或行為不同：
+% - Handle 類別事件
+% - 屬性驗證
+% - 某些存取修飾符
 
-% For compatibility, use simpler OOP patterns
-% or struct-based approaches
+% 為了相容性，請使用較簡單的 OOP 模式
+% 或基於結構體的方法
 ```
 
-### Live Scripts
+### Live 腳本
 
 ```matlab
-% .mlx files are MATLAB-only
-% Use regular .m scripts for compatibility
+% .mlx 檔案僅適用於 MATLAB
+% 為了相容性請使用一般 .m 腳本
 ```
 
-## Writing Compatible Code
+## 撰寫相容程式碼
 
-### Detection
+### 偵測
 
 ```matlab
 function tf = isOctave()
     tf = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 end
 
-% Use for conditional code
+% 用於條件程式碼
 if isOctave()
-    % Octave-specific code
+    % Octave 特定程式碼
 else
-    % MATLAB-specific code
+    % MATLAB 特定程式碼
 end
 ```
 
-### Best Practices
+### 最佳實踐
 
 ```matlab
-% 1. Use % for comments, not #
-% Good
-% This is a comment
+% 1. 註解使用 %，不要用 #
+% 良好
+% 這是一個註解
 
-% Avoid
-# This is a comment (Octave only)
+% 避免
+# 這是一個註解（僅 Octave）
 
-% 2. Use ... for line continuation
-% Good
+% 2. 行續接使用 ...
+% 良好
 x = 1 + 2 + 3 + ...
     4 + 5;
 
-% Avoid
+% 避免
 x = 1 + 2 + 3 + \
     4 + 5;
 
-% 3. Use 'end' for all blocks
-% Good
+% 3. 所有區塊使用 'end'
+% 良好
 if condition
     code
 end
 
-% Avoid
+% 避免
 if condition
     code
 endif
 
-% 4. Avoid compound operators
-% Good
+% 4. 避免複合運算子
+% 良好
 x = x + 1;
 
-% Avoid
+% 避免
 x++;
 x += 1;
 
-% 5. Use single quotes for strings
-% Good
+% 5. 字串使用單引號
+% 良好
 str = 'Hello World';
 
-% Avoid (escape sequence issues)
+% 避免（跳脫序列問題）
 str = "Hello\nWorld";
 
-% 6. Use intermediate variables for indexing
-% Good
+% 6. 索引使用中間變數
+% 良好
 temp = func(arg);
 result = temp(1:10);
 
-% Avoid (Octave only)
+% 避免（僅 Octave）
 result = func(arg)(1:10);
 
-% 7. Save MAT-files in compatible format
+% 7. MAT 檔案使用相容格式儲存
 save('data.mat', 'x', 'y', '-v7');
 ```
 
-### Testing Compatibility
+### 測試相容性
 
 ```bash
-# Test in both environments
+# 在兩個環境中測試
 matlab -nodisplay -nosplash -r "run('test_script.m'); exit;"
 octave --no-gui test_script.m
 
-# Create test script
+# 建立測試腳本
 # test_script.m:
 # try
 #     main_function();
-#     disp('Test passed');
+#     disp('測試通過');
 # catch ME
-#     disp(['Test failed: ' ME.message]);
+#     disp(['測試失敗：' ME.message]);
 # end
 ```
 
-## Octave Packages
+## Octave 套件
 
-### Installing Packages
+### 安裝套件
 
 ```matlab
-% Install from Octave Forge
+% 從 Octave Forge 安裝
 pkg install -forge package_name
 
-% Install from file
+% 從檔案安裝
 pkg install package_file.tar.gz
 
-% Install from URL
+% 從 URL 安裝
 pkg install 'http://example.com/package.tar.gz'
 
-% Uninstall
+% 解除安裝
 pkg uninstall package_name
 ```
 
-### Using Packages
+### 使用套件
 
 ```matlab
-% Load package (required before use)
+% 載入套件（使用前必須）
 pkg load control
 pkg load signal
 pkg load image
 
-% Load at startup (add to .octaverc)
+% 啟動時載入（加入 .octaverc）
 pkg load control
 
-% List loaded packages
+% 列出已載入套件
 pkg list
 
-% Unload package
+% 卸載套件
 pkg unload control
 ```
 
-### Common Packages
+### 常用套件
 
-| Package | Description |
+| 套件 | 描述 |
 |---------|-------------|
-| control | Control systems design |
-| signal | Signal processing |
-| image | Image processing |
-| statistics | Statistical functions |
-| optim | Optimization algorithms |
-| io | Input/output functions |
-| struct | Structure manipulation |
-| symbolic | Symbolic math (via SymPy) |
-| parallel | Parallel computing |
-| netcdf | NetCDF file support |
+| control | 控制系統設計 |
+| signal | 訊號處理 |
+| image | 影像處理 |
+| statistics | 統計函數 |
+| optim | 最佳化演算法 |
+| io | 輸入/輸出函數 |
+| struct | 結構體操作 |
+| symbolic | 符號數學（透過 SymPy） |
+| parallel | 平行運算 |
+| netcdf | NetCDF 檔案支援 |
 
-### Package Management
+### 套件管理
 
 ```matlab
-% Update all packages
+% 更新所有套件
 pkg update
 
-% Get package description
+% 取得套件描述
 pkg describe package_name
 
-% Check for updates
-pkg list  % Compare with Octave Forge website
+% 檢查更新
+pkg list  % 與 Octave Forge 網站比較
 ```

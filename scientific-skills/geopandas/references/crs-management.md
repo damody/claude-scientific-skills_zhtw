@@ -1,243 +1,243 @@
-# Coordinate Reference Systems (CRS)
+# 座標參考系統（CRS）
 
-A coordinate reference system defines how coordinates relate to locations on Earth.
+座標參考系統定義座標如何對應到地球上的位置。
 
-## Understanding CRS
+## 理解 CRS
 
-CRS information is stored as `pyproj.CRS` objects:
+CRS 資訊儲存為 `pyproj.CRS` 物件：
 
 ```python
-# Check CRS
+# 檢查 CRS
 print(gdf.crs)
 
-# Check if CRS is set
+# 檢查是否已設定 CRS
 if gdf.crs is None:
     print("No CRS defined")
 ```
 
-## Setting vs Reprojecting
+## 設定 vs 重新投影
 
-### Setting CRS
+### 設定 CRS
 
-Use `set_crs()` when coordinates are correct but CRS metadata is missing:
+當座標正確但缺少 CRS 元資料時使用 `set_crs()`：
 
 ```python
-# Set CRS (doesn't transform coordinates)
+# 設定 CRS（不轉換座標）
 gdf = gdf.set_crs("EPSG:4326")
 gdf = gdf.set_crs(4326)
 ```
 
-**Warning**: Only use when CRS metadata is missing. This does not transform coordinates.
+**警告**：僅在缺少 CRS 元資料時使用。這不會轉換座標。
 
-### Reprojecting
+### 重新投影
 
-Use `to_crs()` to transform coordinates between coordinate systems:
+使用 `to_crs()` 在座標系統之間轉換座標：
 
 ```python
-# Reproject to different CRS
+# 重新投影到不同的 CRS
 gdf_projected = gdf.to_crs("EPSG:3857")  # Web Mercator
 gdf_projected = gdf.to_crs(3857)
 
-# Reproject to match another GeoDataFrame
+# 重新投影以匹配另一個 GeoDataFrame
 gdf1_reprojected = gdf1.to_crs(gdf2.crs)
 ```
 
-## CRS Formats
+## CRS 格式
 
-GeoPandas accepts multiple formats via `pyproj.CRS.from_user_input()`:
+GeoPandas 透過 `pyproj.CRS.from_user_input()` 接受多種格式：
 
 ```python
-# EPSG code (integer)
+# EPSG 代碼（整數）
 gdf.to_crs(4326)
 
-# Authority string
+# 授權字串
 gdf.to_crs("EPSG:4326")
 gdf.to_crs("ESRI:102003")
 
-# WKT string (Well-Known Text)
+# WKT 字串（Well-Known Text）
 gdf.to_crs("GEOGCS[...]")
 
-# PROJ string
+# PROJ 字串
 gdf.to_crs("+proj=longlat +datum=WGS84")
 
-# pyproj.CRS object
+# pyproj.CRS 物件
 from pyproj import CRS
 crs_obj = CRS.from_epsg(4326)
 gdf.to_crs(crs_obj)
 ```
 
-**Best Practice**: Use WKT2 or authority strings (EPSG) to preserve full CRS information.
+**最佳實踐**：使用 WKT2 或授權字串（EPSG）以保留完整的 CRS 資訊。
 
-## Common EPSG Codes
+## 常用 EPSG 代碼
 
-### Geographic Coordinate Systems
+### 地理座標系統
 
 ```python
-# WGS 84 (latitude/longitude)
+# WGS 84（緯度/經度）
 gdf.to_crs("EPSG:4326")
 
 # NAD83
 gdf.to_crs("EPSG:4269")
 ```
 
-### Projected Coordinate Systems
+### 投影座標系統
 
 ```python
-# Web Mercator (used by web maps)
+# Web Mercator（網頁地圖使用）
 gdf.to_crs("EPSG:3857")
 
-# UTM zones (example: UTM Zone 33N)
+# UTM 帶（範例：UTM 33N 帶）
 gdf.to_crs("EPSG:32633")
 
-# UTM zones (Southern hemisphere, example: UTM Zone 33S)
+# UTM 帶（南半球，範例：UTM 33S 帶）
 gdf.to_crs("EPSG:32733")
 
-# US National Atlas Equal Area
+# 美國國家地圖等面積
 gdf.to_crs("ESRI:102003")
 
-# Albers Equal Area Conic (North America)
+# 阿爾伯斯等面積圓錐投影（北美）
 gdf.to_crs("EPSG:5070")
 ```
 
-## CRS Requirements for Operations
+## 操作對 CRS 的要求
 
-### Operations Requiring Matching CRS
+### 需要匹配 CRS 的操作
 
-These operations require identical CRS:
+這些操作需要相同的 CRS：
 
 ```python
-# Spatial joins
-gpd.sjoin(gdf1, gdf2, ...)  # CRS must match
+# 空間連接
+gpd.sjoin(gdf1, gdf2, ...)  # CRS 必須匹配
 
-# Overlay operations
-gpd.overlay(gdf1, gdf2, ...)  # CRS must match
+# 疊加操作
+gpd.overlay(gdf1, gdf2, ...)  # CRS 必須匹配
 
-# Appending
-pd.concat([gdf1, gdf2])  # CRS must match
+# 附加
+pd.concat([gdf1, gdf2])  # CRS 必須匹配
 
-# Reproject first if needed
+# 如有需要先重新投影
 gdf2_reprojected = gdf2.to_crs(gdf1.crs)
 result = gpd.sjoin(gdf1, gdf2_reprojected)
 ```
 
-### Operations Best in Projected CRS
+### 最好在投影 CRS 中進行的操作
 
-Area and distance calculations should use projected CRS:
+面積和距離計算應使用投影 CRS：
 
 ```python
-# Bad: area in degrees (meaningless)
-areas_degrees = gdf.geometry.area  # If CRS is EPSG:4326
+# 錯誤：以度為單位的面積（無意義）
+areas_degrees = gdf.geometry.area  # 如果 CRS 是 EPSG:4326
 
-# Good: reproject to appropriate projected CRS first
+# 正確：先重新投影到適當的投影 CRS
 gdf_projected = gdf.to_crs("EPSG:3857")
-areas_meters = gdf_projected.geometry.area  # Square meters
+areas_meters = gdf_projected.geometry.area  # 平方公尺
 
-# Better: use appropriate local UTM zone for accuracy
-gdf_utm = gdf.to_crs("EPSG:32633")  # UTM Zone 33N
+# 更好：使用適當的本地 UTM 帶以獲得準確度
+gdf_utm = gdf.to_crs("EPSG:32633")  # UTM 33N 帶
 accurate_areas = gdf_utm.geometry.area
 ```
 
-## Choosing Appropriate CRS
+## 選擇適當的 CRS
 
-### For Area/Distance Calculations
+### 用於面積/距離計算
 
-Use equal-area projections:
+使用等面積投影：
 
 ```python
-# Albers Equal Area Conic (North America)
+# 阿爾伯斯等面積圓錐投影（北美）
 gdf.to_crs("EPSG:5070")
 
-# Lambert Azimuthal Equal Area
-gdf.to_crs("EPSG:3035")  # Europe
+# 蘭伯特方位角等面積
+gdf.to_crs("EPSG:3035")  # 歐洲
 
-# UTM zones (for local areas)
-gdf.to_crs("EPSG:32633")  # Appropriate UTM zone
+# UTM 帶（用於局部區域）
+gdf.to_crs("EPSG:32633")  # 適當的 UTM 帶
 ```
 
-### For Distance-Preserving (Navigation)
+### 用於距離保持（導航）
 
-Use equidistant projections:
+使用等距投影：
 
 ```python
-# Azimuthal Equidistant
+# 方位角等距投影
 gdf.to_crs("ESRI:54032")
 ```
 
-### For Shape-Preserving (Angles)
+### 用於形狀保持（角度）
 
-Use conformal projections:
+使用正形投影：
 
 ```python
-# Web Mercator (conformal but distorts area)
+# Web Mercator（正形但扭曲面積）
 gdf.to_crs("EPSG:3857")
 
-# UTM zones (conformal for local areas)
+# UTM 帶（局部區域的正形）
 gdf.to_crs("EPSG:32633")
 ```
 
-### For Web Mapping
+### 用於網頁製圖
 
 ```python
-# Web Mercator (standard for web maps)
+# Web Mercator（網頁地圖的標準）
 gdf.to_crs("EPSG:3857")
 ```
 
-## Estimating UTM Zone
+## 估計 UTM 帶
 
 ```python
-# Estimate appropriate UTM CRS from data
+# 從資料估計適當的 UTM CRS
 utm_crs = gdf.estimate_utm_crs()
 gdf_utm = gdf.to_crs(utm_crs)
 ```
 
-## Multiple Geometry Columns with Different CRS
+## 具有不同 CRS 的多幾何欄位
 
-GeoPandas 0.8+ supports different CRS per geometry column:
+GeoPandas 0.8+ 支援每個幾何欄位不同的 CRS：
 
 ```python
-# Set CRS for specific geometry column
+# 為特定幾何欄位設定 CRS
 gdf = gdf.set_crs("EPSG:4326", allow_override=True)
 
-# Active geometry determines operations
+# 活動幾何決定操作
 gdf = gdf.set_geometry('other_geom_column')
 
-# Check CRS mismatch
+# 檢查 CRS 不匹配
 try:
     result = gdf1.overlay(gdf2)
 except ValueError as e:
     print("CRS mismatch:", e)
 ```
 
-## CRS Information
+## CRS 資訊
 
 ```python
-# Get full CRS details
+# 取得完整的 CRS 詳情
 print(gdf.crs)
 
-# Get EPSG code if available
+# 取得 EPSG 代碼（如果可用）
 print(gdf.crs.to_epsg())
 
-# Get WKT representation
+# 取得 WKT 表示
 print(gdf.crs.to_wkt())
 
-# Get PROJ string
+# 取得 PROJ 字串
 print(gdf.crs.to_proj4())
 
-# Check if CRS is geographic (lat/lon)
+# 檢查 CRS 是否為地理的（經緯度）
 print(gdf.crs.is_geographic)
 
-# Check if CRS is projected
+# 檢查 CRS 是否為投影的
 print(gdf.crs.is_projected)
 ```
 
-## Transforming Individual Geometries
+## 轉換個別幾何
 
 ```python
 from pyproj import Transformer
 
-# Create transformer
+# 建立轉換器
 transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
 
-# Transform point
+# 轉換點
 x_new, y_new = transformer.transform(x, y)
 ```

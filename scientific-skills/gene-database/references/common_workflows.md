@@ -1,80 +1,80 @@
-# Common Gene Database Workflows
+# 常見基因資料庫工作流程
 
-This document provides examples of common workflows and use cases for working with NCBI Gene database.
+本文件提供使用 NCBI Gene 資料庫的常見工作流程和使用案例範例。
 
-## Table of Contents
+## 目錄
 
-1. [Disease Gene Discovery](#disease-gene-discovery)
-2. [Gene Annotation Pipeline](#gene-annotation-pipeline)
-3. [Cross-Species Gene Comparison](#cross-species-gene-comparison)
-4. [Pathway Analysis](#pathway-analysis)
-5. [Variant Analysis](#variant-analysis)
-6. [Publication Mining](#publication-mining)
+1. [疾病基因發現](#疾病基因發現)
+2. [基因註解管線](#基因註解管線)
+3. [跨物種基因比較](#跨物種基因比較)
+4. [路徑分析](#路徑分析)
+5. [變異分析](#變異分析)
+6. [文獻探勘](#文獻探勘)
 
 ---
 
-## Disease Gene Discovery
+## 疾病基因發現
 
-### Use Case
+### 使用案例
 
-Identify genes associated with a specific disease or phenotype.
+識別與特定疾病或表型相關的基因。
 
-### Workflow
+### 工作流程
 
-1. **Search by disease name**
+1. **按疾病名稱搜尋**
 
 ```bash
-# Find genes associated with Alzheimer's disease
+# 查找與阿茲海默症相關的基因
 python scripts/query_gene.py --search "Alzheimer disease[disease]" --organism human --max-results 50
 ```
 
-2. **Filter by chromosome location**
+2. **按染色體位置過濾**
 
 ```bash
-# Find genes on chromosome 17 associated with breast cancer
+# 查找染色體 17 上與乳癌相關的基因
 python scripts/query_gene.py --search "breast cancer[disease] AND 17[chromosome]" --organism human
 ```
 
-3. **Retrieve detailed information**
+3. **擷取詳細資訊**
 
 ```python
-# Python example: Get gene details for disease-associated genes
+# Python 範例：取得疾病相關基因的詳細資料
 import json
 from scripts.query_gene import esearch, esummary
 
-# Search for genes
+# 搜尋基因
 query = "diabetes[disease] AND human[organism]"
 gene_ids = esearch(query, retmax=100, api_key="YOUR_KEY")
 
-# Get summaries
+# 取得摘要
 summaries = esummary(gene_ids, api_key="YOUR_KEY")
 
-# Extract relevant information
+# 提取相關資訊
 for gene_id in gene_ids:
     if gene_id in summaries['result']:
         gene = summaries['result'][gene_id]
         print(f"{gene['name']}: {gene['description']}")
 ```
 
-### Expected Output
+### 預期輸出
 
-- List of genes with disease associations
-- Gene symbols, descriptions, and chromosomal locations
-- Related publications and clinical annotations
+- 具有疾病關聯的基因列表
+- 基因符號、描述和染色體位置
+- 相關出版物和臨床註解
 
 ---
 
-## Gene Annotation Pipeline
+## 基因註解管線
 
-### Use Case
+### 使用案例
 
-Annotate a list of gene identifiers with comprehensive metadata.
+使用綜合元資料註解基因識別碼列表。
 
-### Workflow
+### 工作流程
 
-1. **Prepare gene list**
+1. **準備基因列表**
 
-Create a file `genes.txt` with gene symbols (one per line):
+建立包含基因符號的檔案 `genes.txt`（每行一個）：
 ```
 BRCA1
 TP53
@@ -82,13 +82,13 @@ EGFR
 KRAS
 ```
 
-2. **Batch lookup**
+2. **批次查詢**
 
 ```bash
 python scripts/batch_gene_lookup.py --file genes.txt --organism human --output annotations.json --api-key YOUR_KEY
 ```
 
-3. **Parse results**
+3. **解析結果**
 
 ```python
 import json
@@ -98,54 +98,54 @@ with open('annotations.json', 'r') as f:
 
 for gene in genes:
     if 'gene_id' in gene:
-        print(f"Symbol: {gene['symbol']}")
-        print(f"ID: {gene['gene_id']}")
-        print(f"Description: {gene['description']}")
-        print(f"Location: chr{gene['chromosome']}:{gene['map_location']}")
+        print(f"符號：{gene['symbol']}")
+        print(f"ID：{gene['gene_id']}")
+        print(f"描述：{gene['description']}")
+        print(f"位置：chr{gene['chromosome']}:{gene['map_location']}")
         print()
 ```
 
-4. **Enrich with sequence data**
+4. **使用序列資料擴充**
 
 ```bash
-# Get detailed data including sequences for specific genes
+# 取得特定基因的詳細資料，包括序列
 python scripts/fetch_gene_data.py --gene-id 672 --verbose > BRCA1_detailed.json
 ```
 
-### Use Cases
+### 使用案例
 
-- Creating gene annotation tables for publications
-- Validating gene lists before analysis
-- Building gene reference databases
-- Quality control for genomic pipelines
+- 為出版物建立基因註解表
+- 在分析前驗證基因列表
+- 建構基因參考資料庫
+- 基因體管線的品質控制
 
 ---
 
-## Cross-Species Gene Comparison
+## 跨物種基因比較
 
-### Use Case
+### 使用案例
 
-Find orthologs or compare the same gene across different species.
+查找同源基因或比較不同物種間的相同基因。
 
-### Workflow
+### 工作流程
 
-1. **Search for gene in multiple organisms**
+1. **在多個生物體中搜尋基因**
 
 ```bash
-# Find TP53 in human
+# 在人類中查找 TP53
 python scripts/fetch_gene_data.py --symbol TP53 --taxon human
 
-# Find TP53 in mouse
+# 在小鼠中查找 TP53
 python scripts/fetch_gene_data.py --symbol TP53 --taxon mouse
 
-# Find TP53 in zebrafish
+# 在斑馬魚中查找 TP53
 python scripts/fetch_gene_data.py --symbol TP53 --taxon zebrafish
 ```
 
-2. **Compare gene IDs across species**
+2. **比較跨物種的基因 ID**
 
 ```python
-# Compare gene information across species
+# 比較跨物種的基因資訊
 species = {
     'human': '9606',
     'mouse': '10090',
@@ -155,57 +155,57 @@ species = {
 gene_symbol = 'TP53'
 
 for organism, taxon_id in species.items():
-    # Fetch gene data
-    # ... (use fetch_gene_by_symbol)
+    # 取得基因資料
+    # ...（使用 fetch_gene_by_symbol）
     print(f"{organism}: {gene_data}")
 ```
 
-3. **Find orthologs using ELink**
+3. **使用 ELink 查找同源基因**
 
 ```bash
-# Get HomoloGene links for a gene
+# 取得基因的 HomoloGene 連結
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=gene&db=homologene&id=7157&retmode=json"
 ```
 
-### Applications
+### 應用
 
-- Evolutionary studies
-- Model organism research
-- Comparative genomics
-- Cross-species experimental design
+- 演化研究
+- 模式生物研究
+- 比較基因體學
+- 跨物種實驗設計
 
 ---
 
-## Pathway Analysis
+## 路徑分析
 
-### Use Case
+### 使用案例
 
-Identify genes involved in specific biological pathways or processes.
+識別參與特定生物路徑或過程的基因。
 
-### Workflow
+### 工作流程
 
-1. **Search by Gene Ontology (GO) term**
+1. **按基因本體（GO）術語搜尋**
 
 ```bash
-# Find genes involved in apoptosis
+# 查找參與細胞凋亡的基因
 python scripts/query_gene.py --search "GO:0006915[biological process]" --organism human --max-results 100
 ```
 
-2. **Search by pathway name**
+2. **按路徑名稱搜尋**
 
 ```bash
-# Find genes in insulin signaling pathway
+# 查找胰島素訊號路徑中的基因
 python scripts/query_gene.py --search "insulin signaling pathway[pathway]" --organism human
 ```
 
-3. **Get pathway-related genes**
+3. **取得路徑相關基因**
 
 ```python
-# Example: Get all genes in a specific pathway
+# 範例：取得特定路徑中的所有基因
 import urllib.request
 import json
 
-# Search for pathway genes
+# 搜尋路徑基因
 query = "MAPK signaling pathway[pathway] AND human[organism]"
 url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term={query}&retmode=json&retmax=200"
 
@@ -213,166 +213,166 @@ with urllib.request.urlopen(url) as response:
     data = json.loads(response.read().decode())
     gene_ids = data['esearchresult']['idlist']
 
-print(f"Found {len(gene_ids)} genes in MAPK signaling pathway")
+print(f"在 MAPK 訊號路徑中找到 {len(gene_ids)} 個基因")
 ```
 
-4. **Batch retrieve gene details**
+4. **批次擷取基因詳細資料**
 
 ```bash
-# Get details for all pathway genes
+# 取得所有路徑基因的詳細資料
 python scripts/batch_gene_lookup.py --ids 5594,5595,5603,5604 --output mapk_genes.json
 ```
 
-### Applications
+### 應用
 
-- Pathway enrichment analysis
-- Gene set analysis
-- Systems biology studies
-- Drug target identification
+- 路徑富集分析
+- 基因集分析
+- 系統生物學研究
+- 藥物標靶識別
 
 ---
 
-## Variant Analysis
+## 變異分析
 
-### Use Case
+### 使用案例
 
-Find genes with clinically relevant variants or disease-associated mutations.
+查找具有臨床相關變異或疾病相關突變的基因。
 
-### Workflow
+### 工作流程
 
-1. **Search for genes with clinical variants**
+1. **搜尋具有臨床變異的基因**
 
 ```bash
-# Find genes with pathogenic variants
+# 查找具有致病性變異的基因
 python scripts/query_gene.py --search "pathogenic[clinical significance]" --organism human --max-results 50
 ```
 
-2. **Link to ClinVar database**
+2. **連結到 ClinVar 資料庫**
 
 ```bash
-# Get ClinVar records for a gene
+# 取得基因的 ClinVar 記錄
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=gene&db=clinvar&id=672&retmode=json"
 ```
 
-3. **Search for pharmacogenomic genes**
+3. **搜尋藥物基因體學基因**
 
 ```bash
-# Find genes associated with drug response
+# 查找與藥物反應相關的基因
 python scripts/query_gene.py --search "pharmacogenomic[property]" --organism human
 ```
 
-4. **Get variant summary data**
+4. **取得變異摘要資料**
 
 ```python
-# Example: Get genes with known variants
+# 範例：取得具有已知變異的基因
 from scripts.query_gene import esearch, efetch
 
-# Search for genes with variants
+# 搜尋具有變異的基因
 gene_ids = esearch("has variants[filter] AND human[organism]", retmax=100)
 
-# Fetch detailed records
-for gene_id in gene_ids[:10]:  # First 10
+# 取得詳細記錄
+for gene_id in gene_ids[:10]:  # 前 10 個
     data = efetch([gene_id], retmode='xml')
-    # Parse XML for variant information
-    print(f"Gene {gene_id} variant data...")
+    # 解析 XML 以獲取變異資訊
+    print(f"基因 {gene_id} 變異資料...")
 ```
 
-### Applications
+### 應用
 
-- Clinical genetics
-- Precision medicine
-- Pharmacogenomics
-- Genetic counseling
+- 臨床遺傳學
+- 精準醫療
+- 藥物基因體學
+- 遺傳諮詢
 
 ---
 
-## Publication Mining
+## 文獻探勘
 
-### Use Case
+### 使用案例
 
-Find genes mentioned in recent publications or link genes to literature.
+查找在近期出版物中提及的基因或將基因與文獻連結。
 
-### Workflow
+### 工作流程
 
-1. **Search genes mentioned in specific publications**
+1. **搜尋在特定出版物中提及的基因**
 
 ```bash
-# Find genes mentioned in papers about CRISPR
+# 查找在關於 CRISPR 的論文中提及的基因
 python scripts/query_gene.py --search "CRISPR[text word]" --organism human --max-results 100
 ```
 
-2. **Get PubMed articles for a gene**
+2. **取得基因的 PubMed 文章**
 
 ```bash
-# Get all publications for BRCA1
+# 取得 BRCA1 的所有出版物
 curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=gene&db=pubmed&id=672&retmode=json"
 ```
 
-3. **Search by author or journal**
+3. **按作者或期刊搜尋**
 
 ```bash
-# Find genes studied by specific research group
+# 查找特定研究團隊研究的基因
 python scripts/query_gene.py --search "Smith J[author] AND 2024[pdat]" --organism human
 ```
 
-4. **Extract gene-publication relationships**
+4. **提取基因-出版物關係**
 
 ```python
-# Example: Build gene-publication network
+# 範例：建構基因-出版物網路
 from scripts.query_gene import esearch, esummary
 import urllib.request
 import json
 
-# Get gene
+# 取得基因
 gene_id = '672'
 
-# Get publications for gene
+# 取得基因的出版物
 url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=gene&db=pubmed&id={gene_id}&retmode=json"
 
 with urllib.request.urlopen(url) as response:
     data = json.loads(response.read().decode())
 
-# Extract PMIDs
+# 提取 PMID
 pmids = []
 for linkset in data.get('linksets', []):
     for linksetdb in linkset.get('linksetdbs', []):
         pmids.extend(linksetdb.get('links', []))
 
-print(f"Gene {gene_id} has {len(pmids)} publications")
+print(f"基因 {gene_id} 有 {len(pmids)} 篇出版物")
 ```
 
-### Applications
+### 應用
 
-- Literature reviews
-- Grant writing
-- Knowledge base construction
-- Trend analysis in genomics research
+- 文獻回顧
+- 計畫撰寫
+- 知識庫建構
+- 基因體學研究趨勢分析
 
 ---
 
-## Advanced Patterns
+## 進階模式
 
-### Combining Multiple Searches
+### 組合多個搜尋
 
 ```python
-# Example: Find genes at intersection of multiple criteria
+# 範例：查找符合多個標準交集的基因
 def find_genes_multi_criteria(organism='human'):
-    # Criteria 1: Disease association
+    # 標準 1：疾病關聯
     disease_genes = set(esearch("diabetes[disease] AND human[organism]"))
 
-    # Criteria 2: Chromosome location
+    # 標準 2：染色體位置
     chr_genes = set(esearch("11[chromosome] AND human[organism]"))
 
-    # Criteria 3: Gene type
+    # 標準 3：基因類型
     coding_genes = set(esearch("protein coding[gene type] AND human[organism]"))
 
-    # Intersection
+    # 交集
     candidates = disease_genes & chr_genes & coding_genes
 
     return list(candidates)
 ```
 
-### Rate-Limited Batch Processing
+### 速率限制的批次處理
 
 ```python
 import time
@@ -383,17 +383,17 @@ def process_genes_with_rate_limit(gene_ids, batch_size=200, delay=0.1):
     for i in range(0, len(gene_ids), batch_size):
         batch = gene_ids[i:i + batch_size]
 
-        # Process batch
+        # 處理批次
         batch_results = esummary(batch)
         results.append(batch_results)
 
-        # Rate limit
+        # 速率限制
         time.sleep(delay)
 
     return results
 ```
 
-### Error Handling and Retry
+### 錯誤處理和重試
 
 ```python
 import time
@@ -405,24 +405,24 @@ def robust_gene_fetch(gene_id, max_retries=3):
             return data
         except Exception as e:
             if attempt < max_retries - 1:
-                wait = 2 ** attempt  # Exponential backoff
+                wait = 2 ** attempt  # 指數退避
                 time.sleep(wait)
             else:
-                print(f"Failed to fetch gene {gene_id}: {e}")
+                print(f"無法取得基因 {gene_id}：{e}")
                 return None
 ```
 
 ---
 
-## Tips and Best Practices
+## 技巧和最佳實踐
 
-1. **Start Specific, Then Broaden**: Begin with precise queries and expand if needed
-2. **Use Organism Filters**: Always specify organism for gene symbol searches
-3. **Validate Results**: Check gene IDs and symbols for accuracy
-4. **Cache Frequently Used Data**: Store common queries locally
-5. **Monitor Rate Limits**: Use API keys and implement delays
-6. **Combine APIs**: Use E-utilities for search, Datasets API for detailed data
-7. **Handle Ambiguity**: Gene symbols may refer to different genes in different species
-8. **Check Data Currency**: Gene annotations are updated regularly
-9. **Use Batch Operations**: Process multiple genes together when possible
-10. **Document Your Queries**: Keep records of search terms and parameters
+1. **從具體開始，然後擴展**：以精確查詢開始，必要時再擴展
+2. **使用生物體過濾器**：始終為基因符號搜尋指定生物體
+3. **驗證結果**：檢查基因 ID 和符號的準確性
+4. **快取常用資料**：在本地儲存常見查詢
+5. **監控速率限制**：使用 API 金鑰並實作延遲
+6. **組合 API**：使用 E-utilities 進行搜尋，使用 Datasets API 取得詳細資料
+7. **處理歧義**：基因符號在不同物種中可能指向不同的基因
+8. **檢查資料時效性**：基因註解會定期更新
+9. **使用批次操作**：盡可能一起處理多個基因
+10. **記錄您的查詢**：保留搜尋詞彙和參數的記錄

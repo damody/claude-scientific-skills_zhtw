@@ -1,83 +1,83 @@
-# Differential Expression Analysis in scvi-tools
+# scvi-tools 中的差異表達分析
 
-This document provides detailed information about differential expression (DE) analysis using scvi-tools' probabilistic framework.
+本文檔提供有關使用 scvi-tools 機率框架進行差異表達（DE）分析的詳細資訊。
 
-## Overview
+## 概述
 
-scvi-tools implements Bayesian differential expression testing that leverages the learned generative models to estimate expression differences between groups. This approach provides several advantages over traditional methods:
+scvi-tools 實作了貝葉斯差異表達檢驗，利用學習到的生成模型來估計組間表達差異。這種方法相較於傳統方法具有多項優勢：
 
-- **Batch correction**: DE testing on batch-corrected representations
-- **Uncertainty quantification**: Probabilistic estimates of effect sizes
-- **Zero-inflation handling**: Proper modeling of dropout and zeros
-- **Flexible comparisons**: Between any groups or cell types
-- **Multiple modalities**: Works for RNA, proteins (totalVI), and accessibility (PeakVI)
+- **批次校正**：在批次校正的表示上進行 DE 檢驗
+- **不確定性量化**：效應量的機率估計
+- **零膨脹處理**：正確建模丟失和零值
+- **靈活比較**：可比較任意組或細胞類型
+- **多模態**：適用於 RNA、蛋白質（totalVI）和可及性（PeakVI）
 
-## Core Statistical Framework
+## 核心統計框架
 
-### Problem Definition
+### 問題定義
 
-The goal is to estimate the log fold-change in expression between two conditions:
+目標是估計兩個條件之間表達的對數倍數變化（log fold-change）：
 
 ```
 log fold-change = log(μ_B) - log(μ_A)
 ```
 
-Where μ_A and μ_B are the mean expression levels in conditions A and B.
+其中 μ_A 和 μ_B 分別是條件 A 和 B 的平均表達水平。
 
-### Three-Stage Process
+### 三階段流程
 
-**Stage 1: Estimating Expression Levels**
-- Sample from posterior distribution of cellular states
-- Generate expression values from the learned generative model
-- Aggregate across cells to get population-level estimates
+**階段一：估計表達水平**
+- 從細胞狀態的後驗分佈中取樣
+- 從學習到的生成模型生成表達值
+- 跨細胞聚合以獲得群體層級估計
 
-**Stage 2: Detecting Relevant Features (Hypothesis Testing)**
-- Test for differential expression using Bayesian framework
-- Two testing modes available:
-  - **"vanilla" mode**: Point null hypothesis (β = 0)
-  - **"change" mode**: Composite hypothesis (|β| ≤ δ)
+**階段二：檢測相關特徵（假設檢驗）**
+- 使用貝葉斯框架檢驗差異表達
+- 有兩種檢驗模式可用：
+  - **「vanilla」模式**：點虛無假設（β = 0）
+  - **「change」模式**：複合假設（|β| ≤ δ）
 
-**Stage 3: Controlling False Discovery**
-- Posterior expected False Discovery Proportion (FDP) control
-- Selects maximum number of discoveries ensuring E[FDP] ≤ α
+**階段三：控制錯誤發現**
+- 後驗期望錯誤發現比例（FDP）控制
+- 選擇最大發現數量以確保 E[FDP] ≤ α
 
-## Basic Usage
+## 基本用法
 
-### Simple Two-Group Comparison
+### 簡單的兩組比較
 
 ```python
 import scvi
 
-# After training a model
+# 訓練模型後
 model = scvi.model.SCVI(adata)
 model.train()
 
-# Compare two cell types
+# 比較兩種細胞類型
 de_results = model.differential_expression(
     groupby="cell_type",
     group1="T cells",
     group2="B cells"
 )
 
-# View top DE genes
+# 查看前幾個 DE 基因
 top_genes = de_results.sort_values("lfc_mean", ascending=False).head(20)
 print(top_genes[["lfc_mean", "lfc_std", "bayes_factor", "is_de_fdr_0.05"]])
 ```
 
-### One vs. Rest Comparison
+### 一對其餘比較
 
 ```python
-# Compare one group against all others
+# 將一組與其他所有組比較
 de_results = model.differential_expression(
     groupby="cell_type",
-    group1="T cells"  # No group2 = compare to rest
+    group1="T cells"  # 沒有 group2 = 與其餘比較
 )
 ```
 
-### All Pairwise Comparisons
+### 所有成對比較
 
 ```python
-# Compare all cell types pairwise
+# 成對比較所有細胞類型
 all_comparisons = {}
 
 cell_types = adata.obs["cell_type"].unique()
@@ -93,57 +93,57 @@ for ct1 in cell_types:
             )
 ```
 
-## Key Parameters
+## 關鍵參數
 
-### `groupby` (required)
-Column in `adata.obs` defining groups to compare.
+### `groupby`（必需）
+`adata.obs` 中定義要比較組別的欄位。
 
 ```python
-# Must be a categorical variable
+# 必須是分類變數
 de_results = model.differential_expression(groupby="cell_type")
 ```
 
-### `group1` and `group2`
-Groups to compare. If `group2` is None, compares `group1` to all others.
+### `group1` 和 `group2`
+要比較的組別。如果 `group2` 為 None，則將 `group1` 與所有其他組比較。
 
 ```python
-# Specific comparison
+# 特定比較
 de = model.differential_expression(groupby="condition", group1="treated", group2="control")
 
-# One vs rest
+# 一對其餘
 de = model.differential_expression(groupby="cell_type", group1="T cells")
 ```
 
-### `mode` (Hypothesis Testing Mode)
+### `mode`（假設檢驗模式）
 
-**"vanilla" mode** (default): Point null hypothesis
-- Tests if β = 0 exactly
-- More sensitive, but may find trivially small effects
+**「vanilla」模式**（預設）：點虛無假設
+- 檢驗 β = 0 是否精確成立
+- 更敏感，但可能找到微不足道的小效應
 
-**"change" mode**: Composite null hypothesis
-- Tests if |β| ≤ δ
-- Requires biologically meaningful change
-- Reduces false discoveries of tiny effects
+**「change」模式**：複合虛無假設
+- 檢驗 |β| ≤ δ
+- 要求生物學上有意義的變化
+- 減少對微小效應的錯誤發現
 
 ```python
-# Change mode with minimum effect size
+# 帶有最小效應量的 change 模式
 de = model.differential_expression(
     groupby="cell_type",
     group1="T cells",
     group2="B cells",
     mode="change",
-    delta=0.25  # Minimum log fold-change
+    delta=0.25  # 最小對數倍數變化
 )
 ```
 
 ### `delta`
-Minimum effect size threshold for "change" mode.
-- Typical values: 0.25, 0.5, 0.7 (log scale)
-- log2(1.5) ≈ 0.58 (1.5-fold change)
-- log2(2) = 1.0 (2-fold change)
+「change」模式的最小效應量閾值。
+- 典型值：0.25、0.5、0.7（對數尺度）
+- log2(1.5) ≈ 0.58（1.5 倍變化）
+- log2(2) = 1.0（2 倍變化）
 
 ```python
-# Require at least 1.5-fold change
+# 要求至少 1.5 倍變化
 de = model.differential_expression(
     groupby="condition",
     group1="disease",
@@ -154,10 +154,10 @@ de = model.differential_expression(
 ```
 
 ### `fdr_target`
-False discovery rate threshold (default: 0.05)
+錯誤發現率閾值（預設：0.05）
 
 ```python
-# More stringent FDR control
+# 更嚴格的 FDR 控制
 de = model.differential_expression(
     groupby="cell_type",
     group1="T cells",
@@ -166,10 +166,10 @@ de = model.differential_expression(
 ```
 
 ### `batch_correction`
-Whether to perform batch correction during DE testing (default: True)
+是否在 DE 檢驗期間執行批次校正（預設：True）
 
 ```python
-# Test within a specific batch
+# 在特定批次內檢驗
 de = model.differential_expression(
     groupby="cell_type",
     group1="T cells",
@@ -179,12 +179,12 @@ de = model.differential_expression(
 ```
 
 ### `n_samples`
-Number of posterior samples for estimation (default: 5000)
-- More samples = more accurate but slower
-- Reduce for speed, increase for precision
+用於估計的後驗樣本數（預設：5000）
+- 更多樣本 = 更準確但更慢
+- 減少以提高速度，增加以提高精確度
 
 ```python
-# High precision analysis
+# 高精確度分析
 de = model.differential_expression(
     groupby="cell_type",
     group1="T cells",
@@ -192,33 +192,33 @@ de = model.differential_expression(
 )
 ```
 
-## Interpreting Results
+## 解讀結果
 
-### Output Columns
+### 輸出欄位
 
-The results DataFrame contains several important columns:
+結果 DataFrame 包含幾個重要欄位：
 
-**Effect Size Estimates**:
-- `lfc_mean`: Mean log fold-change
-- `lfc_median`: Median log fold-change
-- `lfc_std`: Standard deviation of log fold-change
-- `lfc_min`: Lower bound of effect size
-- `lfc_max`: Upper bound of effect size
+**效應量估計**：
+- `lfc_mean`：平均對數倍數變化
+- `lfc_median`：中位對數倍數變化
+- `lfc_std`：對數倍數變化的標準差
+- `lfc_min`：效應量下界
+- `lfc_max`：效應量上界
 
-**Statistical Significance**:
-- `bayes_factor`: Bayes factor for differential expression
-  - Higher values = stronger evidence
-  - >3 often considered meaningful
-- `is_de_fdr_0.05`: Boolean indicating if gene is DE at FDR 0.05
-- `is_de_fdr_0.1`: Boolean indicating if gene is DE at FDR 0.1
+**統計顯著性**：
+- `bayes_factor`：差異表達的貝葉斯因子
+  - 較高值 = 更強證據
+  - >3 通常被認為有意義
+- `is_de_fdr_0.05`：布林值，指示基因在 FDR 0.05 下是否為 DE
+- `is_de_fdr_0.1`：布林值，指示基因在 FDR 0.1 下是否為 DE
 
-**Expression Levels**:
-- `mean1`: Mean expression in group 1
-- `mean2`: Mean expression in group 2
-- `non_zeros_proportion1`: Proportion of non-zero cells in group 1
-- `non_zeros_proportion2`: Proportion of non-zero cells in group 2
+**表達水平**：
+- `mean1`：組 1 中的平均表達
+- `mean2`：組 2 中的平均表達
+- `non_zeros_proportion1`：組 1 中非零細胞的比例
+- `non_zeros_proportion2`：組 2 中非零細胞的比例
 
-### Example Interpretation
+### 解讀範例
 
 ```python
 de_results = model.differential_expression(
@@ -227,28 +227,28 @@ de_results = model.differential_expression(
     group2="B cells"
 )
 
-# Find significantly upregulated genes in T cells
+# 找到在 T 細胞中顯著上調的基因
 upreg_tcells = de_results[
     (de_results["is_de_fdr_0.05"]) &
     (de_results["lfc_mean"] > 0)
 ].sort_values("lfc_mean", ascending=False)
 
-print(f"Upregulated genes in T cells: {len(upreg_tcells)}")
+print(f"T 細胞中上調的基因：{len(upreg_tcells)}")
 print(upreg_tcells.head(10))
 
-# Find genes with large effect sizes
+# 找到具有大效應量的基因
 large_effect = de_results[
     (de_results["is_de_fdr_0.05"]) &
-    (abs(de_results["lfc_mean"]) > 1)  # 2-fold change
+    (abs(de_results["lfc_mean"]) > 1)  # 2 倍變化
 ]
 ```
 
-## Advanced Usage
+## 進階用法
 
-### DE Within Specific Cells
+### 特定細胞內的 DE
 
 ```python
-# Test DE only within a subset of cells
+# 僅在細胞子集內檢驗 DE
 subset_indices = adata.obs["tissue"] == "lung"
 
 de = model.differential_expression(
@@ -257,10 +257,10 @@ de = model.differential_expression(
 )
 ```
 
-### Batch-Specific DE
+### 批次特定的 DE
 
 ```python
-# Test DE within each batch separately
+# 在每個批次內分別檢驗 DE
 batches = adata.obs["batch"].unique()
 
 batch_de_results = {}
@@ -272,24 +272,24 @@ for batch in batches:
     )
 ```
 
-### Pseudo-bulk DE
+### 偽批量 DE
 
 ```python
-# Aggregate cells before DE testing
-# Useful for low cell counts per group
+# 在 DE 檢驗前聚合細胞
+# 對於每組細胞數量少的情況很有用
 
 de = model.differential_expression(
     groupby="cell_type",
     group1="rare_cell_type",
     group2="common_cell_type",
-    n_samples=10000,  # More samples for stability
+    n_samples=10000,  # 更多樣本以提高穩定性
     batch_correction=True
 )
 ```
 
-## Visualization
+## 視覺化
 
-### Volcano Plot
+### 火山圖（Volcano Plot）
 
 ```python
 import matplotlib.pyplot as plt
@@ -301,7 +301,7 @@ de = model.differential_expression(
     group2="control"
 )
 
-# Volcano plot
+# 火山圖
 plt.figure(figsize=(10, 6))
 plt.scatter(
     de["lfc_mean"],
@@ -312,27 +312,27 @@ plt.scatter(
 )
 plt.xlabel("Log Fold Change")
 plt.ylabel("-log10(1/Bayes Factor)")
-plt.title("Volcano Plot: Treated vs Control")
+plt.title("火山圖：處理 vs 對照")
 plt.axvline(x=0, color='k', linestyle='--', linewidth=0.5)
 plt.show()
 ```
 
-### Heatmap of Top DE Genes
+### 前幾個 DE 基因的熱圖
 
 ```python
 import seaborn as sns
 
-# Get top DE genes
+# 獲取前幾個 DE 基因
 top_genes = de.sort_values("lfc_mean", ascending=False).head(50).index
 
-# Get normalized expression
+# 獲取標準化表達
 norm_expr = model.get_normalized_expression(
     adata,
     indices=adata.obs["condition"].isin(["treated", "control"]),
     gene_list=top_genes
 )
 
-# Plot heatmap
+# 繪製熱圖
 plt.figure(figsize=(12, 10))
 sns.heatmap(
     norm_expr.T,
@@ -340,33 +340,33 @@ sns.heatmap(
     xticklabels=False,
     yticklabels=top_genes
 )
-plt.title("Top 50 DE Genes")
+plt.title("前 50 個 DE 基因")
 plt.show()
 ```
 
-### Ranked Gene Plot
+### 排序基因圖
 
 ```python
-# Plot genes ranked by effect size
+# 繪製按效應量排序的基因
 de_sorted = de.sort_values("lfc_mean", ascending=False)
 
 plt.figure(figsize=(12, 6))
 plt.plot(range(len(de_sorted)), de_sorted["lfc_mean"].values)
 plt.axhline(y=0, color='r', linestyle='--')
-plt.xlabel("Gene Rank")
+plt.xlabel("基因排名")
 plt.ylabel("Log Fold Change")
-plt.title("Genes Ranked by Effect Size")
+plt.title("按效應量排序的基因")
 plt.show()
 ```
 
-## Comparison with Traditional Methods
+## 與傳統方法的比較
 
-### scvi-tools vs. Wilcoxon Test
+### scvi-tools vs. Wilcoxon 檢驗
 
 ```python
 import scanpy as sc
 
-# Traditional Wilcoxon test
+# 傳統 Wilcoxon 檢驗
 sc.tl.rank_genes_groups(
     adata,
     groupby="cell_type",
@@ -380,39 +380,39 @@ de_scvi = model.differential_expression(
     group1="T cells"
 )
 
-# Compare results
+# 比較結果
 wilcox_results = sc.get.rank_genes_groups_df(adata, group="T cells", key="wilcoxon")
 ```
 
-**Advantages of scvi-tools**:
-- Accounts for batch effects automatically
-- Handles zero-inflation properly
-- Provides uncertainty quantification
-- No arbitrary pseudocount needed
-- Better statistical properties
+**scvi-tools 的優勢**：
+- 自動考慮批次效應
+- 正確處理零膨脹
+- 提供不確定性量化
+- 不需要任意的偽計數
+- 更好的統計特性
 
-**When to use Wilcoxon**:
-- Very quick exploratory analysis
-- Comparison with published results using Wilcoxon
+**何時使用 Wilcoxon**：
+- 非常快速的探索性分析
+- 與使用 Wilcoxon 的已發表結果進行比較
 
-## Multi-Modal DE
+## 多模態 DE
 
-### Protein DE (totalVI)
+### 蛋白質 DE（totalVI）
 
 ```python
-# Train totalVI on CITE-seq data
+# 在 CITE-seq 數據上訓練 totalVI
 totalvi_model = scvi.model.TOTALVI(adata)
 totalvi_model.train()
 
-# RNA differential expression
+# RNA 差異表達
 rna_de = totalvi_model.differential_expression(
     groupby="cell_type",
     group1="T cells",
     group2="B cells",
-    protein_expression=False  # Default
+    protein_expression=False  # 預設
 )
 
-# Protein differential expression
+# 蛋白質差異表達
 protein_de = totalvi_model.differential_expression(
     groupby="cell_type",
     group1="T cells",
@@ -420,46 +420,46 @@ protein_de = totalvi_model.differential_expression(
     protein_expression=True
 )
 
-print(f"DE genes: {rna_de['is_de_fdr_0.05'].sum()}")
-print(f"DE proteins: {protein_de['is_de_fdr_0.05'].sum()}")
+print(f"DE 基因：{rna_de['is_de_fdr_0.05'].sum()}")
+print(f"DE 蛋白質：{protein_de['is_de_fdr_0.05'].sum()}")
 ```
 
-### Differential Accessibility (PeakVI)
+### 差異可及性（PeakVI）
 
 ```python
-# Train PeakVI on ATAC-seq data
+# 在 ATAC-seq 數據上訓練 PeakVI
 peakvi_model = scvi.model.PEAKVI(atac_adata)
 peakvi_model.train()
 
-# Differential accessibility
+# 差異可及性
 da = peakvi_model.differential_accessibility(
     groupby="cell_type",
     group1="T cells",
     group2="B cells"
 )
 
-# Same interpretation as DE
+# 與 DE 相同的解讀方式
 ```
 
-## Handling Special Cases
+## 處理特殊情況
 
-### Low Cell Count Groups
+### 低細胞數量組
 
 ```python
-# Increase posterior samples for stability
+# 增加後驗樣本以提高穩定性
 de = model.differential_expression(
     groupby="cell_type",
-    group1="rare_type",  # e.g., 50 cells
-    group2="common_type",  # e.g., 5000 cells
+    group1="rare_type",  # 例如 50 個細胞
+    group2="common_type",  # 例如 5000 個細胞
     n_samples=10000
 )
 ```
 
-### Imbalanced Comparisons
+### 不平衡比較
 
 ```python
-# When groups have very different sizes
-# Use change mode to avoid tiny effects
+# 當組別大小非常不同時
+# 使用 change 模式以避免微小效應
 
 de = model.differential_expression(
     groupby="condition",
@@ -470,40 +470,40 @@ de = model.differential_expression(
 )
 ```
 
-### Multiple Testing Correction
+### 多重檢驗校正
 
 ```python
-# Already included via FDP control
-# But can apply additional corrections
+# 已通過 FDP 控制包含
+# 但可以應用額外校正
 
 from statsmodels.stats.multitest import multipletests
 
-# Bonferroni correction (very conservative)
+# Bonferroni 校正（非常保守）
 _, pvals_corrected, _, _ = multipletests(
     1 / (de["bayes_factor"] + 1),
     method="bonferroni"
 )
 ```
 
-## Performance Considerations
+## 效能考量
 
-### Speed Optimization
+### 速度優化
 
 ```python
-# Faster DE testing for large datasets
+# 大數據集的更快 DE 檢驗
 de = model.differential_expression(
     groupby="cell_type",
     group1="T cells",
-    n_samples=1000,  # Reduce samples
-    batch_size=512    # Increase batch size
+    n_samples=1000,  # 減少樣本
+    batch_size=512    # 增加批次大小
 )
 ```
 
-### Memory Management
+### 記憶體管理
 
 ```python
-# For very large datasets
-# Test one comparison at a time rather than all pairwise
+# 對於非常大的數據集
+# 一次檢驗一個比較而不是所有成對
 
 cell_types = adata.obs["cell_type"].unique()
 for ct in cell_types:
@@ -511,36 +511,36 @@ for ct in cell_types:
         groupby="cell_type",
         group1=ct
     )
-    # Save results
+    # 儲存結果
     de.to_csv(f"de_results_{ct}.csv")
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Use "change" mode**: For biologically interpretable results
-2. **Set appropriate delta**: Based on biological significance
-3. **Check expression levels**: Filter lowly expressed genes
-4. **Validate findings**: Check marker genes for sanity
-5. **Visualize results**: Always plot top DE genes
-6. **Report parameters**: Document mode, delta, FDR used
-7. **Consider batch effects**: Use batch_correction=True
-8. **Multiple comparisons**: Be aware of testing many groups
-9. **Sample size**: Ensure sufficient cells per group (>50 recommended)
-10. **Biological validation**: Follow up with functional experiments
+1. **使用「change」模式**：獲得生物學上可解讀的結果
+2. **設定適當的 delta**：基於生物學顯著性
+3. **檢查表達水平**：過濾低表達基因
+4. **驗證發現**：檢查標記基因以確保合理
+5. **視覺化結果**：始終繪製前幾個 DE 基因
+6. **報告參數**：記錄使用的模式、delta、FDR
+7. **考慮批次效應**：使用 batch_correction=True
+8. **多重比較**：注意檢驗多個組
+9. **樣本量**：確保每組有足夠的細胞（建議 >50）
+10. **生物學驗證**：後續進行功能實驗
 
-## Example: Complete DE Analysis Workflow
+## 範例：完整的 DE 分析工作流程
 
 ```python
 import scvi
 import scanpy as sc
 import matplotlib.pyplot as plt
 
-# 1. Train model
+# 1. 訓練模型
 scvi.model.SCVI.setup_anndata(adata, layer="counts", batch_key="batch")
 model = scvi.model.SCVI(adata)
 model.train()
 
-# 2. Perform DE analysis
+# 2. 執行 DE 分析
 de_results = model.differential_expression(
     groupby="cell_type",
     group1="Disease_T_cells",
@@ -550,16 +550,16 @@ de_results = model.differential_expression(
     fdr_target=0.05
 )
 
-# 3. Filter and analyze
+# 3. 過濾和分析
 sig_genes = de_results[de_results["is_de_fdr_0.05"]]
 upreg = sig_genes[sig_genes["lfc_mean"] > 0].sort_values("lfc_mean", ascending=False)
 downreg = sig_genes[sig_genes["lfc_mean"] < 0].sort_values("lfc_mean")
 
-print(f"Significant genes: {len(sig_genes)}")
-print(f"Upregulated: {len(upreg)}")
-print(f"Downregulated: {len(downreg)}")
+print(f"顯著基因：{len(sig_genes)}")
+print(f"上調：{len(upreg)}")
+print(f"下調：{len(downreg)}")
 
-# 4. Visualize top genes
+# 4. 視覺化前幾個基因
 top_genes = upreg.head(10).index.tolist() + downreg.head(10).index.tolist()
 
 sc.pl.violin(
@@ -569,12 +569,12 @@ sc.pl.violin(
     rotation=90
 )
 
-# 5. Functional enrichment (using external tools)
-# E.g., g:Profiler, DAVID, or gprofiler-official Python package
+# 5. 功能富集（使用外部工具）
+# 例如 g:Profiler、DAVID 或 gprofiler-official Python 套件
 upreg_genes = upreg.head(100).index.tolist()
-# Perform pathway analysis...
+# 執行通路分析...
 
-# 6. Save results
+# 6. 儲存結果
 de_results.to_csv("de_results_disease_vs_healthy.csv")
 upreg.to_csv("upregulated_genes.csv")
 downreg.to_csv("downregulated_genes.csv")

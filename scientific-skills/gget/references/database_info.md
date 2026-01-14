@@ -1,300 +1,300 @@
-# gget Database Information
+# gget 資料庫資訊
 
-Overview of databases queried by gget modules, including update frequencies and important considerations.
+gget 模組查詢的資料庫概述，包括更新頻率和重要注意事項。
 
-## Important Note
+## 重要說明
 
-The databases queried by gget are continuously being updated, which sometimes changes their structure. gget modules are tested automatically on a biweekly basis and updated to match new database structures when necessary. Always keep gget updated:
+gget 查詢的資料庫會持續更新，這有時會改變其結構。gget 模組每兩週自動測試一次，並在必要時更新以匹配新的資料庫結構。請始終保持 gget 更新：
 
 ```bash
 pip install --upgrade gget
 ```
 
-## Database Directory
+## 資料庫目錄
 
-### Genomic Reference Databases
+### 基因體參考資料庫
 
 #### Ensembl
-- **Used by:** gget ref, gget search, gget info, gget seq
-- **Description:** Comprehensive genome database with annotations for vertebrate and invertebrate species
-- **Update frequency:** Regular releases (numbered); new releases approximately every 3 months
-- **Access:** FTP downloads, REST API
-- **Website:** https://www.ensembl.org/
-- **Notes:**
-  - Supports both vertebrate and invertebrate genomes
-  - Can specify release number for reproducibility
-  - Shortcuts available for common species ('human', 'mouse')
+- **使用於：** gget ref、gget search、gget info、gget seq
+- **描述：** 具有脊椎動物和無脊椎動物物種註釋的完整基因體資料庫
+- **更新頻率：** 定期發布（編號版本）；約每 3 個月發布新版本
+- **存取方式：** FTP 下載、REST API
+- **網站：** https://www.ensembl.org/
+- **注意事項：**
+  - 支援脊椎動物和無脊椎動物基因體
+  - 可指定版本號以確保可重現性
+  - 常見物種有快捷方式（'human'、'mouse'）
 
 #### UCSC Genome Browser
-- **Used by:** gget blat
-- **Description:** Genome browser database with BLAT alignment tool
-- **Update frequency:** Regular updates with new assemblies
-- **Access:** Web service API
-- **Website:** https://genome.ucsc.edu/
-- **Notes:**
-  - Multiple genome assemblies available (hg38, mm39, etc.)
-  - BLAT optimized for vertebrate genomes
+- **使用於：** gget blat
+- **描述：** 具有 BLAT 比對工具的基因體瀏覽器資料庫
+- **更新頻率：** 隨新組裝定期更新
+- **存取方式：** 網路服務 API
+- **網站：** https://genome.ucsc.edu/
+- **注意事項：**
+  - 提供多個基因體組裝（hg38、mm39 等）
+  - BLAT 針對脊椎動物基因體最佳化
 
-### Protein & Structure Databases
+### 蛋白質與結構資料庫
 
 #### UniProt
-- **Used by:** gget info, gget seq (amino acid sequences), gget elm
-- **Description:** Universal Protein Resource, comprehensive protein sequence and functional information
-- **Update frequency:** Regular releases (weekly for Swiss-Prot, monthly for TrEMBL)
-- **Access:** REST API
-- **Website:** https://www.uniprot.org/
-- **Notes:**
-  - Swiss-Prot: manually annotated and reviewed
-  - TrEMBL: automatically annotated
+- **使用於：** gget info、gget seq（胺基酸序列）、gget elm
+- **描述：** 通用蛋白質資源，完整的蛋白質序列和功能資訊
+- **更新頻率：** 定期發布（Swiss-Prot 每週、TrEMBL 每月）
+- **存取方式：** REST API
+- **網站：** https://www.uniprot.org/
+- **注意事項：**
+  - Swiss-Prot：手動註釋和審核
+  - TrEMBL：自動註釋
 
-#### NCBI (National Center for Biotechnology Information)
-- **Used by:** gget info, gget bgee (for non-Ensembl species)
-- **Description:** Gene and protein databases with extensive cross-references
-- **Update frequency:** Continuous updates
-- **Access:** E-utilities API
-- **Website:** https://www.ncbi.nlm.nih.gov/
-- **Databases:** Gene, Protein, RefSeq
+#### NCBI（國家生物技術資訊中心）
+- **使用於：** gget info、gget bgee（非 Ensembl 物種）
+- **描述：** 具有廣泛交叉參考的基因和蛋白質資料庫
+- **更新頻率：** 持續更新
+- **存取方式：** E-utilities API
+- **網站：** https://www.ncbi.nlm.nih.gov/
+- **資料庫：** Gene、Protein、RefSeq
 
-#### RCSB PDB (Protein Data Bank)
-- **Used by:** gget pdb
-- **Description:** Repository of 3D structural data for proteins and nucleic acids
-- **Update frequency:** Weekly updates
-- **Access:** REST API
-- **Website:** https://www.rcsb.org/
-- **Notes:**
-  - Experimentally determined structures (X-ray, NMR, cryo-EM)
-  - Includes metadata about experiments and publications
+#### RCSB PDB（蛋白質資料庫）
+- **使用於：** gget pdb
+- **描述：** 蛋白質和核酸 3D 結構資料儲存庫
+- **更新頻率：** 每週更新
+- **存取方式：** REST API
+- **網站：** https://www.rcsb.org/
+- **注意事項：**
+  - 實驗確定的結構（X 射線、NMR、冷凍電鏡）
+  - 包含實驗和出版物的中繼資料
 
-#### ELM (Eukaryotic Linear Motif)
-- **Used by:** gget elm
-- **Description:** Database of functional sites in eukaryotic proteins
-- **Update frequency:** Periodic updates
-- **Access:** Downloaded database (via gget setup elm)
-- **Website:** http://elm.eu.org/
-- **Notes:**
-  - Requires local download before first use
-  - Contains validated motifs and patterns
+#### ELM（真核線性基序）
+- **使用於：** gget elm
+- **描述：** 真核蛋白質功能位點資料庫
+- **更新頻率：** 定期更新
+- **存取方式：** 下載的資料庫（透過 gget setup elm）
+- **網站：** http://elm.eu.org/
+- **注意事項：**
+  - 首次使用前需要本地下載
+  - 包含經驗證的基序和模式
 
-### Sequence Similarity Databases
+### 序列相似性資料庫
 
-#### BLAST Databases (NCBI)
-- **Used by:** gget blast
-- **Description:** Pre-formatted databases for BLAST searches
-- **Update frequency:** Regular updates
-- **Access:** NCBI BLAST API
-- **Databases:**
-  - **Nucleotide:** nt (all GenBank), refseq_rna, pdbnt
-  - **Protein:** nr (non-redundant), swissprot, pdbaa, refseq_protein
-- **Notes:**
-  - nt and nr are very large databases
-  - Consider specialized databases for faster, more focused searches
+#### BLAST 資料庫（NCBI）
+- **使用於：** gget blast
+- **描述：** 用於 BLAST 搜尋的預格式化資料庫
+- **更新頻率：** 定期更新
+- **存取方式：** NCBI BLAST API
+- **資料庫：**
+  - **核苷酸：** nt（所有 GenBank）、refseq_rna、pdbnt
+  - **蛋白質：** nr（非冗餘）、swissprot、pdbaa、refseq_protein
+- **注意事項：**
+  - nt 和 nr 是非常大的資料庫
+  - 考慮使用專門資料庫以獲得更快、更專注的搜尋
 
-### Expression & Correlation Databases
+### 表達與相關性資料庫
 
 #### ARCHS4
-- **Used by:** gget archs4
-- **Description:** Massive mining of publicly available RNA-seq data
-- **Update frequency:** Periodic updates with new samples
-- **Access:** HTTP API
-- **Website:** https://maayanlab.cloud/archs4/
-- **Data:**
-  - Human and mouse RNA-seq data
-  - Correlation matrices
-  - Tissue expression atlases
-- **Citation:** Lachmann et al., Nature Communications, 2018
+- **使用於：** gget archs4
+- **描述：** 公開可用 RNA-seq 資料的大規模挖掘
+- **更新頻率：** 定期更新新樣本
+- **存取方式：** HTTP API
+- **網站：** https://maayanlab.cloud/archs4/
+- **資料：**
+  - 人類和小鼠 RNA-seq 資料
+  - 相關性矩陣
+  - 組織表達圖譜
+- **引用：** Lachmann et al., Nature Communications, 2018
 
 #### CZ CELLxGENE Discover
-- **Used by:** gget cellxgene
-- **Description:** Single-cell RNA-seq data from multiple studies
-- **Update frequency:** Continuous additions of new datasets
-- **Access:** Census API (via cellxgene-census package)
-- **Website:** https://cellxgene.cziscience.com/
-- **Data:**
-  - Single-cell RNA-seq count matrices
-  - Cell type annotations
-  - Tissue and disease metadata
-- **Notes:**
-  - Requires gget setup cellxgene
-  - Gene symbols are case-sensitive
-  - May not support latest Python versions
+- **使用於：** gget cellxgene
+- **描述：** 來自多項研究的單細胞 RNA-seq 資料
+- **更新頻率：** 持續添加新資料集
+- **存取方式：** Census API（透過 cellxgene-census 套件）
+- **網站：** https://cellxgene.cziscience.com/
+- **資料：**
+  - 單細胞 RNA-seq 計數矩陣
+  - 細胞類型註釋
+  - 組織和疾病中繼資料
+- **注意事項：**
+  - 需要 gget setup cellxgene
+  - 基因符號區分大小寫
+  - 可能不支援最新 Python 版本
 
 #### Bgee
-- **Used by:** gget bgee
-- **Description:** Gene expression and orthology database
-- **Update frequency:** Regular releases
-- **Access:** REST API
-- **Website:** https://www.bgee.org/
-- **Data:**
-  - Gene expression across tissues and developmental stages
-  - Orthology relationships across species
-- **Citation:** Bastian et al., 2021
+- **使用於：** gget bgee
+- **描述：** 基因表達和同源性資料庫
+- **更新頻率：** 定期發布
+- **存取方式：** REST API
+- **網站：** https://www.bgee.org/
+- **資料：**
+  - 跨組織和發育階段的基因表達
+  - 跨物種的同源性關係
+- **引用：** Bastian et al., 2021
 
-### Functional & Pathway Databases
+### 功能與路徑資料庫
 
 #### Enrichr / modEnrichr
-- **Used by:** gget enrichr
-- **Description:** Gene set enrichment analysis web service
-- **Update frequency:** Regular updates to underlying databases
-- **Access:** REST API
-- **Website:** https://maayanlab.cloud/Enrichr/
-- **Databases included:**
-  - KEGG pathways
-  - Gene Ontology (GO)
-  - Transcription factor targets (ChEA)
-  - Disease associations (GWAS Catalog)
-  - Cell type markers (PanglaoDB)
-- **Notes:**
-  - Supports multiple model organisms
-  - Background gene lists can be provided for custom enrichment
+- **使用於：** gget enrichr
+- **描述：** 基因集富集分析網路服務
+- **更新頻率：** 底層資料庫定期更新
+- **存取方式：** REST API
+- **網站：** https://maayanlab.cloud/Enrichr/
+- **包含的資料庫：**
+  - KEGG 路徑
+  - 基因本體（GO）
+  - 轉錄因子標的（ChEA）
+  - 疾病關聯（GWAS Catalog）
+  - 細胞類型標記（PanglaoDB）
+- **注意事項：**
+  - 支援多種模式生物
+  - 可提供背景基因列表進行自訂富集
 
-### Disease & Drug Databases
+### 疾病與藥物資料庫
 
 #### Open Targets
-- **Used by:** gget opentargets
-- **Description:** Integrative platform for disease-target associations
-- **Update frequency:** Regular releases (quarterly)
-- **Access:** GraphQL API
-- **Website:** https://www.opentargets.org/
-- **Data:**
-  - Disease associations
-  - Drug information and clinical trials
-  - Target tractability
-  - Pharmacogenetics
-  - Gene expression
-  - DepMap gene-disease effects
-  - Protein-protein interactions
+- **使用於：** gget opentargets
+- **描述：** 疾病-標的關聯的整合平台
+- **更新頻率：** 定期發布（每季）
+- **存取方式：** GraphQL API
+- **網站：** https://www.opentargets.org/
+- **資料：**
+  - 疾病關聯
+  - 藥物資訊和臨床試驗
+  - 標的可處理性
+  - 藥物基因體學
+  - 基因表達
+  - DepMap 基因-疾病效應
+  - 蛋白質-蛋白質交互作用
 
 #### cBioPortal
-- **Used by:** gget cbio
-- **Description:** Cancer genomics data portal
-- **Update frequency:** Continuous addition of new studies
-- **Access:** Web API, downloadable datasets
-- **Website:** https://www.cbioportal.org/
-- **Data:**
-  - Mutations, copy number alterations, structural variants
-  - Gene expression
-  - Clinical data
-- **Notes:**
-  - Large datasets; caching recommended
-  - Multiple cancer types and studies available
+- **使用於：** gget cbio
+- **描述：** 癌症基因體學資料入口
+- **更新頻率：** 持續添加新研究
+- **存取方式：** Web API、可下載資料集
+- **網站：** https://www.cbioportal.org/
+- **資料：**
+  - 突變、拷貝數變異、結構變異
+  - 基因表達
+  - 臨床資料
+- **注意事項：**
+  - 大型資料集；建議快取
+  - 提供多種癌症類型和研究
 
-#### COSMIC (Catalogue Of Somatic Mutations In Cancer)
-- **Used by:** gget cosmic
-- **Description:** Comprehensive cancer mutation database
-- **Update frequency:** Regular releases
-- **Access:** Download (requires account and license for commercial use)
-- **Website:** https://cancer.sanger.ac.uk/cosmic
-- **Data:**
-  - Somatic mutations in cancer
-  - Gene census
-  - Cell line data
-  - Drug resistance mutations
-- **Important:**
-  - Free for academic use
-  - License fees apply for commercial use
-  - Requires COSMIC account credentials
-  - Must download database before querying
+#### COSMIC（癌症體細胞突變目錄）
+- **使用於：** gget cosmic
+- **描述：** 完整的癌症突變資料庫
+- **更新頻率：** 定期發布
+- **存取方式：** 下載（需要帳號和商業使用授權）
+- **網站：** https://cancer.sanger.ac.uk/cosmic
+- **資料：**
+  - 癌症中的體細胞突變
+  - 基因普查
+  - 細胞系資料
+  - 藥物抗性突變
+- **重要提示：**
+  - 學術使用免費
+  - 商業使用需要授權費用
+  - 需要 COSMIC 帳號憑證
+  - 查詢前必須下載資料庫
 
-### AI & Prediction Services
+### AI 與預測服務
 
-#### AlphaFold2 (DeepMind)
-- **Used by:** gget alphafold
-- **Description:** Deep learning model for protein structure prediction
-- **Model version:** Simplified version for local execution
-- **Access:** Local computation (requires model download via gget setup)
-- **Website:** https://alphafold.ebi.ac.uk/
-- **Notes:**
-  - Requires ~4GB model parameters download
-  - Requires OpenMM installation
-  - Computationally intensive
-  - Python version-specific requirements
+#### AlphaFold2（DeepMind）
+- **使用於：** gget alphafold
+- **描述：** 蛋白質結構預測的深度學習模型
+- **模型版本：** 用於本地執行的簡化版本
+- **存取方式：** 本地運算（需透過 gget setup 下載模型）
+- **網站：** https://alphafold.ebi.ac.uk/
+- **注意事項：**
+  - 需要約 4GB 模型參數下載
+  - 需要安裝 OpenMM
+  - 運算密集
+  - Python 版本有特定要求
 
 #### OpenAI API
-- **Used by:** gget gpt
-- **Description:** Large language model API
-- **Update frequency:** New models released periodically
-- **Access:** REST API (requires API key)
-- **Website:** https://openai.com/
-- **Notes:**
-  - Default model: gpt-3.5-turbo
-  - Free tier limited to 3 months after account creation
-  - Set billing limits to control costs
+- **使用於：** gget gpt
+- **描述：** 大型語言模型 API
+- **更新頻率：** 定期發布新模型
+- **存取方式：** REST API（需要 API 金鑰）
+- **網站：** https://openai.com/
+- **注意事項：**
+  - 預設模型：gpt-3.5-turbo
+  - 免費層級限於帳號建立後 3 個月
+  - 設定計費限制以控制成本
 
-## Data Consistency & Reproducibility
+## 資料一致性與可重現性
 
-### Version Control
-To ensure reproducibility in analyses:
+### 版本控制
+確保分析可重現性：
 
-1. **Specify database versions/releases:**
+1. **指定資料庫版本/版次：**
    ```python
-   # Use specific Ensembl release
+   # 使用特定 Ensembl 版本
    gget.ref("homo_sapiens", release=110)
 
-   # Use specific Census version
+   # 使用特定 Census 版本
    gget.cellxgene(gene=["PAX7"], census_version="2023-07-25")
    ```
 
-2. **Document gget version:**
+2. **記錄 gget 版本：**
    ```python
    import gget
    print(gget.__version__)
    ```
 
-3. **Save raw data:**
+3. **儲存原始資料：**
    ```python
-   # Always save results for reproducibility
+   # 始終儲存結果以確保可重現性
    results = gget.search(["ACE2"], species="homo_sapiens")
    results.to_csv("search_results_2025-01-15.csv", index=False)
    ```
 
-### Handling Database Updates
+### 處理資料庫更新
 
-1. **Regular gget updates:**
-   - Update gget biweekly to match database structure changes
-   - Check release notes for breaking changes
+1. **定期更新 gget：**
+   - 每兩週更新 gget 以匹配資料庫結構變化
+   - 檢查發行說明了解重大變更
 
-2. **Error handling:**
-   - Database structure changes may cause temporary failures
-   - Check GitHub issues: https://github.com/pachterlab/gget/issues
-   - Update gget if errors occur
+2. **錯誤處理：**
+   - 資料庫結構變化可能導致暫時失敗
+   - 檢查 GitHub issues：https://github.com/pachterlab/gget/issues
+   - 如果發生錯誤，更新 gget
 
-3. **API rate limiting:**
-   - Implement delays for large-scale queries
-   - Use local databases (DIAMOND, COSMIC) when possible
-   - Cache results to avoid repeated queries
+3. **API 速率限制：**
+   - 為大規模查詢實作延遲
+   - 盡可能使用本地資料庫（DIAMOND、COSMIC）
+   - 快取結果以避免重複查詢
 
-## Database-Specific Best Practices
+## 特定資料庫最佳實踐
 
 ### Ensembl
-- Use species shortcuts ('human', 'mouse') for convenience
-- Specify release numbers for reproducibility
-- Check available species with `gget ref --list_species`
+- 使用物種快捷方式（'human'、'mouse'）以方便操作
+- 指定版本號以確保可重現性
+- 使用 `gget ref --list_species` 檢查可用物種
 
 ### UniProt
-- UniProt IDs are more stable than gene names
-- Swiss-Prot annotations are manually curated and more reliable
-- Use PDB flag in gget info only when needed (increases runtime)
+- UniProt ID 比基因名稱更穩定
+- Swiss-Prot 註釋是手動策展的，更可靠
+- 僅在需要時使用 gget info 中的 PDB 旗標（增加執行時間）
 
 ### BLAST/BLAT
-- Start with default parameters, then optimize
-- Use specialized databases (swissprot, refseq_protein) for focused searches
-- Consider E-value cutoffs based on query length
+- 從預設參數開始，然後最佳化
+- 使用專門資料庫（swissprot、refseq_protein）進行專注搜尋
+- 根據查詢長度考慮 E 值截止
 
-### Expression Databases
-- Gene symbols are case-sensitive in CELLxGENE
-- ARCHS4 correlation data is based on co-expression patterns
-- Consider tissue-specificity when interpreting results
+### 表達資料庫
+- CELLxGENE 中基因符號區分大小寫
+- ARCHS4 相關性資料基於共表達模式
+- 解讀結果時考慮組織特異性
 
-### Cancer Databases
-- cBioPortal: cache data locally for repeated analyses
-- COSMIC: download appropriate database subset for your needs
-- Respect license agreements for commercial use
+### 癌症資料庫
+- cBioPortal：本地快取資料以進行重複分析
+- COSMIC：下載適合您需求的資料庫子集
+- 商業使用請遵守授權協議
 
-## Citations
+## 引用
 
-When using gget, cite both the gget publication and the underlying databases:
+使用 gget 時，請引用 gget 出版物和底層資料庫：
 
-**gget:**
+**gget：**
 Luebbert, L. & Pachter, L. (2023). Efficient querying of genomic reference databases with gget. Bioinformatics. https://doi.org/10.1093/bioinformatics/btac836
 
-**Database-specific citations:** Check references/ directory or database websites for appropriate citations.
+**特定資料庫引用：** 請查看 references/ 目錄或資料庫網站以獲取適當的引用。

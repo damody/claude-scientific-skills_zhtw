@@ -1,51 +1,51 @@
-# Consensus Peaks: Universe Building
+# 共識峰：Universe 建構
 
-## Overview
+## 概述
 
-Geniml provides tools for building genomic "universes" — standardized reference sets of consensus peaks from collections of BED files. These universes represent genomic regions where analyzed datasets show significant coverage overlap, serving as reference vocabularies for tokenization and analysis.
+Geniml 提供從 BED 檔案集合建構基因體「universes」的工具——來自 BED 檔案集合的標準化參考共識峰集。這些 universes 代表分析資料集顯示顯著覆蓋重疊的基因體區域，作為符記化和分析的參考詞彙表。
 
-## When to Use
+## 使用時機
 
-Use consensus peak creation when:
-- Building reference peak sets from multiple experiments
-- Creating universe files for Region2Vec or BEDspace tokenization
-- Standardizing genomic regions across a collection of datasets
-- Defining regions of interest with statistical significance
+在以下情況使用共識峰建立：
+- 從多個實驗建構參考峰集
+- 為 Region2Vec 或 BEDspace 符記化建立 universe 檔案
+- 跨資料集集合標準化基因體區域
+- 以統計顯著性定義感興趣的區域
 
-## Workflow
+## 工作流程
 
-### Step 1: Combine BED Files
+### 步驟 1：合併 BED 檔案
 
-Merge all BED files into a single combined file:
+將所有 BED 檔案合併為單一檔案：
 
 ```bash
 cat /path/to/bed/files/*.bed > combined_files.bed
 ```
 
-### Step 2: Generate Coverage Tracks
+### 步驟 2：生成覆蓋軌跡
 
-Create bigWig coverage tracks using uniwig with a smoothing window:
+使用 uniwig 以平滑視窗建立 bigWig 覆蓋軌跡：
 
 ```bash
 uniwig -m 25 combined_files.bed chrom.sizes coverage/
 ```
 
-**Parameters:**
-- `-m 25`: Smoothing window size (25bp typical for chromatin accessibility)
-- `chrom.sizes`: Chromosome sizes file for your genome
-- `coverage/`: Output directory for bigWig files
+**參數：**
+- `-m 25`：平滑視窗大小（25bp 典型用於染色質可及性）
+- `chrom.sizes`：您的基因體的染色體大小檔案
+- `coverage/`：bigWig 檔案的輸出目錄
 
-The smoothing window helps reduce noise and creates more robust peak boundaries.
+平滑視窗有助於減少噪聲並建立更穩健的峰邊界。
 
-### Step 3: Build Universe
+### 步驟 3：建構 Universe
 
-Use one of four methods to construct the consensus peaks:
+使用四種方法之一建構共識峰：
 
-## Universe-Building Methods
+## Universe 建構方法
 
-### 1. Coverage Cutoff (CC)
+### 1. 覆蓋截止（CC）
 
-The simplest approach using a fixed coverage threshold:
+使用固定覆蓋閾值的最簡單方法：
 
 ```bash
 geniml universe build cc \
@@ -56,16 +56,16 @@ geniml universe build cc \
   --filter-size 50
 ```
 
-**Parameters:**
-- `--cutoff`: Coverage threshold (1 = union; file count = intersection)
-- `--merge`: Distance for merging adjacent peaks (bp)
-- `--filter-size`: Minimum peak size for inclusion (bp)
+**參數：**
+- `--cutoff`：覆蓋閾值（1 = 聯集；檔案數 = 交集）
+- `--merge`：合併相鄰峰的距離（bp）
+- `--filter-size`：納入的最小峰大小（bp）
 
-**Use when:** Simple threshold-based selection is sufficient
+**使用時機：** 簡單的閾值基礎選擇即足夠時
 
-### 2. Coverage Cutoff Flexible (CCF)
+### 2. 彈性覆蓋截止（CCF）
 
-Creates confidence intervals around likelihood cutoffs for boundaries and region cores:
+為邊界和區域核心的可能性截止建立信賴區間：
 
 ```bash
 geniml universe build ccf \
@@ -77,14 +77,14 @@ geniml universe build ccf \
   --filter-size 50
 ```
 
-**Additional parameters:**
-- `--confidence`: Confidence level for flexible boundaries (0-1)
+**額外參數：**
+- `--confidence`：彈性邊界的信賴水準（0-1）
 
-**Use when:** Uncertainty in peak boundaries should be captured
+**使用時機：** 應捕捉峰邊界的不確定性時
 
-### 3. Maximum Likelihood (ML)
+### 3. 最大概似（ML）
 
-Builds probabilistic models accounting for region start/end positions:
+建構考慮區域起始/結束位置的機率模型：
 
 ```bash
 geniml universe build ml \
@@ -95,14 +95,14 @@ geniml universe build ml \
   --model-type gaussian
 ```
 
-**Parameters:**
-- `--model-type`: Distribution for likelihood estimation (gaussian, poisson)
+**參數：**
+- `--model-type`：概似估計的分布（gaussian、poisson）
 
-**Use when:** Statistical modeling of peak locations is important
+**使用時機：** 峰位置的統計建模很重要時
 
-### 4. Hidden Markov Model (HMM)
+### 4. 隱馬可夫模型（HMM）
 
-Models genomic regions as hidden states with coverage as emissions:
+將基因體區域建模為隱藏狀態，覆蓋作為發射：
 
 ```bash
 geniml universe build hmm \
@@ -113,17 +113,17 @@ geniml universe build hmm \
   --filter-size 50
 ```
 
-**Parameters:**
-- `--states`: Number of HMM hidden states (typically 2-5)
+**參數：**
+- `--states`：HMM 隱藏狀態數（通常 2-5）
 
-**Use when:** Complex patterns of genomic states should be captured
+**使用時機：** 應捕捉複雜的基因體狀態模式時
 
 ## Python API
 
 ```python
 from geniml.universe import build_universe
 
-# Build using coverage cutoff method
+# 使用覆蓋截止方法建構
 universe = build_universe(
     coverage_folder='coverage/',
     method='cc',
@@ -134,44 +134,44 @@ universe = build_universe(
 )
 ```
 
-## Method Comparison
+## 方法比較
 
-| Method | Complexity | Flexibility | Computational Cost | Best For |
-|--------|------------|-------------|-------------------|----------|
-| CC | Low | Low | Low | Quick reference sets |
-| CCF | Medium | Medium | Medium | Boundary uncertainty |
-| ML | High | High | High | Statistical rigor |
-| HMM | High | High | Very High | Complex patterns |
+| 方法 | 複雜度 | 彈性 | 計算成本 | 最適用於 |
+|------|--------|------|----------|----------|
+| CC | 低 | 低 | 低 | 快速參考集 |
+| CCF | 中 | 中 | 中 | 邊界不確定性 |
+| ML | 高 | 高 | 高 | 統計嚴謹性 |
+| HMM | 高 | 高 | 非常高 | 複雜模式 |
 
-## Best Practices
+## 最佳實踐
 
-### Choosing a Method
+### 選擇方法
 
-1. **Start with CC**: Quick and interpretable for initial exploration
-2. **Use CCF**: When peak boundaries are uncertain or noisy
-3. **Apply ML**: For publication-quality statistical analysis
-4. **Deploy HMM**: When modeling complex chromatin states
+1. **從 CC 開始**：快速且可解釋，適合初步探索
+2. **使用 CCF**：當峰邊界不確定或有噪聲時
+3. **應用 ML**：用於發表品質的統計分析
+4. **部署 HMM**：用於建模複雜的染色質狀態
 
-### Parameter Selection
+### 參數選擇
 
-**Coverage cutoff:**
-- `cutoff = 1`: Union of all peaks (most permissive)
-- `cutoff = n_files`: Intersection (most stringent)
-- `cutoff = 0.5 * n_files`: Moderate consensus (typical choice)
+**覆蓋截止：**
+- `cutoff = 1`：所有峰的聯集（最寬鬆）
+- `cutoff = n_files`：交集（最嚴格）
+- `cutoff = 0.5 * n_files`：中等共識（典型選擇）
 
-**Merge distance:**
-- ATAC-seq: 100-200bp
-- ChIP-seq (narrow peaks): 50-100bp
-- ChIP-seq (broad peaks): 500-1000bp
+**合併距離：**
+- ATAC-seq：100-200bp
+- ChIP-seq（窄峰）：50-100bp
+- ChIP-seq（寬峰）：500-1000bp
 
-**Filter size:**
-- Minimum 30bp to avoid artifacts
-- 50-100bp typical for most assays
-- Larger for broad histone marks
+**過濾大小：**
+- 最小 30bp 以避免假象
+- 50-100bp 適用於大多數分析
+- 較大用於寬組蛋白標記
 
-### Quality Control
+### 品質控制
 
-After building, assess universe quality:
+建構後評估 universe 品質：
 
 ```python
 from geniml.evaluation import assess_universe
@@ -182,19 +182,19 @@ metrics = assess_universe(
     bed_files='bed_files/'
 )
 
-print(f"Number of regions: {metrics['n_regions']}")
-print(f"Mean region size: {metrics['mean_size']:.1f}bp")
-print(f"Coverage of input peaks: {metrics['coverage']:.1%}")
+print(f"區域數量：{metrics['n_regions']}")
+print(f"平均區域大小：{metrics['mean_size']:.1f}bp")
+print(f"輸入峰覆蓋率：{metrics['coverage']:.1%}")
 ```
 
-**Key metrics:**
-- **Region count**: Should capture major features without excessive fragmentation
-- **Size distribution**: Should match expected biology (e.g., ~500bp for ATAC-seq)
-- **Input coverage**: Proportion of original peaks represented (typically >80%)
+**關鍵指標：**
+- **區域數量**：應捕捉主要特徵而不過度片段化
+- **大小分布**：應符合預期的生物學（例如：ATAC-seq 約 500bp）
+- **輸入覆蓋率**：代表的原始峰比例（通常 >80%）
 
-## Output Format
+## 輸出格式
 
-Consensus peaks are saved as BED files with three required columns:
+共識峰儲存為具有三個必要欄位的 BED 檔案：
 
 ```
 chr1    1000    1500
@@ -202,37 +202,37 @@ chr1    2000    2800
 chr2    500     1000
 ```
 
-Additional columns may include confidence scores or state annotations depending on the method.
+根據方法，額外欄位可能包含信賴分數或狀態註解。
 
-## Common Workflows
+## 常見工作流程
 
-### For Region2Vec
+### 用於 Region2Vec
 
-1. Build universe using preferred method
-2. Use universe as tokenization reference
-3. Tokenize BED files
-4. Train Region2Vec model
+1. 使用偏好的方法建構 universe
+2. 使用 universe 作為符記化參考
+3. 符記化 BED 檔案
+4. 訓練 Region2Vec 模型
 
-### For BEDspace
+### 用於 BEDspace
 
-1. Build universe from all datasets
-2. Use universe in preprocessing step
-3. Train BEDspace with metadata
-4. Query across regions and labels
+1. 從所有資料集建構 universe
+2. 在預處理步驟中使用 universe
+3. 使用元資料訓練 BEDspace
+4. 跨區域和標籤查詢
 
-### For scEmbed
+### 用於 scEmbed
 
-1. Create universe from bulk or aggregated scATAC-seq
-2. Use for cell tokenization
-3. Train scEmbed model
-4. Generate cell embeddings
+1. 從批量或聚合的 scATAC-seq 建立 universe
+2. 用於細胞符記化
+3. 訓練 scEmbed 模型
+4. 生成細胞嵌入
 
-## Troubleshooting
+## 疑難排解
 
-**Too few regions:** Lower cutoff threshold or reduce filter size
+**區域太少：** 降低截止閾值或減少過濾大小
 
-**Too many regions:** Raise cutoff threshold, increase merge distance, or increase filter size
+**區域太多：** 提高截止閾值、增加合併距離，或增加過濾大小
 
-**Noisy boundaries:** Use CCF or ML methods instead of CC
+**邊界有噪聲：** 使用 CCF 或 ML 方法代替 CC
 
-**Long computation:** Start with CC method for quick results, then refine with ML/HMM if needed
+**計算時間長：** 從 CC 方法開始以獲得快速結果，然後在需要時用 ML/HMM 改進

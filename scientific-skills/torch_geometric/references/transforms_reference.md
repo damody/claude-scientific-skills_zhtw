@@ -1,202 +1,202 @@
-# PyTorch Geometric Transforms Reference
+# PyTorch Geometric 轉換參考
 
-This document provides a comprehensive reference of all transforms available in `torch_geometric.transforms`.
+本文件提供 `torch_geometric.transforms` 中所有可用轉換的完整參考。
 
-## Overview
+## 概述
 
-Transforms modify `Data` or `HeteroData` objects before or during training. Apply them via:
+轉換（Transforms）在訓練前或訓練期間修改 `Data` 或 `HeteroData` 物件。透過以下方式應用它們：
 
 ```python
-# During dataset loading
+# 在資料集載入期間
 dataset = MyDataset(root='/tmp', transform=MyTransform())
 
-# Apply to individual data
+# 應用於個別資料
 transform = MyTransform()
 data = transform(data)
 
-# Compose multiple transforms
+# 組合多個轉換
 from torch_geometric.transforms import Compose
 transform = Compose([Transform1(), Transform2(), Transform3()])
 ```
 
-## General Transforms
+## 一般轉換
 
 ### NormalizeFeatures
-**Purpose**: Row-normalizes node features to sum to 1
-**Use case**: Feature scaling, probability-like features
+**用途**：將節點特徵按列正規化，使其總和為 1
+**使用案例**：特徵縮放、類機率特徵
 ```python
 from torch_geometric.transforms import NormalizeFeatures
 transform = NormalizeFeatures()
 ```
 
 ### ToDevice
-**Purpose**: Transfers data to specified device (CPU/GPU)
-**Use case**: GPU training, device management
+**用途**：將資料傳輸到指定設備（CPU/GPU）
+**使用案例**：GPU 訓練、設備管理
 ```python
 from torch_geometric.transforms import ToDevice
 transform = ToDevice('cuda')
 ```
 
 ### RandomNodeSplit
-**Purpose**: Creates train/val/test node masks
-**Use case**: Node classification splits
-**Parameters**: `split='train_rest'`, `num_splits`, `num_val`, `num_test`
+**用途**：建立訓練/驗證/測試節點遮罩
+**使用案例**：節點分類分割
+**參數**：`split='train_rest'`、`num_splits`、`num_val`、`num_test`
 ```python
 from torch_geometric.transforms import RandomNodeSplit
 transform = RandomNodeSplit(num_val=0.1, num_test=0.2)
 ```
 
 ### RandomLinkSplit
-**Purpose**: Creates train/val/test edge splits
-**Use case**: Link prediction
-**Parameters**: `num_val`, `num_test`, `is_undirected`, `split_labels`
+**用途**：建立訓練/驗證/測試邊分割
+**使用案例**：連結預測
+**參數**：`num_val`、`num_test`、`is_undirected`、`split_labels`
 ```python
 from torch_geometric.transforms import RandomLinkSplit
 transform = RandomLinkSplit(num_val=0.1, num_test=0.2)
 ```
 
 ### IndexToMask
-**Purpose**: Converts indices to boolean masks
-**Use case**: Data preprocessing
+**用途**：將索引轉換為布林遮罩
+**使用案例**：資料預處理
 ```python
 from torch_geometric.transforms import IndexToMask
 transform = IndexToMask()
 ```
 
 ### MaskToIndex
-**Purpose**: Converts boolean masks to indices
-**Use case**: Data preprocessing
+**用途**：將布林遮罩轉換為索引
+**使用案例**：資料預處理
 ```python
 from torch_geometric.transforms import MaskToIndex
 transform = MaskToIndex()
 ```
 
 ### FixedPoints
-**Purpose**: Samples a fixed number of points
-**Use case**: Point cloud subsampling
-**Parameters**: `num`, `replace`, `allow_duplicates`
+**用途**：取樣固定數量的點
+**使用案例**：點雲子取樣
+**參數**：`num`、`replace`、`allow_duplicates`
 ```python
 from torch_geometric.transforms import FixedPoints
 transform = FixedPoints(1024)
 ```
 
 ### ToDense
-**Purpose**: Converts to dense adjacency matrices
-**Use case**: Small graphs, dense operations
+**用途**：轉換為密集鄰接矩陣
+**使用案例**：小型圖、密集運算
 ```python
 from torch_geometric.transforms import ToDense
 transform = ToDense(num_nodes=100)
 ```
 
 ### ToSparseTensor
-**Purpose**: Converts edge_index to SparseTensor
-**Use case**: Efficient sparse operations
-**Parameters**: `remove_edge_index`, `fill_cache`
+**用途**：將 edge_index 轉換為 SparseTensor
+**使用案例**：高效稀疏運算
+**參數**：`remove_edge_index`、`fill_cache`
 ```python
 from torch_geometric.transforms import ToSparseTensor
 transform = ToSparseTensor()
 ```
 
-## Graph Structure Transforms
+## 圖結構轉換
 
 ### ToUndirected
-**Purpose**: Converts directed graph to undirected
-**Use case**: Undirected graph algorithms
-**Parameters**: `reduce='add'` (how to handle duplicate edges)
+**用途**：將有向圖轉換為無向圖
+**使用案例**：無向圖演算法
+**參數**：`reduce='add'`（如何處理重複邊）
 ```python
 from torch_geometric.transforms import ToUndirected
 transform = ToUndirected()
 ```
 
 ### AddSelfLoops
-**Purpose**: Adds self-loops to all nodes
-**Use case**: GCN-style convolutions
-**Parameters**: `fill_value` (edge attribute for self-loops)
+**用途**：為所有節點添加自環
+**使用案例**：GCN 風格卷積
+**參數**：`fill_value`（自環的邊屬性）
 ```python
 from torch_geometric.transforms import AddSelfLoops
 transform = AddSelfLoops()
 ```
 
 ### RemoveSelfLoops
-**Purpose**: Removes all self-loops
-**Use case**: Cleaning graph structure
+**用途**：移除所有自環
+**使用案例**：清理圖結構
 ```python
 from torch_geometric.transforms import RemoveSelfLoops
 transform = RemoveSelfLoops()
 ```
 
 ### RemoveIsolatedNodes
-**Purpose**: Removes nodes without edges
-**Use case**: Graph cleaning
+**用途**：移除沒有邊的節點
+**使用案例**：圖清理
 ```python
 from torch_geometric.transforms import RemoveIsolatedNodes
 transform = RemoveIsolatedNodes()
 ```
 
 ### RemoveDuplicatedEdges
-**Purpose**: Removes duplicate edges
-**Use case**: Graph cleaning
+**用途**：移除重複邊
+**使用案例**：圖清理
 ```python
 from torch_geometric.transforms import RemoveDuplicatedEdges
 transform = RemoveDuplicatedEdges()
 ```
 
 ### LargestConnectedComponents
-**Purpose**: Keeps only the largest connected component
-**Use case**: Focus on main graph structure
-**Parameters**: `num_components` (how many components to keep)
+**用途**：僅保留最大連通分量
+**使用案例**：聚焦於主要圖結構
+**參數**：`num_components`（要保留的分量數量）
 ```python
 from torch_geometric.transforms import LargestConnectedComponents
 transform = LargestConnectedComponents(num_components=1)
 ```
 
 ### KNNGraph
-**Purpose**: Creates edges based on k-nearest neighbors
-**Use case**: Point clouds, spatial data
-**Parameters**: `k`, `loop`, `force_undirected`, `flow`
+**用途**：基於 k 近鄰建立邊
+**使用案例**：點雲、空間資料
+**參數**：`k`、`loop`、`force_undirected`、`flow`
 ```python
 from torch_geometric.transforms import KNNGraph
 transform = KNNGraph(k=6)
 ```
 
 ### RadiusGraph
-**Purpose**: Creates edges within a radius
-**Use case**: Point clouds, spatial data
-**Parameters**: `r`, `loop`, `max_num_neighbors`, `flow`
+**用途**：在半徑內建立邊
+**使用案例**：點雲、空間資料
+**參數**：`r`、`loop`、`max_num_neighbors`、`flow`
 ```python
 from torch_geometric.transforms import RadiusGraph
 transform = RadiusGraph(r=0.1)
 ```
 
 ### Delaunay
-**Purpose**: Computes Delaunay triangulation
-**Use case**: 2D/3D spatial graphs
+**用途**：計算 Delaunay 三角剖分
+**使用案例**：2D/3D 空間圖
 ```python
 from torch_geometric.transforms import Delaunay
 transform = Delaunay()
 ```
 
 ### FaceToEdge
-**Purpose**: Converts mesh faces to edges
-**Use case**: Mesh processing
+**用途**：將網格面轉換為邊
+**使用案例**：網格處理
 ```python
 from torch_geometric.transforms import FaceToEdge
 transform = FaceToEdge()
 ```
 
 ### LineGraph
-**Purpose**: Converts graph to its line graph
-**Use case**: Edge-centric analysis
-**Parameters**: `force_directed`
+**用途**：將圖轉換為其線圖
+**使用案例**：以邊為中心的分析
+**參數**：`force_directed`
 ```python
 from torch_geometric.transforms import LineGraph
 transform = LineGraph()
 ```
 
 ### GDC
-**Purpose**: Graph Diffusion Convolution preprocessing
-**Use case**: Improved message passing
-**Parameters**: `self_loop_weight`, `normalization_in`, `normalization_out`, `diffusion_kwargs`
+**用途**：圖擴散卷積預處理
+**使用案例**：改進的訊息傳遞
+**參數**：`self_loop_weight`、`normalization_in`、`normalization_out`、`diffusion_kwargs`
 ```python
 from torch_geometric.transforms import GDC
 transform = GDC(self_loop_weight=1, normalization_in='sym',
@@ -204,229 +204,229 @@ transform = GDC(self_loop_weight=1, normalization_in='sym',
 ```
 
 ### SIGN
-**Purpose**: Scalable Inception Graph Neural Networks preprocessing
-**Use case**: Efficient multi-scale features
-**Parameters**: `K` (number of hops)
+**用途**：可擴展 Inception 圖神經網路預處理
+**使用案例**：高效多尺度特徵
+**參數**：`K`（跳數）
 ```python
 from torch_geometric.transforms import SIGN
 transform = SIGN(K=3)
 ```
 
-## Feature Transforms
+## 特徵轉換
 
 ### OneHotDegree
-**Purpose**: One-hot encodes node degree
-**Use case**: Degree as feature
-**Parameters**: `max_degree`, `cat` (concatenate with existing features)
+**用途**：對節點度進行 one-hot 編碼
+**使用案例**：度作為特徵
+**參數**：`max_degree`、`cat`（與現有特徵串接）
 ```python
 from torch_geometric.transforms import OneHotDegree
 transform = OneHotDegree(max_degree=100)
 ```
 
 ### LocalDegreeProfile
-**Purpose**: Appends local degree profile
-**Use case**: Structural node features
+**用途**：附加局部度分佈
+**使用案例**：結構性節點特徵
 ```python
 from torch_geometric.transforms import LocalDegreeProfile
 transform = LocalDegreeProfile()
 ```
 
 ### Constant
-**Purpose**: Adds constant features to nodes
-**Use case**: Featureless graphs
-**Parameters**: `value`, `cat`
+**用途**：為節點添加常數特徵
+**使用案例**：無特徵圖
+**參數**：`value`、`cat`
 ```python
 from torch_geometric.transforms import Constant
 transform = Constant(value=1.0)
 ```
 
 ### TargetIndegree
-**Purpose**: Saves in-degree as target
-**Use case**: Degree prediction
-**Parameters**: `norm`, `max_value`
+**用途**：將入度儲存為目標
+**使用案例**：度預測
+**參數**：`norm`、`max_value`
 ```python
 from torch_geometric.transforms import TargetIndegree
 transform = TargetIndegree(norm=False)
 ```
 
 ### AddRandomWalkPE
-**Purpose**: Adds random walk positional encoding
-**Use case**: Positional information
-**Parameters**: `walk_length`, `attr_name`
+**用途**：添加隨機漫步位置編碼
+**使用案例**：位置資訊
+**參數**：`walk_length`、`attr_name`
 ```python
 from torch_geometric.transforms import AddRandomWalkPE
 transform = AddRandomWalkPE(walk_length=20)
 ```
 
 ### AddLaplacianEigenvectorPE
-**Purpose**: Adds Laplacian eigenvector positional encoding
-**Use case**: Spectral positional information
-**Parameters**: `k` (number of eigenvectors), `attr_name`
+**用途**：添加 Laplacian 特徵向量位置編碼
+**使用案例**：頻譜位置資訊
+**參數**：`k`（特徵向量數量）、`attr_name`
 ```python
 from torch_geometric.transforms import AddLaplacianEigenvectorPE
 transform = AddLaplacianEigenvectorPE(k=10)
 ```
 
 ### AddMetaPaths
-**Purpose**: Adds meta-path induced edges
-**Use case**: Heterogeneous graphs
-**Parameters**: `metapaths`, `drop_orig_edges`, `drop_unconnected_nodes`
+**用途**：添加元路徑誘導的邊
+**使用案例**：異質圖
+**參數**：`metapaths`、`drop_orig_edges`、`drop_unconnected_nodes`
 ```python
 from torch_geometric.transforms import AddMetaPaths
-metapaths = [[('author', 'paper'), ('paper', 'author')]]  # Co-authorship
+metapaths = [[('author', 'paper'), ('paper', 'author')]]  # 共同作者關係
 transform = AddMetaPaths(metapaths)
 ```
 
 ### SVDFeatureReduction
-**Purpose**: Reduces feature dimensionality via SVD
-**Use case**: Dimensionality reduction
-**Parameters**: `out_channels`
+**用途**：透過 SVD 降低特徵維度
+**使用案例**：降維
+**參數**：`out_channels`
 ```python
 from torch_geometric.transforms import SVDFeatureReduction
 transform = SVDFeatureReduction(out_channels=64)
 ```
 
-## Vision/Spatial Transforms
+## 視覺/空間轉換
 
 ### Center
-**Purpose**: Centers node positions
-**Use case**: Point cloud preprocessing
+**用途**：將節點位置置中
+**使用案例**：點雲預處理
 ```python
 from torch_geometric.transforms import Center
 transform = Center()
 ```
 
 ### NormalizeScale
-**Purpose**: Normalizes positions to unit sphere
-**Use case**: Point cloud normalization
+**用途**：將位置正規化到單位球
+**使用案例**：點雲正規化
 ```python
 from torch_geometric.transforms import NormalizeScale
 transform = NormalizeScale()
 ```
 
 ### NormalizeRotation
-**Purpose**: Rotates to principal components
-**Use case**: Rotation-invariant learning
-**Parameters**: `max_points`
+**用途**：旋轉到主成分
+**使用案例**：旋轉不變學習
+**參數**：`max_points`
 ```python
 from torch_geometric.transforms import NormalizeRotation
 transform = NormalizeRotation()
 ```
 
 ### Distance
-**Purpose**: Saves Euclidean distance as edge attribute
-**Use case**: Spatial graphs
-**Parameters**: `norm`, `max_value`, `cat`
+**用途**：將歐氏距離儲存為邊屬性
+**使用案例**：空間圖
+**參數**：`norm`、`max_value`、`cat`
 ```python
 from torch_geometric.transforms import Distance
 transform = Distance(norm=False, cat=False)
 ```
 
 ### Cartesian
-**Purpose**: Saves relative Cartesian coordinates as edge attributes
-**Use case**: Spatial relationships
-**Parameters**: `norm`, `max_value`, `cat`
+**用途**：將相對笛卡爾座標儲存為邊屬性
+**使用案例**：空間關係
+**參數**：`norm`、`max_value`、`cat`
 ```python
 from torch_geometric.transforms import Cartesian
 transform = Cartesian(norm=False)
 ```
 
 ### Polar
-**Purpose**: Saves polar coordinates as edge attributes
-**Use case**: 2D spatial graphs
-**Parameters**: `norm`, `max_value`, `cat`
+**用途**：將極座標儲存為邊屬性
+**使用案例**：2D 空間圖
+**參數**：`norm`、`max_value`、`cat`
 ```python
 from torch_geometric.transforms import Polar
 transform = Polar(norm=False)
 ```
 
 ### Spherical
-**Purpose**: Saves spherical coordinates as edge attributes
-**Use case**: 3D spatial graphs
-**Parameters**: `norm`, `max_value`, `cat`
+**用途**：將球座標儲存為邊屬性
+**使用案例**：3D 空間圖
+**參數**：`norm`、`max_value`、`cat`
 ```python
 from torch_geometric.transforms import Spherical
 transform = Spherical(norm=False)
 ```
 
 ### LocalCartesian
-**Purpose**: Saves coordinates in local coordinate system
-**Use case**: Local spatial features
-**Parameters**: `norm`, `cat`
+**用途**：在局部座標系中儲存座標
+**使用案例**：局部空間特徵
+**參數**：`norm`、`cat`
 ```python
 from torch_geometric.transforms import LocalCartesian
 transform = LocalCartesian()
 ```
 
 ### PointPairFeatures
-**Purpose**: Computes point pair features
-**Use case**: 3D registration, correspondence
-**Parameters**: `cat`
+**用途**：計算點對特徵
+**使用案例**：3D 配準、對應
+**參數**：`cat`
 ```python
 from torch_geometric.transforms import PointPairFeatures
 transform = PointPairFeatures()
 ```
 
-## Data Augmentation
+## 資料增強
 
 ### RandomJitter
-**Purpose**: Randomly jitters node positions
-**Use case**: Point cloud augmentation
-**Parameters**: `translate`, `scale`
+**用途**：隨機抖動節點位置
+**使用案例**：點雲增強
+**參數**：`translate`、`scale`
 ```python
 from torch_geometric.transforms import RandomJitter
 transform = RandomJitter(0.01)
 ```
 
 ### RandomFlip
-**Purpose**: Randomly flips positions along axis
-**Use case**: Geometric augmentation
-**Parameters**: `axis`, `p` (probability)
+**用途**：沿軸隨機翻轉位置
+**使用案例**：幾何增強
+**參數**：`axis`、`p`（機率）
 ```python
 from torch_geometric.transforms import RandomFlip
 transform = RandomFlip(axis=0, p=0.5)
 ```
 
 ### RandomScale
-**Purpose**: Randomly scales positions
-**Use case**: Scale augmentation
-**Parameters**: `scales` (min, max)
+**用途**：隨機縮放位置
+**使用案例**：縮放增強
+**參數**：`scales`（最小值、最大值）
 ```python
 from torch_geometric.transforms import RandomScale
 transform = RandomScale((0.9, 1.1))
 ```
 
 ### RandomRotate
-**Purpose**: Randomly rotates positions
-**Use case**: Rotation augmentation
-**Parameters**: `degrees` (range), `axis` (rotation axis)
+**用途**：隨機旋轉位置
+**使用案例**：旋轉增強
+**參數**：`degrees`（範圍）、`axis`（旋轉軸）
 ```python
 from torch_geometric.transforms import RandomRotate
 transform = RandomRotate(degrees=15, axis=2)
 ```
 
 ### RandomShear
-**Purpose**: Randomly shears positions
-**Use case**: Geometric augmentation
-**Parameters**: `shear` (range)
+**用途**：隨機剪切位置
+**使用案例**：幾何增強
+**參數**：`shear`（範圍）
 ```python
 from torch_geometric.transforms import RandomShear
 transform = RandomShear(0.1)
 ```
 
 ### RandomTranslate
-**Purpose**: Randomly translates positions
-**Use case**: Translation augmentation
-**Parameters**: `translate` (range)
+**用途**：隨機平移位置
+**使用案例**：平移增強
+**參數**：`translate`（範圍）
 ```python
 from torch_geometric.transforms import RandomTranslate
 transform = RandomTranslate(0.1)
 ```
 
 ### LinearTransformation
-**Purpose**: Applies linear transformation matrix
-**Use case**: Custom geometric transforms
-**Parameters**: `matrix`
+**用途**：應用線性變換矩陣
+**使用案例**：自訂幾何變換
+**參數**：`matrix`
 ```python
 from torch_geometric.transforms import LinearTransformation
 import torch
@@ -434,109 +434,109 @@ matrix = torch.eye(3)
 transform = LinearTransformation(matrix)
 ```
 
-## Mesh Processing
+## 網格處理
 
 ### SamplePoints
-**Purpose**: Samples points uniformly from mesh
-**Use case**: Mesh to point cloud conversion
-**Parameters**: `num`, `remove_faces`, `include_normals`
+**用途**：從網格均勻取樣點
+**使用案例**：網格到點雲轉換
+**參數**：`num`、`remove_faces`、`include_normals`
 ```python
 from torch_geometric.transforms import SamplePoints
 transform = SamplePoints(num=1024)
 ```
 
 ### GenerateMeshNormals
-**Purpose**: Generates face/vertex normals
-**Use case**: Mesh processing
+**用途**：生成面/頂點法線
+**使用案例**：網格處理
 ```python
 from torch_geometric.transforms import GenerateMeshNormals
 transform = GenerateMeshNormals()
 ```
 
 ### FaceToEdge
-**Purpose**: Converts mesh faces to edges
-**Use case**: Mesh to graph conversion
-**Parameters**: `remove_faces`
+**用途**：將網格面轉換為邊
+**使用案例**：網格到圖轉換
+**參數**：`remove_faces`
 ```python
 from torch_geometric.transforms import FaceToEdge
 transform = FaceToEdge()
 ```
 
-## Sampling and Splitting
+## 取樣和分割
 
 ### GridSampling
-**Purpose**: Clusters points in voxel grid
-**Use case**: Point cloud downsampling
-**Parameters**: `size` (voxel size), `start`, `end`
+**用途**：在體素網格中聚類點
+**使用案例**：點雲降取樣
+**參數**：`size`（體素大小）、`start`、`end`
 ```python
 from torch_geometric.transforms import GridSampling
 transform = GridSampling(size=0.1)
 ```
 
 ### FixedPoints
-**Purpose**: Samples fixed number of points
-**Use case**: Uniform point cloud size
-**Parameters**: `num`, `replace`, `allow_duplicates`
+**用途**：取樣固定數量的點
+**使用案例**：統一點雲大小
+**參數**：`num`、`replace`、`allow_duplicates`
 ```python
 from torch_geometric.transforms import FixedPoints
 transform = FixedPoints(num=2048, replace=False)
 ```
 
 ### RandomScale
-**Purpose**: Randomly scales by sampling from range
-**Use case**: Scale augmentation (already listed above)
+**用途**：從範圍取樣進行隨機縮放
+**使用案例**：縮放增強（已在上方列出）
 
 ### VirtualNode
-**Purpose**: Adds a virtual node connected to all nodes
-**Use case**: Global information propagation
+**用途**：添加連接到所有節點的虛擬節點
+**使用案例**：全域資訊傳播
 ```python
 from torch_geometric.transforms import VirtualNode
 transform = VirtualNode()
 ```
 
-## Specialized Transforms
+## 專用轉換
 
 ### ToSLIC
-**Purpose**: Converts images to superpixel graphs (SLIC algorithm)
-**Use case**: Image as graph
-**Parameters**: `num_segments`, `compactness`, `add_seg`, `add_img`
+**用途**：將圖像轉換為超像素圖（SLIC 演算法）
+**使用案例**：圖像作為圖
+**參數**：`num_segments`、`compactness`、`add_seg`、`add_img`
 ```python
 from torch_geometric.transforms import ToSLIC
 transform = ToSLIC(num_segments=75)
 ```
 
 ### GCNNorm
-**Purpose**: Applies GCN-style normalization to edges
-**Use case**: Preprocessing for GCN
-**Parameters**: `add_self_loops`
+**用途**：對邊應用 GCN 風格正規化
+**使用案例**：GCN 預處理
+**參數**：`add_self_loops`
 ```python
 from torch_geometric.transforms import GCNNorm
 transform = GCNNorm(add_self_loops=True)
 ```
 
 ### LaplacianLambdaMax
-**Purpose**: Computes largest Laplacian eigenvalue
-**Use case**: ChebConv preprocessing
-**Parameters**: `normalization`, `is_undirected`
+**用途**：計算最大 Laplacian 特徵值
+**使用案例**：ChebConv 預處理
+**參數**：`normalization`、`is_undirected`
 ```python
 from torch_geometric.transforms import LaplacianLambdaMax
 transform = LaplacianLambdaMax(normalization='sym')
 ```
 
 ### NormalizeRotation
-**Purpose**: Rotates mesh/point cloud to align with principal axes
-**Use case**: Canonical orientation
-**Parameters**: `max_points`
+**用途**：旋轉網格/點雲以對齊主軸
+**使用案例**：標準方位
+**參數**：`max_points`
 ```python
 from torch_geometric.transforms import NormalizeRotation
 transform = NormalizeRotation()
 ```
 
-## Compose and Apply
+## 組合和應用
 
 ### Compose
-**Purpose**: Chains multiple transforms
-**Use case**: Complex preprocessing pipelines
+**用途**：串接多個轉換
+**使用案例**：複雜預處理管線
 ```python
 from torch_geometric.transforms import Compose
 transform = Compose([
@@ -548,8 +548,8 @@ transform = Compose([
 ```
 
 ### BaseTransform
-**Purpose**: Base class for custom transforms
-**Use case**: Implementing custom transforms
+**用途**：自訂轉換的基礎類別
+**使用案例**：實作自訂轉換
 ```python
 from torch_geometric.transforms import BaseTransform
 
@@ -558,14 +558,14 @@ class MyTransform(BaseTransform):
         self.param = param
 
     def __call__(self, data):
-        # Modify data
+        # 修改資料
         data.x = data.x * self.param
         return data
 ```
 
-## Common Transform Combinations
+## 常見轉換組合
 
-### Node Classification Preprocessing
+### 節點分類預處理
 ```python
 transform = Compose([
     NormalizeFeatures(),
@@ -573,7 +573,7 @@ transform = Compose([
 ])
 ```
 
-### Point Cloud Processing
+### 點雲處理
 ```python
 transform = Compose([
     Center(),
@@ -585,7 +585,7 @@ transform = Compose([
 ])
 ```
 
-### Mesh to Graph
+### 網格到圖
 ```python
 transform = Compose([
     FaceToEdge(remove_faces=True),
@@ -594,7 +594,7 @@ transform = Compose([
 ])
 ```
 
-### Graph Structure Enhancement
+### 圖結構增強
 ```python
 transform = Compose([
     ToUndirected(),
@@ -604,7 +604,7 @@ transform = Compose([
 ])
 ```
 
-### Heterogeneous Graph Preprocessing
+### 異質圖預處理
 ```python
 transform = Compose([
     AddMetaPaths(metapaths=[
@@ -615,7 +615,7 @@ transform = Compose([
 ])
 ```
 
-### Link Prediction
+### 連結預測
 ```python
 transform = Compose([
     NormalizeFeatures(),
@@ -623,51 +623,51 @@ transform = Compose([
 ])
 ```
 
-## Usage Tips
+## 使用提示
 
-1. **Order matters**: Apply structural transforms before feature transforms
-2. **Caching**: Some transforms (like GDC) are expensive—apply once
-3. **Augmentation**: Use Random* transforms during training only
-4. **Compose sparingly**: Too many transforms slow down data loading
-5. **Custom transforms**: Inherit from `BaseTransform` for custom logic
-6. **Pre-transforms**: Apply expensive transforms once during dataset processing:
+1. **順序很重要**：在特徵轉換之前應用結構轉換
+2. **快取**：某些轉換（如 GDC）計算成本高——只應用一次
+3. **增強**：僅在訓練期間使用 Random* 轉換
+4. **謹慎組合**：太多轉換會減慢資料載入速度
+5. **自訂轉換**：繼承 `BaseTransform` 以實作自訂邏輯
+6. **預轉換**：在資料集處理期間應用昂貴的轉換一次：
    ```python
    dataset = MyDataset(root='/tmp', pre_transform=ExpensiveTransform())
    ```
-7. **Dynamic transforms**: Apply cheap transforms during training:
+7. **動態轉換**：在訓練期間應用低成本轉換：
    ```python
    dataset = MyDataset(root='/tmp', transform=CheapTransform())
    ```
 
-## Performance Considerations
+## 效能考量
 
-**Expensive transforms** (apply as pre_transform):
+**昂貴的轉換**（應用為 pre_transform）：
 - GDC
 - SIGN
-- KNNGraph (for large point clouds)
+- KNNGraph（對於大型點雲）
 - AddLaplacianEigenvectorPE
 - SVDFeatureReduction
 
-**Cheap transforms** (apply as transform):
+**低成本轉換**（應用為 transform）：
 - NormalizeFeatures
 - ToUndirected
 - AddSelfLoops
-- Random* augmentations
+- Random* 增強
 - ToDevice
 
-**Example**:
+**範例**：
 ```python
 from torch_geometric.datasets import Planetoid
 from torch_geometric.transforms import Compose, GDC, NormalizeFeatures
 
-# Expensive preprocessing done once
+# 昂貴的預處理只做一次
 pre_transform = GDC(
     self_loop_weight=1,
     normalization_in='sym',
     diffusion_kwargs=dict(method='ppr', alpha=0.15)
 )
 
-# Cheap transform applied each time
+# 每次應用低成本轉換
 transform = NormalizeFeatures()
 
 dataset = Planetoid(

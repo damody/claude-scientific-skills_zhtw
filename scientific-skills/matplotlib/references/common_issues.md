@@ -1,438 +1,438 @@
-# Matplotlib Common Issues and Solutions
+# Matplotlib 常見問題和解決方案
 
-Troubleshooting guide for frequently encountered matplotlib problems.
+常見 matplotlib 問題的疑難排解指南。
 
-## Display and Backend Issues
+## 顯示和後端問題
 
-### Issue: Plots Not Showing
+### 問題：繪圖不顯示
 
-**Problem:** `plt.show()` doesn't display anything
+**問題：** `plt.show()` 沒有顯示任何內容
 
-**Solutions:**
+**解決方案：**
 ```python
-# 1. Check if backend is properly set (for interactive use)
+# 1. 檢查後端是否正確設定（用於互動使用）
 import matplotlib
 print(matplotlib.get_backend())
 
-# 2. Try different backends
-matplotlib.use('TkAgg')  # or 'Qt5Agg', 'MacOSX'
+# 2. 嘗試不同的後端
+matplotlib.use('TkAgg')  # 或 'Qt5Agg'、'MacOSX'
 import matplotlib.pyplot as plt
 
-# 3. In Jupyter notebooks, use magic command
-%matplotlib inline  # Static images
-# or
-%matplotlib widget  # Interactive plots
+# 3. 在 Jupyter 筆記本中，使用魔術命令
+%matplotlib inline  # 靜態圖像
+# 或
+%matplotlib widget  # 互動式繪圖
 
-# 4. Ensure plt.show() is called
+# 4. 確保呼叫 plt.show()
 plt.plot([1, 2, 3])
 plt.show()
 ```
 
-### Issue: "RuntimeError: main thread is not in main loop"
+### 問題："RuntimeError: main thread is not in main loop"
 
-**Problem:** Interactive mode issues with threading
+**問題：** 執行緒的互動模式問題
 
-**Solution:**
+**解決方案：**
 ```python
-# Switch to non-interactive backend
+# 切換到非互動後端
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-# Or turn off interactive mode
+# 或關閉互動模式
 plt.ioff()
 ```
 
-### Issue: Figures Not Updating Interactively
+### 問題：圖形不會互動式更新
 
-**Problem:** Changes not reflected in interactive windows
+**問題：** 變更未反映在互動視窗中
 
-**Solution:**
+**解決方案：**
 ```python
-# Enable interactive mode
+# 啟用互動模式
 plt.ion()
 
-# Draw after each change
+# 每次變更後重新繪製
 plt.plot(x, y)
 plt.draw()
-plt.pause(0.001)  # Brief pause to update display
+plt.pause(0.001)  # 短暫暫停以更新顯示
 ```
 
-## Layout and Spacing Issues
+## 佈局和間距問題
 
-### Issue: Overlapping Labels and Titles
+### 問題：標籤和標題重疊
 
-**Problem:** Labels, titles, or tick labels overlap or get cut off
+**問題：** 標籤、標題或刻度標籤重疊或被截斷
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Constrained layout (RECOMMENDED)
+# 解決方案 1：Constrained 佈局（建議）
 fig, ax = plt.subplots(constrained_layout=True)
 
-# Solution 2: Tight layout
+# 解決方案 2：Tight 佈局
 fig, ax = plt.subplots()
 plt.tight_layout()
 
-# Solution 3: Adjust margins manually
+# 解決方案 3：手動調整邊距
 plt.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
 
-# Solution 4: Save with bbox_inches='tight'
+# 解決方案 4：儲存時使用 bbox_inches='tight'
 plt.savefig('figure.png', bbox_inches='tight')
 
-# Solution 5: Rotate long tick labels
+# 解決方案 5：旋轉長刻度標籤
 ax.set_xticklabels(labels, rotation=45, ha='right')
 ```
 
-### Issue: Colorbar Affects Subplot Size
+### 問題：色彩條影響子圖大小
 
-**Problem:** Adding colorbar shrinks the plot
+**問題：** 新增色彩條會縮小繪圖
 
-**Solution:**
+**解決方案：**
 ```python
-# Solution 1: Use constrained layout
+# 解決方案 1：使用 constrained 佈局
 fig, ax = plt.subplots(constrained_layout=True)
 im = ax.imshow(data)
 plt.colorbar(im, ax=ax)
 
-# Solution 2: Manually specify colorbar dimensions
+# 解決方案 2：手動指定色彩條尺寸
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 divider = make_axes_locatable(ax)
 cax = divider.append_axes("right", size="5%", pad=0.05)
 plt.colorbar(im, cax=cax)
 
-# Solution 3: For multiple subplots, share colorbar
+# 解決方案 3：對於多個子圖，共享色彩條
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 for ax in axes:
     im = ax.imshow(data)
 fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.95)
 ```
 
-### Issue: Subplots Too Close Together
+### 問題：子圖太靠近
 
-**Problem:** Multiple subplots overlapping
+**問題：** 多個子圖重疊
 
-**Solution:**
+**解決方案：**
 ```python
-# Solution 1: Use constrained_layout
+# 解決方案 1：使用 constrained_layout
 fig, axes = plt.subplots(2, 2, constrained_layout=True)
 
-# Solution 2: Adjust spacing with subplots_adjust
+# 解決方案 2：使用 subplots_adjust 調整間距
 fig, axes = plt.subplots(2, 2)
 plt.subplots_adjust(hspace=0.4, wspace=0.4)
 
-# Solution 3: Specify spacing in tight_layout
+# 解決方案 3：在 tight_layout 中指定間距
 plt.tight_layout(h_pad=2.0, w_pad=2.0)
 ```
 
-## Memory and Performance Issues
+## 記憶體和效能問題
 
-### Issue: Memory Leak with Multiple Figures
+### 問題：多個圖形的記憶體洩漏
 
-**Problem:** Memory usage grows when creating many figures
+**問題：** 建立多個圖形時記憶體使用量增加
 
-**Solution:**
+**解決方案：**
 ```python
-# Close figures explicitly
+# 明確關閉圖形
 fig, ax = plt.subplots()
 ax.plot(x, y)
 plt.savefig('plot.png')
-plt.close(fig)  # or plt.close('all')
+plt.close(fig)  # 或 plt.close('all')
 
-# Clear current figure without closing
+# 清除當前圖形而不關閉
 plt.clf()
 
-# Clear current axes
+# 清除當前座標軸
 plt.cla()
 ```
 
-### Issue: Large File Sizes
+### 問題：檔案太大
 
-**Problem:** Saved figures are too large
+**問題：** 儲存的圖形太大
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Reduce DPI
-plt.savefig('figure.png', dpi=150)  # Instead of 300
+# 解決方案 1：降低 DPI
+plt.savefig('figure.png', dpi=150)  # 而不是 300
 
-# Solution 2: Use rasterization for complex plots
+# 解決方案 2：對複雜繪圖使用點陣化
 ax.plot(x, y, rasterized=True)
 
-# Solution 3: Use vector format for simple plots
-plt.savefig('figure.pdf')  # or .svg
+# 解決方案 3：對簡單繪圖使用向量格式
+plt.savefig('figure.pdf')  # 或 .svg
 
-# Solution 4: Compress PNG
+# 解決方案 4：壓縮 PNG
 plt.savefig('figure.png', dpi=300, optimize=True)
 ```
 
-### Issue: Slow Plotting with Large Datasets
+### 問題：大型資料集繪圖緩慢
 
-**Problem:** Plotting takes too long with many points
+**問題：** 繪製多點時花費太長時間
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Downsample data
+# 解決方案 1：降採樣資料
 from scipy.signal import decimate
-y_downsampled = decimate(y, 10)  # Keep every 10th point
+y_downsampled = decimate(y, 10)  # 每 10 個點保留一個
 
-# Solution 2: Use rasterization
+# 解決方案 2：使用點陣化
 ax.plot(x, y, rasterized=True)
 
-# Solution 3: Use line simplification
+# 解決方案 3：使用線條簡化
 ax.plot(x, y)
 for line in ax.get_lines():
     line.set_rasterized(True)
 
-# Solution 4: For scatter plots, consider hexbin or 2d histogram
+# 解決方案 4：對於散點圖，考慮使用 hexbin 或 2D 直方圖
 ax.hexbin(x, y, gridsize=50, cmap='viridis')
 ```
 
-## Font and Text Issues
+## 字型和文字問題
 
-### Issue: Font Warnings
+### 問題：字型警告
 
-**Problem:** "findfont: Font family [...] not found"
+**問題：** "findfont: Font family [...] not found"
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Use available fonts
+# 解決方案 1：使用可用字型
 from matplotlib.font_manager import findfont, FontProperties
 print(findfont(FontProperties(family='sans-serif')))
 
-# Solution 2: Rebuild font cache
+# 解決方案 2：重建字型快取
 import matplotlib.font_manager
 matplotlib.font_manager._rebuild()
 
-# Solution 3: Suppress warnings
+# 解決方案 3：抑制警告
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
-# Solution 4: Specify fallback fonts
+# 解決方案 4：指定備用字型
 plt.rcParams['font.sans-serif'] = ['Arial', 'DejaVu Sans', 'sans-serif']
 ```
 
-### Issue: LaTeX Rendering Errors
+### 問題：LaTeX 渲染錯誤
 
-**Problem:** Math text not rendering correctly
+**問題：** 數學文字無法正確渲染
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Use raw strings with r prefix
-ax.set_xlabel(r'$\alpha$')  # Not '\alpha'
+# 解決方案 1：使用帶 r 前綴的原始字串
+ax.set_xlabel(r'$\alpha$')  # 不是 '\alpha'
 
-# Solution 2: Escape backslashes in regular strings
+# 解決方案 2：在一般字串中跳脫反斜線
 ax.set_xlabel('$\\alpha$')
 
-# Solution 3: Disable LaTeX if not installed
+# 解決方案 3：如果未安裝 LaTeX 則停用它
 plt.rcParams['text.usetex'] = False
 
-# Solution 4: Use mathtext instead of full LaTeX
-# Mathtext is always available, no LaTeX installation needed
+# 解決方案 4：使用 mathtext 而不是完整的 LaTeX
+# mathtext 始終可用，不需要安裝 LaTeX
 ax.text(x, y, r'$\int_0^\infty e^{-x} dx$')
 ```
 
-### Issue: Text Cut Off or Outside Figure
+### 問題：文字被截斷或超出圖形
 
-**Problem:** Labels or annotations appear outside figure bounds
+**問題：** 標籤或註釋出現在圖形邊界外
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Use bbox_inches='tight'
+# 解決方案 1：使用 bbox_inches='tight'
 plt.savefig('figure.png', bbox_inches='tight')
 
-# Solution 2: Adjust figure bounds
+# 解決方案 2：調整圖形邊界
 plt.subplots_adjust(left=0.15, right=0.85, top=0.85, bottom=0.15)
 
-# Solution 3: Clip text to axes
+# 解決方案 3：將文字裁剪到座標軸
 ax.text(x, y, 'text', clip_on=True)
 
-# Solution 4: Use constrained_layout
+# 解決方案 4：使用 constrained_layout
 fig, ax = plt.subplots(constrained_layout=True)
 ```
 
-## Color and Colormap Issues
+## 顏色和色彩映射問題
 
-### Issue: Colorbar Not Matching Plot
+### 問題：色彩條與繪圖不匹配
 
-**Problem:** Colorbar shows different range than data
+**問題：** 色彩條顯示的範圍與資料不同
 
-**Solution:**
+**解決方案：**
 ```python
-# Explicitly set vmin and vmax
+# 明確設定 vmin 和 vmax
 im = ax.imshow(data, vmin=0, vmax=1, cmap='viridis')
 plt.colorbar(im, ax=ax)
 
-# Or use the same norm for multiple plots
+# 或對多個繪圖使用相同的 norm
 import matplotlib.colors as mcolors
 norm = mcolors.Normalize(vmin=data.min(), vmax=data.max())
 im1 = ax1.imshow(data1, norm=norm, cmap='viridis')
 im2 = ax2.imshow(data2, norm=norm, cmap='viridis')
 ```
 
-### Issue: Colors Look Wrong
+### 問題：顏色看起來不對
 
-**Problem:** Unexpected colors in plots
+**問題：** 繪圖中出現意外顏色
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Check color specification format
-ax.plot(x, y, color='blue')  # Correct
-ax.plot(x, y, color=(0, 0, 1))  # Correct RGB
-ax.plot(x, y, color='#0000FF')  # Correct hex
+# 解決方案 1：檢查顏色指定格式
+ax.plot(x, y, color='blue')  # 正確
+ax.plot(x, y, color=(0, 0, 1))  # 正確 RGB
+ax.plot(x, y, color='#0000FF')  # 正確十六進位
 
-# Solution 2: Verify colormap exists
-print(plt.colormaps())  # List available colormaps
+# 解決方案 2：驗證色彩映射是否存在
+print(plt.colormaps())  # 列出可用色彩映射
 
-# Solution 3: For scatter plots, ensure c shape matches
-ax.scatter(x, y, c=colors)  # colors should have same length as x, y
+# 解決方案 3：對於散點圖，確保 c 形狀匹配
+ax.scatter(x, y, c=colors)  # colors 應與 x、y 長度相同
 
-# Solution 4: Check if alpha is set correctly
-ax.plot(x, y, alpha=1.0)  # 0=transparent, 1=opaque
+# 解決方案 4：檢查 alpha 是否正確設定
+ax.plot(x, y, alpha=1.0)  # 0=透明，1=不透明
 ```
 
-### Issue: Reversed Colormap
+### 問題：色彩映射方向相反
 
-**Problem:** Colormap direction is backwards
+**問題：** 色彩映射方向錯誤
 
-**Solution:**
+**解決方案：**
 ```python
-# Add _r suffix to reverse any colormap
+# 新增 _r 後綴以反轉任何色彩映射
 ax.imshow(data, cmap='viridis_r')
 ```
 
-## Axis and Scale Issues
+## 座標軸和比例問題
 
-### Issue: Axis Limits Not Working
+### 問題：座標軸範圍不起作用
 
-**Problem:** `set_xlim` or `set_ylim` not taking effect
+**問題：** `set_xlim` 或 `set_ylim` 不生效
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Set after plotting
+# 解決方案 1：在繪圖後設定
 ax.plot(x, y)
 ax.set_xlim(0, 10)
 ax.set_ylim(-1, 1)
 
-# Solution 2: Disable autoscaling
+# 解決方案 2：停用自動縮放
 ax.autoscale(False)
 ax.set_xlim(0, 10)
 
-# Solution 3: Use axis method
+# 解決方案 3：使用 axis 方法
 ax.axis([xmin, xmax, ymin, ymax])
 ```
 
-### Issue: Log Scale with Zero or Negative Values
+### 問題：對數比例與零或負值
 
-**Problem:** ValueError when using log scale with data ≤ 0
+**問題：** 當資料 <= 0 時使用對數比例會產生 ValueError
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Filter out non-positive values
+# 解決方案 1：過濾非正值
 mask = (data > 0)
 ax.plot(x[mask], data[mask])
 ax.set_yscale('log')
 
-# Solution 2: Use symlog for data with positive and negative values
+# 解決方案 2：對同時有正負值的資料使用 symlog
 ax.set_yscale('symlog')
 
-# Solution 3: Add small offset
+# 解決方案 3：新增小偏移量
 ax.plot(x, data + 1e-10)
 ax.set_yscale('log')
 ```
 
-### Issue: Dates Not Displaying Correctly
+### 問題：日期顯示不正確
 
-**Problem:** Date axis shows numbers instead of dates
+**問題：** 日期軸顯示數字而不是日期
 
-**Solution:**
+**解決方案：**
 ```python
 import matplotlib.dates as mdates
 import pandas as pd
 
-# Convert to datetime if needed
+# 如需要則轉換為 datetime
 dates = pd.to_datetime(date_strings)
 
 ax.plot(dates, values)
 
-# Format date axis
+# 格式化日期軸
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 ax.xaxis.set_major_locator(mdates.DayLocator(interval=7))
 plt.xticks(rotation=45)
 ```
 
-## Legend Issues
+## 圖例問題
 
-### Issue: Legend Covers Data
+### 問題：圖例遮擋資料
 
-**Problem:** Legend obscures important parts of plot
+**問題：** 圖例遮住繪圖的重要部分
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Use 'best' location
+# 解決方案 1：使用 'best' 位置
 ax.legend(loc='best')
 
-# Solution 2: Place outside plot area
+# 解決方案 2：放在繪圖區域外
 ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 
-# Solution 3: Make legend semi-transparent
+# 解決方案 3：使圖例半透明
 ax.legend(framealpha=0.7)
 
-# Solution 4: Put legend below plot
+# 解決方案 4：將圖例放在繪圖下方
 ax.legend(bbox_to_anchor=(0.5, -0.15), loc='upper center', ncol=3)
 ```
 
-### Issue: Too Many Items in Legend
+### 問題：圖例中項目太多
 
-**Problem:** Legend is cluttered with many entries
+**問題：** 圖例因太多項目而雜亂
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Only label selected items
+# 解決方案 1：只標記選定項目
 for i, (x, y) in enumerate(data):
     label = f'Data {i}' if i % 5 == 0 else None
     ax.plot(x, y, label=label)
 
-# Solution 2: Use multiple columns
+# 解決方案 2：使用多欄
 ax.legend(ncol=3)
 
-# Solution 3: Create custom legend with fewer entries
+# 解決方案 3：建立較少項目的自訂圖例
 from matplotlib.lines import Line2D
 custom_lines = [Line2D([0], [0], color='r'),
                 Line2D([0], [0], color='b')]
 ax.legend(custom_lines, ['Category A', 'Category B'])
 
-# Solution 4: Use separate legend figure
+# 解決方案 4：使用單獨的圖例圖形
 fig_leg = plt.figure(figsize=(3, 2))
 ax_leg = fig_leg.add_subplot(111)
 ax_leg.legend(*ax.get_legend_handles_labels(), loc='center')
 ax_leg.axis('off')
 ```
 
-## 3D Plot Issues
+## 3D 繪圖問題
 
-### Issue: 3D Plots Look Flat
+### 問題：3D 繪圖看起來扁平
 
-**Problem:** Difficult to perceive depth in 3D plots
+**問題：** 3D 繪圖中難以感知深度
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Adjust viewing angle
+# 解決方案 1：調整視角
 ax.view_init(elev=30, azim=45)
 
-# Solution 2: Add gridlines
+# 解決方案 2：新增網格線
 ax.grid(True)
 
-# Solution 3: Use color for depth
+# 解決方案 3：使用顏色表示深度
 scatter = ax.scatter(x, y, z, c=z, cmap='viridis')
 
-# Solution 4: Rotate interactively (if using interactive backend)
-# User can click and drag to rotate
+# 解決方案 4：互動式旋轉（如果使用互動後端）
+# 使用者可以點擊並拖動來旋轉
 ```
 
-### Issue: 3D Axis Labels Cut Off
+### 問題：3D 軸標籤被截斷
 
-**Problem:** 3D axis labels appear outside figure
+**問題：** 3D 軸標籤出現在圖形外
 
-**Solution:**
+**解決方案：**
 ```python
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -440,123 +440,123 @@ fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection='3d')
 ax.plot_surface(X, Y, Z)
 
-# Add padding
+# 新增內邊距
 fig.tight_layout(pad=3.0)
 
-# Or save with tight bounding box
+# 或使用緊密邊界框儲存
 plt.savefig('3d_plot.png', bbox_inches='tight', pad_inches=0.5)
 ```
 
-## Image and Colorbar Issues
+## 圖像和色彩條問題
 
-### Issue: Images Appear Flipped
+### 問題：圖像顯示翻轉
 
-**Problem:** Image orientation is wrong
+**問題：** 圖像方向錯誤
 
-**Solution:**
+**解決方案：**
 ```python
-# Set origin parameter
-ax.imshow(img, origin='lower')  # or 'upper' (default)
+# 設定 origin 參數
+ax.imshow(img, origin='lower')  # 或 'upper'（預設）
 
-# Or flip array
+# 或翻轉陣列
 ax.imshow(np.flipud(img))
 ```
 
-### Issue: Images Look Pixelated
+### 問題：圖像看起來像素化
 
-**Problem:** Image appears blocky when zoomed
+**問題：** 圖像放大時看起來有鋸齒
 
-**Solutions:**
+**解決方案：**
 ```python
-# Solution 1: Use interpolation
+# 解決方案 1：使用插值
 ax.imshow(img, interpolation='bilinear')
-# Options: 'nearest', 'bilinear', 'bicubic', 'spline16', 'spline36', etc.
+# 選項：'nearest'、'bilinear'、'bicubic'、'spline16'、'spline36' 等
 
-# Solution 2: Increase DPI when saving
+# 解決方案 2：儲存時增加 DPI
 plt.savefig('figure.png', dpi=300)
 
-# Solution 3: Use vector format if appropriate
+# 解決方案 3：如果適當的話使用向量格式
 plt.savefig('figure.pdf')
 ```
 
-## Common Errors and Fixes
+## 常見錯誤和修復
 
 ### "TypeError: 'AxesSubplot' object is not subscriptable"
 
-**Problem:** Trying to index single axes
+**問題：** 嘗試索引單一座標軸
 ```python
-# Wrong
+# 錯誤
 fig, ax = plt.subplots()
-ax[0].plot(x, y)  # Error!
+ax[0].plot(x, y)  # 錯誤！
 
-# Correct
+# 正確
 fig, ax = plt.subplots()
 ax.plot(x, y)
 ```
 
 ### "ValueError: x and y must have same first dimension"
 
-**Problem:** Data arrays have mismatched lengths
+**問題：** 資料陣列長度不匹配
 ```python
-# Check shapes
+# 檢查形狀
 print(f"x shape: {x.shape}, y shape: {y.shape}")
 
-# Ensure they match
+# 確保它們匹配
 assert len(x) == len(y), "x and y must have same length"
 ```
 
 ### "AttributeError: 'numpy.ndarray' object has no attribute 'plot'"
 
-**Problem:** Calling plot on array instead of axes
+**問題：** 對陣列而不是座標軸呼叫 plot
 ```python
-# Wrong
+# 錯誤
 data.plot(x, y)
 
-# Correct
+# 正確
 ax.plot(x, y)
-# or for pandas
+# 或對於 pandas
 data.plot(ax=ax)
 ```
 
-## Best Practices to Avoid Issues
+## 避免問題的最佳實踐
 
-1. **Always use the OO interface** - Avoid pyplot state machine
+1. **始終使用物件導向介面** - 避免 pyplot 狀態機
    ```python
-   fig, ax = plt.subplots()  # Good
+   fig, ax = plt.subplots()  # 良好
    ax.plot(x, y)
    ```
 
-2. **Use constrained_layout** - Prevents overlap issues
+2. **使用 constrained_layout** - 防止重疊問題
    ```python
    fig, ax = plt.subplots(constrained_layout=True)
    ```
 
-3. **Close figures explicitly** - Prevents memory leaks
+3. **明確關閉圖形** - 防止記憶體洩漏
    ```python
    plt.close(fig)
    ```
 
-4. **Set figure size at creation** - Better than resizing later
+4. **在建立時設定圖形大小** - 比之後調整大小更好
    ```python
    fig, ax = plt.subplots(figsize=(10, 6))
    ```
 
-5. **Use raw strings for math text** - Avoids escape issues
+5. **對數學文字使用原始字串** - 避免跳脫問題
    ```python
    ax.set_xlabel(r'$\alpha$')
    ```
 
-6. **Check data shapes before plotting** - Catch size mismatches early
+6. **繪圖前檢查資料形狀** - 及早發現大小不匹配
    ```python
    assert len(x) == len(y)
    ```
 
-7. **Use appropriate DPI** - 300 for print, 150 for web
+7. **使用適當的 DPI** - 列印 300，網頁 150
    ```python
    plt.savefig('figure.png', dpi=300)
    ```
 
-8. **Test with different backends** - If display issues occur
+8. **測試不同的後端** - 如果出現顯示問題
    ```python
    import matplotlib
    matplotlib.use('TkAgg')

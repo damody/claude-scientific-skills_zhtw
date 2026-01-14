@@ -1,10 +1,10 @@
-# Text Generation
+# 文字生成
 
-## Overview
+## 概述
 
-Generate text with language models using the `generate()` method. Control output quality and style through generation strategies and parameters.
+使用 `generate()` 方法透過語言模型生成文字。通過生成策略和參數控制輸出品質和風格。
 
-## Basic Generation
+## 基本生成
 
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -23,11 +23,11 @@ text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 print(text)
 ```
 
-## Generation Strategies
+## 生成策略
 
-### Greedy Decoding
+### 貪婪解碼（Greedy Decoding）
 
-Select highest probability token at each step (deterministic):
+在每一步選擇最高機率的 token（確定性）：
 
 ```python
 outputs = model.generate(
@@ -37,11 +37,11 @@ outputs = model.generate(
 )
 ```
 
-**Use for**: Factual text, translations, where determinism is needed.
+**使用時機**：事實性文字、翻譯、需要確定性的場合。
 
-### Sampling
+### 採樣（Sampling）
 
-Randomly sample from probability distribution:
+從機率分佈中隨機採樣：
 
 ```python
 outputs = model.generate(
@@ -54,11 +54,11 @@ outputs = model.generate(
 )
 ```
 
-**Use for**: Creative writing, diverse outputs, open-ended generation.
+**使用時機**：創意寫作、多樣化輸出、開放式生成。
 
-### Beam Search
+### 束搜尋（Beam Search）
 
-Explore multiple hypotheses in parallel:
+並行探索多個假設：
 
 ```python
 outputs = model.generate(
@@ -69,11 +69,11 @@ outputs = model.generate(
 )
 ```
 
-**Use for**: Translations, summarization, where quality is critical.
+**使用時機**：翻譯、摘要、品質至關重要的場合。
 
-### Contrastive Search
+### 對比搜尋（Contrastive Search）
 
-Balance quality and diversity:
+平衡品質和多樣性：
 
 ```python
 outputs = model.generate(
@@ -84,35 +84,35 @@ outputs = model.generate(
 )
 ```
 
-**Use for**: Long-form generation, reducing repetition.
+**使用時機**：長文本生成、減少重複。
 
-## Key Parameters
+## 關鍵參數
 
-### Length Control
+### 長度控制
 
-**max_new_tokens**: Maximum tokens to generate
+**max_new_tokens**：生成的最大 token 數
 ```python
 max_new_tokens=100  # Generate up to 100 new tokens
 ```
 
-**max_length**: Maximum total length (input + output)
+**max_length**：最大總長度（輸入 + 輸出）
 ```python
 max_length=512  # Total sequence length
 ```
 
-**min_new_tokens**: Minimum tokens to generate
+**min_new_tokens**：生成的最小 token 數
 ```python
 min_new_tokens=50  # Force at least 50 tokens
 ```
 
-**min_length**: Minimum total length
+**min_length**：最小總長度
 ```python
 min_length=100
 ```
 
-### Temperature
+### Temperature（溫度）
 
-Controls randomness (only with sampling):
+控制隨機性（僅在採樣時使用）：
 
 ```python
 temperature=1.0   # Default, balanced
@@ -120,61 +120,61 @@ temperature=0.7   # More focused, less random
 temperature=1.5   # More creative, more random
 ```
 
-Lower temperature → more deterministic
-Higher temperature → more random
+較低溫度 → 更確定性
+較高溫度 → 更隨機
 
-### Top-K Sampling
+### Top-K 採樣
 
-Consider only top K most likely tokens:
+僅考慮最可能的前 K 個 token：
 
 ```python
 do_sample=True
 top_k=50  # Sample from top 50 tokens
 ```
 
-**Common values**: 40-100 for balanced output, 10-20 for focused output.
+**常見值**：40-100 用於平衡輸出，10-20 用於集中輸出。
 
-### Top-P (Nucleus) Sampling
+### Top-P（Nucleus）採樣
 
-Consider tokens with cumulative probability ≥ P:
+考慮累積機率 >= P 的 token：
 
 ```python
 do_sample=True
 top_p=0.95  # Sample from smallest set with 95% cumulative probability
 ```
 
-**Common values**: 0.9-0.95 for balanced, 0.7-0.85 for focused.
+**常見值**：0.9-0.95 用於平衡，0.7-0.85 用於集中。
 
-### Repetition Penalty
+### 重複懲罰（Repetition Penalty）
 
-Discourage repetition:
+減少重複：
 
 ```python
 repetition_penalty=1.2  # Penalize repeated tokens
 ```
 
-**Values**: 1.0 = no penalty, 1.2-1.5 = moderate, 2.0+ = strong penalty.
+**值**：1.0 = 無懲罰，1.2-1.5 = 中等，2.0+ = 強懲罰。
 
-### Beam Search Parameters
+### 束搜尋參數
 
-**num_beams**: Number of beams
+**num_beams**：束的數量
 ```python
 num_beams=5  # Keep 5 hypotheses
 ```
 
-**early_stopping**: Stop when num_beams sentences are finished
+**early_stopping**：當 num_beams 個句子完成時停止
 ```python
 early_stopping=True
 ```
 
-**no_repeat_ngram_size**: Prevent n-gram repetition
+**no_repeat_ngram_size**：防止 n-gram 重複
 ```python
 no_repeat_ngram_size=3  # Don't repeat any 3-gram
 ```
 
-### Output Control
+### 輸出控制
 
-**num_return_sequences**: Generate multiple outputs
+**num_return_sequences**：生成多個輸出
 ```python
 outputs = model.generate(
     **inputs,
@@ -184,21 +184,21 @@ outputs = model.generate(
 )
 ```
 
-**pad_token_id**: Specify padding token
+**pad_token_id**：指定填充 token
 ```python
 pad_token_id=tokenizer.eos_token_id
 ```
 
-**eos_token_id**: Stop generation at specific token
+**eos_token_id**：在特定 token 處停止生成
 ```python
 eos_token_id=tokenizer.eos_token_id
 ```
 
-## Advanced Features
+## 進階功能
 
-### Batch Generation
+### 批次生成
 
-Generate for multiple prompts:
+為多個提示生成：
 
 ```python
 prompts = ["Hello, my name is", "Once upon a time"]
@@ -211,9 +211,9 @@ for i, output in enumerate(outputs):
     print(f"Prompt {i}: {text}\n")
 ```
 
-### Streaming Generation
+### 串流生成
 
-Stream tokens as generated:
+生成時串流輸出 token：
 
 ```python
 from transformers import TextIteratorStreamer
@@ -236,9 +236,9 @@ for text in streamer:
 thread.join()
 ```
 
-### Constrained Generation
+### 受限生成
 
-Force specific token sequences:
+強制特定 token 序列：
 
 ```python
 # Force generation to start with specific tokens
@@ -252,9 +252,9 @@ outputs = model.generate(
 )
 ```
 
-### Guidance and Control
+### 引導和控制
 
-**Prevent bad words:**
+**防止不良詞彙：**
 ```python
 bad_words = ["offensive", "inappropriate"]
 bad_words_ids = [tokenizer.encode(word, add_special_tokens=False) for word in bad_words]
@@ -265,9 +265,9 @@ outputs = model.generate(
 )
 ```
 
-### Generation Config
+### 生成配置
 
-Save and reuse generation parameters:
+儲存和重用生成參數：
 
 ```python
 from transformers import GenerationConfig
@@ -289,11 +289,11 @@ generation_config = GenerationConfig.from_pretrained("./my_generation_config")
 outputs = model.generate(**inputs, generation_config=generation_config)
 ```
 
-## Model-Specific Generation
+## 模型特定的生成
 
-### Chat Models
+### 聊天模型
 
-Use chat templates:
+使用聊天模板：
 
 ```python
 messages = [
@@ -308,9 +308,9 @@ outputs = model.generate(**inputs, max_new_tokens=100)
 response = tokenizer.decode(outputs[0], skip_special_tokens=True)
 ```
 
-### Encoder-Decoder Models
+### 編碼器-解碼器模型
 
-For T5, BART, etc.:
+對於 T5、BART 等：
 
 ```python
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
@@ -326,11 +326,11 @@ outputs = model.generate(**inputs, max_new_tokens=50)
 translation = tokenizer.decode(outputs[0], skip_special_tokens=True)
 ```
 
-## Optimization
+## 最佳化
 
-### Caching
+### 快取
 
-Enable KV cache for faster generation:
+啟用 KV 快取以加速生成：
 
 ```python
 outputs = model.generate(
@@ -340,9 +340,9 @@ outputs = model.generate(
 )
 ```
 
-### Static Cache
+### 靜態快取
 
-For fixed sequence lengths:
+用於固定序列長度：
 
 ```python
 from transformers import StaticCache
@@ -356,9 +356,9 @@ outputs = model.generate(
 )
 ```
 
-### Attention Implementation
+### 注意力實作
 
-Use Flash Attention for speed:
+使用 Flash Attention 加速：
 
 ```python
 model = AutoModelForCausalLM.from_pretrained(
@@ -367,9 +367,9 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 ```
 
-## Generation Recipes
+## 生成方案
 
-### Creative Writing
+### 創意寫作
 
 ```python
 outputs = model.generate(
@@ -383,7 +383,7 @@ outputs = model.generate(
 )
 ```
 
-### Factual Generation
+### 事實性生成
 
 ```python
 outputs = model.generate(
@@ -394,7 +394,7 @@ outputs = model.generate(
 )
 ```
 
-### Diverse Outputs
+### 多樣化輸出
 
 ```python
 outputs = model.generate(
@@ -407,7 +407,7 @@ outputs = model.generate(
 )
 ```
 
-### Long-Form Generation
+### 長文本生成
 
 ```python
 outputs = model.generate(
@@ -419,7 +419,7 @@ outputs = model.generate(
 )
 ```
 
-### Translation/Summarization
+### 翻譯/摘要
 
 ```python
 outputs = model.generate(
@@ -431,37 +431,37 @@ outputs = model.generate(
 )
 ```
 
-## Common Issues
+## 常見問題
 
-**Repetitive output:**
-- Increase repetition_penalty (1.2-1.5)
-- Use no_repeat_ngram_size (2-3)
-- Try contrastive search
-- Lower temperature
+**輸出重複：**
+- 增加 repetition_penalty（1.2-1.5）
+- 使用 no_repeat_ngram_size（2-3）
+- 嘗試對比搜尋
+- 降低溫度
 
-**Poor quality:**
-- Use beam search (num_beams=5)
-- Lower temperature
-- Adjust top_k/top_p
+**品質不佳：**
+- 使用束搜尋（num_beams=5）
+- 降低溫度
+- 調整 top_k/top_p
 
-**Too deterministic:**
-- Enable sampling (do_sample=True)
-- Increase temperature (0.7-1.0)
-- Adjust top_k/top_p
+**太確定性：**
+- 啟用採樣（do_sample=True）
+- 增加溫度（0.7-1.0）
+- 調整 top_k/top_p
 
-**Slow generation:**
-- Reduce batch size
-- Enable use_cache=True
-- Use Flash Attention
-- Reduce max_new_tokens
+**生成緩慢：**
+- 減少批次大小
+- 啟用 use_cache=True
+- 使用 Flash Attention
+- 減少 max_new_tokens
 
-## Best Practices
+## 最佳實踐
 
-1. **Start with defaults**: Then tune based on output
-2. **Use appropriate strategy**: Greedy for factual, sampling for creative
-3. **Set max_new_tokens**: Avoid unnecessarily long generation
-4. **Enable caching**: For faster sequential generation
-5. **Tune temperature**: Most impactful parameter for sampling
-6. **Use beam search carefully**: Slower but higher quality
-7. **Test different seeds**: For reproducibility with sampling
-8. **Monitor memory**: Large beams use significant memory
+1. **從預設開始**：然後根據輸出調整
+2. **使用適當策略**：貪婪用於事實性，採樣用於創意
+3. **設定 max_new_tokens**：避免不必要的長生成
+4. **啟用快取**：用於更快的序列生成
+5. **調整溫度**：採樣時最具影響力的參數
+6. **謹慎使用束搜尋**：較慢但品質更高
+7. **測試不同種子**：用於採樣時的可重現性
+8. **監控記憶體**：大束使用大量記憶體

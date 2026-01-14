@@ -1,63 +1,63 @@
-# QuTiP Time Evolution and Dynamics Solvers
+# QuTiP 時間演化和動力學求解器
 
-## Overview
+## 概述
 
-QuTiP provides multiple solvers for quantum dynamics:
-- `sesolve` - Schrödinger equation (unitary evolution)
-- `mesolve` - Master equation (open systems with dissipation)
-- `mcsolve` - Monte Carlo (quantum trajectories)
-- `brmesolve` - Bloch-Redfield master equation
-- `fmmesolve` - Floquet-Markov master equation
-- `ssesolve/smesolve` - Stochastic Schrödinger/master equations
+QuTiP 提供多個用於量子動力學的求解器：
+- `sesolve` - 薛丁格方程（么正演化）
+- `mesolve` - 主方程（帶耗散的開放系統）
+- `mcsolve` - 蒙地卡羅（量子軌跡）
+- `brmesolve` - Bloch-Redfield 主方程
+- `fmmesolve` - Floquet-Markov 主方程
+- `ssesolve/smesolve` - 隨機薛丁格/主方程
 
-## Schrödinger Equation Solver (sesolve)
+## 薛丁格方程求解器（sesolve）
 
-For closed quantum systems evolving unitarily.
+用於么正演化的封閉量子系統。
 
-### Basic Usage
+### 基本用法
 
 ```python
 from qutip import *
 import numpy as np
 
-# System setup
+# 系統設定
 N = 10
-psi0 = basis(N, 0)  # Initial state
-H = num(N)  # Hamiltonian
+psi0 = basis(N, 0)  # 初始態
+H = num(N)  # 哈密頓量
 
-# Time points
+# 時間點
 tlist = np.linspace(0, 10, 100)
 
-# Solve
+# 求解
 result = sesolve(H, psi0, tlist)
 
-# Access results
-states = result.states  # List of states at each time
+# 存取結果
+states = result.states  # 每個時間的態列表
 final_state = result.states[-1]
 ```
 
-### With Expectation Values
+### 帶期望值
 
 ```python
-# Operators to compute expectation values
+# 要計算期望值的運算子
 e_ops = [num(N), destroy(N), create(N)]
 
 result = sesolve(H, psi0, tlist, e_ops=e_ops)
 
-# Access expectation values
+# 存取期望值
 n_t = result.expect[0]  # ⟨n⟩(t)
 a_t = result.expect[1]  # ⟨a⟩(t)
 ```
 
-### Time-Dependent Hamiltonians
+### 時間相依哈密頓量
 
 ```python
-# Method 1: String-based (faster, requires Cython)
+# 方法 1：基於字串（更快，需要 Cython）
 H = [num(N), [destroy(N) + create(N), 'cos(w*t)']]
 args = {'w': 1.0}
 result = sesolve(H, psi0, tlist, args=args)
 
-# Method 2: Function-based
+# 方法 2：基於函數
 def drive(t, args):
     return np.exp(-t/args['tau']) * np.sin(args['w'] * t)
 
@@ -65,60 +65,60 @@ H = [num(N), [destroy(N) + create(N), drive]]
 args = {'w': 1.0, 'tau': 5.0}
 result = sesolve(H, psi0, tlist, args=args)
 
-# Method 3: QobjEvo (most flexible)
+# 方法 3：QobjEvo（最靈活）
 from qutip import QobjEvo
 H_td = QobjEvo([num(N), [destroy(N) + create(N), drive]], args=args)
 result = sesolve(H_td, psi0, tlist)
 ```
 
-## Master Equation Solver (mesolve)
+## 主方程求解器（mesolve）
 
-For open quantum systems with dissipation and decoherence.
+用於帶耗散和退相干的開放量子系統。
 
-### Basic Usage
+### 基本用法
 
 ```python
-# System Hamiltonian
+# 系統哈密頓量
 H = num(N)
 
-# Collapse operators (Lindblad operators)
-kappa = 0.1  # Decay rate
+# 坍縮運算子（Lindblad 運算子）
+kappa = 0.1  # 衰減率
 c_ops = [np.sqrt(kappa) * destroy(N)]
 
-# Initial state
+# 初始態
 psi0 = coherent(N, 2.0)
 
-# Solve
+# 求解
 result = mesolve(H, psi0, tlist, c_ops, e_ops=[num(N)])
 
-# Result is a density matrix evolution
-rho_t = result.states  # List of density matrices
+# 結果是密度矩陣演化
+rho_t = result.states  # 密度矩陣列表
 n_t = result.expect[0]  # ⟨n⟩(t)
 ```
 
-### Multiple Dissipation Channels
+### 多重耗散通道
 
 ```python
-# Photon loss
+# 光子損失
 kappa = 0.1
-# Dephasing
+# 退相位
 gamma = 0.05
-# Thermal excitation
-nth = 0.5  # Thermal photon number
+# 熱激發
+nth = 0.5  # 熱光子數
 
 c_ops = [
-    np.sqrt(kappa * (1 + nth)) * destroy(N),  # Thermal decay
-    np.sqrt(kappa * nth) * create(N),  # Thermal excitation
-    np.sqrt(gamma) * num(N)  # Pure dephasing
+    np.sqrt(kappa * (1 + nth)) * destroy(N),  # 熱衰減
+    np.sqrt(kappa * nth) * create(N),  # 熱激發
+    np.sqrt(gamma) * num(N)  # 純退相位
 ]
 
 result = mesolve(H, psi0, tlist, c_ops)
 ```
 
-### Time-Dependent Dissipation
+### 時間相依耗散
 
 ```python
-# Time-dependent decay rate
+# 時間相依衰減率
 def kappa_t(t, args):
     return args['k0'] * (1 + np.sin(args['w'] * t))
 
@@ -128,221 +128,221 @@ args = {'k0': 0.1, 'w': 1.0}
 result = mesolve(H, psi0, tlist, c_ops, args=args)
 ```
 
-## Monte Carlo Solver (mcsolve)
+## 蒙地卡羅求解器（mcsolve）
 
-Simulates quantum trajectories for open systems.
+模擬開放系統的量子軌跡。
 
-### Basic Usage
+### 基本用法
 
 ```python
-# Same setup as mesolve
+# 與 mesolve 相同設定
 H = num(N)
 c_ops = [np.sqrt(0.1) * destroy(N)]
 psi0 = coherent(N, 2.0)
 
-# Number of trajectories
+# 軌跡數
 ntraj = 500
 
 result = mcsolve(H, psi0, tlist, c_ops, e_ops=[num(N)], ntraj=ntraj)
 
-# Results averaged over trajectories
+# 軌跡平均結果
 n_avg = result.expect[0]
-n_std = result.std_expect[0]  # Standard deviation
+n_std = result.std_expect[0]  # 標準差
 
-# Individual trajectories (if options.store_states=True)
+# 個別軌跡（如果 options.store_states=True）
 options = Options(store_states=True)
 result = mcsolve(H, psi0, tlist, c_ops, ntraj=ntraj, options=options)
-trajectories = result.states  # List of trajectory lists
+trajectories = result.states  # 軌跡列表的列表
 ```
 
-### Photon Counting
+### 光子計數
 
 ```python
-# Track quantum jumps
+# 追蹤量子跳躍
 result = mcsolve(H, psi0, tlist, c_ops, ntraj=ntraj, options=options)
 
-# Access jump times and which operator caused the jump
+# 存取跳躍時間和引起跳躍的運算子
 for traj in result.col_times:
-    print(f"Jump times: {traj}")
+    print(f"跳躍時間: {traj}")
 
 for traj in result.col_which:
-    print(f"Jump operator indices: {traj}")
+    print(f"跳躍運算子索引: {traj}")
 ```
 
-## Bloch-Redfield Solver (brmesolve)
+## Bloch-Redfield 求解器（brmesolve）
 
-For weak system-bath coupling in the secular approximation.
+用於久期近似中的弱系統-熱浴耦合。
 
 ```python
-# System Hamiltonian
+# 系統哈密頓量
 H = sigmaz()
 
-# Coupling operators and spectral density
-a_ops = [[sigmax(), lambda w: 0.1 * w if w > 0 else 0]]  # Ohmic bath
+# 耦合運算子和譜密度
+a_ops = [[sigmax(), lambda w: 0.1 * w if w > 0 else 0]]  # 歐姆熱浴
 
 psi0 = basis(2, 0)
 result = brmesolve(H, psi0, tlist, a_ops, e_ops=[sigmaz(), sigmax()])
 ```
 
-## Floquet Solver (fmmesolve)
+## Floquet 求解器（fmmesolve）
 
-For time-periodic Hamiltonians.
+用於時間週期哈密頓量。
 
 ```python
-# Time-periodic Hamiltonian
-w_d = 1.0  # Drive frequency
+# 時間週期哈密頓量
+w_d = 1.0  # 驅動頻率
 H0 = sigmaz()
 H1 = sigmax()
 H = [H0, [H1, 'cos(w*t)']]
 args = {'w': w_d}
 
-# Floquet modes and quasi-energies
-T = 2 * np.pi / w_d  # Period
+# Floquet 模式和準能量
+T = 2 * np.pi / w_d  # 週期
 f_modes, f_energies = floquet_modes(H, T, args)
 
-# Initial state in Floquet basis
+# Floquet 基底中的初始態
 psi0 = basis(2, 0)
 
-# Dissipation in Floquet basis
+# Floquet 基底中的耗散
 c_ops = [np.sqrt(0.1) * sigmam()]
 
 result = fmmesolve(H, psi0, tlist, c_ops, e_ops=[num(2)], T=T, args=args)
 ```
 
-## Stochastic Solvers
+## 隨機求解器
 
-### Stochastic Schrödinger Equation (ssesolve)
+### 隨機薛丁格方程（ssesolve）
 
 ```python
-# Diffusion operator
+# 擴散運算子
 sc_ops = [np.sqrt(0.1) * destroy(N)]
 
-# Heterodyne detection
+# 外差偵測
 result = ssesolve(H, psi0, tlist, sc_ops=sc_ops, e_ops=[num(N)],
-                   ntraj=500, noise=1)  # noise=1 for heterodyne
+                   ntraj=500, noise=1)  # noise=1 用於外差
 ```
 
-### Stochastic Master Equation (smesolve)
+### 隨機主方程（smesolve）
 
 ```python
 result = smesolve(H, psi0, tlist, c_ops=[], sc_ops=sc_ops,
                    e_ops=[num(N)], ntraj=500)
 ```
 
-## Propagators
+## 傳播子
 
-### Time-Evolution Operator
+### 時間演化運算子
 
 ```python
-# Evolution operator U(t) such that ψ(t) = U(t)ψ(0)
+# 演化運算子 U(t) 使得 ψ(t) = U(t)ψ(0)
 U = (-1j * H * t).expm()
 psi_t = U * psi0
 
-# For master equation (superoperator propagator)
+# 對於主方程（超運算子傳播子）
 L = liouvillian(H, c_ops)
 U_super = (L * t).expm()
 rho_t = vector_to_operator(U_super * operator_to_vector(rho0))
 ```
 
-### Propagator Function
+### 傳播子函數
 
 ```python
-# Generate propagators for multiple times
+# 生成多個時間的傳播子
 U_list = propagator(H, tlist, c_ops)
 
-# Apply to states
+# 應用於態
 psi_t = [U_list[i] * psi0 for i in range(len(tlist))]
 ```
 
-## Steady State Solutions
+## 穩態解
 
-### Direct Steady State
+### 直接穩態
 
 ```python
-# Find steady state of Liouvillian
+# 尋找劉維爾運算子的穩態
 rho_ss = steadystate(H, c_ops)
 
-# Check it's steady
+# 驗證它是穩態
 L = liouvillian(H, c_ops)
 assert (L * operator_to_vector(rho_ss)).norm() < 1e-10
 ```
 
-### Pseudo-Inverse Method
+### 偽逆方法
 
 ```python
-# For degenerate steady states
+# 對於簡併穩態
 rho_ss = steadystate(H, c_ops, method='direct')
-# or 'eigen', 'svd', 'power'
+# 或 'eigen'、'svd'、'power'
 ```
 
-## Correlation Functions
+## 關聯函數
 
-### Two-Time Correlation
+### 雙時關聯
 
 ```python
 # ⟨A(t+τ)B(t)⟩
 A = destroy(N)
 B = create(N)
 
-# Emission spectrum
+# 發射譜
 taulist = np.linspace(0, 10, 200)
 corr = correlation_2op_1t(H, None, taulist, c_ops, A, B)
 
-# Power spectrum
+# 功率譜
 w, S = spectrum_correlation_fft(taulist, corr)
 ```
 
-### Multi-Time Correlation
+### 多時關聯
 
 ```python
 # ⟨A(t3)B(t2)C(t1)⟩
 corr = correlation_3op_1t(H, None, taulist, c_ops, A, B, C)
 ```
 
-## Solver Options
+## 求解器選項
 
 ```python
 from qutip import Options
 
 options = Options()
-options.nsteps = 10000  # Max internal steps
-options.atol = 1e-8  # Absolute tolerance
-options.rtol = 1e-6  # Relative tolerance
-options.method = 'adams'  # or 'bdf' for stiff problems
-options.store_states = True  # Store all states
-options.store_final_state = True  # Store only final state
+options.nsteps = 10000  # 最大內部步數
+options.atol = 1e-8  # 絕對容差
+options.rtol = 1e-6  # 相對容差
+options.method = 'adams'  # 或 'bdf' 用於剛性問題
+options.store_states = True  # 儲存所有態
+options.store_final_state = True  # 只儲存最終態
 
 result = mesolve(H, psi0, tlist, c_ops, options=options)
 ```
 
-### Progress Bar
+### 進度條
 
 ```python
 options.progress_bar = True
 result = mesolve(H, psi0, tlist, c_ops, options=options)
 ```
 
-## Saving and Loading Results
+## 儲存和載入結果
 
 ```python
-# Save results
+# 儲存結果
 result.save("my_simulation.dat")
 
-# Load results
+# 載入結果
 from qutip import Result
 loaded_result = Result.load("my_simulation.dat")
 ```
 
-## Tips for Efficient Simulations
+## 高效模擬技巧
 
-1. **Sparse matrices**: QuTiP automatically uses sparse matrices
-2. **Small Hilbert spaces**: Truncate when possible
-3. **Time-dependent terms**: String format is fastest (requires compilation)
-4. **Parallel trajectories**: mcsolve automatically parallelizes
-5. **Convergence**: Check by varying `ntraj`, `nsteps`, tolerances
-6. **Solver selection**:
-   - Pure states: Use `sesolve` (faster)
-   - Mixed states/dissipation: Use `mesolve`
-   - Noise/measurements: Use `mcsolve`
-   - Weak coupling: Use `brmesolve`
-   - Periodic driving: Use Floquet methods
+1. **稀疏矩陣**：QuTiP 自動使用稀疏矩陣
+2. **小希爾伯特空間**：盡可能截斷
+3. **時間相依項**：字串格式最快（需要編譯）
+4. **平行軌跡**：mcsolve 自動平行化
+5. **收斂**：透過變化 `ntraj`、`nsteps`、容差來檢查
+6. **求解器選擇**：
+   - 純態：使用 `sesolve`（更快）
+   - 混合態/耗散：使用 `mesolve`
+   - 雜訊/測量：使用 `mcsolve`
+   - 弱耦合：使用 `brmesolve`
+   - 週期驅動：使用 Floquet 方法

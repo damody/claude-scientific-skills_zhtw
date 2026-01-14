@@ -1,25 +1,25 @@
-# Image Processing & Rendering
+# 影像處理與渲染
 
-This reference covers accessing raw pixel data, image rendering, and creating new images in OMERO.
+此參考涵蓋存取原始像素資料、影像渲染，以及在 OMERO 中建立新影像。
 
-## Accessing Raw Pixel Data
+## 存取原始像素資料
 
-### Get Single Plane
+### 取得單一平面
 
 ```python
-# Get image
+# 取得影像
 image = conn.getObject("Image", image_id)
 
-# Get dimensions
+# 取得尺寸
 size_z = image.getSizeZ()
 size_c = image.getSizeC()
 size_t = image.getSizeT()
 
-# Get pixels object
+# 取得像素物件
 pixels = image.getPrimaryPixels()
 
-# Get single plane (returns NumPy array)
-z, c, t = 0, 0, 0  # First Z-section, channel, and timepoint
+# 取得單一平面（傳回 NumPy 陣列）
+z, c, t = 0, 0, 0  # 第一個 Z 切面、通道和時間點
 plane = pixels.getPlane(z, c, t)
 
 print(f"Shape: {plane.shape}")
@@ -27,71 +27,71 @@ print(f"Data type: {plane.dtype.name}")
 print(f"Min: {plane.min()}, Max: {plane.max()}")
 ```
 
-### Get Multiple Planes
+### 取得多個平面
 
 ```python
 import numpy as np
 
-# Get Z-stack for specific channel and timepoint
+# 取得特定通道和時間點的 Z 堆疊
 pixels = image.getPrimaryPixels()
-c, t = 0, 0  # First channel and timepoint
+c, t = 0, 0  # 第一個通道和時間點
 
-# Build list of (z, c, t) coordinates
+# 建立 (z, c, t) 座標列表
 zct_list = [(z, c, t) for z in range(size_z)]
 
-# Get all planes at once
+# 一次取得所有平面
 planes = pixels.getPlanes(zct_list)
 
-# Stack into 3D array
+# 堆疊成 3D 陣列
 z_stack = np.array([p for p in planes])
 print(f"Z-stack shape: {z_stack.shape}")
 ```
 
-### Get Hypercube (Subset of 5D Data)
+### 取得超立方體（5D 資料的子集）
 
 ```python
-# Get subset of 5D data (Z, C, T)
+# 取得 5D 資料的子集（Z、C、T）
 zct_list = []
-for z in range(size_z // 2, size_z):  # Second half of Z
-    for c in range(size_c):           # All channels
-        for t in range(size_t):       # All timepoints
+for z in range(size_z // 2, size_z):  # Z 的後半部分
+    for c in range(size_c):           # 所有通道
+        for t in range(size_t):       # 所有時間點
             zct_list.append((z, c, t))
 
-# Get planes
+# 取得平面
 planes = pixels.getPlanes(zct_list)
 
-# Process each plane
+# 處理每個平面
 for i, plane in enumerate(planes):
     z, c, t = zct_list[i]
     print(f"Plane Z={z}, C={c}, T={t}: Min={plane.min()}, Max={plane.max()}")
 ```
 
-### Get Tile (Region of Interest)
+### 取得區塊（感興趣區域）
 
 ```python
-# Define tile coordinates
-x, y = 50, 50          # Top-left corner
-width, height = 100, 100  # Tile size
+# 定義區塊座標
+x, y = 50, 50          # 左上角
+width, height = 100, 100  # 區塊大小
 tile = (x, y, width, height)
 
-# Get tile for specific Z, C, T
+# 取得特定 Z、C、T 的區塊
 z, c, t = 0, 0, 0
 zct_list = [(z, c, t, tile)]
 
 tiles = pixels.getTiles(zct_list)
 tile_data = tiles[0]
 
-print(f"Tile shape: {tile_data.shape}")  # Should be (height, width)
+print(f"Tile shape: {tile_data.shape}")  # 應該是 (height, width)
 ```
 
-### Get Multiple Tiles
+### 取得多個區塊
 
 ```python
-# Get tiles from Z-stack
+# 從 Z 堆疊取得區塊
 c, t = 0, 0
 tile = (50, 50, 100, 100)  # x, y, width, height
 
-# Build list with tiles
+# 建立包含區塊的列表
 zct_list = [(z, c, t, tile) for z in range(size_z)]
 
 tiles = pixels.getTiles(zct_list)
@@ -100,12 +100,12 @@ for i, tile_data in enumerate(tiles):
     print(f"Tile Z={i}: {tile_data.shape}, Min={tile_data.min()}")
 ```
 
-## Image Histograms
+## 影像直方圖
 
-### Get Histogram
+### 取得直方圖
 
 ```python
-# Get histogram for first channel
+# 取得第一個通道的直方圖
 channel_index = 0
 num_bins = 256
 z, t = 0, 0
@@ -115,10 +115,10 @@ print(f"Histogram bins: {len(histogram)}")
 print(f"First 10 bins: {histogram[:10]}")
 ```
 
-### Multi-Channel Histogram
+### 多通道直方圖
 
 ```python
-# Get histograms for all channels
+# 取得所有通道的直方圖
 channels = list(range(image.getSizeC()))
 histograms = image.getHistogram(channels, 256, False, 0, 0)
 
@@ -126,57 +126,57 @@ for c, hist in enumerate(histograms):
     print(f"Channel {c}: Total pixels = {sum(hist)}")
 ```
 
-## Image Rendering
+## 影像渲染
 
-### Render Image with Current Settings
+### 使用當前設定渲染影像
 
 ```python
 from PIL import Image
 from io import BytesIO
 
-# Get image
+# 取得影像
 image = conn.getObject("Image", image_id)
 
-# Render at specific Z and T
-z = image.getSizeZ() // 2  # Middle Z-section
+# 在特定 Z 和 T 渲染
+z = image.getSizeZ() // 2  # 中間 Z 切面
 t = 0
 
 rendered_image = image.renderImage(z, t)
-# rendered_image is a PIL Image object
+# rendered_image 是 PIL Image 物件
 rendered_image.save("rendered_image.jpg")
 ```
 
-### Get Thumbnail
+### 取得縮圖
 
 ```python
 from PIL import Image
 from io import BytesIO
 
-# Get thumbnail (uses current rendering settings)
+# 取得縮圖（使用當前渲染設定）
 thumbnail_data = image.getThumbnail()
 
-# Convert to PIL Image
+# 轉換為 PIL Image
 thumbnail = Image.open(BytesIO(thumbnail_data))
 thumbnail.save("thumbnail.jpg")
 
-# Get specific thumbnail size
+# 取得特定縮圖大小
 thumbnail_data = image.getThumbnail(size=(96, 96))
 thumbnail = Image.open(BytesIO(thumbnail_data))
 ```
 
-## Rendering Settings
+## 渲染設定
 
-### View Current Settings
+### 查看當前設定
 
 ```python
-# Display rendering settings
+# 顯示渲染設定
 print("Current Rendering Settings:")
 print(f"Grayscale mode: {image.isGreyscaleRenderingModel()}")
 print(f"Default Z: {image.getDefaultZ()}")
 print(f"Default T: {image.getDefaultT()}")
 print()
 
-# Channel settings
+# 通道設定
 print("Channel Settings:")
 for idx, channel in enumerate(image.getChannels()):
     print(f"Channel {idx + 1}:")
@@ -187,95 +187,95 @@ for idx, channel in enumerate(image.getChannels()):
     print(f"  Min/Max: {channel.getWindowMin()} - {channel.getWindowMax()}")
 ```
 
-### Set Rendering Model
+### 設定渲染模式
 
 ```python
-# Switch to grayscale rendering
+# 切換到灰階渲染
 image.setGreyscaleRenderingModel()
 
-# Switch to color rendering
+# 切換到彩色渲染
 image.setColorRenderingModel()
 ```
 
-### Set Active Channels
+### 設定啟用通道
 
 ```python
-# Activate specific channels (1-indexed)
-image.setActiveChannels([1, 3])  # Channels 1 and 3 only
+# 啟用特定通道（1 索引）
+image.setActiveChannels([1, 3])  # 只啟用通道 1 和 3
 
-# Activate all channels
+# 啟用所有通道
 all_channels = list(range(1, image.getSizeC() + 1))
 image.setActiveChannels(all_channels)
 
-# Activate single channel
+# 啟用單一通道
 image.setActiveChannels([2])
 ```
 
-### Set Channel Colors
+### 設定通道顏色
 
 ```python
-# Set channel colors (hex format)
+# 設定通道顏色（十六進位格式）
 channels = [1, 2, 3]
-colors = ['FF0000', '00FF00', '0000FF']  # Red, Green, Blue
+colors = ['FF0000', '00FF00', '0000FF']  # 紅、綠、藍
 
 image.setActiveChannels(channels, colors=colors)
 
-# Use None to keep existing color
-colors = ['FF0000', None, '0000FF']  # Keep channel 2's color
+# 使用 None 保持現有顏色
+colors = ['FF0000', None, '0000FF']  # 保持通道 2 的顏色
 image.setActiveChannels(channels, colors=colors)
 ```
 
-### Set Channel Window (Intensity Range)
+### 設定通道視窗（強度範圍）
 
 ```python
-# Set intensity windows for channels
+# 設定通道的強度視窗
 channels = [1, 2]
 windows = [
-    [100.0, 500.0],  # Channel 1: 100-500
-    [50.0, 300.0]    # Channel 2: 50-300
+    [100.0, 500.0],  # 通道 1：100-500
+    [50.0, 300.0]    # 通道 2：50-300
 ]
 
 image.setActiveChannels(channels, windows=windows)
 
-# Use None to keep existing window
+# 使用 None 保持現有視窗
 windows = [[100.0, 500.0], [None, None]]
 image.setActiveChannels(channels, windows=windows)
 ```
 
-### Set Default Z and T
+### 設定預設 Z 和 T
 
 ```python
-# Set default Z-section and timepoint
+# 設定預設 Z 切面和時間點
 image.setDefaultZ(5)
 image.setDefaultT(0)
 
-# Render using defaults
+# 使用預設值渲染
 rendered_image = image.renderImage(z=None, t=None)
 rendered_image.save("default_rendering.jpg")
 ```
 
-## Render Individual Channels
+## 渲染個別通道
 
-### Render Each Channel Separately
+### 分別渲染每個通道
 
 ```python
-# Set grayscale mode
+# 設定灰階模式
 image.setGreyscaleRenderingModel()
 
 z = image.getSizeZ() // 2
 t = 0
 
-# Render each channel
+# 渲染每個通道
 for c in range(1, image.getSizeC() + 1):
     image.setActiveChannels([c])
     rendered = image.renderImage(z, t)
     rendered.save(f"channel_{c}.jpg")
 ```
 
-### Render Multi-Channel Composites
+### 渲染多通道複合
 
 ```python
-# Color composite of first 3 channels
+# 前 3 個通道的彩色複合
 image.setColorRenderingModel()
 channels = [1, 2, 3]
 colors = ['FF0000', '00FF00', '0000FF']  # RGB
@@ -285,24 +285,24 @@ rendered = image.renderImage(z, t)
 rendered.save("rgb_composite.jpg")
 ```
 
-## Image Projections
+## 影像投影
 
-### Maximum Intensity Projection
+### 最大強度投影
 
 ```python
-# Set projection type
+# 設定投影類型
 image.setProjection('intmax')
 
-# Render (projects across all Z)
-z, t = 0, 0  # Z is ignored for projections
+# 渲染（投影跨越所有 Z）
+z, t = 0, 0  # 投影時忽略 Z
 rendered = image.renderImage(z, t)
 rendered.save("max_projection.jpg")
 
-# Reset to normal rendering
+# 重設為正常渲染
 image.setProjection('normal')
 ```
 
-### Mean Intensity Projection
+### 平均強度投影
 
 ```python
 image.setProjection('intmean')
@@ -311,55 +311,55 @@ rendered.save("mean_projection.jpg")
 image.setProjection('normal')
 ```
 
-### Available Projection Types
+### 可用投影類型
 
-- `'normal'`: No projection (default)
-- `'intmax'`: Maximum intensity projection
-- `'intmean'`: Mean intensity projection
-- `'intmin'`: Minimum intensity projection (if supported)
+- `'normal'`：無投影（預設）
+- `'intmax'`：最大強度投影
+- `'intmean'`：平均強度投影
+- `'intmin'`：最小強度投影（如支援）
 
-## Save and Reset Rendering Settings
+## 儲存和重設渲染設定
 
-### Save Current Settings as Default
+### 儲存當前設定為預設
 
 ```python
-# Modify rendering settings
+# 修改渲染設定
 image.setActiveChannels([1, 2])
 image.setDefaultZ(5)
 
-# Save as new default
+# 儲存為新預設
 image.saveDefaults()
 ```
 
-### Reset to Import Settings
+### 重設為匯入設定
 
 ```python
-# Reset to original import settings
+# 重設為原始匯入設定
 image.resetDefaults(save=True)
 ```
 
-## Create Images from NumPy Arrays
+## 從 NumPy 陣列建立影像
 
-### Create Simple Image
+### 建立簡單影像
 
 ```python
 import numpy as np
 
-# Create sample data
+# 建立範例資料
 size_x, size_y = 512, 512
 size_z, size_c, size_t = 10, 2, 1
 
-# Generate planes
+# 生成平面
 def plane_generator():
-    """Generator that yields planes"""
+    """產生平面的生成器"""
     for z in range(size_z):
         for c in range(size_c):
             for t in range(size_t):
-                # Create synthetic data
+                # 建立合成資料
                 plane = np.random.randint(0, 255, (size_y, size_x), dtype=np.uint8)
                 yield plane
 
-# Create image
+# 建立影像
 image = conn.createImageFromNumpySeq(
     plane_generator(),
     "Test Image",
@@ -371,16 +371,16 @@ image = conn.createImageFromNumpySeq(
 print(f"Created image ID: {image.getId()}")
 ```
 
-### Create Image from Hard-Coded Arrays
+### 從硬編碼陣列建立影像
 
 ```python
 from numpy import array, int8
 
-# Define dimensions
+# 定義尺寸
 size_x, size_y = 5, 4
 size_z, size_c, size_t = 1, 2, 1
 
-# Create planes
+# 建立平面
 plane1 = array(
     [[0, 1, 2, 3, 4],
      [5, 6, 7, 8, 9],
@@ -403,7 +403,7 @@ def plane_gen():
     for p in planes:
         yield p
 
-# Create image
+# 建立影像
 desc = "Image created from hard-coded arrays"
 image = conn.createImageFromNumpySeq(
     plane_gen(),
@@ -416,26 +416,26 @@ image = conn.createImageFromNumpySeq(
 print(f"Created image: {image.getName()} (ID: {image.getId()})")
 ```
 
-### Create Image in Dataset
+### 在資料集中建立影像
 
 ```python
-# Get target dataset
+# 取得目標資料集
 dataset = conn.getObject("Dataset", dataset_id)
 
-# Create image
+# 建立影像
 image = conn.createImageFromNumpySeq(
     plane_generator(),
     "New Analysis Result",
     size_z, size_c, size_t,
     description="Result from analysis pipeline",
-    dataset=dataset  # Add to dataset
+    dataset=dataset  # 新增到資料集
 )
 ```
 
-### Create Derived Image
+### 建立衍生影像
 
 ```python
-# Get source image
+# 取得來源影像
 source = conn.getObject("Image", source_image_id)
 size_z = source.getSizeZ()
 size_c = source.getSizeC()
@@ -443,24 +443,24 @@ size_t = source.getSizeT()
 dataset = source.getParent()
 
 pixels = source.getPrimaryPixels()
-new_size_c = 1  # Average channels
+new_size_c = 1  # 平均通道
 
 def plane_gen():
-    """Average channels together"""
+    """將通道平均在一起"""
     for z in range(size_z):
         for c in range(new_size_c):
             for t in range(size_t):
-                # Get multiple channels
+                # 取得多個通道
                 channel0 = pixels.getPlane(z, 0, t)
                 channel1 = pixels.getPlane(z, 1, t)
 
-                # Combine
+                # 組合
                 new_plane = (channel0.astype(float) + channel1.astype(float)) / 2
                 new_plane = new_plane.astype(channel0.dtype)
 
                 yield new_plane
 
-# Create new image
+# 建立新影像
 desc = "Averaged channels from source image"
 derived = conn.createImageFromNumpySeq(
     plane_gen(),
@@ -473,39 +473,39 @@ derived = conn.createImageFromNumpySeq(
 print(f"Created derived image: {derived.getId()}")
 ```
 
-## Set Physical Dimensions
+## 設定物理尺寸
 
-### Set Pixel Sizes with Units
+### 設定具有單位的像素大小
 
 ```python
 from omero.model.enums import UnitsLength
 import omero.model
 
-# Get image
+# 取得影像
 image = conn.getObject("Image", image_id)
 
-# Create unit objects
+# 建立單位物件
 pixel_size_x = omero.model.LengthI(0.325, UnitsLength.MICROMETER)
 pixel_size_y = omero.model.LengthI(0.325, UnitsLength.MICROMETER)
 pixel_size_z = omero.model.LengthI(1.0, UnitsLength.MICROMETER)
 
-# Get pixels object
+# 取得像素物件
 pixels = image.getPrimaryPixels()._obj
 
-# Set physical sizes
+# 設定物理大小
 pixels.setPhysicalSizeX(pixel_size_x)
 pixels.setPhysicalSizeY(pixel_size_y)
 pixels.setPhysicalSizeZ(pixel_size_z)
 
-# Save changes
+# 儲存變更
 conn.getUpdateService().saveObject(pixels)
 
 print("Updated pixel dimensions")
 ```
 
-### Available Length Units
+### 可用長度單位
 
-From `omero.model.enums.UnitsLength`:
+來自 `omero.model.enums.UnitsLength`：
 - `ANGSTROM`
 - `NANOMETER`
 - `MICROMETER`
@@ -514,20 +514,20 @@ From `omero.model.enums.UnitsLength`:
 - `METER`
 - `PIXEL`
 
-### Set Pixel Size on New Image
+### 為新影像設定像素大小
 
 ```python
 from omero.model.enums import UnitsLength
 import omero.model
 
-# Create image
+# 建立影像
 image = conn.createImageFromNumpySeq(
     plane_generator(),
     "New Image with Dimensions",
     size_z, size_c, size_t
 )
 
-# Set pixel sizes
+# 設定像素大小
 pixel_size = omero.model.LengthI(0.5, UnitsLength.MICROMETER)
 pixels = image.getPrimaryPixels()._obj
 pixels.setPhysicalSizeX(pixel_size)
@@ -539,7 +539,7 @@ pixels.setPhysicalSizeZ(z_size)
 conn.getUpdateService().saveObject(pixels)
 ```
 
-## Complete Example: Image Processing Pipeline
+## 完整範例：影像處理管線
 
 ```python
 from omero.gateway import BlitzGateway
@@ -551,11 +551,11 @@ USERNAME = 'user'
 PASSWORD = 'pass'
 
 with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
-    # Get source image
+    # 取得來源影像
     source = conn.getObject("Image", source_image_id)
     print(f"Processing: {source.getName()}")
 
-    # Get dimensions
+    # 取得尺寸
     size_x = source.getSizeX()
     size_y = source.getSizeY()
     size_z = source.getSizeZ()
@@ -564,32 +564,32 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
 
     pixels = source.getPrimaryPixels()
 
-    # Process: Maximum intensity projection over Z
+    # 處理：Z 方向的最大強度投影
     def plane_gen():
         for c in range(size_c):
             for t in range(size_t):
-                # Get all Z planes for this C, T
+                # 取得此 C、T 的所有 Z 平面
                 z_stack = []
                 for z in range(size_z):
                     plane = pixels.getPlane(z, c, t)
                     z_stack.append(plane)
 
-                # Maximum projection
+                # 最大投影
                 max_proj = np.max(z_stack, axis=0)
                 yield max_proj
 
-    # Create result image (single Z-section)
+    # 建立結果影像（單一 Z 切面）
     result = conn.createImageFromNumpySeq(
         plane_gen(),
         f"{source.getName()}_MIP",
-        1, size_c, size_t,  # Z=1 for projection
+        1, size_c, size_t,  # 投影為 Z=1
         description="Maximum intensity projection",
         dataset=source.getParent()
     )
 
     print(f"Created MIP image: {result.getId()}")
 
-    # Copy pixel sizes (X and Y only, no Z for projection)
+    # 複製像素大小（只有 X 和 Y，投影沒有 Z）
     from omero.model.enums import UnitsLength
     import omero.model
 
@@ -604,62 +604,62 @@ with BlitzGateway(USERNAME, PASSWORD, host=HOST, port=PORT) as conn:
     print("Processing complete")
 ```
 
-## Working with Different Data Types
+## 處理不同資料類型
 
-### Handle Various Pixel Types
+### 處理各種像素類型
 
 ```python
-# Get pixel type
+# 取得像素類型
 pixel_type = image.getPixelsType()
 print(f"Pixel type: {pixel_type}")
 
-# Common types: uint8, uint16, uint32, int8, int16, int32, float, double
+# 常見類型：uint8、uint16、uint32、int8、int16、int32、float、double
 
-# Get plane with correct dtype
+# 取得具有正確 dtype 的平面
 plane = pixels.getPlane(z, c, t)
 print(f"NumPy dtype: {plane.dtype}")
 
-# Convert if needed for processing
+# 如需處理則轉換
 if plane.dtype == np.uint16:
-    # Convert to float for processing
+    # 轉換為浮點數進行處理
     plane_float = plane.astype(np.float32)
-    # Process...
-    # Convert back
+    # 處理...
+    # 轉換回來
     result = plane_float.astype(np.uint16)
 ```
 
-### Handle Large Images
+### 處理大型影像
 
 ```python
-# Process large images in tiles to save memory
+# 以區塊處理大型影像以節省記憶體
 tile_size = 512
 size_x = image.getSizeX()
 size_y = image.getSizeY()
 
 for y in range(0, size_y, tile_size):
     for x in range(0, size_x, tile_size):
-        # Get tile dimensions
+        # 取得區塊尺寸
         w = min(tile_size, size_x - x)
         h = min(tile_size, size_y - y)
         tile = (x, y, w, h)
 
-        # Get tile data
+        # 取得區塊資料
         zct_list = [(z, c, t, tile)]
         tile_data = pixels.getTiles(zct_list)[0]
 
-        # Process tile
+        # 處理區塊
         # ...
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Use Generators**: For creating images, use generators to avoid loading all data in memory
-2. **Specify Data Types**: Match NumPy dtypes to OMERO pixel types
-3. **Set Physical Dimensions**: Always set pixel sizes for new images
-4. **Tile Large Images**: Process large images in tiles to manage memory
-5. **Close Connections**: Always close connections when done
-6. **Rendering Efficiency**: Cache rendering settings when rendering multiple images
-7. **Channel Indexing**: Remember channels are 1-indexed for rendering, 0-indexed for pixel access
-8. **Save Settings**: Save rendering settings if they should be permanent
-9. **Compression**: Use compression parameter in renderImage() for faster transfers
-10. **Error Handling**: Check for None returns and handle exceptions
+1. **使用生成器**：建立影像時使用生成器以避免將所有資料載入記憶體
+2. **指定資料類型**：將 NumPy dtypes 與 OMERO 像素類型匹配
+3. **設定物理尺寸**：務必為新影像設定像素大小
+4. **分塊處理大型影像**：以區塊處理大型影像以管理記憶體
+5. **關閉連線**：完成後務必關閉連線
+6. **渲染效率**：渲染多張影像時快取渲染設定
+7. **通道索引**：記住渲染時通道是 1 索引，像素存取時是 0 索引
+8. **儲存設定**：如果應該永久保存則儲存渲染設定
+9. **壓縮**：在 renderImage() 中使用 compression 參數以加快傳輸
+10. **錯誤處理**：檢查 None 傳回值並處理異常

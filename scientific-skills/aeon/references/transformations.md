@@ -1,168 +1,168 @@
-# Transformations
+# 轉換
 
-Aeon provides extensive transformation capabilities for preprocessing, feature extraction, and representation learning from time series data.
+Aeon 提供廣泛的轉換功能，用於時間序列資料的預處理、特徵擷取和表示學習。
 
-## Transformation Types
+## 轉換類型
 
-Aeon distinguishes between:
-- **CollectionTransformers**: Transform multiple time series (collections)
-- **SeriesTransformers**: Transform individual time series
+Aeon 區分：
+- **CollectionTransformers**：轉換多個時間序列（集合）
+- **SeriesTransformers**：轉換單個時間序列
 
-## Collection Transformers
+## 集合轉換器
 
-### Convolution-Based Feature Extraction
+### 基於卷積的特徵擷取
 
-Fast, scalable feature generation using random kernels:
+使用隨機核心的快速、可擴展特徵生成：
 
-- `RocketTransformer` - Random convolutional kernels
-- `MiniRocketTransformer` - Simplified ROCKET for speed
-- `MultiRocketTransformer` - Enhanced ROCKET variant
-- `HydraTransformer` - Multi-resolution dilated convolutions
-- `MultiRocketHydraTransformer` - Combines ROCKET and Hydra
-- `ROCKETGPU` - GPU-accelerated variant
+- `RocketTransformer` - 隨機卷積核心
+- `MiniRocketTransformer` - 簡化的 ROCKET，追求速度
+- `MultiRocketTransformer` - 增強的 ROCKET 變體
+- `HydraTransformer` - 多解析度膨脹卷積
+- `MultiRocketHydraTransformer` - 結合 ROCKET 和 Hydra
+- `ROCKETGPU` - GPU 加速變體
 
-**Use when**: Need fast, scalable features for any ML algorithm, strong baseline performance.
+**使用時機**：需要快速、可擴展的特徵用於任何 ML 演算法，強大的基準效能。
 
-### Statistical Feature Extraction
+### 統計特徵擷取
 
-Domain-agnostic features based on time series characteristics:
+基於時間序列特徵的領域無關特徵：
 
-- `Catch22` - 22 canonical time-series characteristics
-- `TSFresh` - Comprehensive automated feature extraction (100+ features)
-- `TSFreshRelevant` - Feature extraction with relevance filtering
-- `SevenNumberSummary` - Descriptive statistics (mean, std, quantiles)
+- `Catch22` - 22 個典型的時間序列特徵
+- `TSFresh` - 全面的自動特徵擷取（100+ 特徵）
+- `TSFreshRelevant` - 帶有相關性過濾的特徵擷取
+- `SevenNumberSummary` - 描述性統計（平均值、標準差、分位數）
 
-**Use when**: Need interpretable features, domain-agnostic approach, or feeding traditional ML.
+**使用時機**：需要可解釋特徵、領域無關方法，或輸入傳統 ML。
 
-### Dictionary-Based Representations
+### 基於字典的表示
 
-Symbolic approximations for discrete representations:
+用於離散表示的符號近似：
 
-- `SAX` - Symbolic Aggregate approXimation
-- `PAA` - Piecewise Aggregate Approximation
-- `SFA` - Symbolic Fourier Approximation
-- `SFAFast` - Optimized SFA
-- `SFAWhole` - SFA on entire series (no windowing)
-- `BORF` - Bag-of-Receptive-Fields
+- `SAX` - 符號聚合近似
+- `PAA` - 分段聚合近似
+- `SFA` - 符號傅立葉近似
+- `SFAFast` - 優化的 SFA
+- `SFAWhole` - 整個序列上的 SFA（無視窗）
+- `BORF` - 感受野袋
 
-**Use when**: Need discrete/symbolic representation, dimensionality reduction, interpretability.
+**使用時機**：需要離散/符號表示、降維、可解釋性。
 
-### Shapelet-Based Features
+### 基於 Shapelet 的特徵
 
-Discriminative subsequence extraction:
+判別性子序列擷取：
 
-- `RandomShapeletTransform` - Random discriminative shapelets
-- `RandomDilatedShapeletTransform` - Dilated shapelets for multi-scale
-- `SAST` - Scalable And Accurate Subsequence Transform
-- `RSAST` - Randomized SAST
+- `RandomShapeletTransform` - 隨機判別性 shapelets
+- `RandomDilatedShapeletTransform` - 用於多尺度的膨脹 shapelets
+- `SAST` - 可擴展且準確的子序列轉換
+- `RSAST` - 隨機化 SAST
 
-**Use when**: Need interpretable discriminative patterns, phase-invariant features.
+**使用時機**：需要可解釋的判別模式、相位不變特徵。
 
-### Interval-Based Features
+### 基於區間的特徵
 
-Statistical summaries from time intervals:
+來自時間區間的統計摘要：
 
-- `RandomIntervals` - Features from random intervals
-- `SupervisedIntervals` - Supervised interval selection
-- `QUANTTransformer` - Quantile-based interval features
+- `RandomIntervals` - 來自隨機區間的特徵
+- `SupervisedIntervals` - 監督區間選擇
+- `QUANTTransformer` - 基於分位數的區間特徵
 
-**Use when**: Predictive patterns localized to specific windows.
+**使用時機**：預測模式局限於特定視窗。
 
-### Preprocessing Transformations
+### 預處理轉換
 
-Data preparation and normalization:
+資料準備和標準化：
 
-- `MinMaxScaler` - Scale to [0, 1] range
-- `Normalizer` - Z-normalization (zero mean, unit variance)
-- `Centerer` - Center to zero mean
-- `SimpleImputer` - Fill missing values
-- `DownsampleTransformer` - Reduce temporal resolution
-- `Tabularizer` - Convert time series to tabular format
+- `MinMaxScaler` - 縮放到 [0, 1] 範圍
+- `Normalizer` - Z 標準化（零平均值、單位方差）
+- `Centerer` - 中心化為零平均值
+- `SimpleImputer` - 填充遺失值
+- `DownsampleTransformer` - 降低時間解析度
+- `Tabularizer` - 將時間序列轉換為表格格式
 
-**Use when**: Need standardization, missing value handling, format conversion.
+**使用時機**：需要標準化、遺失值處理、格式轉換。
 
-### Specialized Transformations
+### 專門轉換
 
-Advanced analysis methods:
+進階分析方法：
 
-- `MatrixProfile` - Computes distance profiles for pattern discovery
-- `DWTTransformer` - Discrete Wavelet Transform
-- `AutocorrelationFunctionTransformer` - ACF computation
-- `Dobin` - Distance-based Outlier BasIs using Neighbors
-- `SignatureTransformer` - Path signature methods
-- `PLATransformer` - Piecewise Linear Approximation
+- `MatrixProfile` - 計算用於模式發現的距離輪廓
+- `DWTTransformer` - 離散小波變換
+- `AutocorrelationFunctionTransformer` - ACF 計算
+- `Dobin` - 使用鄰居的基於距離的離群值基礎
+- `SignatureTransformer` - 路徑簽名方法
+- `PLATransformer` - 分段線性近似
 
-### Class Imbalance Handling
+### 類別不平衡處理
 
-- `ADASYN` - Adaptive Synthetic Sampling
-- `SMOTE` - Synthetic Minority Over-sampling
-- `OHIT` - Over-sampling with Highly Imbalanced Time series
+- `ADASYN` - 自適應合成抽樣
+- `SMOTE` - 合成少數過抽樣
+- `OHIT` - 高度不平衡時間序列的過抽樣
 
-**Use when**: Classification with imbalanced classes.
+**使用時機**：類別不平衡的分類。
 
-### Pipeline Composition
+### 流程組合
 
-- `CollectionTransformerPipeline` - Chain multiple transformers
+- `CollectionTransformerPipeline` - 串聯多個轉換器
 
-## Series Transformers
+## 序列轉換器
 
-Transform individual time series (e.g., for preprocessing in forecasting).
+轉換單個時間序列（例如，用於預測中的預處理）。
 
-### Statistical Analysis
+### 統計分析
 
-- `AutoCorrelationSeriesTransformer` - Autocorrelation
-- `StatsModelsACF` - ACF using statsmodels
-- `StatsModelsPACF` - Partial autocorrelation
+- `AutoCorrelationSeriesTransformer` - 自相關
+- `StatsModelsACF` - 使用 statsmodels 的 ACF
+- `StatsModelsPACF` - 偏自相關
 
-### Smoothing and Filtering
+### 平滑和過濾
 
-- `ExponentialSmoothing` - Exponentially weighted moving average
-- `MovingAverage` - Simple or weighted moving average
-- `SavitzkyGolayFilter` - Polynomial smoothing
-- `GaussianFilter` - Gaussian kernel smoothing
-- `BKFilter` - Baxter-King bandpass filter
-- `DiscreteFourierApproximation` - Fourier-based filtering
+- `ExponentialSmoothing` - 指數加權移動平均
+- `MovingAverage` - 簡單或加權移動平均
+- `SavitzkyGolayFilter` - 多項式平滑
+- `GaussianFilter` - 高斯核平滑
+- `BKFilter` - Baxter-King 帶通濾波器
+- `DiscreteFourierApproximation` - 基於傅立葉的過濾
 
-**Use when**: Need noise reduction, trend extraction, or frequency filtering.
+**使用時機**：需要降噪、趨勢擷取或頻率過濾。
 
-### Dimensionality Reduction
+### 降維
 
-- `PCASeriesTransformer` - Principal component analysis
-- `PlASeriesTransformer` - Piecewise Linear Approximation
+- `PCASeriesTransformer` - 主成分分析
+- `PlASeriesTransformer` - 分段線性近似
 
-### Transformations
+### 變換
 
-- `BoxCoxTransformer` - Variance stabilization
-- `LogTransformer` - Logarithmic scaling
-- `ClaSPTransformer` - Classification Score Profile
+- `BoxCoxTransformer` - 方差穩定化
+- `LogTransformer` - 對數縮放
+- `ClaSPTransformer` - 分類分數輪廓
 
-### Pipeline Composition
+### 流程組合
 
-- `SeriesTransformerPipeline` - Chain series transformers
+- `SeriesTransformerPipeline` - 串聯序列轉換器
 
-## Quick Start: Feature Extraction
+## 快速開始：特徵擷取
 
 ```python
 from aeon.transformations.collection.convolution_based import RocketTransformer
 from aeon.classification.sklearn import RotationForest
 from aeon.datasets import load_classification
 
-# Load data
+# 載入資料
 X_train, y_train = load_classification("GunPoint", split="train")
 X_test, y_test = load_classification("GunPoint", split="test")
 
-# Extract ROCKET features
+# 擷取 ROCKET 特徵
 rocket = RocketTransformer()
 X_train_features = rocket.fit_transform(X_train)
 X_test_features = rocket.transform(X_test)
 
-# Use with any sklearn classifier
+# 搭配任何 sklearn 分類器使用
 clf = RotationForest()
 clf.fit(X_train_features, y_train)
 accuracy = clf.score(X_test_features, y_test)
 ```
 
-## Quick Start: Preprocessing Pipeline
+## 快速開始：預處理流程
 
 ```python
 from aeon.transformations.collection import (
@@ -171,7 +171,7 @@ from aeon.transformations.collection import (
     CollectionTransformerPipeline
 )
 
-# Build preprocessing pipeline
+# 建立預處理流程
 pipeline = CollectionTransformerPipeline([
     ('imputer', SimpleImputer(strategy='mean')),
     ('scaler', MinMaxScaler())
@@ -180,46 +180,46 @@ pipeline = CollectionTransformerPipeline([
 X_transformed = pipeline.fit_transform(X_train)
 ```
 
-## Quick Start: Series Smoothing
+## 快速開始：序列平滑
 
 ```python
 from aeon.transformations.series import MovingAverage
 
-# Smooth individual time series
+# 平滑單個時間序列
 smoother = MovingAverage(window_size=5)
 y_smoothed = smoother.fit_transform(y)
 ```
 
-## Algorithm Selection
+## 演算法選擇
 
-### For Feature Extraction:
-- **Speed + Performance**: MiniRocketTransformer
-- **Interpretability**: Catch22, TSFresh
-- **Dimensionality reduction**: PAA, SAX, PCA
-- **Discriminative patterns**: Shapelet transforms
-- **Comprehensive features**: TSFresh (with longer runtime)
+### 特徵擷取：
+- **速度 + 效能**：MiniRocketTransformer
+- **可解釋性**：Catch22、TSFresh
+- **降維**：PAA、SAX、PCA
+- **判別模式**：Shapelet 轉換
+- **全面特徵**：TSFresh（執行時間較長）
 
-### For Preprocessing:
-- **Normalization**: Normalizer, MinMaxScaler
-- **Smoothing**: MovingAverage, SavitzkyGolayFilter
-- **Missing values**: SimpleImputer
-- **Frequency analysis**: DWTTransformer, Fourier methods
+### 預處理：
+- **標準化**：Normalizer、MinMaxScaler
+- **平滑**：MovingAverage、SavitzkyGolayFilter
+- **遺失值**：SimpleImputer
+- **頻率分析**：DWTTransformer、傅立葉方法
 
-### For Symbolic Representation:
-- **Fast approximation**: PAA
-- **Alphabet-based**: SAX
-- **Frequency-based**: SFA, SFAFast
+### 符號表示：
+- **快速近似**：PAA
+- **基於字母**：SAX
+- **基於頻率**：SFA、SFAFast
 
-## Best Practices
+## 最佳實務
 
-1. **Fit on training data only**: Avoid data leakage
+1. **僅在訓練資料上擬合**：避免資料洩漏
    ```python
    transformer.fit(X_train)
    X_train_tf = transformer.transform(X_train)
    X_test_tf = transformer.transform(X_test)
    ```
 
-2. **Pipeline composition**: Chain transformers for complex workflows
+2. **流程組合**：串聯轉換器用於複雜工作流程
    ```python
    pipeline = CollectionTransformerPipeline([
        ('imputer', SimpleImputer()),
@@ -228,19 +228,19 @@ y_smoothed = smoother.fit_transform(y)
    ])
    ```
 
-3. **Feature selection**: TSFresh can generate many features; consider selection
+3. **特徵選擇**：TSFresh 可生成許多特徵；考慮選擇
    ```python
    from sklearn.feature_selection import SelectKBest
    selector = SelectKBest(k=100)
    X_selected = selector.fit_transform(X_features, y)
    ```
 
-4. **Memory considerations**: Some transformers memory-intensive on large datasets
-   - Use MiniRocket instead of ROCKET for speed
-   - Consider downsampling for very long series
-   - Use ROCKETGPU for GPU acceleration
+4. **記憶體考量**：某些轉換器在大型資料集上記憶體密集
+   - 使用 MiniRocket 而非 ROCKET 以提高速度
+   - 考慮對非常長的序列進行降抽樣
+   - 使用 ROCKETGPU 進行 GPU 加速
 
-5. **Domain knowledge**: Choose transformations matching domain:
-   - Periodic data: Fourier-based methods
-   - Noisy data: Smoothing filters
-   - Spike detection: Wavelet transforms
+5. **領域知識**：選擇與領域匹配的轉換：
+   - 週期性資料：基於傅立葉的方法
+   - 雜訊資料：平滑濾波器
+   - 尖峰檢測：小波變換

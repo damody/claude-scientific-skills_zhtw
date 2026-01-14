@@ -1,65 +1,65 @@
-# Core Concepts and Technical Details
+# 核心概念和技術細節
 
-## Overview
+## 概述
 
-This reference covers TorchDrug's fundamental architecture, design principles, and technical implementation details.
+本參考文件涵蓋 TorchDrug 的基本架構、設計原則和技術實作細節。
 
-## Architecture Philosophy
+## 架構理念
 
-### Modular Design
+### 模組化設計
 
-TorchDrug separates concerns into distinct modules:
+TorchDrug 將關注點分離為不同的模組：
 
-1. **Representation Models** (models.py): Encode graphs into embeddings
-2. **Task Definitions** (tasks.py): Define learning objectives and evaluation
-3. **Data Handling** (data.py, datasets.py): Graph structures and datasets
-4. **Core Components** (core.py): Base classes and utilities
+1. **表示模型**（models.py）：將圖編碼為嵌入向量
+2. **任務定義**（tasks.py）：定義學習目標和評估
+3. **資料處理**（data.py、datasets.py）：圖結構和資料集
+4. **核心組件**（core.py）：基礎類別和工具
 
-**Benefits:**
-- Reuse representations across tasks
-- Mix and match components
-- Easy experimentation and prototyping
-- Clear separation of concerns
+**優點：**
+- 跨任務重用表示
+- 混合搭配組件
+- 易於實驗和原型開發
+- 清晰的關注點分離
 
-### Configurable System
+### 可配置系統
 
-All components inherit from `core.Configurable`:
-- Serialize to configuration dictionaries
-- Reconstruct from configurations
-- Save and load complete pipelines
-- Reproducible experiments
+所有組件繼承自 `core.Configurable`：
+- 序列化為配置字典
+- 從配置重建
+- 儲存和載入完整管線
+- 可重現的實驗
 
-## Core Components
+## 核心組件
 
 ### core.Configurable
 
-Base class for all TorchDrug components.
+所有 TorchDrug 組件的基礎類別。
 
-**Key Methods:**
-- `config_dict()`: Serialize to dictionary
-- `load_config_dict(config)`: Load from dictionary
-- `save(file)`: Save to file
-- `load(file)`: Load from file
+**關鍵方法：**
+- `config_dict()`：序列化為字典
+- `load_config_dict(config)`：從字典載入
+- `save(file)`：儲存到檔案
+- `load(file)`：從檔案載入
 
-**Example:**
+**範例：**
 ```python
 from torchdrug import core, models
 
 model = models.GIN(input_dim=10, hidden_dims=[256, 256])
 
-# Save configuration
+# 儲存配置
 config = model.config_dict()
 # {'class': 'GIN', 'input_dim': 10, 'hidden_dims': [256, 256], ...}
 
-# Reconstruct model
+# 重建模型
 model2 = core.Configurable.load_config_dict(config)
 ```
 
 ### core.Registry
 
-Decorator for registering models, tasks, and datasets.
+用於註冊模型、任務和資料集的裝飾器。
 
-**Usage:**
+**用法：**
 ```python
 from torchdrug import core as core_td
 
@@ -70,142 +70,142 @@ class CustomModel(nn.Module, core_td.Configurable):
         self.linear = nn.Linear(input_dim, hidden_dim)
 
     def forward(self, graph, input, all_loss, metric):
-        # Model implementation
+        # 模型實作
         pass
 ```
 
-**Benefits:**
-- Models automatically serializable
-- String-based model specification
-- Easy model lookup and instantiation
+**優點：**
+- 模型自動可序列化
+- 基於字串的模型指定
+- 易於模型查找和實例化
 
-## Data Structures
+## 資料結構
 
 ### Graph
 
-Core data structure representing molecular or protein graphs.
+表示分子或蛋白質圖的核心資料結構。
 
-**Attributes:**
-- `num_node`: Number of nodes
-- `num_edge`: Number of edges
-- `node_feature`: Node feature tensor [num_node, feature_dim]
-- `edge_feature`: Edge feature tensor [num_edge, feature_dim]
-- `edge_list`: Edge connectivity [num_edge, 2 or 3]
-- `num_relation`: Number of edge types (for multi-relational)
+**屬性：**
+- `num_node`：節點數量
+- `num_edge`：邊數量
+- `node_feature`：節點特徵張量 [num_node, feature_dim]
+- `edge_feature`：邊特徵張量 [num_edge, feature_dim]
+- `edge_list`：邊連接 [num_edge, 2 or 3]
+- `num_relation`：邊類型數量（用於多關係）
 
-**Methods:**
-- `node_mask(mask)`: Select subset of nodes
-- `edge_mask(mask)`: Select subset of edges
-- `undirected()`: Make graph undirected
-- `directed()`: Make graph directed
+**方法：**
+- `node_mask(mask)`：選擇節點子集
+- `edge_mask(mask)`：選擇邊子集
+- `undirected()`：使圖無向
+- `directed()`：使圖有向
 
-**Batching:**
-- Graphs batched into single disconnected graph
-- Automatic batching in DataLoader
-- Preserves node/edge indices per graph
+**批次處理：**
+- 圖被批次處理成單一斷開的圖
+- DataLoader 中自動批次處理
+- 保留每個圖的節點/邊索引
 
-### Molecule (extends Graph)
+### Molecule（擴展 Graph）
 
-Specialized graph for molecules.
+分子的專用圖。
 
-**Additional Attributes:**
-- `atom_type`: Atomic numbers
-- `bond_type`: Bond types (single, double, triple, aromatic)
-- `formal_charge`: Atomic formal charges
-- `explicit_hs`: Explicit hydrogen counts
+**額外屬性：**
+- `atom_type`：原子序數
+- `bond_type`：鍵類型（單鍵、雙鍵、三鍵、芳香）
+- `formal_charge`：原子形式電荷
+- `explicit_hs`：顯式氫計數
 
-**Methods:**
-- `from_smiles(smiles)`: Create from SMILES string
-- `from_molecule(mol)`: Create from RDKit molecule
-- `to_smiles()`: Convert to SMILES
-- `to_molecule()`: Convert to RDKit molecule
-- `ion_to_molecule()`: Neutralize charges
+**方法：**
+- `from_smiles(smiles)`：從 SMILES 字串建立
+- `from_molecule(mol)`：從 RDKit 分子建立
+- `to_smiles()`：轉換為 SMILES
+- `to_molecule()`：轉換為 RDKit 分子
+- `ion_to_molecule()`：中和電荷
 
-**Example:**
+**範例：**
 ```python
 from torchdrug import data
 
-# From SMILES
+# 從 SMILES
 mol = data.Molecule.from_smiles("CCO")
 
-# Atom features
+# 原子特徵
 print(mol.atom_type)  # [6, 6, 8] (C, C, O)
-print(mol.bond_type)  # [1, 1] (single bonds)
+print(mol.bond_type)  # [1, 1] (單鍵)
 ```
 
-### Protein (extends Graph)
+### Protein（擴展 Graph）
 
-Specialized graph for proteins.
+蛋白質的專用圖。
 
-**Additional Attributes:**
-- `residue_type`: Amino acid types
-- `atom_name`: Atom names (CA, CB, etc.)
-- `atom_type`: Atomic numbers
-- `residue_number`: Residue numbering
-- `chain_id`: Chain identifiers
+**額外屬性：**
+- `residue_type`：胺基酸類型
+- `atom_name`：原子名稱（CA、CB 等）
+- `atom_type`：原子序數
+- `residue_number`：殘基編號
+- `chain_id`：鏈標識符
 
-**Methods:**
-- `from_pdb(pdb_file)`: Load from PDB file
-- `from_sequence(sequence)`: Create from sequence
-- `to_pdb(pdb_file)`: Save to PDB file
+**方法：**
+- `from_pdb(pdb_file)`：從 PDB 檔案載入
+- `from_sequence(sequence)`：從序列建立
+- `to_pdb(pdb_file)`：儲存為 PDB 檔案
 
-**Graph Construction:**
-- Nodes typically represent residues (not atoms)
-- Edges can be sequential, spatial (KNN), or contact-based
-- Configurable edge construction strategies
+**圖構建：**
+- 節點通常表示殘基（非原子）
+- 邊可以是序列性、空間性（KNN）或基於接觸
+- 可配置的邊構建策略
 
-**Example:**
+**範例：**
 ```python
 from torchdrug import data
 
-# Load protein
+# 載入蛋白質
 protein = data.Protein.from_pdb("1a3x.pdb")
 
-# Build graph with multiple edge types
+# 建構具有多種邊類型的圖
 graph = protein.residue_graph(
-    node_position="ca",  # Use Cα positions
-    edge_types=["sequential", "radius"]  # Sequential + spatial edges
+    node_position="ca",  # 使用 Cα 位置
+    edge_types=["sequential", "radius"]  # 序列 + 空間邊
 )
 ```
 
 ### PackedGraph
 
-Efficient batching structure for heterogeneous graphs.
+用於異質圖的高效批次處理結構。
 
-**Purpose:**
-- Batch graphs of different sizes
-- Single GPU memory allocation
-- Efficient parallel processing
+**目的：**
+- 批次處理不同大小的圖
+- 單一 GPU 記憶體配置
+- 高效並行處理
 
-**Attributes:**
-- `num_nodes`: List of node counts per graph
-- `num_edges`: List of edge counts per graph
-- `graph_ind`: Graph index for each node
+**屬性：**
+- `num_nodes`：每個圖的節點計數列表
+- `num_edges`：每個圖的邊計數列表
+- `graph_ind`：每個節點的圖索引
 
-**Use Cases:**
-- Automatic in DataLoader
-- Custom batching strategies
-- Multi-graph operations
+**使用案例：**
+- DataLoader 中自動使用
+- 自訂批次處理策略
+- 多圖操作
 
-## Model Interface
+## 模型介面
 
-### Forward Function Signature
+### Forward 函數簽名
 
-All TorchDrug models follow a standardized interface:
+所有 TorchDrug 模型遵循標準化介面：
 
 ```python
 def forward(self, graph, input, all_loss=None, metric=None):
     """
-    Args:
-        graph (Graph): Batch of graphs
-        input (Tensor): Node input features
-        all_loss (Tensor, optional): Accumulator for losses
-        metric (dict, optional): Dictionary for metrics
+    參數：
+        graph (Graph)：圖的批次
+        input (Tensor)：節點輸入特徵
+        all_loss (Tensor, optional)：損失累加器
+        metric (dict, optional)：指標字典
 
-    Returns:
-        dict: Output dictionary with representation keys
+    返回：
+        dict：包含表示鍵的輸出字典
     """
-    # Model computation
+    # 模型計算
     output = self.layers(graph, input)
 
     return {
@@ -214,127 +214,127 @@ def forward(self, graph, input, all_loss=None, metric=None):
     }
 ```
 
-**Key Points:**
-- `graph`: Batched graph structure
-- `input`: Node features [num_node, input_dim]
-- `all_loss`: Accumulated loss (for multi-task)
-- `metric`: Shared metric dictionary
-- Returns dict with representation types
+**關鍵點：**
+- `graph`：批次圖結構
+- `input`：節點特徵 [num_node, input_dim]
+- `all_loss`：累積損失（用於多任務）
+- `metric`：共享指標字典
+- 返回包含表示類型的字典
 
-### Essential Attributes
+### 必要屬性
 
-**All models must define:**
-- `input_dim`: Expected input feature dimension
-- `output_dim`: Output representation dimension
+**所有模型必須定義：**
+- `input_dim`：預期輸入特徵維度
+- `output_dim`：輸出表示維度
 
-**Purpose:**
-- Automatic dimension checking
-- Compose models in pipelines
-- Error checking and validation
+**目的：**
+- 自動維度檢查
+- 在管線中組合模型
+- 錯誤檢查和驗證
 
-**Example:**
+**範例：**
 ```python
 class CustomModel(nn.Module):
     def __init__(self, input_dim, hidden_dim):
         super().__init__()
         self.input_dim = input_dim
         self.output_dim = hidden_dim
-        # ... layers ...
+        # ... 層 ...
 ```
 
-## Task Interface
+## 任務介面
 
-### Core Task Methods
+### 核心任務方法
 
-All tasks implement these methods:
+所有任務實作這些方法：
 
 ```python
 class CustomTask(tasks.Task):
     def preprocess(self, train_set, valid_set, test_set):
-        """Dataset-specific preprocessing (optional)"""
+        """資料集特定預處理（可選）"""
         pass
 
     def predict(self, batch):
-        """Generate predictions for a batch"""
+        """為批次生成預測"""
         graph, label = batch
         output = self.model(graph, graph.node_feature)
         pred = self.mlp(output["graph_feature"])
         return pred
 
     def target(self, batch):
-        """Extract ground truth labels"""
+        """提取真實標籤"""
         graph, label = batch
         return label
 
     def forward(self, batch):
-        """Compute training loss"""
+        """計算訓練損失"""
         pred = self.predict(batch)
         target = self.target(batch)
         loss = self.criterion(pred, target)
         return loss
 
     def evaluate(self, pred, target):
-        """Compute evaluation metrics"""
+        """計算評估指標"""
         metrics = {}
         metrics["auroc"] = compute_auroc(pred, target)
         metrics["auprc"] = compute_auprc(pred, target)
         return metrics
 ```
 
-### Task Components
+### 任務組件
 
-**Typical Task Structure:**
-1. **Representation Model**: Encodes graph to embeddings
-2. **Readout/Prediction Head**: Maps embeddings to predictions
-3. **Loss Function**: Training objective
-4. **Metrics**: Evaluation measures
+**典型任務結構：**
+1. **表示模型**：將圖編碼為嵌入向量
+2. **讀出/預測頭**：將嵌入向量映射到預測
+3. **損失函數**：訓練目標
+4. **指標**：評估度量
 
-**Example:**
+**範例：**
 ```python
 from torchdrug import tasks, models
 
-# Representation model
+# 表示模型
 model = models.GIN(input_dim=10, hidden_dims=[256, 256])
 
-# Task wraps model with prediction head
+# 任務用預測頭包裝模型
 task = tasks.PropertyPrediction(
     model=model,
-    task=["task1", "task2"],  # Multi-task
+    task=["task1", "task2"],  # 多任務
     criterion="bce",
     metric=["auroc", "auprc"],
     num_mlp_layer=2
 )
 ```
 
-## Training Workflow
+## 訓練工作流程
 
-### Standard Training Loop
+### 標準訓練循環
 
 ```python
 import torch
 from torch.utils.data import DataLoader
 from torchdrug import core, models, tasks, datasets
 
-# 1. Load dataset
+# 1. 載入資料集
 dataset = datasets.BBBP("~/datasets/")
 train_set, valid_set, test_set = dataset.split()
 
-# 2. Create data loaders
+# 2. 建立資料載入器
 train_loader = DataLoader(train_set, batch_size=32, shuffle=True)
 valid_loader = DataLoader(valid_set, batch_size=32)
 
-# 3. Define model and task
+# 3. 定義模型和任務
 model = models.GIN(input_dim=dataset.node_feature_dim,
                    hidden_dims=[256, 256, 256])
 task = tasks.PropertyPrediction(model, task=dataset.tasks,
                                  criterion="bce", metric=["auroc", "auprc"])
 
-# 4. Setup optimizer
+# 4. 設定最佳化器
 optimizer = torch.optim.Adam(task.parameters(), lr=1e-3)
 
-# 5. Training loop
+# 5. 訓練循環
 for epoch in range(100):
-    # Train
+    # 訓練
     task.train()
     for batch in train_loader:
         loss = task(batch)
@@ -342,7 +342,7 @@ for epoch in range(100):
         loss.backward()
         optimizer.step()
 
-    # Validate
+    # 驗證
     task.eval()
     preds, targets = [], []
     for batch in valid_loader:
@@ -357,9 +357,9 @@ for epoch in range(100):
     print(f"Epoch {epoch}: {metrics}")
 ```
 
-### PyTorch Lightning Integration
+### PyTorch Lightning 整合
 
-TorchDrug tasks are compatible with PyTorch Lightning:
+TorchDrug 任務與 PyTorch Lightning 相容：
 
 ```python
 import pytorch_lightning as pl
@@ -388,24 +388,24 @@ class LightningWrapper(pl.LightningModule):
         return torch.optim.Adam(self.parameters(), lr=1e-3)
 ```
 
-## Loss Functions
+## 損失函數
 
-### Built-in Criteria
+### 內建準則
 
-**Classification:**
-- `"bce"`: Binary cross-entropy
-- `"ce"`: Cross-entropy (multi-class)
+**分類：**
+- `"bce"`：二元交叉熵
+- `"ce"`：交叉熵（多類）
 
-**Regression:**
-- `"mse"`: Mean squared error
-- `"mae"`: Mean absolute error
+**迴歸：**
+- `"mse"`：均方誤差
+- `"mae"`：平均絕對誤差
 
-**Knowledge Graph:**
-- `"bce"`: Binary classification of triples
-- `"ce"`: Cross-entropy ranking loss
-- `"margin"`: Margin-based ranking
+**知識圖譜：**
+- `"bce"`：三元組的二元分類
+- `"ce"`：交叉熵排名損失
+- `"margin"`：基於邊界的排名
 
-### Custom Loss
+### 自訂損失
 
 ```python
 class CustomTask(tasks.Task):
@@ -413,153 +413,153 @@ class CustomTask(tasks.Task):
         pred = self.predict(batch)
         target = self.target(batch)
 
-        # Custom loss computation
+        # 自訂損失計算
         loss = custom_loss_function(pred, target)
 
         return loss
 ```
 
-## Metrics
+## 指標
 
-### Common Metrics
+### 常見指標
 
-**Classification:**
-- **AUROC**: Area under ROC curve
-- **AUPRC**: Area under precision-recall curve
-- **Accuracy**: Overall accuracy
-- **F1**: Harmonic mean of precision and recall
+**分類：**
+- **AUROC**：ROC 曲線下面積
+- **AUPRC**：精確度-召回率曲線下面積
+- **Accuracy**：整體準確度
+- **F1**：精確度和召回率的調和平均
 
-**Regression:**
-- **MAE**: Mean absolute error
-- **RMSE**: Root mean squared error
-- **R²**: Coefficient of determination
-- **Pearson**: Pearson correlation
+**迴歸：**
+- **MAE**：平均絕對誤差
+- **RMSE**：均方根誤差
+- **R**：決定係數
+- **Pearson**：皮爾森相關係數
 
-**Ranking (Knowledge Graph):**
-- **MR**: Mean rank
-- **MRR**: Mean reciprocal rank
-- **Hits@K**: Percentage in top K
+**排名（知識圖譜）：**
+- **MR**：平均排名
+- **MRR**：平均倒數排名
+- **Hits@K**：前 K 名中的百分比
 
-### Multi-Task Metrics
+### 多任務指標
 
-For multi-label or multi-task:
-- Metrics computed per task
-- Macro-average across tasks
-- Can weight by task importance
+對於多標籤或多任務：
+- 每個任務計算指標
+- 跨任務的宏觀平均
+- 可按任務重要性加權
 
-## Data Transforms
+## 資料轉換
 
-### Molecule Transforms
+### 分子轉換
 
 ```python
 from torchdrug import transforms
 
-# Add virtual node connected to all atoms
+# 添加連接到所有原子的虛擬節點
 transform1 = transforms.VirtualNode()
 
-# Add virtual edges
+# 添加虛擬邊
 transform2 = transforms.VirtualEdge()
 
-# Compose transforms
+# 組合轉換
 transform = transforms.Compose([transform1, transform2])
 
 dataset = datasets.BBBP("~/datasets/", transform=transform)
 ```
 
-### Protein Transforms
+### 蛋白質轉換
 
 ```python
-# Add edges based on spatial proximity
+# 基於空間鄰近性添加邊
 transform = transforms.TruncateProtein(max_length=500)
 
 dataset = datasets.Fold("~/datasets/", transform=transform)
 ```
 
-## Best Practices
+## 最佳實踐
 
-### Memory Efficiency
+### 記憶體效率
 
-1. **Gradient Accumulation**: For large models
-2. **Mixed Precision**: FP16 training
-3. **Batch Size Tuning**: Balance speed and memory
-4. **Data Loading**: Multiple workers for I/O
+1. **梯度累積**：用於大型模型
+2. **混合精度**：FP16 訓練
+3. **批次大小調整**：平衡速度和記憶體
+4. **資料載入**：多個工作程序用於 I/O
 
-### Reproducibility
+### 可重現性
 
-1. **Set Seeds**: PyTorch, NumPy, Python random
-2. **Deterministic Operations**: `torch.use_deterministic_algorithms(True)`
-3. **Save Configurations**: Use `core.Configurable`
-4. **Version Control**: Track TorchDrug version
+1. **設定種子**：PyTorch、NumPy、Python 隨機
+2. **確定性操作**：`torch.use_deterministic_algorithms(True)`
+3. **儲存配置**：使用 `core.Configurable`
+4. **版本控制**：追蹤 TorchDrug 版本
 
-### Debugging
+### 除錯
 
-1. **Check Dimensions**: Verify `input_dim` and `output_dim`
-2. **Validate Batching**: Print batch statistics
-3. **Monitor Gradients**: Watch for vanishing/exploding
-4. **Overfit Small Batch**: Ensure model capacity
+1. **檢查維度**：驗證 `input_dim` 和 `output_dim`
+2. **驗證批次處理**：列印批次統計
+3. **監控梯度**：注意梯度消失/爆炸
+4. **過擬合小批次**：確保模型容量
 
-### Performance Optimization
+### 效能最佳化
 
-1. **GPU Utilization**: Monitor with `nvidia-smi`
-2. **Profile Code**: Use PyTorch profiler
-3. **Optimize Data Loading**: Prefetch, pin memory
-4. **Compile Models**: Use TorchScript if possible
+1. **GPU 利用率**：使用 `nvidia-smi` 監控
+2. **剖析程式碼**：使用 PyTorch 分析器
+3. **最佳化資料載入**：預取、固定記憶體
+4. **編譯模型**：如果可能使用 TorchScript
 
-## Advanced Topics
+## 進階主題
 
-### Multi-Task Learning
+### 多任務學習
 
-Train single model on multiple related tasks:
+在多個相關任務上訓練單一模型：
 ```python
 task = tasks.PropertyPrediction(
     model,
     task=["task1", "task2", "task3"],
     criterion="bce",
     metric=["auroc"],
-    task_weight=[1.0, 1.0, 2.0]  # Weight task 3 more
+    task_weight=[1.0, 1.0, 2.0]  # 更重視任務 3
 )
 ```
 
-### Transfer Learning
+### 遷移學習
 
-1. Pre-train on large dataset
-2. Fine-tune on target dataset
-3. Optionally freeze early layers
+1. 在大型資料集上預訓練
+2. 在目標資料集上微調
+3. 可選凍結早期層
 
-### Self-Supervised Pre-training
+### 自監督預訓練
 
-Use pre-training tasks:
-- `AttributeMasking`: Mask node features
-- `EdgePrediction`: Predict edge existence
-- `ContextPrediction`: Contrastive learning
+使用預訓練任務：
+- `AttributeMasking`：遮罩節點特徵
+- `EdgePrediction`：預測邊存在
+- `ContextPrediction`：對比學習
 
-### Custom Layers
+### 自訂層
 
-Extend TorchDrug with custom GNN layers:
+使用自訂 GNN 層擴展 TorchDrug：
 ```python
 from torchdrug import layers
 
 class CustomConv(layers.MessagePassingBase):
     def message(self, graph, input):
-        # Custom message function
+        # 自訂訊息函數
         pass
 
     def aggregate(self, graph, message):
-        # Custom aggregation
+        # 自訂聚合
         pass
 
     def combine(self, input, update):
-        # Custom combination
+        # 自訂組合
         pass
 ```
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Forgetting `input_dim` and `output_dim`**: Models won't compose
-2. **Not Batching Properly**: Use PackedGraph for variable-sized graphs
-3. **Data Leakage**: Be careful with scaffold splits and pre-training
-4. **Ignoring Edge Features**: Bonds/spatial info can be critical
-5. **Wrong Evaluation Metrics**: Match metrics to task (AUROC for imbalanced)
-6. **Insufficient Regularization**: Use dropout, weight decay, early stopping
-7. **Not Validating Chemistry**: Generated molecules must be valid
-8. **Overfitting Small Datasets**: Use pre-training or simpler models
+1. **忘記 `input_dim` 和 `output_dim`**：模型將無法組合
+2. **未正確批次處理**：對可變大小的圖使用 PackedGraph
+3. **資料洩漏**：注意骨架分割和預訓練
+4. **忽略邊特徵**：鍵/空間資訊可能很關鍵
+5. **錯誤的評估指標**：將指標與任務匹配（對不平衡使用 AUROC）
+6. **正則化不足**：使用 dropout、權重衰減、早停
+7. **未驗證化學**：生成的分子必須有效
+8. **小型資料集過擬合**：使用預訓練或更簡單的模型

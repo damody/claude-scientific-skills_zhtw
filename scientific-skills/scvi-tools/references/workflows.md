@@ -1,98 +1,98 @@
-# Common Workflows and Best Practices
+# 常見工作流程與最佳實踐
 
-This document covers common workflows, best practices, and advanced usage patterns for scvi-tools.
+本文檔涵蓋 scvi-tools 的常見工作流程、最佳實踐和進階使用模式。
 
-## Standard Analysis Workflow
+## 標準分析工作流程
 
-### 1. Data Loading and Preparation
+### 1. 數據載入與準備
 
 ```python
 import scvi
 import scanpy as sc
 import numpy as np
 
-# Load data (AnnData format required)
+# 載入數據（需要 AnnData 格式）
 adata = sc.read_h5ad("data.h5ad")
-# Or load from other formats
+# 或從其他格式載入
 # adata = sc.read_10x_mtx("filtered_feature_bc_matrix/")
 # adata = sc.read_csv("counts.csv")
 
-# Basic QC metrics
+# 基本 QC 指標
 sc.pp.calculate_qc_metrics(adata, inplace=True)
 adata.var['mt'] = adata.var_names.str.startswith('MT-')
 sc.pp.calculate_qc_metrics(adata, qc_vars=['mt'], inplace=True)
 ```
 
-### 2. Quality Control
+### 2. 品質控制
 
 ```python
-# Filter cells
+# 過濾細胞
 sc.pp.filter_cells(adata, min_genes=200)
 sc.pp.filter_cells(adata, max_genes=5000)
 
-# Filter genes
+# 過濾基因
 sc.pp.filter_genes(adata, min_cells=3)
 
-# Filter by mitochondrial content
+# 按粒線體含量過濾
 adata = adata[adata.obs['pct_counts_mt'] < 20, :]
 
-# Remove doublets (optional, before training)
+# 移除雙細胞（可選，在訓練前）
 sc.external.pp.scrublet(adata)
 adata = adata[~adata.obs['predicted_doublet'], :]
 ```
 
-### 3. Preprocessing for scvi-tools
+### 3. scvi-tools 預處理
 
 ```python
-# IMPORTANT: scvi-tools needs RAW counts
-# If you've already normalized, use the raw layer or reload data
+# 重要：scvi-tools 需要原始計數
+# 如果已經標準化，使用原始層或重新載入數據
 
-# Save raw counts if not already available
+# 如果原始計數不可用，儲存原始計數
 if 'counts' not in adata.layers:
     adata.layers['counts'] = adata.X.copy()
 
-# Feature selection (optional but recommended)
+# 特徵選擇（可選但建議）
 sc.pp.highly_variable_genes(
     adata,
     n_top_genes=4000,
-    subset=False,  # Keep all genes, just mark HVGs
-    batch_key="batch"  # If multiple batches
+    subset=False,  # 保留所有基因，只標記 HVG
+    batch_key="batch"  # 如果有多個批次
 )
 
-# Filter to HVGs (optional)
+# 過濾到 HVG（可選）
 # adata = adata[:, adata.var['highly_variable']]
 ```
 
-### 4. Register Data with scvi-tools
+### 4. 向 scvi-tools 註冊數據
 
 ```python
-# Setup AnnData for scvi-tools
+# 設定 AnnData 用於 scvi-tools
 scvi.model.SCVI.setup_anndata(
     adata,
-    layer="counts",  # Use raw counts
-    batch_key="batch",  # Technical batches
+    layer="counts",  # 使用原始計數
+    batch_key="batch",  # 技術批次
     categorical_covariate_keys=["donor", "condition"],
     continuous_covariate_keys=["percent_mito", "n_counts"]
 )
 
-# Check registration
+# 檢查註冊
 adata.uns['_scvi']['summary_stats']
 ```
 
-### 5. Model Training
+### 5. 模型訓練
 
 ```python
-# Create model
+# 創建模型
 model = scvi.model.SCVI(
     adata,
-    n_latent=30,  # Latent dimensions
-    n_layers=2,   # Network depth
-    n_hidden=128, # Hidden layer size
+    n_latent=30,  # 潛在維度
+    n_layers=2,   # 網路深度
+    n_hidden=128, # 隱藏層大小
     dropout_rate=0.1,
-    gene_likelihood="zinb"  # zero-inflated negative binomial
+    gene_likelihood="zinb"  # 零膨脹負二項分佈
 )
 
-# Train model
+# 訓練模型
 model.train(
     max_epochs=400,
     batch_size=128,
@@ -101,39 +101,39 @@ model.train(
     check_val_every_n_epoch=10
 )
 
-# View training history
+# 查看訓練歷史
 train_history = model.history["elbo_train"]
 val_history = model.history["elbo_validation"]
 ```
 
-### 6. Extract Results
+### 6. 提取結果
 
 ```python
-# Get latent representation
+# 獲取潛在表示
 latent = model.get_latent_representation()
 adata.obsm["X_scVI"] = latent
 
-# Get normalized expression
+# 獲取標準化表達
 normalized = model.get_normalized_expression(
     adata,
     library_size=1e4,
-    n_samples=25  # Monte Carlo samples
+    n_samples=25  # 蒙特卡羅樣本
 )
 adata.layers["scvi_normalized"] = normalized
 ```
 
-### 7. Downstream Analysis
+### 7. 下游分析
 
 ```python
-# Clustering on scVI latent space
+# 在 scVI 潛在空間上聚類
 sc.pp.neighbors(adata, use_rep="X_scVI", n_neighbors=15)
 sc.tl.umap(adata, min_dist=0.3)
 sc.tl.leiden(adata, resolution=0.8, key_added="leiden")
 
-# Visualization
+# 視覺化
 sc.pl.umap(adata, color=["leiden", "batch", "cell_type"])
 
-# Differential expression
+# 差異表達
 de_results = model.differential_expression(
     groupby="leiden",
     group1="0",
@@ -143,53 +143,53 @@ de_results = model.differential_expression(
 )
 ```
 
-### 8. Model Persistence
+### 8. 模型持久化
 
 ```python
-# Save model
+# 儲存模型
 model_dir = "./scvi_model/"
 model.save(model_dir, overwrite=True)
 
-# Save AnnData with results
+# 儲存帶結果的 AnnData
 adata.write("analyzed_data.h5ad")
 
-# Load model later
+# 之後載入模型
 model = scvi.model.SCVI.load(model_dir, adata=adata)
 ```
 
-## Hyperparameter Tuning
+## 超參數調優
 
-### Key Hyperparameters
+### 關鍵超參數
 
-**Architecture**:
-- `n_latent`: Latent space dimensionality (10-50)
-  - Larger for complex, heterogeneous datasets
-  - Smaller for simple datasets or to prevent overfitting
-- `n_layers`: Number of hidden layers (1-3)
-  - More layers for complex data, but diminishing returns
-- `n_hidden`: Nodes per hidden layer (64-256)
-  - Scale with dataset size and complexity
+**架構**：
+- `n_latent`：潛在空間維度（10-50）
+  - 對於複雜、異質的數據集使用較大值
+  - 對於簡單數據集或防止過擬合使用較小值
+- `n_layers`：隱藏層數（1-3）
+  - 更多層適用於複雜數據，但收益遞減
+- `n_hidden`：每個隱藏層的節點數（64-256）
+  - 隨數據集大小和複雜度調整
 
-**Training**:
-- `max_epochs`: Training iterations (200-500)
-  - Use early stopping to prevent overfitting
-- `batch_size`: Samples per batch (64-256)
-  - Larger for big datasets, smaller for limited memory
-- `lr`: Learning rate (0.001 default, usually good)
+**訓練**：
+- `max_epochs`：訓練迭代次數（200-500）
+  - 使用早停防止過擬合
+- `batch_size`：每批樣本數（64-256）
+  - 大數據集使用較大值，記憶體有限使用較小值
+- `lr`：學習率（預設 0.001，通常適用）
 
-**Model-specific**:
-- `gene_likelihood`: Distribution ("zinb", "nb", "poisson")
-  - "zinb" for sparse data with zero-inflation
-  - "nb" for less sparse data
-- `dispersion`: Gene or gene-batch specific
-  - "gene" for simple, "gene-batch" for complex batch effects
+**模型特定**：
+- `gene_likelihood`：分佈（「zinb」、「nb」、「poisson」）
+  - 「zinb」用於零膨脹的稀疏數據
+  - 「nb」用於較不稀疏的數據
+- `dispersion`：基因或基因-批次特定
+  - 「gene」用於簡單情況，「gene-batch」用於複雜批次效應
 
-### Hyperparameter Search Example
+### 超參數搜索範例
 
 ```python
 from scvi.model import SCVI
 
-# Define search space
+# 定義搜索空間
 latent_dims = [10, 20, 30]
 n_layers_options = [1, 2]
 
@@ -205,17 +205,17 @@ for n_latent in latent_dims:
         )
         model.train(max_epochs=200)
 
-        # Evaluate on validation set
+        # 在驗證集上評估
         val_elbo = model.history["elbo_validation"][-1]
 
         if val_elbo > best_score:
             best_score = val_elbo
             best_params = {"n_latent": n_latent, "n_layers": n_layers}
 
-print(f"Best params: {best_params}")
+print(f"最佳參數：{best_params}")
 ```
 
-### Using Optuna for Hyperparameter Optimization
+### 使用 Optuna 進行超參數優化
 
 ```python
 import optuna
@@ -238,58 +238,58 @@ def objective(trial):
 study = optuna.create_study(direction="maximize")
 study.optimize(objective, n_trials=20)
 
-print(f"Best parameters: {study.best_params}")
+print(f"最佳參數：{study.best_params}")
 ```
 
-## GPU Acceleration
+## GPU 加速
 
-### Enable GPU Training
+### 啟用 GPU 訓練
 
 ```python
-# Automatic GPU detection
+# 自動 GPU 檢測
 model = scvi.model.SCVI(adata)
-model.train(accelerator="auto")  # Uses GPU if available
+model.train(accelerator="auto")  # 如果可用則使用 GPU
 
-# Force GPU
+# 強制使用 GPU
 model.train(accelerator="gpu")
 
-# Multi-GPU
+# 多 GPU
 model.train(accelerator="gpu", devices=2)
 
-# Check if GPU is being used
+# 檢查是否正在使用 GPU
 import torch
-print(f"CUDA available: {torch.cuda.is_available()}")
-print(f"GPU count: {torch.cuda.device_count()}")
+print(f"CUDA 可用：{torch.cuda.is_available()}")
+print(f"GPU 數量：{torch.cuda.device_count()}")
 ```
 
-### GPU Memory Management
+### GPU 記憶體管理
 
 ```python
-# Reduce batch size if OOM
-model.train(batch_size=64)  # Instead of default 128
+# 如果 OOM 則減少批次大小
+model.train(batch_size=64)  # 而非預設的 128
 
-# Mixed precision training (saves memory)
+# 混合精度訓練（節省記憶體）
 model.train(precision=16)
 
-# Clear cache between runs
+# 清除運行之間的快取
 import torch
 torch.cuda.empty_cache()
 ```
 
-## Batch Integration Strategies
+## 批次整合策略
 
-### Strategy 1: Simple Batch Key
+### 策略一：簡單批次鍵
 
 ```python
-# For standard batch correction
+# 標準批次校正
 scvi.model.SCVI.setup_anndata(adata, batch_key="batch")
 model = scvi.model.SCVI(adata)
 ```
 
-### Strategy 2: Multiple Covariates
+### 策略二：多個共變量
 
 ```python
-# Correct for multiple technical factors
+# 校正多個技術因素
 scvi.model.SCVI.setup_anndata(
     adata,
     batch_key="sequencing_batch",
@@ -298,11 +298,11 @@ scvi.model.SCVI.setup_anndata(
 )
 ```
 
-### Strategy 3: Hierarchical Batches
+### 策略三：層次批次
 
 ```python
-# When batches have hierarchical structure
-# E.g., samples within studies
+# 當批次具有層次結構時
+# 例如，研究內的樣本
 adata.obs["batch_hierarchy"] = (
     adata.obs["study"].astype(str) + "_" +
     adata.obs["sample"].astype(str)
@@ -311,42 +311,42 @@ adata.obs["batch_hierarchy"] = (
 scvi.model.SCVI.setup_anndata(adata, batch_key="batch_hierarchy")
 ```
 
-## Reference Mapping (scArches)
+## 參考映射（scArches）
 
-### Training Reference Model
+### 訓練參考模型
 
 ```python
-# Train on reference dataset
+# 在參考數據集上訓練
 scvi.model.SCVI.setup_anndata(ref_adata, batch_key="batch")
 ref_model = scvi.model.SCVI(ref_adata)
 ref_model.train()
 
-# Save reference
+# 儲存參考
 ref_model.save("reference_model")
 ```
 
-### Mapping Query to Reference
+### 將查詢映射到參考
 
 ```python
-# Load reference
+# 載入參考
 ref_model = scvi.model.SCVI.load("reference_model", adata=ref_adata)
 
-# Setup query with same parameters
+# 使用相同參數設定查詢
 scvi.model.SCVI.setup_anndata(query_adata, batch_key="batch")
 
-# Transfer learning
+# 遷移學習
 query_model = scvi.model.SCVI.load_query_data(
     query_adata,
     "reference_model"
 )
 
-# Fine-tune on query (optional)
+# 在查詢上微調（可選）
 query_model.train(max_epochs=200)
 
-# Get query embeddings
+# 獲取查詢嵌入
 query_latent = query_model.get_latent_representation()
 
-# Transfer labels using KNN
+# 使用 KNN 遷移標籤
 from sklearn.neighbors import KNeighborsClassifier
 
 knn = KNeighborsClassifier(n_neighbors=15)
@@ -354,34 +354,34 @@ knn.fit(ref_model.get_latent_representation(), ref_adata.obs["cell_type"])
 query_adata.obs["predicted_cell_type"] = knn.predict(query_latent)
 ```
 
-## Model Minification
+## 模型精簡化
 
-Reduce model size for faster inference:
+減少模型大小以加快推斷：
 
 ```python
-# Train full model
+# 訓練完整模型
 model = scvi.model.SCVI(adata)
 model.train()
 
-# Minify for deployment
+# 精簡化用於部署
 minified = model.minify_adata(adata)
 
-# Save minified version
+# 儲存精簡版本
 minified.write("minified_data.h5ad")
 model.save("minified_model")
 
-# Load and use (much faster)
+# 載入並使用（快很多）
 mini_model = scvi.model.SCVI.load("minified_model", adata=minified)
 ```
 
-## Memory-Efficient Data Loading
+## 記憶體高效數據載入
 
-### Using AnnDataLoader
+### 使用 AnnDataLoader
 
 ```python
 from scvi.data import AnnDataLoader
 
-# For very large datasets
+# 對於非常大的數據集
 dataloader = AnnDataLoader(
     adata,
     batch_size=128,
@@ -389,158 +389,158 @@ dataloader = AnnDataLoader(
     drop_last=False
 )
 
-# Custom training loop (advanced)
+# 自定義訓練迴圈（進階）
 for batch in dataloader:
-    # Process batch
+    # 處理批次
     pass
 ```
 
-### Using Backed AnnData
+### 使用 Backed AnnData
 
 ```python
-# For data too large for memory
+# 對於太大無法放入記憶體的數據
 adata = sc.read_h5ad("huge_dataset.h5ad", backed='r')
 
-# scvi-tools works with backed mode
+# scvi-tools 支援 backed 模式
 scvi.model.SCVI.setup_anndata(adata)
 model = scvi.model.SCVI(adata)
 model.train()
 ```
 
-## Model Interpretation
+## 模型解釋
 
-### Feature Importance with SHAP
+### 使用 SHAP 的特徵重要性
 
 ```python
 import shap
 
-# Get SHAP values for interpretability
+# 獲取 SHAP 值用於可解釋性
 explainer = shap.DeepExplainer(model.module, background_data)
 shap_values = explainer.shap_values(test_data)
 
-# Visualize
+# 視覺化
 shap.summary_plot(shap_values, feature_names=adata.var_names)
 ```
 
-### Gene Correlation Analysis
+### 基因相關性分析
 
 ```python
-# Get gene-gene correlation matrix
+# 獲取基因-基因相關性矩陣
 correlation = model.get_feature_correlation_matrix(
     adata,
     transform_batch="batch1"
 )
 
-# Visualize top correlated genes
+# 視覺化前幾個相關基因
 import seaborn as sns
 sns.heatmap(correlation[:50, :50], cmap="coolwarm")
 ```
 
-## Troubleshooting Common Issues
+## 常見問題排除
 
-### Issue: NaN Loss During Training
+### 問題：訓練期間出現 NaN 損失
 
-**Causes**:
-- Learning rate too high
-- Unnormalized input (must use raw counts)
-- Data quality issues
+**原因**：
+- 學習率太高
+- 輸入未標準化（必須使用原始計數）
+- 數據品質問題
 
-**Solutions**:
+**解決方案**：
 ```python
-# Reduce learning rate
+# 降低學習率
 model.train(lr=0.0001)
 
-# Check data
-assert adata.X.min() >= 0  # No negative values
-assert np.isnan(adata.X).sum() == 0  # No NaNs
+# 檢查數據
+assert adata.X.min() >= 0  # 無負值
+assert np.isnan(adata.X).sum() == 0  # 無 NaN
 
-# Use more stable likelihood
+# 使用更穩定的似然函數
 model = scvi.model.SCVI(adata, gene_likelihood="nb")
 ```
 
-### Issue: Poor Batch Correction
+### 問題：批次校正效果差
 
-**Solutions**:
+**解決方案**：
 ```python
-# Increase batch effect modeling
+# 增加批次效應建模
 model = scvi.model.SCVI(
     adata,
-    encode_covariates=True,  # Encode batch in encoder
+    encode_covariates=True,  # 在編碼器中編碼批次
     deeply_inject_covariates=False
 )
 
-# Or try opposite
+# 或嘗試相反設定
 model = scvi.model.SCVI(adata, deeply_inject_covariates=True)
 
-# Use more latent dimensions
+# 使用更多潛在維度
 model = scvi.model.SCVI(adata, n_latent=50)
 ```
 
-### Issue: Model Not Training (ELBO Not Decreasing)
+### 問題：模型沒有訓練（ELBO 沒有下降）
 
-**Solutions**:
+**解決方案**：
 ```python
-# Increase learning rate
+# 增加學習率
 model.train(lr=0.005)
 
-# Increase network capacity
+# 增加網路容量
 model = scvi.model.SCVI(adata, n_hidden=256, n_layers=2)
 
-# Train longer
+# 訓練更久
 model.train(max_epochs=500)
 ```
 
-### Issue: Out of Memory (OOM)
+### 問題：記憶體不足（OOM）
 
-**Solutions**:
+**解決方案**：
 ```python
-# Reduce batch size
+# 減少批次大小
 model.train(batch_size=64)
 
-# Use mixed precision
+# 使用混合精度
 model.train(precision=16)
 
-# Reduce model size
+# 減少模型大小
 model = scvi.model.SCVI(adata, n_latent=10, n_hidden=64)
 
-# Use backed AnnData
+# 使用 backed AnnData
 adata = sc.read_h5ad("data.h5ad", backed='r')
 ```
 
-## Performance Benchmarking
+## 效能基準測試
 
 ```python
 import time
 
-# Time training
+# 計時訓練
 start = time.time()
 model.train(max_epochs=400)
 training_time = time.time() - start
-print(f"Training time: {training_time:.2f}s")
+print(f"訓練時間：{training_time:.2f}s")
 
-# Time inference
+# 計時推斷
 start = time.time()
 latent = model.get_latent_representation()
 inference_time = time.time() - start
-print(f"Inference time: {inference_time:.2f}s")
+print(f"推斷時間：{inference_time:.2f}s")
 
-# Memory usage
+# 記憶體使用
 import psutil
 import os
 process = psutil.Process(os.getpid())
 memory_gb = process.memory_info().rss / 1024**3
-print(f"Memory usage: {memory_gb:.2f} GB")
+print(f"記憶體使用：{memory_gb:.2f} GB")
 ```
 
-## Best Practices Summary
+## 最佳實踐總結
 
-1. **Always use raw counts**: Never log-normalize before scvi-tools
-2. **Feature selection**: Use highly variable genes for efficiency
-3. **Batch correction**: Register all known technical covariates
-4. **Early stopping**: Use validation set to prevent overfitting
-5. **Model saving**: Always save trained models
-6. **GPU usage**: Use GPU for large datasets (>10k cells)
-7. **Hyperparameter tuning**: Start with defaults, tune if needed
-8. **Validation**: Check batch correction visually (UMAP colored by batch)
-9. **Documentation**: Keep track of preprocessing steps
-10. **Reproducibility**: Set random seeds (`scvi.settings.seed = 0`)
+1. **始終使用原始計數**：在 scvi-tools 之前不要對數標準化
+2. **特徵選擇**：使用高變異基因以提高效率
+3. **批次校正**：註冊所有已知的技術共變量
+4. **早停**：使用驗證集防止過擬合
+5. **模型儲存**：始終儲存訓練好的模型
+6. **GPU 使用**：對大數據集（>10k 細胞）使用 GPU
+7. **超參數調優**：從預設值開始，必要時調整
+8. **驗證**：視覺化檢查批次校正（按批次著色的 UMAP）
+9. **文檔**：記錄預處理步驟
+10. **可重複性**：設定隨機種子（`scvi.settings.seed = 0`）

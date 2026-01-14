@@ -1,352 +1,352 @@
-# Molecular Generation
+# 分子生成
 
-## Overview
+## 概述
 
-Molecular generation involves creating novel molecular structures with desired properties. TorchDrug supports both unconditional generation (exploring chemical space) and conditional generation (optimizing for specific properties).
+分子生成涉及創建具有所需性質的新分子結構。TorchDrug 支援無條件生成（探索化學空間）和條件生成（針對特定性質最佳化）。
 
-## Task Types
+## 任務類型
 
 ### AutoregressiveGeneration
 
-Generates molecules step-by-step by sequentially adding atoms and bonds. This approach enables fine-grained control and property optimization during generation.
+透過逐步添加原子和鍵來生成分子。這種方法能夠在生成過程中進行細粒度控制和性質最佳化。
 
-**Key Features:**
-- Sequential atom-by-bond construction
-- Supports property optimization during generation
-- Can incorporate chemical validity constraints
-- Enables multi-objective optimization
+**關鍵特徵：**
+- 序列性原子-鍵構建
+- 支援生成過程中的性質最佳化
+- 可以整合化學有效性約束
+- 啟用多目標最佳化
 
-**Generation Strategies:**
-1. **Beam Search**: Keep top-k candidates at each step
-2. **Sampling**: Probabilistic selection for diversity
-3. **Greedy**: Always select highest probability action
+**生成策略：**
+1. **束搜尋**：每步保留前 k 個候選
+2. **採樣**：機率性選擇以增加多樣性
+3. **貪婪**：始終選擇最高機率動作
 
-**Property Optimization:**
-- Reward shaping based on desired properties
-- Real-time constraint satisfaction
-- Multi-objective balancing (e.g., potency + drug-likeness)
+**性質最佳化：**
+- 基於所需性質的獎勵塑形
+- 即時約束滿足
+- 多目標平衡（如效力 + 類藥性）
 
-### GCPNGeneration (Graph Convolutional Policy Network)
+### GCPNGeneration（圖卷積策略網路）
 
-Uses reinforcement learning to generate molecules optimized for specific properties.
+使用強化學習生成針對特定性質最佳化的分子。
 
-**Components:**
-1. **Policy Network**: Decides which action to take (add atom, add bond)
-2. **Reward Function**: Evaluates generated molecule quality
-3. **Training**: Reinforcement learning with policy gradient
+**組件：**
+1. **策略網路**：決定採取何種動作（添加原子、添加鍵）
+2. **獎勵函數**：評估生成分子的品質
+3. **訓練**：使用策略梯度的強化學習
 
-**Advantages:**
-- Direct optimization of non-differentiable objectives
-- Can incorporate complex domain knowledge
-- Balances exploration and exploitation
+**優點：**
+- 直接最佳化不可微分目標
+- 可以整合複雜領域知識
+- 平衡探索和利用
 
-**Applications:**
-- Drug design with specific targets
-- Material discovery with property constraints
-- Multi-objective molecular optimization
+**應用：**
+- 針對特定標靶的藥物設計
+- 具有性質約束的材料發現
+- 多目標分子最佳化
 
-## Generative Models
+## 生成模型
 
 ### GraphAutoregressiveFlow
 
-Normalizing flow model for molecular generation with exact likelihood computation.
+具有精確似然計算的分子生成正規化流模型。
 
-**Architecture:**
-- Coupling layers transform simple distribution to complex molecular distribution
-- Invertible transformations enable density estimation
-- Supports conditional generation
+**架構：**
+- 耦合層將簡單分佈轉換為複雜分子分佈
+- 可逆變換實現密度估計
+- 支援條件生成
 
-**Key Features:**
-- Exact likelihood computation (vs. VAE's approximate likelihood)
-- Stable training (vs. GAN's adversarial training)
-- Efficient sampling through invertible transformations
-- Can generate molecules with specified properties
+**關鍵特徵：**
+- 精確似然計算（vs. VAE 的近似似然）
+- 穩定訓練（vs. GAN 的對抗訓練）
+- 通過可逆變換高效採樣
+- 可以生成具有指定性質的分子
 
-**Training:**
-- Maximum likelihood on molecule dataset
-- Optional property prediction head for conditional generation
-- Typically trained on ZINC or QM9
+**訓練：**
+- 在分子資料集上的最大似然
+- 用於條件生成的可選性質預測頭
+- 通常在 ZINC 或 QM9 上訓練
 
-**Use Cases:**
-- Generating diverse drug-like molecules
-- Interpolation between known molecules
-- Density estimation for molecular space
+**使用案例：**
+- 生成多樣的類藥分子
+- 已知分子間的插值
+- 分子空間的密度估計
 
-## Generation Workflows
+## 生成工作流程
 
-### Unconditional Generation
+### 無條件生成
 
-Generate diverse molecules without specific property targets.
+生成多樣分子而無特定性質目標。
 
-**Workflow:**
-1. Train generative model on molecule dataset (e.g., ZINC250k)
-2. Sample from learned distribution
-3. Post-process for validity and uniqueness
-4. Evaluate diversity metrics
+**工作流程：**
+1. 在分子資料集上訓練生成模型（如 ZINC250k）
+2. 從學習的分佈中採樣
+3. 後處理以確保有效性和唯一性
+4. 評估多樣性指標
 
-**Evaluation Metrics:**
-- **Validity**: Percentage of chemically valid molecules
-- **Uniqueness**: Percentage of unique molecules among valid
-- **Novelty**: Percentage not in training set
-- **Diversity**: Internal diversity using fingerprint similarity
+**評估指標：**
+- **有效性**：化學有效分子的百分比
+- **唯一性**：有效分子中唯一分子的百分比
+- **新穎性**：不在訓練集中的百分比
+- **多樣性**：使用指紋相似性的內部多樣性
 
-### Conditional Generation
+### 條件生成
 
-Generate molecules optimized for specific properties.
+生成針對特定性質最佳化的分子。
 
-**Property Targets:**
-- **Drug-likeness**: LogP, QED, Lipinski's rule of five
-- **Synthesizability**: SA score, retrosynthesis feasibility
-- **Bioactivity**: Predicted IC50, binding affinity
-- **ADMET**: Absorption, distribution, metabolism, excretion, toxicity
-- **Multi-objective**: Balance multiple properties simultaneously
+**性質目標：**
+- **類藥性**：LogP、QED、Lipinski 五規則
+- **可合成性**：SA 分數、逆合成可行性
+- **生物活性**：預測的 IC50、結合親和力
+- **ADMET**：吸收、分佈、代謝、排泄、毒性
+- **多目標**：同時平衡多個性質
 
-**Workflow:**
-1. Define reward function combining property objectives
-2. Train GCPN or condition flow model on properties
-3. Generate molecules with desired property ranges
-4. Validate generated molecules (in silico → wet lab)
+**工作流程：**
+1. 定義結合性質目標的獎勵函數
+2. 在性質上訓練 GCPN 或條件流模型
+3. 生成具有所需性質範圍的分子
+4. 驗證生成的分子（矽內 → 濕實驗室）
 
-### Scaffold-Based Generation
+### 基於骨架的生成
 
-Generate molecules around a fixed scaffold or core structure.
+圍繞固定骨架或核心結構生成分子。
 
-**Applications:**
-- Lead optimization keeping core pharmacophore
-- R-group enumeration for SAR studies
-- Fragment linking and growing
+**應用：**
+- 保持核心藥效團的先導化合物最佳化
+- SAR 研究的 R 基團枚舉
+- 片段連接和生長
 
-**Approaches:**
-- Mask scaffold during training
-- Condition generation on scaffold
-- Post-generation grafting
+**方法：**
+- 訓練期間遮罩骨架
+- 基於骨架的條件生成
+- 生成後嫁接
 
-### Fragment-Based Generation
+### 基於片段的生成
 
-Build molecules from validated fragments.
+從已驗證的片段構建分子。
 
-**Benefits:**
-- Ensures drug-like substructures
-- Reduces search space
-- Incorporates medicinal chemistry knowledge
+**優點：**
+- 確保類藥子結構
+- 減少搜尋空間
+- 整合藥物化學知識
 
-**Methods:**
-- Fragment library as building blocks
-- Vocabulary-based generation
-- Fragment linking with learned linkers
+**方法：**
+- 片段庫作為構建模組
+- 基於詞彙的生成
+- 使用學習連接子的片段連接
 
-## Property Optimization Strategies
+## 性質最佳化策略
 
-### Single-Objective Optimization
+### 單目標最佳化
 
-Maximize or minimize a single property (e.g., binding affinity).
+最大化或最小化單一性質（如結合親和力）。
 
-**Approach:**
-- Define scalar reward function
-- Use GCPN with RL training
-- Generate and rank candidates
+**方法：**
+- 定義標量獎勵函數
+- 使用 RL 訓練的 GCPN
+- 生成並排名候選物
 
-**Challenges:**
-- May sacrifice other important properties
-- Risk of adversarial examples (valid but non-drug-like)
-- Need constraints on drug-likeness
+**挑戰：**
+- 可能犧牲其他重要性質
+- 對抗性範例風險（有效但非類藥）
+- 需要對類藥性的約束
 
-### Multi-Objective Optimization
+### 多目標最佳化
 
-Balance multiple competing objectives (e.g., potency, selectivity, synthesizability).
+平衡多個競爭目標（如效力、選擇性、可合成性）。
 
-**Weighting Approaches:**
-- **Linear combination**: w1×prop1 + w2×prop2 + ...
-- **Pareto optimization**: Find non-dominated solutions
-- **Constraint satisfaction**: Threshold on secondary objectives
+**加權方法：**
+- **線性組合**：w1×性質1 + w2×性質2 + ...
+- **帕累托最佳化**：尋找非支配解
+- **約束滿足**：次要目標上的閾值
 
-**Example Objectives:**
-- High binding affinity (target)
-- Low binding affinity (off-targets)
-- High synthesizability (SA score)
-- Drug-like properties (QED)
-- Low molecular weight
+**範例目標：**
+- 高結合親和力（標靶）
+- 低結合親和力（脫靶）
+- 高可合成性（SA 分數）
+- 類藥性質（QED）
+- 低分子量
 
-**Workflow:**
+**工作流程：**
 ```python
 from torchdrug import tasks
 
-# Define multi-objective reward
+# 定義多目標獎勵
 def reward_function(mol):
     affinity_score = predict_binding(mol)
     druglikeness = calculate_qed(mol)
     synthesizability = sa_score(mol)
 
-    # Weighted combination
+    # 加權組合
     reward = 0.5 * affinity_score + 0.3 * druglikeness + 0.2 * (1 - synthesizability)
     return reward
 
-# GCPN task with custom reward
+# 具有自訂獎勵的 GCPN 任務
 task = tasks.GCPNGeneration(
     model,
     reward_function=reward_function,
-    criterion="ppo"  # Proximal policy optimization
+    criterion="ppo"  # 近端策略最佳化
 )
 ```
 
-### Constraint-Based Generation
+### 基於約束的生成
 
-Generate molecules satisfying hard constraints.
+生成滿足硬約束的分子。
 
-**Common Constraints:**
-- Molecular weight range
-- LogP range
-- Number of rotatable bonds
-- Ring count limits
-- Substructure inclusion/exclusion
-- Synthetic accessibility threshold
+**常見約束：**
+- 分子量範圍
+- LogP 範圍
+- 可旋轉鍵數量
+- 環計數限制
+- 子結構包含/排除
+- 合成可及性閾值
 
-**Implementation:**
-- Validity checking during generation
-- Early stopping for invalid molecules
-- Penalty terms in reward function
+**實作：**
+- 生成期間的有效性檢查
+- 無效分子的早停
+- 獎勵函數中的懲罰項
 
-## Training Considerations
+## 訓練考量
 
-### Dataset Selection
+### 資料集選擇
 
-**ZINC (Drug-like compounds):**
-- ZINC250k: 250,000 compounds
-- ZINC2M: 2 million compounds
-- Pre-filtered for drug-likeness
-- Good for drug discovery applications
+**ZINC（類藥化合物）：**
+- ZINC250k：250,000 化合物
+- ZINC2M：200 萬化合物
+- 預過濾類藥性
+- 適合藥物發現應用
 
-**QM9 (Small organic molecules):**
-- 133,885 molecules
-- Includes quantum properties
-- Good for property prediction models
+**QM9（小型有機分子）：**
+- 133,885 分子
+- 包含量子性質
+- 適合性質預測模型
 
-**ChEMBL (Bioactive molecules):**
-- Millions of bioactive compounds
-- Activity data available
-- Target-specific generation
+**ChEMBL（生物活性分子）：**
+- 數百萬生物活性化合物
+- 有活性資料
+- 標靶特定生成
 
-**Custom Datasets:**
-- Focus on specific chemical space
-- Include expert knowledge
-- Domain-specific constraints
+**自訂資料集：**
+- 專注於特定化學空間
+- 包含專家知識
+- 領域特定約束
 
-### Data Augmentation
+### 資料增強
 
-**SMILES Augmentation:**
-- Generate multiple SMILES for same molecule
-- Helps model learn canonical representations
-- Improves robustness
+**SMILES 增強：**
+- 為相同分子生成多個 SMILES
+- 幫助模型學習規範表示
+- 提高穩健性
 
-**Graph Augmentation:**
-- Random node/edge masking
-- Subgraph sampling
-- Motif substitution
+**圖增強：**
+- 隨機節點/邊遮罩
+- 子圖採樣
+- 基序替換
 
-### Model Architecture Choices
+### 模型架構選擇
 
-**For Small Molecules (<30 atoms):**
-- Simpler architectures sufficient
-- Faster training and generation
-- GCN or GIN backbone
+**小分子（<30 原子）：**
+- 更簡單架構足夠
+- 更快訓練和生成
+- GCN 或 GIN 骨幹
 
-**For Drug-like Molecules:**
-- Deeper architectures (4-6 layers)
-- Attention mechanisms help
-- Consider molecular fingerprints
+**類藥分子：**
+- 更深架構（4-6 層）
+- 注意力機制有幫助
+- 考慮分子指紋
 
-**For Macrocycles/Polymers:**
-- Handle larger graphs
-- Ring closure mechanisms important
-- Long-range dependencies
+**大環/聚合物：**
+- 處理更大的圖
+- 環閉合機制重要
+- 長距離依賴性
 
-## Validation and Filtering
+## 驗證和過濾
 
-### In Silico Validation
+### 矽內驗證
 
-**Chemical Validity:**
-- Valence rules
-- Aromaticity rules
-- Charge neutrality
-- Stable substructures
+**化學有效性：**
+- 價態規則
+- 芳香性規則
+- 電荷中性
+- 穩定子結構
 
-**Drug-likeness Filters:**
-- Lipinski's rule of five
-- Veber's rules
-- PAINS filters (pan-assay interference compounds)
-- BRENK filters (toxic/reactive substructures)
+**類藥性過濾：**
+- Lipinski 五規則
+- Veber 規則
+- PAINS 過濾（泛測定干擾化合物）
+- BRENK 過濾（毒性/反應性子結構）
 
-**Synthesizability:**
-- SA score (synthetic accessibility)
-- Retrosynthesis prediction
-- Commercial availability of precursors
+**可合成性：**
+- SA 分數（合成可及性）
+- 逆合成預測
+- 前驅體的商業可用性
 
-**Property Prediction:**
-- ADMET properties
-- Toxicity prediction
-- Off-target binding
-- Metabolic stability
+**性質預測：**
+- ADMET 性質
+- 毒性預測
+- 脫靶結合
+- 代謝穩定性
 
-### Ranking and Selection
+### 排名和選擇
 
-**Criteria:**
-1. Predicted target affinity
-2. Drug-likeness score
-3. Synthesizability
-4. Novelty (dissimilarity to known actives)
-5. Diversity (within generated set)
-6. Predicted ADMET properties
+**標準：**
+1. 預測標靶親和力
+2. 類藥性分數
+3. 可合成性
+4. 新穎性（與已知活性物的不相似度）
+5. 多樣性（生成集內）
+6. 預測 ADMET 性質
 
-**Selection Strategies:**
-- Pareto frontier selection
-- Weighted scoring
-- Clustering and representative selection
-- Active learning for wet lab validation
+**選擇策略：**
+- 帕累托前沿選擇
+- 加權評分
+- 聚類和代表性選擇
+- 用於濕實驗室驗證的主動學習
 
-## Best Practices
+## 最佳實踐
 
-1. **Start Simple**: Begin with unconditional generation, then add constraints
-2. **Validate Chemistry**: Always check for valid molecules and drug-likeness
-3. **Diverse Training Data**: Use large, diverse datasets for better generalization
-4. **Multi-Objective**: Consider multiple properties from the start
-5. **Iterative Refinement**: Generate → validate → retrain with feedback
-6. **Domain Expert Review**: Consult medicinal chemists before synthesis
-7. **Benchmark**: Compare against known actives and random samples
-8. **Synthesizability**: Prioritize molecules that can actually be made
-9. **Explainability**: Understand why model generates certain structures
-10. **Wet Lab Validation**: Ultimately validate promising candidates experimentally
+1. **從簡單開始**：先進行無條件生成，再添加約束
+2. **驗證化學**：始終檢查有效分子和類藥性
+3. **多樣訓練資料**：使用大型、多樣的資料集以更好泛化
+4. **多目標**：從一開始就考慮多個性質
+5. **迭代改進**：生成 → 驗證 → 使用反饋重訓練
+6. **領域專家審查**：合成前諮詢藥物化學家
+7. **基準測試**：與已知活性物和隨機樣本比較
+8. **可合成性**：優先考慮實際可製造的分子
+9. **可解釋性**：理解模型為何生成某些結構
+10. **濕實驗室驗證**：最終實驗驗證有前途的候選物
 
-## Common Applications
+## 常見應用
 
-### Drug Discovery
-- Lead generation for novel targets
-- Lead optimization around active scaffolds
-- Bioisostere replacement
-- Fragment elaboration
+### 藥物發現
+- 新標靶的先導化合物生成
+- 圍繞活性骨架的先導化合物最佳化
+- 生物電子等排體替換
+- 片段延伸
 
-### Materials Science
-- Polymer design with target properties
-- Catalyst discovery
-- Energy storage materials
-- Photovoltaic materials
+### 材料科學
+- 具有目標性質的聚合物設計
+- 催化劑發現
+- 儲能材料
+- 光伏材料
 
-### Chemical Biology
-- Probe molecule design
-- Degrader (PROTAC) design
-- Molecular glue discovery
+### 化學生物學
+- 探針分子設計
+- 降解劑（PROTAC）設計
+- 分子膠發現
 
-## Integration with Other Tools
+## 與其他工具的整合
 
-**Docking:**
-- Generate molecules → Dock to target → Retrain with docking scores
+**對接：**
+- 生成分子 → 對接到標靶 → 使用對接分數重訓練
 
-**Retrosynthesis:**
-- Filter generated molecules by synthetic accessibility
-- Plan synthesis routes for top candidates
+**逆合成：**
+- 按合成可及性過濾生成的分子
+- 為頂級候選物規劃合成路線
 
-**Property Prediction:**
-- Use trained property prediction models as reward functions
-- Multi-task learning with generation and prediction
+**性質預測：**
+- 使用訓練好的性質預測模型作為獎勵函數
+- 生成和預測的多任務學習
 
-**Active Learning:**
-- Generate candidates → Predict properties → Synthesize best → Retrain
+**主動學習：**
+- 生成候選物 → 預測性質 → 合成最佳 → 重訓練

@@ -1,108 +1,108 @@
-# Molfeat API Reference
+# Molfeat API 參考
 
-## Core Modules
+## 核心模組
 
-Molfeat is organized into several key modules that provide different aspects of molecular featurization:
+Molfeat 組織為幾個關鍵模組，提供分子特徵化的不同面向：
 
-- **`molfeat.store`** - Manages model loading, listing, and registration
-- **`molfeat.calc`** - Provides calculators for single-molecule featurization
-- **`molfeat.trans`** - Offers scikit-learn compatible transformers for batch processing
-- **`molfeat.utils`** - Utility functions for data handling
-- **`molfeat.viz`** - Visualization tools for molecular features
+- **`molfeat.store`** - 管理模型載入、列表和註冊
+- **`molfeat.calc`** - 提供單分子特徵化的計算器
+- **`molfeat.trans`** - 提供 scikit-learn 相容的批次處理轉換器
+- **`molfeat.utils`** - 資料處理的工具函數
+- **`molfeat.viz`** - 分子特徵的視覺化工具
 
 ---
 
-## molfeat.calc - Calculators
+## molfeat.calc - 計算器
 
-Calculators are callable objects that convert individual molecules into feature vectors. They accept either RDKit `Chem.Mol` objects or SMILES strings as input.
+計算器（Calculators）是可呼叫物件，將單個分子轉換為特徵向量。它們接受 RDKit `Chem.Mol` 物件或 SMILES 字串作為輸入。
 
-### SerializableCalculator (Base Class)
+### SerializableCalculator（基礎類別）
 
-Base abstract class for all calculators. When subclassing, must implement:
-- `__call__()` - Required method for featurization
-- `__len__()` - Optional, returns output length
-- `columns` - Optional property, returns feature names
-- `batch_compute()` - Optional, for efficient batch processing
+所有計算器的基礎抽象類別。建立子類別時，必須實作：
+- `__call__()` - 特徵化的必要方法
+- `__len__()` - 可選，返回輸出長度
+- `columns` - 可選屬性，返回特徵名稱
+- `batch_compute()` - 可選，用於高效批次處理
 
-**State Management Methods:**
-- `to_state_json()` - Save calculator state as JSON
-- `to_state_yaml()` - Save calculator state as YAML
-- `from_state_dict()` - Load calculator from state dictionary
-- `to_state_dict()` - Export calculator state as dictionary
+**狀態管理方法：**
+- `to_state_json()` - 將計算器狀態儲存為 JSON
+- `to_state_yaml()` - 將計算器狀態儲存為 YAML
+- `from_state_dict()` - 從狀態字典載入計算器
+- `to_state_dict()` - 將計算器狀態匯出為字典
 
 ### FPCalculator
 
-Computes molecular fingerprints. Supports 15+ fingerprint methods.
+計算分子指紋。支援 15 種以上的指紋方法。
 
-**Supported Fingerprint Types:**
+**支援的指紋類型：**
 
-**Structural Fingerprints:**
-- `ecfp` - Extended-connectivity fingerprints (circular)
-- `fcfp` - Functional-class fingerprints
-- `rdkit` - RDKit topological fingerprints
-- `maccs` - MACCS keys (166-bit structural keys)
-- `avalon` - Avalon fingerprints
-- `pattern` - Pattern fingerprints
-- `layered` - Layered fingerprints
+**結構指紋：**
+- `ecfp` - 擴展連接指紋（Extended-connectivity fingerprints，圓形）
+- `fcfp` - 功能類別指紋（Functional-class fingerprints）
+- `rdkit` - RDKit 拓撲指紋
+- `maccs` - MACCS 鍵（166 位元結構鍵）
+- `avalon` - Avalon 指紋
+- `pattern` - 模式指紋
+- `layered` - 分層指紋
 
-**Atom-based Fingerprints:**
-- `atompair` - Atom pair fingerprints
-- `atompair-count` - Counted atom pairs
-- `topological` - Topological torsion fingerprints
-- `topological-count` - Counted topological torsions
+**原子指紋：**
+- `atompair` - 原子對指紋
+- `atompair-count` - 計數原子對
+- `topological` - 拓撲扭轉指紋
+- `topological-count` - 計數拓撲扭轉
 
-**Specialized Fingerprints:**
-- `map4` - MinHashed atom-pair fingerprint up to 4 bonds
-- `secfp` - SMILES extended connectivity fingerprint
-- `erg` - Extended reduced graphs
-- `estate` - Electrotopological state indices
+**專門指紋：**
+- `map4` - 最小雜湊原子對指紋（最多 4 個鍵）
+- `secfp` - SMILES 擴展連接指紋
+- `erg` - 擴展簡化圖
+- `estate` - 電拓撲狀態指數
 
-**Parameters:**
-- `method` (str) - Fingerprint type name
-- `radius` (int) - Radius for circular fingerprints (default: 3)
-- `fpSize` (int) - Fingerprint size (default: 2048)
-- `includeChirality` (bool) - Include chirality information
-- `counting` (bool) - Use count vectors instead of binary
+**參數：**
+- `method` (str) - 指紋類型名稱
+- `radius` (int) - 圓形指紋的半徑（預設：3）
+- `fpSize` (int) - 指紋大小（預設：2048）
+- `includeChirality` (bool) - 包含手性資訊
+- `counting` (bool) - 使用計數向量而非二元
 
-**Usage:**
+**使用方式：**
 ```python
 from molfeat.calc import FPCalculator
 
-# Create fingerprint calculator
+# 建立指紋計算器
 calc = FPCalculator("ecfp", radius=3, fpSize=2048)
 
-# Compute fingerprint for single molecule
-fp = calc("CCO")  # Returns numpy array
+# 計算單個分子的指紋
+fp = calc("CCO")  # 返回 numpy 陣列
 
-# Get fingerprint length
+# 取得指紋長度
 length = len(calc)  # 2048
 
-# Get feature names
+# 取得特徵名稱
 names = calc.columns
 ```
 
-**Common Fingerprint Dimensions:**
-- MACCS: 167 dimensions
-- ECFP (default): 2048 dimensions
-- MAP4 (default): 1024 dimensions
+**常見指紋維度：**
+- MACCS：167 維
+- ECFP（預設）：2048 維
+- MAP4（預設）：1024 維
 
-### Descriptor Calculators
+### 描述符計算器
 
 **RDKitDescriptors2D**
-Computes 2D molecular descriptors using RDKit.
+使用 RDKit 計算 2D 分子描述符。
 
 ```python
 from molfeat.calc import RDKitDescriptors2D
 
 calc = RDKitDescriptors2D()
-descriptors = calc("CCO")  # Returns 200+ descriptors
+descriptors = calc("CCO")  # 返回 200+ 描述符
 ```
 
 **RDKitDescriptors3D**
-Computes 3D molecular descriptors (requires conformer generation).
+計算 3D 分子描述符（需要構象生成）。
 
 **MordredDescriptors**
-Calculates over 1800 molecular descriptors using Mordred.
+使用 Mordred 計算超過 1800 個分子描述符。
 
 ```python
 from molfeat.calc import MordredDescriptors
@@ -111,218 +111,218 @@ calc = MordredDescriptors()
 descriptors = calc("CCO")
 ```
 
-### Pharmacophore Calculators
+### 藥效團計算器
 
 **Pharmacophore2D**
-RDKit's 2D pharmacophore fingerprint generation.
+RDKit 的 2D 藥效團指紋生成。
 
 **Pharmacophore3D**
-Consensus pharmacophore fingerprints from multiple conformers.
+來自多個構象的共識藥效團指紋。
 
 **CATSCalculator**
-Computes Chemically Advanced Template Search (CATS) descriptors - pharmacophore point pair distributions.
+計算化學高級模板搜索（Chemically Advanced Template Search，CATS）描述符 - 藥效團點對分佈。
 
-**Parameters:**
-- `mode` - "2D" or "3D" distance calculations
-- `dist_bins` - Distance bins for pair distributions
-- `scale` - Scaling mode: "raw", "num", or "count"
+**參數：**
+- `mode` - "2D" 或 "3D" 距離計算
+- `dist_bins` - 對分佈的距離區間
+- `scale` - 縮放模式："raw"、"num" 或 "count"
 
 ```python
 from molfeat.calc import CATSCalculator
 
 calc = CATSCalculator(mode="2D", scale="raw")
-cats = calc("CCO")  # Returns 21 descriptors by default
+cats = calc("CCO")  # 預設返回 21 個描述符
 ```
 
-### Shape Descriptors
+### 形狀描述符
 
 **USRDescriptors**
-Ultrafast shape recognition descriptors (multiple variants).
+超快形狀識別（Ultrafast shape recognition）描述符（多種變體）。
 
 **ElectroShapeDescriptors**
-Electrostatic shape descriptors combining shape, chirality, and electrostatics.
+結合形狀、手性和靜電的電形狀描述符。
 
-### Graph-Based Calculators
+### 圖形計算器
 
 **ScaffoldKeyCalculator**
-Computes 40+ scaffold-based molecular properties.
+計算 40+ 種基於骨架的分子屬性。
 
 **AtomCalculator**
-Atom-level featurization for graph neural networks.
+用於圖神經網路的原子級特徵化。
 
 **BondCalculator**
-Bond-level featurization for graph neural networks.
+用於圖神經網路的鍵級特徵化。
 
-### Utility Function
+### 工具函數
 
 **get_calculator()**
-Factory function to instantiate calculators by name.
+按名稱實例化計算器的工廠函數。
 
 ```python
 from molfeat.calc import get_calculator
 
-# Instantiate any calculator by name
+# 按名稱實例化任何計算器
 calc = get_calculator("ecfp", radius=3)
 calc = get_calculator("maccs")
 calc = get_calculator("desc2D")
 ```
 
-Raises `ValueError` for unsupported featurizers.
+對不支援的特徵提取器引發 `ValueError`。
 
 ---
 
-## molfeat.trans - Transformers
+## molfeat.trans - 轉換器
 
-Transformers wrap calculators into complete featurization pipelines for batch processing.
+轉換器（Transformers）將計算器包裝成完整的批次處理特徵化管線。
 
 ### MoleculeTransformer
 
-Scikit-learn compatible transformer for batch molecular featurization.
+用於批次分子特徵化的 Scikit-learn 相容轉換器。
 
-**Key Parameters:**
-- `featurizer` - Calculator or featurizer to use
-- `n_jobs` (int) - Number of parallel jobs (-1 for all cores)
-- `dtype` - Output data type (numpy float32/64, torch tensors)
-- `verbose` (bool) - Enable verbose logging
-- `ignore_errors` (bool) - Continue on failures (returns None for failed molecules)
+**關鍵參數：**
+- `featurizer` - 要使用的計算器或特徵提取器
+- `n_jobs` (int) - 平行任務數（-1 表示所有核心）
+- `dtype` - 輸出資料類型（numpy float32/64、torch 張量）
+- `verbose` (bool) - 啟用詳細記錄
+- `ignore_errors` (bool) - 失敗時繼續（對失敗的分子返回 None）
 
-**Essential Methods:**
-- `transform(mols)` - Processes batches and returns representations
-- `_transform(mol)` - Handles individual molecule featurization
-- `__call__(mols)` - Convenience wrapper around transform()
-- `preprocess(mol)` - Prepares input molecules (not automatically applied)
-- `to_state_yaml_file(path)` - Save transformer configuration
-- `from_state_yaml_file(path)` - Load transformer configuration
+**基本方法：**
+- `transform(mols)` - 處理批次並返回表示
+- `_transform(mol)` - 處理單個分子特徵化
+- `__call__(mols)` - transform() 的便捷包裝器
+- `preprocess(mol)` - 準備輸入分子（不自動應用）
+- `to_state_yaml_file(path)` - 儲存轉換器配置
+- `from_state_yaml_file(path)` - 載入轉換器配置
 
-**Usage:**
+**使用方式：**
 ```python
 from molfeat.calc import FPCalculator
 from molfeat.trans import MoleculeTransformer
 import datamol as dm
 
-# Load molecules
+# 載入分子
 smiles = dm.data.freesolv().sample(100).smiles.values
 
-# Create transformer
+# 建立轉換器
 calc = FPCalculator("ecfp")
 transformer = MoleculeTransformer(calc, n_jobs=-1)
 
-# Featurize batch
-features = transformer(smiles)  # Returns numpy array (100, 2048)
+# 批次特徵化
+features = transformer(smiles)  # 返回 numpy 陣列 (100, 2048)
 
-# Save configuration
+# 儲存配置
 transformer.to_state_yaml_file("ecfp_config.yml")
 
-# Reload
+# 重新載入
 transformer = MoleculeTransformer.from_state_yaml_file("ecfp_config.yml")
 ```
 
-**Performance:** Testing on 642 molecules showed 3.4x speedup using 4 parallel jobs versus single-threaded processing.
+**效能：** 在 642 個分子上測試顯示，使用 4 個平行任務相比單執行緒處理有 3.4 倍的加速。
 
 ### FeatConcat
 
-Concatenates multiple featurizers into unified representations.
+將多個特徵提取器連接成統一的表示。
 
 ```python
 from molfeat.trans import FeatConcat
 from molfeat.calc import FPCalculator
 
-# Combine multiple fingerprints
+# 組合多個指紋
 concat = FeatConcat([
-    FPCalculator("maccs"),      # 167 dimensions
-    FPCalculator("ecfp")         # 2048 dimensions
+    FPCalculator("maccs"),      # 167 維
+    FPCalculator("ecfp")         # 2048 維
 ])
 
-# Result: 2167-dimensional features
+# 結果：2167 維特徵
 transformer = MoleculeTransformer(concat, n_jobs=-1)
 features = transformer(smiles)
 ```
 
 ### PretrainedMolTransformer
 
-Subclass of `MoleculeTransformer` for pre-trained deep learning models.
+用於預訓練深度學習模型的 `MoleculeTransformer` 子類別。
 
-**Unique Features:**
-- `_embed()` - Batched inference for neural networks
-- `_convert()` - Transforms SMILES/molecules into model-compatible formats
-  - SELFIES strings for language models
-  - DGL graphs for graph neural networks
-- Integrated caching system for efficient storage
+**獨特功能：**
+- `_embed()` - 神經網路的批次推論
+- `_convert()` - 將 SMILES/分子轉換為模型相容格式
+  - 語言模型的 SELFIES 字串
+  - 圖神經網路的 DGL 圖
+- 用於高效儲存的整合快取系統
 
-**Usage:**
+**使用方式：**
 ```python
 from molfeat.trans.pretrained import PretrainedMolTransformer
 
-# Load pretrained model
+# 載入預訓練模型
 transformer = PretrainedMolTransformer("ChemBERTa-77M-MLM", n_jobs=-1)
 
-# Generate embeddings
+# 生成嵌入
 embeddings = transformer(smiles)
 ```
 
 ### PrecomputedMolTransformer
 
-Transformer for cached/precomputed features.
+用於快取/預計算特徵的轉換器。
 
 ---
 
-## molfeat.store - Model Store
+## molfeat.store - 模型商店
 
-Manages featurizer discovery, loading, and registration.
+管理特徵提取器的發現、載入和註冊。
 
 ### ModelStore
 
-Central hub for accessing available featurizers.
+存取可用特徵提取器的中央中心。
 
-**Key Methods:**
-- `available_models` - Property listing all available featurizers
-- `search(name=None, **kwargs)` - Search for specific featurizers
-- `load(name, **kwargs)` - Load a featurizer by name
-- `register(name, card)` - Register custom featurizer
+**關鍵方法：**
+- `available_models` - 列出所有可用特徵提取器的屬性
+- `search(name=None, **kwargs)` - 搜索特定特徵提取器
+- `load(name, **kwargs)` - 按名稱載入特徵提取器
+- `register(name, card)` - 註冊自訂特徵提取器
 
-**Usage:**
+**使用方式：**
 ```python
 from molfeat.store.modelstore import ModelStore
 
-# Initialize store
+# 初始化商店
 store = ModelStore()
 
-# List all available models
+# 列出所有可用模型
 all_models = store.available_models
 print(f"Found {len(all_models)} featurizers")
 
-# Search for specific model
+# 搜索特定模型
 results = store.search(name="ChemBERTa-77M-MLM")
 if results:
     model_card = results[0]
 
-    # View usage information
+    # 檢視使用資訊
     model_card.usage()
 
-    # Load the model
+    # 載入模型
     transformer = model_card.load()
 
-# Direct loading
+# 直接載入
 transformer = store.load("ChemBERTa-77M-MLM")
 ```
 
-**ModelCard Attributes:**
-- `name` - Model identifier
-- `description` - Model description
-- `version` - Model version
-- `authors` - Model authors
-- `tags` - Categorization tags
-- `usage()` - Display usage examples
-- `load(**kwargs)` - Load the model
+**ModelCard 屬性：**
+- `name` - 模型識別碼
+- `description` - 模型描述
+- `version` - 模型版本
+- `authors` - 模型作者
+- `tags` - 分類標籤
+- `usage()` - 顯示使用範例
+- `load(**kwargs)` - 載入模型
 
 ---
 
-## Common Patterns
+## 常見模式
 
-### Error Handling
+### 錯誤處理
 
 ```python
-# Enable error tolerance
+# 啟用錯誤容忍
 featurizer = MoleculeTransformer(
     calc,
     n_jobs=-1,
@@ -330,49 +330,49 @@ featurizer = MoleculeTransformer(
     ignore_errors=True
 )
 
-# Failed molecules return None
+# 失敗的分子返回 None
 features = featurizer(smiles_with_errors)
 ```
 
-### Data Type Control
+### 資料類型控制
 
 ```python
-# NumPy float32 (default)
+# NumPy float32（預設）
 features = transformer(smiles, enforce_dtype=True)
 
-# PyTorch tensors
+# PyTorch 張量
 import torch
 transformer = MoleculeTransformer(calc, dtype=torch.float32)
 features = transformer(smiles)
 ```
 
-### Persistence and Reproducibility
+### 持久性和可重現性
 
 ```python
-# Save transformer state
+# 儲存轉換器狀態
 transformer.to_state_yaml_file("config.yml")
 transformer.to_state_json_file("config.json")
 
-# Load from saved state
+# 從儲存的狀態載入
 transformer = MoleculeTransformer.from_state_yaml_file("config.yml")
 transformer = MoleculeTransformer.from_state_json_file("config.json")
 ```
 
-### Preprocessing
+### 預處理
 
 ```python
-# Manual preprocessing
+# 手動預處理
 mol = transformer.preprocess("CCO")
 
-# Transform with preprocessing
+# 帶預處理的轉換
 features = transformer.transform(smiles_list)
 ```
 
 ---
 
-## Integration Examples
+## 整合範例
 
-### Scikit-learn Pipeline
+### Scikit-learn 管線
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -380,18 +380,18 @@ from sklearn.ensemble import RandomForestClassifier
 from molfeat.trans import MoleculeTransformer
 from molfeat.calc import FPCalculator
 
-# Create pipeline
+# 建立管線
 pipeline = Pipeline([
     ('featurizer', MoleculeTransformer(FPCalculator("ecfp"))),
     ('classifier', RandomForestClassifier())
 ])
 
-# Fit and predict
+# 擬合和預測
 pipeline.fit(smiles_train, y_train)
 predictions = pipeline.predict(smiles_test)
 ```
 
-### PyTorch Integration
+### PyTorch 整合
 
 ```python
 import torch
@@ -411,7 +411,7 @@ class MoleculeDataset(Dataset):
         features = self.transformer(self.smiles[idx])
         return torch.tensor(features), torch.tensor(self.labels[idx])
 
-# Create dataset and dataloader
+# 建立資料集和資料載入器
 transformer = MoleculeTransformer(FPCalculator("ecfp"))
 dataset = MoleculeDataset(smiles, labels, transformer)
 loader = DataLoader(dataset, batch_size=32)
@@ -419,10 +419,10 @@ loader = DataLoader(dataset, batch_size=32)
 
 ---
 
-## Performance Tips
+## 效能提示
 
-1. **Parallelization**: Use `n_jobs=-1` to utilize all CPU cores
-2. **Batch Processing**: Process multiple molecules at once instead of loops
-3. **Caching**: Leverage built-in caching for pretrained models
-4. **Data Types**: Use float32 instead of float64 when precision allows
-5. **Error Handling**: Set `ignore_errors=True` for large datasets with potential invalid molecules
+1. **平行化**：使用 `n_jobs=-1` 以利用所有 CPU 核心
+2. **批次處理**：一次處理多個分子而不是使用迴圈
+3. **快取**：利用預訓練模型的內建快取
+4. **資料類型**：精度允許時使用 float32 而非 float64
+5. **錯誤處理**：對可能包含無效分子的大型資料集設定 `ignore_errors=True`

@@ -1,668 +1,668 @@
-# Common SMARTS Patterns for RDKit
+# RDKit 常用 SMARTS 模式
 
-This document provides a collection of commonly used SMARTS patterns for substructure searching in RDKit.
+本文件提供用於 RDKit 子結構搜尋的常用 SMARTS 模式集合。
 
-## Functional Groups
+## 官能基
 
-### Alcohols
+### 醇
 
 ```python
-# Primary alcohol
+# 一級醇
 '[CH2][OH1]'
 
-# Secondary alcohol
+# 二級醇
 '[CH1]([OH1])[CH3,CH2]'
 
-# Tertiary alcohol
+# 三級醇
 '[C]([OH1])([C])([C])[C]'
 
-# Any alcohol
+# 任意醇
 '[OH1][C]'
 
-# Phenol
+# 酚
 'c[OH1]'
 ```
 
-### Aldehydes and Ketones
+### 醛和酮
 
 ```python
-# Aldehyde
+# 醛
 '[CH1](=O)'
 
-# Ketone
+# 酮
 '[C](=O)[C]'
 
-# Any carbonyl
+# 任意羰基
 '[C](=O)'
 ```
 
-### Carboxylic Acids and Derivatives
+### 羧酸及衍生物
 
 ```python
-# Carboxylic acid
+# 羧酸
 'C(=O)[OH1]'
-'[CX3](=O)[OX2H1]'  # More specific
+'[CX3](=O)[OX2H1]'  # 更具體
 
-# Ester
+# 酯
 'C(=O)O[C]'
-'[CX3](=O)[OX2][C]'  # More specific
+'[CX3](=O)[OX2][C]'  # 更具體
 
-# Amide
+# 醯胺
 'C(=O)N'
-'[CX3](=O)[NX3]'  # More specific
+'[CX3](=O)[NX3]'  # 更具體
 
-# Acyl chloride
+# 醯氯
 'C(=O)Cl'
 
-# Anhydride
+# 酸酐
 'C(=O)OC(=O)'
 ```
 
-### Amines
+### 胺
 
 ```python
-# Primary amine
+# 一級胺
 '[NH2][C]'
 
-# Secondary amine
+# 二級胺
 '[NH1]([C])[C]'
 
-# Tertiary amine
+# 三級胺
 '[N]([C])([C])[C]'
 
-# Aromatic amine (aniline)
+# 芳香胺（苯胺）
 'c[NH2]'
 
-# Any amine
+# 任意胺
 '[NX3]'
 ```
 
-### Ethers
+### 醚
 
 ```python
-# Aliphatic ether
+# 脂肪族醚
 '[C][O][C]'
 
-# Aromatic ether
+# 芳香醚
 'c[O][C,c]'
 ```
 
-### Halides
+### 鹵化物
 
 ```python
-# Alkyl halide
+# 烷基鹵化物
 '[C][F,Cl,Br,I]'
 
-# Aryl halide
+# 芳基鹵化物
 'c[F,Cl,Br,I]'
 
-# Specific halides
-'[C]F'  # Fluoride
-'[C]Cl'  # Chloride
-'[C]Br'  # Bromide
-'[C]I'  # Iodide
+# 特定鹵化物
+'[C]F'  # 氟化物
+'[C]Cl'  # 氯化物
+'[C]Br'  # 溴化物
+'[C]I'  # 碘化物
 ```
 
-### Nitriles and Nitro Groups
+### 腈和硝基
 
 ```python
-# Nitrile
+# 腈
 'C#N'
 
-# Nitro group
+# 硝基
 '[N+](=O)[O-]'
 
-# Nitro on aromatic
+# 芳香硝基
 'c[N+](=O)[O-]'
 ```
 
-### Thiols and Sulfides
+### 硫醇和硫化物
 
 ```python
-# Thiol
+# 硫醇
 '[C][SH1]'
 
-# Sulfide
+# 硫化物
 '[C][S][C]'
 
-# Disulfide
+# 二硫化物
 '[C][S][S][C]'
 
-# Sulfoxide
+# 亞碸
 '[C][S](=O)[C]'
 
-# Sulfone
+# 碸
 '[C][S](=O)(=O)[C]'
 ```
 
-## Ring Systems
+## 環系統
 
-### Simple Rings
+### 簡單環
 
 ```python
-# Benzene ring
+# 苯環
 'c1ccccc1'
-'[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1'  # Explicit atoms
+'[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1'  # 明確原子
 
-# Cyclohexane
+# 環己烷
 'C1CCCCC1'
 
-# Cyclopentane
+# 環戊烷
 'C1CCCC1'
 
-# Any 3-membered ring
+# 任意 3 元環
 '[r3]'
 
-# Any 4-membered ring
+# 任意 4 元環
 '[r4]'
 
-# Any 5-membered ring
+# 任意 5 元環
 '[r5]'
 
-# Any 6-membered ring
+# 任意 6 元環
 '[r6]'
 
-# Any 7-membered ring
+# 任意 7 元環
 '[r7]'
 ```
 
-### Aromatic Rings
+### 芳香環
 
 ```python
-# Aromatic carbon in ring
+# 環中的芳香碳
 '[cR]'
 
-# Aromatic nitrogen in ring (pyridine, etc.)
+# 環中的芳香氮（吡啶等）
 '[nR]'
 
-# Aromatic oxygen in ring (furan, etc.)
+# 環中的芳香氧（呋喃等）
 '[oR]'
 
-# Aromatic sulfur in ring (thiophene, etc.)
+# 環中的芳香硫（噻吩等）
 '[sR]'
 
-# Any aromatic ring
+# 任意芳香環
 'a1aaaaa1'
 ```
 
-### Heterocycles
+### 雜環
 
 ```python
-# Pyridine
+# 吡啶
 'n1ccccc1'
 
-# Pyrrole
+# 吡咯
 'n1cccc1'
 
-# Furan
+# 呋喃
 'o1cccc1'
 
-# Thiophene
+# 噻吩
 's1cccc1'
 
-# Imidazole
+# 咪唑
 'n1cncc1'
 
-# Pyrimidine
+# 嘧啶
 'n1cnccc1'
 
-# Thiazole
+# 噻唑
 'n1ccsc1'
 
-# Oxazole
+# 噁唑
 'n1ccoc1'
 ```
 
-### Fused Rings
+### 稠環
 
 ```python
-# Naphthalene
+# 萘
 'c1ccc2ccccc2c1'
 
-# Indole
+# 吲哚
 'c1ccc2[nH]ccc2c1'
 
-# Quinoline
+# 喹啉
 'n1cccc2ccccc12'
 
-# Benzimidazole
+# 苯並咪唑
 'c1ccc2[nH]cnc2c1'
 
-# Purine
+# 嘌呤
 'n1cnc2ncnc2c1'
 ```
 
-### Macrocycles
+### 大環
 
 ```python
-# Rings with 8 or more atoms
+# 8 個或更多原子的環
 '[r{8-}]'
 
-# Rings with 9-15 atoms
+# 9-15 個原子的環
 '[r{9-15}]'
 
-# Rings with more than 12 atoms (macrocycles)
+# 超過 12 個原子的環（大環）
 '[r{12-}]'
 ```
 
-## Specific Structural Features
+## 特定結構特徵
 
-### Aliphatic vs Aromatic
+### 脂肪族 vs 芳香族
 
 ```python
-# Aliphatic carbon
+# 脂肪族碳
 '[C]'
 
-# Aromatic carbon
+# 芳香碳
 '[c]'
 
-# Aliphatic carbon in ring
+# 環中的脂肪族碳
 '[CR]'
 
-# Aromatic carbon (alternative)
+# 芳香碳（替代）
 '[cR]'
 ```
 
-### Stereochemistry
+### 立體化學
 
 ```python
-# Tetrahedral center with clockwise chirality
+# 順時針手性的四面體中心
 '[C@]'
 
-# Tetrahedral center with counterclockwise chirality
+# 逆時針手性的四面體中心
 '[C@@]'
 
-# Any chiral center
+# 任意手性中心
 '[C@,C@@]'
 
-# E double bond
+# E 雙鍵
 'C/C=C/C'
 
-# Z double bond
+# Z 雙鍵
 'C/C=C\\C'
 ```
 
-### Hybridization
+### 雜化
 
 ```python
-# SP hybridization (triple bond)
+# SP 雜化（參鍵）
 '[CX2]'
 
-# SP2 hybridization (double bond or aromatic)
+# SP2 雜化（雙鍵或芳香）
 '[CX3]'
 
-# SP3 hybridization (single bonds)
+# SP3 雜化（單鍵）
 '[CX4]'
 ```
 
-### Charge
+### 電荷
 
 ```python
-# Positive charge
+# 正電荷
 '[+]'
 
-# Negative charge
+# 負電荷
 '[-]'
 
-# Specific charge
+# 特定電荷
 '[+1]'
 '[-1]'
 '[+2]'
 
-# Positively charged nitrogen
+# 帶正電的氮
 '[N+]'
 
-# Negatively charged oxygen
+# 帶負電的氧
 '[O-]'
 
-# Carboxylate anion
+# 羧酸陰離子
 'C(=O)[O-]'
 
-# Ammonium cation
+# 銨陽離子
 '[N+]([C])([C])([C])[C]'
 ```
 
-## Pharmacophore Features
+## 藥效團特徵
 
-### Hydrogen Bond Donors
+### 氫鍵供體
 
 ```python
-# Hydroxyl
+# 羥基
 '[OH]'
 
-# Amine
+# 胺
 '[NH,NH2]'
 
-# Amide NH
+# 醯胺 NH
 '[N][C](=O)'
 
-# Any H-bond donor
+# 任意氫鍵供體
 '[OH,NH,NH2,NH3+]'
 ```
 
-### Hydrogen Bond Acceptors
+### 氫鍵受體
 
 ```python
-# Carbonyl oxygen
+# 羰基氧
 '[O]=[C,S,P]'
 
-# Ether oxygen
+# 醚氧
 '[OX2]'
 
-# Ester oxygen
+# 酯氧
 'C(=O)[O]'
 
-# Nitrogen acceptor
+# 氮受體
 '[N;!H0]'
 
-# Any H-bond acceptor
+# 任意氫鍵受體
 '[O,N]'
 ```
 
-### Hydrophobic Groups
+### 疏水基團
 
 ```python
-# Alkyl chain (4+ carbons)
+# 烷基鏈（4+ 個碳）
 'CCCC'
 
-# Branched alkyl
+# 分支烷基
 'C(C)(C)C'
 
-# Aromatic rings (hydrophobic)
+# 芳香環（疏水）
 'c1ccccc1'
 ```
 
-### Aromatic Interactions
+### 芳香相互作用
 
 ```python
-# Benzene for pi-pi stacking
+# 用於 pi-pi 堆疊的苯
 'c1ccccc1'
 
-# Heterocycle for pi-pi
+# 用於 pi-pi 的雜環
 '[a]1[a][a][a][a][a]1'
 
-# Any aromatic ring
+# 任意芳香環
 '[aR]'
 ```
 
-## Drug-like Fragments
+## 類藥片段
 
-### Lipinski Fragments
+### Lipinski 片段
 
 ```python
-# Aromatic ring with substituents
+# 帶取代基的芳香環
 'c1cc(*)ccc1'
 
-# Aliphatic chain
+# 脂肪族鏈
 'CCCC'
 
-# Ether linkage
+# 醚連接
 '[C][O][C]'
 
-# Amine (basic center)
+# 胺（鹼性中心）
 '[N]([C])([C])'
 ```
 
-### Common Scaffolds
+### 常見骨架
 
 ```python
-# Benzamide
+# 苯甲醯胺
 'c1ccccc1C(=O)N'
 
-# Sulfonamide
+# 磺醯胺
 'S(=O)(=O)N'
 
-# Urea
+# 脲
 '[N][C](=O)[N]'
 
-# Guanidine
+# 胍
 '[N]C(=[N])[N]'
 
-# Phosphate
+# 磷酸根
 'P(=O)([O-])([O-])[O-]'
 ```
 
-### Privileged Structures
+### 優勢結構
 
 ```python
-# Biphenyl
+# 聯苯
 'c1ccccc1-c2ccccc2'
 
-# Benzopyran
+# 苯並吡喃
 'c1ccc2OCCCc2c1'
 
-# Piperazine
+# 哌嗪
 'N1CCNCC1'
 
-# Piperidine
+# 哌啶
 'N1CCCCC1'
 
-# Morpholine
+# 嗎啡啉
 'N1CCOCC1'
 ```
 
-## Reactive Groups
+## 反應性基團
 
-### Electrophiles
+### 親電子體
 
 ```python
-# Acyl chloride
+# 醯氯
 'C(=O)Cl'
 
-# Alkyl halide
+# 烷基鹵化物
 '[C][Cl,Br,I]'
 
-# Epoxide
+# 環氧化物
 'C1OC1'
 
-# Michael acceptor
+# Michael 受體
 'C=C[C](=O)'
 ```
 
-### Nucleophiles
+### 親核體
 
 ```python
-# Primary amine
+# 一級胺
 '[NH2][C]'
 
-# Thiol
+# 硫醇
 '[SH][C]'
 
-# Alcohol
+# 醇
 '[OH][C]'
 ```
 
-## Toxicity Alerts (PAINS)
+## 毒性警報（PAINS）
 
 ```python
-# Rhodanine
+# 羅丹寧
 'S1C(=O)NC(=S)C1'
 
-# Catechol
+# 鄰苯二酚
 'c1ccc(O)c(O)c1'
 
-# Quinone
+# 醌
 'O=C1C=CC(=O)C=C1'
 
-# Hydroquinone
+# 氫醌
 'OC1=CC=C(O)C=C1'
 
-# Alkyl halide (reactive)
+# 烷基鹵化物（反應性）
 '[C][I,Br]'
 
-# Michael acceptor (reactive)
+# Michael 受體（反應性）
 'C=CC(=O)[C,N]'
 ```
 
-## Metal Binding
+## 金屬結合
 
 ```python
-# Carboxylate (metal chelator)
+# 羧酸根（金屬螯合劑）
 'C(=O)[O-]'
 
-# Hydroxamic acid
+# 異羥肟酸
 'C(=O)N[OH]'
 
-# Catechol (iron chelator)
+# 鄰苯二酚（鐵螯合劑）
 'c1c(O)c(O)ccc1'
 
-# Thiol (metal binding)
+# 硫醇（金屬結合）
 '[SH]'
 
-# Histidine-like (metal binding)
+# 組氨酸類（金屬結合）
 'c1ncnc1'
 ```
 
-## Size and Complexity Filters
+## 大小和複雜度過濾
 
 ```python
-# Long aliphatic chains (>6 carbons)
+# 長脂肪鏈（>6 個碳）
 'CCCCCCC'
 
-# Highly branched (quaternary carbon)
+# 高度分支（季碳）
 'C(C)(C)(C)C'
 
-# Multiple rings
-'[R]~[R]'  # Two rings connected
+# 多個環
+'[R]~[R]'  # 兩個連接的環
 
-# Spiro center
+# 螺中心
 '[C]12[C][C][C]1[C][C]2'
 ```
 
-## Special Patterns
+## 特殊模式
 
-### Atom Counts
+### 原子計數
 
 ```python
-# Any atom
+# 任意原子
 '[*]'
 
-# Heavy atom (not H)
+# 重原子（非 H）
 '[!H]'
 
-# Carbon
+# 碳
 '[C,c]'
 
-# Heteroatom
+# 雜原子
 '[!C;!H]'
 
-# Halogen
+# 鹵素
 '[F,Cl,Br,I]'
 ```
 
-### Bond Types
+### 鍵類型
 
 ```python
-# Single bond
+# 單鍵
 'C-C'
 
-# Double bond
+# 雙鍵
 'C=C'
 
-# Triple bond
+# 參鍵
 'C#C'
 
-# Aromatic bond
+# 芳香鍵
 'c:c'
 
-# Any bond
+# 任意鍵
 'C~C'
 ```
 
-### Ring Membership
+### 環成員
 
 ```python
-# In any ring
+# 在任意環中
 '[R]'
 
-# Not in ring
+# 不在環中
 '[!R]'
 
-# In exactly one ring
+# 恰好在一個環中
 '[R1]'
 
-# In exactly two rings
+# 恰好在兩個環中
 '[R2]'
 
-# Ring bond
+# 環鍵
 '[R]~[R]'
 ```
 
-### Degree and Connectivity
+### 度和連接性
 
 ```python
-# Total degree 1 (terminal atom)
+# 總度為 1（末端原子）
 '[D1]'
 
-# Total degree 2 (chain)
+# 總度為 2（鏈）
 '[D2]'
 
-# Total degree 3 (branch point)
+# 總度為 3（分支點）
 '[D3]'
 
-# Total degree 4 (highly branched)
+# 總度為 4（高度分支）
 '[D4]'
 
-# Connected to exactly 2 carbons
+# 恰好連接 2 個碳
 '[C]([C])[C]'
 ```
 
-## Usage Examples
+## 使用範例
 
 ```python
 from rdkit import Chem
 
-# Create SMARTS query
-pattern = Chem.MolFromSmarts('[CH2][OH1]')  # Primary alcohol
+# 建立 SMARTS 查詢
+pattern = Chem.MolFromSmarts('[CH2][OH1]')  # 一級醇
 
-# Search molecule
+# 搜尋分子
 mol = Chem.MolFromSmiles('CCO')
 matches = mol.GetSubstructMatches(pattern)
 
-# Multiple patterns
+# 多個模式
 patterns = {
     'alcohol': '[OH1][C]',
     'amine': '[NH2,NH1][C]',
     'carboxylic_acid': 'C(=O)[OH1]'
 }
 
-# Check for functional groups
+# 檢查官能基
 for name, smarts in patterns.items():
     query = Chem.MolFromSmarts(smarts)
     if mol.HasSubstructMatch(query):
-        print(f"Found {name}")
+        print(f"找到 {name}")
 ```
 
-## Tips for Writing SMARTS
+## 編寫 SMARTS 的提示
 
-1. **Be specific when needed:** Use atom properties [CX3] instead of just [C]
-2. **Use brackets for clarity:** [C] is different from C (aromatic)
-3. **Consider aromaticity:** lowercase letters (c, n, o) are aromatic
-4. **Check ring membership:** [R] for in-ring, [!R] for not in-ring
-5. **Use recursive SMARTS:** $(...) for complex patterns
-6. **Test patterns:** Always validate SMARTS on known molecules
-7. **Start simple:** Build complex patterns incrementally
+1. **需要時要具體：** 使用原子性質 [CX3] 而非只用 [C]
+2. **使用方括號增加清晰度：** [C] 與 C（芳香）不同
+3. **考慮芳香性：** 小寫字母（c、n、o）是芳香的
+4. **檢查環成員：** [R] 表示在環中，[!R] 表示不在環中
+5. **使用遞迴 SMARTS：** $(...) 用於複雜模式
+6. **測試模式：** 始終在已知分子上驗證 SMARTS
+7. **從簡單開始：** 逐步建構複雜模式
 
-## Common SMARTS Syntax
+## 常見 SMARTS 語法
 
-- `[C]` - Aliphatic carbon
-- `[c]` - Aromatic carbon
-- `[CX4]` - Carbon with 4 connections (sp3)
-- `[CX3]` - Carbon with 3 connections (sp2)
-- `[CX2]` - Carbon with 2 connections (sp)
-- `[CH3]` - Methyl group
-- `[R]` - In ring
-- `[r6]` - In 6-membered ring
-- `[r{5-7}]` - In 5, 6, or 7-membered ring
-- `[D2]` - Degree 2 (2 neighbors)
-- `[+]` - Positive charge
-- `[-]` - Negative charge
-- `[!C]` - Not carbon
-- `[#6]` - Element with atomic number 6 (carbon)
-- `~` - Any bond type
-- `-` - Single bond
-- `=` - Double bond
-- `#` - Triple bond
-- `:` - Aromatic bond
-- `@` - Clockwise chirality
-- `@@` - Counter-clockwise chirality
+- `[C]` - 脂肪族碳
+- `[c]` - 芳香碳
+- `[CX4]` - 4 個連接的碳（sp3）
+- `[CX3]` - 3 個連接的碳（sp2）
+- `[CX2]` - 2 個連接的碳（sp）
+- `[CH3]` - 甲基
+- `[R]` - 在環中
+- `[r6]` - 在 6 元環中
+- `[r{5-7}]` - 在 5、6 或 7 元環中
+- `[D2]` - 度為 2（2 個鄰居）
+- `[+]` - 正電荷
+- `[-]` - 負電荷
+- `[!C]` - 非碳
+- `[#6]` - 原子序數為 6 的元素（碳）
+- `~` - 任意鍵類型
+- `-` - 單鍵
+- `=` - 雙鍵
+- `#` - 參鍵
+- `:` - 芳香鍵
+- `@` - 順時針手性
+- `@@` - 逆時針手性

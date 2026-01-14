@@ -1,82 +1,82 @@
-# PyMC Sampling and Inference Methods
+# PyMC 抽樣與推斷方法
 
-This reference covers the sampling algorithms and inference methods available in PyMC for posterior inference.
+此參考涵蓋 PyMC 中可用於後驗推斷的抽樣演算法和推斷方法。
 
-## MCMC Sampling Methods
+## MCMC 抽樣方法
 
-### Primary Sampling Function
+### 主要抽樣函數
 
 **`pm.sample(draws=1000, tune=1000, chains=4, **kwargs)`**
 
-The main interface for MCMC sampling in PyMC.
+PyMC 中 MCMC 抽樣的主要介面。
 
-**Key Parameters:**
-- `draws`: Number of samples to draw per chain (default: 1000)
-- `tune`: Number of tuning/warmup samples (default: 1000, discarded)
-- `chains`: Number of parallel chains (default: 4)
-- `cores`: Number of CPU cores to use (default: all available)
-- `target_accept`: Target acceptance rate for step size tuning (default: 0.8, increase to 0.9-0.95 for difficult posteriors)
-- `random_seed`: Random seed for reproducibility
-- `return_inferencedata`: Return ArviZ InferenceData object (default: True)
-- `idata_kwargs`: Additional kwargs for InferenceData creation (e.g., `{"log_likelihood": True}` for model comparison)
+**關鍵參數：**
+- `draws`：每條鏈抽取的樣本數（預設：1000）
+- `tune`：調整/暖機樣本數（預設：1000，丟棄）
+- `chains`：平行鏈數（預設：4）
+- `cores`：使用的 CPU 核心數（預設：所有可用）
+- `target_accept`：步長調整的目標接受率（預設：0.8，困難後驗增加到 0.9-0.95）
+- `random_seed`：用於可重現性的隨機種子
+- `return_inferencedata`：回傳 ArviZ InferenceData 物件（預設：True）
+- `idata_kwargs`：InferenceData 建立的額外參數（例如 `{"log_likelihood": True}` 用於模型比較）
 
-**Returns:** InferenceData object containing posterior samples, sampling statistics, and diagnostics
+**回傳：** 包含後驗樣本、抽樣統計和診斷的 InferenceData 物件
 
-**Example:**
+**範例：**
 ```python
 with pm.Model() as model:
-    # ... define model ...
+    # ... 定義模型 ...
     idata = pm.sample(draws=2000, tune=1000, chains=4, target_accept=0.9)
 ```
 
-### Sampling Algorithms
+### 抽樣演算法
 
-PyMC automatically selects appropriate samplers based on model structure, but you can specify algorithms manually.
+PyMC 根據模型結構自動選擇適當的抽樣器，但您可以手動指定演算法。
 
-#### NUTS (No-U-Turn Sampler)
+#### NUTS（No-U-Turn Sampler）
 
-**Default algorithm** for continuous parameters. Highly efficient Hamiltonian Monte Carlo variant.
+連續參數的**預設演算法**。高效率的漢密爾頓蒙地卡羅變體。
 
-- Automatically tunes step size and mass matrix
-- Adaptive: explores posterior geometry during tuning
-- Best for smooth, continuous posteriors
-- Can struggle with high correlation or multimodality
+- 自動調整步長和質量矩陣
+- 自適應：在調整期間探索後驗幾何
+- 最適合平滑、連續的後驗
+- 高相關性或多模態時可能遇到困難
 
-**Manual specification:**
+**手動指定：**
 ```python
 with model:
     idata = pm.sample(step=pm.NUTS(target_accept=0.95))
 ```
 
-**When to adjust:**
-- Increase `target_accept` (0.9-0.99) if seeing divergences
-- Use `init='adapt_diag'` for faster initialization (default)
-- Use `init='jitter+adapt_diag'` for difficult initializations
+**何時調整：**
+- 如果看到發散，增加 `target_accept`（0.9-0.99）
+- 使用 `init='adapt_diag'` 加快初始化（預設）
+- 對困難的初始化使用 `init='jitter+adapt_diag'`
 
 #### Metropolis
 
-General-purpose Metropolis-Hastings sampler.
+通用 Metropolis-Hastings 抽樣器。
 
-- Works for both continuous and discrete variables
-- Less efficient than NUTS for smooth continuous posteriors
-- Useful for discrete parameters or non-differentiable models
-- Requires manual tuning
+- 適用於連續和離散變數
+- 對平滑連續後驗不如 NUTS 高效
+- 對離散參數或不可微分模型有用
+- 需要手動調整
 
-**Example:**
+**範例：**
 ```python
 with model:
     idata = pm.sample(step=pm.Metropolis())
 ```
 
-#### Slice Sampler
+#### 切片抽樣器
 
-Slice sampling for univariate distributions.
+單變量分布的切片抽樣。
 
-- No tuning required
-- Good for difficult univariate posteriors
-- Can be slow for high dimensions
+- 無需調整
+- 適合困難的單變量後驗
+- 高維度時可能緩慢
 
-**Example:**
+**範例：**
 ```python
 with model:
     idata = pm.sample(step=pm.Slice())
@@ -84,307 +84,307 @@ with model:
 
 #### CompoundStep
 
-Combine different samplers for different parameters.
+為不同參數組合不同的抽樣器。
 
-**Example:**
+**範例：**
 ```python
 with model:
-    # Use NUTS for continuous params, Metropolis for discrete
+    # 連續參數用 NUTS，離散參數用 Metropolis
     step1 = pm.NUTS([continuous_var1, continuous_var2])
     step2 = pm.Metropolis([discrete_var])
     idata = pm.sample(step=[step1, step2])
 ```
 
-### Sampling Diagnostics
+### 抽樣診斷
 
-PyMC automatically computes diagnostics. Check these before trusting results:
+PyMC 自動計算診斷。在信任結果前檢查這些：
 
-#### Effective Sample Size (ESS)
+#### 有效樣本大小（ESS）
 
-Measures independent information in correlated samples.
+測量相關樣本中的獨立資訊。
 
-- **Rule of thumb**: ESS > 400 per chain (1600 total for 4 chains)
-- Low ESS indicates high autocorrelation
-- Access via: `az.ess(idata)`
+- **經驗法則**：每條鏈 ESS > 400（4 條鏈共 1600）
+- ESS 低表示高自相關
+- 存取方式：`az.ess(idata)`
 
-#### R-hat (Gelman-Rubin statistic)
+#### R-hat（Gelman-Rubin 統計量）
 
-Measures convergence across chains.
+測量跨鏈收斂性。
 
-- **Rule of thumb**: R-hat < 1.01 for all parameters
-- R-hat > 1.01 indicates non-convergence
-- Access via: `az.rhat(idata)`
+- **經驗法則**：所有參數 R-hat < 1.01
+- R-hat > 1.01 表示未收斂
+- 存取方式：`az.rhat(idata)`
 
-#### Divergences
+#### 發散
 
-Indicate regions where NUTS struggled.
+指示 NUTS 遇到困難的區域。
 
-- **Rule of thumb**: 0 divergences (or very few)
-- Divergences suggest biased samples
-- **Fix**: Increase `target_accept`, reparameterize, or use stronger priors
-- Access via: `idata.sample_stats.diverging.sum()`
+- **經驗法則**：0 次發散（或非常少）
+- 發散表示樣本可能有偏差
+- **修復**：增加 `target_accept`、重新參數化或使用更強的先驗
+- 存取方式：`idata.sample_stats.diverging.sum()`
 
-#### Energy Plot
+#### 能量圖
 
-Visualizes Hamiltonian Monte Carlo energy transitions.
+視覺化漢密爾頓蒙地卡羅能量轉換。
 
 ```python
 az.plot_energy(idata)
 ```
 
-Good separation between energy distributions indicates healthy sampling.
+能量分布之間良好的分離表示健康的抽樣。
 
-### Handling Sampling Issues
+### 處理抽樣問題
 
-#### Divergences
+#### 發散
 
 ```python
-# Increase target acceptance rate
+# 增加目標接受率
 idata = pm.sample(target_accept=0.95)
 
-# Or reparameterize using non-centered parameterization
-# Bad (centered):
+# 或使用非中心化參數化重新參數化
+# 不好（中心化）：
 mu = pm.Normal('mu', 0, 1)
 sigma = pm.HalfNormal('sigma', 1)
 x = pm.Normal('x', mu, sigma, observed=data)
 
-# Good (non-centered):
+# 好（非中心化）：
 mu = pm.Normal('mu', 0, 1)
 sigma = pm.HalfNormal('sigma', 1)
 x_offset = pm.Normal('x_offset', 0, 1, observed=(data - mu) / sigma)
 ```
 
-#### Slow Sampling
+#### 抽樣緩慢
 
 ```python
-# Use fewer tuning steps if model is simple
+# 如果模型簡單，使用較少的調整步驟
 idata = pm.sample(tune=500)
 
-# Increase cores for parallelization
+# 增加核心數進行平行化
 idata = pm.sample(cores=8, chains=8)
 
-# Use variational inference for initialization
+# 使用變分推斷進行初始化
 with model:
-    approx = pm.fit()  # Run ADVI
+    approx = pm.fit()  # 執行 ADVI
     idata = pm.sample(start=approx.sample(return_inferencedata=False)[0])
 ```
 
-#### High Autocorrelation
+#### 高自相關
 
 ```python
-# Increase draws
+# 增加抽樣數
 idata = pm.sample(draws=5000)
 
-# Reparameterize to reduce correlation
-# Consider using QR decomposition for regression models
+# 重新參數化以減少相關性
+# 考慮對迴歸模型使用 QR 分解
 ```
 
-## Variational Inference
+## 變分推斷
 
-Faster approximate inference for large models or quick exploration.
+用於大型模型或快速探索的較快近似推斷。
 
-### ADVI (Automatic Differentiation Variational Inference)
+### ADVI（自動微分變分推斷）
 
 **`pm.fit(n=10000, method='advi', **kwargs)`**
 
-Approximates posterior with simpler distribution (typically mean-field Gaussian).
+用較簡單的分布（通常是平均場高斯）近似後驗。
 
-**Key Parameters:**
-- `n`: Number of iterations (default: 10000)
-- `method`: VI algorithm ('advi', 'fullrank_advi', 'svgd')
-- `random_seed`: Random seed
+**關鍵參數：**
+- `n`：迭代次數（預設：10000）
+- `method`：VI 演算法（'advi'、'fullrank_advi'、'svgd'）
+- `random_seed`：隨機種子
 
-**Returns:** Approximation object for sampling and analysis
+**回傳：** 用於抽樣和分析的近似物件
 
-**Example:**
+**範例：**
 ```python
 with model:
     approx = pm.fit(n=50000)
-    # Draw samples from approximation
+    # 從近似抽取樣本
     idata = approx.sample(1000)
-    # Or sample for MCMC initialization
+    # 或抽樣用於 MCMC 初始化
     start = approx.sample(return_inferencedata=False)[0]
 ```
 
-**Trade-offs:**
-- **Pros**: Much faster than MCMC, scales to large data
-- **Cons**: Approximate, may miss posterior structure, underestimates uncertainty
+**權衡：**
+- **優點**：比 MCMC 快得多，可擴展到大資料
+- **缺點**：近似，可能遺漏後驗結構，低估不確定性
 
-### Full-Rank ADVI
+### 全秩 ADVI
 
-Captures correlations between parameters.
+捕捉參數之間的相關性。
 
 ```python
 with model:
     approx = pm.fit(method='fullrank_advi')
 ```
 
-More accurate than mean-field but slower.
+比平均場更準確但更慢。
 
-### SVGD (Stein Variational Gradient Descent)
+### SVGD（Stein 變分梯度下降）
 
-Non-parametric variational inference.
+非參數變分推斷。
 
 ```python
 with model:
     approx = pm.fit(method='svgd', n=20000)
 ```
 
-Better captures multimodality but more computationally expensive.
+更好地捕捉多模態，但計算成本更高。
 
-## Prior and Posterior Predictive Sampling
+## 先驗和後驗預測抽樣
 
-### Prior Predictive Sampling
+### 先驗預測抽樣
 
-Sample from the prior distribution (before seeing data).
+從先驗分布抽樣（觀察資料前）。
 
 **`pm.sample_prior_predictive(samples=500, **kwargs)`**
 
-**Purpose:**
-- Validate priors are reasonable
-- Check implied predictions before fitting
-- Ensure model generates plausible data
+**目的：**
+- 驗證先驗是否合理
+- 擬合前檢查隱含預測
+- 確保模型生成合理資料
 
-**Example:**
+**範例：**
 ```python
 with model:
     prior_pred = pm.sample_prior_predictive(samples=1000)
 
-# Visualize prior predictions
+# 視覺化先驗預測
 az.plot_ppc(prior_pred, group='prior')
 ```
 
-### Posterior Predictive Sampling
+### 後驗預測抽樣
 
-Sample from posterior predictive distribution (after fitting).
+從後驗預測分布抽樣（擬合後）。
 
 **`pm.sample_posterior_predictive(trace, **kwargs)`**
 
-**Purpose:**
-- Model validation via posterior predictive checks
-- Generate predictions for new data
-- Assess goodness-of-fit
+**目的：**
+- 透過後驗預測檢查驗證模型
+- 為新資料生成預測
+- 評估擬合優度
 
-**Example:**
+**範例：**
 ```python
 with model:
-    # After sampling
+    # 抽樣後
     idata = pm.sample()
 
-    # Add posterior predictive samples
+    # 添加後驗預測樣本
     pm.sample_posterior_predictive(idata, extend_inferencedata=True)
 
-# Posterior predictive check
+# 後驗預測檢查
 az.plot_ppc(idata)
 ```
 
-### Predictions for New Data
+### 新資料預測
 
-Update data and sample predictive distribution:
+更新資料並抽取預測分布：
 
 ```python
 with model:
-    # Original model fit
+    # 原始模型擬合
     idata = pm.sample()
 
-    # Update with new predictor values
+    # 用新的預測變數值更新
     pm.set_data({'X': X_new})
 
-    # Sample predictions
+    # 抽取預測
     post_pred_new = pm.sample_posterior_predictive(
         idata.posterior,
         var_names=['y_pred']
     )
 ```
 
-## Maximum A Posteriori (MAP) Estimation
+## 最大後驗（MAP）估計
 
-Find posterior mode (point estimate).
+找到後驗眾數（點估計）。
 
 **`pm.find_MAP(start=None, method='L-BFGS-B', **kwargs)`**
 
-**When to use:**
-- Quick point estimates
-- Initialization for MCMC
-- When full posterior not needed
+**何時使用：**
+- 快速點估計
+- MCMC 初始化
+- 不需要完整後驗時
 
-**Example:**
+**範例：**
 ```python
 with model:
     map_estimate = pm.find_MAP()
     print(map_estimate)
 ```
 
-**Limitations:**
-- Doesn't quantify uncertainty
-- Can find local optima in multimodal posteriors
-- Sensitive to prior specification
+**限制：**
+- 不量化不確定性
+- 多模態後驗可能找到局部最優
+- 對先驗設定敏感
 
-## Inference Recommendations
+## 推斷建議
 
-### Standard Workflow
+### 標準工作流程
 
-1. **Start with ADVI** for quick exploration:
+1. **從 ADVI 開始**進行快速探索：
    ```python
    approx = pm.fit(n=20000)
    ```
 
-2. **Run MCMC** for full inference:
+2. **執行 MCMC** 進行完整推斷：
    ```python
    idata = pm.sample(draws=2000, tune=1000)
    ```
 
-3. **Check diagnostics**:
+3. **檢查診斷**：
    ```python
-   az.summary(idata, var_names=['~mu_log__'])  # Exclude transformed vars
+   az.summary(idata, var_names=['~mu_log__'])  # 排除轉換變數
    ```
 
-4. **Sample posterior predictive**:
+4. **抽取後驗預測**：
    ```python
    pm.sample_posterior_predictive(idata, extend_inferencedata=True)
    ```
 
-### Choosing Inference Method
+### 選擇推斷方法
 
-| Scenario | Recommended Method |
+| 情境 | 推薦方法 |
 |----------|-------------------|
-| Small-medium models, need full uncertainty | MCMC with NUTS |
-| Large models, initial exploration | ADVI |
-| Discrete parameters | Metropolis or marginalize |
-| Hierarchical models with divergences | Non-centered parameterization + NUTS |
-| Very large data | Minibatch ADVI |
-| Quick point estimates | MAP or ADVI |
+| 中小型模型，需要完整不確定性 | 使用 NUTS 的 MCMC |
+| 大型模型，初步探索 | ADVI |
+| 離散參數 | Metropolis 或邊際化 |
+| 有發散的階層式模型 | 非中心化參數化 + NUTS |
+| 非常大的資料 | Minibatch ADVI |
+| 快速點估計 | MAP 或 ADVI |
 
-### Reparameterization Tricks
+### 重新參數化技巧
 
-**Non-centered parameterization** for hierarchical models:
+階層式模型的**非中心化參數化**：
 
 ```python
-# Centered (can cause divergences):
+# 中心化（可能導致發散）：
 mu = pm.Normal('mu', 0, 10)
 sigma = pm.HalfNormal('sigma', 1)
 theta = pm.Normal('theta', mu, sigma, shape=n_groups)
 
-# Non-centered (better sampling):
+# 非中心化（更好的抽樣）：
 mu = pm.Normal('mu', 0, 10)
 sigma = pm.HalfNormal('sigma', 1)
 theta_offset = pm.Normal('theta_offset', 0, 1, shape=n_groups)
 theta = pm.Deterministic('theta', mu + sigma * theta_offset)
 ```
 
-**QR decomposition** for correlated predictors:
+相關預測變數的 **QR 分解**：
 
 ```python
 import numpy as np
 
-# QR decomposition
+# QR 分解
 Q, R = np.linalg.qr(X)
 
 with pm.Model():
-    # Uncorrelated coefficients
+    # 不相關係數
     beta_tilde = pm.Normal('beta_tilde', 0, 1, shape=p)
 
-    # Transform back to original scale
+    # 轉換回原始尺度
     beta = pm.Deterministic('beta', pm.math.solve(R, beta_tilde))
 
     mu = pm.math.dot(Q, beta_tilde)
@@ -392,22 +392,22 @@ with pm.Model():
     y = pm.Normal('y', mu, sigma, observed=y_obs)
 ```
 
-## Advanced Sampling
+## 進階抽樣
 
-### Sequential Monte Carlo (SMC)
+### 序列蒙地卡羅（SMC）
 
-For complex posteriors or model evidence estimation:
+用於複雜後驗或模型證據估計：
 
 ```python
 with model:
     idata = pm.sample_smc(draws=2000, chains=4)
 ```
 
-Good for multimodal posteriors or when NUTS struggles.
+適合多模態後驗或 NUTS 遇到困難時。
 
-### Custom Initialization
+### 自訂初始化
 
-Provide starting values:
+提供起始值：
 
 ```python
 start = {'mu': 0, 'sigma': 1}
@@ -415,7 +415,7 @@ with model:
     idata = pm.sample(start=start)
 ```
 
-Or use MAP estimate:
+或使用 MAP 估計：
 
 ```python
 with model:

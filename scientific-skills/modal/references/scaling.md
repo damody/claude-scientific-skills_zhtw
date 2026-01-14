@@ -1,17 +1,17 @@
-# Scaling Out on Modal
+# Modal 擴展
 
-## Automatic Autoscaling
+## 自動擴展
 
-Every Modal Function corresponds to an autoscaling pool of containers. Modal's autoscaler:
-- Spins up containers when no capacity available
-- Spins down containers when resources idle
-- Scales to zero by default when no inputs to process
+每個 Modal 函數對應一個自動擴展的容器池。Modal 的自動擴展器：
+- 在沒有可用容量時啟動容器
+- 在資源閒置時關閉容器
+- 預設在沒有輸入要處理時擴展到零
 
-Autoscaling decisions are made quickly and frequently.
+自動擴展決策快速且頻繁地做出。
 
-## Parallel Execution with `.map()`
+## 使用 `.map()` 平行執行
 
-Run function repeatedly with different inputs in parallel:
+在不同輸入上重複平行執行函數：
 
 ```python
 @app.function()
@@ -21,14 +21,14 @@ def evaluate_model(x):
 @app.local_entrypoint()
 def main():
     inputs = list(range(100))
-    # Runs 100 inputs in parallel across containers
+    # 跨容器平行執行 100 個輸入
     for result in evaluate_model.map(inputs):
         print(result)
 ```
 
-### Multiple Arguments with `.starmap()`
+### 使用 `.starmap()` 處理多個參數
 
-For functions with multiple arguments:
+對於有多個參數的函數：
 
 ```python
 @app.function()
@@ -41,7 +41,7 @@ def main():
     # [3, 7]
 ```
 
-### Exception Handling
+### 例外處理
 
 ```python
 @app.function()
@@ -60,50 +60,50 @@ def main():
     # [0, 1, Exception('error')]
 ```
 
-## Autoscaling Configuration
+## 自動擴展配置
 
-Configure autoscaler behavior with parameters:
+使用參數配置自動擴展器行為：
 
 ```python
 @app.function(
-    max_containers=100,      # Upper limit on containers
-    min_containers=2,        # Keep warm even when inactive
-    buffer_containers=5,     # Maintain buffer while active
-    scaledown_window=60,     # Max idle time before scaling down (seconds)
+    max_containers=100,      # 容器上限
+    min_containers=2,        # 即使不活動也保持暖機
+    buffer_containers=5,     # 活動時維持的緩衝
+    scaledown_window=60,     # 縮減前的最大閒置時間（秒）
 )
 def my_function():
     ...
 ```
 
-Parameters:
-- **max_containers**: Upper limit on total containers
-- **min_containers**: Minimum kept warm even when inactive
-- **buffer_containers**: Buffer size while function active (additional inputs won't need to queue)
-- **scaledown_window**: Maximum idle duration before scale down (seconds)
+參數：
+- **max_containers**：總容器的上限
+- **min_containers**：即使不活動也保持暖機的最小數量
+- **buffer_containers**：函數活動時的緩衝大小（額外輸入不需要排隊）
+- **scaledown_window**：縮減前的最大閒置持續時間（秒）
 
-Trade-offs:
-- Larger warm pool/buffer → Higher cost, lower latency
-- Longer scaledown window → Less churn for infrequent requests
+權衡：
+- 較大的暖機池/緩衝 → 更高成本、更低延遲
+- 較長的縮減窗口 → 對不頻繁請求的流動較少
 
-## Dynamic Autoscaler Updates
+## 動態自動擴展器更新
 
-Update autoscaler settings without redeployment:
+在不重新部署的情況下更新自動擴展器設定：
 
 ```python
 f = modal.Function.from_name("my-app", "f")
 f.update_autoscaler(max_containers=100)
 ```
 
-Settings revert to decorator configuration on next deploy, or are overridden by further updates:
+設定在下次部署時恢復為裝飾器配置，或被進一步更新覆蓋：
 
 ```python
 f.update_autoscaler(min_containers=2, max_containers=10)
-f.update_autoscaler(min_containers=4)  # max_containers=10 still in effect
+f.update_autoscaler(min_containers=4)  # max_containers=10 仍然有效
 ```
 
-### Time-Based Scaling
+### 基於時間的擴展
 
-Adjust warm pool based on time of day:
+根據時間調整暖機池：
 
 ```python
 @app.function()
@@ -119,9 +119,9 @@ def decrease_warm_pool():
     inference_server.update_autoscaler(min_containers=0)
 ```
 
-### For Classes
+### 對於類別
 
-Update autoscaler for specific parameter instances:
+為特定參數實例更新自動擴展器：
 
 ```python
 MyClass = modal.Cls.from_name("my-app", "MyClass")
@@ -129,73 +129,73 @@ obj = MyClass(model_version="3.5")
 obj.update_autoscaler(buffer_containers=2)  # type: ignore
 ```
 
-## Input Concurrency
+## 輸入並行
 
-Process multiple inputs per container with `@modal.concurrent`:
+使用 `@modal.concurrent` 在每個容器處理多個輸入：
 
 ```python
 @app.function()
 @modal.concurrent(max_inputs=100)
 def my_function(input: str):
-    # Container can handle up to 100 concurrent inputs
+    # 容器可以處理最多 100 個並行輸入
     ...
 ```
 
-Ideal for I/O-bound workloads:
-- Database queries
-- External API requests
-- Remote Modal Function calls
+適合 I/O 密集型工作負載：
+- 資料庫查詢
+- 外部 API 請求
+- 遠端 Modal 函數呼叫
 
-### Concurrency Mechanisms
+### 並行機制
 
-**Synchronous Functions**: Separate threads (must be thread-safe)
+**同步函數**：獨立執行緒（必須是執行緒安全的）
 
 ```python
 @app.function()
 @modal.concurrent(max_inputs=10)
 def sync_function():
-    time.sleep(1)  # Must be thread-safe
+    time.sleep(1)  # 必須是執行緒安全的
 ```
 
-**Async Functions**: Separate asyncio tasks (must not block event loop)
+**非同步函數**：獨立 asyncio 任務（不能阻塞事件迴圈）
 
 ```python
 @app.function()
 @modal.concurrent(max_inputs=10)
 async def async_function():
-    await asyncio.sleep(1)  # Must not block event loop
+    await asyncio.sleep(1)  # 不能阻塞事件迴圈
 ```
 
-### Target vs Max Inputs
+### 目標 vs 最大輸入
 
 ```python
 @app.function()
 @modal.concurrent(
-    max_inputs=120,    # Hard limit
-    target_inputs=100  # Autoscaler target
+    max_inputs=120,    # 硬性限制
+    target_inputs=100  # 自動擴展器目標
 )
 def my_function(input: str):
-    # Allow 20% burst above target
+    # 允許比目標高 20% 的突發
     ...
 ```
 
-Autoscaler aims for `target_inputs`, but containers can burst to `max_inputs` during scale-up.
+自動擴展器以 `target_inputs` 為目標，但容器可以在擴展期間突發到 `max_inputs`。
 
-## Scaling Limits
+## 擴展限制
 
-Modal enforces limits per function:
-- 2,000 pending inputs (not yet assigned to containers)
-- 25,000 total inputs (running + pending)
+Modal 對每個函數強制限制：
+- 2,000 個待處理輸入（尚未分配給容器）
+- 25,000 個總輸入（執行中 + 待處理）
 
-For `.spawn()` async jobs: up to 1 million pending inputs.
+對於 `.spawn()` 非同步任務：最多 100 萬個待處理輸入。
 
-Exceeding limits returns `Resource Exhausted` error - retry later.
+超過限制返回 `Resource Exhausted` 錯誤 - 稍後重試。
 
-Each `.map()` invocation: max 1,000 concurrent inputs.
+每次 `.map()` 調用：最多 1,000 個並行輸入。
 
-## Async Usage
+## 非同步用法
 
-Use async APIs for arbitrary parallel execution patterns:
+使用非同步 API 進行任意平行執行模式：
 
 ```python
 @app.function()
@@ -209,22 +209,22 @@ async def main():
     results = await asyncio.gather(*tasks)
 ```
 
-## Common Gotchas
+## 常見陷阱
 
-**Incorrect**: Using Python's builtin map (runs sequentially)
+**錯誤**：使用 Python 的內建 map（順序執行）
 ```python
-# DON'T DO THIS
+# 不要這樣做
 results = map(evaluate_model, inputs)
 ```
 
-**Incorrect**: Calling function first
+**錯誤**：先呼叫函數
 ```python
-# DON'T DO THIS
+# 不要這樣做
 results = evaluate_model(inputs).map()
 ```
 
-**Correct**: Call .map() on Modal function object
+**正確**：在 Modal 函數物件上呼叫 .map()
 ```python
-# DO THIS
+# 這樣做
 results = evaluate_model.map(inputs)
 ```

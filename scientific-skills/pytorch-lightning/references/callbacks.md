@@ -1,19 +1,19 @@
-# Callbacks - Comprehensive Guide
+# 回呼函數 - 完整指南
 
-## Overview
+## 概述
 
-Callbacks enable adding arbitrary self-contained programs to training without cluttering your LightningModule research code. They execute custom logic at specific hooks during the training lifecycle.
+回呼函數（Callbacks）可以在訓練中新增任意獨立程式，而不會使 LightningModule 研究程式碼變得雜亂。它們在訓練生命週期的特定鉤子處執行自訂邏輯。
 
-## Architecture
+## 架構
 
-Lightning organizes training logic across three components:
-- **Trainer** - Engineering infrastructure
-- **LightningModule** - Research code
-- **Callbacks** - Non-essential functionality (monitoring, checkpointing, custom behaviors)
+Lightning 將訓練邏輯組織為三個元件：
+- **Trainer** - 工程基礎設施
+- **LightningModule** - 研究程式碼
+- **Callbacks** - 非必要功能（監控、檢查點、自訂行為）
 
-## Creating Custom Callbacks
+## 建立自訂回呼函數
 
-Basic structure:
+基本結構：
 
 ```python
 from lightning.pytorch.callbacks import Callback
@@ -25,31 +25,31 @@ class MyCustomCallback(Callback):
     def on_train_end(self, trainer, pl_module):
         print("Training is done!")
 
-# Use with Trainer
+# 與 Trainer 一起使用
 trainer = L.Trainer(callbacks=[MyCustomCallback()])
 ```
 
-## Built-in Callbacks
+## 內建回呼函數
 
 ### ModelCheckpoint
 
-Save models based on monitored metrics.
+根據監控的指標儲存模型。
 
-**Key Parameters:**
-- `dirpath` - Directory to save checkpoints
-- `filename` - Checkpoint filename pattern
-- `monitor` - Metric to monitor
-- `mode` - "min" or "max" for monitored metric
-- `save_top_k` - Number of best models to keep
-- `save_last` - Save last epoch checkpoint
-- `every_n_epochs` - Save every N epochs
-- `save_on_train_epoch_end` - Save at train epoch end vs validation end
+**主要參數：**
+- `dirpath` - 儲存檢查點的目錄
+- `filename` - 檢查點檔名模式
+- `monitor` - 要監控的指標
+- `mode` - 監控指標的 "min" 或 "max"
+- `save_top_k` - 保留的最佳模型數量
+- `save_last` - 儲存最後一個 epoch 的檢查點
+- `every_n_epochs` - 每 N 個 epochs 儲存
+- `save_on_train_epoch_end` - 在訓練 epoch 結束時儲存 vs 驗證結束時
 
-**Examples:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import ModelCheckpoint
 
-# Save top 3 models based on validation loss
+# 根據驗證損失儲存最佳的 3 個模型
 checkpoint_callback = ModelCheckpoint(
     dirpath="checkpoints/",
     filename="model-{epoch:02d}-{val_loss:.2f}",
@@ -59,15 +59,15 @@ checkpoint_callback = ModelCheckpoint(
     save_last=True
 )
 
-# Save every 10 epochs
+# 每 10 個 epochs 儲存
 checkpoint_callback = ModelCheckpoint(
     dirpath="checkpoints/",
     filename="model-{epoch:02d}",
     every_n_epochs=10,
-    save_top_k=-1  # Save all
+    save_top_k=-1  # 全部儲存
 )
 
-# Save best model based on accuracy
+# 根據準確率儲存最佳模型
 checkpoint_callback = ModelCheckpoint(
     dirpath="checkpoints/",
     filename="best-model",
@@ -79,35 +79,35 @@ checkpoint_callback = ModelCheckpoint(
 trainer = L.Trainer(callbacks=[checkpoint_callback])
 ```
 
-**Accessing Saved Checkpoints:**
+**存取已儲存的檢查點：**
 ```python
-# Get best model path
+# 取得最佳模型路徑
 best_model_path = checkpoint_callback.best_model_path
 
-# Get last checkpoint path
+# 取得最後一個檢查點路徑
 last_checkpoint = checkpoint_callback.last_model_path
 
-# Get all checkpoint paths
+# 取得所有檢查點路徑
 all_checkpoints = checkpoint_callback.best_k_models
 ```
 
 ### EarlyStopping
 
-Stop training when a monitored metric stops improving.
+當監控的指標停止改善時停止訓練。
 
-**Key Parameters:**
-- `monitor` - Metric to monitor
-- `patience` - Number of epochs with no improvement after which training stops
-- `mode` - "min" or "max" for monitored metric
-- `min_delta` - Minimum change to qualify as an improvement
-- `verbose` - Print messages
-- `strict` - Crash if monitored metric not found
+**主要參數：**
+- `monitor` - 要監控的指標
+- `patience` - 沒有改善後停止訓練的 epochs 數
+- `mode` - 監控指標的 "min" 或 "max"
+- `min_delta` - 認定為改善的最小變化量
+- `verbose` - 列印訊息
+- `strict` - 如果找不到監控指標則崩潰
 
-**Examples:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import EarlyStopping
 
-# Stop when validation loss stops improving
+# 當驗證損失停止改善時停止
 early_stop = EarlyStopping(
     monitor="val_loss",
     patience=10,
@@ -115,12 +115,12 @@ early_stop = EarlyStopping(
     verbose=True
 )
 
-# Stop when accuracy plateaus
+# 當準確率停滯時停止
 early_stop = EarlyStopping(
     monitor="val_acc",
     patience=5,
     mode="max",
-    min_delta=0.001  # Must improve by at least 0.001
+    min_delta=0.001  # 必須至少改善 0.001
 )
 
 trainer = L.Trainer(callbacks=[early_stop])
@@ -128,51 +128,51 @@ trainer = L.Trainer(callbacks=[early_stop])
 
 ### LearningRateMonitor
 
-Track learning rate changes from schedulers.
+追蹤來自調度器的學習率變化。
 
-**Key Parameters:**
-- `logging_interval` - When to log: "step" or "epoch"
-- `log_momentum` - Also log momentum values
+**主要參數：**
+- `logging_interval` - 何時記錄："step" 或 "epoch"
+- `log_momentum` - 同時記錄動量值
 
-**Example:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import LearningRateMonitor
 
 lr_monitor = LearningRateMonitor(logging_interval="step")
 trainer = L.Trainer(callbacks=[lr_monitor])
 
-# Logs learning rate automatically as "lr-{optimizer_name}"
+# 自動記錄學習率為 "lr-{optimizer_name}"
 ```
 
 ### DeviceStatsMonitor
 
-Log device performance metrics (GPU/CPU/TPU).
+記錄裝置效能指標（GPU/CPU/TPU）。
 
-**Key Parameters:**
-- `cpu_stats` - Log CPU stats
+**主要參數：**
+- `cpu_stats` - 記錄 CPU 統計資訊
 
-**Example:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import DeviceStatsMonitor
 
 device_stats = DeviceStatsMonitor(cpu_stats=True)
 trainer = L.Trainer(callbacks=[device_stats])
 
-# Logs: gpu_utilization, gpu_memory_usage, etc.
+# 記錄：gpu_utilization、gpu_memory_usage 等
 ```
 
 ### ModelSummary / RichModelSummary
 
-Display model architecture and parameter count.
+顯示模型架構和參數數量。
 
-**Example:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import ModelSummary, RichModelSummary
 
-# Basic summary
+# 基本摘要
 summary = ModelSummary(max_depth=2)
 
-# Rich formatted summary (prettier)
+# 豐富格式的摘要（更漂亮）
 rich_summary = RichModelSummary(max_depth=3)
 
 trainer = L.Trainer(callbacks=[rich_summary])
@@ -180,21 +180,21 @@ trainer = L.Trainer(callbacks=[rich_summary])
 
 ### Timer
 
-Track and limit training duration.
+追蹤和限制訓練時間。
 
-**Key Parameters:**
-- `duration` - Maximum training time (timedelta or dict)
-- `interval` - Check interval: "step", "epoch", or "batch"
+**主要參數：**
+- `duration` - 最大訓練時間（timedelta 或 dict）
+- `interval` - 檢查間隔："step"、"epoch" 或 "batch"
 
-**Example:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import Timer
 from datetime import timedelta
 
-# Limit training to 1 hour
+# 限制訓練為 1 小時
 timer = Timer(duration=timedelta(hours=1))
 
-# Or using dict
+# 或使用字典
 timer = Timer(duration={"hours": 23, "minutes": 30})
 
 trainer = L.Trainer(callbacks=[timer])
@@ -202,9 +202,9 @@ trainer = L.Trainer(callbacks=[timer])
 
 ### BatchSizeFinder
 
-Automatically find the optimal batch size.
+自動找到最佳批次大小。
 
-**Example:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import BatchSizeFinder
 
@@ -213,18 +213,18 @@ batch_finder = BatchSizeFinder(mode="power", steps_per_trial=3)
 trainer = L.Trainer(callbacks=[batch_finder])
 trainer.fit(model, datamodule=dm)
 
-# Optimal batch size is set automatically
+# 最佳批次大小會自動設定
 ```
 
 ### GradientAccumulationScheduler
 
-Schedule gradient accumulation steps dynamically.
+動態排程梯度累積步驟。
 
-**Example:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import GradientAccumulationScheduler
 
-# Accumulate 4 batches for first 5 epochs, then 2 batches
+# 前 5 個 epochs 累積 4 個批次，然後 2 個批次
 accumulator = GradientAccumulationScheduler(scheduling={0: 4, 5: 2})
 
 trainer = L.Trainer(callbacks=[accumulator])
@@ -232,9 +232,9 @@ trainer = L.Trainer(callbacks=[accumulator])
 
 ### StochasticWeightAveraging (SWA)
 
-Apply stochastic weight averaging for better generalization.
+應用隨機權重平均以獲得更好的泛化。
 
-**Example:**
+**範例：**
 ```python
 from lightning.pytorch.callbacks import StochasticWeightAveraging
 
@@ -243,9 +243,9 @@ swa = StochasticWeightAveraging(swa_lrs=1e-2, swa_epoch_start=0.8)
 trainer = L.Trainer(callbacks=[swa])
 ```
 
-## Custom Callback Examples
+## 自訂回呼函數範例
 
-### Simple Logging Callback
+### 簡單日誌記錄回呼函數
 
 ```python
 class MetricsLogger(Callback):
@@ -253,25 +253,25 @@ class MetricsLogger(Callback):
         self.metrics = []
 
     def on_validation_end(self, trainer, pl_module):
-        # Access logged metrics
+        # 存取已記錄的指標
         metrics = trainer.callback_metrics
         self.metrics.append(dict(metrics))
         print(f"Validation metrics: {metrics}")
 ```
 
-### Gradient Monitoring Callback
+### 梯度監控回呼函數
 
 ```python
 class GradientMonitor(Callback):
     def on_after_backward(self, trainer, pl_module):
-        # Log gradient norms
+        # 記錄梯度範數
         for name, param in pl_module.named_parameters():
             if param.grad is not None:
                 grad_norm = param.grad.norm().item()
                 pl_module.log(f"grad_norm/{name}", grad_norm)
 ```
 
-### Custom Checkpointing Callback
+### 自訂檢查點回呼函數
 
 ```python
 class CustomCheckpoint(Callback):
@@ -280,13 +280,13 @@ class CustomCheckpoint(Callback):
 
     def on_train_epoch_end(self, trainer, pl_module):
         epoch = trainer.current_epoch
-        if epoch % 5 == 0:  # Save every 5 epochs
+        if epoch % 5 == 0:  # 每 5 個 epochs 儲存
             filepath = f"{self.save_dir}/custom-{epoch}.ckpt"
             trainer.save_checkpoint(filepath)
             print(f"Saved checkpoint: {filepath}")
 ```
 
-### Model Freezing Callback
+### 模型凍結回呼函數
 
 ```python
 class FreezeUnfreeze(Callback):
@@ -297,16 +297,16 @@ class FreezeUnfreeze(Callback):
         epoch = trainer.current_epoch
 
         if epoch < self.freeze_until_epoch:
-            # Freeze backbone
+            # 凍結主幹網路
             for param in pl_module.backbone.parameters():
                 param.requires_grad = False
         else:
-            # Unfreeze backbone
+            # 解凍主幹網路
             for param in pl_module.backbone.parameters():
                 param.requires_grad = True
 ```
 
-### Learning Rate Finder Callback
+### 學習率查找器回呼函數
 
 ```python
 class LRFinder(Callback):
@@ -322,7 +322,7 @@ class LRFinder(Callback):
             trainer.should_stop = True
             return
 
-        # Exponential LR schedule
+        # 指數學習率排程
         lr = self.min_lr * (self.max_lr / self.min_lr) ** (batch_idx / self.num_steps)
         optimizer = trainer.optimizers[0]
         for param_group in optimizer.param_groups:
@@ -332,7 +332,7 @@ class LRFinder(Callback):
         self.losses.append(outputs['loss'].item())
 
     def on_train_end(self, trainer, pl_module):
-        # Plot LR vs Loss
+        # 繪製 LR vs Loss
         import matplotlib.pyplot as plt
         plt.plot(self.lrs, self.losses)
         plt.xscale('log')
@@ -341,7 +341,7 @@ class LRFinder(Callback):
         plt.savefig('lr_finder.png')
 ```
 
-### Prediction Saver Callback
+### 預測儲存回呼函數
 
 ```python
 class PredictionSaver(Callback):
@@ -353,52 +353,52 @@ class PredictionSaver(Callback):
         self.predictions.append(outputs)
 
     def on_predict_end(self, trainer, pl_module):
-        # Save all predictions
+        # 儲存所有預測
         torch.save(self.predictions, self.save_path)
         print(f"Predictions saved to {self.save_path}")
 ```
 
-## Available Hooks
+## 可用的鉤子
 
-### Setup and Teardown
-- `setup(trainer, pl_module, stage)` - Called at beginning of fit/test/predict
-- `teardown(trainer, pl_module, stage)` - Called at end of fit/test/predict
+### 設定和清理
+- `setup(trainer, pl_module, stage)` - 在 fit/test/predict 開始時呼叫
+- `teardown(trainer, pl_module, stage)` - 在 fit/test/predict 結束時呼叫
 
-### Training Lifecycle
-- `on_fit_start(trainer, pl_module)` - Called at start of fit
-- `on_fit_end(trainer, pl_module)` - Called at end of fit
-- `on_train_start(trainer, pl_module)` - Called at start of training
-- `on_train_end(trainer, pl_module)` - Called at end of training
+### 訓練生命週期
+- `on_fit_start(trainer, pl_module)` - 在 fit 開始時呼叫
+- `on_fit_end(trainer, pl_module)` - 在 fit 結束時呼叫
+- `on_train_start(trainer, pl_module)` - 在訓練開始時呼叫
+- `on_train_end(trainer, pl_module)` - 在訓練結束時呼叫
 
-### Epoch Boundaries
-- `on_train_epoch_start(trainer, pl_module)` - Called at start of training epoch
-- `on_train_epoch_end(trainer, pl_module)` - Called at end of training epoch
-- `on_validation_epoch_start(trainer, pl_module)` - Called at start of validation
-- `on_validation_epoch_end(trainer, pl_module)` - Called at end of validation
-- `on_test_epoch_start(trainer, pl_module)` - Called at start of test
-- `on_test_epoch_end(trainer, pl_module)` - Called at end of test
+### Epoch 邊界
+- `on_train_epoch_start(trainer, pl_module)` - 在訓練 epoch 開始時呼叫
+- `on_train_epoch_end(trainer, pl_module)` - 在訓練 epoch 結束時呼叫
+- `on_validation_epoch_start(trainer, pl_module)` - 在驗證開始時呼叫
+- `on_validation_epoch_end(trainer, pl_module)` - 在驗證結束時呼叫
+- `on_test_epoch_start(trainer, pl_module)` - 在測試開始時呼叫
+- `on_test_epoch_end(trainer, pl_module)` - 在測試結束時呼叫
 
-### Batch Boundaries
-- `on_train_batch_start(trainer, pl_module, batch, batch_idx)` - Before training batch
-- `on_train_batch_end(trainer, pl_module, outputs, batch, batch_idx)` - After training batch
-- `on_validation_batch_start(trainer, pl_module, batch, batch_idx)` - Before validation batch
-- `on_validation_batch_end(trainer, pl_module, outputs, batch, batch_idx)` - After validation batch
+### 批次邊界
+- `on_train_batch_start(trainer, pl_module, batch, batch_idx)` - 訓練批次之前
+- `on_train_batch_end(trainer, pl_module, outputs, batch, batch_idx)` - 訓練批次之後
+- `on_validation_batch_start(trainer, pl_module, batch, batch_idx)` - 驗證批次之前
+- `on_validation_batch_end(trainer, pl_module, outputs, batch, batch_idx)` - 驗證批次之後
 
-### Gradient Events
-- `on_before_backward(trainer, pl_module, loss)` - Before loss.backward()
-- `on_after_backward(trainer, pl_module)` - After loss.backward()
-- `on_before_optimizer_step(trainer, pl_module, optimizer)` - Before optimizer.step()
+### 梯度事件
+- `on_before_backward(trainer, pl_module, loss)` - 在 loss.backward() 之前
+- `on_after_backward(trainer, pl_module)` - 在 loss.backward() 之後
+- `on_before_optimizer_step(trainer, pl_module, optimizer)` - 在 optimizer.step() 之前
 
-### Checkpoint Events
-- `on_save_checkpoint(trainer, pl_module, checkpoint)` - When saving checkpoint
-- `on_load_checkpoint(trainer, pl_module, checkpoint)` - When loading checkpoint
+### 檢查點事件
+- `on_save_checkpoint(trainer, pl_module, checkpoint)` - 儲存檢查點時
+- `on_load_checkpoint(trainer, pl_module, checkpoint)` - 載入檢查點時
 
-### Exception Handling
-- `on_exception(trainer, pl_module, exception)` - When exception occurs
+### 異常處理
+- `on_exception(trainer, pl_module, exception)` - 發生異常時
 
-## State Management
+## 狀態管理
 
-For callbacks requiring persistence across checkpoints:
+對於需要跨檢查點持久化的回呼函數：
 
 ```python
 class StatefulCallback(Callback):
@@ -416,17 +416,17 @@ class StatefulCallback(Callback):
 
     @property
     def state_key(self):
-        # Unique identifier for this callback
+        # 此回呼函數的唯一識別碼
         return "my_stateful_callback"
 ```
 
-## Best Practices
+## 最佳實務
 
-### 1. Keep Callbacks Isolated
-Each callback should be self-contained and independent:
+### 1. 保持回呼函數隔離
+每個回呼函數應該是自包含和獨立的：
 
 ```python
-# Good: Self-contained
+# 好：自包含
 class MyCallback(Callback):
     def __init__(self):
         self.data = []
@@ -434,82 +434,82 @@ class MyCallback(Callback):
     def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx):
         self.data.append(outputs['loss'].item())
 
-# Bad: Depends on external state
+# 不好：依賴外部狀態
 global_data = []
 
 class BadCallback(Callback):
     def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx):
-        global_data.append(outputs['loss'].item())  # External dependency
+        global_data.append(outputs['loss'].item())  # 外部依賴
 ```
 
-### 2. Avoid Inter-Callback Dependencies
-Callbacks should not depend on other callbacks:
+### 2. 避免回呼函數間的依賴
+回呼函數不應該依賴其他回呼函數：
 
 ```python
-# Bad: Callback B depends on Callback A
+# 不好：Callback B 依賴 Callback A
 class CallbackA(Callback):
     def __init__(self):
         self.value = 0
 
 class CallbackB(Callback):
     def __init__(self, callback_a):
-        self.callback_a = callback_a  # Tight coupling
+        self.callback_a = callback_a  # 緊密耦合
 
-# Good: Independent callbacks
+# 好：獨立的回呼函數
 class CallbackA(Callback):
     def __init__(self):
         self.value = 0
 
 class CallbackB(Callback):
     def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx):
-        # Access trainer state instead
+        # 改為存取 trainer 狀態
         value = trainer.callback_metrics.get('metric')
 ```
 
-### 3. Never Manually Invoke Callback Methods
-Let Lightning call callbacks automatically:
+### 3. 永遠不要手動呼叫回呼函數方法
+讓 Lightning 自動呼叫回呼函數：
 
 ```python
-# Bad: Manual invocation
+# 不好：手動呼叫
 callback = MyCallback()
-callback.on_train_start(trainer, model)  # Don't do this
+callback.on_train_start(trainer, model)  # 不要這樣做
 
-# Good: Let Trainer handle it
+# 好：讓 Trainer 處理
 trainer = L.Trainer(callbacks=[MyCallback()])
 ```
 
-### 4. Design for Any Execution Order
-Callbacks may execute in any order, so don't rely on specific ordering:
+### 4. 設計為任意執行順序
+回呼函數可能以任意順序執行，所以不要依賴特定順序：
 
 ```python
-# Good: Order-independent
+# 好：順序獨立
 class GoodCallback(Callback):
     def on_train_epoch_end(self, trainer, pl_module):
-        # Use trainer state, not other callbacks
+        # 使用 trainer 狀態，而非其他回呼函數
         metrics = trainer.callback_metrics
         self.log_metrics(metrics)
 ```
 
-### 5. Use Callbacks for Non-Essential Logic
-Keep core research code in LightningModule, use callbacks for auxiliary functionality:
+### 5. 將回呼函數用於非必要邏輯
+將核心研究程式碼保留在 LightningModule 中，使用回呼函數處理輔助功能：
 
 ```python
-# Good separation
+# 好的分離
 class MyModel(L.LightningModule):
-    # Core research logic here
+    # 核心研究邏輯在這裡
     def training_step(self, batch, batch_idx):
         return loss
 
-# Non-essential monitoring in callback
+# 非必要的監控在回呼函數中
 class MonitorCallback(Callback):
     def on_validation_end(self, trainer, pl_module):
-        # Monitoring logic
+        # 監控邏輯
         pass
 ```
 
-## Common Patterns
+## 常見模式
 
-### Combining Multiple Callbacks
+### 組合多個回呼函數
 
 ```python
 from lightning.pytorch.callbacks import (
@@ -529,7 +529,7 @@ callbacks = [
 trainer = L.Trainer(callbacks=callbacks)
 ```
 
-### Conditional Callback Activation
+### 條件式回呼函數啟動
 
 ```python
 class ConditionalCallback(Callback):
@@ -538,11 +538,11 @@ class ConditionalCallback(Callback):
 
     def on_train_epoch_end(self, trainer, pl_module):
         if trainer.current_epoch >= self.activate_after_epoch:
-            # Only active after specified epoch
+            # 僅在指定 epoch 後啟動
             self.do_something(trainer, pl_module)
 ```
 
-### Multi-Stage Training Callback
+### 多階段訓練回呼函數
 
 ```python
 class MultiStageTraining(Callback):
@@ -557,7 +557,7 @@ class MultiStageTraining(Callback):
             self.current_stage += 1
             print(f"Entering stage {self.current_stage}")
 
-            # Adjust learning rate for new stage
+            # 為新階段調整學習率
             for optimizer in trainer.optimizers:
                 for param_group in optimizer.param_groups:
                     param_group['lr'] *= 0.1

@@ -1,22 +1,22 @@
-# Material Handling Equipment in PyLabRobot
+# PyLabRobot 材料處理設備
 
-## Overview
+## 概述
 
-PyLabRobot integrates with material handling equipment including heater shakers, incubators, centrifuges, and pumps. These devices enable environmental control, sample preparation, and automated workflows beyond basic liquid handling.
+PyLabRobot 整合材料處理設備，包括加熱震盪器、培養箱、離心機和幫浦。這些設備實現環境控制、樣品製備和超越基本液體處理的自動化工作流程。
 
-## Heater Shakers
+## 加熱震盪器
 
 ### Hamilton HeaterShaker
 
-The Hamilton HeaterShaker provides temperature control and orbital shaking for microplates.
+Hamilton HeaterShaker 為微孔盤提供溫度控制和軌道震盪。
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.heating_shaking import HeaterShaker
 from pylabrobot.heating_shaking.hamilton import HamiltonHeaterShakerBackend
 
-# Create heater shaker
+# 建立加熱震盪器
 hs = HeaterShaker(
     name="heater_shaker_1",
     backend=HamiltonHeaterShakerBackend(),
@@ -28,50 +28,50 @@ hs = HeaterShaker(
 await hs.setup()
 ```
 
-#### Operations
+#### 操作
 
-**Temperature Control:**
+**溫度控制：**
 
 ```python
-# Set temperature (Celsius)
+# 設定溫度（攝氏度）
 await hs.set_temperature(37)
 
-# Get current temperature
+# 取得目前溫度
 temp = await hs.get_temperature()
-print(f"Current temperature: {temp}°C")
+print(f"目前溫度：{temp}°C")
 
-# Turn off heating
+# 關閉加熱
 await hs.set_temperature(None)
 ```
 
-**Shaking Control:**
+**震盪控制：**
 
 ```python
-# Start shaking (RPM)
+# 開始震盪（RPM）
 await hs.set_shake_rate(300)  # 300 RPM
 
-# Stop shaking
+# 停止震盪
 await hs.set_shake_rate(0)
 ```
 
-**Plate Operations:**
+**微孔盤操作：**
 
 ```python
-# Lock plate in position
+# 鎖定微孔盤位置
 await hs.lock_plate()
 
-# Unlock plate
+# 解鎖微孔盤
 await hs.unlock_plate()
 ```
 
-#### Integration with Liquid Handler
+#### 與液體處理器整合
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
 from pylabrobot.liquid_handling.backends import STAR
 from pylabrobot.resources import STARLetDeck
 
-# Initialize devices
+# 初始化設備
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 hs = HeaterShaker(name="hs", backend=HamiltonHeaterShakerBackend())
 
@@ -79,33 +79,33 @@ await lh.setup()
 await hs.setup()
 
 try:
-    # Assign heater shaker to deck
+    # 將加熱震盪器分配到工作台
     lh.deck.assign_child_resource(hs, rails=8)
 
-    # Prepare samples
+    # 準備樣品
     tip_rack = TIP_CAR_480_A00(name="tips")
     plate = Cos_96_DW_1mL(name="plate")
 
     lh.deck.assign_child_resource(tip_rack, rails=1)
 
-    # Place plate on heater shaker
+    # 將微孔盤放置在加熱震盪器上
     hs.assign_child_resource(plate, location=(0, 0, 0))
 
-    # Transfer reagents to plate on heater shaker
+    # 將試劑轉移到加熱震盪器上的微孔盤
     await lh.pick_up_tips(tip_rack["A1:H1"])
     await lh.transfer(reagent["A1:H1"], plate["A1:H1"], vols=100)
     await lh.drop_tips()
 
-    # Lock plate and start incubation
+    # 鎖定微孔盤並開始培養
     await hs.lock_plate()
     await hs.set_temperature(37)
     await hs.set_shake_rate(300)
 
-    # Incubate
+    # 培養
     import asyncio
-    await asyncio.sleep(600)  # 10 minutes
+    await asyncio.sleep(600)  # 10 分鐘
 
-    # Stop shaking and heating
+    # 停止震盪和加熱
     await hs.set_shake_rate(0)
     await hs.set_temperature(None)
     await hs.unlock_plate()
@@ -115,32 +115,32 @@ finally:
     await hs.stop()
 ```
 
-#### Multiple Heater Shakers
+#### 多個加熱震盪器
 
-The HamiltonHeaterShakerBackend handles multiple units:
+HamiltonHeaterShakerBackend 處理多個單元：
 
 ```python
-# Backend automatically manages multiple heater shakers
+# 後端自動管理多個加熱震盪器
 hs1 = HeaterShaker(name="hs1", backend=HamiltonHeaterShakerBackend())
 hs2 = HeaterShaker(name="hs2", backend=HamiltonHeaterShakerBackend())
 
 await hs1.setup()
 await hs2.setup()
 
-# Assign to different deck positions
+# 分配到不同的工作台位置
 lh.deck.assign_child_resource(hs1, rails=8)
 lh.deck.assign_child_resource(hs2, rails=12)
 
-# Control independently
+# 獨立控制
 await hs1.set_temperature(37)
 await hs2.set_temperature(42)
 ```
 
 ### Inheco ThermoShake
 
-The Inheco ThermoShake provides temperature control and shaking.
+Inheco ThermoShake 提供溫度控制和震盪。
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.heating_shaking import HeaterShaker
@@ -157,42 +157,42 @@ hs = HeaterShaker(
 await hs.setup()
 ```
 
-#### Operations
+#### 操作
 
-Similar to Hamilton HeaterShaker:
+與 Hamilton HeaterShaker 類似：
 
 ```python
-# Temperature control
+# 溫度控制
 await hs.set_temperature(37)
 temp = await hs.get_temperature()
 
-# Shaking control
+# 震盪控制
 await hs.set_shake_rate(300)
 
-# Plate locking
+# 微孔盤鎖定
 await hs.lock_plate()
 await hs.unlock_plate()
 ```
 
-## Incubators
+## 培養箱
 
-### Inheco Incubators
+### Inheco 培養箱
 
-PyLabRobot supports various Inheco incubator models for temperature-controlled plate storage.
+PyLabRobot 支援各種 Inheco 培養箱型號用於控溫微孔盤儲存。
 
-#### Supported Models
+#### 支援的型號
 
-- Inheco Single Plate Incubator
-- Inheco Multi-Plate Incubators
-- Other Inheco temperature controllers
+- Inheco 單微孔盤培養箱
+- Inheco 多微孔盤培養箱
+- 其他 Inheco 溫度控制器
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.temperature_control import TemperatureController
 from pylabrobot.temperature_control.inheco import InhecoBackend
 
-# Create incubator
+# 建立培養箱
 incubator = TemperatureController(
     name="incubator",
     backend=InhecoBackend(),
@@ -204,25 +204,25 @@ incubator = TemperatureController(
 await incubator.setup()
 ```
 
-#### Operations
+#### 操作
 
 ```python
-# Set temperature
+# 設定溫度
 await incubator.set_temperature(37)
 
-# Get temperature
+# 取得溫度
 temp = await incubator.get_temperature()
-print(f"Incubator temperature: {temp}°C")
+print(f"培養箱溫度：{temp}°C")
 
-# Turn off
+# 關閉
 await incubator.set_temperature(None)
 ```
 
-### Thermo Fisher Cytomat Incubators
+### Thermo Fisher Cytomat 培養箱
 
-Cytomat incubators provide automated plate storage with temperature and CO2 control.
+Cytomat 培養箱提供具有溫度和 CO2 控制的自動化微孔盤儲存。
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.incubation import Incubator
@@ -236,27 +236,27 @@ incubator = Incubator(
 await incubator.setup()
 ```
 
-#### Operations
+#### 操作
 
 ```python
-# Store plate
+# 儲存微孔盤
 await incubator.store_plate(plate_id="plate_001", position=1)
 
-# Retrieve plate
+# 取出微孔盤
 await incubator.retrieve_plate(position=1)
 
-# Set environmental conditions
+# 設定環境條件
 await incubator.set_temperature(37)
 await incubator.set_co2(5.0)  # 5% CO2
 ```
 
-## Centrifuges
+## 離心機
 
 ### Agilent VSpin
 
-The Agilent VSpin is a vacuum-assisted centrifuge for plate processing.
+Agilent VSpin 是用於微孔盤處理的真空輔助離心機。
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.centrifuge import Centrifuge
@@ -270,52 +270,52 @@ centrifuge = Centrifuge(
 await centrifuge.setup()
 ```
 
-#### Operations
+#### 操作
 
-**Door Control:**
+**門控制：**
 
 ```python
-# Open door
+# 開門
 await centrifuge.open_door()
 
-# Close door
+# 關門
 await centrifuge.close_door()
 
-# Lock door
+# 鎖門
 await centrifuge.lock_door()
 
-# Unlock door
+# 解鎖門
 await centrifuge.unlock_door()
 ```
 
-**Bucket Positioning:**
+**轉桶定位：**
 
 ```python
-# Move bucket to loading position
+# 將轉桶移至載入位置
 await centrifuge.move_bucket_to_loading()
 
-# Move bucket to home position
+# 將轉桶移至原位
 await centrifuge.move_bucket_to_home()
 ```
 
-**Spinning:**
+**旋轉：**
 
 ```python
-# Run centrifuge
+# 運行離心機
 await centrifuge.spin(
     speed=2000,      # RPM
-    duration=300     # seconds
+    duration=300     # 秒
 )
 
-# Stop spinning
+# 停止旋轉
 await centrifuge.stop_spin()
 ```
 
-#### Integration Example
+#### 整合範例
 
 ```python
 async def centrifuge_workflow():
-    """Complete centrifugation workflow"""
+    """完整離心工作流程"""
 
     lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
     centrifuge = Centrifuge(name="vspin", backend=VSpinBackend())
@@ -324,29 +324,29 @@ async def centrifuge_workflow():
     await centrifuge.setup()
 
     try:
-        # Prepare samples
+        # 準備樣品
         await lh.pick_up_tips(tip_rack["A1:H1"])
         await lh.transfer(samples["A1:H12"], plate["A1:H12"], vols=200)
         await lh.drop_tips()
 
-        # Load into centrifuge
-        print("Move plate to centrifuge")
+        # 載入離心機
+        print("將微孔盤移至離心機")
         await centrifuge.open_door()
         await centrifuge.move_bucket_to_loading()
-        input("Press Enter when plate is loaded...")
+        input("微孔盤載入後按 Enter...")
 
         await centrifuge.move_bucket_to_home()
         await centrifuge.close_door()
         await centrifuge.lock_door()
 
-        # Centrifuge
+        # 離心
         await centrifuge.spin(speed=2000, duration=300)
 
-        # Unload
+        # 卸載
         await centrifuge.unlock_door()
         await centrifuge.open_door()
         await centrifuge.move_bucket_to_loading()
-        input("Press Enter when plate is removed...")
+        input("微孔盤移除後按 Enter...")
 
         await centrifuge.move_bucket_to_home()
         await centrifuge.close_door()
@@ -356,13 +356,13 @@ async def centrifuge_workflow():
         await centrifuge.stop()
 ```
 
-## Pumps
+## 幫浦
 
 ### Cole Parmer Masterflex
 
-PyLabRobot supports Cole Parmer Masterflex peristaltic pumps for fluid transfer.
+PyLabRobot 支援 Cole Parmer Masterflex 蠕動幫浦用於流體輸送。
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.pumps import Pump
@@ -376,50 +376,50 @@ pump = Pump(
 await pump.setup()
 ```
 
-#### Operations
+#### 操作
 
-**Running Pump:**
+**運行幫浦：**
 
 ```python
-# Run for duration
+# 運行一段時間
 await pump.run_for_duration(
-    duration=10,      # seconds
-    speed=50          # % of maximum
+    duration=10,      # 秒
+    speed=50          # 最大值的百分比
 )
 
-# Run continuously
+# 連續運行
 await pump.start(speed=50)
 
-# Stop pump
+# 停止幫浦
 await pump.stop()
 ```
 
-**Volume-Based Pumping:**
+**基於體積的泵送：**
 
 ```python
-# Pump specific volume (requires calibration)
+# 泵送特定體積（需要校準）
 await pump.pump_volume(
     volume=10,        # mL
-    speed=50          # % of maximum
+    speed=50          # 最大值的百分比
 )
 ```
 
-#### Calibration
+#### 校準
 
 ```python
-# Calibrate pump for volume accuracy
-# (requires known volume measurement)
+# 校準幫浦以提高體積準確度
+# （需要已知體積測量）
 await pump.run_for_duration(duration=60, speed=50)
-actual_volume = 25.3  # mL measured
+actual_volume = 25.3  # mL 測量值
 
 pump.calibrate(duration=60, speed=50, volume=actual_volume)
 ```
 
-### Agrowtek Pump Array
+### Agrowtek 幫浦陣列
 
-Support for Agrowtek pump arrays for multiple simultaneous fluid transfers.
+支援 Agrowtek 幫浦陣列用於多個同時流體輸送。
 
-#### Setup
+#### 設置
 
 ```python
 from pylabrobot.pumps import PumpArray
@@ -434,17 +434,17 @@ pump_array = PumpArray(
 await pump_array.setup()
 ```
 
-#### Operations
+#### 操作
 
 ```python
-# Run specific pump
+# 運行特定幫浦
 await pump_array.run_pump(
     pump_number=1,
     duration=10,
     speed=50
 )
 
-# Run multiple pumps simultaneously
+# 同時運行多個幫浦
 await pump_array.run_pumps(
     pump_numbers=[1, 2, 3],
     duration=10,
@@ -452,15 +452,15 @@ await pump_array.run_pumps(
 )
 ```
 
-## Multi-Device Protocols
+## 多設備協定
 
-### Complex Workflow Example
+### 複雜工作流程範例
 
 ```python
 async def complex_workflow():
-    """Multi-device automated workflow"""
+    """多設備自動化工作流程"""
 
-    # Initialize all devices
+    # 初始化所有設備
     lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
     hs = HeaterShaker(name="hs", backend=HamiltonHeaterShakerBackend())
     centrifuge = Centrifuge(name="vspin", backend=VSpinBackend())
@@ -472,32 +472,32 @@ async def complex_workflow():
     await pump.setup()
 
     try:
-        # 1. Sample preparation
+        # 1. 樣品製備
         await lh.pick_up_tips(tip_rack["A1:H1"])
         await lh.transfer(samples["A1:H12"], plate["A1:H12"], vols=100)
         await lh.drop_tips()
 
-        # 2. Add reagent via pump
+        # 2. 通過幫浦添加試劑
         await pump.pump_volume(volume=50, speed=50)
 
-        # 3. Mix on heater shaker
+        # 3. 在加熱震盪器上混合
         await hs.lock_plate()
         await hs.set_temperature(37)
         await hs.set_shake_rate(300)
-        await asyncio.sleep(600)  # 10 min incubation
+        await asyncio.sleep(600)  # 10 分鐘培養
         await hs.set_shake_rate(0)
         await hs.set_temperature(None)
         await hs.unlock_plate()
 
-        # 4. Centrifuge
+        # 4. 離心
         await centrifuge.open_door()
-        # (load plate)
+        # （載入微孔盤）
         await centrifuge.close_door()
         await centrifuge.spin(speed=2000, duration=180)
         await centrifuge.open_door()
-        # (unload plate)
+        # （卸載微孔盤）
 
-        # 5. Transfer supernatant
+        # 5. 轉移上清液
         await lh.pick_up_tips(tip_rack["A2:H2"])
         await lh.transfer(
             plate["A1:H12"],
@@ -513,22 +513,22 @@ async def complex_workflow():
         await pump.stop()
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Device Initialization**: Setup all devices at protocol start
-2. **Sequential Operations**: Material handling often requires sequential steps
-3. **Safety**: Always unlock/open doors before manual plate handling
-4. **Temperature Equilibration**: Allow time for devices to reach temperature
-5. **Error Handling**: Handle device errors gracefully with try/finally
-6. **State Verification**: Check device state before operations
-7. **Timing**: Account for device-specific delays (heating, centrifugation)
-8. **Maintenance**: Follow manufacturer maintenance schedules
-9. **Calibration**: Regularly calibrate pumps and temperature controllers
-10. **Documentation**: Record all device settings and parameters
+1. **設備初始化**：在協定開始時設置所有設備
+2. **順序操作**：材料處理通常需要順序步驟
+3. **安全性**：手動微孔盤處理前始終解鎖/開門
+4. **溫度平衡**：留出時間讓設備達到溫度
+5. **錯誤處理**：使用 try/finally 優雅地處理設備錯誤
+6. **狀態驗證**：操作前檢查設備狀態
+7. **時間控制**：考慮設備特定的延遲（加熱、離心）
+8. **維護**：遵循製造商的維護計畫
+9. **校準**：定期校準幫浦和溫度控制器
+10. **文件**：記錄所有設備設定和參數
 
-## Common Patterns
+## 常見模式
 
-### Temperature-Controlled Incubation
+### 控溫培養
 
 ```python
 async def incubate_with_shaking(
@@ -537,24 +537,24 @@ async def incubate_with_shaking(
     shake_rate: int,
     duration: int
 ):
-    """Incubate plate with temperature and shaking"""
+    """使用溫度和震盪培養微孔盤"""
 
     hs = HeaterShaker(name="hs", backend=HamiltonHeaterShakerBackend())
     await hs.setup()
 
     try:
-        # Assign plate to heater shaker
+        # 將微孔盤分配到加熱震盪器
         hs.assign_child_resource(plate, location=(0, 0, 0))
 
-        # Start incubation
+        # 開始培養
         await hs.lock_plate()
         await hs.set_temperature(temperature)
         await hs.set_shake_rate(shake_rate)
 
-        # Wait
+        # 等待
         await asyncio.sleep(duration)
 
-        # Stop
+        # 停止
         await hs.set_shake_rate(0)
         await hs.set_temperature(None)
         await hs.unlock_plate()
@@ -562,20 +562,20 @@ async def incubate_with_shaking(
     finally:
         await hs.stop()
 
-# Use in protocol
+# 在協定中使用
 await incubate_with_shaking(
     plate=assay_plate,
     temperature=37,
     shake_rate=300,
-    duration=600  # 10 minutes
+    duration=600  # 10 分鐘
 )
 ```
 
-### Automated Plate Processing
+### 自動化微孔盤處理
 
 ```python
 async def process_plates(plate_list: list):
-    """Process multiple plates through workflow"""
+    """處理多個微孔盤的工作流程"""
 
     lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
     hs = HeaterShaker(name="hs", backend=HamiltonHeaterShakerBackend())
@@ -585,9 +585,9 @@ async def process_plates(plate_list: list):
 
     try:
         for i, plate in enumerate(plate_list):
-            print(f"Processing plate {i+1}/{len(plate_list)}")
+            print(f"處理微孔盤 {i+1}/{len(plate_list)}")
 
-            # Transfer samples
+            # 轉移樣品
             await lh.pick_up_tips(tip_rack[f"A{i+1}:H{i+1}"])
             await lh.transfer(
                 source[f"A{i+1}:H{i+1}"],
@@ -596,12 +596,12 @@ async def process_plates(plate_list: list):
             )
             await lh.drop_tips()
 
-            # Incubate
+            # 培養
             hs.assign_child_resource(plate, location=(0, 0, 0))
             await hs.lock_plate()
             await hs.set_temperature(37)
             await hs.set_shake_rate(300)
-            await asyncio.sleep(300)  # 5 min
+            await asyncio.sleep(300)  # 5 分鐘
             await hs.set_shake_rate(0)
             await hs.set_temperature(None)
             await hs.unlock_plate()
@@ -612,9 +612,9 @@ async def process_plates(plate_list: list):
         await hs.stop()
 ```
 
-## Additional Resources
+## 其他資源
 
-- Material Handling Documentation: https://docs.pylabrobot.org/user_guide/01_material-handling/
-- Heater Shakers: https://docs.pylabrobot.org/user_guide/01_material-handling/heating_shaking/
-- API Reference: https://docs.pylabrobot.org/api/
-- Supported Equipment: https://docs.pylabrobot.org/user_guide/machines.html
+- 材料處理文件：https://docs.pylabrobot.org/user_guide/01_material-handling/
+- 加熱震盪器：https://docs.pylabrobot.org/user_guide/01_material-handling/heating_shaking/
+- API 參考：https://docs.pylabrobot.org/api/
+- 支援的設備：https://docs.pylabrobot.org/user_guide/machines.html

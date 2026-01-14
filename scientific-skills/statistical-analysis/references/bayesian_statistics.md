@@ -1,137 +1,137 @@
-# Bayesian Statistical Analysis
+# 貝氏統計分析
 
-This document provides guidance on conducting and interpreting Bayesian statistical analyses, which offer an alternative framework to frequentist (classical) statistics.
+本文件提供進行和解讀貝氏統計分析的指南，這是頻率學派（古典）統計的替代框架。
 
-## Bayesian vs. Frequentist Philosophy
+## 貝氏與頻率學派哲學
 
-### Fundamental Differences
+### 基本差異
 
-| Aspect | Frequentist | Bayesian |
+| 面向 | 頻率學派 | 貝氏 |
 |--------|-------------|----------|
-| **Probability interpretation** | Long-run frequency of events | Degree of belief/uncertainty |
-| **Parameters** | Fixed but unknown | Random variables with distributions |
-| **Inference** | Based on sampling distributions | Based on posterior distributions |
-| **Primary output** | p-values, confidence intervals | Posterior probabilities, credible intervals |
-| **Prior information** | Not formally incorporated | Explicitly incorporated via priors |
-| **Hypothesis testing** | Reject/fail to reject null | Probability of hypotheses given data |
-| **Sample size** | Often requires minimum | Can work with any sample size |
-| **Interpretation** | Indirect (probability of data given H₀) | Direct (probability of hypothesis given data) |
+| **機率解讀** | 事件的長期頻率 | 信念/不確定性程度 |
+| **參數** | 固定但未知 | 具有分布的隨機變數 |
+| **推論** | 基於抽樣分布 | 基於後驗分布 |
+| **主要輸出** | p 值、信賴區間 | 後驗機率、可信區間 |
+| **先驗資訊** | 不正式納入 | 透過先驗分布明確納入 |
+| **假設檢定** | 拒絕/未能拒絕虛無假設 | 給定資料下假設的機率 |
+| **樣本大小** | 通常需要最小值 | 可用於任何樣本大小 |
+| **解讀** | 間接（給定 H₀ 下資料的機率） | 直接（給定資料下假設的機率） |
 
-### Key Question Difference
+### 關鍵問題差異
 
-**Frequentist**: "If the null hypothesis is true, what is the probability of observing data this extreme or more extreme?"
+**頻率學派**：「如果虛無假設為真，觀察到這麼極端或更極端資料的機率是多少？」
 
-**Bayesian**: "Given the observed data, what is the probability that the hypothesis is true?"
+**貝氏**：「給定觀察到的資料，假設為真的機率是多少？」
 
-The Bayesian question is more intuitive and directly addresses what researchers want to know.
+貝氏問題更直觀，直接回答研究者想知道的問題。
 
 ---
 
-## Bayes' Theorem
+## 貝氏定理
 
-**Formula**:
+**公式**：
 ```
 P(θ|D) = P(D|θ) × P(θ) / P(D)
 ```
 
-**In words**:
+**白話說明**：
 ```
-Posterior = Likelihood × Prior / Evidence
+後驗 = 概似 × 先驗 / 證據
 ```
 
-Where:
-- **θ (theta)**: Parameter of interest (e.g., mean difference, correlation)
-- **D**: Observed data
-- **P(θ|D)**: Posterior distribution (belief about θ after seeing data)
-- **P(D|θ)**: Likelihood (probability of data given θ)
-- **P(θ)**: Prior distribution (belief about θ before seeing data)
-- **P(D)**: Marginal likelihood/evidence (normalizing constant)
+其中：
+- **θ（theta）**：感興趣的參數（例如，平均差異、相關）
+- **D**：觀察到的資料
+- **P(θ|D)**：後驗分布（看到資料後對 θ 的信念）
+- **P(D|θ)**：概似函數（給定 θ 下資料的機率）
+- **P(θ)**：先驗分布（看到資料前對 θ 的信念）
+- **P(D)**：邊際概似/證據（正規化常數）
 
 ---
 
-## Prior Distributions
+## 先驗分布
 
-### Types of Priors
+### 先驗類型
 
-#### 1. Informative Priors
+#### 1. 訊息性先驗
 
-**When to use**: When you have substantial prior knowledge from:
-- Previous studies
-- Expert knowledge
-- Theory
-- Pilot data
+**何時使用**：當您有來自以下來源的實質先驗知識：
+- 先前研究
+- 專家知識
+- 理論
+- 試驗資料
 
-**Example**: Meta-analysis shows effect size d ≈ 0.40, SD = 0.15
-- Prior: Normal(0.40, 0.15)
+**範例**：統合分析顯示效果量 d ≈ 0.40，SD = 0.15
+- 先驗：Normal(0.40, 0.15)
 
-**Advantages**:
-- Incorporates existing knowledge
-- More efficient (smaller samples needed)
-- Can stabilize estimates with small data
+**優點**：
+- 納入現有知識
+- 更有效率（需要較小樣本）
+- 可以用小資料穩定估計
 
-**Disadvantages**:
-- Subjective (but subjectivity can be strength)
-- Must be justified and transparent
-- May be controversial if strong prior conflicts with data
-
----
-
-#### 2. Weakly Informative Priors
-
-**When to use**: Default choice for most applications
-
-**Characteristics**:
-- Regularizes estimates (prevents extreme values)
-- Has minimal influence on posterior with moderate data
-- Prevents computational issues
-
-**Example priors**:
-- Effect size: Normal(0, 1) or Cauchy(0, 0.707)
-- Variance: Half-Cauchy(0, 1)
-- Correlation: Uniform(-1, 1) or Beta(2, 2)
-
-**Advantages**:
-- Balances objectivity and regularization
-- Computationally stable
-- Broadly acceptable
+**缺點**：
+- 主觀（但主觀性可以是優勢）
+- 必須合理且透明
+- 如果強先驗與資料衝突可能有爭議
 
 ---
 
-#### 3. Non-Informative (Flat/Uniform) Priors
+#### 2. 弱訊息性先驗
 
-**When to use**: When attempting to be "objective"
+**何時使用**：大多數應用的預設選擇
 
-**Example**: Uniform(-∞, ∞) for any value
+**特性**：
+- 正則化估計（防止極端值）
+- 在中等資料下對後驗影響最小
+- 防止計算問題
 
-**⚠️ Caution**:
-- Can lead to improper posteriors
-- May produce non-sensible results
-- Not truly "non-informative" (still makes assumptions)
-- Often not recommended in modern Bayesian practice
+**先驗範例**：
+- 效果量：Normal(0, 1) 或 Cauchy(0, 0.707)
+- 變異數：Half-Cauchy(0, 1)
+- 相關：Uniform(-1, 1) 或 Beta(2, 2)
 
-**Better alternative**: Use weakly informative priors
+**優點**：
+- 平衡客觀性和正則化
+- 計算穩定
+- 廣泛可接受
 
 ---
 
-### Prior Sensitivity Analysis
+#### 3. 無訊息性（平坦/均勻）先驗
 
-**Always conduct**: Test how results change with different priors
+**何時使用**：當試圖「客觀」時
 
-**Process**:
-1. Fit model with default/planned prior
-2. Fit model with more diffuse prior
-3. Fit model with more concentrated prior
-4. Compare posterior distributions
+**範例**：Uniform(-∞, ∞) 對任何值
 
-**Reporting**:
-- If results are similar: Evidence is robust
-- If results differ substantially: Data are not strong enough to overwhelm prior
+**⚠️ 注意**：
+- 可能導致不適當的後驗
+- 可能產生不合理的結果
+- 不是真正「無訊息性」的（仍然做出假設）
+- 在現代貝氏實踐中通常不建議
 
-**Python example**:
+**更好的替代方案**：使用弱訊息性先驗
+
+---
+
+### 先驗敏感度分析
+
+**務必進行**：測試結果如何隨不同先驗變化
+
+**過程**：
+1. 用預設/計畫的先驗擬合模型
+2. 用更分散的先驗擬合模型
+3. 用更集中的先驗擬合模型
+4. 比較後驗分布
+
+**報告**：
+- 如果結果相似：證據是穩健的
+- 如果結果有實質差異：資料不夠強以壓倒先驗
+
+**Python 範例**：
 ```python
 import pymc as pm
 
-# Model with different priors
+# 使用不同先驗的模型
 priors = [
     ('weakly_informative', pm.Normal.dist(0, 1)),
     ('diffuse', pm.Normal.dist(0, 10)),
@@ -142,126 +142,126 @@ results = {}
 for name, prior in priors:
     with pm.Model():
         effect = pm.Normal('effect', mu=prior.mu, sigma=prior.sigma)
-        # ... rest of model
+        # ... 模型其餘部分
         trace = pm.sample()
         results[name] = trace
 ```
 
 ---
 
-## Bayesian Hypothesis Testing
+## 貝氏假設檢定
 
-### Bayes Factor (BF)
+### 貝氏因子（BF）
 
-**What it is**: Ratio of evidence for two competing hypotheses
+**定義**：兩個競爭假設的證據比率
 
-**Formula**:
+**公式**：
 ```
 BF₁₀ = P(D|H₁) / P(D|H₀)
 ```
 
-**Interpretation**:
+**解讀**：
 
-| BF₁₀ | Evidence |
+| BF₁₀ | 證據 |
 |------|----------|
-| >100 | Decisive for H₁ |
-| 30-100 | Very strong for H₁ |
-| 10-30 | Strong for H₁ |
-| 3-10 | Moderate for H₁ |
-| 1-3 | Anecdotal for H₁ |
-| 1 | No evidence |
-| 1/3-1 | Anecdotal for H₀ |
-| 1/10-1/3 | Moderate for H₀ |
-| 1/30-1/10 | Strong for H₀ |
-| 1/100-1/30 | Very strong for H₀ |
-| <1/100 | Decisive for H₀ |
+| >100 | 決定性支持 H₁ |
+| 30-100 | 非常強支持 H₁ |
+| 10-30 | 強支持 H₁ |
+| 3-10 | 中度支持 H₁ |
+| 1-3 | 軼事性支持 H₁ |
+| 1 | 無證據 |
+| 1/3-1 | 軼事性支持 H₀ |
+| 1/10-1/3 | 中度支持 H₀ |
+| 1/30-1/10 | 強支持 H₀ |
+| 1/100-1/30 | 非常強支持 H₀ |
+| <1/100 | 決定性支持 H₀ |
 
-**Advantages over p-values**:
-1. Can provide evidence for null hypothesis
-2. Not dependent on sampling intentions (no "peeking" problem)
-3. Directly quantifies evidence
-4. Can be updated with more data
+**相對於 p 值的優勢**：
+1. 可以提供虛無假設的證據
+2. 不依賴抽樣意圖（沒有「偷看」問題）
+3. 直接量化證據
+4. 可以用更多資料更新
 
-**Python calculation**:
+**Python 計算**：
 ```python
 import pingouin as pg
 
-# Note: Limited BF support in Python
-# Better options: R packages (BayesFactor), JASP software
+# 注意：Python 中 BF 支援有限
+# 更好的選項：R 套件（BayesFactor）、JASP 軟體
 
-# Approximate BF from t-statistic
-# Using Jeffreys-Zellner-Siow prior
+# 從 t 統計量近似 BF
+# 使用 Jeffreys-Zellner-Siow 先驗
 from scipy import stats
 
 def bf_from_t(t, n1, n2, r_scale=0.707):
     """
-    Approximate Bayes Factor from t-statistic
-    r_scale: Cauchy prior scale (default 0.707 for medium effect)
+    從 t 統計量近似貝氏因子
+    r_scale：Cauchy 先驗尺度（預設 0.707 為中等效果）
     """
-    # This is simplified; use dedicated packages for accurate calculation
+    # 這是簡化版；使用專用套件獲得精確計算
     df = n1 + n2 - 2
-    # Implementation requires numerical integration
+    # 實作需要數值積分
     pass
 ```
 
 ---
 
-### Region of Practical Equivalence (ROPE)
+### 實際等價區間（ROPE）
 
-**Purpose**: Define range of negligible effect sizes
+**目的**：定義可忽略效果量的範圍
 
-**Process**:
-1. Define ROPE (e.g., d ∈ [-0.1, 0.1] for negligible effects)
-2. Calculate % of posterior inside ROPE
-3. Make decision:
-   - >95% in ROPE: Accept practical equivalence
-   - >95% outside ROPE: Reject equivalence
-   - Otherwise: Inconclusive
+**過程**：
+1. 定義 ROPE（例如，d ∈ [-0.1, 0.1] 為可忽略效果）
+2. 計算後驗在 ROPE 內的百分比
+3. 做出決策：
+   - >95% 在 ROPE 內：接受實際等價
+   - >95% 在 ROPE 外：拒絕等價
+   - 否則：無定論
 
-**Advantage**: Directly tests for practical significance
+**優勢**：直接檢定實際顯著性
 
-**Python example**:
+**Python 範例**：
 ```python
-# Define ROPE
+# 定義 ROPE
 rope_lower, rope_upper = -0.1, 0.1
 
-# Calculate % of posterior in ROPE
+# 計算後驗在 ROPE 內的百分比
 in_rope = np.mean((posterior_samples > rope_lower) &
                   (posterior_samples < rope_upper))
 
-print(f"{in_rope*100:.1f}% of posterior in ROPE")
+print(f"{in_rope*100:.1f}% 後驗在 ROPE 內")
 ```
 
 ---
 
-## Bayesian Estimation
+## 貝氏估計
 
-### Credible Intervals
+### 可信區間
 
-**What it is**: Interval containing parameter with X% probability
+**定義**：包含參數機率為 X% 的區間
 
-**95% Credible Interval interpretation**:
-> "There is a 95% probability that the true parameter lies in this interval."
+**95% 可信區間解讀**：
+> 「真實參數落在此區間內的機率為 95%。」
 
-**This is what people THINK confidence intervals mean** (but don't in frequentist framework)
+**這正是人們認為信賴區間的意義**（但在頻率學派框架中不是）
 
-**Types**:
+**類型**：
 
-#### Equal-Tailed Interval (ETI)
-- 2.5th to 97.5th percentile
-- Simple to calculate
-- May not include mode for skewed distributions
+#### 等尾區間（ETI）
+- 第 2.5 百分位到第 97.5 百分位
+- 計算簡單
+- 對偏斜分布可能不包含眾數
 
-#### Highest Density Interval (HDI)
-- Narrowest interval containing 95% of distribution
-- Always includes mode
-- Better for skewed distributions
+#### 最高密度區間（HDI）
+- 包含 95% 分布的最窄區間
+- 始終包含眾數
+- 對偏斜分布更好
 
-**Python calculation**:
+**Python 計算**：
 ```python
 import arviz as az
 
-# Equal-tailed interval
+# 等尾區間
 eti = np.percentile(posterior_samples, [2.5, 97.5])
 
 # HDI
@@ -270,111 +270,111 @@ hdi = az.hdi(posterior_samples, hdi_prob=0.95)
 
 ---
 
-### Posterior Distributions
+### 後驗分布
 
-**Interpreting posterior distributions**:
+**解讀後驗分布**：
 
-1. **Central tendency**:
-   - Mean: Average posterior value
-   - Median: 50th percentile
-   - Mode: Most probable value (MAP - Maximum A Posteriori)
+1. **集中趨勢**：
+   - 平均值：後驗平均值
+   - 中位數：第 50 百分位
+   - 眾數：最可能值（MAP - 最大後驗估計）
 
-2. **Uncertainty**:
-   - SD: Spread of posterior
-   - Credible intervals: Quantify uncertainty
+2. **不確定性**：
+   - SD：後驗的離散程度
+   - 可信區間：量化不確定性
 
-3. **Shape**:
-   - Symmetric: Similar to normal
-   - Skewed: Asymmetric uncertainty
-   - Multimodal: Multiple plausible values
+3. **形狀**：
+   - 對稱：類似常態
+   - 偏斜：不對稱不確定性
+   - 多峰：多個可能值
 
-**Visualization**:
+**視覺化**：
 ```python
 import matplotlib.pyplot as plt
 import arviz as az
 
-# Posterior plot with HDI
+# 含 HDI 的後驗圖
 az.plot_posterior(trace, hdi_prob=0.95)
 
-# Trace plot (check convergence)
+# 軌跡圖（檢查收斂）
 az.plot_trace(trace)
 
-# Forest plot (multiple parameters)
+# 森林圖（多個參數）
 az.plot_forest(trace)
 ```
 
 ---
 
-## Common Bayesian Analyses
+## 常見貝氏分析
 
-### Bayesian T-Test
+### 貝氏 T 檢定
 
-**Purpose**: Compare two groups (Bayesian alternative to t-test)
+**目的**：比較兩組（t 檢定的貝氏替代方法）
 
-**Outputs**:
-1. Posterior distribution of mean difference
-2. 95% credible interval
-3. Bayes Factor (BF₁₀)
-4. Probability of directional hypothesis (e.g., P(μ₁ > μ₂))
+**輸出**：
+1. 平均差異的後驗分布
+2. 95% 可信區間
+3. 貝氏因子（BF₁₀）
+4. 方向假設的機率（例如，P(μ₁ > μ₂)）
 
-**Python implementation**:
+**Python 實作**：
 ```python
 import pymc as pm
 import arviz as az
 
-# Bayesian independent samples t-test
+# 貝氏獨立樣本 t 檢定
 with pm.Model() as model:
-    # Priors for group means
+    # 組平均值的先驗
     mu1 = pm.Normal('mu1', mu=0, sigma=10)
     mu2 = pm.Normal('mu2', mu=0, sigma=10)
 
-    # Prior for pooled standard deviation
+    # 合併標準差的先驗
     sigma = pm.HalfNormal('sigma', sigma=10)
 
-    # Likelihood
+    # 概似函數
     y1 = pm.Normal('y1', mu=mu1, sigma=sigma, observed=group1)
     y2 = pm.Normal('y2', mu=mu2, sigma=sigma, observed=group2)
 
-    # Derived quantity: mean difference
+    # 衍生量：平均差異
     diff = pm.Deterministic('diff', mu1 - mu2)
 
-    # Sample posterior
+    # 抽樣後驗
     trace = pm.sample(2000, tune=1000, return_inferencedata=True)
 
-# Analyze results
+# 分析結果
 print(az.summary(trace, var_names=['mu1', 'mu2', 'diff']))
 
-# Probability that group1 > group2
+# group1 > group2 的機率
 prob_greater = np.mean(trace.posterior['diff'].values > 0)
 print(f"P(μ₁ > μ₂) = {prob_greater:.3f}")
 
-# Plot posterior
+# 繪製後驗
 az.plot_posterior(trace, var_names=['diff'], ref_val=0)
 ```
 
 ---
 
-### Bayesian ANOVA
+### 貝氏變異數分析
 
-**Purpose**: Compare three or more groups
+**目的**：比較三組以上
 
-**Model**:
+**模型**：
 ```python
 import pymc as pm
 
 with pm.Model() as anova_model:
-    # Hyperpriors
+    # 超先驗
     mu_global = pm.Normal('mu_global', mu=0, sigma=10)
     sigma_between = pm.HalfNormal('sigma_between', sigma=5)
     sigma_within = pm.HalfNormal('sigma_within', sigma=5)
 
-    # Group means (hierarchical)
+    # 組平均值（階層式）
     group_means = pm.Normal('group_means',
                             mu=mu_global,
                             sigma=sigma_between,
                             shape=n_groups)
 
-    # Likelihood
+    # 概似函數
     y = pm.Normal('y',
                   mu=group_means[group_idx],
                   sigma=sigma_within,
@@ -382,31 +382,31 @@ with pm.Model() as anova_model:
 
     trace = pm.sample(2000, tune=1000, return_inferencedata=True)
 
-# Posterior contrasts
+# 後驗對比
 contrast_1_2 = trace.posterior['group_means'][:,:,0] - trace.posterior['group_means'][:,:,1]
 ```
 
 ---
 
-### Bayesian Correlation
+### 貝氏相關
 
-**Purpose**: Estimate correlation between two variables
+**目的**：估計兩個變數之間的相關
 
-**Advantage**: Provides distribution of correlation values
+**優勢**：提供相關值的分布
 
-**Python implementation**:
+**Python 實作**：
 ```python
 import pymc as pm
 
 with pm.Model() as corr_model:
-    # Prior on correlation
+    # 相關的先驗
     rho = pm.Uniform('rho', lower=-1, upper=1)
 
-    # Convert to covariance matrix
+    # 轉換為共變異數矩陣
     cov_matrix = pm.math.stack([[1, rho],
                                 [rho, 1]])
 
-    # Likelihood (bivariate normal)
+    # 概似函數（雙變量常態）
     obs = pm.MvNormal('obs',
                      mu=[0, 0],
                      cov=cov_matrix,
@@ -414,50 +414,50 @@ with pm.Model() as corr_model:
 
     trace = pm.sample(2000, tune=1000, return_inferencedata=True)
 
-# Summarize correlation
+# 摘要相關
 print(az.summary(trace, var_names=['rho']))
 
-# Probability that correlation is positive
+# 相關為正的機率
 prob_positive = np.mean(trace.posterior['rho'].values > 0)
 ```
 
 ---
 
-### Bayesian Linear Regression
+### 貝氏線性迴歸
 
-**Purpose**: Model relationship between predictors and outcome
+**目的**：建立預測變數和結果之間的關係模型
 
-**Advantages**:
-- Uncertainty in all parameters
-- Natural regularization (via priors)
-- Can incorporate prior knowledge
-- Credible intervals for predictions
+**優勢**：
+- 所有參數的不確定性
+- 自然正則化（透過先驗）
+- 可以納入先驗知識
+- 預測的可信區間
 
-**Python implementation**:
+**Python 實作**：
 ```python
 import pymc as pm
 
 with pm.Model() as regression_model:
-    # Priors for coefficients
-    alpha = pm.Normal('alpha', mu=0, sigma=10)  # Intercept
+    # 係數的先驗
+    alpha = pm.Normal('alpha', mu=0, sigma=10)  # 截距
     beta = pm.Normal('beta', mu=0, sigma=10, shape=n_predictors)
     sigma = pm.HalfNormal('sigma', sigma=10)
 
-    # Expected value
+    # 期望值
     mu = alpha + pm.math.dot(X, beta)
 
-    # Likelihood
+    # 概似函數
     y_obs = pm.Normal('y_obs', mu=mu, sigma=sigma, observed=y)
 
     trace = pm.sample(2000, tune=1000, return_inferencedata=True)
 
-# Posterior predictive checks
+# 後驗預測檢驗
 with regression_model:
     ppc = pm.sample_posterior_predictive(trace)
 
 az.plot_ppc(ppc)
 
-# Predictions with uncertainty
+# 含不確定性的預測
 with regression_model:
     pm.set_data({'X': X_new})
     posterior_pred = pm.sample_posterior_predictive(trace)
@@ -465,34 +465,34 @@ with regression_model:
 
 ---
 
-## Hierarchical (Multilevel) Models
+## 階層（多層次）模型
 
-**When to use**:
-- Nested/clustered data (students within schools)
-- Repeated measures
-- Meta-analysis
-- Varying effects across groups
+**何時使用**：
+- 巢狀/群集資料（學校中的學生）
+- 重複測量
+- 統合分析
+- 跨組的變化效果
 
-**Key concept**: Partial pooling
-- Complete pooling: Ignore groups (biased)
-- No pooling: Analyze groups separately (high variance)
-- Partial pooling: Borrow strength across groups (Bayesian)
+**關鍵概念**：部分合併
+- 完全合併：忽略組別（有偏）
+- 無合併：分別分析組別（高變異）
+- 部分合併：跨組借用強度（貝氏）
 
-**Example: Varying intercepts**:
+**範例：變化截距**：
 ```python
 with pm.Model() as hierarchical_model:
-    # Hyperpriors
+    # 超先驗
     mu_global = pm.Normal('mu_global', mu=0, sigma=10)
     sigma_between = pm.HalfNormal('sigma_between', sigma=5)
     sigma_within = pm.HalfNormal('sigma_within', sigma=5)
 
-    # Group-level intercepts
+    # 組層級截距
     alpha = pm.Normal('alpha',
                      mu=mu_global,
                      sigma=sigma_between,
                      shape=n_groups)
 
-    # Likelihood
+    # 概似函數
     y_obs = pm.Normal('y_obs',
                      mu=alpha[group_idx],
                      sigma=sigma_within,
@@ -503,39 +503,39 @@ with pm.Model() as hierarchical_model:
 
 ---
 
-## Model Comparison
+## 模型比較
 
-### Methods
+### 方法
 
-#### 1. Bayes Factor
-- Directly compares model evidence
-- Sensitive to prior specification
-- Can be computationally intensive
+#### 1. 貝氏因子
+- 直接比較模型證據
+- 對先驗設定敏感
+- 計算可能密集
 
-#### 2. Information Criteria
+#### 2. 資訊準則
 
-**WAIC (Widely Applicable Information Criterion)**:
-- Bayesian analog of AIC
-- Lower is better
-- Accounts for effective number of parameters
+**WAIC（廣泛適用資訊準則）**：
+- AIC 的貝氏類比
+- 越低越好
+- 考慮有效參數數量
 
-**LOO (Leave-One-Out Cross-Validation)**:
-- Estimates out-of-sample prediction error
-- Lower is better
-- More robust than WAIC
+**LOO（留一法交叉驗證）**：
+- 估計樣本外預測誤差
+- 越低越好
+- 比 WAIC 更穩健
 
-**Python calculation**:
+**Python 計算**：
 ```python
 import arviz as az
 
-# Calculate WAIC and LOO
+# 計算 WAIC 和 LOO
 waic = az.waic(trace)
 loo = az.loo(trace)
 
 print(f"WAIC: {waic.elpd_waic:.2f}")
 print(f"LOO: {loo.elpd_loo:.2f}")
 
-# Compare multiple models
+# 比較多個模型
 comparison = az.compare({
     'model1': trace1,
     'model2': trace2,
@@ -546,116 +546,116 @@ print(comparison)
 
 ---
 
-## Checking Bayesian Models
+## 檢驗貝氏模型
 
-### 1. Convergence Diagnostics
+### 1. 收斂診斷
 
-**R-hat (Gelman-Rubin statistic)**:
-- Compares within-chain and between-chain variance
-- Values close to 1.0 indicate convergence
-- R-hat < 1.01: Good
-- R-hat > 1.05: Poor convergence
+**R-hat（Gelman-Rubin 統計量）**：
+- 比較鏈內和鏈間變異
+- 接近 1.0 的值表示收斂
+- R-hat < 1.01：良好
+- R-hat > 1.05：收斂不良
 
-**Effective Sample Size (ESS)**:
-- Number of independent samples
-- Higher is better
-- ESS > 400 per chain recommended
+**有效樣本大小（ESS）**：
+- 獨立樣本數量
+- 越高越好
+- 建議每條鏈 ESS > 400
 
-**Trace plots**:
-- Should look like "fuzzy caterpillar"
-- No trends, no stuck chains
+**軌跡圖**：
+- 應該看起來像「模糊的毛毛蟲」
+- 沒有趨勢，沒有卡住的鏈
 
-**Python checking**:
+**Python 檢驗**：
 ```python
-# Automatic summary with diagnostics
+# 含診斷的自動摘要
 print(az.summary(trace, var_names=['parameter']))
 
-# Visual diagnostics
+# 視覺診斷
 az.plot_trace(trace)
-az.plot_rank(trace)  # Rank plots
+az.plot_rank(trace)  # 等級圖
 ```
 
 ---
 
-### 2. Posterior Predictive Checks
+### 2. 後驗預測檢驗
 
-**Purpose**: Does model generate data similar to observed data?
+**目的**：模型是否產生與觀察資料相似的資料？
 
-**Process**:
-1. Generate predictions from posterior
-2. Compare to actual data
-3. Look for systematic discrepancies
+**過程**：
+1. 從後驗產生預測
+2. 與實際資料比較
+3. 尋找系統性差異
 
-**Python implementation**:
+**Python 實作**：
 ```python
 with model:
     ppc = pm.sample_posterior_predictive(trace)
 
-# Visual check
+# 視覺檢驗
 az.plot_ppc(ppc, num_pp_samples=100)
 
-# Quantitative checks
+# 定量檢驗
 obs_mean = np.mean(observed_data)
 pred_means = [np.mean(sample) for sample in ppc.posterior_predictive['y_obs']]
-p_value = np.mean(pred_means >= obs_mean)  # Bayesian p-value
+p_value = np.mean(pred_means >= obs_mean)  # 貝氏 p 值
 ```
 
 ---
 
-## Reporting Bayesian Results
+## 報告貝氏結果
 
-### Example T-Test Report
+### T 檢定報告範例
 
-> "A Bayesian independent samples t-test was conducted to compare groups A and B. Weakly informative priors were used: Normal(0, 1) for the mean difference and Half-Cauchy(0, 1) for the pooled standard deviation. The posterior distribution of the mean difference had a mean of 5.2 (95% CI [2.3, 8.1]), indicating that Group A scored higher than Group B. The Bayes Factor BF₁₀ = 23.5 provided strong evidence for a difference between groups, and there was a 99.7% probability that Group A's mean exceeded Group B's mean."
+> 「進行貝氏獨立樣本 t 檢定以比較 A 組和 B 組。使用弱訊息性先驗：平均差異為 Normal(0, 1)，合併標準差為 Half-Cauchy(0, 1)。平均差異的後驗分布平均值為 5.2（95% CI [2.3, 8.1]），表示 A 組分數高於 B 組。貝氏因子 BF₁₀ = 23.5 提供了組間差異的強證據，A 組平均值超過 B 組平均值的機率為 99.7%。」
 
-### Example Regression Report
+### 迴歸報告範例
 
-> "A Bayesian linear regression was fitted with weakly informative priors (Normal(0, 10) for coefficients, Half-Cauchy(0, 5) for residual SD). The model explained substantial variance (R² = 0.47, 95% CI [0.38, 0.55]). Study hours (β = 0.52, 95% CI [0.38, 0.66]) and prior GPA (β = 0.31, 95% CI [0.17, 0.45]) were credible predictors (95% CIs excluded zero). Posterior predictive checks showed good model fit. Convergence diagnostics were satisfactory (all R-hat < 1.01, ESS > 1000)."
-
----
-
-## Advantages and Limitations
-
-### Advantages
-
-1. **Intuitive interpretation**: Direct probability statements about parameters
-2. **Incorporates prior knowledge**: Uses all available information
-3. **Flexible**: Handles complex models easily
-4. **No p-hacking**: Can look at data as it arrives
-5. **Quantifies uncertainty**: Full posterior distribution
-6. **Small samples**: Works with any sample size
-
-### Limitations
-
-1. **Computational**: Requires MCMC sampling (can be slow)
-2. **Prior specification**: Requires thought and justification
-3. **Complexity**: Steeper learning curve
-4. **Software**: Fewer tools than frequentist methods
-5. **Communication**: May need to educate reviewers/readers
+> 「使用弱訊息性先驗（係數為 Normal(0, 10)，殘差 SD 為 Half-Cauchy(0, 5)）擬合貝氏線性迴歸。模型解釋了相當大的變異（R² = 0.47，95% CI [0.38, 0.55]）。學習時數（β = 0.52，95% CI [0.38, 0.66]）和先前 GPA（β = 0.31，95% CI [0.17, 0.45]）是可信的預測變數（95% CI 排除零）。後驗預測檢驗顯示模型配適良好。收斂診斷令人滿意（所有 R-hat < 1.01，ESS > 1000）。」
 
 ---
 
-## Key Python Packages
+## 優勢和限制
 
-- **PyMC**: Full Bayesian modeling framework
-- **ArviZ**: Visualization and diagnostics
-- **Bambi**: High-level interface for regression models
-- **PyStan**: Python interface to Stan
-- **TensorFlow Probability**: Bayesian inference with TensorFlow
+### 優勢
+
+1. **直觀解讀**：關於參數的直接機率陳述
+2. **納入先驗知識**：使用所有可用資訊
+3. **靈活**：輕鬆處理複雜模型
+4. **沒有 p-hacking**：可以在資料到達時查看
+5. **量化不確定性**：完整的後驗分布
+6. **小樣本**：可用於任何樣本大小
+
+### 限制
+
+1. **計算**：需要 MCMC 抽樣（可能很慢）
+2. **先驗設定**：需要思考和合理化
+3. **複雜性**：學習曲線較陡
+4. **軟體**：工具比頻率學派方法少
+5. **溝通**：可能需要教育審查者/讀者
 
 ---
 
-## When to Use Bayesian Methods
+## 主要 Python 套件
 
-**Use Bayesian when**:
-- You have prior information to incorporate
-- You want direct probability statements
-- Sample size is small
-- Model is complex (hierarchical, missing data, etc.)
-- You want to update analysis as data arrives
+- **PyMC**：完整的貝氏建模框架
+- **ArviZ**：視覺化和診斷
+- **Bambi**：迴歸模型的高層介面
+- **PyStan**：Stan 的 Python 介面
+- **TensorFlow Probability**：使用 TensorFlow 的貝氏推論
 
-**Frequentist may be sufficient when**:
-- Standard analysis with large sample
-- No prior information
-- Computational resources limited
-- Reviewers unfamiliar with Bayesian methods
+---
+
+## 何時使用貝氏方法
+
+**使用貝氏當**：
+- 您有先驗資訊要納入
+- 您想要直接的機率陳述
+- 樣本大小小
+- 模型複雜（階層式、缺失資料等）
+- 您想要在資料到達時更新分析
+
+**頻率學派可能足夠當**：
+- 大樣本的標準分析
+- 沒有先驗資訊
+- 計算資源有限
+- 審查者不熟悉貝氏方法

@@ -1,22 +1,22 @@
-# SimPy Real-Time Simulations
+# SimPy 即時模擬
 
-This guide covers real-time simulation capabilities in SimPy, where simulation time is synchronized with wall-clock time.
+本指南涵蓋 SimPy 中的即時模擬功能，其中模擬時間與實際時間同步。
 
-## Overview
+## 概述
 
-Real-time simulations synchronize simulation time with actual wall-clock time. This is useful for:
+即時模擬將模擬時間與實際時間同步。這對以下情況很有用：
 
-- **Hardware-in-the-loop (HIL)** testing
-- **Human interaction** with simulations
-- **Algorithm behavior analysis** under real-time constraints
-- **System integration** testing
-- **Demonstration** purposes
+- **硬體迴路（HIL）**測試
+- **人機互動**模擬
+- **演算法行為分析**在即時限制下
+- **系統整合**測試
+- **展示**目的
 
 ## RealtimeEnvironment
 
-Replace the standard `Environment` with `simpy.rt.RealtimeEnvironment` to enable real-time synchronization.
+將標準 `Environment` 替換為 `simpy.rt.RealtimeEnvironment` 以啟用即時同步。
 
-### Basic Usage
+### 基本使用
 
 ```python
 import simpy.rt
@@ -32,7 +32,7 @@ env.process(process(env))
 env.run(until=5)
 ```
 
-### Constructor Parameters
+### 建構函式參數
 
 ```python
 simpy.rt.RealtimeEnvironment(
@@ -42,11 +42,11 @@ simpy.rt.RealtimeEnvironment(
 )
 ```
 
-## Time Scaling with Factor
+## 使用 Factor 進行時間縮放
 
-The `factor` parameter controls how simulation time maps to real time.
+`factor` 參數控制模擬時間如何對應到實際時間。
 
-### Factor Examples
+### Factor 範例
 
 ```python
 import simpy.rt
@@ -78,16 +78,16 @@ env.process(timed_process(env, 'Half speed'))
 env.run()
 ```
 
-**Factor interpretation:**
-- `factor=1.0` → 1 simulation time unit takes 1 real second
-- `factor=0.1` → 1 simulation time unit takes 0.1 real seconds (10x faster)
-- `factor=60` → 1 simulation time unit takes 60 real seconds (1 minute)
+**Factor 解釋：**
+- `factor=1.0` → 1 個模擬時間單位需要 1 實際秒
+- `factor=0.1` → 1 個模擬時間單位需要 0.1 實際秒（10 倍速）
+- `factor=60` → 1 個模擬時間單位需要 60 實際秒（1 分鐘）
 
-## Strict Mode
+## 嚴格模式
 
-### strict=True (Default)
+### strict=True（預設）
 
-Raises `RuntimeError` if computation exceeds allocated real-time budget.
+如果計算超過分配的實時預算，則拋出 `RuntimeError`。
 
 ```python
 import simpy.rt
@@ -113,7 +113,7 @@ except RuntimeError as e:
 
 ### strict=False
 
-Allows simulation to run slower than intended without crashing.
+允許模擬執行比預期慢而不會崩潰。
 
 ```python
 import simpy.rt
@@ -135,13 +135,13 @@ env.run()
 print('Simulation completed (slower than real-time)')
 ```
 
-**Use strict=False when:**
-- Development and debugging
-- Computation time is unpredictable
-- Acceptable to run slower than target rate
-- Analyzing worst-case behavior
+**在以下情況使用 strict=False：**
+- 開發和除錯
+- 計算時間不可預測
+- 可接受比目標速率慢
+- 分析最壞情況行為
 
-## Hardware-in-the-Loop Example
+## 硬體迴路範例
 
 ```python
 import simpy.rt
@@ -188,7 +188,7 @@ env.process(control_loop(env, hardware, setpoint))
 env.run(until=5)
 ```
 
-## Human Interaction Example
+## 人機互動範例
 
 ```python
 import simpy.rt
@@ -212,7 +212,7 @@ env.process(interactive_process(env))
 env.run()
 ```
 
-## Monitoring Real-Time Performance
+## 監控即時效能
 
 ```python
 import simpy.rt
@@ -258,7 +258,7 @@ env.run()
 monitor.report()
 ```
 
-## Mixed Real-Time and Fast Simulation
+## 混合即時和快速模擬
 
 ```python
 import simpy.rt
@@ -283,9 +283,9 @@ env.process(real_time_display(env))
 env.run()
 ```
 
-## Converting Standard to Real-Time
+## 將標準轉換為即時
 
-Converting a standard simulation to real-time is straightforward:
+將標準模擬轉換為即時很簡單：
 
 ```python
 import simpy
@@ -311,33 +311,33 @@ env_rt.process(process(env_rt))
 env_rt.run()
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Factor selection**: Choose factor based on hardware/human constraints
-   - Human interaction: `factor=1.0` (1:1 time mapping)
-   - Fast hardware: `factor=0.01` (100x faster)
-   - Slow processes: `factor=60` (1 sim unit = 1 minute)
+1. **Factor 選擇**：根據硬體/人類限制選擇 factor
+   - 人機互動：`factor=1.0`（1:1 時間對應）
+   - 快速硬體：`factor=0.01`（100 倍速）
+   - 慢速流程：`factor=60`（1 個模擬單位 = 1 分鐘）
 
-2. **Strict mode usage**:
-   - Use `strict=True` for timing validation
-   - Use `strict=False` for development and variable workloads
+2. **嚴格模式使用**：
+   - 使用 `strict=True` 進行時序驗證
+   - 使用 `strict=False` 進行開發和可變工作負載
 
-3. **Computation budget**: Ensure process logic executes faster than timeout duration
+3. **計算預算**：確保流程邏輯執行速度快於超時持續時間
 
-4. **Error handling**: Wrap real-time runs in try-except for timing violations
+4. **錯誤處理**：將即時執行包裝在 try-except 中以處理時序違規
 
-5. **Testing strategy**:
-   - Develop with standard Environment (fast iteration)
-   - Test with RealtimeEnvironment (validation)
-   - Deploy with appropriate factor and strict settings
+5. **測試策略**：
+   - 使用標準 Environment 開發（快速迭代）
+   - 使用 RealtimeEnvironment 測試（驗證）
+   - 使用適當的 factor 和 strict 設定進行部署
 
-6. **Performance monitoring**: Track drift between simulation and real time
+6. **效能監控**：追蹤模擬和實際時間之間的漂移
 
-7. **Graceful degradation**: Use `strict=False` when timing guarantees aren't critical
+7. **優雅降級**：當時序保證不重要時使用 `strict=False`
 
-## Common Patterns
+## 常見模式
 
-### Periodic Real-Time Tasks
+### 週期性即時任務
 
 ```python
 import simpy.rt
@@ -364,7 +364,7 @@ env.process(periodic_task(env, 'Task', period=2.0, duration=0.5))
 env.run(until=6)
 ```
 
-### Synchronized Multi-Device Control
+### 同步多設備控制
 
 ```python
 import simpy.rt
@@ -386,10 +386,10 @@ env.process(device_controller(env, 'C', 2.0))
 env.run(until=5)
 ```
 
-## Limitations
+## 限制
 
-1. **Performance**: Real-time simulation adds overhead; not suitable for high-frequency events
-2. **Synchronization**: Single-threaded; all processes share same time base
-3. **Precision**: Limited by Python's time resolution and system scheduling
-4. **Strict mode**: May raise errors frequently with computationally intensive processes
-5. **Platform-dependent**: Timing accuracy varies across operating systems
+1. **效能**：即時模擬增加開銷；不適合高頻事件
+2. **同步**：單執行緒；所有流程共享同一時間基準
+3. **精度**：受限於 Python 的時間解析度和系統排程
+4. **嚴格模式**：對於計算密集型流程可能經常拋出錯誤
+5. **平台相依**：時序準確度因作業系統而異

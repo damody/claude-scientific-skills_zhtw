@@ -1,141 +1,141 @@
 # Dask Futures
 
-## Overview
+## 概述
 
-Dask futures extend Python's `concurrent.futures` interface, enabling immediate (non-lazy) task execution. Unlike delayed computations (used in DataFrames, Arrays, and Bags), futures provide more flexibility in situations where computations may evolve over time or require dynamic workflow construction.
+Dask futures 擴展了 Python 的 `concurrent.futures` 介面，支援立即（非延遲）任務執行。與延遲運算（用於 DataFrames、Arrays 和 Bags）不同，futures 在運算可能隨時間演進或需要動態工作流程建構的情況下提供更多靈活性。
 
-## Core Concept
+## 核心概念
 
-Futures represent real-time task execution:
-- Tasks execute immediately when submitted (not lazy)
-- Each future represents a remote computation result
-- Automatic dependency tracking between futures
-- Enables dynamic, evolving workflows
-- Direct control over task scheduling and data placement
+Futures 代表即時任務執行：
+- 任務在提交時立即執行（非延遲）
+- 每個 future 代表一個遠端運算結果
+- 自動追蹤 futures 之間的依賴關係
+- 支援動態、演進的工作流程
+- 直接控制任務排程和資料放置
 
-## Key Capabilities
+## 主要功能
 
-### Real-Time Execution
-- Tasks run immediately when submitted
-- No need for explicit `.compute()` call
-- Get results with `.result()` method
+### 即時執行
+- 任務在提交時立即執行
+- 不需要明確的 `.compute()` 呼叫
+- 使用 `.result()` 方法取得結果
 
-### Automatic Dependency Management
-When you submit tasks with future inputs, Dask automatically handles dependency tracking. Once all input futures have completed, they will be moved onto a single worker for efficient computation.
+### 自動依賴管理
+當您提交具有 future 輸入的任務時，Dask 會自動處理依賴追蹤。一旦所有輸入 futures 完成，它們將被移動到單一 worker 以進行高效運算。
 
-### Dynamic Workflows
-Build computations that evolve based on intermediate results:
-- Submit new tasks based on previous results
-- Conditional execution paths
-- Iterative algorithms with varying structure
+### 動態工作流程
+根據中間結果建構運算：
+- 根據先前結果提交新任務
+- 條件執行路徑
+- 具有變化結構的迭代演算法
 
-## When to Use Futures
+## 何時使用 Futures
 
-**Use Futures When**:
-- Building dynamic, evolving workflows
-- Need immediate task execution (not lazy)
-- Computations depend on runtime conditions
-- Require fine control over task placement
-- Implementing custom parallel algorithms
-- Need stateful computations (with actors)
+**使用 Futures 的情況**：
+- 建構動態、演進的工作流程
+- 需要立即任務執行（非延遲）
+- 運算取決於執行時期條件
+- 需要對任務放置的精細控制
+- 實作自訂平行演算法
+- 需要有狀態的運算（使用 actors）
 
-**Use Other Collections When**:
-- Static, predefined computation graphs (use delayed, DataFrames, Arrays)
-- Simple data parallelism on large collections (use Bags, DataFrames)
-- Standard array/dataframe operations suffice
+**使用其他集合的情況**：
+- 靜態、預定義的運算圖（使用 delayed、DataFrames、Arrays）
+- 大型集合上的簡單資料平行（使用 Bags、DataFrames）
+- 標準陣列/dataframe 操作就足夠
 
-## Setting Up Client
+## 設定 Client
 
-Futures require a distributed client:
+Futures 需要分散式 client：
 
 ```python
 from dask.distributed import Client
 
-# Local cluster (on single machine)
+# 本地叢集（在單機上）
 client = Client()
 
-# Or specify resources
+# 或指定資源
 client = Client(n_workers=4, threads_per_worker=2)
 
-# Or connect to existing cluster
+# 或連接到現有叢集
 client = Client('scheduler-address:8786')
 ```
 
-## Submitting Tasks
+## 提交任務
 
-### Basic Submit
+### 基本 Submit
 ```python
 from dask.distributed import Client
 
 client = Client()
 
-# Submit single task
+# 提交單一任務
 def add(x, y):
     return x + y
 
 future = client.submit(add, 1, 2)
 
-# Get result
-result = future.result()  # Blocks until complete
+# 取得結果
+result = future.result()  # 阻塞直到完成
 print(result)  # 3
 ```
 
-### Multiple Tasks
+### 多個任務
 ```python
-# Submit multiple independent tasks
+# 提交多個獨立任務
 futures = []
 for i in range(10):
     future = client.submit(add, i, i)
     futures.append(future)
 
-# Gather results
-results = client.gather(futures)  # Efficient parallel gathering
+# 收集結果
+results = client.gather(futures)  # 高效的平行收集
 ```
 
-### Map Over Inputs
+### Map 到多個輸入
 ```python
-# Apply function to multiple inputs
+# 對多個輸入應用函數
 def square(x):
     return x ** 2
 
-# Submit batch of tasks
+# 批次提交任務
 futures = client.map(square, range(100))
 
-# Gather results
+# 收集結果
 results = client.gather(futures)
 ```
 
-**Note**: Each task carries ~1ms overhead, making `map` less suitable for millions of tiny tasks. For massive datasets, use Bags or DataFrames instead.
+**注意**：每個任務有約 1ms 開銷，使 `map` 不適合數百萬個微小任務。對於大規模資料集，改用 Bags 或 DataFrames。
 
-## Working with Futures
+## 使用 Futures
 
-### Check Status
+### 檢查狀態
 ```python
 future = client.submit(expensive_function, arg)
 
-# Check if complete
-print(future.done())  # False or True
+# 檢查是否完成
+print(future.done())  # False 或 True
 
-# Check status
-print(future.status)  # 'pending', 'running', 'finished', or 'error'
+# 檢查狀態
+print(future.status)  # 'pending'、'running'、'finished' 或 'error'
 ```
 
-### Non-Blocking Result Retrieval
+### 非阻塞結果取得
 ```python
-# Non-blocking check
+# 非阻塞檢查
 if future.done():
     result = future.result()
 else:
     print("Still computing...")
 
-# Or use callbacks
+# 或使用回調
 def handle_result(future):
     print(f"Result: {future.result()}")
 
 future.add_done_callback(handle_result)
 ```
 
-### Error Handling
+### 錯誤處理
 ```python
 def might_fail(x):
     if x < 0:
@@ -150,108 +150,108 @@ except ValueError as e:
     print(f"Task failed: {e}")
 ```
 
-## Task Dependencies
+## 任務依賴
 
-### Automatic Dependency Tracking
+### 自動依賴追蹤
 ```python
-# Submit task
+# 提交任務
 future1 = client.submit(add, 1, 2)
 
-# Use future as input (creates dependency)
-future2 = client.submit(add, future1, 10)  # Depends on future1
+# 使用 future 作為輸入（建立依賴）
+future2 = client.submit(add, future1, 10)  # 依賴 future1
 
-# Chain dependencies
-future3 = client.submit(add, future2, 100)  # Depends on future2
+# 串連依賴
+future3 = client.submit(add, future2, 100)  # 依賴 future2
 
-# Get final result
+# 取得最終結果
 result = future3.result()  # 113
 ```
 
-### Complex Dependencies
+### 複雜依賴
 ```python
-# Multiple dependencies
+# 多個依賴
 a = client.submit(func1, x)
 b = client.submit(func2, y)
-c = client.submit(func3, a, b)  # Depends on both a and b
+c = client.submit(func3, a, b)  # 依賴 a 和 b
 
 result = c.result()
 ```
 
-## Data Movement Optimization
+## 資料移動優化
 
-### Scatter Data
-Pre-scatter important data to avoid repeated transfers:
+### 分散資料
+預先分散重要資料以避免重複傳輸：
 
 ```python
-# Upload data to cluster once
-large_dataset = client.scatter(big_data)  # Returns future
+# 一次上傳資料到叢集
+large_dataset = client.scatter(big_data)  # 回傳 future
 
-# Use scattered data in multiple tasks
+# 在多個任務中使用分散的資料
 futures = [client.submit(process, large_dataset, i) for i in range(100)]
 
-# Each task uses the same scattered data without re-transfer
+# 每個任務使用相同的分散資料，無需重新傳輸
 results = client.gather(futures)
 ```
 
-### Efficient Gathering
-Use `client.gather()` for concurrent result collection:
+### 高效收集
+使用 `client.gather()` 進行並行結果收集：
 
 ```python
-# Better: Gather all at once (parallel)
+# 較佳：一次收集所有（平行）
 results = client.gather(futures)
 
-# Worse: Sequential result retrieval
+# 較差：順序取得結果
 results = [f.result() for f in futures]
 ```
 
 ## Fire-and-Forget
 
-For side-effect tasks without needing the result:
+對於不需要結果的副作用任務：
 
 ```python
 from dask.distributed import fire_and_forget
 
 def log_to_database(data):
-    # Write to database, no return value needed
+    # 寫入資料庫，不需要回傳值
     database.write(data)
 
-# Submit without keeping reference
+# 提交但不保留引用
 future = client.submit(log_to_database, data)
 fire_and_forget(future)
 
-# Dask won't abandon this computation even without active future reference
+# 即使沒有活動的 future 引用，Dask 也不會放棄這個運算
 ```
 
-## Performance Characteristics
+## 效能特性
 
-### Task Overhead
-- ~1ms overhead per task
-- Good for: Thousands of tasks
-- Not suitable for: Millions of tiny tasks
+### 任務開銷
+- 每個任務約 1ms 開銷
+- 適合：數千個任務
+- 不適合：數百萬個微小任務
 
-### Worker-to-Worker Communication
-- Direct worker-to-worker data transfer
-- Roundtrip latency: ~1ms
-- Efficient for task dependencies
+### Worker 到 Worker 通訊
+- 直接 worker 到 worker 資料傳輸
+- 往返延遲：約 1ms
+- 對任務依賴高效
 
-### Memory Management
-Dask tracks active futures locally. When a future is garbage collected by your local Python session, Dask will feel free to delete that data.
+### 記憶體管理
+Dask 在本地追蹤活動的 futures。當 future 被您的本地 Python 會話垃圾回收時，Dask 將自由刪除該資料。
 
-**Keep References**:
+**保留引用**：
 ```python
-# Keep reference to prevent deletion
+# 保留引用以防止刪除
 important_result = client.submit(expensive_calc, data)
 
-# Use result multiple times
+# 多次使用結果
 future1 = client.submit(process1, important_result)
 future2 = client.submit(process2, important_result)
 ```
 
-## Advanced Coordination
+## 進階協調
 
-### Distributed Primitives
+### 分散式原語
 
-**Queues**:
+**佇列**：
 ```python
 from dask.distributed import Queue
 
@@ -267,13 +267,13 @@ def consumer():
         results.append(queue.get())
     return results
 
-# Submit tasks
+# 提交任務
 client.submit(producer)
 result_future = client.submit(consumer)
 results = result_future.result()
 ```
 
-**Locks**:
+**鎖**：
 ```python
 from dask.distributed import Lock
 
@@ -281,41 +281,41 @@ lock = Lock()
 
 def critical_section():
     with lock:
-        # Only one task executes this at a time
+        # 一次只有一個任務執行這個
         shared_resource.update()
 ```
 
-**Events**:
+**事件**：
 ```python
 from dask.distributed import Event
 
 event = Event()
 
 def waiter():
-    event.wait()  # Blocks until event is set
+    event.wait()  # 阻塞直到事件被設定
     return "Event occurred"
 
 def setter():
     time.sleep(5)
     event.set()
 
-# Start both tasks
+# 啟動兩個任務
 wait_future = client.submit(waiter)
 set_future = client.submit(setter)
 
-result = wait_future.result()  # Waits for setter to complete
+result = wait_future.result()  # 等待 setter 完成
 ```
 
-**Variables**:
+**變數**：
 ```python
 from dask.distributed import Variable
 
 var = Variable('my-var')
 
-# Set value
+# 設定值
 var.set(42)
 
-# Get value from tasks
+# 從任務取得值
 def reader():
     return var.get()
 
@@ -325,9 +325,9 @@ print(future.result())  # 42
 
 ## Actors
 
-For stateful, rapidly-changing workflows, actors enable worker-to-worker roundtrip latency around 1ms while bypassing scheduler coordination.
+對於有狀態、快速變化的工作流程，actors 支援約 1ms 的 worker 到 worker 往返延遲，同時繞過排程器協調。
 
-### Creating Actors
+### 建立 Actors
 ```python
 from dask.distributed import Client
 
@@ -344,76 +344,76 @@ class Counter:
     def get_count(self):
         return self.count
 
-# Create actor on worker
+# 在 worker 上建立 actor
 counter = client.submit(Counter, actor=True).result()
 
-# Call methods
+# 呼叫方法
 future1 = counter.increment()
 future2 = counter.increment()
 result = counter.get_count().result()
 print(result)  # 2
 ```
 
-### Actor Use Cases
-- Stateful services (databases, caches)
-- Rapidly changing state
-- Complex coordination patterns
-- Real-time streaming applications
+### Actor 使用情境
+- 有狀態服務（資料庫、快取）
+- 快速變化的狀態
+- 複雜的協調模式
+- 即時串流應用
 
-## Common Patterns
+## 常見模式
 
-### Embarrassingly Parallel Tasks
+### Embarrassingly Parallel 任務
 ```python
 from dask.distributed import Client
 
 client = Client()
 
 def process_item(item):
-    # Independent computation
+    # 獨立運算
     return expensive_computation(item)
 
-# Process many items in parallel
+# 平行處理多個項目
 items = range(1000)
 futures = client.map(process_item, items)
 
-# Gather all results
+# 收集所有結果
 results = client.gather(futures)
 ```
 
-### Dynamic Task Submission
+### 動態任務提交
 ```python
 def recursive_compute(data, depth):
     if depth == 0:
         return process(data)
 
-    # Split and recurse
+    # 分割和遞迴
     left, right = split(data)
     left_future = client.submit(recursive_compute, left, depth - 1)
     right_future = client.submit(recursive_compute, right, depth - 1)
 
-    # Combine results
+    # 組合結果
     return combine(left_future.result(), right_future.result())
 
-# Start computation
+# 開始運算
 result_future = client.submit(recursive_compute, initial_data, 5)
 result = result_future.result()
 ```
 
-### Parameter Sweep
+### 參數掃描
 ```python
 from itertools import product
 
 def run_simulation(param1, param2, param3):
-    # Run simulation with parameters
+    # 使用參數執行模擬
     return simulate(param1, param2, param3)
 
-# Generate parameter combinations
+# 生成參數組合
 params = product(range(10), range(10), range(10))
 
-# Submit all combinations
+# 提交所有組合
 futures = [client.submit(run_simulation, p1, p2, p3) for p1, p2, p3 in params]
 
-# Gather results as they complete
+# 在完成時收集結果
 from dask.distributed import as_completed
 
 for future in as_completed(futures):
@@ -421,76 +421,76 @@ for future in as_completed(futures):
     process_result(result)
 ```
 
-### Pipeline with Dependencies
+### 帶依賴的管道
 ```python
-# Stage 1: Load data
+# 階段 1：載入資料
 load_futures = [client.submit(load_data, file) for file in files]
 
-# Stage 2: Process (depends on stage 1)
+# 階段 2：處理（依賴階段 1）
 process_futures = [client.submit(process, f) for f in load_futures]
 
-# Stage 3: Aggregate (depends on stage 2)
+# 階段 3：聚合（依賴階段 2）
 agg_future = client.submit(aggregate, process_futures)
 
-# Get final result
+# 取得最終結果
 result = agg_future.result()
 ```
 
-### Iterative Algorithm
+### 迭代演算法
 ```python
-# Initialize
+# 初始化
 state = client.scatter(initial_state)
 
-# Iterate
+# 迭代
 for iteration in range(num_iterations):
-    # Compute update based on current state
+    # 根據當前狀態計算更新
     state = client.submit(update_function, state)
 
-    # Check convergence
+    # 檢查收斂
     converged = client.submit(check_convergence, state)
     if converged.result():
         break
 
-# Get final state
+# 取得最終狀態
 final_state = state.result()
 ```
 
-## Best Practices
+## 最佳實踐
 
-### 1. Pre-scatter Large Data
+### 1. 預先分散大型資料
 ```python
-# Upload once, use many times
+# 上傳一次，多次使用
 large_data = client.scatter(big_dataset)
 futures = [client.submit(process, large_data, i) for i in range(100)]
 ```
 
-### 2. Use Gather for Bulk Retrieval
+### 2. 使用 Gather 進行批次取得
 ```python
-# Efficient: Parallel gathering
+# 高效：平行收集
 results = client.gather(futures)
 
-# Inefficient: Sequential
+# 低效：順序
 results = [f.result() for f in futures]
 ```
 
-### 3. Manage Memory with References
+### 3. 使用引用管理記憶體
 ```python
-# Keep important futures
+# 保留重要的 futures
 important = client.submit(expensive_calc, data)
 
-# Use multiple times
+# 多次使用
 f1 = client.submit(use_result, important)
 f2 = client.submit(use_result, important)
 
-# Clean up when done
+# 完成後清理
 del important
 ```
 
-### 4. Handle Errors Appropriately
+### 4. 適當處理錯誤
 ```python
 futures = client.map(might_fail, inputs)
 
-# Check for errors
+# 檢查錯誤
 results = []
 errors = []
 for future in as_completed(futures):
@@ -500,42 +500,42 @@ for future in as_completed(futures):
         errors.append(e)
 ```
 
-### 5. Use as_completed for Progressive Processing
+### 5. 使用 as_completed 進行漸進處理
 ```python
 from dask.distributed import as_completed
 
 futures = client.map(process, items)
 
-# Process results as they arrive
+# 結果到達時處理
 for future in as_completed(futures):
     result = future.result()
     handle_result(result)
 ```
 
-## Debugging Tips
+## 除錯技巧
 
-### Monitor Dashboard
-View the Dask dashboard to see:
-- Task progress
-- Worker utilization
-- Memory usage
-- Task dependencies
+### 監控儀表板
+查看 Dask 儀表板以了解：
+- 任務進度
+- Worker 使用率
+- 記憶體使用
+- 任務依賴
 
-### Check Task Status
+### 檢查任務狀態
 ```python
-# Inspect future
+# 檢查 future
 print(future.status)
 print(future.done())
 
-# Get traceback on error
+# 在錯誤時取得追蹤
 try:
     future.result()
 except Exception:
     print(future.traceback())
 ```
 
-### Profile Tasks
+### 分析任務
 ```python
-# Get performance data
+# 取得效能資料
 client.profile(filename='profile.html')
 ```

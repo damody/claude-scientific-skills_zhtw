@@ -1,25 +1,25 @@
-# NetworkX Input/Output
+# NetworkX 輸入/輸出
 
-## Reading Graphs from Files
+## 從檔案讀取圖
 
-### Adjacency List Format
+### 鄰接列表格式
 ```python
-# Read adjacency list (simple text format)
+# 讀取鄰接列表（簡單文字格式）
 G = nx.read_adjlist('graph.adjlist')
 
-# With node type conversion
+# 帶節點類型轉換
 G = nx.read_adjlist('graph.adjlist', nodetype=int)
 
-# For directed graphs
+# 對於有向圖
 G = nx.read_adjlist('graph.adjlist', create_using=nx.DiGraph())
 
-# Write adjacency list
+# 寫入鄰接列表
 nx.write_adjlist(G, 'graph.adjlist')
 ```
 
-Example adjacency list format:
+鄰接列表格式範例：
 ```
-# node neighbors
+# 節點 鄰居
 0 1 2
 1 0 3 4
 2 0 3
@@ -27,254 +27,254 @@ Example adjacency list format:
 4 1 3
 ```
 
-### Edge List Format
+### 邊列表格式
 ```python
-# Read edge list
+# 讀取邊列表
 G = nx.read_edgelist('graph.edgelist')
 
-# With node types and edge data
+# 帶節點類型和邊資料
 G = nx.read_edgelist('graph.edgelist',
                      nodetype=int,
                      data=(('weight', float),))
 
-# Read weighted edge list
+# 讀取加權邊列表
 G = nx.read_weighted_edgelist('weighted.edgelist')
 
-# Write edge list
+# 寫入邊列表
 nx.write_edgelist(G, 'graph.edgelist')
 
-# Write weighted edge list
+# 寫入加權邊列表
 nx.write_weighted_edgelist(G, 'weighted.edgelist')
 ```
 
-Example edge list format:
+邊列表格式範例：
 ```
-# source target
+# 來源 目標
 0 1
 1 2
 2 3
 3 0
 ```
 
-Example weighted edge list:
+加權邊列表範例：
 ```
-# source target weight
+# 來源 目標 權重
 0 1 0.5
 1 2 1.0
 2 3 0.75
 ```
 
-### GML (Graph Modelling Language)
+### GML（圖建模語言）
 ```python
-# Read GML (preserves all attributes)
+# 讀取 GML（保留所有屬性）
 G = nx.read_gml('graph.gml')
 
-# Write GML
+# 寫入 GML
 nx.write_gml(G, 'graph.gml')
 ```
 
-### GraphML Format
+### GraphML 格式
 ```python
-# Read GraphML (XML-based format)
+# 讀取 GraphML（基於 XML 的格式）
 G = nx.read_graphml('graph.graphml')
 
-# Write GraphML
+# 寫入 GraphML
 nx.write_graphml(G, 'graph.graphml')
 
-# With specific encoding
+# 指定編碼
 nx.write_graphml(G, 'graph.graphml', encoding='utf-8')
 ```
 
-### GEXF (Graph Exchange XML Format)
+### GEXF（圖交換 XML 格式）
 ```python
-# Read GEXF
+# 讀取 GEXF
 G = nx.read_gexf('graph.gexf')
 
-# Write GEXF
+# 寫入 GEXF
 nx.write_gexf(G, 'graph.gexf')
 ```
 
-### Pajek Format
+### Pajek 格式
 ```python
-# Read Pajek .net files
+# 讀取 Pajek .net 檔案
 G = nx.read_pajek('graph.net')
 
-# Write Pajek format
+# 寫入 Pajek 格式
 nx.write_pajek(G, 'graph.net')
 ```
 
-### LEDA Format
+### LEDA 格式
 ```python
-# Read LEDA format
+# 讀取 LEDA 格式
 G = nx.read_leda('graph.leda')
 
-# Write LEDA format
+# 寫入 LEDA 格式
 nx.write_leda(G, 'graph.leda')
 ```
 
-## Working with Pandas
+## 使用 Pandas
 
-### From Pandas DataFrame
+### 從 Pandas DataFrame
 ```python
 import pandas as pd
 
-# Create graph from edge list DataFrame
+# 從邊列表 DataFrame 建立圖
 df = pd.DataFrame({
     'source': [1, 2, 3, 4],
     'target': [2, 3, 4, 1],
     'weight': [0.5, 1.0, 0.75, 0.25]
 })
 
-# Create graph
+# 建立圖
 G = nx.from_pandas_edgelist(df,
                             source='source',
                             target='target',
                             edge_attr='weight')
 
-# With multiple edge attributes
+# 帶多個邊屬性
 G = nx.from_pandas_edgelist(df,
                             source='source',
                             target='target',
                             edge_attr=['weight', 'color', 'type'])
 
-# Create directed graph
+# 建立有向圖
 G = nx.from_pandas_edgelist(df,
                             source='source',
                             target='target',
                             create_using=nx.DiGraph())
 ```
 
-### To Pandas DataFrame
+### 轉為 Pandas DataFrame
 ```python
-# Convert graph to edge list DataFrame
+# 將圖轉換為邊列表 DataFrame
 df = nx.to_pandas_edgelist(G)
 
-# With specific edge attributes
+# 指定邊屬性
 df = nx.to_pandas_edgelist(G, source='node1', target='node2')
 ```
 
-### Adjacency Matrix with Pandas
+### 使用 Pandas 的鄰接矩陣
 ```python
-# Create DataFrame from adjacency matrix
+# 從鄰接矩陣建立 DataFrame
 df = nx.to_pandas_adjacency(G, dtype=int)
 
-# Create graph from adjacency DataFrame
+# 從鄰接 DataFrame 建立圖
 G = nx.from_pandas_adjacency(df)
 
-# For directed graphs
+# 對於有向圖
 G = nx.from_pandas_adjacency(df, create_using=nx.DiGraph())
 ```
 
-## NumPy and SciPy Integration
+## NumPy 和 SciPy 整合
 
-### Adjacency Matrix
+### 鄰接矩陣
 ```python
 import numpy as np
 
-# To NumPy adjacency matrix
+# 轉為 NumPy 鄰接矩陣
 A = nx.to_numpy_array(G, dtype=int)
 
-# With specific node order
+# 指定節點順序
 nodelist = [1, 2, 3, 4, 5]
 A = nx.to_numpy_array(G, nodelist=nodelist)
 
-# From NumPy array
+# 從 NumPy 陣列
 G = nx.from_numpy_array(A)
 
-# For directed graphs
+# 對於有向圖
 G = nx.from_numpy_array(A, create_using=nx.DiGraph())
 ```
 
-### Sparse Matrix (SciPy)
+### 稀疏矩陣（SciPy）
 ```python
 from scipy import sparse
 
-# To sparse matrix
+# 轉為稀疏矩陣
 A = nx.to_scipy_sparse_array(G)
 
-# With specific format (csr, csc, coo, etc.)
+# 指定格式（csr、csc、coo 等）
 A_csr = nx.to_scipy_sparse_array(G, format='csr')
 
-# From sparse matrix
+# 從稀疏矩陣
 G = nx.from_scipy_sparse_array(A)
 ```
 
-## JSON Format
+## JSON 格式
 
-### Node-Link Format
+### 節點連結格式
 ```python
 import json
 
-# To node-link format (good for d3.js)
+# 轉為節點連結格式（適合 d3.js）
 data = nx.node_link_data(G)
 with open('graph.json', 'w') as f:
     json.dump(data, f)
 
-# From node-link format
+# 從節點連結格式
 with open('graph.json', 'r') as f:
     data = json.load(f)
 G = nx.node_link_graph(data)
 ```
 
-### Adjacency Data Format
+### 鄰接資料格式
 ```python
-# To adjacency format
+# 轉為鄰接格式
 data = nx.adjacency_data(G)
 with open('graph.json', 'w') as f:
     json.dump(data, f)
 
-# From adjacency format
+# 從鄰接格式
 with open('graph.json', 'r') as f:
     data = json.load(f)
 G = nx.adjacency_graph(data)
 ```
 
-### Tree Data Format
+### 樹資料格式
 ```python
-# For tree graphs
+# 對於樹形圖
 data = nx.tree_data(G, root=0)
 with open('tree.json', 'w') as f:
     json.dump(data, f)
 
-# From tree format
+# 從樹格式
 with open('tree.json', 'r') as f:
     data = json.load(f)
 G = nx.tree_graph(data)
 ```
 
-## Pickle Format
+## Pickle 格式
 
-### Binary Pickle
+### 二進位 Pickle
 ```python
 import pickle
 
-# Write pickle (preserves all Python objects)
+# 寫入 pickle（保留所有 Python 物件）
 with open('graph.pkl', 'wb') as f:
     pickle.dump(G, f)
 
-# Read pickle
+# 讀取 pickle
 with open('graph.pkl', 'rb') as f:
     G = pickle.load(f)
 
-# NetworkX convenience functions
+# NetworkX 便利函數
 nx.write_gpickle(G, 'graph.gpickle')
 G = nx.read_gpickle('graph.gpickle')
 ```
 
-## CSV Files
+## CSV 檔案
 
-### Custom CSV Reading
+### 自訂 CSV 讀取
 ```python
 import csv
 
-# Read edges from CSV
+# 從 CSV 讀取邊
 G = nx.Graph()
 with open('edges.csv', 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
         G.add_edge(row['source'], row['target'], weight=float(row['weight']))
 
-# Write edges to CSV
+# 將邊寫入 CSV
 with open('edges.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(['source', 'target', 'weight'])
@@ -282,116 +282,116 @@ with open('edges.csv', 'w', newline='') as f:
         writer.writerow([u, v, data.get('weight', 1.0)])
 ```
 
-## Database Integration
+## 資料庫整合
 
-### SQL Databases
+### SQL 資料庫
 ```python
 import sqlite3
 import pandas as pd
 
-# Read from SQL database via pandas
+# 透過 pandas 從 SQL 資料庫讀取
 conn = sqlite3.connect('network.db')
 df = pd.read_sql_query("SELECT source, target, weight FROM edges", conn)
 G = nx.from_pandas_edgelist(df, 'source', 'target', edge_attr='weight')
 conn.close()
 
-# Write to SQL database
+# 寫入 SQL 資料庫
 df = nx.to_pandas_edgelist(G)
 conn = sqlite3.connect('network.db')
 df.to_sql('edges', conn, if_exists='replace', index=False)
 conn.close()
 ```
 
-## Graph Formats for Visualization
+## 視覺化用圖格式
 
-### DOT Format (Graphviz)
+### DOT 格式（Graphviz）
 ```python
-# Write DOT file for Graphviz
+# 寫入 DOT 檔案供 Graphviz 使用
 nx.drawing.nx_pydot.write_dot(G, 'graph.dot')
 
-# Read DOT file
+# 讀取 DOT 檔案
 G = nx.drawing.nx_pydot.read_dot('graph.dot')
 
-# Generate directly to image (requires Graphviz)
+# 直接生成圖像（需要 Graphviz）
 from networkx.drawing.nx_pydot import to_pydot
 pydot_graph = to_pydot(G)
 pydot_graph.write_png('graph.png')
 ```
 
-## Cytoscape Integration
+## Cytoscape 整合
 
 ### Cytoscape JSON
 ```python
-# Export for Cytoscape
+# 匯出供 Cytoscape 使用
 data = nx.cytoscape_data(G)
 with open('cytoscape.json', 'w') as f:
     json.dump(data, f)
 
-# Import from Cytoscape
+# 從 Cytoscape 匯入
 with open('cytoscape.json', 'r') as f:
     data = json.load(f)
 G = nx.cytoscape_graph(data)
 ```
 
-## Specialized Formats
+## 專門格式
 
-### Matrix Market Format
+### Matrix Market 格式
 ```python
 from scipy.io import mmread, mmwrite
 
-# Read Matrix Market
+# 讀取 Matrix Market
 A = mmread('graph.mtx')
 G = nx.from_scipy_sparse_array(A)
 
-# Write Matrix Market
+# 寫入 Matrix Market
 A = nx.to_scipy_sparse_array(G)
 mmwrite('graph.mtx', A)
 ```
 
-### Shapefile (for Geographic Networks)
+### Shapefile（地理網路）
 ```python
-# Requires pyshp library
-# Read geographic network from shapefile
+# 需要 pyshp 函式庫
+# 從 shapefile 讀取地理網路
 G = nx.read_shp('roads.shp')
 
-# Write to shapefile
+# 寫入 shapefile
 nx.write_shp(G, 'network')
 ```
 
-## Format Selection Guidelines
+## 格式選擇指南
 
-### Choose Based on Requirements
+### 根據需求選擇
 
-**Adjacency List** - Simple, human-readable, no attributes
-- Best for: Simple unweighted graphs, quick viewing
+**鄰接列表** - 簡單、人類可讀、無屬性
+- 最適合：簡單無權圖、快速檢視
 
-**Edge List** - Simple, supports weights, human-readable
-- Best for: Weighted graphs, importing/exporting data
+**邊列表** - 簡單、支援權重、人類可讀
+- 最適合：加權圖、資料匯入/匯出
 
-**GML/GraphML** - Full attribute preservation, XML-based
-- Best for: Complete graph serialization with all metadata
+**GML/GraphML** - 完整屬性保留、基於 XML
+- 最適合：帶所有元資料的完整圖序列化
 
-**JSON** - Web-friendly, JavaScript integration
-- Best for: Web applications, d3.js visualizations
+**JSON** - 網頁友好、JavaScript 整合
+- 最適合：網頁應用、d3.js 視覺化
 
-**Pickle** - Fast, preserves Python objects, binary
-- Best for: Python-only storage, complex attributes
+**Pickle** - 快速、保留 Python 物件、二進位
+- 最適合：僅 Python 儲存、複雜屬性
 
-**Pandas** - Data analysis integration, DataFrame operations
-- Best for: Data processing pipelines, statistical analysis
+**Pandas** - 資料分析整合、DataFrame 操作
+- 最適合：資料處理管線、統計分析
 
-**NumPy/SciPy** - Numerical computation, sparse matrices
-- Best for: Matrix operations, scientific computing
+**NumPy/SciPy** - 數值計算、稀疏矩陣
+- 最適合：矩陣運算、科學計算
 
-**DOT** - Visualization, Graphviz integration
-- Best for: Creating visual diagrams
+**DOT** - 視覺化、Graphviz 整合
+- 最適合：建立視覺圖表
 
-## Performance Considerations
+## 效能考量
 
-### Large Graphs
-For large graphs, consider:
+### 大型圖
+對於大型圖，考慮：
 ```python
-# Use compressed formats
+# 使用壓縮格式
 import gzip
 with gzip.open('graph.adjlist.gz', 'wt') as f:
     nx.write_adjlist(G, f)
@@ -399,31 +399,31 @@ with gzip.open('graph.adjlist.gz', 'wt') as f:
 with gzip.open('graph.adjlist.gz', 'rt') as f:
     G = nx.read_adjlist(f)
 
-# Use binary formats (faster)
-nx.write_gpickle(G, 'graph.gpickle')  # Faster than text formats
+# 使用二進位格式（更快）
+nx.write_gpickle(G, 'graph.gpickle')  # 比文字格式更快
 
-# Use sparse matrices for adjacency
-A = nx.to_scipy_sparse_array(G, format='csr')  # Memory efficient
+# 對鄰接使用稀疏矩陣
+A = nx.to_scipy_sparse_array(G, format='csr')  # 記憶體高效
 ```
 
-### Incremental Loading
-For very large graphs:
+### 增量載入
+對於非常大的圖：
 ```python
-# Load graph incrementally from edge list
+# 從邊列表增量載入圖
 G = nx.Graph()
 with open('huge_graph.edgelist') as f:
     for line in f:
         u, v = line.strip().split()
         G.add_edge(u, v)
 
-        # Process in chunks
+        # 分塊處理
         if G.number_of_edges() % 100000 == 0:
             print(f"Loaded {G.number_of_edges()} edges")
 ```
 
-## Error Handling
+## 錯誤處理
 
-### Robust File Reading
+### 穩健的檔案讀取
 ```python
 try:
     G = nx.read_graphml('graph.graphml')
@@ -433,9 +433,9 @@ except FileNotFoundError:
     print("File not found")
     G = nx.Graph()
 
-# Check if file format is supported
+# 檢查是否支援檔案格式
 if os.path.exists('graph.txt'):
     with open('graph.txt') as f:
         first_line = f.readline()
-        # Detect format and read accordingly
+        # 檢測格式並相應讀取
 ```

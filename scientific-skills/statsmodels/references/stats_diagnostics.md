@@ -1,36 +1,36 @@
-# Statistical Tests and Diagnostics Reference
+# 統計檢定和診斷參考
 
-This document provides comprehensive guidance on statistical tests, diagnostics, and tools available in statsmodels.
+本文件提供 statsmodels 中統計檢定、診斷和工具的完整指引。
 
-## Overview
+## 概述
 
-Statsmodels provides extensive statistical testing capabilities:
-- Residual diagnostics and specification tests
-- Hypothesis testing (parametric and non-parametric)
-- Goodness-of-fit tests
-- Multiple comparisons and post-hoc tests
-- Power and sample size calculations
-- Robust covariance matrices
-- Influence and outlier detection
+Statsmodels 提供廣泛的統計檢定功能：
+- 殘差診斷和規格檢定
+- 假設檢定（母數和無母數）
+- 配適度檢定
+- 多重比較和事後檢定
+- 檢定力和樣本大小計算
+- 穩健共變異數矩陣
+- 影響和離群值偵測
 
-## Residual Diagnostics
+## 殘差診斷
 
-### Autocorrelation Tests
+### 自相關檢定
 
-**Ljung-Box Test**: Tests for autocorrelation in residuals
+**Ljung-Box 檢定**：檢定殘差中的自相關
 
 ```python
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
-# Test residuals for autocorrelation
+# 檢定殘差的自相關
 lb_test = acorr_ljungbox(residuals, lags=10, return_df=True)
 print(lb_test)
 
-# H0: No autocorrelation up to lag k
-# If p-value < 0.05, reject H0 (autocorrelation present)
+# H0：直到滯後 k 無自相關
+# 若 p 值 < 0.05，拒絕 H0（存在自相關）
 ```
 
-**Durbin-Watson Test**: Tests for first-order autocorrelation
+**Durbin-Watson 檢定**：檢定一階自相關
 
 ```python
 from statsmodels.stats.stattools import durbin_watson
@@ -38,13 +38,13 @@ from statsmodels.stats.stattools import durbin_watson
 dw_stat = durbin_watson(residuals)
 print(f"Durbin-Watson: {dw_stat:.4f}")
 
-# DW ≈ 2: no autocorrelation
-# DW < 2: positive autocorrelation
-# DW > 2: negative autocorrelation
-# Exact critical values depend on n and k
+# DW ≈ 2：無自相關
+# DW < 2：正自相關
+# DW > 2：負自相關
+# 精確臨界值取決於 n 和 k
 ```
 
-**Breusch-Godfrey Test**: More general test for autocorrelation
+**Breusch-Godfrey 檢定**：更一般的自相關檢定
 
 ```python
 from statsmodels.stats.diagnostic import acorr_breusch_godfrey
@@ -53,12 +53,12 @@ bg_test = acorr_breusch_godfrey(results, nlags=5)
 lm_stat, lm_pval, f_stat, f_pval = bg_test
 
 print(f"LM statistic: {lm_stat:.4f}, p-value: {lm_pval:.4f}")
-# H0: No autocorrelation up to lag k
+# H0：直到滯後 k 無自相關
 ```
 
-### Heteroskedasticity Tests
+### 異質變異數檢定
 
-**Breusch-Pagan Test**: Tests for heteroskedasticity
+**Breusch-Pagan 檢定**：檢定異質變異數
 
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan
@@ -67,11 +67,11 @@ bp_test = het_breuschpagan(residuals, exog)
 lm_stat, lm_pval, f_stat, f_pval = bp_test
 
 print(f"Breusch-Pagan test p-value: {lm_pval:.4f}")
-# H0: Homoskedasticity (constant variance)
-# If p-value < 0.05, reject H0 (heteroskedasticity present)
+# H0：同質變異數（變異數恆定）
+# 若 p 值 < 0.05，拒絕 H0（存在異質變異數）
 ```
 
-**White Test**: More general test for heteroskedasticity
+**White 檢定**：更一般的異質變異數檢定
 
 ```python
 from statsmodels.stats.diagnostic import het_white
@@ -80,10 +80,10 @@ white_test = het_white(residuals, exog)
 lm_stat, lm_pval, f_stat, f_pval = white_test
 
 print(f"White test p-value: {lm_pval:.4f}")
-# H0: Homoskedasticity
+# H0：同質變異數
 ```
 
-**ARCH Test**: Tests for autoregressive conditional heteroskedasticity
+**ARCH 檢定**：檢定自迴歸條件異質變異數
 
 ```python
 from statsmodels.stats.diagnostic import het_arch
@@ -92,13 +92,13 @@ arch_test = het_arch(residuals, nlags=5)
 lm_stat, lm_pval, f_stat, f_pval = arch_test
 
 print(f"ARCH test p-value: {lm_pval:.4f}")
-# H0: No ARCH effects
-# If significant, consider GARCH model
+# H0：無 ARCH 效應
+# 若顯著，考慮 GARCH 模型
 ```
 
-### Normality Tests
+### 常態性檢定
 
-**Jarque-Bera Test**: Tests for normality using skewness and kurtosis
+**Jarque-Bera 檢定**：使用偏態和峰度檢定常態性
 
 ```python
 from statsmodels.stats.stattools import jarque_bera
@@ -110,21 +110,21 @@ print(f"p-value: {jb_pval:.4f}")
 print(f"Skewness: {skew:.4f}")
 print(f"Kurtosis: {kurtosis:.4f}")
 
-# H0: Residuals are normally distributed
-# Normal: skewness ≈ 0, kurtosis ≈ 3
+# H0：殘差呈常態分布
+# 常態：偏態 ≈ 0，峰度 ≈ 3
 ```
 
-**Omnibus Test**: Another normality test (also based on skewness/kurtosis)
+**Omnibus 檢定**：另一個常態性檢定（同樣基於偏態/峰度）
 
 ```python
 from statsmodels.stats.stattools import omni_normtest
 
 omni_stat, omni_pval = omni_normtest(residuals)
 print(f"Omnibus test p-value: {omni_pval:.4f}")
-# H0: Normality
+# H0：常態性
 ```
 
-**Anderson-Darling Test**: Distribution fit test
+**Anderson-Darling 檢定**：分布配適檢定
 
 ```python
 from statsmodels.stats.diagnostic import normal_ad
@@ -133,7 +133,7 @@ ad_stat, ad_pval = normal_ad(residuals)
 print(f"Anderson-Darling test p-value: {ad_pval:.4f}")
 ```
 
-**Lilliefors Test**: Modified Kolmogorov-Smirnov test
+**Lilliefors 檢定**：修改的 Kolmogorov-Smirnov 檢定
 
 ```python
 from statsmodels.stats.diagnostic import lilliefors
@@ -142,9 +142,9 @@ lf_stat, lf_pval = lilliefors(residuals, dist='norm')
 print(f"Lilliefors test p-value: {lf_pval:.4f}")
 ```
 
-### Linearity and Specification Tests
+### 線性和規格檢定
 
-**Ramsey RESET Test**: Tests for functional form misspecification
+**Ramsey RESET 檢定**：檢定函數形式誤設
 
 ```python
 from statsmodels.stats.diagnostic import linear_reset
@@ -153,29 +153,29 @@ reset_test = linear_reset(results, power=2)
 f_stat, f_pval = reset_test
 
 print(f"RESET test p-value: {f_pval:.4f}")
-# H0: Model is correctly specified (linear)
-# If rejected, may need polynomial terms or transformations
+# H0：模型正確指定（線性）
+# 若被拒絕，可能需要多項式項或轉換
 ```
 
-**Harvey-Collier Test**: Tests for linearity
+**Harvey-Collier 檢定**：檢定線性
 
 ```python
 from statsmodels.stats.diagnostic import linear_harvey_collier
 
 hc_stat, hc_pval = linear_harvey_collier(results)
 print(f"Harvey-Collier test p-value: {hc_pval:.4f}")
-# H0: Linear specification is correct
+# H0：線性規格正確
 ```
 
-## Multicollinearity Detection
+## 多重共線性偵測
 
-**Variance Inflation Factor (VIF)**:
+**變異數膨脹因子（VIF）**：
 
 ```python
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import pandas as pd
 
-# Calculate VIF for each variable
+# 計算每個變數的 VIF
 vif_data = pd.DataFrame()
 vif_data["Variable"] = X.columns
 vif_data["VIF"] = [variance_inflation_factor(X.values, i)
@@ -183,41 +183,41 @@ vif_data["VIF"] = [variance_inflation_factor(X.values, i)
 
 print(vif_data.sort_values('VIF', ascending=False))
 
-# Interpretation:
-# VIF = 1: No correlation with other predictors
-# VIF > 5: Moderate multicollinearity
-# VIF > 10: Serious multicollinearity problem
-# VIF > 20: Severe multicollinearity (consider removing variable)
+# 解釋：
+# VIF = 1：與其他預測變數無相關
+# VIF > 5：中度多重共線性
+# VIF > 10：嚴重多重共線性問題
+# VIF > 20：嚴重多重共線性（考慮移除變數）
 ```
 
-**Condition Number**: From regression results
+**條件數**：從迴歸結果
 
 ```python
 print(f"Condition number: {results.condition_number:.2f}")
 
-# Interpretation:
-# < 10: No multicollinearity concern
-# 10-30: Moderate multicollinearity
-# > 30: Strong multicollinearity
-# > 100: Severe multicollinearity
+# 解釋：
+# < 10：無多重共線性擔憂
+# 10-30：中度多重共線性
+# > 30：強多重共線性
+# > 100：嚴重多重共線性
 ```
 
-## Influence and Outlier Detection
+## 影響和離群值偵測
 
-### Leverage
+### 槓桿
 
-High leverage points have extreme predictor values.
+高槓桿點具有極端的預測變數值。
 
 ```python
 from statsmodels.stats.outliers_influence import OLSInfluence
 
 influence = results.get_influence()
 
-# Hat values (leverage)
+# Hat 值（槓桿）
 leverage = influence.hat_matrix_diag
 
-# Rule of thumb: leverage > 2*p/n or 3*p/n is high
-# p = number of parameters, n = sample size
+# 經驗法則：槓桿 > 2*p/n 或 3*p/n 為高
+# p = 參數數，n = 樣本大小
 threshold = 2 * len(results.params) / len(y)
 high_leverage = np.where(leverage > threshold)[0]
 
@@ -226,19 +226,19 @@ print(f"High leverage observations: {high_leverage}")
 
 ### Cook's Distance
 
-Measures overall influence of each observation.
+測量每個觀測值的整體影響。
 
 ```python
 # Cook's distance
 cooks_d = influence.cooks_distance[0]
 
-# Rule of thumb: Cook's D > 4/n is influential
+# 經驗法則：Cook's D > 4/n 為有影響
 threshold = 4 / len(y)
 influential = np.where(cooks_d > threshold)[0]
 
 print(f"Influential observations (Cook's D): {influential}")
 
-# Plot
+# 繪圖
 import matplotlib.pyplot as plt
 plt.stem(range(len(cooks_d)), cooks_d)
 plt.axhline(y=threshold, color='r', linestyle='--', label=f'Threshold (4/n)')
@@ -250,13 +250,13 @@ plt.show()
 
 ### DFFITS
 
-Measures influence on fitted value.
+測量對擬合值的影響。
 
 ```python
 # DFFITS
 dffits = influence.dffits[0]
 
-# Rule of thumb: |DFFITS| > 2*sqrt(p/n) is influential
+# 經驗法則：|DFFITS| > 2*sqrt(p/n) 為有影響
 p = len(results.params)
 n = len(y)
 threshold = 2 * np.sqrt(p / n)
@@ -267,13 +267,13 @@ print(f"Influential observations (DFFITS): {influential_dffits}")
 
 ### DFBETAs
 
-Measures influence on each coefficient.
+測量對每個係數的影響。
 
 ```python
-# DFBETAs (one for each parameter)
+# DFBETAs（每個參數一個）
 dfbetas = influence.dfbetas
 
-# Rule of thumb: |DFBETA| > 2/sqrt(n)
+# 經驗法則：|DFBETA| > 2/sqrt(n)
 threshold = 2 / np.sqrt(n)
 
 for i, param_name in enumerate(results.params.index):
@@ -282,7 +282,7 @@ for i, param_name in enumerate(results.params.index):
         print(f"Influential for {param_name}: {influential}")
 ```
 
-### Influence Plot
+### 影響圖
 
 ```python
 from statsmodels.graphics.regressionplots import influence_plot
@@ -291,76 +291,76 @@ fig, ax = plt.subplots(figsize=(12, 8))
 influence_plot(results, ax=ax, criterion='cooks')
 plt.show()
 
-# Combines leverage, residuals, and Cook's distance
-# Large bubbles = high Cook's distance
-# Far from x=0 = high leverage
-# Far from y=0 = large residual
+# 結合槓桿、殘差和 Cook's distance
+# 大氣泡 = 高 Cook's distance
+# 遠離 x=0 = 高槓桿
+# 遠離 y=0 = 大殘差
 ```
 
-### Studentized Residuals
+### 學生化殘差
 
 ```python
-# Studentized residuals (outliers)
+# 學生化殘差（離群值）
 student_resid = influence.resid_studentized_internal
 
-# External studentized residuals (more conservative)
+# 外部學生化殘差（更保守）
 student_resid_external = influence.resid_studentized_external
 
-# Outliers: |studentized residual| > 3 (or > 2.5)
+# 離群值：|學生化殘差| > 3（或 > 2.5）
 outliers = np.where(np.abs(student_resid_external) > 3)[0]
 print(f"Outliers: {outliers}")
 ```
 
-## Hypothesis Testing
+## 假設檢定
 
-### t-tests
+### t 檢定
 
-**One-sample t-test**: Test if mean equals specific value
+**單樣本 t 檢定**：檢定均值是否等於特定值
 
 ```python
 from scipy import stats
 
-# H0: population mean = mu_0
+# H0：母體均值 = mu_0
 t_stat, p_value = stats.ttest_1samp(data, popmean=mu_0)
 
 print(f"t-statistic: {t_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-**Two-sample t-test**: Compare means of two groups
+**雙樣本 t 檢定**：比較兩組的均值
 
 ```python
-# H0: mean1 = mean2 (equal variances)
+# H0：mean1 = mean2（變異數相等）
 t_stat, p_value = stats.ttest_ind(group1, group2)
 
-# Welch's t-test (unequal variances)
+# Welch's t 檢定（變異數不等）
 t_stat, p_value = stats.ttest_ind(group1, group2, equal_var=False)
 
 print(f"t-statistic: {t_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-**Paired t-test**: Compare paired observations
+**配對 t 檢定**：比較配對觀測值
 
 ```python
-# H0: mean difference = 0
+# H0：均值差 = 0
 t_stat, p_value = stats.ttest_rel(before, after)
 
 print(f"t-statistic: {t_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-### Proportion Tests
+### 比例檢定
 
-**One-proportion test**:
+**單比例檢定**：
 
 ```python
 from statsmodels.stats.proportion import proportions_ztest
 
-# H0: proportion = p0
-count = 45  # successes
-nobs = 100  # total observations
-p0 = 0.5    # hypothesized proportion
+# H0：比例 = p0
+count = 45  # 成功數
+nobs = 100  # 總觀測數
+p0 = 0.5    # 假設比例
 
 z_stat, p_value = proportions_ztest(count, nobs, value=p0)
 
@@ -368,10 +368,10 @@ print(f"z-statistic: {z_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-**Two-proportion test**:
+**雙比例檢定**：
 
 ```python
-# H0: proportion1 = proportion2
+# H0：proportion1 = proportion2
 counts = [45, 60]
 nobs = [100, 120]
 
@@ -380,14 +380,14 @@ print(f"z-statistic: {z_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-### Chi-square Tests
+### 卡方檢定
 
-**Chi-square test of independence**:
+**獨立性卡方檢定**：
 
 ```python
 from scipy.stats import chi2_contingency
 
-# Contingency table
+# 列聯表
 contingency_table = pd.crosstab(variable1, variable2)
 
 chi2, p_value, dof, expected = chi2_contingency(contingency_table)
@@ -396,18 +396,18 @@ print(f"Chi-square statistic: {chi2:.4f}")
 print(f"p-value: {p_value:.4f}")
 print(f"Degrees of freedom: {dof}")
 
-# H0: Variables are independent
+# H0：變數間獨立
 ```
 
-**Chi-square goodness-of-fit**:
+**配適度卡方檢定**：
 
 ```python
 from scipy.stats import chisquare
 
-# Observed frequencies
+# 觀察頻率
 observed = [20, 30, 25, 25]
 
-# Expected frequencies (equal by default)
+# 期望頻率（預設相等）
 expected = [25, 25, 25, 25]
 
 chi2, p_value = chisquare(observed, expected)
@@ -415,126 +415,126 @@ chi2, p_value = chisquare(observed, expected)
 print(f"Chi-square statistic: {chi2:.4f}")
 print(f"p-value: {p_value:.4f}")
 
-# H0: Data follow the expected distribution
+# H0：資料遵循期望分布
 ```
 
-### Non-parametric Tests
+### 無母數檢定
 
-**Mann-Whitney U test** (independent samples):
+**Mann-Whitney U 檢定**（獨立樣本）：
 
 ```python
 from scipy.stats import mannwhitneyu
 
-# H0: Distributions are equal
+# H0：分布相等
 u_stat, p_value = mannwhitneyu(group1, group2, alternative='two-sided')
 
 print(f"U statistic: {u_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-**Wilcoxon signed-rank test** (paired samples):
+**Wilcoxon 符號等級檢定**（配對樣本）：
 
 ```python
 from scipy.stats import wilcoxon
 
-# H0: Median difference = 0
+# H0：中位數差 = 0
 w_stat, p_value = wilcoxon(before, after)
 
 print(f"W statistic: {w_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-**Kruskal-Wallis H test** (>2 groups):
+**Kruskal-Wallis H 檢定**（>2 組）：
 
 ```python
 from scipy.stats import kruskal
 
-# H0: All groups have same distribution
+# H0：所有組別具有相同分布
 h_stat, p_value = kruskal(group1, group2, group3)
 
 print(f"H statistic: {h_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-**Sign test**:
+**符號檢定**：
 
 ```python
 from statsmodels.stats.descriptivestats import sign_test
 
-# H0: Median = m0
+# H0：中位數 = m0
 result = sign_test(data, m0=0)
 print(result)
 ```
 
-### ANOVA
+### 變異數分析（ANOVA）
 
-**One-way ANOVA**:
+**單因子變異數分析**：
 
 ```python
 from scipy.stats import f_oneway
 
-# H0: All group means are equal
+# H0：所有組別均值相等
 f_stat, p_value = f_oneway(group1, group2, group3)
 
 print(f"F-statistic: {f_stat:.4f}")
 print(f"p-value: {p_value:.4f}")
 ```
 
-**Two-way ANOVA** (with statsmodels):
+**雙因子變異數分析**（使用 statsmodels）：
 
 ```python
 from statsmodels.formula.api import ols
 from statsmodels.stats.anova import anova_lm
 
-# Fit model
+# 配適模型
 model = ols('response ~ C(factor1) + C(factor2) + C(factor1):C(factor2)',
             data=df).fit()
 
-# ANOVA table
+# ANOVA 表
 anova_table = anova_lm(model, typ=2)
 print(anova_table)
 ```
 
-**Repeated measures ANOVA**:
+**重複測量變異數分析**：
 
 ```python
 from statsmodels.stats.anova import AnovaRM
 
-# Requires long-format data
+# 需要長格式資料
 aovrm = AnovaRM(df, depvar='score', subject='subject_id', within=['time'])
 results = aovrm.fit()
 
 print(results.summary())
 ```
 
-## Multiple Comparisons
+## 多重比較
 
-### Post-hoc Tests
+### 事後檢定
 
-**Tukey's HSD** (Honest Significant Difference):
+**Tukey HSD**（Honest Significant Difference）：
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
-# Perform Tukey HSD test
+# 執行 Tukey HSD 檢定
 tukey = pairwise_tukeyhsd(data, groups, alpha=0.05)
 
 print(tukey.summary())
 
-# Plot confidence intervals
+# 繪製信賴區間
 tukey.plot_simultaneous()
 plt.show()
 ```
 
-**Bonferroni correction**:
+**Bonferroni 校正**：
 
 ```python
 from statsmodels.stats.multitest import multipletests
 
-# P-values from multiple tests
+# 多重檢定的 P 值
 p_values = [0.01, 0.03, 0.04, 0.15, 0.001]
 
-# Apply correction
+# 應用校正
 reject, pvals_corrected, alphac_sidak, alphac_bonf = multipletests(
     p_values,
     alpha=0.05,
@@ -545,10 +545,10 @@ print("Rejected:", reject)
 print("Corrected p-values:", pvals_corrected)
 ```
 
-**False Discovery Rate (FDR)**:
+**偽發現率（FDR）**：
 
 ```python
-# FDR correction (less conservative than Bonferroni)
+# FDR 校正（比 Bonferroni 較不保守）
 reject, pvals_corrected, alphac_sidak, alphac_bonf = multipletests(
     p_values,
     alpha=0.05,
@@ -559,46 +559,46 @@ print("Rejected:", reject)
 print("Corrected p-values:", pvals_corrected)
 ```
 
-## Robust Covariance Matrices
+## 穩健共變異數矩陣
 
-### Heteroskedasticity-Consistent (HC) Standard Errors
+### 異質變異數一致（HC）標準誤
 
 ```python
-# After fitting OLS
+# 配適 OLS 後
 results = sm.OLS(y, X).fit()
 
-# HC0 (White's heteroskedasticity-consistent SEs)
+# HC0（White 異質變異數一致標準誤）
 results_hc0 = results.get_robustcov_results(cov_type='HC0')
 
-# HC1 (degrees of freedom adjustment)
+# HC1（自由度調整）
 results_hc1 = results.get_robustcov_results(cov_type='HC1')
 
-# HC2 (leverage adjustment)
+# HC2（槓桿調整）
 results_hc2 = results.get_robustcov_results(cov_type='HC2')
 
-# HC3 (most conservative, recommended for small samples)
+# HC3（最保守，建議用於小樣本）
 results_hc3 = results.get_robustcov_results(cov_type='HC3')
 
 print("Standard OLS SEs:", results.bse)
 print("Robust HC3 SEs:", results_hc3.bse)
 ```
 
-### HAC (Heteroskedasticity and Autocorrelation Consistent)
+### HAC（異質變異數和自相關一致）
 
-**Newey-West standard errors**:
+**Newey-West 標準誤**：
 
 ```python
-# For time series with autocorrelation and heteroskedasticity
+# 用於具有自相關和異質變異數的時間序列
 results_hac = results.get_robustcov_results(cov_type='HAC', maxlags=4)
 
 print("HAC (Newey-West) SEs:", results_hac.bse)
 print(results_hac.summary())
 ```
 
-### Cluster-Robust Standard Errors
+### 群集穩健標準誤
 
 ```python
-# For clustered/grouped data
+# 用於群集/分組資料
 results_cluster = results.get_robustcov_results(
     cov_type='cluster',
     groups=cluster_ids
@@ -607,14 +607,14 @@ results_cluster = results.get_robustcov_results(
 print("Cluster-robust SEs:", results_cluster.bse)
 ```
 
-## Descriptive Statistics
+## 描述統計
 
-**Basic descriptive statistics**:
+**基本描述統計**：
 
 ```python
 from statsmodels.stats.api import DescrStatsW
 
-# Comprehensive descriptive stats
+# 完整描述統計
 desc = DescrStatsW(data)
 
 print("Mean:", desc.mean)
@@ -622,47 +622,47 @@ print("Std Dev:", desc.std)
 print("Variance:", desc.var)
 print("Confidence interval:", desc.tconfint_mean())
 
-# Quantiles
+# 分位數
 print("Median:", desc.quantile(0.5))
 print("IQR:", desc.quantile([0.25, 0.75]))
 ```
 
-**Weighted statistics**:
+**加權統計**：
 
 ```python
-# With weights
+# 帶權重
 desc_weighted = DescrStatsW(data, weights=weights)
 
 print("Weighted mean:", desc_weighted.mean)
 print("Weighted std:", desc_weighted.std)
 ```
 
-**Compare two groups**:
+**比較兩組**：
 
 ```python
 from statsmodels.stats.weightstats import CompareMeans
 
-# Create comparison object
+# 建立比較物件
 cm = CompareMeans(DescrStatsW(group1), DescrStatsW(group2))
 
-# t-test
+# t 檢定
 print("t-test:", cm.ttest_ind())
 
-# Confidence interval for difference
+# 差異的信賴區間
 print("CI for difference:", cm.tconfint_diff())
 
-# Test for equal variances
+# 變異數相等檢定
 print("Equal variance test:", cm.test_equal_var())
 ```
 
-## Power Analysis and Sample Size
+## 檢定力分析和樣本大小
 
-**Power for t-test**:
+**t 檢定的檢定力**：
 
 ```python
 from statsmodels.stats.power import tt_ind_solve_power
 
-# Solve for sample size
+# 求解樣本大小
 effect_size = 0.5  # Cohen's d
 alpha = 0.05
 power = 0.8
@@ -674,7 +674,7 @@ n = tt_ind_solve_power(effect_size=effect_size,
 
 print(f"Required sample size per group: {n:.0f}")
 
-# Solve for power given n
+# 給定 n 求解檢定力
 power = tt_ind_solve_power(effect_size=0.5,
                            nobs1=50,
                            alpha=0.05,
@@ -683,13 +683,13 @@ power = tt_ind_solve_power(effect_size=0.5,
 print(f"Power: {power:.4f}")
 ```
 
-**Power for proportion test**:
+**比例檢定的檢定力**：
 
 ```python
 from statsmodels.stats.power import zt_ind_solve_power
 
-# For proportion tests (z-test)
-effect_size = 0.3  # Difference in proportions
+# 用於比例檢定（z 檢定）
+effect_size = 0.3  # 比例差
 alpha = 0.05
 power = 0.8
 
@@ -701,18 +701,18 @@ n = zt_ind_solve_power(effect_size=effect_size,
 print(f"Required sample size per group: {n:.0f}")
 ```
 
-**Power curves**:
+**檢定力曲線**：
 
 ```python
 from statsmodels.stats.power import TTestIndPower
 import matplotlib.pyplot as plt
 
-# Create power analysis object
+# 建立檢定力分析物件
 analysis = TTestIndPower()
 
-# Plot power curves for different sample sizes
+# 繪製不同樣本大小的檢定力曲線
 sample_sizes = range(10, 200, 10)
-effect_sizes = [0.2, 0.5, 0.8]  # Small, medium, large
+effect_sizes = [0.2, 0.5, 0.8]  # 小、中、大
 
 fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -730,17 +730,17 @@ ax.grid(True, alpha=0.3)
 plt.show()
 ```
 
-## Effect Sizes
+## 效果量
 
-**Cohen's d** (standardized mean difference):
+**Cohen's d**（標準化均值差）：
 
 ```python
 def cohens_d(group1, group2):
-    \"\"\"Calculate Cohen's d for independent samples\"\"\"
+    """計算獨立樣本的 Cohen's d"""
     n1, n2 = len(group1), len(group2)
     var1, var2 = np.var(group1, ddof=1), np.var(group2, ddof=1)
 
-    # Pooled standard deviation
+    # 合併標準差
     pooled_std = np.sqrt(((n1-1)*var1 + (n2-1)*var2) / (n1+n2-2))
 
     # Cohen's d
@@ -751,109 +751,109 @@ def cohens_d(group1, group2):
 d = cohens_d(group1, group2)
 print(f"Cohen's d: {d:.4f}")
 
-# Interpretation:
-# |d| < 0.2: negligible
-# |d| ~ 0.2: small
-# |d| ~ 0.5: medium
-# |d| ~ 0.8: large
+# 解釋：
+# |d| < 0.2：可忽略
+# |d| ~ 0.2：小
+# |d| ~ 0.5：中
+# |d| ~ 0.8：大
 ```
 
-**Eta-squared** (for ANOVA):
+**Eta 平方**（用於 ANOVA）：
 
 ```python
-# From ANOVA table
+# 從 ANOVA 表
 # η² = SS_between / SS_total
 
 def eta_squared(anova_table):
     return anova_table['sum_sq'][0] / anova_table['sum_sq'].sum()
 
-# After running ANOVA
+# 執行 ANOVA 後
 eta_sq = eta_squared(anova_table)
 print(f"Eta-squared: {eta_sq:.4f}")
 
-# Interpretation:
-# 0.01: small effect
-# 0.06: medium effect
-# 0.14: large effect
+# 解釋：
+# 0.01：小效果
+# 0.06：中效果
+# 0.14：大效果
 ```
 
-## Contingency Tables and Association
+## 列聯表和關聯
 
-**McNemar's test** (paired binary data):
+**McNemar 檢定**（配對二元資料）：
 
 ```python
 from statsmodels.stats.contingency_tables import mcnemar
 
-# 2x2 contingency table
+# 2x2 列聯表
 table = [[a, b],
          [c, d]]
 
-result = mcnemar(table, exact=True)  # or exact=False for large samples
+result = mcnemar(table, exact=True)  # 或大樣本用 exact=False
 print(f"p-value: {result.pvalue:.4f}")
 
-# H0: Marginal probabilities are equal
+# H0：邊際機率相等
 ```
 
-**Cochran-Mantel-Haenszel test**:
+**Cochran-Mantel-Haenszel 檢定**：
 
 ```python
 from statsmodels.stats.contingency_tables import StratifiedTable
 
-# For stratified 2x2 tables
+# 用於分層 2x2 表
 strat_table = StratifiedTable(tables_list)
 result = strat_table.test_null_odds()
 
 print(f"p-value: {result.pvalue:.4f}")
 ```
 
-## Treatment Effects and Causal Inference
+## 處理效應和因果推論
 
-**Propensity score matching**:
+**傾向分數配對**：
 
 ```python
 from statsmodels.treatment import propensity_score
 
-# Estimate propensity scores
+# 估計傾向分數
 ps_model = sm.Logit(treatment, X).fit()
 propensity_scores = ps_model.predict(X)
 
-# Use for matching or weighting
-# (manual implementation of matching needed)
+# 用於配對或加權
+# （需要手動實作配對）
 ```
 
-**Difference-in-differences**:
+**雙重差分法**：
 
 ```python
-# Did formula: outcome ~ treatment * post
+# Did 公式：outcome ~ treatment * post
 model = ols('outcome ~ treatment + post + treatment:post', data=df).fit()
 
-# DiD estimate is the interaction coefficient
+# DiD 估計是交互作用係數
 did_estimate = model.params['treatment:post']
 print(f"DiD estimate: {did_estimate:.4f}")
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Always check assumptions**: Test before interpreting results
-2. **Report effect sizes**: Not just p-values
-3. **Use appropriate tests**: Match test to data type and distribution
-4. **Correct for multiple comparisons**: When conducting many tests
-5. **Check sample size**: Ensure adequate power
-6. **Visual inspection**: Plot data before testing
-7. **Report confidence intervals**: Along with point estimates
-8. **Consider alternatives**: Non-parametric when assumptions violated
-9. **Robust standard errors**: Use when heteroskedasticity/autocorrelation present
-10. **Document decisions**: Note which tests used and why
+1. **始終檢查假設**：解釋結果前進行檢定
+2. **報告效果量**：不只是 p 值
+3. **使用適當檢定**：配合資料類型和分布
+4. **多重比較校正**：進行多個檢定時
+5. **檢查樣本大小**：確保足夠檢定力
+6. **視覺檢查**：檢定前繪製資料
+7. **報告信賴區間**：連同點估計
+8. **考慮替代方案**：假設違反時使用無母數
+9. **穩健標準誤**：當存在異質變異數/自相關時使用
+10. **記錄決策**：註記使用哪些檢定及原因
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Not checking test assumptions**: May invalidate results
-2. **Multiple testing without correction**: Inflated Type I error
-3. **Using parametric tests on non-normal data**: Consider non-parametric
-4. **Ignoring heteroskedasticity**: Use robust SEs
-5. **Confusing statistical and practical significance**: Check effect sizes
-6. **Not reporting confidence intervals**: Only p-values insufficient
-7. **Using wrong test**: Match test to research question
-8. **Insufficient power**: Risk of Type II error (false negatives)
-9. **p-hacking**: Testing many specifications until significant
-10. **Overinterpreting p-values**: Remember limitations of NHST
+1. **未檢查檢定假設**：可能使結果無效
+2. **多重檢定未校正**：膨脹型一誤差
+3. **對非常態資料使用母數檢定**：考慮無母數
+4. **忽略異質變異數**：使用穩健標準誤
+5. **混淆統計顯著性和實務顯著性**：檢查效果量
+6. **未報告信賴區間**：只有 p 值不夠
+7. **使用錯誤檢定**：配合研究問題
+8. **檢定力不足**：型二誤差風險（偽陰性）
+9. **p 值操弄（p-hacking）**：測試多種規格直到顯著
+10. **過度解釋 p 值**：記住 NHST 的限制

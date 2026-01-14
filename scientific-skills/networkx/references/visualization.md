@@ -1,150 +1,150 @@
-# NetworkX Graph Visualization
+# NetworkX 圖視覺化
 
-## Basic Drawing with Matplotlib
+## 使用 Matplotlib 的基本繪圖
 
-### Simple Visualization
+### 簡單視覺化
 ```python
 import networkx as nx
 import matplotlib.pyplot as plt
 
-# Create and draw graph
+# 建立和繪製圖
 G = nx.karate_club_graph()
 nx.draw(G)
 plt.show()
 
-# Save to file
+# 儲存到檔案
 nx.draw(G)
 plt.savefig('graph.png', dpi=300, bbox_inches='tight')
 plt.close()
 ```
 
-### Drawing with Labels
+### 帶標籤繪製
 ```python
-# Draw with node labels
+# 繪製帶節點標籤
 nx.draw(G, with_labels=True)
 plt.show()
 
-# Custom labels
+# 自訂標籤
 labels = {i: f"Node {i}" for i in G.nodes()}
 nx.draw(G, labels=labels, with_labels=True)
 plt.show()
 ```
 
-## Layout Algorithms
+## 佈局演算法
 
-### Spring Layout (Force-Directed)
+### 彈簧佈局（力導向）
 ```python
-# Fruchterman-Reingold force-directed algorithm
+# Fruchterman-Reingold 力導向演算法
 pos = nx.spring_layout(G, seed=42)
 nx.draw(G, pos=pos, with_labels=True)
 plt.show()
 
-# With parameters
+# 帶參數
 pos = nx.spring_layout(G, k=0.5, iterations=50, seed=42)
 ```
 
-### Circular Layout
+### 圓形佈局
 ```python
-# Arrange nodes in circle
+# 將節點排列成圓形
 pos = nx.circular_layout(G)
 nx.draw(G, pos=pos, with_labels=True)
 plt.show()
 ```
 
-### Random Layout
+### 隨機佈局
 ```python
-# Random positioning
+# 隨機定位
 pos = nx.random_layout(G, seed=42)
 nx.draw(G, pos=pos, with_labels=True)
 plt.show()
 ```
 
-### Shell Layout
+### 殼形佈局
 ```python
-# Concentric circles
+# 同心圓
 pos = nx.shell_layout(G)
 nx.draw(G, pos=pos, with_labels=True)
 plt.show()
 
-# With custom shells
+# 自訂殼
 shells = [[0, 1, 2], [3, 4, 5, 6], [7, 8, 9]]
 pos = nx.shell_layout(G, nlist=shells)
 ```
 
-### Spectral Layout
+### 譜佈局
 ```python
-# Use eigenvectors of graph Laplacian
+# 使用圖拉普拉斯算子的特徵向量
 pos = nx.spectral_layout(G)
 nx.draw(G, pos=pos, with_labels=True)
 plt.show()
 ```
 
-### Kamada-Kawai Layout
+### Kamada-Kawai 佈局
 ```python
-# Energy-based layout
+# 基於能量的佈局
 pos = nx.kamada_kawai_layout(G)
 nx.draw(G, pos=pos, with_labels=True)
 plt.show()
 ```
 
-### Planar Layout
+### 平面佈局
 ```python
-# For planar graphs only
+# 僅適用於平面圖
 if nx.is_planar(G):
     pos = nx.planar_layout(G)
     nx.draw(G, pos=pos, with_labels=True)
     plt.show()
 ```
 
-### Tree Layouts
+### 樹佈局
 ```python
-# For tree graphs
+# 對於樹形圖
 if nx.is_tree(G):
     pos = nx.nx_agraph.graphviz_layout(G, prog='dot')
     nx.draw(G, pos=pos, with_labels=True)
     plt.show()
 ```
 
-## Customizing Node Appearance
+## 自訂節點外觀
 
-### Node Colors
+### 節點顏色
 ```python
-# Single color
+# 單一顏色
 nx.draw(G, node_color='red')
 
-# Different colors per node
+# 每個節點不同顏色
 node_colors = ['red' if G.degree(n) > 5 else 'blue' for n in G.nodes()]
 nx.draw(G, node_color=node_colors)
 
-# Color by attribute
+# 按屬性著色
 colors = [G.nodes[n].get('value', 0) for n in G.nodes()]
 nx.draw(G, node_color=colors, cmap=plt.cm.viridis)
 plt.colorbar()
 plt.show()
 ```
 
-### Node Sizes
+### 節點大小
 ```python
-# Size by degree
+# 按度數調整大小
 node_sizes = [100 * G.degree(n) for n in G.nodes()]
 nx.draw(G, node_size=node_sizes)
 
-# Size by centrality
+# 按中心性調整大小
 centrality = nx.degree_centrality(G)
 node_sizes = [3000 * centrality[n] for n in G.nodes()]
 nx.draw(G, node_size=node_sizes)
 ```
 
-### Node Shapes
+### 節點形狀
 ```python
-# Draw nodes separately with different shapes
+# 分別繪製不同形狀的節點
 pos = nx.spring_layout(G)
 
-# Circle nodes
+# 圓形節點
 nx.draw_networkx_nodes(G, pos, nodelist=[0, 1, 2],
                        node_shape='o', node_color='red')
 
-# Square nodes
+# 方形節點
 nx.draw_networkx_nodes(G, pos, nodelist=[3, 4, 5],
                        node_shape='s', node_color='blue')
 
@@ -153,51 +153,51 @@ nx.draw_networkx_labels(G, pos)
 plt.show()
 ```
 
-### Node Borders
+### 節點邊框
 ```python
 nx.draw(G, pos=pos,
         node_color='lightblue',
-        edgecolors='black',  # Node border color
-        linewidths=2)        # Node border width
+        edgecolors='black',  # 節點邊框顏色
+        linewidths=2)        # 節點邊框寬度
 plt.show()
 ```
 
-## Customizing Edge Appearance
+## 自訂邊外觀
 
-### Edge Colors
+### 邊顏色
 ```python
-# Single color
+# 單一顏色
 nx.draw(G, edge_color='gray')
 
-# Different colors per edge
+# 每條邊不同顏色
 edge_colors = ['red' if G[u][v].get('weight', 1) > 0.5 else 'blue'
                for u, v in G.edges()]
 nx.draw(G, edge_color=edge_colors)
 
-# Color by weight
+# 按權重著色
 edges = G.edges()
 weights = [G[u][v].get('weight', 1) for u, v in edges]
 nx.draw(G, edge_color=weights, edge_cmap=plt.cm.Reds)
 ```
 
-### Edge Widths
+### 邊寬度
 ```python
-# Width by weight
+# 按權重調整寬度
 edge_widths = [3 * G[u][v].get('weight', 1) for u, v in G.edges()]
 nx.draw(G, width=edge_widths)
 
-# Width by betweenness
+# 按介數調整寬度
 edge_betweenness = nx.edge_betweenness_centrality(G)
 edge_widths = [5 * edge_betweenness[(u, v)] for u, v in G.edges()]
 nx.draw(G, width=edge_widths)
 ```
 
-### Edge Styles
+### 邊樣式
 ```python
-# Dashed edges
+# 虛線邊
 nx.draw(G, style='dashed')
 
-# Different styles per edge
+# 每條邊不同樣式
 pos = nx.spring_layout(G)
 strong_edges = [(u, v) for u, v in G.edges() if G[u][v].get('weight', 0) > 0.5]
 weak_edges = [(u, v) for u, v in G.edges() if G[u][v].get('weight', 0) <= 0.5]
@@ -208,9 +208,9 @@ nx.draw_networkx_edges(G, pos, edgelist=weak_edges, style='dashed', width=1)
 plt.show()
 ```
 
-### Directed Graphs (Arrows)
+### 有向圖（箭頭）
 ```python
-# Draw directed graph with arrows
+# 繪製帶箭頭的有向圖
 G_directed = nx.DiGraph([(1, 2), (2, 3), (3, 1)])
 pos = nx.spring_layout(G_directed)
 
@@ -222,77 +222,77 @@ nx.draw(G_directed, pos=pos, with_labels=True,
 plt.show()
 ```
 
-## Labels and Annotations
+## 標籤和註釋
 
-### Node Labels
+### 節點標籤
 ```python
 pos = nx.spring_layout(G)
 
-# Custom labels
+# 自訂標籤
 labels = {n: f"N{n}" for n in G.nodes()}
 nx.draw_networkx_labels(G, pos, labels=labels, font_size=12, font_color='white')
 
-# Font customization
+# 字體自訂
 nx.draw_networkx_labels(G, pos,
                        font_size=10,
                        font_family='serif',
                        font_weight='bold')
 ```
 
-### Edge Labels
+### 邊標籤
 ```python
 pos = nx.spring_layout(G)
 nx.draw_networkx_nodes(G, pos)
 nx.draw_networkx_edges(G, pos)
 
-# Edge labels from attributes
+# 從屬性取得邊標籤
 edge_labels = nx.get_edge_attributes(G, 'weight')
 nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
 plt.show()
 
-# Custom edge labels
+# 自訂邊標籤
 edge_labels = {(u, v): f"{u}-{v}" for u, v in G.edges()}
 nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
 ```
 
-## Advanced Drawing Techniques
+## 進階繪圖技術
 
-### Combining Draw Functions
+### 組合繪圖函數
 ```python
-# Full control by separating components
+# 分離組件以完全控制
 pos = nx.spring_layout(G, seed=42)
 
-# Draw edges
+# 繪製邊
 nx.draw_networkx_edges(G, pos, alpha=0.3, width=1)
 
-# Draw nodes
+# 繪製節點
 nx.draw_networkx_nodes(G, pos,
                        node_color='lightblue',
                        node_size=500,
                        edgecolors='black')
 
-# Draw labels
+# 繪製標籤
 nx.draw_networkx_labels(G, pos, font_size=10)
 
-# Remove axis
+# 移除軸
 plt.axis('off')
 plt.tight_layout()
 plt.show()
 ```
 
-### Subgraph Highlighting
+### 子圖高亮
 ```python
 pos = nx.spring_layout(G)
 
-# Identify subgraph to highlight
+# 識別要高亮的子圖
 subgraph_nodes = [1, 2, 3, 4]
 subgraph = G.subgraph(subgraph_nodes)
 
-# Draw main graph
+# 繪製主圖
 nx.draw_networkx_nodes(G, pos, node_color='lightgray', node_size=300)
 nx.draw_networkx_edges(G, pos, alpha=0.2)
 
-# Highlight subgraph
+# 高亮子圖
 nx.draw_networkx_nodes(subgraph, pos, node_color='red', node_size=500)
 nx.draw_networkx_edges(subgraph, pos, edge_color='red', width=2)
 
@@ -301,14 +301,14 @@ plt.axis('off')
 plt.show()
 ```
 
-### Community Coloring
+### 社群著色
 ```python
 from networkx.algorithms import community
 
-# Detect communities
+# 檢測社群
 communities = community.greedy_modularity_communities(G)
 
-# Assign colors
+# 指派顏色
 color_map = {}
 colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange']
 for i, comm in enumerate(communities):
@@ -322,9 +322,9 @@ nx.draw(G, pos=pos, node_color=node_colors, with_labels=True)
 plt.show()
 ```
 
-## Creating Publication-Quality Figures
+## 建立出版品質圖形
 
-### High Resolution Export
+### 高解析度匯出
 ```python
 plt.figure(figsize=(12, 8))
 pos = nx.spring_layout(G, seed=42)
@@ -341,15 +341,15 @@ plt.title('Graph Visualization', fontsize=16)
 plt.axis('off')
 plt.tight_layout()
 plt.savefig('publication_graph.png', dpi=300, bbox_inches='tight')
-plt.savefig('publication_graph.pdf', bbox_inches='tight')  # Vector format
+plt.savefig('publication_graph.pdf', bbox_inches='tight')  # 向量格式
 plt.close()
 ```
 
-### Multi-Panel Figures
+### 多面板圖形
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(18, 6))
 
-# Different layouts
+# 不同佈局
 layouts = [nx.circular_layout(G), nx.spring_layout(G), nx.spectral_layout(G)]
 titles = ['Circular', 'Spring', 'Spectral']
 
@@ -363,16 +363,16 @@ plt.savefig('layouts_comparison.png', dpi=300)
 plt.close()
 ```
 
-## Interactive Visualization Libraries
+## 互動式視覺化函式庫
 
-### Plotly (Interactive)
+### Plotly（互動式）
 ```python
 import plotly.graph_objects as go
 
-# Create positions
+# 建立位置
 pos = nx.spring_layout(G)
 
-# Edge trace
+# 邊追蹤
 edge_x = []
 edge_y = []
 for edge in G.edges():
@@ -387,7 +387,7 @@ edge_trace = go.Scatter(
     hoverinfo='none',
     mode='lines')
 
-# Node trace
+# 節點追蹤
 node_x = [pos[node][0] for node in G.nodes()]
 node_y = [pos[node][1] for node in G.nodes()]
 
@@ -402,7 +402,7 @@ node_trace = go.Scatter(
         colorbar=dict(thickness=15, title='Node Connections'),
         line_width=2))
 
-# Color by degree
+# 按度數著色
 node_adjacencies = [len(list(G.neighbors(node))) for node in G.nodes()]
 node_trace.marker.color = node_adjacencies
 
@@ -415,49 +415,49 @@ fig = go.Figure(data=[edge_trace, node_trace],
 fig.show()
 ```
 
-### PyVis (Interactive HTML)
+### PyVis（互動式 HTML）
 ```python
 from pyvis.network import Network
 
-# Create network
+# 建立網路
 net = Network(notebook=True, height='750px', width='100%')
 
-# Add nodes and edges from NetworkX
+# 從 NetworkX 添加節點和邊
 net.from_nx(G)
 
-# Customize
+# 自訂
 net.show_buttons(filter_=['physics'])
 
-# Save
+# 儲存
 net.show('graph.html')
 ```
 
-### Graphviz (via pydot)
+### Graphviz（透過 pydot）
 ```python
-# Requires graphviz and pydot
+# 需要 graphviz 和 pydot
 from networkx.drawing.nx_pydot import graphviz_layout
 
-pos = graphviz_layout(G, prog='neato')  # neato, dot, fdp, sfdp, circo, twopi
+pos = graphviz_layout(G, prog='neato')  # neato、dot、fdp、sfdp、circo、twopi
 nx.draw(G, pos=pos, with_labels=True)
 plt.show()
 
-# Export to graphviz
+# 匯出到 graphviz
 nx.drawing.nx_pydot.write_dot(G, 'graph.dot')
 ```
 
-## Bipartite Graph Visualization
+## 二部圖視覺化
 
-### Two-Set Layout
+### 雙集佈局
 ```python
 from networkx.algorithms import bipartite
 
-# Create bipartite graph
+# 建立二部圖
 B = nx.Graph()
 B.add_nodes_from([1, 2, 3, 4], bipartite=0)
 B.add_nodes_from(['a', 'b', 'c', 'd', 'e'], bipartite=1)
 B.add_edges_from([(1, 'a'), (1, 'b'), (2, 'b'), (2, 'c'), (3, 'd'), (4, 'e')])
 
-# Layout with two columns
+# 雙欄佈局
 pos = {}
 top_nodes = [n for n, d in B.nodes(data=True) if d['bipartite'] == 0]
 bottom_nodes = [n for n, d in B.nodes(data=True) if d['bipartite'] == 1]
@@ -471,32 +471,32 @@ nx.draw(B, pos=pos, with_labels=True,
 plt.show()
 ```
 
-## 3D Visualization
+## 3D 視覺化
 
-### 3D Network Plot
+### 3D 網路圖
 ```python
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# 3D spring layout
+# 3D 彈簧佈局
 pos = nx.spring_layout(G, dim=3, seed=42)
 
-# Extract coordinates
+# 提取座標
 node_xyz = np.array([pos[v] for v in G.nodes()])
 edge_xyz = np.array([(pos[u], pos[v]) for u, v in G.edges()])
 
-# Create figure
+# 建立圖形
 fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection='3d')
 
-# Plot edges
+# 繪製邊
 for vizedge in edge_xyz:
     ax.plot(*vizedge.T, color='gray', alpha=0.5)
 
-# Plot nodes
+# 繪製節點
 ax.scatter(*node_xyz.T, s=100, c='lightblue', edgecolors='black')
 
-# Labels
+# 標籤
 for i, (x, y, z) in enumerate(node_xyz):
     ax.text(x, y, z, str(i))
 
@@ -504,26 +504,26 @@ ax.set_axis_off()
 plt.show()
 ```
 
-## Best Practices
+## 最佳實踐
 
-### Performance
-- For large graphs (>1000 nodes), use simpler layouts (circular, random)
-- Use `alpha` parameter to make dense edges more visible
-- Consider downsampling or showing subgraphs for very large networks
+### 效能
+- 對於大型圖（>1000 節點），使用較簡單的佈局（圓形、隨機）
+- 使用 `alpha` 參數讓密集邊更可見
+- 對於非常大的網路，考慮降採樣或顯示子圖
 
-### Aesthetics
-- Use consistent color schemes
-- Scale node sizes meaningfully (e.g., by degree or importance)
-- Keep labels readable (adjust font size and position)
-- Use white space effectively (adjust figure size)
+### 美學
+- 使用一致的配色方案
+- 有意義地縮放節點大小（例如，按度數或重要性）
+- 保持標籤可讀（調整字體大小和位置）
+- 有效使用空白（調整圖形大小）
 
-### Reproducibility
-- Always set random seeds for layouts: `nx.spring_layout(G, seed=42)`
-- Save layout positions for consistency across multiple plots
-- Document color/size mappings in legends or captions
+### 可重現性
+- 始終為佈局設定隨機種子：`nx.spring_layout(G, seed=42)`
+- 儲存佈局位置以在多個圖表中保持一致性
+- 在圖例或說明中記錄顏色/大小映射
 
-### File Formats
-- PNG for raster images (web, presentations)
-- PDF for vector graphics (publications, scalable)
-- SVG for web and interactive applications
-- HTML for interactive visualizations
+### 檔案格式
+- PNG 用於點陣圖像（網頁、簡報）
+- PDF 用於向量圖形（出版物、可縮放）
+- SVG 用於網頁和互動式應用
+- HTML 用於互動式視覺化

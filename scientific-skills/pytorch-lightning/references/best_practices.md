@@ -1,18 +1,18 @@
-# Best Practices - PyTorch Lightning
+# 最佳實務 - PyTorch Lightning
 
-## Code Organization
+## 程式碼組織
 
-### 1. Separate Research from Engineering
+### 1. 分離研究與工程
 
-**Good:**
+**好的做法：**
 ```python
 class MyModel(L.LightningModule):
-    # Research code (what the model does)
+    # 研究程式碼（模型做什麼）
     def training_step(self, batch, batch_idx):
         loss = self.compute_loss(batch)
         return loss
 
-# Engineering code (how to train) - in Trainer
+# 工程程式碼（如何訓練）- 在 Trainer 中
 trainer = L.Trainer(
     max_epochs=100,
     accelerator="gpu",
@@ -21,17 +21,17 @@ trainer = L.Trainer(
 )
 ```
 
-**Bad:**
+**不好的做法：**
 ```python
-# Mixing research and engineering logic
+# 混合研究和工程邏輯
 class MyModel(L.LightningModule):
     def training_step(self, batch, batch_idx):
         loss = self.compute_loss(batch)
 
-        # Don't do device management manually
+        # 不要手動進行裝置管理
         loss = loss.cuda()
 
-        # Don't do optimizer steps manually (unless manual optimization)
+        # 不要手動進行優化器步驟（除非使用手動優化）
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
@@ -39,9 +39,9 @@ class MyModel(L.LightningModule):
         return loss
 ```
 
-### 2. Use LightningDataModule
+### 2. 使用 LightningDataModule
 
-**Good:**
+**好的做法：**
 ```python
 class MyDataModule(L.LightningDataModule):
     def __init__(self, data_dir, batch_size):
@@ -50,25 +50,25 @@ class MyDataModule(L.LightningDataModule):
         self.batch_size = batch_size
 
     def prepare_data(self):
-        # Download data once
+        # 下載資料一次
         download_data(self.data_dir)
 
     def setup(self, stage):
-        # Load data per-process
+        # 每個程序載入資料
         self.train_dataset = MyDataset(self.data_dir, split='train')
         self.val_dataset = MyDataset(self.data_dir, split='val')
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True)
 
-# Reusable and shareable
+# 可重用和可分享
 dm = MyDataModule("./data", batch_size=32)
 trainer.fit(model, datamodule=dm)
 ```
 
-**Bad:**
+**不好的做法：**
 ```python
-# Scattered data logic
+# 分散的資料邏輯
 train_dataset = load_data()
 val_dataset = load_data()
 train_loader = DataLoader(train_dataset, ...)
@@ -76,7 +76,7 @@ val_loader = DataLoader(val_dataset, ...)
 trainer.fit(model, train_loader, val_loader)
 ```
 
-### 3. Keep Models Modular
+### 3. 保持模型模組化
 
 ```python
 class Encoder(nn.Module):
@@ -106,100 +106,100 @@ class MyModel(L.LightningModule):
         return self.decoder(z)
 ```
 
-## Device Agnosticism
+## 裝置無關性
 
-### 1. Never Use Explicit CUDA Calls
+### 1. 永遠不要使用明確的 CUDA 呼叫
 
-**Bad:**
+**不好的做法：**
 ```python
 x = x.cuda()
 model = model.cuda()
 torch.cuda.set_device(0)
 ```
 
-**Good:**
+**好的做法：**
 ```python
-# Inside LightningModule
+# 在 LightningModule 內部
 x = x.to(self.device)
 
-# Or let Lightning handle it automatically
+# 或讓 Lightning 自動處理
 def training_step(self, batch, batch_idx):
-    x, y = batch  # Already on correct device
+    x, y = batch  # 已經在正確的裝置上
     return loss
 ```
 
-### 2. Use `self.device` Property
+### 2. 使用 `self.device` 屬性
 
 ```python
 class MyModel(L.LightningModule):
     def training_step(self, batch, batch_idx):
-        # Create tensors on correct device
+        # 在正確的裝置上建立張量
         noise = torch.randn(batch.size(0), 100).to(self.device)
 
-        # Or use type_as
+        # 或使用 type_as
         noise = torch.randn(batch.size(0), 100).type_as(batch)
 ```
 
-### 3. Register Buffers for Non-Parameters
+### 3. 為非參數註冊緩衝區
 
 ```python
 class MyModel(L.LightningModule):
     def __init__(self):
         super().__init__()
-        # Register buffers (automatically moved to correct device)
+        # 註冊緩衝區（自動移動到正確的裝置）
         self.register_buffer("running_mean", torch.zeros(100))
 
     def forward(self, x):
-        # self.running_mean is automatically on correct device
+        # self.running_mean 自動在正確的裝置上
         return x - self.running_mean
 ```
 
-## Hyperparameter Management
+## 超參數管理
 
-### 1. Always Use `save_hyperparameters()`
+### 1. 始終使用 `save_hyperparameters()`
 
-**Good:**
+**好的做法：**
 ```python
 class MyModel(L.LightningModule):
     def __init__(self, learning_rate, hidden_dim, dropout):
         super().__init__()
-        self.save_hyperparameters()  # Saves all arguments
+        self.save_hyperparameters()  # 儲存所有參數
 
-        # Access via self.hparams
+        # 透過 self.hparams 存取
         self.model = nn.Linear(self.hparams.hidden_dim, 10)
 
-# Load from checkpoint with saved hparams
+# 從檢查點載入並保留已儲存的 hparams
 model = MyModel.load_from_checkpoint("checkpoint.ckpt")
-print(model.hparams.learning_rate)  # Original value preserved
+print(model.hparams.learning_rate)  # 原始值被保留
 ```
 
-**Bad:**
+**不好的做法：**
 ```python
 class MyModel(L.LightningModule):
     def __init__(self, learning_rate, hidden_dim, dropout):
         super().__init__()
-        self.learning_rate = learning_rate  # Manual tracking
+        self.learning_rate = learning_rate  # 手動追蹤
         self.hidden_dim = hidden_dim
 ```
 
-### 2. Ignore Specific Arguments
+### 2. 忽略特定參數
 
 ```python
 class MyModel(L.LightningModule):
     def __init__(self, lr, model, dataset):
         super().__init__()
-        # Don't save 'model' and 'dataset' (not serializable)
+        # 不儲存 'model' 和 'dataset'（不可序列化）
         self.save_hyperparameters(ignore=['model', 'dataset'])
 
         self.model = model
         self.dataset = dataset
 ```
 
-### 3. Use Hyperparameters in `configure_optimizers()`
+### 3. 在 `configure_optimizers()` 中使用超參數
 
 ```python
 def configure_optimizers(self):
-    # Use saved hyperparameters
+    # 使用已儲存的超參數
     optimizer = torch.optim.Adam(
         self.parameters(),
         lr=self.hparams.learning_rate,
@@ -208,26 +208,26 @@ def configure_optimizers(self):
     return optimizer
 ```
 
-## Logging Best Practices
+## 日誌記錄最佳實務
 
-### 1. Log Both Step and Epoch Metrics
+### 1. 記錄步驟和 epoch 指標
 
 ```python
 def training_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
 
-    # Log per-step for detailed monitoring
-    # Log per-epoch for aggregated view
+    # 記錄每步以進行詳細監控
+    # 記錄每 epoch 以進行聚合檢視
     self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True)
 
     return loss
 ```
 
-### 2. Use Structured Logging
+### 2. 使用結構化日誌記錄
 
 ```python
 def training_step(self, batch, batch_idx):
-    # Organize with prefixes
+    # 使用前綴組織
     self.log("train/loss", loss)
     self.log("train/acc", acc)
     self.log("train/f1", f1)
@@ -238,17 +238,17 @@ def validation_step(self, batch, batch_idx):
     self.log("val/f1", f1)
 ```
 
-### 3. Sync Metrics in Distributed Training
+### 3. 在分散式訓練中同步指標
 
 ```python
 def validation_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
 
-    # IMPORTANT: sync_dist=True for proper aggregation across GPUs
+    # 重要：sync_dist=True 用於跨 GPU 的正確聚合
     self.log("val_loss", loss, sync_dist=True)
 ```
 
-### 4. Monitor Learning Rate
+### 4. 監控學習率
 
 ```python
 from lightning.pytorch.callbacks import LearningRateMonitor
@@ -258,37 +258,37 @@ trainer = L.Trainer(
 )
 ```
 
-## Reproducibility
+## 可重現性
 
-### 1. Seed Everything
+### 1. 設定所有種子
 
 ```python
 import lightning as L
 
-# Set seed for reproducibility
+# 設定種子以確保可重現性
 L.seed_everything(42, workers=True)
 
 trainer = L.Trainer(
-    deterministic=True,  # Use deterministic algorithms
-    benchmark=False      # Disable cudnn benchmarking
+    deterministic=True,  # 使用確定性演算法
+    benchmark=False      # 停用 cudnn 基準測試
 )
 ```
 
-### 2. Avoid Non-Deterministic Operations
+### 2. 避免非確定性操作
 
 ```python
-# Bad: Non-deterministic
+# 不好：非確定性
 torch.use_deterministic_algorithms(False)
 
-# Good: Deterministic
+# 好：確定性
 torch.use_deterministic_algorithms(True)
 ```
 
-### 3. Log Random State
+### 3. 記錄隨機狀態
 
 ```python
 def on_save_checkpoint(self, checkpoint):
-    # Save random states
+    # 儲存隨機狀態
     checkpoint['rng_state'] = {
         'torch': torch.get_rng_state(),
         'numpy': np.random.get_state(),
@@ -296,77 +296,77 @@ def on_save_checkpoint(self, checkpoint):
     }
 
 def on_load_checkpoint(self, checkpoint):
-    # Restore random states
+    # 還原隨機狀態
     if 'rng_state' in checkpoint:
         torch.set_rng_state(checkpoint['rng_state']['torch'])
         np.random.set_state(checkpoint['rng_state']['numpy'])
         random.setstate(checkpoint['rng_state']['python'])
 ```
 
-## Debugging
+## 除錯
 
-### 1. Use `fast_dev_run`
+### 1. 使用 `fast_dev_run`
 
 ```python
-# Test with 1 batch before full training
+# 在完整訓練前用 1 個批次測試
 trainer = L.Trainer(fast_dev_run=True)
 trainer.fit(model, datamodule=dm)
 ```
 
-### 2. Limit Training Data
+### 2. 限制訓練資料
 
 ```python
-# Use only 10% of data for quick iteration
+# 僅使用 10% 的資料進行快速迭代
 trainer = L.Trainer(
     limit_train_batches=0.1,
     limit_val_batches=0.1
 )
 ```
 
-### 3. Enable Anomaly Detection
+### 3. 啟用異常檢測
 
 ```python
-# Detect NaN/Inf in gradients
+# 在梯度中檢測 NaN/Inf
 trainer = L.Trainer(detect_anomaly=True)
 ```
 
-### 4. Overfit on Small Batch
+### 4. 在小批次上過擬合
 
 ```python
-# Overfit on 10 batches to verify model capacity
+# 在 10 個批次上過擬合以驗證模型容量
 trainer = L.Trainer(overfit_batches=10)
 ```
 
-### 5. Profile Code
+### 5. 效能分析
 
 ```python
-# Find performance bottlenecks
-trainer = L.Trainer(profiler="simple")  # or "advanced"
+# 找出效能瓶頸
+trainer = L.Trainer(profiler="simple")  # 或 "advanced"
 ```
 
-## Memory Optimization
+## 記憶體優化
 
-### 1. Use Mixed Precision
+### 1. 使用混合精度
 
 ```python
-# FP16/BF16 mixed precision for memory savings and speed
+# FP16/BF16 混合精度用於節省記憶體和加速
 trainer = L.Trainer(
     precision="16-mixed",   # V100, T4
-    # or
+    # 或
     precision="bf16-mixed"  # A100, H100
 )
 ```
 
-### 2. Gradient Accumulation
+### 2. 梯度累積
 
 ```python
-# Simulate larger batch size without memory increase
+# 模擬較大批次大小而不增加記憶體
 trainer = L.Trainer(
-    accumulate_grad_batches=4  # Accumulate over 4 batches
+    accumulate_grad_batches=4  # 累積 4 個批次
 )
 ```
 
-### 3. Gradient Checkpointing
+### 3. 梯度檢查點
 
 ```python
 class MyModel(L.LightningModule):
@@ -374,48 +374,48 @@ class MyModel(L.LightningModule):
         super().__init__()
         self.model = transformers.AutoModel.from_pretrained("bert-base")
 
-        # Enable gradient checkpointing
+        # 啟用梯度檢查點
         self.model.gradient_checkpointing_enable()
 ```
 
-### 4. Clear Cache
+### 4. 清除快取
 
 ```python
 def on_train_epoch_end(self):
-    # Clear collected outputs to free memory
+    # 清除收集的輸出以釋放記憶體
     self.training_step_outputs.clear()
 
-    # Clear CUDA cache if needed
+    # 如果需要，清除 CUDA 快取
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 ```
 
-### 5. Use Efficient Data Types
+### 5. 使用高效的資料類型
 
 ```python
-# Use appropriate precision
-# FP32 for stability, FP16/BF16 for speed/memory
+# 使用適當的精度
+# FP32 用於穩定性，FP16/BF16 用於速度/記憶體
 
 class MyModel(L.LightningModule):
     def __init__(self):
         super().__init__()
-        # Use bfloat16 for better numerical stability than fp16
+        # 使用 bfloat16 以獲得比 fp16 更好的數值穩定性
         self.model = MyTransformer().to(torch.bfloat16)
 ```
 
-## Training Stability
+## 訓練穩定性
 
-### 1. Gradient Clipping
+### 1. 梯度裁剪
 
 ```python
-# Prevent gradient explosion
+# 防止梯度爆炸
 trainer = L.Trainer(
     gradient_clip_val=1.0,
-    gradient_clip_algorithm="norm"  # or "value"
+    gradient_clip_algorithm="norm"  # 或 "value"
 )
 ```
 
-### 2. Learning Rate Warmup
+### 2. 學習率預熱
 
 ```python
 def configure_optimizers(self):
@@ -425,7 +425,7 @@ def configure_optimizers(self):
         optimizer,
         max_lr=1e-2,
         total_steps=self.trainer.estimated_stepping_batches,
-        pct_start=0.1  # 10% warmup
+        pct_start=0.1  # 10% 預熱
     )
 
     return {
@@ -437,18 +437,18 @@ def configure_optimizers(self):
     }
 ```
 
-### 3. Monitor Gradients
+### 3. 監控梯度
 
 ```python
 class MyModel(L.LightningModule):
     def on_after_backward(self):
-        # Log gradient norms
+        # 記錄梯度範數
         for name, param in self.named_parameters():
             if param.grad is not None:
                 self.log(f"grad_norm/{name}", param.grad.norm())
 ```
 
-### 4. Use EarlyStopping
+### 4. 使用 EarlyStopping
 
 ```python
 from lightning.pytorch.callbacks import EarlyStopping
@@ -463,9 +463,9 @@ early_stop = EarlyStopping(
 trainer = L.Trainer(callbacks=[early_stop])
 ```
 
-## Checkpointing
+## 檢查點
 
-### 1. Save Top-K and Last
+### 1. 儲存 Top-K 和最後一個
 
 ```python
 from lightning.pytorch.callbacks import ModelCheckpoint
@@ -475,68 +475,68 @@ checkpoint_callback = ModelCheckpoint(
     filename="{epoch}-{val_loss:.2f}",
     monitor="val_loss",
     mode="min",
-    save_top_k=3,    # Keep best 3
-    save_last=True   # Always save last for resuming
+    save_top_k=3,    # 保留最佳的 3 個
+    save_last=True   # 始終儲存最後一個以便恢復
 )
 
 trainer = L.Trainer(callbacks=[checkpoint_callback])
 ```
 
-### 2. Resume Training
+### 2. 恢復訓練
 
 ```python
-# Resume from last checkpoint
+# 從最後一個檢查點恢復
 trainer.fit(model, datamodule=dm, ckpt_path="last.ckpt")
 
-# Resume from specific checkpoint
+# 從特定檢查點恢復
 trainer.fit(model, datamodule=dm, ckpt_path="epoch=10-val_loss=0.23.ckpt")
 ```
 
-### 3. Custom Checkpoint State
+### 3. 自訂檢查點狀態
 
 ```python
 def on_save_checkpoint(self, checkpoint):
-    # Add custom state
+    # 新增自訂狀態
     checkpoint['custom_data'] = self.custom_data
     checkpoint['epoch_metrics'] = self.metrics
 
 def on_load_checkpoint(self, checkpoint):
-    # Restore custom state
+    # 還原自訂狀態
     self.custom_data = checkpoint.get('custom_data', {})
     self.metrics = checkpoint.get('epoch_metrics', [])
 ```
 
-## Testing
+## 測試
 
-### 1. Separate Train and Test
+### 1. 分離訓練和測試
 
 ```python
-# Train
+# 訓練
 trainer = L.Trainer(max_epochs=100)
 trainer.fit(model, datamodule=dm)
 
-# Test ONLY ONCE before publishing
+# 僅在發布前測試一次
 trainer.test(model, datamodule=dm)
 ```
 
-### 2. Use Validation for Model Selection
+### 2. 使用驗證進行模型選擇
 
 ```python
-# Use validation for hyperparameter tuning
+# 使用驗證進行超參數調整
 checkpoint_callback = ModelCheckpoint(monitor="val_loss", mode="min")
 trainer = L.Trainer(callbacks=[checkpoint_callback])
 trainer.fit(model, datamodule=dm)
 
-# Load best model
+# 載入最佳模型
 best_model = MyModel.load_from_checkpoint(checkpoint_callback.best_model_path)
 
-# Test only once with best model
+# 僅用最佳模型測試一次
 trainer.test(best_model, datamodule=dm)
 ```
 
-## Code Quality
+## 程式碼品質
 
-### 1. Type Hints
+### 1. 類型提示
 
 ```python
 from typing import Any, Dict, Tuple
@@ -554,17 +554,17 @@ class MyModel(L.LightningModule):
         return {"optimizer": optimizer}
 ```
 
-### 2. Docstrings
+### 2. 文件字串
 
 ```python
 class MyModel(L.LightningModule):
     """
-    My awesome model for image classification.
+    用於影像分類的優秀模型。
 
     Args:
-        num_classes: Number of output classes
-        learning_rate: Learning rate for optimizer
-        hidden_dim: Hidden dimension size
+        num_classes: 輸出類別數量
+        learning_rate: 優化器的學習率
+        hidden_dim: 隱藏維度大小
     """
 
     def __init__(self, num_classes: int, learning_rate: float, hidden_dim: int):
@@ -572,127 +572,127 @@ class MyModel(L.LightningModule):
         self.save_hyperparameters()
 ```
 
-### 3. Property Methods
+### 3. 屬性方法
 
 ```python
 class MyModel(L.LightningModule):
     @property
     def learning_rate(self) -> float:
-        """Current learning rate."""
+        """目前學習率。"""
         return self.hparams.learning_rate
 
     @property
     def num_parameters(self) -> int:
-        """Total number of parameters."""
+        """參數總數。"""
         return sum(p.numel() for p in self.parameters())
 ```
 
-## Common Pitfalls
+## 常見陷阱
 
-### 1. Forgetting to Return Loss
+### 1. 忘記回傳損失
 
-**Bad:**
+**不好的做法：**
 ```python
 def training_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
     self.log("train_loss", loss)
-    # FORGOT TO RETURN LOSS!
+    # 忘記回傳損失！
 ```
 
-**Good:**
+**好的做法：**
 ```python
 def training_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
     self.log("train_loss", loss)
-    return loss  # MUST return loss
+    return loss  # 必須回傳損失
 ```
 
-### 2. Not Syncing Metrics in DDP
+### 2. 在 DDP 中不同步指標
 
-**Bad:**
+**不好的做法：**
 ```python
 def validation_step(self, batch, batch_idx):
-    self.log("val_acc", acc)  # Wrong value with multi-GPU!
+    self.log("val_acc", acc)  # 多 GPU 時數值錯誤！
 ```
 
-**Good:**
+**好的做法：**
 ```python
 def validation_step(self, batch, batch_idx):
-    self.log("val_acc", acc, sync_dist=True)  # Correct aggregation
+    self.log("val_acc", acc, sync_dist=True)  # 正確聚合
 ```
 
-### 3. Manual Device Management
+### 3. 手動裝置管理
 
-**Bad:**
+**不好的做法：**
 ```python
 def training_step(self, batch, batch_idx):
-    x = x.cuda()  # Don't do this
+    x = x.cuda()  # 不要這樣做
     y = y.cuda()
 ```
 
-**Good:**
+**好的做法：**
 ```python
 def training_step(self, batch, batch_idx):
-    # Lightning handles device placement
-    x, y = batch  # Already on correct device
+    # Lightning 處理裝置放置
+    x, y = batch  # 已經在正確的裝置上
 ```
 
-### 4. Not Using `self.log()`
+### 4. 不使用 `self.log()`
 
-**Bad:**
-```python
-def training_step(self, batch, batch_idx):
-    loss = self.compute_loss(batch)
-    self.training_losses.append(loss)  # Manual tracking
-    return loss
-```
-
-**Good:**
+**不好的做法：**
 ```python
 def training_step(self, batch, batch_idx):
     loss = self.compute_loss(batch)
-    self.log("train_loss", loss)  # Automatic logging
+    self.training_losses.append(loss)  # 手動追蹤
     return loss
 ```
 
-### 5. Modifying Batch In-Place
+**好的做法：**
+```python
+def training_step(self, batch, batch_idx):
+    loss = self.compute_loss(batch)
+    self.log("train_loss", loss)  # 自動記錄
+    return loss
+```
 
-**Bad:**
+### 5. 原地修改批次
+
+**不好的做法：**
 ```python
 def training_step(self, batch, batch_idx):
     x, y = batch
-    x[:] = self.augment(x)  # In-place modification can cause issues
+    x[:] = self.augment(x)  # 原地修改可能導致問題
 ```
 
-**Good:**
+**好的做法：**
 ```python
 def training_step(self, batch, batch_idx):
     x, y = batch
-    x = self.augment(x)  # Create new tensor
+    x = self.augment(x)  # 建立新張量
 ```
 
-## Performance Tips
+## 效能技巧
 
-### 1. Use DataLoader Workers
+### 1. 使用 DataLoader Workers
 
 ```python
 def train_dataloader(self):
     return DataLoader(
         self.train_dataset,
         batch_size=32,
-        num_workers=4,           # Use multiple workers
-        pin_memory=True,         # Faster GPU transfer
-        persistent_workers=True  # Keep workers alive
+        num_workers=4,           # 使用多個 workers
+        pin_memory=True,         # 更快的 GPU 傳輸
+        persistent_workers=True  # 保持 workers 存活
     )
 ```
 
-### 2. Enable Benchmark Mode (if fixed input size)
+### 2. 啟用基準測試模式（如果輸入大小固定）
 
 ```python
 trainer = L.Trainer(benchmark=True)
 ```
 
-### 3. Use Automatic Batch Size Finding
+### 3. 使用自動批次大小查找
 
 ```python
 from lightning.pytorch.tuner import Tuner
@@ -700,17 +700,17 @@ from lightning.pytorch.tuner import Tuner
 trainer = L.Trainer()
 tuner = Tuner(trainer)
 
-# Find optimal batch size
+# 找到最佳批次大小
 tuner.scale_batch_size(model, datamodule=dm, mode="power")
 
-# Then train
+# 然後訓練
 trainer.fit(model, datamodule=dm)
 ```
 
-### 4. Optimize Data Loading
+### 4. 優化資料載入
 
 ```python
-# Use faster image decoding
+# 使用更快的影像解碼
 import torch
 import torchvision.transforms as T
 
@@ -719,6 +719,6 @@ transforms = T.Compose([
     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-# Use PIL-SIMD for faster image loading
+# 使用 PIL-SIMD 進行更快的影像載入
 # pip install pillow-simd
 ```

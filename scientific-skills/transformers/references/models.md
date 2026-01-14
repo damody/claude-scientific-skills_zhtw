@@ -1,14 +1,14 @@
-# Model Loading and Management
+# 模型載入和管理
 
-## Overview
+## 概述
 
-The transformers library provides flexible model loading with automatic architecture detection, device management, and configuration control.
+transformers 函式庫提供靈活的模型載入，具有自動架構檢測、裝置管理和配置控制。
 
-## Loading Models
+## 載入模型
 
-### AutoModel Classes
+### AutoModel 類別
 
-Use AutoModel classes for automatic architecture selection:
+使用 AutoModel 類別進行自動架構選擇：
 
 ```python
 from transformers import AutoModel, AutoModelForSequenceClassification, AutoModelForCausalLM
@@ -31,39 +31,39 @@ from transformers import AutoModelForSeq2SeqLM
 model = AutoModelForSeq2SeqLM.from_pretrained("t5-small")
 ```
 
-### Common AutoModel Classes
+### 常見 AutoModel 類別
 
-**NLP Tasks:**
-- `AutoModelForSequenceClassification`: Text classification, sentiment analysis
-- `AutoModelForTokenClassification`: NER, POS tagging
-- `AutoModelForQuestionAnswering`: Extractive QA
-- `AutoModelForCausalLM`: Text generation (GPT, Llama)
-- `AutoModelForMaskedLM`: Masked language modeling (BERT)
-- `AutoModelForSeq2SeqLM`: Translation, summarization (T5, BART)
+**NLP 任務：**
+- `AutoModelForSequenceClassification`：文字分類、情感分析
+- `AutoModelForTokenClassification`：NER（命名實體識別）、POS 標註
+- `AutoModelForQuestionAnswering`：抽取式問答
+- `AutoModelForCausalLM`：文字生成（GPT、Llama）
+- `AutoModelForMaskedLM`：遮罩語言模型（BERT）
+- `AutoModelForSeq2SeqLM`：翻譯、摘要（T5、BART）
 
-**Vision Tasks:**
-- `AutoModelForImageClassification`: Image classification
-- `AutoModelForObjectDetection`: Object detection
-- `AutoModelForImageSegmentation`: Image segmentation
+**視覺任務：**
+- `AutoModelForImageClassification`：圖像分類
+- `AutoModelForObjectDetection`：物件偵測
+- `AutoModelForImageSegmentation`：圖像分割
 
-**Audio Tasks:**
-- `AutoModelForAudioClassification`: Audio classification
-- `AutoModelForSpeechSeq2Seq`: Speech recognition
+**音訊任務：**
+- `AutoModelForAudioClassification`：音訊分類
+- `AutoModelForSpeechSeq2Seq`：語音識別
 
-**Multimodal:**
-- `AutoModelForVision2Seq`: Image captioning, VQA
+**多模態：**
+- `AutoModelForVision2Seq`：圖像描述、VQA（視覺問答）
 
-## Loading Parameters
+## 載入參數
 
-### Basic Parameters
+### 基本參數
 
-**pretrained_model_name_or_path**: Model identifier or local path
+**pretrained_model_name_or_path**：模型識別碼或本地路徑
 ```python
 model = AutoModel.from_pretrained("bert-base-uncased")  # From Hub
 model = AutoModel.from_pretrained("./local/model/path")  # From disk
 ```
 
-**num_labels**: Number of output labels for classification
+**num_labels**：分類的輸出標籤數量
 ```python
 model = AutoModelForSequenceClassification.from_pretrained(
     "bert-base-uncased",
@@ -71,14 +71,14 @@ model = AutoModelForSequenceClassification.from_pretrained(
 )
 ```
 
-**cache_dir**: Custom cache location
+**cache_dir**：自訂快取位置
 ```python
 model = AutoModel.from_pretrained("model-id", cache_dir="./my_cache")
 ```
 
-### Device Management
+### 裝置管理
 
-**device_map**: Automatic device allocation for large models
+**device_map**：大型模型的自動裝置分配
 ```python
 # Automatically distribute across GPUs and CPU
 model = AutoModelForCausalLM.from_pretrained(
@@ -101,7 +101,7 @@ device_map = {
 model = AutoModel.from_pretrained("model-id", device_map=device_map)
 ```
 
-Manual device placement:
+手動裝置放置：
 ```python
 import torch
 model = AutoModel.from_pretrained("model-id")
@@ -109,9 +109,9 @@ model.to("cuda:0")  # Move to GPU 0
 model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 ```
 
-### Precision Control
+### 精度控制
 
-**torch_dtype**: Set model precision
+**torch_dtype**：設定模型精度
 ```python
 import torch
 
@@ -125,9 +125,9 @@ model = AutoModel.from_pretrained("model-id", torch_dtype=torch.bfloat16)
 model = AutoModel.from_pretrained("model-id", torch_dtype="auto")
 ```
 
-### Attention Implementation
+### 注意力實作
 
-**attn_implementation**: Choose attention mechanism
+**attn_implementation**：選擇注意力機制
 ```python
 # Scaled Dot Product Attention (PyTorch 2.0+, fastest)
 model = AutoModel.from_pretrained("model-id", attn_implementation="sdpa")
@@ -139,9 +139,9 @@ model = AutoModel.from_pretrained("model-id", attn_implementation="flash_attenti
 model = AutoModel.from_pretrained("model-id", attn_implementation="eager")
 ```
 
-### Memory Optimization
+### 記憶體最佳化
 
-**low_cpu_mem_usage**: Reduce CPU memory during loading
+**low_cpu_mem_usage**：減少載入時的 CPU 記憶體
 ```python
 model = AutoModelForCausalLM.from_pretrained(
     "large-model-id",
@@ -150,7 +150,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 ```
 
-**load_in_8bit**: 8-bit quantization (requires bitsandbytes)
+**load_in_8bit**：8 位元量化（需要 bitsandbytes）
 ```python
 model = AutoModelForCausalLM.from_pretrained(
     "model-id",
@@ -159,7 +159,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 ```
 
-**load_in_4bit**: 4-bit quantization
+**load_in_4bit**：4 位元量化
 ```python
 from transformers import BitsAndBytesConfig
 
@@ -175,9 +175,9 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 ```
 
-## Model Configuration
+## 模型配置
 
-### Loading with Custom Config
+### 使用自訂配置載入
 
 ```python
 from transformers import AutoConfig, AutoModel
@@ -191,18 +191,18 @@ config.attention_probs_dropout_prob = 0.2
 model = AutoModel.from_pretrained("bert-base-uncased", config=config)
 ```
 
-### Initializing from Config Only
+### 僅從配置初始化
 
 ```python
 config = AutoConfig.from_pretrained("gpt2")
 model = AutoModelForCausalLM.from_config(config)  # Random weights
 ```
 
-## Model Modes
+## 模型模式
 
-### Training vs Evaluation Mode
+### 訓練模式 vs 評估模式
 
-Models load in evaluation mode by default:
+模型預設載入為評估模式：
 
 ```python
 model = AutoModel.from_pretrained("model-id")
@@ -215,21 +215,21 @@ model.train()
 model.eval()
 ```
 
-Evaluation mode disables dropout and uses batch norm statistics.
+評估模式會停用 dropout 並使用批次正規化統計資訊。
 
-## Saving Models
+## 儲存模型
 
-### Save Locally
+### 本地儲存
 
 ```python
 model.save_pretrained("./my_model")
 ```
 
-This creates:
-- `config.json`: Model configuration
-- `pytorch_model.bin` or `model.safetensors`: Model weights
+這會建立：
+- `config.json`：模型配置
+- `pytorch_model.bin` 或 `model.safetensors`：模型權重
 
-### Save to Hugging Face Hub
+### 儲存到 Hugging Face Hub
 
 ```python
 model.push_to_hub("username/model-name")
@@ -241,9 +241,9 @@ model.push_to_hub("username/model-name", commit_message="Update model")
 model.push_to_hub("username/model-name", private=True)
 ```
 
-## Model Inspection
+## 模型檢查
 
-### Parameter Count
+### 參數計數
 
 ```python
 # Total parameters
@@ -256,7 +256,7 @@ print(f"Total: {total_params:,}")
 print(f"Trainable: {trainable_params:,}")
 ```
 
-### Memory Footprint
+### 記憶體佔用
 
 ```python
 memory_bytes = model.get_memory_footprint()
@@ -264,7 +264,7 @@ memory_mb = memory_bytes / 1024**2
 print(f"Memory: {memory_mb:.2f} MB")
 ```
 
-### Model Architecture
+### 模型架構
 
 ```python
 print(model)  # Print full architecture
@@ -274,9 +274,9 @@ print(model.config)
 print(model.base_model)
 ```
 
-## Forward Pass
+## 前向傳播
 
-Basic inference:
+基本推論：
 
 ```python
 from transformers import AutoTokenizer
@@ -291,11 +291,11 @@ logits = outputs.logits
 predictions = logits.argmax(dim=-1)
 ```
 
-## Model Formats
+## 模型格式
 
 ### SafeTensors vs PyTorch
 
-SafeTensors is faster and safer:
+SafeTensors 更快且更安全：
 
 ```python
 # Save as safetensors (recommended)
@@ -305,9 +305,9 @@ model.save_pretrained("./model", safe_serialization=True)
 model = AutoModel.from_pretrained("./model")
 ```
 
-### ONNX Export
+### ONNX 匯出
 
-Export for optimized inference:
+匯出以進行最佳化推論：
 
 ```python
 from transformers.onnx import export
@@ -321,20 +321,20 @@ export(
 )
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Use AutoModel classes**: Automatic architecture detection
-2. **Specify dtype explicitly**: Control precision and memory
-3. **Use device_map="auto"**: For large models
-4. **Enable low_cpu_mem_usage**: When loading large models
-5. **Use safetensors format**: Faster and safer serialization
-6. **Check model.training**: Ensure correct mode for task
-7. **Consider quantization**: For deployment on resource-constrained devices
-8. **Cache models locally**: Set TRANSFORMERS_CACHE environment variable
+1. **使用 AutoModel 類別**：自動架構檢測
+2. **明確指定 dtype**：控制精度和記憶體
+3. **使用 device_map="auto"**：用於大型模型
+4. **啟用 low_cpu_mem_usage**：載入大型模型時
+5. **使用 safetensors 格式**：更快且更安全的序列化
+6. **檢查 model.training**：確保任務的正確模式
+7. **考慮量化**：用於資源受限裝置上的部署
+8. **本地快取模型**：設定 TRANSFORMERS_CACHE 環境變數
 
-## Common Issues
+## 常見問題
 
-**CUDA out of memory:**
+**CUDA 記憶體不足：**
 ```python
 # Use smaller precision
 model = AutoModel.from_pretrained("model-id", torch_dtype=torch.float16)
@@ -346,13 +346,13 @@ model = AutoModel.from_pretrained("model-id", load_in_8bit=True)
 model = AutoModel.from_pretrained("model-id", device_map="cpu")
 ```
 
-**Slow loading:**
+**載入緩慢：**
 ```python
 # Enable low CPU memory mode
 model = AutoModel.from_pretrained("model-id", low_cpu_mem_usage=True)
 ```
 
-**Model not found:**
+**找不到模型：**
 ```python
 # Verify model ID on hub.co
 # Check authentication for private models

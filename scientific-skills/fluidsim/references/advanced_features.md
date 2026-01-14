@@ -1,36 +1,36 @@
-# Advanced Features
+# 進階功能
 
-## Custom Forcing
+## 自訂強制
 
-### Forcing Types
+### 強制類型
 
-FluidSim supports several forcing mechanisms to maintain turbulence or drive specific dynamics.
+FluidSim 支援多種強制機制，用於維持紊流或驅動特定動力學。
 
-#### Time-Correlated Random Forcing
+#### 時間相關隨機強制
 
-Most common for sustained turbulence:
+最常用於持續紊流：
 
 ```python
 params.forcing.enable = True
 params.forcing.type = "tcrandom"
-params.forcing.nkmin_forcing = 2  # minimum forced wavenumber
-params.forcing.nkmax_forcing = 5  # maximum forced wavenumber
-params.forcing.forcing_rate = 1.0  # energy injection rate
-params.forcing.tcrandom_time_correlation = 1.0  # correlation time
+params.forcing.nkmin_forcing = 2  # 最小強制波數
+params.forcing.nkmax_forcing = 5  # 最大強制波數
+params.forcing.forcing_rate = 1.0  # 能量注入率
+params.forcing.tcrandom_time_correlation = 1.0  # 相關時間
 ```
 
-#### Proportional Forcing
+#### 比例強制
 
-Maintains a specific energy distribution:
+維持特定能量分布：
 
 ```python
 params.forcing.type = "proportional"
 params.forcing.forcing_rate = 1.0
 ```
 
-#### Custom Forcing in Script
+#### 腳本中的自訂強制
 
-Define forcing directly in the launch script:
+在啟動腳本中直接定義強制：
 
 ```python
 params.forcing.enable = True
@@ -38,30 +38,30 @@ params.forcing.type = "in_script"
 
 sim = Simul(params)
 
-# Define custom forcing function
+# 定義自訂強制函式
 def compute_forcing_fft(sim):
-    """Compute forcing in Fourier space"""
+    """在傅立葉空間計算強制"""
     forcing_vx_fft = sim.oper.create_arrayK(value=0.)
     forcing_vy_fft = sim.oper.create_arrayK(value=0.)
 
-    # Add custom forcing logic
-    # Example: force specific modes
+    # 添加自訂強制邏輯
+    # 範例：強制特定模態
     forcing_vx_fft[10, 10] = 1.0 + 0.5j
 
     return forcing_vx_fft, forcing_vy_fft
 
-# Override forcing method
+# 覆蓋強制方法
 sim.forcing.forcing_maker.compute_forcing_fft = lambda: compute_forcing_fft(sim)
 
-# Run simulation
+# 執行模擬
 sim.time_stepping.start()
 ```
 
-## Custom Initial Conditions
+## 自訂初始條件
 
-### In-Script Initialization
+### 腳本內初始化
 
-Full control over initial fields:
+完全控制初始場：
 
 ```python
 from math import pi
@@ -75,42 +75,42 @@ params.init_fields.type = "in_script"
 
 sim = Simul(params)
 
-# Get coordinate arrays
+# 取得座標陣列
 X, Y = sim.oper.get_XY_loc()
 
-# Define velocity fields
+# 定義速度場
 vx = sim.state.state_phys.get_var("vx")
 vy = sim.state.state_phys.get_var("vy")
 
-# Taylor-Green vortex
+# Taylor-Green 渦流
 vx[:] = np.sin(X) * np.cos(Y)
 vy[:] = -np.cos(X) * np.sin(Y)
 
-# Initialize state in Fourier space
+# 在傅立葉空間初始化狀態
 sim.state.statephys_from_statespect()
 
-# Run simulation
+# 執行模擬
 sim.time_stepping.start()
 ```
 
-### Layer Initialization (Stratified Flows)
+### 層初始化（分層流）
 
-Set up density layers:
+設定密度層：
 
 ```python
 from fluidsim.solvers.ns2d.strat.solver import Simul
 
 params = Simul.create_default_params()
-params.N = 1.0  # stratification
+params.N = 1.0  # 分層
 params.init_fields.type = "in_script"
 
 sim = Simul(params)
 
-# Define dense layer
+# 定義密度層
 X, Y = sim.oper.get_XY_loc()
-b = sim.state.state_phys.get_var("b")  # buoyancy field
+b = sim.state.state_phys.get_var("b")  # 浮力場
 
-# Gaussian density anomaly
+# 高斯密度異常
 x0, y0 = pi, pi
 sigma = 0.5
 b[:] = np.exp(-((X - x0)**2 + (Y - y0)**2) / (2 * sigma**2))
@@ -119,51 +119,51 @@ sim.state.statephys_from_statespect()
 sim.time_stepping.start()
 ```
 
-## Parallel Computing with MPI
+## 使用 MPI 進行平行計算
 
-### Running MPI Simulations
+### 執行 MPI 模擬
 
-Install with MPI support:
+安裝 MPI 支援：
 ```bash
 uv pip install "fluidsim[fft,mpi]"
 ```
 
-Run with MPI:
+使用 MPI 執行：
 ```bash
 mpirun -np 8 python simulation_script.py
 ```
 
-FluidSim automatically detects MPI and distributes computation.
+FluidSim 自動偵測 MPI 並分配計算。
 
-### MPI-Specific Parameters
+### MPI 特定參數
 
 ```python
-# No special parameters needed
-# FluidSim handles domain decomposition automatically
+# 不需要特殊參數
+# FluidSim 自動處理域分解
 
-# For very large 3D simulations
+# 對於非常大的 3D 模擬
 params.oper.nx = 512
 params.oper.ny = 512
 params.oper.nz = 512
 
-# Run with: mpirun -np 64 python script.py
+# 執行：mpirun -np 64 python script.py
 ```
 
-### Output with MPI
+### MPI 輸出
 
-Output files are written from rank 0 processor. Analysis scripts work identically for serial and MPI runs.
+輸出檔案由排名 0 的處理器寫入。分析腳本對於序列和 MPI 執行的運作方式相同。
 
-## Parametric Studies
+## 參數研究
 
-### Running Multiple Simulations
+### 執行多個模擬
 
-Script to generate and run multiple parameter combinations:
+生成和執行多個參數組合的腳本：
 
 ```python
 from fluidsim.solvers.ns2d.solver import Simul
 import numpy as np
 
-# Parameter ranges
+# 參數範圍
 viscosities = [1e-3, 5e-4, 1e-4, 5e-5]
 resolutions = [128, 256, 512]
 
@@ -171,22 +171,22 @@ for nu in viscosities:
     for nx in resolutions:
         params = Simul.create_default_params()
 
-        # Configure simulation
+        # 設定模擬
         params.oper.nx = params.oper.ny = nx
         params.nu_2 = nu
         params.time_stepping.t_end = 10.0
 
-        # Unique output directory
+        # 唯一輸出目錄
         params.output.sub_directory = f"nu{nu}_nx{nx}"
 
-        # Run simulation
+        # 執行模擬
         sim = Simul(params)
         sim.time_stepping.start()
 ```
 
-### Cluster Submission
+### 叢集提交
 
-Submit multiple jobs to a cluster:
+提交多個工作到叢集：
 
 ```python
 from fluiddyn.clusters.legi import Calcul8 as Cluster
@@ -220,7 +220,7 @@ sim.time_stepping.start()
         )
 ```
 
-### Analyzing Parametric Studies
+### 分析參數研究
 
 ```python
 import os
@@ -230,7 +230,7 @@ import matplotlib.pyplot as plt
 
 results = []
 
-# Collect data from all simulations
+# 從所有模擬收集資料
 for sim_dir in os.listdir("simulations"):
     sim_path = f"simulations/{sim_dir}"
     if not os.path.isdir(sim_path):
@@ -239,11 +239,11 @@ for sim_dir in os.listdir("simulations"):
     try:
         sim = load_sim_for_plot(sim_path)
 
-        # Extract parameters
+        # 提取參數
         nu = sim.params.nu_2
         nx = sim.params.oper.nx
 
-        # Extract results
+        # 提取結果
         df = sim.output.spatial_means.load()
         final_energy = df["E"].iloc[-1]
         mean_energy = df["E"].mean()
@@ -255,144 +255,144 @@ for sim_dir in os.listdir("simulations"):
             "mean_energy": mean_energy
         })
     except Exception as e:
-        print(f"Error loading {sim_dir}: {e}")
+        print(f"載入 {sim_dir} 時發生錯誤：{e}")
 
-# Analyze results
+# 分析結果
 results_df = pd.DataFrame(results)
 
-# Plot results
+# 繪製結果
 plt.figure(figsize=(10, 6))
 for nx in results_df["nx"].unique():
     subset = results_df[results_df["nx"] == nx]
     plt.plot(subset["nu"], subset["mean_energy"],
              marker="o", label=f"nx={nx}")
 
-plt.xlabel("Viscosity")
-plt.ylabel("Mean Energy")
+plt.xlabel("黏度")
+plt.ylabel("平均能量")
 plt.xscale("log")
 plt.legend()
 plt.savefig("parametric_study_results.png")
 ```
 
-## Custom Solvers
+## 自訂求解器
 
-### Extending Existing Solvers
+### 擴展現有求解器
 
-Create a new solver by inheriting from an existing one:
+透過繼承現有求解器建立新求解器：
 
 ```python
 from fluidsim.solvers.ns2d.solver import Simul as SimulNS2D
 from fluidsim.base.setofvariables import SetOfVariables
 
 class SimulCustom(SimulNS2D):
-    """Custom solver with additional physics"""
+    """具有額外物理的自訂求解器"""
 
     @staticmethod
     def _complete_params_with_default(params):
-        """Add custom parameters"""
+        """添加自訂參數"""
         SimulNS2D._complete_params_with_default(params)
         params._set_child("custom", {"param1": 0.0})
 
     def __init__(self, params):
         super().__init__(params)
-        # Custom initialization
+        # 自訂初始化
 
     def tendencies_nonlin(self, state_spect=None):
-        """Override to add custom tendencies"""
+        """覆蓋以添加自訂趨勢"""
         tendencies = super().tendencies_nonlin(state_spect)
 
-        # Add custom terms
+        # 添加自訂項
         # tendencies.vx_fft += custom_term_vx
         # tendencies.vy_fft += custom_term_vy
 
         return tendencies
 ```
 
-Use the custom solver:
+使用自訂求解器：
 ```python
 params = SimulCustom.create_default_params()
-# Configure params...
+# 設定參數...
 sim = SimulCustom(params)
 sim.time_stepping.start()
 ```
 
-## Online Visualization
+## 線上視覺化
 
-Display fields during simulation:
+在模擬期間顯示場：
 
 ```python
 params.output.ONLINE_PLOT_OK = True
-params.output.periods_plot.phys_fields = 1.0  # plot every 1.0 time units
+params.output.periods_plot.phys_fields = 1.0  # 每 1.0 時間單位繪製
 params.output.phys_fields.field_to_plot = "vorticity"
 
 sim = Simul(params)
 sim.time_stepping.start()
 ```
 
-Plots appear in real-time during execution.
+圖表在執行期間即時顯示。
 
-## Checkpoint and Restart
+## 檢查點和重新啟動
 
-### Automatic Checkpointing
+### 自動檢查點
 
 ```python
-params.output.periods_save.phys_fields = 1.0  # save every 1.0 time units
+params.output.periods_save.phys_fields = 1.0  # 每 1.0 時間單位儲存
 ```
 
-Fields are saved automatically during simulation.
+場在模擬期間自動儲存。
 
-### Manual Checkpointing
+### 手動檢查點
 
 ```python
-# During simulation
+# 在模擬期間
 sim.output.phys_fields.save()
 ```
 
-### Restarting from Checkpoint
+### 從檢查點重新啟動
 
 ```python
 params = Simul.create_default_params()
 params.init_fields.type = "from_file"
 params.init_fields.from_file.path = "simulation_dir/state_phys_t5.000.h5"
-params.time_stepping.t_end = 20.0  # extend simulation
+params.time_stepping.t_end = 20.0  # 延長模擬
 
 sim = Simul(params)
 sim.time_stepping.start()
 ```
 
-## Memory and Performance Optimization
+## 記憶體和效能最佳化
 
-### Reduce Memory Usage
+### 減少記憶體使用
 
 ```python
-# Disable unnecessary outputs
-params.output.periods_save.spectra = 0  # disable spectra saving
-params.output.periods_save.spect_energy_budg = 0  # disable energy budget
+# 停用不必要的輸出
+params.output.periods_save.spectra = 0  # 停用頻譜儲存
+params.output.periods_save.spect_energy_budg = 0  # 停用能量預算
 
-# Reduce spatial field saves
-params.output.periods_save.phys_fields = 10.0  # save less frequently
+# 減少空間場儲存
+params.output.periods_save.phys_fields = 10.0  # 較少頻率儲存
 ```
 
-### Optimize FFT Performance
+### 最佳化 FFT 效能
 
 ```python
 import os
 
-# Select FFT library
+# 選擇 FFT 函式庫
 os.environ["FLUIDSIM_TYPE_FFT2D"] = "fft2d.with_fftw"
 os.environ["FLUIDSIM_TYPE_FFT3D"] = "fft3d.with_fftw"
 
-# Or use MKL if available
+# 或者如果可用，使用 MKL
 # os.environ["FLUIDSIM_TYPE_FFT2D"] = "fft2d.with_mkl"
 ```
 
-### Time Step Optimization
+### 時間步長最佳化
 
 ```python
-# Use adaptive time stepping
+# 使用自適應時間步進
 params.time_stepping.USE_CFL = True
-params.time_stepping.CFL = 0.8  # slightly larger CFL for faster runs
+params.time_stepping.CFL = 0.8  # 稍大的 CFL 以加快執行
 
-# Use efficient time scheme
-params.time_stepping.type_time_scheme = "RK4"  # 4th order Runge-Kutta
+# 使用高效時間格式
+params.time_stepping.type_time_scheme = "RK4"  # 四階 Runge-Kutta
 ```

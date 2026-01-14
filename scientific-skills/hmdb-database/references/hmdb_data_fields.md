@@ -1,196 +1,196 @@
-# HMDB Data Fields Reference
+# HMDB 資料欄位參考
 
-This document provides detailed information about the data fields available in HMDB metabolite entries.
+本文件提供有關 HMDB 代謝物條目中可用資料欄位的詳細資訊。
 
-## Metabolite Entry Structure
+## 代謝物條目結構
 
-Each HMDB metabolite entry contains 130+ data fields organized into several categories:
+每個 HMDB 代謝物條目包含 130+ 個資料欄位，組織成幾個類別：
 
-### Chemical Data Fields
+### 化學資料欄位
 
-**Identification:**
-- `accession`: Primary HMDB ID (e.g., HMDB0000001)
-- `secondary_accessions`: Previous HMDB IDs for merged entries
-- `name`: Primary metabolite name
-- `synonyms`: Alternative names and common names
-- `chemical_formula`: Molecular formula (e.g., C6H12O6)
-- `average_molecular_weight`: Average molecular weight in Daltons
-- `monoisotopic_molecular_weight`: Monoisotopic molecular weight
+**識別：**
+- `accession`：主要 HMDB ID（例如 HMDB0000001）
+- `secondary_accessions`：合併條目的先前 HMDB ID
+- `name`：主要代謝物名稱
+- `synonyms`：替代名稱和常用名稱
+- `chemical_formula`：分子式（例如 C6H12O6）
+- `average_molecular_weight`：平均分子量（道爾頓）
+- `monoisotopic_molecular_weight`：單同位素分子量
 
-**Structure Representations:**
-- `smiles`: Simplified Molecular Input Line Entry System string
-- `inchi`: International Chemical Identifier string
-- `inchikey`: Hashed InChI for fast lookup
-- `iupac_name`: IUPAC systematic name
-- `traditional_iupac`: Traditional IUPAC name
+**結構表示：**
+- `smiles`：簡化分子輸入行輸入系統字串
+- `inchi`：國際化學識別碼字串
+- `inchikey`：用於快速查找的雜湊 InChI
+- `iupac_name`：IUPAC 系統命名
+- `traditional_iupac`：傳統 IUPAC 名稱
 
-**Chemical Properties:**
-- `state`: Physical state (solid, liquid, gas)
-- `charge`: Net molecular charge
-- `logp`: Octanol-water partition coefficient (experimental/predicted)
-- `pka_strongest_acidic`: Strongest acidic pKa value
-- `pka_strongest_basic`: Strongest basic pKa value
-- `polar_surface_area`: Topological polar surface area (TPSA)
-- `refractivity`: Molar refractivity
-- `polarizability`: Molecular polarizability
-- `rotatable_bond_count`: Number of rotatable bonds
-- `acceptor_count`: Hydrogen bond acceptor count
-- `donor_count`: Hydrogen bond donor count
+**化學性質：**
+- `state`：物理狀態（固體、液體、氣體）
+- `charge`：淨分子電荷
+- `logp`：辛醇-水分配係數（實驗/預測）
+- `pka_strongest_acidic`：最強酸性 pKa 值
+- `pka_strongest_basic`：最強鹼性 pKa 值
+- `polar_surface_area`：拓撲極性表面積（TPSA）
+- `refractivity`：莫耳折射率
+- `polarizability`：分子極化率
+- `rotatable_bond_count`：可旋轉鍵數量
+- `acceptor_count`：氫鍵受體數量
+- `donor_count`：氫鍵給體數量
 
-**Chemical Taxonomy:**
-- `kingdom`: Chemical kingdom (e.g., Organic compounds)
-- `super_class`: Chemical superclass
-- `class`: Chemical class
-- `sub_class`: Chemical subclass
-- `direct_parent`: Direct chemical parent
-- `alternative_parents`: Alternative parent classifications
-- `substituents`: Chemical substituents present
-- `description`: Text description of the compound
+**化學分類法：**
+- `kingdom`：化學界（例如有機化合物）
+- `super_class`：化學超類
+- `class`：化學類別
+- `sub_class`：化學子類
+- `direct_parent`：直接化學母體
+- `alternative_parents`：替代母體分類
+- `substituents`：存在的化學取代基
+- `description`：化合物的文字描述
 
-### Biological Data Fields
+### 生物資料欄位
 
-**Metabolite Origins:**
-- `origin`: Source of metabolite (endogenous, exogenous, drug metabolite, food component)
-- `biofluid_locations`: Biological fluids where found (blood, urine, saliva, CSF, etc.)
-- `tissue_locations`: Tissues where found (liver, kidney, brain, muscle, etc.)
-- `cellular_locations`: Subcellular locations (cytoplasm, mitochondria, membrane, etc.)
+**代謝物來源：**
+- `origin`：代謝物來源（內源性、外源性、藥物代謝物、食物成分）
+- `biofluid_locations`：發現的生物體液（血液、尿液、唾液、腦脊液等）
+- `tissue_locations`：發現的組織（肝臟、腎臟、大腦、肌肉等）
+- `cellular_locations`：亞細胞位置（細胞質、粒線體、膜等）
 
-**Biospecimen Information:**
-- `biospecimen`: Type of biological specimen
-- `status`: Detection status (detected, expected, predicted)
-- `concentration`: Concentration ranges with units
-- `concentration_references`: Citations for concentration data
+**生物標本資訊：**
+- `biospecimen`：生物標本類型
+- `status`：偵測狀態（已偵測、預期、預測）
+- `concentration`：濃度範圍及單位
+- `concentration_references`：濃度資料的引用
 
-**Normal and Abnormal Concentrations:**
-For each biofluid (blood, urine, saliva, CSF, feces, sweat):
-- Normal concentration value and range
-- Units (μM, mg/L, etc.)
-- Age and gender considerations
-- Abnormal concentration indicators
-- Clinical significance
+**正常和異常濃度：**
+對於每種生物體液（血液、尿液、唾液、腦脊液、糞便、汗液）：
+- 正常濃度值和範圍
+- 單位（μM、mg/L 等）
+- 年齡和性別考量
+- 異常濃度指標
+- 臨床意義
 
-### Pathway and Enzyme Information
+### 代謝途徑和酵素資訊
 
-**Metabolic Pathways:**
-- `pathways`: List of associated metabolic pathways
-  - Pathway name
-  - SMPDB ID (Small Molecule Pathway Database ID)
-  - KEGG pathway ID
-  - Pathway category
+**代謝途徑：**
+- `pathways`：相關代謝途徑列表
+  - 代謝途徑名稱
+  - SMPDB ID（小分子代謝途徑資料庫 ID）
+  - KEGG 代謝途徑 ID
+  - 代謝途徑類別
 
-**Enzymatic Reactions:**
-- `protein_associations`: Enzymes and transporters
-  - Protein name
-  - Gene name
+**酵素反應：**
+- `protein_associations`：酵素和轉運蛋白
+  - 蛋白質名稱
+  - 基因名稱
   - Uniprot ID
   - GenBank ID
-  - Protein type (enzyme, transporter, carrier, etc.)
-  - Enzyme reactions
-  - Enzyme kinetics (Km values)
+  - 蛋白質類型（酵素、轉運蛋白、載體等）
+  - 酵素反應
+  - 酵素動力學（Km 值）
 
-**Biochemical Context:**
-- `reactions`: Biochemical reactions involving the metabolite
-- `reaction_enzymes`: Enzymes catalyzing reactions
-- `cofactors`: Required cofactors
-- `inhibitors`: Known enzyme inhibitors
+**生化背景：**
+- `reactions`：涉及代謝物的生化反應
+- `reaction_enzymes`：催化反應的酵素
+- `cofactors`：所需輔因子
+- `inhibitors`：已知的酵素抑制劑
 
-### Disease and Biomarker Associations
+### 疾病和生物標記關聯
 
-**Disease Links:**
-- `diseases`: Associated diseases and conditions
-  - Disease name
-  - OMIM ID (Online Mendelian Inheritance in Man)
-  - Disease category
-  - References and evidence
+**疾病連結：**
+- `diseases`：相關疾病和病況
+  - 疾病名稱
+  - OMIM ID（人類孟德爾遺傳線上資料庫）
+  - 疾病類別
+  - 參考文獻和證據
 
-**Biomarker Information:**
-- `biomarker_status`: Whether compound is a known biomarker
-- `biomarker_applications`: Clinical applications
-- `biomarker_for`: Diseases or conditions where used as biomarker
+**生物標記資訊：**
+- `biomarker_status`：化合物是否為已知生物標記
+- `biomarker_applications`：臨床應用
+- `biomarker_for`：用作生物標記的疾病或病況
 
-### Spectroscopic Data
+### 光譜資料
 
-**NMR Spectra:**
-- `nmr_spectra`: Nuclear Magnetic Resonance data
-  - Spectrum type (1D ¹H, ¹³C, 2D COSY, HSQC, etc.)
-  - Spectrometer frequency (MHz)
-  - Solvent used
-  - Temperature
+**NMR 光譜：**
+- `nmr_spectra`：核磁共振資料
+  - 光譜類型（1D ¹H、¹³C、2D COSY、HSQC 等）
+  - 光譜儀頻率（MHz）
+  - 使用的溶劑
+  - 溫度
   - pH
-  - Peak list with chemical shifts and multiplicities
-  - FID (Free Induction Decay) files
+  - 含化學位移和多重性的峰值列表
+  - FID（自由感應衰減）檔案
 
-**Mass Spectrometry:**
-- `ms_spectra`: Mass spectrometry data
-  - Spectrum type (MS, MS-MS, LC-MS, GC-MS)
-  - Ionization mode (positive, negative, neutral)
-  - Collision energy
-  - Instrument type
-  - Peak list (m/z, intensity, annotation)
-  - Predicted vs. experimental flag
+**質譜：**
+- `ms_spectra`：質譜資料
+  - 光譜類型（MS、MS-MS、LC-MS、GC-MS）
+  - 離子化模式（正、負、中性）
+  - 碰撞能量
+  - 儀器類型
+  - 峰值列表（m/z、強度、註釋）
+  - 預測與實驗標記
 
-**Chromatography:**
-- `chromatography`: Chromatographic properties
-  - Retention time
-  - Column type
-  - Mobile phase
-  - Method details
+**層析法：**
+- `chromatography`：層析性質
+  - 滯留時間
+  - 管柱類型
+  - 流動相
+  - 方法詳情
 
-### External Database Links
+### 外部資料庫連結
 
-**Database Cross-References:**
-- `kegg_id`: KEGG Compound ID
-- `pubchem_compound_id`: PubChem CID
-- `pubchem_substance_id`: PubChem SID
-- `chebi_id`: Chemical Entities of Biological Interest ID
-- `chemspider_id`: ChemSpider ID
-- `drugbank_id`: DrugBank accession (if applicable)
-- `foodb_id`: FooDB ID (if food component)
-- `knapsack_id`: KNApSAcK ID
-- `metacyc_id`: MetaCyc ID
-- `bigg_id`: BiGG Model ID
-- `wikipedia_id`: Wikipedia page link
-- `metlin_id`: METLIN ID
-- `vmh_id`: Virtual Metabolic Human ID
-- `fbonto_id`: FlyBase ontology ID
+**資料庫交叉參考：**
+- `kegg_id`：KEGG 化合物 ID
+- `pubchem_compound_id`：PubChem CID
+- `pubchem_substance_id`：PubChem SID
+- `chebi_id`：生物興趣化學實體 ID
+- `chemspider_id`：ChemSpider ID
+- `drugbank_id`：DrugBank 登錄號（如適用）
+- `foodb_id`：FooDB ID（如為食物成分）
+- `knapsack_id`：KNApSAcK ID
+- `metacyc_id`：MetaCyc ID
+- `bigg_id`：BiGG 模型 ID
+- `wikipedia_id`：維基百科頁面連結
+- `metlin_id`：METLIN ID
+- `vmh_id`：虛擬代謝人類 ID
+- `fbonto_id`：FlyBase 本體 ID
 
-**Protein Database Links:**
-- `uniprot_id`: UniProt accession for associated proteins
-- `genbank_id`: GenBank ID for associated genes
-- `pdb_id`: Protein Data Bank ID for protein structures
+**蛋白質資料庫連結：**
+- `uniprot_id`：相關蛋白質的 UniProt 登錄號
+- `genbank_id`：相關基因的 GenBank ID
+- `pdb_id`：蛋白質結構的蛋白質資料庫 ID
 
-### Literature and Evidence
+### 文獻和證據
 
-**References:**
-- `general_references`: General references about the metabolite
+**參考文獻：**
+- `general_references`：關於代謝物的一般參考文獻
   - PubMed ID
-  - Reference text
-  - Citation
-- `synthesis_reference`: Synthesis methods and references
-- `protein_references`: References for protein associations
-- `pathway_references`: References for pathway involvement
+  - 參考文獻
+  - 引用
+- `synthesis_reference`：合成方法和參考文獻
+- `protein_references`：蛋白質關聯的參考文獻
+- `pathway_references`：代謝途徑參與的參考文獻
 
-### Ontology and Classification
+### 本體論和分類
 
-**Ontology Terms:**
-- `ontology_terms`: Related ontology classifications
-  - Term name
-  - Ontology source (ChEBI, MeSH, etc.)
-  - Term ID
-  - Definition
+**本體論術語：**
+- `ontology_terms`：相關本體論分類
+  - 術語名稱
+  - 本體論來源（ChEBI、MeSH 等）
+  - 術語 ID
+  - 定義
 
-### Data Quality and Provenance
+### 資料品質和來源
 
-**Metadata:**
-- `creation_date`: Date entry was created
-- `update_date`: Date entry was last updated
-- `version`: HMDB version number
-- `status`: Entry status (detected, expected, predicted)
-- `evidence`: Evidence level for detection/presence
+**中繼資料：**
+- `creation_date`：條目建立日期
+- `update_date`：條目最後更新日期
+- `version`：HMDB 版本號
+- `status`：條目狀態（已偵測、預期、預測）
+- `evidence`：偵測/存在的證據等級
 
-## XML Structure Example
+## XML 結構範例
 
-When downloading HMDB data in XML format, the structure follows this pattern:
+以 XML 格式下載 HMDB 資料時，結構遵循此模式：
 
 ```xml
 <metabolite>
@@ -233,35 +233,35 @@ When downloading HMDB data in XML format, the structure follows this pattern:
 </metabolite>
 ```
 
-## Querying Specific Fields
+## 查詢特定欄位
 
-When working with HMDB data programmatically:
+以程式化方式處理 HMDB 資料時：
 
-**For metabolite identification:**
-- Query by `accession`, `name`, `synonyms`, `inchi`, `smiles`
+**用於代謝物鑑定：**
+- 依 `accession`、`name`、`synonyms`、`inchi`、`smiles` 查詢
 
-**For chemical similarity:**
-- Use `smiles`, `inchi`, `inchikey`, `molecular_weight`, `chemical_formula`
+**用於化學相似性：**
+- 使用 `smiles`、`inchi`、`inchikey`、`molecular_weight`、`chemical_formula`
 
-**For biomarker discovery:**
-- Filter by `diseases`, `biomarker_status`, `normal_concentrations`, `abnormal_concentrations`
+**用於生物標記發現：**
+- 依 `diseases`、`biomarker_status`、`normal_concentrations`、`abnormal_concentrations` 過濾
 
-**For pathway analysis:**
-- Extract `pathways`, `protein_associations`, `reactions`
+**用於代謝途徑分析：**
+- 擷取 `pathways`、`protein_associations`、`reactions`
 
-**For spectral matching:**
-- Compare against `nmr_spectra`, `ms_spectra` peak lists
+**用於光譜比對：**
+- 與 `nmr_spectra`、`ms_spectra` 峰值列表比較
 
-**For cross-database integration:**
-- Map using external IDs: `kegg_id`, `pubchem_compound_id`, `chebi_id`, etc.
+**用於跨資料庫整合：**
+- 使用外部 ID 映射：`kegg_id`、`pubchem_compound_id`、`chebi_id` 等
 
-## Field Completeness
+## 欄位完整性
 
-Not all fields are populated for every metabolite:
+並非每個代謝物都填入所有欄位：
 
-- **Highly complete fields** (>90% of entries): accession, name, chemical_formula, molecular_weight, smiles, inchi
-- **Moderately complete** (50-90%): biospecimen_locations, tissue_locations, pathways
-- **Variably complete** (10-50%): concentration data, disease associations, protein associations
-- **Sparsely complete** (<10%): experimental NMR/MS spectra, detailed kinetic data
+- **高度完整欄位**（>90% 條目）：accession、name、chemical_formula、molecular_weight、smiles、inchi
+- **中度完整**（50-90%）：biospecimen_locations、tissue_locations、pathways
+- **可變完整**（10-50%）：濃度資料、疾病關聯、蛋白質關聯
+- **稀疏完整**（<10%）：實驗 NMR/MS 光譜、詳細動力學資料
 
-Predicted and computational data (e.g., predicted MS spectra, predicted concentrations) supplement experimental data where available.
+預測和計算資料（例如預測的 MS 光譜、預測的濃度）在可用時補充實驗資料。

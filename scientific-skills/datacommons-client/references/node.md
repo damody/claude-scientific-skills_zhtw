@@ -1,46 +1,46 @@
-# Node Endpoint - Knowledge Graph Exploration
+# Node 端點 - 知識圖譜探索
 
-## Purpose
+## 用途
 
-The Node endpoint retrieves property relationships and values from the Data Commons knowledge graph. It returns information about directed edges (properties) connecting nodes, enabling discovery of connections within the graph structure.
+Node 端點從 Data Commons 知識圖譜中擷取屬性關係和值。它回傳連接節點的有向邊（屬性）資訊，能夠發現圖譜結構中的連接。
 
-## Core Capabilities
+## 核心功能
 
-The Node API performs three primary functions:
-1. Retrieve property labels associated with nodes
-2. Obtain values for specific properties across nodes
-3. Discover all connected nodes linked through relationships
+Node API 執行三項主要功能：
+1. 擷取與節點關聯的屬性標籤
+2. 取得節點間特定屬性的值
+3. 發現透過關係連接的所有節點
 
-## Available Methods
+## 可用方法
 
 ### 1. fetch()
 
-Retrieve properties using relation expressions with arrow notation.
+使用箭頭表示法的關係表達式擷取屬性。
 
-**Key Parameters:**
-- `node_dcids`: Target node identifier(s)
-- `expression`: Relation syntax using arrows (`->`, `<-`, `<-*`)
-- `all_pages`: Enable pagination (default: True)
-- `next_token`: Continue paginated results
+**主要參數：**
+- `node_dcids`：目標節點識別碼
+- `expression`：使用箭頭的關係語法（`->`、`<-`、`<-*`）
+- `all_pages`：啟用分頁（預設：True）
+- `next_token`：繼續分頁結果
 
-**Arrow Notation:**
-- `->`: Outgoing property (from node to value)
-- `<-`: Incoming property (from value to node)
-- `<-*`: Multi-hop incoming traversal
+**箭頭表示法：**
+- `->`：傳出屬性（從節點到值）
+- `<-`：傳入屬性（從值到節點）
+- `<-*`：多跳傳入遍歷
 
-**Example Usage:**
+**使用範例：**
 ```python
 from datacommons_client import DataCommonsClient
 
 client = DataCommonsClient()
 
-# Get outgoing properties from California
+# 從加州取得傳出屬性
 response = client.node.fetch(
     node_dcids=["geoId/06"],
     expression="->name"
 )
 
-# Get incoming properties (what points to this node)
+# 取得傳入屬性（什麼指向此節點）
 response = client.node.fetch(
     node_dcids=["geoId/06"],
     expression="<-containedInPlace"
@@ -49,21 +49,21 @@ response = client.node.fetch(
 
 ### 2. fetch_property_labels()
 
-Get property labels without retrieving values—useful for discovering what properties exist.
+取得屬性標籤而不擷取值——適用於發現存在哪些屬性。
 
-**Parameters:**
-- `node_dcids`: Node identifier(s)
-- `out`: Boolean—True for outgoing properties, False for incoming
+**參數：**
+- `node_dcids`：節點識別碼
+- `out`：布林值——True 表示傳出屬性，False 表示傳入
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Get all outgoing property labels for California
+# 取得加州所有傳出屬性標籤
 labels = client.node.fetch_property_labels(
     node_dcids=["geoId/06"],
     out=True
 )
 
-# Get all incoming property labels
+# 取得所有傳入屬性標籤
 labels = client.node.fetch_property_labels(
     node_dcids=["geoId/06"],
     out=False
@@ -72,17 +72,17 @@ labels = client.node.fetch_property_labels(
 
 ### 3. fetch_property_values()
 
-Obtain specific property values with optional filters.
+取得具有可選篩選器的特定屬性值。
 
-**Parameters:**
-- `node_dcids`: Node identifier(s)
-- `property`: Property name to query
-- `out`: Direction (True for outgoing, False for incoming)
-- `limit`: Maximum number of values to return
+**參數：**
+- `node_dcids`：節點識別碼
+- `property`：要查詢的屬性名稱
+- `out`：方向（True 表示傳出，False 表示傳入）
+- `limit`：要回傳的最大值數量
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Get name property for California
+# 取得加州的名稱屬性
 values = client.node.fetch_property_values(
     node_dcids=["geoId/06"],
     property="name",
@@ -92,73 +92,73 @@ values = client.node.fetch_property_values(
 
 ### 4. fetch_all_classes()
 
-List all entity types (Class nodes) in the Data Commons graph.
+列出 Data Commons 圖譜中的所有實體類型（Class 節點）。
 
-**Example Usage:**
+**使用範例：**
 ```python
 classes = client.node.fetch_all_classes()
 ```
 
 ### 5. fetch_entity_names()
 
-Look up entity names by DCID in selected languages.
+按 DCID 查詢所選語言的實體名稱。
 
-**Parameters:**
-- `node_dcids`: Entity identifier(s)
-- `language`: Language code (default: "en")
+**參數：**
+- `node_dcids`：實體識別碼
+- `language`：語言代碼（預設："en"）
 
-**Example Usage:**
+**使用範例：**
 ```python
 names = client.node.fetch_entity_names(
     node_dcids=["geoId/06", "country/USA"],
     language="en"
 )
-# Returns: {"geoId/06": "California", "country/USA": "United States"}
+# 回傳：{"geoId/06": "California", "country/USA": "United States"}
 ```
 
-### 6. Place Hierarchy Methods
+### 6. 地點階層方法
 
-These methods navigate geographic relationships:
+這些方法瀏覽地理關係：
 
 #### fetch_place_children()
-Get direct child places.
+取得直接子地點。
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Get all states in USA
+# 取得美國的所有州
 children = client.node.fetch_place_children(
     node_dcids=["country/USA"]
 )
 ```
 
 #### fetch_place_descendants()
-Retrieve full child hierarchies (recursive).
+擷取完整的子階層（遞迴）。
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Get all descendants of California (counties, cities, etc.)
+# 取得加州的所有後代（縣、城市等）
 descendants = client.node.fetch_place_descendants(
     node_dcids=["geoId/06"]
 )
 ```
 
 #### fetch_place_parents()
-Get direct parent places.
+取得直接父地點。
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Get parent of San Francisco
+# 取得舊金山的父級
 parents = client.node.fetch_place_parents(
     node_dcids=["geoId/0667000"]
 )
 ```
 
 #### fetch_place_ancestors()
-Retrieve complete parent lineages.
+擷取完整的父系譜系。
 
-**Example Usage:**
+**使用範例：**
 ```python
-# Get all ancestors of San Francisco (CA, USA, etc.)
+# 取得舊金山的所有祖先（加州、美國等）
 ancestors = client.node.fetch_place_ancestors(
     node_dcids=["geoId/0667000"]
 )
@@ -166,38 +166,38 @@ ancestors = client.node.fetch_place_ancestors(
 
 ### 7. fetch_statvar_constraints()
 
-Access constraint properties for statistical variables—useful for understanding variable definitions and constraints.
+存取統計變數的約束屬性——適用於理解變數定義和約束。
 
-**Example Usage:**
+**使用範例：**
 ```python
 constraints = client.node.fetch_statvar_constraints(
     node_dcids=["Count_Person"]
 )
 ```
 
-## Response Format
+## 回應格式
 
-Methods return either:
-- **NodeResponse objects** with `.to_dict()`, `.to_json()`, and `.nextToken` properties
-- **Dictionaries** for entity names and place hierarchy methods
+方法回傳以下其中之一：
+- **NodeResponse 物件**，具有 `.to_dict()`、`.to_json()` 和 `.nextToken` 屬性
+- **字典**，用於實體名稱和地點階層方法
 
-## Pagination
+## 分頁
 
-For large responses:
-1. Set `all_pages=False` to receive data in chunks
-2. Response includes a `nextToken` value
-3. Re-query using that token to fetch subsequent pages
+對於大型回應：
+1. 設定 `all_pages=False` 以分塊接收資料
+2. 回應包含 `nextToken` 值
+3. 使用該 token 重新查詢以取得後續頁面
 
-**Example:**
+**範例：**
 ```python
-# First page
+# 第一頁
 response = client.node.fetch(
     node_dcids=["country/USA"],
     expression="<-containedInPlace",
     all_pages=False
 )
 
-# Get next page if available
+# 如果有下一頁則取得
 if response.nextToken:
     next_response = client.node.fetch(
         node_dcids=["country/USA"],
@@ -206,45 +206,45 @@ if response.nextToken:
     )
 ```
 
-## Common Use Cases
+## 常見使用案例
 
-### Use Case 1: Explore Available Properties
+### 使用案例 1：探索可用屬性
 
 ```python
-# Discover what properties an entity has
+# 發現實體有哪些屬性
 labels = client.node.fetch_property_labels(
     node_dcids=["geoId/06"],
     out=True
 )
-print(labels)  # Shows all outgoing properties like 'name', 'latitude', etc.
+print(labels)  # 顯示所有傳出屬性如 'name'、'latitude' 等
 ```
 
-### Use Case 2: Navigate Geographic Hierarchies
+### 使用案例 2：瀏覽地理階層
 
 ```python
-# Get all counties in California
+# 取得加州的所有縣
 counties = client.node.fetch_place_children(
     node_dcids=["geoId/06"]
 )
 
-# Filter for specific type if needed
+# 如有需要，篩選特定類型
 county_dcids = [child for child in counties["geoId/06"]
                 if "County" in child]
 ```
 
-### Use Case 3: Build Entity Relationships
+### 使用案例 3：建立實體關係
 
 ```python
-# Find all entities that reference a specific node
+# 尋找所有引用特定節點的實體
 references = client.node.fetch(
     node_dcids=["geoId/06"],
     expression="<-location"
 )
 ```
 
-## Important Notes
+## 重要注意事項
 
-- Use `fetch_property_labels()` first to discover available properties
-- The Node API cannot resolve complex relation expressions—use simpler expressions or break into multiple queries
-- For linked entity properties with arc relationships, combine Node API queries with Observation API
-- Place hierarchy methods return dictionaries, not NodeResponse objects
+- 先使用 `fetch_property_labels()` 發現可用屬性
+- Node API 無法解析複雜的關係表達式——使用更簡單的表達式或分成多個查詢
+- 對於具有弧關係的連結實體屬性，將 Node API 查詢與 Observation API 結合
+- 地點階層方法回傳字典，而非 NodeResponse 物件

@@ -1,8 +1,8 @@
-# RDKit Molecular Descriptors Reference
+# RDKit 分子描述子參考
 
-Complete reference for molecular descriptors available in RDKit's `Descriptors` module.
+RDKit `Descriptors` 模組中可用分子描述子的完整參考。
 
-## Usage
+## 用法
 
 ```python
 from rdkit import Chem
@@ -10,241 +10,241 @@ from rdkit.Chem import Descriptors
 
 mol = Chem.MolFromSmiles('CCO')
 
-# Calculate individual descriptor
+# 計算單一描述子
 mw = Descriptors.MolWt(mol)
 
-# Calculate all descriptors at once
+# 一次計算所有描述子
 all_desc = Descriptors.CalcMolDescriptors(mol)
 ```
 
-## Molecular Weight and Mass
+## 分子量和質量
 
 ### MolWt
-Average molecular weight of the molecule.
+分子的平均分子量。
 ```python
 Descriptors.MolWt(mol)
 ```
 
 ### ExactMolWt
-Exact molecular weight using isotopic composition.
+使用同位素組成的精確分子量。
 ```python
 Descriptors.ExactMolWt(mol)
 ```
 
 ### HeavyAtomMolWt
-Average molecular weight ignoring hydrogens.
+忽略氫的平均分子量。
 ```python
 Descriptors.HeavyAtomMolWt(mol)
 ```
 
-## Lipophilicity
+## 親脂性
 
 ### MolLogP
-Wildman-Crippen LogP (octanol-water partition coefficient).
+Wildman-Crippen LogP（辛醇-水分配係數）。
 ```python
 Descriptors.MolLogP(mol)
 ```
 
 ### MolMR
-Wildman-Crippen molar refractivity.
+Wildman-Crippen 莫耳折射率。
 ```python
 Descriptors.MolMR(mol)
 ```
 
-## Polar Surface Area
+## 極性表面積
 
 ### TPSA
-Topological polar surface area (TPSA) based on fragment contributions.
+基於片段貢獻的拓撲極性表面積（TPSA）。
 ```python
 Descriptors.TPSA(mol)
 ```
 
 ### LabuteASA
-Labute's Approximate Surface Area (ASA).
+Labute 近似表面積（ASA）。
 ```python
 Descriptors.LabuteASA(mol)
 ```
 
-## Hydrogen Bonding
+## 氫鍵
 
 ### NumHDonors
-Number of hydrogen bond donors (N-H and O-H).
+氫鍵供體數量（N-H 和 O-H）。
 ```python
 Descriptors.NumHDonors(mol)
 ```
 
 ### NumHAcceptors
-Number of hydrogen bond acceptors (N and O).
+氫鍵受體數量（N 和 O）。
 ```python
 Descriptors.NumHAcceptors(mol)
 ```
 
 ### NOCount
-Number of N and O atoms.
+N 和 O 原子數量。
 ```python
 Descriptors.NOCount(mol)
 ```
 
 ### NHOHCount
-Number of N-H and O-H bonds.
+N-H 和 O-H 鍵數量。
 ```python
 Descriptors.NHOHCount(mol)
 ```
 
-## Atom Counts
+## 原子計數
 
 ### HeavyAtomCount
-Number of heavy atoms (non-hydrogen).
+重原子數量（非氫）。
 ```python
 Descriptors.HeavyAtomCount(mol)
 ```
 
 ### NumHeteroatoms
-Number of heteroatoms (non-C and non-H).
+雜原子數量（非 C 和非 H）。
 ```python
 Descriptors.NumHeteroatoms(mol)
 ```
 
 ### NumValenceElectrons
-Total number of valence electrons.
+價電子總數。
 ```python
 Descriptors.NumValenceElectrons(mol)
 ```
 
 ### NumRadicalElectrons
-Number of radical electrons.
+自由基電子數量。
 ```python
 Descriptors.NumRadicalElectrons(mol)
 ```
 
-## Ring Descriptors
+## 環描述子
 
 ### RingCount
-Number of rings.
+環數量。
 ```python
 Descriptors.RingCount(mol)
 ```
 
 ### NumAromaticRings
-Number of aromatic rings.
+芳香環數量。
 ```python
 Descriptors.NumAromaticRings(mol)
 ```
 
 ### NumSaturatedRings
-Number of saturated rings.
+飽和環數量。
 ```python
 Descriptors.NumSaturatedRings(mol)
 ```
 
 ### NumAliphaticRings
-Number of aliphatic (non-aromatic) rings.
+脂肪族（非芳香）環數量。
 ```python
 Descriptors.NumAliphaticRings(mol)
 ```
 
 ### NumAromaticCarbocycles
-Number of aromatic carbocycles (rings with only carbons).
+芳香碳環數量（僅含碳的環）。
 ```python
 Descriptors.NumAromaticCarbocycles(mol)
 ```
 
 ### NumAromaticHeterocycles
-Number of aromatic heterocycles (rings with heteroatoms).
+芳香雜環數量（含雜原子的環）。
 ```python
 Descriptors.NumAromaticHeterocycles(mol)
 ```
 
 ### NumSaturatedCarbocycles
-Number of saturated carbocycles.
+飽和碳環數量。
 ```python
 Descriptors.NumSaturatedCarbocycles(mol)
 ```
 
 ### NumSaturatedHeterocycles
-Number of saturated heterocycles.
+飽和雜環數量。
 ```python
 Descriptors.NumSaturatedHeterocycles(mol)
 ```
 
 ### NumAliphaticCarbocycles
-Number of aliphatic carbocycles.
+脂肪族碳環數量。
 ```python
 Descriptors.NumAliphaticCarbocycles(mol)
 ```
 
 ### NumAliphaticHeterocycles
-Number of aliphatic heterocycles.
+脂肪族雜環數量。
 ```python
 Descriptors.NumAliphaticHeterocycles(mol)
 ```
 
-## Rotatable Bonds
+## 可旋轉鍵
 
 ### NumRotatableBonds
-Number of rotatable bonds (flexibility).
+可旋轉鍵數量（柔性）。
 ```python
 Descriptors.NumRotatableBonds(mol)
 ```
 
-## Aromatic Atoms
+## 芳香原子
 
 ### NumAromaticAtoms
-Number of aromatic atoms.
+芳香原子數量。
 ```python
 Descriptors.NumAromaticAtoms(mol)
 ```
 
-## Fraction Descriptors
+## 比例描述子
 
 ### FractionCsp3
-Fraction of carbons that are sp3 hybridized.
+sp3 雜化碳的比例。
 ```python
 Descriptors.FractionCsp3(mol)
 ```
 
-## Complexity Descriptors
+## 複雜度描述子
 
 ### BertzCT
-Bertz complexity index.
+Bertz 複雜度指數。
 ```python
 Descriptors.BertzCT(mol)
 ```
 
 ### Ipc
-Information content (complexity measure).
+資訊含量（複雜度度量）。
 ```python
 Descriptors.Ipc(mol)
 ```
 
-## Kappa Shape Indices
+## Kappa 形狀指數
 
-Molecular shape descriptors based on graph invariants.
+基於圖不變量的分子形狀描述子。
 
 ### Kappa1
-First kappa shape index.
+第一 kappa 形狀指數。
 ```python
 Descriptors.Kappa1(mol)
 ```
 
 ### Kappa2
-Second kappa shape index.
+第二 kappa 形狀指數。
 ```python
 Descriptors.Kappa2(mol)
 ```
 
 ### Kappa3
-Third kappa shape index.
+第三 kappa 形狀指數。
 ```python
 Descriptors.Kappa3(mol)
 ```
 
-## Chi Connectivity Indices
+## Chi 連接性指數
 
-Molecular connectivity indices.
+分子連接性指數。
 
 ### Chi0, Chi1, Chi2, Chi3, Chi4
-Simple chi connectivity indices.
+簡單 chi 連接性指數。
 ```python
 Descriptors.Chi0(mol)
 Descriptors.Chi1(mol)
@@ -254,7 +254,7 @@ Descriptors.Chi4(mol)
 ```
 
 ### Chi0n, Chi1n, Chi2n, Chi3n, Chi4n
-Valence-modified chi connectivity indices.
+價態修正 chi 連接性指數。
 ```python
 Descriptors.Chi0n(mol)
 Descriptors.Chi1n(mol)
@@ -264,7 +264,7 @@ Descriptors.Chi4n(mol)
 ```
 
 ### Chi0v, Chi1v, Chi2v, Chi3v, Chi4v
-Valence chi connectivity indices.
+價態 chi 連接性指數。
 ```python
 Descriptors.Chi0v(mol)
 Descriptors.Chi1v(mol)
@@ -276,214 +276,214 @@ Descriptors.Chi4v(mol)
 ## Hall-Kier Alpha
 
 ### HallKierAlpha
-Hall-Kier alpha value (molecular flexibility).
+Hall-Kier alpha 值（分子柔性）。
 ```python
 Descriptors.HallKierAlpha(mol)
 ```
 
-## Balaban's J Index
+## Balaban J 指數
 
 ### BalabanJ
-Balaban's J index (branching descriptor).
+Balaban J 指數（分支描述子）。
 ```python
 Descriptors.BalabanJ(mol)
 ```
 
-## EState Indices
+## EState 指數
 
-Electrotopological state indices.
+電拓撲態指數。
 
 ### MaxEStateIndex
-Maximum E-state value.
+最大 E-state 值。
 ```python
 Descriptors.MaxEStateIndex(mol)
 ```
 
 ### MinEStateIndex
-Minimum E-state value.
+最小 E-state 值。
 ```python
 Descriptors.MinEStateIndex(mol)
 ```
 
 ### MaxAbsEStateIndex
-Maximum absolute E-state value.
+最大絕對 E-state 值。
 ```python
 Descriptors.MaxAbsEStateIndex(mol)
 ```
 
 ### MinAbsEStateIndex
-Minimum absolute E-state value.
+最小絕對 E-state 值。
 ```python
 Descriptors.MinAbsEStateIndex(mol)
 ```
 
-## Partial Charges
+## 部分電荷
 
 ### MaxPartialCharge
-Maximum partial charge.
+最大部分電荷。
 ```python
 Descriptors.MaxPartialCharge(mol)
 ```
 
 ### MinPartialCharge
-Minimum partial charge.
+最小部分電荷。
 ```python
 Descriptors.MinPartialCharge(mol)
 ```
 
 ### MaxAbsPartialCharge
-Maximum absolute partial charge.
+最大絕對部分電荷。
 ```python
 Descriptors.MaxAbsPartialCharge(mol)
 ```
 
 ### MinAbsPartialCharge
-Minimum absolute partial charge.
+最小絕對部分電荷。
 ```python
 Descriptors.MinAbsPartialCharge(mol)
 ```
 
-## Fingerprint Density
+## 指紋密度
 
-Measures the density of molecular fingerprints.
+測量分子指紋的密度。
 
 ### FpDensityMorgan1
-Morgan fingerprint density at radius 1.
+半徑 1 的 Morgan 指紋密度。
 ```python
 Descriptors.FpDensityMorgan1(mol)
 ```
 
 ### FpDensityMorgan2
-Morgan fingerprint density at radius 2.
+半徑 2 的 Morgan 指紋密度。
 ```python
 Descriptors.FpDensityMorgan2(mol)
 ```
 
 ### FpDensityMorgan3
-Morgan fingerprint density at radius 3.
+半徑 3 的 Morgan 指紋密度。
 ```python
 Descriptors.FpDensityMorgan3(mol)
 ```
 
-## PEOE VSA Descriptors
+## PEOE VSA 描述子
 
-Partial Equalization of Orbital Electronegativities (PEOE) VSA descriptors.
+軌域電負度部分均衡（PEOE）VSA 描述子。
 
-### PEOE_VSA1 through PEOE_VSA14
-MOE-type descriptors using partial charges and surface area contributions.
+### PEOE_VSA1 到 PEOE_VSA14
+使用部分電荷和表面積貢獻的 MOE 類型描述子。
 ```python
 Descriptors.PEOE_VSA1(mol)
-# ... through PEOE_VSA14
+# ... 到 PEOE_VSA14
 ```
 
-## SMR VSA Descriptors
+## SMR VSA 描述子
 
-Molecular refractivity VSA descriptors.
+莫耳折射率 VSA 描述子。
 
-### SMR_VSA1 through SMR_VSA10
-MOE-type descriptors using MR contributions and surface area.
+### SMR_VSA1 到 SMR_VSA10
+使用 MR 貢獻和表面積的 MOE 類型描述子。
 ```python
 Descriptors.SMR_VSA1(mol)
-# ... through SMR_VSA10
+# ... 到 SMR_VSA10
 ```
 
-## SLogP VSA Descriptors
+## SLogP VSA 描述子
 
-LogP VSA descriptors.
+LogP VSA 描述子。
 
-### SLogP_VSA1 through SLogP_VSA12
-MOE-type descriptors using LogP contributions and surface area.
+### SLogP_VSA1 到 SLogP_VSA12
+使用 LogP 貢獻和表面積的 MOE 類型描述子。
 ```python
 Descriptors.SLogP_VSA1(mol)
-# ... through SLogP_VSA12
+# ... 到 SLogP_VSA12
 ```
 
-## EState VSA Descriptors
+## EState VSA 描述子
 
-### EState_VSA1 through EState_VSA11
-MOE-type descriptors using E-state indices and surface area.
+### EState_VSA1 到 EState_VSA11
+使用 E-state 指數和表面積的 MOE 類型描述子。
 ```python
 Descriptors.EState_VSA1(mol)
-# ... through EState_VSA11
+# ... 到 EState_VSA11
 ```
 
-## VSA Descriptors
+## VSA 描述子
 
-van der Waals surface area descriptors.
+范德華表面積描述子。
 
-### VSA_EState1 through VSA_EState10
-EState VSA descriptors.
+### VSA_EState1 到 VSA_EState10
+EState VSA 描述子。
 ```python
 Descriptors.VSA_EState1(mol)
-# ... through VSA_EState10
+# ... 到 VSA_EState10
 ```
 
-## BCUT Descriptors
+## BCUT 描述子
 
-Burden-CAS-University of Texas eigenvalue descriptors.
+Burden-CAS-University of Texas 特徵值描述子。
 
 ### BCUT2D_MWHI
-Highest eigenvalue of Burden matrix weighted by molecular weight.
+以分子量加權的 Burden 矩陣最高特徵值。
 ```python
 Descriptors.BCUT2D_MWHI(mol)
 ```
 
 ### BCUT2D_MWLOW
-Lowest eigenvalue of Burden matrix weighted by molecular weight.
+以分子量加權的 Burden 矩陣最低特徵值。
 ```python
 Descriptors.BCUT2D_MWLOW(mol)
 ```
 
 ### BCUT2D_CHGHI
-Highest eigenvalue weighted by partial charges.
+以部分電荷加權的最高特徵值。
 ```python
 Descriptors.BCUT2D_CHGHI(mol)
 ```
 
 ### BCUT2D_CHGLO
-Lowest eigenvalue weighted by partial charges.
+以部分電荷加權的最低特徵值。
 ```python
 Descriptors.BCUT2D_CHGLO(mol)
 ```
 
 ### BCUT2D_LOGPHI
-Highest eigenvalue weighted by LogP.
+以 LogP 加權的最高特徵值。
 ```python
 Descriptors.BCUT2D_LOGPHI(mol)
 ```
 
 ### BCUT2D_LOGPLOW
-Lowest eigenvalue weighted by LogP.
+以 LogP 加權的最低特徵值。
 ```python
 Descriptors.BCUT2D_LOGPLOW(mol)
 ```
 
 ### BCUT2D_MRHI
-Highest eigenvalue weighted by molar refractivity.
+以莫耳折射率加權的最高特徵值。
 ```python
 Descriptors.BCUT2D_MRHI(mol)
 ```
 
 ### BCUT2D_MRLOW
-Lowest eigenvalue weighted by molar refractivity.
+以莫耳折射率加權的最低特徵值。
 ```python
 Descriptors.BCUT2D_MRLOW(mol)
 ```
 
-## Autocorrelation Descriptors
+## 自相關描述子
 
 ### AUTOCORR2D
-2D autocorrelation descriptors (if enabled).
-Various autocorrelation indices measuring spatial distribution of properties.
+2D 自相關描述子（如果啟用）。
+測量性質空間分布的各種自相關指數。
 
-## MQN Descriptors
+## MQN 描述子
 
-Molecular Quantum Numbers - 42 simple descriptors.
+分子量子數 - 42 個簡單描述子。
 
-### mqn1 through mqn42
-Integer descriptors counting various molecular features.
+### mqn1 到 mqn42
+計數各種分子特徵的整數描述子。
 ```python
-# Access via CalcMolDescriptors
+# 透過 CalcMolDescriptors 存取
 desc = Descriptors.CalcMolDescriptors(mol)
 mqns = {k: v for k, v in desc.items() if k.startswith('mqn')}
 ```
@@ -491,14 +491,14 @@ mqns = {k: v for k, v in desc.items() if k.startswith('mqn')}
 ## QED
 
 ### qed
-Quantitative Estimate of Drug-likeness.
+類藥性定量估計。
 ```python
 Descriptors.qed(mol)
 ```
 
-## Lipinski's Rule of Five
+## Lipinski 五規則
 
-Check drug-likeness using Lipinski's criteria:
+使用 Lipinski 標準檢查類藥性：
 
 ```python
 def lipinski_rule_of_five(mol):
@@ -509,9 +509,9 @@ def lipinski_rule_of_five(mol):
     return mw and logp and hbd and hba
 ```
 
-## Batch Descriptor Calculation
+## 批次描述子計算
 
-Calculate all descriptors at once:
+一次計算所有描述子：
 
 ```python
 from rdkit import Chem
@@ -519,34 +519,34 @@ from rdkit.Chem import Descriptors
 
 mol = Chem.MolFromSmiles('CCO')
 
-# Get all descriptors as dictionary
+# 取得所有描述子為字典
 all_descriptors = Descriptors.CalcMolDescriptors(mol)
 
-# Access specific descriptor
+# 存取特定描述子
 mw = all_descriptors['MolWt']
 logp = all_descriptors['MolLogP']
 
-# Get list of available descriptor names
+# 取得可用描述子名稱列表
 from rdkit.Chem import Descriptors
 descriptor_names = [desc[0] for desc in Descriptors._descList]
 ```
 
-## Descriptor Categories Summary
+## 描述子類別總結
 
-1. **Physicochemical**: MolWt, MolLogP, MolMR, TPSA
-2. **Topological**: BertzCT, BalabanJ, Kappa indices
-3. **Electronic**: Partial charges, E-state indices
-4. **Shape**: Kappa indices, BCUT descriptors
-5. **Connectivity**: Chi indices
-6. **2D Fingerprints**: FpDensity descriptors
-7. **Atom counts**: Heavy atoms, heteroatoms, rings
-8. **Drug-likeness**: QED, Lipinski parameters
-9. **Flexibility**: NumRotatableBonds, HallKierAlpha
-10. **Surface area**: VSA-based descriptors
+1. **物理化學**：MolWt、MolLogP、MolMR、TPSA
+2. **拓撲**：BertzCT、BalabanJ、Kappa 指數
+3. **電子**：部分電荷、E-state 指數
+4. **形狀**：Kappa 指數、BCUT 描述子
+5. **連接性**：Chi 指數
+6. **2D 指紋**：FpDensity 描述子
+7. **原子計數**：重原子、雜原子、環
+8. **類藥性**：QED、Lipinski 參數
+9. **柔性**：NumRotatableBonds、HallKierAlpha
+10. **表面積**：VSA 基礎描述子
 
-## Common Use Cases
+## 常見用例
 
-### Drug-likeness Screening
+### 類藥性篩選
 
 ```python
 def screen_druglikeness(mol):
@@ -562,7 +562,7 @@ def screen_druglikeness(mol):
     }
 ```
 
-### Lead-like Filtering
+### 先導類過濾
 
 ```python
 def is_leadlike(mol):
@@ -572,7 +572,7 @@ def is_leadlike(mol):
     return mw and logp and rot_bonds
 ```
 
-### Diversity Analysis
+### 多樣性分析
 
 ```python
 def molecular_complexity(mol):
@@ -585,11 +585,11 @@ def molecular_complexity(mol):
     }
 ```
 
-## Tips
+## 提示
 
-1. **Use batch calculation** for multiple descriptors to avoid redundant computations
-2. **Check for None** - some descriptors may return None for invalid molecules
-3. **Normalize descriptors** for machine learning applications
-4. **Select relevant descriptors** - not all 200+ descriptors are useful for every task
-5. **Consider 3D descriptors** separately (require 3D coordinates)
-6. **Validate ranges** - check if descriptor values are in expected ranges
+1. **使用批次計算**以避免多個描述子的冗餘計算
+2. **檢查 None** - 某些描述子可能對無效分子返回 None
+3. **正規化描述子**用於機器學習應用
+4. **選擇相關描述子** - 並非所有 200+ 個描述子都對每個任務有用
+5. **單獨考慮 3D 描述子**（需要 3D 座標）
+6. **驗證範圍** - 檢查描述子值是否在預期範圍內

@@ -1,24 +1,24 @@
-# FlowIO API Reference
+# FlowIO API 參考
 
-## Overview
+## 概述
 
-FlowIO is a Python library for reading and writing Flow Cytometry Standard (FCS) files. It supports FCS versions 2.0, 3.0, and 3.1 with minimal dependencies.
+FlowIO 是用於讀取和寫入流式細胞儀標準（FCS）檔案的 Python 函式庫。它支援 FCS 版本 2.0、3.0 和 3.1，且依賴最少。
 
-## Installation
+## 安裝
 
 ```bash
 pip install flowio
 ```
 
-Supports Python 3.9 and later.
+支援 Python 3.9 及更高版本。
 
-## Core Classes
+## 核心類別
 
 ### FlowData
 
-The primary class for working with FCS files.
+用於處理 FCS 檔案的主要類別。
 
-#### Constructor
+#### 建構函式
 
 ```python
 FlowData(fcs_file,
@@ -30,44 +30,44 @@ FlowData(fcs_file,
          null_channel_list=None)
 ```
 
-**Parameters:**
-- `fcs_file`: File path (str), Path object, or file handle
-- `ignore_offset_error` (bool): Ignore offset errors (default: False)
-- `ignore_offset_discrepancy` (bool): Ignore offset discrepancies between HEADER and TEXT sections (default: False)
-- `use_header_offsets` (bool): Use HEADER section offsets instead of TEXT section (default: False)
-- `only_text` (bool): Only parse the TEXT segment, skip DATA and ANALYSIS (default: False)
-- `nextdata_offset` (int): Byte offset for reading multi-dataset files
-- `null_channel_list` (list): List of PnN labels for null channels to exclude
+**參數：**
+- `fcs_file`：檔案路徑（str）、Path 物件或檔案控制代碼
+- `ignore_offset_error`（bool）：忽略位移錯誤（預設：False）
+- `ignore_offset_discrepancy`（bool）：忽略 HEADER 和 TEXT 區段之間的位移差異（預設：False）
+- `use_header_offsets`（bool）：使用 HEADER 區段位移而非 TEXT 區段（預設：False）
+- `only_text`（bool）：僅解析 TEXT 區段，跳過 DATA 和 ANALYSIS（預設：False）
+- `nextdata_offset`（int）：讀取多資料集檔案的位元組位移
+- `null_channel_list`（list）：要排除的空通道 PnN 標籤列表
 
-#### Attributes
+#### 屬性
 
-**File Information:**
-- `name`: Name of the FCS file
-- `file_size`: Size of the file in bytes
-- `version`: FCS version (e.g., '3.0', '3.1')
-- `header`: Dictionary containing HEADER segment information
-- `data_type`: Type of data format ('I', 'F', 'D', 'A')
+**檔案資訊：**
+- `name`：FCS 檔案名稱
+- `file_size`：檔案大小（位元組）
+- `version`：FCS 版本（例如：'3.0'、'3.1'）
+- `header`：包含 HEADER 區段資訊的字典
+- `data_type`：資料格式類型（'I'、'F'、'D'、'A'）
 
-**Channel Information:**
-- `channel_count`: Number of channels in the dataset
-- `channels`: Dictionary mapping channel numbers to channel info
-- `pnn_labels`: List of PnN (short channel name) labels
-- `pns_labels`: List of PnS (descriptive stain name) labels
-- `pnr_values`: List of PnR (range) values for each channel
-- `fluoro_indices`: List of indices for fluorescence channels
-- `scatter_indices`: List of indices for scatter channels
-- `time_index`: Index of the time channel (or None)
-- `null_channels`: List of null channel indices
+**通道資訊：**
+- `channel_count`：資料集中的通道數量
+- `channels`：將通道編號對應到通道資訊的字典
+- `pnn_labels`：PnN（短通道名稱）標籤列表
+- `pns_labels`：PnS（描述性染色名稱）標籤列表
+- `pnr_values`：每個通道的 PnR（範圍）值列表
+- `fluoro_indices`：螢光通道的索引列表
+- `scatter_indices`：散射通道的索引列表
+- `time_index`：時間通道的索引（或 None）
+- `null_channels`：空通道索引列表
 
-**Event Data:**
-- `event_count`: Number of events (rows) in the dataset
-- `events`: Raw event data as bytes
+**事件資料：**
+- `event_count`：資料集中的事件（列）數量
+- `events`：原始事件資料（作為位元組）
 
-**Metadata:**
-- `text`: Dictionary of TEXT segment key-value pairs
-- `analysis`: Dictionary of ANALYSIS segment key-value pairs (if present)
+**元資料：**
+- `text`：TEXT 區段鍵值對的字典
+- `analysis`：ANALYSIS 區段鍵值對的字典（如果存在）
 
-#### Methods
+#### 方法
 
 ##### as_array()
 
@@ -75,19 +75,19 @@ FlowData(fcs_file,
 as_array(preprocess=True)
 ```
 
-Return event data as a 2-D NumPy array.
+以 2 維 NumPy 陣列回傳事件資料。
 
-**Parameters:**
-- `preprocess` (bool): Apply gain, logarithmic, and time scaling transformations (default: True)
+**參數：**
+- `preprocess`（bool）：套用增益、對數和時間縮放轉換（預設：True）
 
-**Returns:**
-- NumPy ndarray with shape (event_count, channel_count)
+**回傳：**
+- 形狀為 (event_count, channel_count) 的 NumPy ndarray
 
-**Example:**
+**範例：**
 ```python
 flow_data = FlowData('sample.fcs')
-events_array = flow_data.as_array()  # Preprocessed data
-raw_array = flow_data.as_array(preprocess=False)  # Raw data
+events_array = flow_data.as_array()  # 預處理後的資料
+raw_array = flow_data.as_array(preprocess=False)  # 原始資料
 ```
 
 ##### write_fcs()
@@ -96,21 +96,21 @@ raw_array = flow_data.as_array(preprocess=False)  # Raw data
 write_fcs(filename, metadata=None)
 ```
 
-Export the FlowData instance as a new FCS file.
+將 FlowData 實例匯出為新的 FCS 檔案。
 
-**Parameters:**
-- `filename` (str): Output file path
-- `metadata` (dict): Optional dictionary of TEXT segment keywords to add/update
+**參數：**
+- `filename`（str）：輸出檔案路徑
+- `metadata`（dict）：要新增/更新的 TEXT 區段關鍵字的可選字典
 
-**Example:**
+**範例：**
 ```python
 flow_data = FlowData('sample.fcs')
-flow_data.write_fcs('output.fcs', metadata={'$SRC': 'Modified data'})
+flow_data.write_fcs('output.fcs', metadata={'$SRC': '修改後的資料'})
 ```
 
-**Note:** Exports as FCS 3.1 with single-precision floating-point data.
+**注意：** 以 FCS 3.1 格式匯出，使用單精度浮點數資料。
 
-## Utility Functions
+## 公用程式函式
 
 ### read_multiple_data_sets()
 
@@ -121,22 +121,22 @@ read_multiple_data_sets(fcs_file,
                         use_header_offsets=False)
 ```
 
-Read all datasets from an FCS file containing multiple datasets.
+從包含多個資料集的 FCS 檔案讀取所有資料集。
 
-**Parameters:**
-- Same as FlowData constructor (except `nextdata_offset`)
+**參數：**
+- 與 FlowData 建構函式相同（除了 `nextdata_offset`）
 
-**Returns:**
-- List of FlowData instances, one for each dataset
+**回傳：**
+- FlowData 實例列表，每個資料集一個
 
-**Example:**
+**範例：**
 ```python
 from flowio import read_multiple_data_sets
 
 datasets = read_multiple_data_sets('multi_dataset.fcs')
-print(f"Found {len(datasets)} datasets")
+print(f"發現 {len(datasets)} 個資料集")
 for i, dataset in enumerate(datasets):
-    print(f"Dataset {i}: {dataset.event_count} events")
+    print(f"資料集 {i}：{dataset.event_count} 個事件")
 ```
 
 ### create_fcs()
@@ -149,21 +149,21 @@ create_fcs(filename,
            metadata=None)
 ```
 
-Create a new FCS file from event data.
+從事件資料建立新的 FCS 檔案。
 
-**Parameters:**
-- `filename` (str): Output file path
-- `event_data` (ndarray): 2-D NumPy array of event data (rows=events, columns=channels)
-- `channel_names` (list): List of PnN (short) channel names
-- `opt_channel_names` (list): Optional list of PnS (descriptive) channel names
-- `metadata` (dict): Optional dictionary of TEXT segment keywords
+**參數：**
+- `filename`（str）：輸出檔案路徑
+- `event_data`（ndarray）：2 維 NumPy 事件資料陣列（列=事件，欄=通道）
+- `channel_names`（list）：PnN（短）通道名稱列表
+- `opt_channel_names`（list）：PnS（描述性）通道名稱的可選列表
+- `metadata`（dict）：TEXT 區段關鍵字的可選字典
 
-**Example:**
+**範例：**
 ```python
 import numpy as np
 from flowio import create_fcs
 
-# Create synthetic data
+# 建立合成資料
 events = np.random.rand(10000, 5)
 channels = ['FSC-A', 'SSC-A', 'FL1-A', 'FL2-A', 'Time']
 opt_channels = ['Forward Scatter', 'Side Scatter', 'FITC', 'PE', 'Time']
@@ -172,196 +172,196 @@ create_fcs('synthetic.fcs',
            events,
            channels,
            opt_channel_names=opt_channels,
-           metadata={'$SRC': 'Synthetic data'})
+           metadata={'$SRC': '合成資料'})
 ```
 
-## Exception Classes
+## 例外類別
 
 ### FlowIOWarning
 
-Generic warning class for non-critical issues.
+用於非關鍵問題的通用警告類別。
 
 ### PnEWarning
 
-Warning raised when PnE values are invalid during FCS file creation.
+建立 FCS 檔案時 PnE 值無效時發出的警告。
 
 ### FlowIOException
 
-Base exception class for FlowIO errors.
+FlowIO 錯誤的基礎例外類別。
 
 ### FCSParsingError
 
-Raised when there are issues parsing an FCS file.
+解析 FCS 檔案時發生問題時引發。
 
 ### DataOffsetDiscrepancyError
 
-Raised when the HEADER and TEXT sections provide different byte offsets for data segments.
+當 HEADER 和 TEXT 區段為資料區段提供不同的位元組位移時引發。
 
-**Workaround:** Use `ignore_offset_discrepancy=True` parameter when creating FlowData instance.
+**解決方法：** 建立 FlowData 實例時使用 `ignore_offset_discrepancy=True` 參數。
 
 ### MultipleDataSetsError
 
-Raised when attempting to read a file with multiple datasets using the standard FlowData constructor.
+嘗試使用標準 FlowData 建構函式讀取包含多個資料集的檔案時引發。
 
-**Solution:** Use `read_multiple_data_sets()` function instead.
+**解決方案：** 改用 `read_multiple_data_sets()` 函式。
 
-## FCS File Structure Reference
+## FCS 檔案結構參考
 
-FCS files consist of four segments:
+FCS 檔案由四個區段組成：
 
-1. **HEADER**: Contains FCS version and byte locations of other segments
-2. **TEXT**: Key-value metadata pairs (delimited format)
-3. **DATA**: Raw event data (binary, floating-point, or ASCII)
-4. **ANALYSIS** (optional): Results from data processing
+1. **HEADER**：包含 FCS 版本和其他區段的位元組位置
+2. **TEXT**：鍵值元資料對（分隔格式）
+3. **DATA**：原始事件資料（二進位、浮點或 ASCII）
+4. **ANALYSIS**（可選）：資料處理的結果
 
-### Common TEXT Segment Keywords
+### 常見 TEXT 區段關鍵字
 
-- `$BEGINDATA`, `$ENDDATA`: Byte offsets for DATA segment
-- `$BEGINANALYSIS`, `$ENDANALYSIS`: Byte offsets for ANALYSIS segment
-- `$BYTEORD`: Byte order (1,2,3,4 for little-endian; 4,3,2,1 for big-endian)
-- `$DATATYPE`: Data type ('I'=integer, 'F'=float, 'D'=double, 'A'=ASCII)
-- `$MODE`: Data mode ('L'=list mode, most common)
-- `$NEXTDATA`: Offset to next dataset (0 if single dataset)
-- `$PAR`: Number of parameters (channels)
-- `$TOT`: Total number of events
-- `PnN`: Short name for parameter n
-- `PnS`: Descriptive stain name for parameter n
-- `PnR`: Range (max value) for parameter n
-- `PnE`: Amplification exponent for parameter n (format: "a,b" where value = a * 10^(b*x))
-- `PnG`: Amplification gain for parameter n
+- `$BEGINDATA`、`$ENDDATA`：DATA 區段的位元組位移
+- `$BEGINANALYSIS`、`$ENDANALYSIS`：ANALYSIS 區段的位元組位移
+- `$BYTEORD`：位元組順序（1,2,3,4 為小端序；4,3,2,1 為大端序）
+- `$DATATYPE`：資料類型（'I'=整數、'F'=浮點、'D'=雙精度、'A'=ASCII）
+- `$MODE`：資料模式（'L'=列表模式，最常見）
+- `$NEXTDATA`：到下一個資料集的位移（如果是單一資料集則為 0）
+- `$PAR`：參數（通道）數量
+- `$TOT`：事件總數
+- `PnN`：參數 n 的短名稱
+- `PnS`：參數 n 的描述性染色名稱
+- `PnR`：參數 n 的範圍（最大值）
+- `PnE`：參數 n 的放大指數（格式："a,b"，其中 value = a * 10^(b*x)）
+- `PnG`：參數 n 的放大增益
 
-## Channel Types
+## 通道類型
 
-FlowIO automatically categorizes channels:
+FlowIO 自動分類通道：
 
-- **Scatter channels**: FSC (forward scatter), SSC (side scatter)
-- **Fluorescence channels**: FL1, FL2, FITC, PE, etc.
-- **Time channel**: Usually labeled "Time"
+- **散射通道**：FSC（前向散射）、SSC（側向散射）
+- **螢光通道**：FL1、FL2、FITC、PE 等
+- **時間通道**：通常標記為「Time」
 
-Access indices via:
+透過以下屬性存取索引：
 - `flow_data.scatter_indices`
 - `flow_data.fluoro_indices`
 - `flow_data.time_index`
 
-## Data Preprocessing
+## 資料預處理
 
-When calling `as_array(preprocess=True)`, FlowIO applies:
+呼叫 `as_array(preprocess=True)` 時，FlowIO 套用：
 
-1. **Gain scaling**: Multiply by PnG value
-2. **Logarithmic transformation**: Apply PnE exponential transformation if present
-3. **Time scaling**: Convert time values to appropriate units
+1. **增益縮放**：乘以 PnG 值
+2. **對數轉換**：如果存在，套用 PnE 指數轉換
+3. **時間縮放**：將時間值轉換為適當的單位
 
-To access raw, unprocessed data: `as_array(preprocess=False)`
+要存取原始、未處理的資料：`as_array(preprocess=False)`
 
-## Best Practices
+## 最佳實踐
 
-1. **Memory efficiency**: Use `only_text=True` when only metadata is needed
-2. **Error handling**: Wrap file operations in try-except blocks for FCSParsingError
-3. **Multi-dataset files**: Always use `read_multiple_data_sets()` if unsure about dataset count
-4. **Offset issues**: If encountering offset errors, try `ignore_offset_discrepancy=True`
-5. **Channel selection**: Use null_channel_list to exclude unwanted channels during parsing
+1. **記憶體效率**：當只需要元資料時使用 `only_text=True`
+2. **錯誤處理**：將檔案操作包裝在 try-except 區塊中處理 FCSParsingError
+3. **多資料集檔案**：如果不確定資料集數量，始終使用 `read_multiple_data_sets()`
+4. **位移問題**：如果遇到位移錯誤，嘗試 `ignore_offset_discrepancy=True`
+5. **通道選擇**：使用 null_channel_list 在解析時排除不需要的通道
 
-## Integration with FlowKit
+## 與 FlowKit 整合
 
-For advanced flow cytometry analysis including compensation, gating, and GatingML support, consider using FlowKit library alongside FlowIO. FlowKit provides higher-level abstractions built on top of FlowIO's file parsing capabilities.
+如需進階流式細胞儀分析，包括補償、圈選和 GatingML 支援，請考慮將 FlowKit 函式庫與 FlowIO 一起使用。FlowKit 提供建構在 FlowIO 檔案解析功能之上的更高級抽象。
 
-## Example Workflows
+## 範例工作流程
 
-### Basic File Reading
+### 基本檔案讀取
 
 ```python
 from flowio import FlowData
 
-# Read FCS file
+# 讀取 FCS 檔案
 flow = FlowData('experiment.fcs')
 
-# Print basic info
-print(f"Version: {flow.version}")
-print(f"Events: {flow.event_count}")
-print(f"Channels: {flow.channel_count}")
-print(f"Channel names: {flow.pnn_labels}")
+# 列印基本資訊
+print(f"版本：{flow.version}")
+print(f"事件數：{flow.event_count}")
+print(f"通道數：{flow.channel_count}")
+print(f"通道名稱：{flow.pnn_labels}")
 
-# Get event data
+# 取得事件資料
 events = flow.as_array()
-print(f"Data shape: {events.shape}")
+print(f"資料形狀：{events.shape}")
 ```
 
-### Metadata Extraction
+### 元資料擷取
 
 ```python
 from flowio import FlowData
 
 flow = FlowData('sample.fcs', only_text=True)
 
-# Access metadata
-print(f"Acquisition date: {flow.text.get('$DATE', 'N/A')}")
-print(f"Instrument: {flow.text.get('$CYT', 'N/A')}")
+# 存取元資料
+print(f"採集日期：{flow.text.get('$DATE', 'N/A')}")
+print(f"儀器：{flow.text.get('$CYT', 'N/A')}")
 
-# Channel information
+# 通道資訊
 for i, (pnn, pns) in enumerate(zip(flow.pnn_labels, flow.pns_labels)):
-    print(f"Channel {i}: {pnn} ({pns})")
+    print(f"通道 {i}：{pnn}（{pns}）")
 ```
 
-### Creating New FCS Files
+### 建立新的 FCS 檔案
 
 ```python
 import numpy as np
 from flowio import create_fcs
 
-# Generate or process data
+# 產生或處理資料
 data = np.random.rand(5000, 3) * 1000
 
-# Define channels
+# 定義通道
 channels = ['FSC-A', 'SSC-A', 'FL1-A']
 stains = ['Forward Scatter', 'Side Scatter', 'GFP']
 
-# Create FCS file
+# 建立 FCS 檔案
 create_fcs('output.fcs',
            data,
            channels,
            opt_channel_names=stains,
            metadata={
-               '$SRC': 'Python script',
+               '$SRC': 'Python 腳本',
                '$DATE': '19-OCT-2025'
            })
 ```
 
-### Processing Multi-Dataset Files
+### 處理多資料集檔案
 
 ```python
 from flowio import read_multiple_data_sets
 
-# Read all datasets
+# 讀取所有資料集
 datasets = read_multiple_data_sets('multi.fcs')
 
-# Process each dataset
+# 處理每個資料集
 for i, dataset in enumerate(datasets):
-    print(f"\nDataset {i}:")
-    print(f"  Events: {dataset.event_count}")
-    print(f"  Channels: {dataset.pnn_labels}")
+    print(f"\n資料集 {i}：")
+    print(f"  事件數：{dataset.event_count}")
+    print(f"  通道：{dataset.pnn_labels}")
 
-    # Get data array
+    # 取得資料陣列
     events = dataset.as_array()
     mean_values = events.mean(axis=0)
-    print(f"  Mean values: {mean_values}")
+    print(f"  平均值：{mean_values}")
 ```
 
-### Modifying and Re-exporting
+### 修改並重新匯出
 
 ```python
 from flowio import FlowData
 
-# Read original file
+# 讀取原始檔案
 flow = FlowData('original.fcs')
 
-# Get event data
+# 取得事件資料
 events = flow.as_array(preprocess=False)
 
-# Modify data (example: apply custom transformation)
-events[:, 0] = events[:, 0] * 1.5  # Scale first channel
+# 修改資料（範例：套用自訂轉換）
+events[:, 0] = events[:, 0] * 1.5  # 縮放第一個通道
 
-# Note: Currently, FlowIO doesn't support direct modification of event data
-# For modifications, use create_fcs() instead:
+# 注意：目前 FlowIO 不支援直接修改事件資料
+# 如需修改，請改用 create_fcs()：
 from flowio import create_fcs
 
 create_fcs('modified.fcs',

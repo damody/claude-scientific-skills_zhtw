@@ -1,509 +1,509 @@
-# Respiratory Signal Processing
+# 呼吸訊號處理
 
-## Overview
+## 概述
 
-Respiratory signal processing in NeuroKit2 enables analysis of breathing patterns, respiratory rate, amplitude, and variability. Respiration is closely linked to cardiac activity (respiratory sinus arrhythmia), emotional state, and cognitive processes.
+NeuroKit2 的呼吸訊號處理支援呼吸模式、呼吸率、振幅和變異性分析。呼吸與心臟活動（呼吸性竇性心律不齊）、情緒狀態和認知過程密切相關。
 
-## Main Processing Pipeline
+## 主要處理管線
 
 ### rsp_process()
 
-Automated processing of respiratory signals with peak/trough detection and feature extraction.
+自動化呼吸訊號處理，包含波峰/波谷偵測和特徵提取。
 
 ```python
 signals, info = nk.rsp_process(rsp_signal, sampling_rate=100, method='khodadad2018')
 ```
 
-**Pipeline steps:**
-1. Signal cleaning (noise removal, filtering)
-2. Peak (exhalation) and trough (inhalation) detection
-3. Respiratory rate calculation
-4. Amplitude computation
-5. Phase determination (inspiration/expiration)
-6. Respiratory volume per time (RVT)
+**管線步驟：**
+1. 訊號清理（去噪、濾波）
+2. 波峰（呼氣）和波谷（吸氣）偵測
+3. 呼吸率計算
+4. 振幅計算
+5. 相位確定（吸氣/呼氣）
+6. 每時間呼吸量（RVT）
 
-**Returns:**
-- `signals`: DataFrame with:
-  - `RSP_Clean`: Filtered respiratory signal
-  - `RSP_Peaks`, `RSP_Troughs`: Extrema markers
-  - `RSP_Rate`: Instantaneous breathing rate (breaths/min)
-  - `RSP_Amplitude`: Breath-to-breath amplitude
-  - `RSP_Phase`: Inspiration (0) vs. expiration (1)
-  - `RSP_Phase_Completion`: Phase completion percentage (0-1)
-  - `RSP_RVT`: Respiratory volume per time
-- `info`: Dictionary with peak/trough indices
+**回傳：**
+- `signals`：DataFrame 包含：
+  - `RSP_Clean`：濾波後的呼吸訊號
+  - `RSP_Peaks`、`RSP_Troughs`：極值標記
+  - `RSP_Rate`：瞬時呼吸率（次/分鐘）
+  - `RSP_Amplitude`：呼吸對呼吸振幅
+  - `RSP_Phase`：吸氣（0）vs. 呼氣（1）
+  - `RSP_Phase_Completion`：相位完成百分比（0-1）
+  - `RSP_RVT`：每時間呼吸量
+- `info`：包含波峰/波谷索引的字典
 
-**Methods:**
-- `'khodadad2018'`: Khodadad et al. algorithm (default, robust)
-- `'biosppy'`: BioSPPy-based processing (alternative)
+**方法：**
+- `'khodadad2018'`：Khodadad et al. 演算法（預設，穩健）
+- `'biosppy'`：基於 BioSPPy 的處理（替代）
 
-## Preprocessing Functions
+## 預處理函數
 
 ### rsp_clean()
 
-Remove noise and smooth respiratory signal.
+移除噪音並平滑呼吸訊號。
 
 ```python
 cleaned_rsp = nk.rsp_clean(rsp_signal, sampling_rate=100, method='khodadad2018')
 ```
 
-**Methods:**
+**方法：**
 
-**1. Khodadad2018 (default):**
-- Butterworth low-pass filter
-- Removes high-frequency noise
-- Preserves breathing waveform
+**1. Khodadad2018（預設）：**
+- Butterworth 低通濾波器
+- 移除高頻噪音
+- 保留呼吸波形
 
-**2. BioSPPy:**
-- Alternative filtering approach
-- Similar performance to Khodadad
+**2. BioSPPy：**
+- 替代濾波方法
+- 與 Khodadad 相似的性能
 
-**3. Hampel filter:**
+**3. Hampel 濾波器：**
 ```python
 cleaned_rsp = nk.rsp_clean(rsp_signal, sampling_rate=100, method='hampel')
 ```
-- Median-based outlier removal
-- Robust to artifacts and spikes
-- Preserves sharp transitions
+- 基於中位數的異常值移除
+- 對偽跡和尖峰穩健
+- 保留銳利轉換
 
-**Typical respiratory frequency:**
-- Adults at rest: 12-20 breaths/min (0.2-0.33 Hz)
-- Children: faster rates
-- During exercise: up to 40-60 breaths/min
+**典型呼吸頻率：**
+- 靜息成人：12-20 次/分鐘（0.2-0.33 Hz）
+- 兒童：更快的速率
+- 運動期間：高達 40-60 次/分鐘
 
 ### rsp_peaks()
 
-Identify inhalation troughs and exhalation peaks in respiratory signal.
+識別呼吸訊號中的吸氣波谷和呼氣波峰。
 
 ```python
 peaks, info = nk.rsp_peaks(cleaned_rsp, sampling_rate=100, method='khodadad2018')
 ```
 
-**Detection methods:**
-- `'khodadad2018'`: Optimized for clean signals
-- `'biosppy'`: Alternative approach
-- `'scipy'`: Simple scipy-based detection
+**偵測方法：**
+- `'khodadad2018'`：針對乾淨訊號最佳化
+- `'biosppy'`：替代方法
+- `'scipy'`：簡單的基於 scipy 的偵測
 
-**Returns:**
-- Dictionary with:
-  - `RSP_Peaks`: Indices of exhalation peaks (maximum points)
-  - `RSP_Troughs`: Indices of inhalation troughs (minimum points)
+**回傳：**
+- 字典包含：
+  - `RSP_Peaks`：呼氣波峰索引（最大點）
+  - `RSP_Troughs`：吸氣波谷索引（最小點）
 
-**Respiratory cycle definition:**
-- **Inhalation**: Trough → Peak (air flows in, chest/abdomen expands)
-- **Exhalation**: Peak → Trough (air flows out, chest/abdomen contracts)
+**呼吸週期定義：**
+- **吸氣**：波谷 → 波峰（空氣流入，胸部/腹部擴張）
+- **呼氣**：波峰 → 波谷（空氣流出，胸部/腹部收縮）
 
 ### rsp_findpeaks()
 
-Low-level peak detection with multiple algorithm options.
+帶多種演算法選項的低階波峰偵測。
 
 ```python
 peaks_dict = nk.rsp_findpeaks(cleaned_rsp, sampling_rate=100, method='scipy')
 ```
 
-**Methods:**
-- `'scipy'`: Scipy's find_peaks
-- Custom threshold-based algorithms
+**方法：**
+- `'scipy'`：Scipy 的 find_peaks
+- 自訂基於閾值的演算法
 
-**Use case:**
-- Fine-tuned peak detection
-- Custom parameter adjustment
-- Algorithm comparison
+**應用場景：**
+- 精細波峰偵測
+- 自訂參數調整
+- 演算法比較
 
 ### rsp_fixpeaks()
 
-Correct detected peak/trough anomalies (e.g., missed or false detections).
+校正偵測到的波峰/波谷異常（例如，遺漏或錯誤偵測）。
 
 ```python
 corrected_peaks = nk.rsp_fixpeaks(peaks, sampling_rate=100)
 ```
 
-**Corrections:**
-- Remove physiologically implausible intervals
-- Interpolate missing peaks
-- Remove artifact-related false peaks
+**校正：**
+- 移除生理上不合理的間隔
+- 內插遺漏的波峰
+- 移除與偽跡相關的錯誤波峰
 
-## Feature Extraction Functions
+## 特徵提取函數
 
 ### rsp_rate()
 
-Compute instantaneous breathing rate (breaths per minute).
+計算瞬時呼吸率（每分鐘呼吸次數）。
 
 ```python
 rate = nk.rsp_rate(peaks, sampling_rate=100, desired_length=None)
 ```
 
-**Method:**
-- Calculate inter-breath intervals from peak/trough timing
-- Convert to breaths per minute (BPM)
-- Interpolate to match signal length
+**方法：**
+- 從波峰/波谷時間計算呼吸間隔
+- 轉換為每分鐘呼吸次數（BPM）
+- 內插以匹配訊號長度
 
-**Typical values:**
-- Resting adult: 12-20 BPM
-- Slow breathing: <10 BPM (meditation, relaxation)
-- Fast breathing: >25 BPM (exercise, anxiety)
+**典型值：**
+- 靜息成人：12-20 BPM
+- 慢速呼吸：<10 BPM（冥想、放鬆）
+- 快速呼吸：>25 BPM（運動、焦慮）
 
 ### rsp_amplitude()
 
-Compute breath-to-breath amplitude (peak-to-trough difference).
+計算呼吸對呼吸振幅（波峰到波谷差異）。
 
 ```python
 amplitude = nk.rsp_amplitude(cleaned_rsp, peaks)
 ```
 
-**Interpretation:**
-- Larger amplitude: deeper breaths (tidal volume increase)
-- Smaller amplitude: shallow breaths
-- Variable amplitude: irregular breathing pattern
+**解讀：**
+- 較大振幅：較深的呼吸（潮氣量增加）
+- 較小振幅：淺呼吸
+- 可變振幅：不規則呼吸模式
 
-**Clinical relevance:**
-- Reduced amplitude: restrictive lung disease, chest wall rigidity
-- Increased amplitude: compensatory hyperventilation
+**臨床相關性：**
+- 振幅減少：限制性肺病、胸壁僵硬
+- 振幅增加：代償性過度換氣
 
 ### rsp_phase()
 
-Determine inspiration/expiration phases and completion percentage.
+確定吸氣/呼氣相位和完成百分比。
 
 ```python
 phase, completion = nk.rsp_phase(cleaned_rsp, peaks, sampling_rate=100)
 ```
 
-**Returns:**
-- `RSP_Phase`: Binary (0 = inspiration, 1 = expiration)
-- `RSP_Phase_Completion`: Continuous 0-1 indicating phase progress
+**回傳：**
+- `RSP_Phase`：二元（0 = 吸氣，1 = 呼氣）
+- `RSP_Phase_Completion`：連續 0-1 表示相位進度
 
-**Use cases:**
-- Respiratory-gated stimulus presentation
-- Phase-locked averaging
-- Respiratory-cardiac coupling analysis
+**應用場景：**
+- 呼吸門控刺激呈現
+- 相位鎖定平均
+- 呼吸-心臟耦合分析
 
 ### rsp_symmetry()
 
-Analyze breath symmetry patterns (peak-trough balance, rise-decay timing).
+分析呼吸對稱性模式（波峰-波谷平衡、上升-下降時間）。
 
 ```python
 symmetry = nk.rsp_symmetry(cleaned_rsp, peaks)
 ```
 
-**Metrics:**
-- Peak-trough symmetry: Are peaks and troughs equally spaced?
-- Rise-decay symmetry: Is inhalation time equal to exhalation time?
+**指標：**
+- 波峰-波谷對稱性：波峰和波谷是否等距？
+- 上升-下降對稱性：吸氣時間是否等於呼氣時間？
 
-**Interpretation:**
-- Symmetric: normal, relaxed breathing
-- Asymmetric: effortful breathing, airway obstruction
+**解讀：**
+- 對稱：正常、放鬆的呼吸
+- 不對稱：費力呼吸、呼吸道阻塞
 
-## Advanced Analysis Functions
+## 進階分析函數
 
 ### rsp_rrv()
 
-Respiratory Rate Variability - analogous to heart rate variability.
+呼吸率變異性 - 類似於心率變異性。
 
 ```python
 rrv_indices = nk.rsp_rrv(peaks, sampling_rate=100)
 ```
 
-**Time-domain metrics:**
-- `RRV_SDBB`: Standard deviation of breath-to-breath intervals
-- `RRV_RMSSD`: Root mean square of successive differences
-- `RRV_MeanBB`: Mean breath-to-breath interval
+**時域指標：**
+- `RRV_SDBB`：呼吸間隔標準差
+- `RRV_RMSSD`：連續差異的均方根
+- `RRV_MeanBB`：平均呼吸間隔
 
-**Frequency-domain metrics:**
-- Power in frequency bands (if applicable)
+**頻域指標：**
+- 頻帶功率（如適用）
 
-**Interpretation:**
-- Higher RRV: flexible, adaptive breathing control
-- Lower RRV: rigid, constrained breathing
-- Altered RRV: anxiety, respiratory disorders, autonomic dysfunction
+**解讀：**
+- 較高 RRV：靈活、適應性的呼吸控制
+- 較低 RRV：僵硬、受限的呼吸
+- RRV 改變：焦慮、呼吸疾病、自主神經功能障礙
 
-**Recording duration:**
-- Minimum: 2-3 minutes
-- Optimal: 5-10 minutes for stable estimates
+**記錄時長：**
+- 最低：2-3 分鐘
+- 最佳：5-10 分鐘以獲得穩定估計
 
 ### rsp_rvt()
 
-Respiratory Volume per Time - fMRI confound regressor.
+每時間呼吸量 - fMRI 混淆因子迴歸器。
 
 ```python
 rvt = nk.rsp_rvt(cleaned_rsp, peaks, sampling_rate=100)
 ```
 
-**Calculation:**
-- Derivative of respiratory signal
-- Captures rate of volume change
-- Correlates with BOLD signal fluctuations
+**計算：**
+- 呼吸訊號的導數
+- 捕捉體積變化率
+- 與 BOLD 訊號波動相關
 
-**Use cases:**
-- fMRI artifact correction
-- Neuroimaging preprocessing
-- Respiratory confound regression
+**應用場景：**
+- fMRI 偽跡校正
+- 神經影像預處理
+- 呼吸混淆因子迴歸
 
-**Reference:**
+**參考：**
 - Birn, R. M., et al. (2008). Separating respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in fMRI. NeuroImage, 31(4), 1536-1548.
 
 ### rsp_rav()
 
-Respiratory Amplitude Variability indices.
+呼吸振幅變異性指標。
 
 ```python
 rav = nk.rsp_rav(amplitude, sampling_rate=100)
 ```
 
-**Metrics:**
-- Standard deviation of amplitudes
-- Coefficient of variation
-- Range of amplitudes
+**指標：**
+- 振幅標準差
+- 變異係數
+- 振幅範圍
 
-**Interpretation:**
-- High RAV: irregular depth (sighing, arousal changes)
-- Low RAV: stable, controlled breathing
+**解讀：**
+- 高 RAV：不規則深度（嘆息、喚起變化）
+- 低 RAV：穩定、受控的呼吸
 
-## Analysis Functions
+## 分析函數
 
 ### rsp_analyze()
 
-Automatically select event-related or interval-related analysis.
+自動選擇事件相關或區間相關分析。
 
 ```python
 analysis = nk.rsp_analyze(signals, sampling_rate=100)
 ```
 
-**Mode selection:**
-- Duration < 10 seconds → event-related
-- Duration ≥ 10 seconds → interval-related
+**模式選擇：**
+- 時長 < 10 秒 → 事件相關
+- 時長 ≥ 10 秒 → 區間相關
 
 ### rsp_eventrelated()
 
-Analyze respiratory responses to specific events/stimuli.
+分析對特定事件/刺激的呼吸反應。
 
 ```python
 results = nk.rsp_eventrelated(epochs)
 ```
 
-**Computed metrics (per epoch):**
-- `RSP_Rate_Mean`: Average breathing rate during epoch
-- `RSP_Rate_Min/Max`: Minimum/maximum rate
-- `RSP_Amplitude_Mean`: Average breath depth
-- `RSP_Phase`: Respiratory phase at event onset
-- Dynamics of rate and amplitude across epoch
+**計算的指標（每時段）：**
+- `RSP_Rate_Mean`：時段期間的平均呼吸率
+- `RSP_Rate_Min/Max`：最小/最大呼吸率
+- `RSP_Amplitude_Mean`：平均呼吸深度
+- `RSP_Phase`：事件開始時的呼吸相位
+- 跨時段的呼吸率和振幅動態
 
-**Use cases:**
-- Respiratory changes during emotional stimuli
-- Anticipatory breathing before task events
-- Breath-holding or hyperventilation paradigms
+**應用場景：**
+- 情緒刺激期間的呼吸變化
+- 任務事件前的預期性呼吸
+- 屏息或過度換氣範式
 
 ### rsp_intervalrelated()
 
-Analyze extended respiratory recordings.
+分析延長的呼吸記錄。
 
 ```python
 results = nk.rsp_intervalrelated(signals, sampling_rate=100)
 ```
 
-**Computed metrics:**
-- `RSP_Rate_Mean`: Average breathing rate
-- `RSP_Rate_SD`: Variability in rate
-- `RSP_Amplitude_Mean`: Average breath depth
-- RRV indices (if sufficient data)
-- RAV indices
+**計算的指標：**
+- `RSP_Rate_Mean`：平均呼吸率
+- `RSP_Rate_SD`：呼吸率變異性
+- `RSP_Amplitude_Mean`：平均呼吸深度
+- RRV 指標（如有足夠資料）
+- RAV 指標
 
-**Recording duration:**
-- Minimum: 60 seconds
-- Optimal: 5-10 minutes
+**記錄時長：**
+- 最低：60 秒
+- 最佳：5-10 分鐘
 
-**Use cases:**
-- Resting state breathing patterns
-- Baseline respiratory assessment
-- Stress or relaxation monitoring
+**應用場景：**
+- 靜息狀態呼吸模式
+- 基線呼吸評估
+- 壓力或放鬆監測
 
-## Simulation and Visualization
+## 模擬和視覺化
 
 ### rsp_simulate()
 
-Generate synthetic respiratory signals for testing.
+生成用於測試的合成呼吸訊號。
 
 ```python
 synthetic_rsp = nk.rsp_simulate(duration=60, sampling_rate=100, respiratory_rate=15,
                                 method='sinusoidal', noise=0.1, random_state=42)
 ```
 
-**Methods:**
-- `'sinusoidal'`: Simple sinusoidal oscillation (fast)
-- `'breathmetrics'`: Advanced realistic breathing model (slower, more accurate)
+**方法：**
+- `'sinusoidal'`：簡單的正弦振盪（快速）
+- `'breathmetrics'`：進階真實呼吸模型（較慢、更準確）
 
-**Parameters:**
-- `respiratory_rate`: Breaths per minute (default: 15)
-- `noise`: Gaussian noise level
-- `random_state`: Seed for reproducibility
+**參數：**
+- `respiratory_rate`：每分鐘呼吸次數（預設：15）
+- `noise`：高斯噪音水平
+- `random_state`：可重現性種子
 
-**Use cases:**
-- Algorithm validation
-- Parameter tuning
-- Educational demonstrations
+**應用場景：**
+- 演算法驗證
+- 參數調整
+- 教育示範
 
 ### rsp_plot()
 
-Visualize processed respiratory signal.
+視覺化處理後的呼吸訊號。
 
 ```python
 nk.rsp_plot(signals, info, static=True)
 ```
 
-**Displays:**
-- Raw and cleaned respiratory signal
-- Detected peaks and troughs
-- Instantaneous breathing rate
-- Phase markers
+**顯示：**
+- 原始和清理後的呼吸訊號
+- 偵測到的波峰和波谷
+- 瞬時呼吸率
+- 相位標記
 
-**Interactive mode:** Set `static=False` for Plotly visualization
+**互動模式：** 設定 `static=False` 使用 Plotly 視覺化
 
-## Practical Considerations
+## 實務考量
 
-### Sampling Rate Recommendations
-- **Minimum**: 10 Hz (adequate for rate estimation)
-- **Standard**: 50-100 Hz (research-grade)
-- **High-resolution**: 1000 Hz (typically unnecessary, oversampled)
+### 取樣率建議
+- **最低**：10 Hz（足夠進行呼吸率估計）
+- **標準**：50-100 Hz（研究級）
+- **高解析度**：1000 Hz（通常不必要，過度取樣）
 
-### Recording Duration
-- **Rate estimation**: ≥10 seconds (few breaths)
-- **RRV analysis**: ≥2-3 minutes
-- **Resting state**: 5-10 minutes
-- **Circadian patterns**: Hours to days
+### 記錄時長
+- **呼吸率估計**：≥10 秒（幾次呼吸）
+- **RRV 分析**：≥2-3 分鐘
+- **靜息狀態**：5-10 分鐘
+- **晝夜模式**：數小時至數天
 
-### Signal Acquisition Methods
+### 訊號採集方法
 
-**Strain gauge/piezoelectric belt:**
-- Chest or abdominal expansion
-- Most common
-- Comfortable, non-invasive
+**應變規/壓電帶：**
+- 胸部或腹部擴張
+- 最常見
+- 舒適、非侵入性
 
-**Thermistor/thermocouple:**
-- Nasal/oral airflow temperature
-- Direct airflow measurement
-- Can be intrusive
+**熱敏電阻/熱電偶：**
+- 鼻/口氣流溫度
+- 直接氣流測量
+- 可能具侵入性
 
-**Capnography:**
-- End-tidal CO₂ measurement
-- Gold standard for physiology
-- Expensive, clinical settings
+**呼氣末 CO₂ 測量：**
+- 呼氣末 CO₂ 測量
+- 生理學黃金標準
+- 昂貴，臨床環境
 
-**Impedance pneumography:**
-- Derived from ECG electrodes
-- Convenient for multi-modal recording
-- Less accurate than dedicated sensors
+**阻抗描記法：**
+- 從 ECG 電極衍生
+- 方便進行多模態記錄
+- 不如專用感測器準確
 
-### Common Issues and Solutions
+### 常見問題和解決方案
 
-**Irregular breathing:**
-- Normal in awake, resting humans
-- Sighs, yawns, speech, swallowing cause variability
-- Exclude artifacts or model as events
+**不規則呼吸：**
+- 清醒休息狀態下正常
+- 嘆息、打哈欠、說話、吞嚥造成變異
+- 排除偽跡或作為事件建模
 
-**Shallow breathing:**
-- Low signal amplitude
-- Check sensor placement and tightness
-- Increase gain if available
+**淺呼吸：**
+- 低訊號振幅
+- 檢查感測器放置和緊度
+- 如可用，增加增益
 
-**Movement artifacts:**
-- Spikes or discontinuities
-- Minimize participant movement
-- Use robust peak detection (Hampel filter)
+**動作偽跡：**
+- 尖峰或不連續
+- 最小化參與者運動
+- 使用穩健的波峰偵測（Hampel 濾波器）
 
-**Talking/coughing:**
-- Disrupts natural breathing pattern
-- Annotate and exclude from analysis
-- Or model as separate event types
+**說話/咳嗽：**
+- 干擾自然呼吸模式
+- 註記並從分析中排除
+- 或作為單獨事件類型建模
 
-### Best Practices
+### 最佳實踐
 
-**Standard workflow:**
+**標準工作流程：**
 ```python
-# 1. Clean signal
+# 1. 清理訊號
 cleaned = nk.rsp_clean(rsp_raw, sampling_rate=100, method='khodadad2018')
 
-# 2. Detect peaks/troughs
+# 2. 偵測波峰/波谷
 peaks, info = nk.rsp_peaks(cleaned, sampling_rate=100)
 
-# 3. Extract features
+# 3. 提取特徵
 rate = nk.rsp_rate(peaks, sampling_rate=100, desired_length=len(cleaned))
 amplitude = nk.rsp_amplitude(cleaned, peaks)
 phase = nk.rsp_phase(cleaned, peaks, sampling_rate=100)
 
-# 4. Comprehensive processing (alternative)
+# 4. 完整處理（替代方案）
 signals, info = nk.rsp_process(rsp_raw, sampling_rate=100)
 
-# 5. Analyze
+# 5. 分析
 analysis = nk.rsp_analyze(signals, sampling_rate=100)
 ```
 
-**Respiratory-cardiac integration:**
+**呼吸-心臟整合：**
 ```python
-# Process both signals
+# 處理兩個訊號
 ecg_signals, ecg_info = nk.ecg_process(ecg, sampling_rate=1000)
 rsp_signals, rsp_info = nk.rsp_process(rsp, sampling_rate=100)
 
-# Respiratory sinus arrhythmia (RSA)
+# 呼吸性竇性心律不齊（RSA）
 rsa = nk.hrv_rsa(ecg_info['ECG_R_Peaks'], rsp_signals['RSP_Clean'], sampling_rate=1000)
 
-# Or use bio_process for multi-signal integration
+# 或使用 bio_process 進行多訊號整合
 bio_signals, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, sampling_rate=1000)
 ```
 
-## Clinical and Research Applications
+## 臨床和研究應用
 
-**Psychophysiology:**
-- Emotion and arousal (rapid, shallow breathing during stress)
-- Relaxation interventions (slow, deep breathing)
-- Respiratory biofeedback
+**心理生理學：**
+- 情緒和喚起（壓力期間快速、淺呼吸）
+- 放鬆介入（慢速、深呼吸）
+- 呼吸生物回饋
 
-**Anxiety and panic disorders:**
-- Hyperventilation during panic attacks
-- Altered breathing patterns
-- Breathing retraining therapy effectiveness
+**焦慮和恐慌症：**
+- 恐慌發作期間的過度換氣
+- 改變的呼吸模式
+- 呼吸再訓練治療效果
 
-**Sleep medicine:**
-- Sleep apnea detection
-- Breathing pattern abnormalities
-- Sleep stage correlates
+**睡眠醫學：**
+- 睡眠呼吸暫停偵測
+- 呼吸模式異常
+- 睡眠階段相關性
 
-**Cardiorespiratory coupling:**
-- Respiratory sinus arrhythmia (HRV modulation by breathing)
-- Heart-lung interaction
-- Autonomic nervous system assessment
+**心肺耦合：**
+- 呼吸性竇性心律不齊（呼吸對 HRV 的調節）
+- 心肺互動
+- 自主神經系統評估
 
-**Neuroimaging:**
-- fMRI artifact correction (RVT regressor)
-- BOLD signal confound removal
-- Respiratory-related brain activity
+**神經影像：**
+- fMRI 偽跡校正（RVT 迴歸器）
+- BOLD 訊號混淆因子移除
+- 與呼吸相關的大腦活動
 
-**Meditation and mindfulness:**
-- Breath awareness training
-- Slow breathing practices (resonance frequency ~6 breaths/min)
-- Physiological markers of relaxation
+**冥想和正念：**
+- 呼吸覺察訓練
+- 慢速呼吸練習（共振頻率 ~6 次/分鐘）
+- 放鬆的生理標記
 
-**Athletic performance:**
-- Breathing efficiency
-- Training adaptations
-- Recovery monitoring
+**運動表現：**
+- 呼吸效率
+- 訓練適應
+- 恢復監測
 
-## Interpretation Guidelines
+## 解讀指南
 
-**Breathing rate:**
-- **Normal**: 12-20 BPM (adults at rest)
-- **Slow**: <10 BPM (relaxation, meditation, sleep)
-- **Fast**: >25 BPM (exercise, anxiety, pain, fever)
+**呼吸率：**
+- **正常**：12-20 BPM（靜息成人）
+- **慢速**：<10 BPM（放鬆、冥想、睡眠）
+- **快速**：>25 BPM（運動、焦慮、疼痛、發燒）
 
-**Breathing amplitude:**
-- Tidal volume typically 400-600 mL at rest
-- Deep breathing: 2-3 L
-- Shallow breathing: <300 mL
+**呼吸振幅：**
+- 靜息時潮氣量通常 400-600 mL
+- 深呼吸：2-3 L
+- 淺呼吸：<300 mL
 
-**Respiratory patterns:**
-- **Normal**: Smooth, regular sinusoidal
-- **Cheyne-Stokes**: Crescendo-decrescendo with apneas (clinical pathology)
-- **Ataxic**: Completely irregular (brainstem lesion)
+**呼吸模式：**
+- **正常**：平滑、規則的正弦波
+- **Cheyne-Stokes**：漸強漸弱伴呼吸暫停（臨床病理）
+- **失調**：完全不規則（腦幹病變）
 
-## References
+## 參考文獻
 
 - Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... & Bayford, R. (2018). A review of tissue substitutes for ultrasound imaging. Ultrasound in medicine & biology, 44(9), 1807-1823.
 - Grossman, P., & Taylor, E. W. (2007). Toward understanding respiratory sinus arrhythmia: Relations to cardiac vagal tone, evolution and biobehavioral functions. Biological psychology, 74(2), 263-285.

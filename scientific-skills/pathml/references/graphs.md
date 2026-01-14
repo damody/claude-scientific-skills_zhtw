@@ -1,43 +1,43 @@
-# Graph Construction & Spatial Analysis
+# 圖構建與空間分析
 
-## Overview
+## 概述
 
-PathML provides tools for constructing spatial graphs from tissue images to represent cellular and tissue-level relationships. Graph-based representations enable sophisticated spatial analysis, including neighborhood analysis, cell-cell interaction studies, and graph neural network applications. These graphs capture both morphological features and spatial topology for downstream computational analysis.
+PathML 提供從組織影像構建空間圖的工具，用於表示細胞和組織層級的關係。基於圖的表示能實現複雜的空間分析，包括鄰域分析、細胞間交互作用研究和圖神經網路應用。這些圖同時捕捉形態特徵和空間拓撲結構，用於下游計算分析。
 
-## Graph Types
+## 圖類型
 
-PathML supports construction of multiple graph types:
+PathML 支援構建多種圖類型：
 
-### Cell Graphs
-- Nodes represent individual cells
-- Edges represent spatial proximity or biological interactions
-- Node features include morphology, marker expression, cell type
-- Suitable for single-cell spatial analysis
+### 細胞圖
+- 節點代表單個細胞
+- 邊代表空間鄰近性或生物交互作用
+- 節點特徵包括形態、標記表達、細胞類型
+- 適用於單細胞空間分析
 
-### Tissue Graphs
-- Nodes represent tissue regions or superpixels
-- Edges represent spatial adjacency
-- Node features include tissue composition, texture features
-- Suitable for tissue-level spatial patterns
+### 組織圖
+- 節點代表組織區域或超像素
+- 邊代表空間鄰接性
+- 節點特徵包括組織組成、紋理特徵
+- 適用於組織層級空間模式
 
-### Spatial Transcriptomics Graphs
-- Nodes represent spatial spots or cells
-- Edges encode spatial relationships
-- Node features include gene expression profiles
-- Suitable for spatial omics analysis
+### 空間轉錄組學圖
+- 節點代表空間點或細胞
+- 邊編碼空間關係
+- 節點特徵包括基因表達譜
+- 適用於空間組學分析
 
-## Graph Construction Workflow
+## 圖構建工作流程
 
-### From Segmentation to Graphs
+### 從分割到圖
 
-Convert nucleus or cell segmentation results into spatial graphs:
+將細胞核或細胞分割結果轉換為空間圖：
 
 ```python
 from pathml.graph import CellGraph
 from pathml.preprocessing import Pipeline, SegmentMIF
 import numpy as np
 
-# 1. Perform cell segmentation
+# 1. 執行細胞分割
 pipeline = Pipeline([
     SegmentMIF(
         nuclear_channel='DAPI',
@@ -47,157 +47,157 @@ pipeline = Pipeline([
 ])
 pipeline.run(slide)
 
-# 2. Extract instance segmentation mask
+# 2. 提取實例分割遮罩
 inst_map = slide.masks['cell_segmentation']
 
-# 3. Build cell graph
+# 3. 構建細胞圖
 cell_graph = CellGraph.from_instance_map(
     inst_map,
-    image=slide.image,  # Optional: for extracting visual features
-    connectivity='delaunay',  # 'knn', 'radius', or 'delaunay'
-    k=5,  # For knn: number of neighbors
-    radius=50  # For radius: distance threshold in pixels
+    image=slide.image,  # 可選：用於提取視覺特徵
+    connectivity='delaunay',  # 'knn'、'radius' 或 'delaunay'
+    k=5,  # 對於 knn：鄰居數量
+    radius=50  # 對於 radius：像素距離閾值
 )
 
-# 4. Access graph components
-nodes = cell_graph.nodes  # Node features
-edges = cell_graph.edges  # Edge list
-adjacency = cell_graph.adjacency_matrix  # Adjacency matrix
+# 4. 存取圖元件
+nodes = cell_graph.nodes  # 節點特徵
+edges = cell_graph.edges  # 邊列表
+adjacency = cell_graph.adjacency_matrix  # 鄰接矩陣
 ```
 
-### Connectivity Methods
+### 連接方法
 
-**K-Nearest Neighbors (KNN):**
+**K 近鄰（KNN）：**
 ```python
-# Connect each cell to its k nearest neighbors
+# 將每個細胞連接到其 k 個最近鄰居
 graph = CellGraph.from_instance_map(
     inst_map,
     connectivity='knn',
-    k=5  # Number of neighbors
+    k=5  # 鄰居數量
 )
 ```
-- Fixed degree per node
-- Captures local neighborhoods
-- Simple and interpretable
+- 每個節點固定的度數
+- 捕捉局部鄰域
+- 簡單且可解釋
 
-**Radius-based:**
+**基於半徑：**
 ```python
-# Connect cells within a distance threshold
+# 連接距離閾值內的細胞
 graph = CellGraph.from_instance_map(
     inst_map,
     connectivity='radius',
-    radius=100,  # Maximum distance in pixels
-    distance_metric='euclidean'  # or 'manhattan', 'chebyshev'
+    radius=100,  # 像素中的最大距離
+    distance_metric='euclidean'  # 或 'manhattan'、'chebyshev'
 )
 ```
-- Variable degree based on density
-- Biologically motivated (interaction range)
-- Captures physical proximity
+- 基於密度的可變度數
+- 生物學導向（交互作用範圍）
+- 捕捉物理鄰近性
 
-**Delaunay Triangulation:**
+**Delaunay 三角剖分：**
 ```python
-# Connect cells using Delaunay triangulation
+# 使用 Delaunay 三角剖分連接細胞
 graph = CellGraph.from_instance_map(
     inst_map,
     connectivity='delaunay'
 )
 ```
-- Creates connected graph from spatial positions
-- No isolated nodes (in convex hull)
-- Captures spatial tessellation
+- 從空間位置創建連通圖
+- 無孤立節點（在凸包內）
+- 捕捉空間鑲嵌
 
-**Contact-based:**
+**基於接觸：**
 ```python
-# Connect cells with touching boundaries
+# 連接邊界接觸的細胞
 graph = CellGraph.from_instance_map(
     inst_map,
     connectivity='contact',
-    dilation=2  # Dilate boundaries to capture near-contacts
+    dilation=2  # 擴張邊界以捕捉近接觸
 )
 ```
-- Physical cell-cell contacts
-- Most biologically direct
-- Sparse edges for separated cells
+- 物理細胞間接觸
+- 最直接的生物學意義
+- 分離細胞的邊較稀疏
 
-## Node Features
+## 節點特徵
 
-### Morphological Features
+### 形態特徵
 
-Extract shape and size features for each cell:
+為每個細胞提取形狀和大小特徵：
 
 ```python
 from pathml.graph import extract_morphology_features
 
-# Compute morphological features
+# 計算形態特徵
 morphology_features = extract_morphology_features(
     inst_map,
     features=[
-        'area',  # Cell area in pixels
-        'perimeter',  # Cell perimeter
-        'eccentricity',  # Shape elongation
-        'solidity',  # Convexity measure
+        'area',  # 細胞面積（像素）
+        'perimeter',  # 細胞周長
+        'eccentricity',  # 形狀伸長度
+        'solidity',  # 凸性度量
         'major_axis_length',
         'minor_axis_length',
-        'orientation'  # Cell orientation angle
+        'orientation'  # 細胞方向角度
     ]
 )
 
-# Add to graph
+# 添加到圖
 cell_graph.add_node_features(morphology_features, feature_names=['area', 'perimeter', ...])
 ```
 
-**Available morphological features:**
-- **Area** - Number of pixels
-- **Perimeter** - Boundary length
-- **Eccentricity** - 0 (circle) to 1 (line)
-- **Solidity** - Area / convex hull area
-- **Circularity** - 4π × area / perimeter²
-- **Major/Minor axis** - Lengths of fitted ellipse axes
-- **Orientation** - Angle of major axis
-- **Extent** - Area / bounding box area
+**可用形態特徵：**
+- **Area** - 像素數量
+- **Perimeter** - 邊界長度
+- **Eccentricity** - 0（圓形）到 1（線形）
+- **Solidity** - 面積 / 凸包面積
+- **Circularity** - 4π × 面積 / 周長²
+- **Major/Minor axis** - 擬合橢圓的軸長度
+- **Orientation** - 主軸角度
+- **Extent** - 面積 / 邊界框面積
 
-### Intensity Features
+### 強度特徵
 
-Extract marker expression or intensity statistics:
+提取標記表達或強度統計：
 
 ```python
 from pathml.graph import extract_intensity_features
 
-# Extract mean marker intensities per cell
+# 提取每個細胞的平均標記強度
 intensity_features = extract_intensity_features(
     inst_map,
-    image=multichannel_image,  # Shape: (H, W, C)
+    image=multichannel_image,  # 形狀：(H, W, C)
     channel_names=['DAPI', 'CD3', 'CD4', 'CD8', 'CD20'],
     statistics=['mean', 'std', 'median', 'max']
 )
 
-# Add to graph
+# 添加到圖
 cell_graph.add_node_features(
     intensity_features,
     feature_names=['DAPI_mean', 'CD3_mean', ...]
 )
 ```
 
-**Available statistics:**
-- **mean** - Average intensity
-- **median** - Median intensity
-- **std** - Standard deviation
-- **max** - Maximum intensity
-- **min** - Minimum intensity
-- **quantile_25/75** - Quartiles
+**可用統計量：**
+- **mean** - 平均強度
+- **median** - 中位強度
+- **std** - 標準差
+- **max** - 最大強度
+- **min** - 最小強度
+- **quantile_25/75** - 四分位數
 
-### Texture Features
+### 紋理特徵
 
-Compute texture descriptors for each cell region:
+為每個細胞區域計算紋理描述子：
 
 ```python
 from pathml.graph import extract_texture_features
 
-# Haralick texture features
+# Haralick 紋理特徵
 texture_features = extract_texture_features(
     inst_map,
     image=grayscale_image,
-    features='haralick',  # or 'lbp', 'gabor'
+    features='haralick',  # 或 'lbp'、'gabor'
     distance=1,
     angles=[0, np.pi/4, np.pi/2, 3*np.pi/4]
 )
@@ -205,20 +205,20 @@ texture_features = extract_texture_features(
 cell_graph.add_node_features(texture_features)
 ```
 
-### Cell Type Annotations
+### 細胞類型註釋
 
-Add cell type labels from classification:
+從分類添加細胞類型標籤：
 
 ```python
-# From ML model predictions
-cell_types = hovernet_type_predictions  # Array of cell type IDs
+# 來自 ML 模型預測
+cell_types = hovernet_type_predictions  # 細胞類型 ID 陣列
 
 cell_graph.add_node_features(
     cell_types,
     feature_names=['cell_type']
 )
 
-# One-hot encode cell types
+# 對細胞類型進行獨熱編碼
 cell_type_onehot = one_hot_encode(cell_types, num_classes=5)
 cell_graph.add_node_features(
     cell_type_onehot,
@@ -226,49 +226,49 @@ cell_graph.add_node_features(
 )
 ```
 
-## Edge Features
+## 邊特徵
 
-### Spatial Distance
+### 空間距離
 
-Compute edge features based on spatial relationships:
+基於空間關係計算邊特徵：
 
 ```python
 from pathml.graph import compute_edge_distances
 
-# Add pairwise distances as edge features
+# 添加成對距離作為邊特徵
 distances = compute_edge_distances(
     cell_graph,
-    metric='euclidean'  # or 'manhattan', 'chebyshev'
+    metric='euclidean'  # 或 'manhattan'、'chebyshev'
 )
 
 cell_graph.add_edge_features(distances, feature_names=['distance'])
 ```
 
-### Interaction Features
+### 交互作用特徵
 
-Model biological interactions between cell types:
+模擬細胞類型之間的生物交互作用：
 
 ```python
 from pathml.graph import compute_interaction_features
 
-# Cell type co-occurrence along edges
+# 沿邊的細胞類型共現
 interaction_features = compute_interaction_features(
     cell_graph,
     cell_types=cell_type_labels,
-    interaction_type='categorical'  # or 'numerical'
+    interaction_type='categorical'  # 或 'numerical'
 )
 
 cell_graph.add_edge_features(interaction_features)
 ```
 
-## Graph-Level Features
+## 圖層級特徵
 
-Aggregate features for entire graph:
+匯總整個圖的特徵：
 
 ```python
 from pathml.graph import compute_graph_features
 
-# Topological features
+# 拓撲特徵
 graph_features = compute_graph_features(
     cell_graph,
     features=[
@@ -281,85 +281,85 @@ graph_features = compute_graph_features(
     ]
 )
 
-# Cell composition features
+# 細胞組成特徵
 composition = cell_graph.compute_cell_type_composition(
     cell_type_labels,
-    normalize=True  # Proportions
+    normalize=True  # 比例
 )
 ```
 
-## Spatial Analysis
+## 空間分析
 
-### Neighborhood Analysis
+### 鄰域分析
 
-Analyze cell neighborhoods and microenvironments:
+分析細胞鄰域和微環境：
 
 ```python
 from pathml.graph import analyze_neighborhoods
 
-# Characterize neighborhoods around each cell
+# 表徵每個細胞周圍的鄰域
 neighborhoods = analyze_neighborhoods(
     cell_graph,
     cell_types=cell_type_labels,
-    radius=100,  # Neighborhood radius
+    radius=100,  # 鄰域半徑
     metrics=['diversity', 'density', 'composition']
 )
 
-# Neighborhood diversity (Shannon entropy)
+# 鄰域多樣性（Shannon 熵）
 diversity = neighborhoods['diversity']
 
-# Cell type composition in each neighborhood
+# 每個鄰域中的細胞類型組成
 composition = neighborhoods['composition']  # (n_cells, n_cell_types)
 ```
 
-### Spatial Clustering
+### 空間聚類
 
-Identify spatial clusters of cell types:
+識別細胞類型的空間聚類：
 
 ```python
 from pathml.graph import spatial_clustering
 import matplotlib.pyplot as plt
 
-# Detect spatial clusters
+# 檢測空間聚類
 clusters = spatial_clustering(
     cell_graph,
     cell_positions,
-    method='dbscan',  # or 'kmeans', 'hierarchical'
-    eps=50,  # DBSCAN: neighborhood radius
-    min_samples=10  # DBSCAN: minimum cluster size
+    method='dbscan',  # 或 'kmeans'、'hierarchical'
+    eps=50,  # DBSCAN：鄰域半徑
+    min_samples=10  # DBSCAN：最小聚類大小
 )
 
-# Visualize clusters
+# 視覺化聚類
 plt.scatter(
     cell_positions[:, 0],
     cell_positions[:, 1],
     c=clusters,
     cmap='tab20'
 )
-plt.title('Spatial Clusters')
+plt.title('空間聚類')
 plt.show()
 ```
 
-### Cell-Cell Interaction Analysis
+### 細胞間交互作用分析
 
-Test for enrichment or depletion of cell type interactions:
+測試細胞類型交互作用的富集或耗竭：
 
 ```python
 from pathml.graph import cell_interaction_analysis
 
-# Test for significant interactions
+# 測試顯著交互作用
 interaction_results = cell_interaction_analysis(
     cell_graph,
     cell_types=cell_type_labels,
-    method='permutation',  # or 'expected'
+    method='permutation',  # 或 'expected'
     n_permutations=1000,
     significance_level=0.05
 )
 
-# Interaction scores (positive = attraction, negative = avoidance)
+# 交互作用分數（正 = 吸引，負 = 排斥）
 interaction_matrix = interaction_results['scores']
 
-# Visualize with heatmap
+# 使用熱力圖視覺化
 import seaborn as sns
 sns.heatmap(
     interaction_matrix,
@@ -368,18 +368,18 @@ sns.heatmap(
     xticklabels=cell_type_names,
     yticklabels=cell_type_names
 )
-plt.title('Cell-Cell Interaction Scores')
+plt.title('細胞間交互作用分數')
 plt.show()
 ```
 
-### Spatial Statistics
+### 空間統計
 
-Compute spatial statistics and patterns:
+計算空間統計和模式：
 
 ```python
 from pathml.graph import spatial_statistics
 
-# Ripley's K function for spatial point patterns
+# 用於空間點模式的 Ripley K 函數
 ripleys_k = spatial_statistics(
     cell_positions,
     cell_types=cell_type_labels,
@@ -387,7 +387,7 @@ ripleys_k = spatial_statistics(
     radii=np.linspace(0, 200, 50)
 )
 
-# Nearest neighbor distances
+# 最近鄰距離
 nn_distances = spatial_statistics(
     cell_positions,
     statistic='nearest_neighbor',
@@ -395,26 +395,26 @@ nn_distances = spatial_statistics(
 )
 ```
 
-## Integration with Graph Neural Networks
+## 與圖神經網路整合
 
-### Convert to PyTorch Geometric Format
+### 轉換為 PyTorch Geometric 格式
 
 ```python
 from pathml.graph import to_pyg
 import torch
 from torch_geometric.data import Data
 
-# Convert to PyTorch Geometric Data object
+# 轉換為 PyTorch Geometric Data 物件
 pyg_data = cell_graph.to_pyg()
 
-# Access components
-x = pyg_data.x  # Node features (n_nodes, n_features)
-edge_index = pyg_data.edge_index  # Edge connectivity (2, n_edges)
-edge_attr = pyg_data.edge_attr  # Edge features (n_edges, n_edge_features)
-y = pyg_data.y  # Graph-level label
-pos = pyg_data.pos  # Node positions (n_nodes, 2)
+# 存取元件
+x = pyg_data.x  # 節點特徵 (n_nodes, n_features)
+edge_index = pyg_data.edge_index  # 邊連接 (2, n_edges)
+edge_attr = pyg_data.edge_attr  # 邊特徵 (n_edges, n_edge_features)
+y = pyg_data.y  # 圖層級標籤
+pos = pyg_data.pos  # 節點位置 (n_nodes, 2)
 
-# Use with PyTorch Geometric
+# 與 PyTorch Geometric 一起使用
 from torch_geometric.nn import GCNConv
 
 class GNN(torch.nn.Module):
@@ -433,24 +433,24 @@ model = GNN(in_channels=pyg_data.num_features, hidden_channels=64, out_channels=
 output = model(pyg_data)
 ```
 
-### Graph Dataset for Multiple Slides
+### 多個切片的圖資料集
 
 ```python
 from pathml.graph import GraphDataset
 from torch_geometric.loader import DataLoader
 
-# Create dataset of graphs from multiple slides
+# 從多個切片創建圖資料集
 graphs = []
 for slide in slides:
-    # Build graph for each slide
+    # 為每個切片構建圖
     cell_graph = CellGraph.from_instance_map(slide.inst_map, ...)
     pyg_graph = cell_graph.to_pyg()
     graphs.append(pyg_graph)
 
-# Create DataLoader
+# 創建 DataLoader
 loader = DataLoader(graphs, batch_size=32, shuffle=True)
 
-# Train GNN
+# 訓練 GNN
 for batch in loader:
     output = model(batch)
     loss = criterion(output, batch.y)
@@ -458,18 +458,18 @@ for batch in loader:
     optimizer.step()
 ```
 
-## Visualization
+## 視覺化
 
-### Graph Visualization
+### 圖視覺化
 
 ```python
 import matplotlib.pyplot as plt
 import networkx as nx
 
-# Convert to NetworkX
+# 轉換為 NetworkX
 nx_graph = cell_graph.to_networkx()
 
-# Draw graph with cell positions as layout
+# 使用細胞位置作為佈局繪製圖
 pos = {i: cell_graph.positions[i] for i in range(len(cell_graph.nodes))}
 
 plt.figure(figsize=(12, 12))
@@ -483,39 +483,39 @@ nx.draw_networkx(
     alpha=0.8
 )
 plt.axis('equal')
-plt.title('Cell Graph')
+plt.title('細胞圖')
 plt.show()
 ```
 
-### Overlay on Tissue Image
+### 疊加在組織影像上
 
 ```python
 from pathml.graph import visualize_graph_on_image
 
-# Visualize graph overlaid on tissue
+# 視覺化疊加在組織上的圖
 fig, ax = plt.subplots(figsize=(15, 15))
 ax.imshow(tissue_image)
 
-# Draw edges
+# 繪製邊
 for edge in cell_graph.edges:
     node1, node2 = edge
     pos1 = cell_graph.positions[node1]
     pos2 = cell_graph.positions[node2]
     ax.plot([pos1[0], pos2[0]], [pos1[1], pos2[1]], 'b-', alpha=0.3, linewidth=0.5)
 
-# Draw nodes colored by type
+# 繪製按類型著色的節點
 for cell_type in np.unique(cell_type_labels):
     mask = cell_type_labels == cell_type
     positions = cell_graph.positions[mask]
-    ax.scatter(positions[:, 0], positions[:, 1], label=f'Type {cell_type}', s=20)
+    ax.scatter(positions[:, 0], positions[:, 1], label=f'類型 {cell_type}', s=20)
 
 ax.legend()
 ax.axis('off')
-plt.title('Cell Graph on Tissue')
+plt.title('組織上的細胞圖')
 plt.show()
 ```
 
-## Complete Workflow Example
+## 完整工作流程範例
 
 ```python
 from pathml.core import SlideData, CODEXSlide
@@ -523,7 +523,7 @@ from pathml.preprocessing import Pipeline, CollapseRunsCODEX, SegmentMIF
 from pathml.graph import CellGraph, extract_morphology_features, extract_intensity_features
 import matplotlib.pyplot as plt
 
-# 1. Load and preprocess slide
+# 1. 載入並預處理切片
 slide = CODEXSlide('path/to/codex', stain='IF')
 
 pipeline = Pipeline([
@@ -536,7 +536,7 @@ pipeline = Pipeline([
 ])
 pipeline.run(slide)
 
-# 2. Build cell graph
+# 2. 構建細胞圖
 inst_map = slide.masks['cell_segmentation']
 cell_graph = CellGraph.from_instance_map(
     inst_map,
@@ -545,15 +545,15 @@ cell_graph = CellGraph.from_instance_map(
     k=6
 )
 
-# 3. Extract features
-# Morphological features
+# 3. 提取特徵
+# 形態特徵
 morph_features = extract_morphology_features(
     inst_map,
     features=['area', 'perimeter', 'eccentricity', 'solidity']
 )
 cell_graph.add_node_features(morph_features)
 
-# Intensity features (marker expression)
+# 強度特徵（標記表達）
 intensity_features = extract_intensity_features(
     inst_map,
     image=slide.image,
@@ -562,7 +562,7 @@ intensity_features = extract_intensity_features(
 )
 cell_graph.add_node_features(intensity_features)
 
-# 4. Spatial analysis
+# 4. 空間分析
 from pathml.graph import analyze_neighborhoods
 
 neighborhoods = analyze_neighborhoods(
@@ -572,14 +572,14 @@ neighborhoods = analyze_neighborhoods(
     metrics=['diversity', 'composition']
 )
 
-# 5. Export for GNN
+# 5. 匯出用於 GNN
 pyg_data = cell_graph.to_pyg()
 
-# 6. Visualize
+# 6. 視覺化
 plt.figure(figsize=(15, 15))
 plt.imshow(slide.image)
 
-# Overlay graph
+# 疊加圖
 nx_graph = cell_graph.to_networkx()
 pos = {i: cell_graph.positions[i] for i in range(cell_graph.num_nodes)}
 nx.draw_networkx(
@@ -591,63 +591,63 @@ nx.draw_networkx(
     with_labels=False
 )
 plt.axis('off')
-plt.title('Cell Graph with Spatial Neighborhood')
+plt.title('帶空間鄰域的細胞圖')
 plt.show()
 ```
 
-## Performance Considerations
+## 效能考量
 
-**Large tissue sections:**
-- Build graphs tile-by-tile, then merge
-- Use sparse adjacency matrices
-- Leverage GPU for feature extraction
+**大型組織切片：**
+- 逐圖磚構建圖，然後合併
+- 使用稀疏鄰接矩陣
+- 利用 GPU 進行特徵提取
 
-**Memory efficiency:**
-- Store only necessary edge features
-- Use int32/float32 instead of int64/float64
-- Batch process multiple slides
+**記憶體效率：**
+- 僅儲存必要的邊特徵
+- 使用 int32/float32 代替 int64/float64
+- 批次處理多個切片
 
-**Computational efficiency:**
-- Parallelize feature extraction across cells
-- Use KNN for faster neighbor queries
-- Cache computed features
+**計算效率：**
+- 跨細胞並行化特徵提取
+- 使用 KNN 進行更快的鄰居查詢
+- 快取計算的特徵
 
-## Best Practices
+## 最佳實踐
 
-1. **Choose appropriate connectivity:** KNN for uniform analysis, radius for physical interactions, contact for direct cell-cell communication
+1. **選擇適當的連接性：** KNN 用於均勻分析，radius 用於物理交互作用，contact 用於直接細胞間通訊
 
-2. **Normalize features:** Scale morphological and intensity features for GNN compatibility
+2. **標準化特徵：** 縮放形態和強度特徵以與 GNN 相容
 
-3. **Handle edge effects:** Exclude boundary cells or use tissue masks to define valid regions
+3. **處理邊緣效應：** 排除邊界細胞或使用組織遮罩定義有效區域
 
-4. **Validate graph construction:** Visualize graphs on small regions before large-scale processing
+4. **驗證圖構建：** 在大規模處理前在小區域上視覺化圖
 
-5. **Combine multiple feature types:** Morphology + intensity + texture provides rich representations
+5. **結合多種特徵類型：** 形態 + 強度 + 紋理提供豐富的表示
 
-6. **Consider tissue context:** Tissue type affects appropriate graph parameters (connectivity, radius)
+6. **考慮組織背景：** 組織類型影響適當的圖參數（連接性、半徑）
 
-## Common Issues and Solutions
+## 常見問題與解決方案
 
-**Issue: Too many/few edges**
-- Adjust k (KNN) or radius (radius-based) parameters
-- Verify pixel-to-micron conversion for biological relevance
+**問題：邊太多/太少**
+- 調整 k（KNN）或 radius（基於半徑）參數
+- 驗證像素到微米的轉換以確保生物學相關性
 
-**Issue: Memory errors with large graphs**
-- Process tiles separately and merge graphs
-- Use sparse matrix representations
-- Reduce edge features to essential ones
+**問題：大型圖的記憶體錯誤**
+- 分別處理圖磚並合併圖
+- 使用稀疏矩陣表示
+- 將邊特徵減少到必要的
 
-**Issue: Missing cells at tissue boundaries**
-- Apply edge_correction parameter
-- Use tissue masks to exclude invalid regions
+**問題：組織邊界處缺少細胞**
+- 應用 edge_correction 參數
+- 使用組織遮罩排除無效區域
 
-**Issue: Inconsistent feature scales**
-- Normalize features: `(x - mean) / std`
-- Use robust scaling for outliers
+**問題：特徵縮放不一致**
+- 標準化特徵：`(x - mean) / std`
+- 對異常值使用穩健縮放
 
-## Additional Resources
+## 其他資源
 
-- **PathML Graph API:** https://pathml.readthedocs.io/en/latest/api_graph_reference.html
-- **PyTorch Geometric:** https://pytorch-geometric.readthedocs.io/
-- **NetworkX:** https://networkx.org/
-- **Spatial Statistics:** Baddeley et al., "Spatial Point Patterns: Methodology and Applications with R"
+- **PathML Graph API：** https://pathml.readthedocs.io/en/latest/api_graph_reference.html
+- **PyTorch Geometric：** https://pytorch-geometric.readthedocs.io/
+- **NetworkX：** https://networkx.org/
+- **空間統計：** Baddeley 等人，"Spatial Point Patterns: Methodology and Applications with R"

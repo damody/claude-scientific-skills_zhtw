@@ -1,235 +1,235 @@
-# Matplotlib API Reference
+# Matplotlib API 參考
 
-This document provides a quick reference for the most commonly used matplotlib classes and methods.
+本文件提供最常用 matplotlib 類別和方法的快速參考。
 
-## Core Classes
+## 核心類別
 
 ### Figure
 
-The top-level container for all plot elements.
+所有繪圖元素的頂層容器。
 
-**Creation:**
+**建立：**
 ```python
 fig = plt.figure(figsize=(10, 6), dpi=100, facecolor='white')
 fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 6))
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 ```
 
-**Key Methods:**
-- `fig.add_subplot(nrows, ncols, index)` - Add a subplot
-- `fig.add_axes([left, bottom, width, height])` - Add axes at specific position
-- `fig.savefig(filename, dpi=300, bbox_inches='tight')` - Save figure
-- `fig.tight_layout()` - Adjust spacing to prevent overlaps
-- `fig.suptitle(title)` - Set figure title
-- `fig.legend()` - Create figure-level legend
-- `fig.colorbar(mappable)` - Add colorbar to figure
-- `plt.close(fig)` - Close figure to free memory
+**主要方法：**
+- `fig.add_subplot(nrows, ncols, index)` - 新增子圖
+- `fig.add_axes([left, bottom, width, height])` - 在特定位置新增座標軸
+- `fig.savefig(filename, dpi=300, bbox_inches='tight')` - 儲存圖形
+- `fig.tight_layout()` - 調整間距以防止重疊
+- `fig.suptitle(title)` - 設定圖形標題
+- `fig.legend()` - 建立圖形層級的圖例
+- `fig.colorbar(mappable)` - 為圖形新增色彩條
+- `plt.close(fig)` - 關閉圖形以釋放記憶體
 
-**Key Attributes:**
-- `fig.axes` - List of all axes in the figure
-- `fig.dpi` - Resolution in dots per inch
-- `fig.figsize` - Figure dimensions in inches (width, height)
+**主要屬性：**
+- `fig.axes` - 圖形中所有座標軸的列表
+- `fig.dpi` - 解析度（每英吋點數）
+- `fig.figsize` - 圖形尺寸（英吋）（寬度、高度）
 
 ### Axes
 
-The actual plotting area where data is visualized.
+資料視覺化的實際繪圖區域。
 
-**Creation:**
+**建立：**
 ```python
-fig, ax = plt.subplots()  # Single axes
-ax = fig.add_subplot(111)  # Alternative method
+fig, ax = plt.subplots()  # 單一座標軸
+ax = fig.add_subplot(111)  # 替代方法
 ```
 
-**Plotting Methods:**
+**繪圖方法：**
 
-**Line plots:**
-- `ax.plot(x, y, **kwargs)` - Line plot
-- `ax.step(x, y, where='pre'/'mid'/'post')` - Step plot
-- `ax.errorbar(x, y, yerr, xerr)` - Error bars
+**折線圖：**
+- `ax.plot(x, y, **kwargs)` - 折線圖
+- `ax.step(x, y, where='pre'/'mid'/'post')` - 階梯圖
+- `ax.errorbar(x, y, yerr, xerr)` - 誤差條
 
-**Scatter plots:**
-- `ax.scatter(x, y, s=size, c=color, marker='o', alpha=0.5)` - Scatter plot
+**散點圖：**
+- `ax.scatter(x, y, s=size, c=color, marker='o', alpha=0.5)` - 散點圖
 
-**Bar charts:**
-- `ax.bar(x, height, width=0.8, align='center')` - Vertical bar chart
-- `ax.barh(y, width)` - Horizontal bar chart
+**長條圖：**
+- `ax.bar(x, height, width=0.8, align='center')` - 垂直長條圖
+- `ax.barh(y, width)` - 水平長條圖
 
-**Statistical plots:**
-- `ax.hist(data, bins=10, density=False)` - Histogram
-- `ax.boxplot(data, labels=None)` - Box plot
-- `ax.violinplot(data)` - Violin plot
+**統計圖：**
+- `ax.hist(data, bins=10, density=False)` - 直方圖
+- `ax.boxplot(data, labels=None)` - 箱形圖
+- `ax.violinplot(data)` - 小提琴圖
 
-**2D plots:**
-- `ax.imshow(array, cmap='viridis', aspect='auto')` - Display image/matrix
-- `ax.contour(X, Y, Z, levels=10)` - Contour lines
-- `ax.contourf(X, Y, Z, levels=10)` - Filled contours
-- `ax.pcolormesh(X, Y, Z)` - Pseudocolor plot
+**2D 圖：**
+- `ax.imshow(array, cmap='viridis', aspect='auto')` - 顯示圖像/矩陣
+- `ax.contour(X, Y, Z, levels=10)` - 等高線
+- `ax.contourf(X, Y, Z, levels=10)` - 填充等高線
+- `ax.pcolormesh(X, Y, Z)` - 偽彩色圖
 
-**Filling:**
-- `ax.fill_between(x, y1, y2, alpha=0.3)` - Fill between curves
-- `ax.fill_betweenx(y, x1, x2)` - Fill between vertical curves
+**填充：**
+- `ax.fill_between(x, y1, y2, alpha=0.3)` - 曲線之間填充
+- `ax.fill_betweenx(y, x1, x2)` - 垂直曲線之間填充
 
-**Text and annotations:**
-- `ax.text(x, y, text, fontsize=12)` - Add text
-- `ax.annotate(text, xy=(x, y), xytext=(x2, y2), arrowprops={})` - Annotate with arrow
+**文字和註釋：**
+- `ax.text(x, y, text, fontsize=12)` - 新增文字
+- `ax.annotate(text, xy=(x, y), xytext=(x2, y2), arrowprops={})` - 帶箭頭的註釋
 
-**Customization Methods:**
+**自訂方法：**
 
-**Labels and titles:**
-- `ax.set_xlabel(label, fontsize=12)` - Set x-axis label
-- `ax.set_ylabel(label, fontsize=12)` - Set y-axis label
-- `ax.set_title(title, fontsize=14)` - Set axes title
+**標籤和標題：**
+- `ax.set_xlabel(label, fontsize=12)` - 設定 x 軸標籤
+- `ax.set_ylabel(label, fontsize=12)` - 設定 y 軸標籤
+- `ax.set_title(title, fontsize=14)` - 設定座標軸標題
 
-**Limits and scales:**
-- `ax.set_xlim(left, right)` - Set x-axis limits
-- `ax.set_ylim(bottom, top)` - Set y-axis limits
-- `ax.set_xscale('linear'/'log'/'symlog')` - Set x-axis scale
-- `ax.set_yscale('linear'/'log'/'symlog')` - Set y-axis scale
+**範圍和比例：**
+- `ax.set_xlim(left, right)` - 設定 x 軸範圍
+- `ax.set_ylim(bottom, top)` - 設定 y 軸範圍
+- `ax.set_xscale('linear'/'log'/'symlog')` - 設定 x 軸比例
+- `ax.set_yscale('linear'/'log'/'symlog')` - 設定 y 軸比例
 
-**Ticks:**
-- `ax.set_xticks(positions)` - Set x-tick positions
-- `ax.set_xticklabels(labels)` - Set x-tick labels
-- `ax.tick_params(axis='both', labelsize=10)` - Customize tick appearance
+**刻度：**
+- `ax.set_xticks(positions)` - 設定 x 刻度位置
+- `ax.set_xticklabels(labels)` - 設定 x 刻度標籤
+- `ax.tick_params(axis='both', labelsize=10)` - 自訂刻度外觀
 
-**Grid and spines:**
-- `ax.grid(True, alpha=0.3, linestyle='--')` - Add grid
-- `ax.spines['top'].set_visible(False)` - Hide top spine
-- `ax.spines['right'].set_visible(False)` - Hide right spine
+**網格和邊框：**
+- `ax.grid(True, alpha=0.3, linestyle='--')` - 新增網格
+- `ax.spines['top'].set_visible(False)` - 隱藏頂部邊框
+- `ax.spines['right'].set_visible(False)` - 隱藏右側邊框
 
-**Legend:**
-- `ax.legend(loc='best', fontsize=10, frameon=True)` - Add legend
-- `ax.legend(handles, labels)` - Custom legend
+**圖例：**
+- `ax.legend(loc='best', fontsize=10, frameon=True)` - 新增圖例
+- `ax.legend(handles, labels)` - 自訂圖例
 
-**Aspect and layout:**
-- `ax.set_aspect('equal'/'auto'/ratio)` - Set aspect ratio
-- `ax.invert_xaxis()` - Invert x-axis
-- `ax.invert_yaxis()` - Invert y-axis
+**長寬比和佈局：**
+- `ax.set_aspect('equal'/'auto'/ratio)` - 設定長寬比
+- `ax.invert_xaxis()` - 反轉 x 軸
+- `ax.invert_yaxis()` - 反轉 y 軸
 
-### pyplot Module
+### pyplot 模組
 
-High-level interface for quick plotting.
+用於快速繪圖的高階介面。
 
-**Figure creation:**
-- `plt.figure()` - Create new figure
-- `plt.subplots()` - Create figure and axes
-- `plt.subplot()` - Add subplot to current figure
+**圖形建立：**
+- `plt.figure()` - 建立新圖形
+- `plt.subplots()` - 建立圖形和座標軸
+- `plt.subplot()` - 為當前圖形新增子圖
 
-**Plotting (uses current axes):**
-- `plt.plot()` - Line plot
-- `plt.scatter()` - Scatter plot
-- `plt.bar()` - Bar chart
-- `plt.hist()` - Histogram
-- (All axes methods available)
+**繪圖（使用當前座標軸）：**
+- `plt.plot()` - 折線圖
+- `plt.scatter()` - 散點圖
+- `plt.bar()` - 長條圖
+- `plt.hist()` - 直方圖
+- （所有座標軸方法皆可用）
 
-**Display and save:**
-- `plt.show()` - Display figure
-- `plt.savefig()` - Save figure
-- `plt.close()` - Close figure
+**顯示和儲存：**
+- `plt.show()` - 顯示圖形
+- `plt.savefig()` - 儲存圖形
+- `plt.close()` - 關閉圖形
 
-**Style:**
-- `plt.style.use(style_name)` - Apply style sheet
-- `plt.style.available` - List available styles
+**樣式：**
+- `plt.style.use(style_name)` - 套用樣式表
+- `plt.style.available` - 列出可用樣式
 
-**State management:**
-- `plt.gca()` - Get current axes
-- `plt.gcf()` - Get current figure
-- `plt.sca(ax)` - Set current axes
-- `plt.clf()` - Clear current figure
-- `plt.cla()` - Clear current axes
+**狀態管理：**
+- `plt.gca()` - 取得當前座標軸
+- `plt.gcf()` - 取得當前圖形
+- `plt.sca(ax)` - 設定當前座標軸
+- `plt.clf()` - 清除當前圖形
+- `plt.cla()` - 清除當前座標軸
 
-## Line and Marker Styles
+## 線條和標記樣式
 
-### Line Styles
-- `'-'` or `'solid'` - Solid line
-- `'--'` or `'dashed'` - Dashed line
-- `'-.'` or `'dashdot'` - Dash-dot line
-- `':'` or `'dotted'` - Dotted line
-- `''` or `' '` or `'None'` - No line
+### 線條樣式
+- `'-'` 或 `'solid'` - 實線
+- `'--'` 或 `'dashed'` - 虛線
+- `'-.'` 或 `'dashdot'` - 點劃線
+- `':'` 或 `'dotted'` - 點線
+- `''` 或 `' '` 或 `'None'` - 無線條
 
-### Marker Styles
-- `'.'` - Point marker
-- `'o'` - Circle marker
-- `'v'`, `'^'`, `'<'`, `'>'` - Triangle markers
-- `'s'` - Square marker
-- `'p'` - Pentagon marker
-- `'*'` - Star marker
-- `'h'`, `'H'` - Hexagon markers
-- `'+'` - Plus marker
-- `'x'` - X marker
-- `'D'`, `'d'` - Diamond markers
+### 標記樣式
+- `'.'` - 點標記
+- `'o'` - 圓形標記
+- `'v'`、`'^'`、`'<'`、`'>'` - 三角形標記
+- `'s'` - 正方形標記
+- `'p'` - 五邊形標記
+- `'*'` - 星形標記
+- `'h'`、`'H'` - 六邊形標記
+- `'+'` - 加號標記
+- `'x'` - X 標記
+- `'D'`、`'d'` - 菱形標記
 
-### Color Specifications
+### 顏色指定
 
-**Single character shortcuts:**
-- `'b'` - Blue
-- `'g'` - Green
-- `'r'` - Red
-- `'c'` - Cyan
-- `'m'` - Magenta
-- `'y'` - Yellow
-- `'k'` - Black
-- `'w'` - White
+**單字元縮寫：**
+- `'b'` - 藍色
+- `'g'` - 綠色
+- `'r'` - 紅色
+- `'c'` - 青色
+- `'m'` - 洋紅色
+- `'y'` - 黃色
+- `'k'` - 黑色
+- `'w'` - 白色
 
-**Named colors:**
-- `'steelblue'`, `'coral'`, `'teal'`, etc.
-- See full list: https://matplotlib.org/stable/gallery/color/named_colors.html
+**命名顏色：**
+- `'steelblue'`、`'coral'`、`'teal'` 等
+- 完整列表請參閱：https://matplotlib.org/stable/gallery/color/named_colors.html
 
-**Other formats:**
-- Hex: `'#FF5733'`
-- RGB tuple: `(0.1, 0.2, 0.3)`
-- RGBA tuple: `(0.1, 0.2, 0.3, 0.5)`
+**其他格式：**
+- 十六進位：`'#FF5733'`
+- RGB 元組：`(0.1, 0.2, 0.3)`
+- RGBA 元組：`(0.1, 0.2, 0.3, 0.5)`
 
-## Common Parameters
+## 常用參數
 
-### Plot Function Parameters
+### 繪圖函數參數
 
 ```python
 ax.plot(x, y,
-    color='blue',           # Line color
-    linewidth=2,            # Line width
-    linestyle='--',         # Line style
-    marker='o',             # Marker style
-    markersize=8,           # Marker size
-    markerfacecolor='red',  # Marker fill color
-    markeredgecolor='black',# Marker edge color
-    markeredgewidth=1,      # Marker edge width
-    alpha=0.7,              # Transparency (0-1)
-    label='data',           # Legend label
-    zorder=2,               # Drawing order
-    rasterized=True         # Rasterize for smaller file size
+    color='blue',           # 線條顏色
+    linewidth=2,            # 線條寬度
+    linestyle='--',         # 線條樣式
+    marker='o',             # 標記樣式
+    markersize=8,           # 標記大小
+    markerfacecolor='red',  # 標記填充顏色
+    markeredgecolor='black',# 標記邊緣顏色
+    markeredgewidth=1,      # 標記邊緣寬度
+    alpha=0.7,              # 透明度（0-1）
+    label='data',           # 圖例標籤
+    zorder=2,               # 繪製順序
+    rasterized=True         # 點陣化以減少檔案大小
 )
 ```
 
-### Scatter Function Parameters
+### 散點函數參數
 
 ```python
 ax.scatter(x, y,
-    s=50,                   # Size (scalar or array)
-    c='blue',               # Color (scalar, array, or sequence)
-    marker='o',             # Marker style
-    cmap='viridis',         # Colormap (if c is numeric)
-    alpha=0.5,              # Transparency
-    edgecolors='black',     # Edge color
-    linewidths=1,           # Edge width
-    vmin=0, vmax=1,         # Color scale limits
-    label='data'            # Legend label
+    s=50,                   # 大小（純量或陣列）
+    c='blue',               # 顏色（純量、陣列或序列）
+    marker='o',             # 標記樣式
+    cmap='viridis',         # 色彩映射（如果 c 是數值）
+    alpha=0.5,              # 透明度
+    edgecolors='black',     # 邊緣顏色
+    linewidths=1,           # 邊緣寬度
+    vmin=0, vmax=1,         # 顏色比例範圍
+    label='data'            # 圖例標籤
 )
 ```
 
-### Text Parameters
+### 文字參數
 
 ```python
 ax.text(x, y, text,
-    fontsize=12,            # Font size
-    fontweight='normal',    # 'normal', 'bold', 'heavy', 'light'
-    fontstyle='normal',     # 'normal', 'italic', 'oblique'
-    fontfamily='sans-serif',# Font family
-    color='black',          # Text color
-    alpha=1.0,              # Transparency
-    ha='center',            # Horizontal alignment: 'left', 'center', 'right'
-    va='center',            # Vertical alignment: 'top', 'center', 'bottom', 'baseline'
-    rotation=0,             # Rotation angle in degrees
-    bbox=dict(              # Background box
+    fontsize=12,            # 字型大小
+    fontweight='normal',    # 'normal'、'bold'、'heavy'、'light'
+    fontstyle='normal',     # 'normal'、'italic'、'oblique'
+    fontfamily='sans-serif',# 字型系列
+    color='black',          # 文字顏色
+    alpha=1.0,              # 透明度
+    ha='center',            # 水平對齊：'left'、'center'、'right'
+    va='center',            # 垂直對齊：'top'、'center'、'bottom'、'baseline'
+    rotation=0,             # 旋轉角度（度）
+    bbox=dict(              # 背景框
         facecolor='white',
         edgecolor='black',
         boxstyle='round'
@@ -237,50 +237,50 @@ ax.text(x, y, text,
 )
 ```
 
-## rcParams Configuration
+## rcParams 設定
 
-Common rcParams settings for global customization:
+用於全域自訂的常用 rcParams 設定：
 
 ```python
-# Font settings
+# 字型設定
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica']
 plt.rcParams['font.size'] = 12
 
-# Figure settings
+# 圖形設定
 plt.rcParams['figure.figsize'] = (10, 6)
 plt.rcParams['figure.dpi'] = 100
 plt.rcParams['figure.facecolor'] = 'white'
 plt.rcParams['savefig.dpi'] = 300
 plt.rcParams['savefig.bbox'] = 'tight'
 
-# Axes settings
+# 座標軸設定
 plt.rcParams['axes.labelsize'] = 14
 plt.rcParams['axes.titlesize'] = 16
 plt.rcParams['axes.grid'] = True
 plt.rcParams['axes.grid.alpha'] = 0.3
 
-# Line settings
+# 線條設定
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['lines.markersize'] = 8
 
-# Tick settings
+# 刻度設定
 plt.rcParams['xtick.labelsize'] = 10
 plt.rcParams['ytick.labelsize'] = 10
-plt.rcParams['xtick.direction'] = 'in'  # 'in', 'out', 'inout'
+plt.rcParams['xtick.direction'] = 'in'  # 'in'、'out'、'inout'
 plt.rcParams['ytick.direction'] = 'in'
 
-# Legend settings
+# 圖例設定
 plt.rcParams['legend.fontsize'] = 12
 plt.rcParams['legend.frameon'] = True
 plt.rcParams['legend.framealpha'] = 0.8
 
-# Grid settings
+# 網格設定
 plt.rcParams['grid.alpha'] = 0.3
 plt.rcParams['grid.linestyle'] = '--'
 ```
 
-## GridSpec for Complex Layouts
+## 用於複雜佈局的 GridSpec
 
 ```python
 from matplotlib.gridspec import GridSpec
@@ -288,15 +288,15 @@ from matplotlib.gridspec import GridSpec
 fig = plt.figure(figsize=(12, 8))
 gs = GridSpec(3, 3, figure=fig, hspace=0.3, wspace=0.3)
 
-# Span multiple cells
-ax1 = fig.add_subplot(gs[0, :])      # Top row, all columns
-ax2 = fig.add_subplot(gs[1:, 0])     # Bottom two rows, first column
-ax3 = fig.add_subplot(gs[1, 1:])     # Middle row, last two columns
-ax4 = fig.add_subplot(gs[2, 1])      # Bottom row, middle column
-ax5 = fig.add_subplot(gs[2, 2])      # Bottom row, right column
+# 跨越多個單元格
+ax1 = fig.add_subplot(gs[0, :])      # 頂列，所有欄
+ax2 = fig.add_subplot(gs[1:, 0])     # 底部兩列，第一欄
+ax3 = fig.add_subplot(gs[1, 1:])     # 中間列，最後兩欄
+ax4 = fig.add_subplot(gs[2, 1])      # 底列，中間欄
+ax5 = fig.add_subplot(gs[2, 2])      # 底列，右欄
 ```
 
-## 3D Plotting
+## 3D 繪圖
 
 ```python
 from mpl_toolkits.mplot3d import Axes3D
@@ -304,22 +304,22 @@ from mpl_toolkits.mplot3d import Axes3D
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-# Plot types
-ax.plot(x, y, z)                    # 3D line
-ax.scatter(x, y, z)                 # 3D scatter
-ax.plot_surface(X, Y, Z)            # 3D surface
-ax.plot_wireframe(X, Y, Z)          # 3D wireframe
-ax.contour(X, Y, Z)                 # 3D contour
-ax.bar3d(x, y, z, dx, dy, dz)       # 3D bar
+# 繪圖類型
+ax.plot(x, y, z)                    # 3D 線圖
+ax.scatter(x, y, z)                 # 3D 散點圖
+ax.plot_surface(X, Y, Z)            # 3D 曲面
+ax.plot_wireframe(X, Y, Z)          # 3D 線框
+ax.contour(X, Y, Z)                 # 3D 等高線
+ax.bar3d(x, y, z, dx, dy, dz)       # 3D 長條
 
-# Customization
+# 自訂
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
-ax.view_init(elev=30, azim=45)      # Set viewing angle
+ax.view_init(elev=30, azim=45)      # 設定視角
 ```
 
-## Animation
+## 動畫
 
 ```python
 from matplotlib.animation import FuncAnimation
@@ -341,71 +341,71 @@ def update(frame):
 anim = FuncAnimation(fig, update, init_func=init,
                      frames=100, interval=50, blit=True)
 
-# Save animation
+# 儲存動畫
 anim.save('animation.gif', writer='pillow', fps=20)
 anim.save('animation.mp4', writer='ffmpeg', fps=20)
 ```
 
-## Image Operations
+## 圖像操作
 
 ```python
-# Read and display image
+# 讀取和顯示圖像
 img = plt.imread('image.png')
 ax.imshow(img)
 
-# Display matrix as image
+# 將矩陣顯示為圖像
 ax.imshow(matrix, cmap='viridis', aspect='auto',
           interpolation='nearest', origin='lower')
 
-# Colorbar
+# 色彩條
 cbar = plt.colorbar(im, ax=ax)
 cbar.set_label('Values')
 
-# Image extent (set coordinates)
+# 圖像範圍（設定座標）
 ax.imshow(img, extent=[x_min, x_max, y_min, y_max])
 ```
 
-## Event Handling
+## 事件處理
 
 ```python
-# Mouse click event
+# 滑鼠點擊事件
 def on_click(event):
     if event.inaxes:
         print(f'Clicked at x={event.xdata:.2f}, y={event.ydata:.2f}')
 
 fig.canvas.mpl_connect('button_press_event', on_click)
 
-# Key press event
+# 按鍵事件
 def on_key(event):
     print(f'Key pressed: {event.key}')
 
 fig.canvas.mpl_connect('key_press_event', on_key)
 ```
 
-## Useful Utilities
+## 實用工具
 
 ```python
-# Get current axis limits
+# 取得當前座標軸範圍
 xlims = ax.get_xlim()
 ylims = ax.get_ylim()
 
-# Set equal aspect ratio
+# 設定等比例長寬比
 ax.set_aspect('equal', adjustable='box')
 
-# Share axes between subplots
+# 子圖之間共享座標軸
 fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
 
-# Twin axes (two y-axes)
+# 雙 y 軸
 ax2 = ax1.twinx()
 
-# Remove tick labels
+# 移除刻度標籤
 ax.set_xticklabels([])
 ax.set_yticklabels([])
 
-# Scientific notation
+# 科學記號
 ax.ticklabel_format(style='scientific', axis='y', scilimits=(0,0))
 
-# Date formatting
+# 日期格式化
 import matplotlib.dates as mdates
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 ax.xaxis.set_major_locator(mdates.DayLocator(interval=7))

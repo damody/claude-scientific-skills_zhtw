@@ -1,34 +1,34 @@
-# Stable Baselines3 Callback System
+# Stable Baselines3 回調系統
 
-This document provides comprehensive information about the callback system in Stable Baselines3 for monitoring and controlling training.
+本文件提供 Stable Baselines3 中回調系統的完整資訊，用於監控和控制訓練。
 
-## Overview
+## 概述
 
-Callbacks are functions called at specific points during training to:
-- Monitor training metrics
-- Save checkpoints
-- Implement early stopping
-- Log custom metrics
-- Adjust hyperparameters dynamically
-- Trigger evaluations
+回調（Callback）是在訓練期間特定時間點呼叫的函數，用於：
+- 監控訓練指標
+- 儲存檢查點
+- 實作提早停止
+- 記錄自訂指標
+- 動態調整超參數
+- 觸發評估
 
-## Built-in Callbacks
+## 內建回調
 
 ### EvalCallback
 
-Evaluates the agent periodically and saves the best model.
+定期評估代理並儲存最佳模型。
 
 ```python
 from stable_baselines3.common.callbacks import EvalCallback
 
 eval_callback = EvalCallback(
-    eval_env,                                    # Separate evaluation environment
-    best_model_save_path="./logs/best_model/",  # Where to save best model
-    log_path="./logs/eval/",                    # Where to save evaluation logs
-    eval_freq=10000,                            # Evaluate every N steps
-    n_eval_episodes=5,                          # Number of episodes per evaluation
-    deterministic=True,                         # Use deterministic actions
-    render=False,                               # Render during evaluation
+    eval_env,                                    # 獨立的評估環境
+    best_model_save_path="./logs/best_model/",  # 儲存最佳模型的位置
+    log_path="./logs/eval/",                    # 儲存評估日誌的位置
+    eval_freq=10000,                            # 每 N 步評估一次
+    n_eval_episodes=5,                          # 每次評估的回合數
+    deterministic=True,                         # 使用確定性動作
+    render=False,                               # 評估時是否渲染
     verbose=1,
     warn=True,
 )
@@ -36,59 +36,59 @@ eval_callback = EvalCallback(
 model.learn(total_timesteps=100000, callback=eval_callback)
 ```
 
-**Key Features:**
-- Automatically saves best model based on mean reward
-- Logs evaluation metrics to TensorBoard
-- Can stop training if reward threshold reached
+**關鍵功能：**
+- 根據平均獎勵自動儲存最佳模型
+- 將評估指標記錄到 TensorBoard
+- 達到獎勵閾值時可停止訓練
 
-**Important:** When using vectorized training environments, adjust `eval_freq`:
+**重要：** 使用向量化訓練環境時，調整 `eval_freq`：
 ```python
-# With 4 parallel environments, divide eval_freq by n_envs
-eval_freq = 10000 // 4  # Evaluate every 10000 total environment steps
+# 使用 4 個平行環境時，將 eval_freq 除以 n_envs
+eval_freq = 10000 // 4  # 每 10000 個總環境步驟評估一次
 ```
 
 ### CheckpointCallback
 
-Saves model checkpoints at regular intervals.
+定期儲存模型檢查點。
 
 ```python
 from stable_baselines3.common.callbacks import CheckpointCallback
 
 checkpoint_callback = CheckpointCallback(
-    save_freq=10000,                     # Save every N steps
-    save_path="./logs/checkpoints/",     # Directory for checkpoints
-    name_prefix="rl_model",              # Prefix for checkpoint files
-    save_replay_buffer=True,             # Save replay buffer (off-policy only)
-    save_vecnormalize=True,              # Save VecNormalize stats
+    save_freq=10000,                     # 每 N 步儲存
+    save_path="./logs/checkpoints/",     # 檢查點目錄
+    name_prefix="rl_model",              # 檢查點檔案前綴
+    save_replay_buffer=True,             # 儲存回放緩衝區（僅離線策略）
+    save_vecnormalize=True,              # 儲存 VecNormalize 統計
     verbose=2,
 )
 
 model.learn(total_timesteps=100000, callback=checkpoint_callback)
 ```
 
-**Output Files:**
-- `rl_model_10000_steps.zip` - Model at 10k steps
-- `rl_model_20000_steps.zip` - Model at 20k steps
-- etc.
+**輸出檔案：**
+- `rl_model_10000_steps.zip` - 10k 步時的模型
+- `rl_model_20000_steps.zip` - 20k 步時的模型
+- 等等
 
-**Important:** Adjust `save_freq` for vectorized environments (divide by n_envs).
+**重要：** 向量化環境需調整 `save_freq`（除以 n_envs）。
 
 ### StopTrainingOnRewardThreshold
 
-Stops training when mean reward exceeds a threshold.
+當平均獎勵超過閾值時停止訓練。
 
 ```python
 from stable_baselines3.common.callbacks import StopTrainingOnRewardThreshold
 
 stop_callback = StopTrainingOnRewardThreshold(
-    reward_threshold=200,  # Stop when mean reward >= 200
+    reward_threshold=200,  # 當平均獎勵 >= 200 時停止
     verbose=1,
 )
 
-# Must be used with EvalCallback
+# 必須與 EvalCallback 一起使用
 eval_callback = EvalCallback(
     eval_env,
-    callback_on_new_best=stop_callback,  # Trigger when new best found
+    callback_on_new_best=stop_callback,  # 發現新最佳時觸發
     eval_freq=10000,
     n_eval_episodes=5,
 )
@@ -98,18 +98,18 @@ model.learn(total_timesteps=1000000, callback=eval_callback)
 
 ### StopTrainingOnNoModelImprovement
 
-Stops training if model doesn't improve for N evaluations.
+如果模型在 N 次評估內沒有改善則停止訓練。
 
 ```python
 from stable_baselines3.common.callbacks import StopTrainingOnNoModelImprovement
 
 stop_callback = StopTrainingOnNoModelImprovement(
-    max_no_improvement_evals=10,  # Stop after 10 evals with no improvement
-    min_evals=20,                 # Minimum evaluations before stopping
+    max_no_improvement_evals=10,  # 10 次評估無改善後停止
+    min_evals=20,                 # 停止前的最少評估次數
     verbose=1,
 )
 
-# Use with EvalCallback
+# 與 EvalCallback 一起使用
 eval_callback = EvalCallback(
     eval_env,
     callback_after_eval=stop_callback,
@@ -121,13 +121,13 @@ model.learn(total_timesteps=1000000, callback=eval_callback)
 
 ### StopTrainingOnMaxEpisodes
 
-Stops training after a maximum number of episodes.
+在達到最大回合數後停止訓練。
 
 ```python
 from stable_baselines3.common.callbacks import StopTrainingOnMaxEpisodes
 
 stop_callback = StopTrainingOnMaxEpisodes(
-    max_episodes=1000,  # Stop after 1000 episodes
+    max_episodes=1000,  # 1000 回合後停止
     verbose=1,
 )
 
@@ -136,7 +136,7 @@ model.learn(total_timesteps=1000000, callback=stop_callback)
 
 ### ProgressBarCallback
 
-Displays a progress bar during training (requires tqdm).
+在訓練期間顯示進度條（需要 tqdm）。
 
 ```python
 from stable_baselines3.common.callbacks import ProgressBarCallback
@@ -146,89 +146,89 @@ progress_callback = ProgressBarCallback()
 model.learn(total_timesteps=100000, callback=progress_callback)
 ```
 
-**Output:**
+**輸出：**
 ```
 100%|██████████| 100000/100000 [05:23<00:00, 309.31it/s]
 ```
 
-## Creating Custom Callbacks
+## 建立自訂回調
 
-### BaseCallback Structure
+### BaseCallback 結構
 
 ```python
 from stable_baselines3.common.callbacks import BaseCallback
 
 class CustomCallback(BaseCallback):
     """
-    Custom callback template.
+    自訂回調範本。
     """
 
     def __init__(self, verbose=0):
         super().__init__(verbose)
-        # Custom initialization
+        # 自訂初始化
 
     def _init_callback(self) -> None:
         """
-        Called once when training starts.
-        Useful for initialization that requires access to model/env.
+        訓練開始時呼叫一次。
+        用於需要存取 model/env 的初始化。
         """
         pass
 
     def _on_training_start(self) -> None:
         """
-        Called before the first rollout starts.
+        在第一次資料收集開始前呼叫。
         """
         pass
 
     def _on_rollout_start(self) -> None:
         """
-        Called before collecting new samples (on-policy algorithms).
+        在收集新樣本前呼叫（在線策略演算法）。
         """
         pass
 
     def _on_step(self) -> bool:
         """
-        Called after every step in the environment.
+        在環境中每一步後呼叫。
 
-        Returns:
-            bool: If False, training will be stopped.
+        返回：
+            bool：如果為 False，訓練將停止。
         """
-        return True  # Continue training
+        return True  # 繼續訓練
 
     def _on_rollout_end(self) -> None:
         """
-        Called after rollout ends (on-policy algorithms).
+        在資料收集結束後呼叫（在線策略演算法）。
         """
         pass
 
     def _on_training_end(self) -> None:
         """
-        Called at the end of training.
+        在訓練結束時呼叫。
         """
         pass
 ```
 
-### Useful Attributes
+### 可用屬性
 
-Inside callbacks, you have access to:
+在回調內部，您可以存取：
 
-- **`self.model`**: The RL algorithm instance
-- **`self.training_env`**: The training environment
-- **`self.n_calls`**: Number of times `_on_step()` was called
-- **`self.num_timesteps`**: Total number of environment steps
-- **`self.locals`**: Local variables from the algorithm (varies by algorithm)
-- **`self.globals`**: Global variables from the algorithm
-- **`self.logger`**: Logger for TensorBoard/CSV logging
-- **`self.parent`**: Parent callback (if used in CallbackList)
+- **`self.model`**：RL 演算法實例
+- **`self.training_env`**：訓練環境
+- **`self.n_calls`**：`_on_step()` 被呼叫的次數
+- **`self.num_timesteps`**：總環境步數
+- **`self.locals`**：演算法的區域變數（因演算法而異）
+- **`self.globals`**：演算法的全域變數
+- **`self.logger`**：TensorBoard/CSV 記錄的日誌記錄器
+- **`self.parent`**：父回調（如果在 CallbackList 中使用）
 
-## Custom Callback Examples
+## 自訂回調範例
 
-### Example 1: Log Custom Metrics
+### 範例 1：記錄自訂指標
 
 ```python
 class LogCustomMetricsCallback(BaseCallback):
     """
-    Log custom metrics to TensorBoard.
+    將自訂指標記錄到 TensorBoard。
     """
 
     def __init__(self, verbose=0):
@@ -236,13 +236,13 @@ class LogCustomMetricsCallback(BaseCallback):
         self.episode_rewards = []
 
     def _on_step(self) -> bool:
-        # Check if episode ended
+        # 檢查回合是否結束
         if self.locals["dones"][0]:
-            # Log episode reward
+            # 記錄回合獎勵
             episode_reward = self.locals["infos"][0].get("episode", {}).get("r", 0)
             self.episode_rewards.append(episode_reward)
 
-            # Log to TensorBoard
+            # 記錄到 TensorBoard
             self.logger.record("custom/episode_reward", episode_reward)
             self.logger.record("custom/mean_reward_last_100",
                              np.mean(self.episode_rewards[-100:]))
@@ -250,12 +250,12 @@ class LogCustomMetricsCallback(BaseCallback):
         return True
 ```
 
-### Example 2: Adjust Learning Rate
+### 範例 2：調整學習率
 
 ```python
 class LinearScheduleCallback(BaseCallback):
     """
-    Linearly decrease learning rate during training.
+    在訓練期間線性降低學習率。
     """
 
     def __init__(self, initial_lr=3e-4, final_lr=3e-5, verbose=0):
@@ -264,28 +264,28 @@ class LinearScheduleCallback(BaseCallback):
         self.final_lr = final_lr
 
     def _on_step(self) -> bool:
-        # Calculate progress (0 to 1)
+        # 計算進度（0 到 1）
         progress = self.num_timesteps / self.locals["total_timesteps"]
 
-        # Linear interpolation
+        # 線性內插
         new_lr = self.initial_lr + (self.final_lr - self.initial_lr) * progress
 
-        # Update learning rate
+        # 更新學習率
         for param_group in self.model.policy.optimizer.param_groups:
             param_group["lr"] = new_lr
 
-        # Log learning rate
+        # 記錄學習率
         self.logger.record("train/learning_rate", new_lr)
 
         return True
 ```
 
-### Example 3: Early Stopping on Moving Average
+### 範例 3：基於移動平均的提早停止
 
 ```python
 class EarlyStoppingCallback(BaseCallback):
     """
-    Stop training if moving average of rewards doesn't improve.
+    如果獎勵的移動平均沒有改善則停止訓練。
     """
 
     def __init__(self, check_freq=10000, min_reward=200, window=100, verbose=0):
@@ -296,31 +296,31 @@ class EarlyStoppingCallback(BaseCallback):
         self.rewards = []
 
     def _on_step(self) -> bool:
-        # Collect episode rewards
+        # 收集回合獎勵
         if self.locals["dones"][0]:
             reward = self.locals["infos"][0].get("episode", {}).get("r", 0)
             self.rewards.append(reward)
 
-        # Check every check_freq steps
+        # 每 check_freq 步檢查一次
         if self.n_calls % self.check_freq == 0 and len(self.rewards) >= self.window:
             mean_reward = np.mean(self.rewards[-self.window:])
             if self.verbose > 0:
-                print(f"Mean reward: {mean_reward:.2f}")
+                print(f"平均獎勵：{mean_reward:.2f}")
 
             if mean_reward >= self.min_reward:
                 if self.verbose > 0:
-                    print(f"Stopping: reward threshold reached!")
-                return False  # Stop training
+                    print(f"停止：達到獎勵閾值！")
+                return False  # 停止訓練
 
-        return True  # Continue training
+        return True  # 繼續訓練
 ```
 
-### Example 4: Save Best Model by Custom Metric
+### 範例 4：根據自訂指標儲存最佳模型
 
 ```python
 class SaveBestModelCallback(BaseCallback):
     """
-    Save model when custom metric is best.
+    當自訂指標最佳時儲存模型。
     """
 
     def __init__(self, check_freq=1000, save_path="./best_model/", verbose=0):
@@ -335,31 +335,31 @@ class SaveBestModelCallback(BaseCallback):
 
     def _on_step(self) -> bool:
         if self.n_calls % self.check_freq == 0:
-            # Calculate custom metric (example: policy entropy)
+            # 計算自訂指標（範例：策略熵）
             custom_metric = self.locals.get("entropy_losses", [0])[-1]
 
             if custom_metric > self.best_score:
                 self.best_score = custom_metric
                 if self.verbose > 0:
-                    print(f"New best! Saving model to {self.save_path}")
+                    print(f"新最佳！儲存模型到 {self.save_path}")
                 self.model.save(os.path.join(self.save_path, "best_model"))
 
         return True
 ```
 
-### Example 5: Log Environment-Specific Information
+### 範例 5：記錄環境特定資訊
 
 ```python
 class EnvironmentInfoCallback(BaseCallback):
     """
-    Log custom info from environment.
+    記錄來自環境的自訂資訊。
     """
 
     def _on_step(self) -> bool:
-        # Access info dict from environment
+        # 從環境存取 info 字典
         info = self.locals["infos"][0]
 
-        # Log custom metrics from environment
+        # 記錄來自環境的自訂指標
         if "distance_to_goal" in info:
             self.logger.record("env/distance_to_goal", info["distance_to_goal"])
 
@@ -369,9 +369,9 @@ class EnvironmentInfoCallback(BaseCallback):
         return True
 ```
 
-## Chaining Multiple Callbacks
+## 鏈接多個回調
 
-Use `CallbackList` to combine multiple callbacks:
+使用 `CallbackList` 組合多個回調：
 
 ```python
 from stable_baselines3.common.callbacks import CallbackList
@@ -386,7 +386,7 @@ callback_list = CallbackList([
 model.learn(total_timesteps=100000, callback=callback_list)
 ```
 
-Or pass a list directly:
+或直接傳遞列表：
 
 ```python
 model.learn(
@@ -395,55 +395,55 @@ model.learn(
 )
 ```
 
-## Event-Based Callbacks
+## 事件驅動回調
 
-Callbacks can trigger other callbacks on specific events:
+回調可以在特定事件上觸發其他回調：
 
 ```python
 from stable_baselines3.common.callbacks import EventCallback
 
-# Stop training when reward threshold reached
+# 達到獎勵閾值時停止訓練
 stop_callback = StopTrainingOnRewardThreshold(reward_threshold=200)
 
-# Evaluate periodically and trigger stop_callback when new best found
+# 定期評估並在發現新最佳時觸發 stop_callback
 eval_callback = EvalCallback(
     eval_env,
-    callback_on_new_best=stop_callback,  # Triggered when new best model
+    callback_on_new_best=stop_callback,  # 發現新最佳模型時觸發
     eval_freq=10000,
 )
 ```
 
-## Logging to TensorBoard
+## 記錄到 TensorBoard
 
-Use `self.logger.record()` to log metrics:
+使用 `self.logger.record()` 記錄指標：
 
 ```python
 class TensorBoardCallback(BaseCallback):
     def _on_step(self) -> bool:
-        # Log scalar
+        # 記錄純量
         self.logger.record("custom/my_metric", value)
 
-        # Log multiple metrics
+        # 記錄多個指標
         self.logger.record("custom/metric1", value1)
         self.logger.record("custom/metric2", value2)
 
-        # Logger automatically writes to TensorBoard
+        # 日誌記錄器自動寫入 TensorBoard
         return True
 ```
 
-**View in TensorBoard:**
+**在 TensorBoard 中查看：**
 ```bash
 tensorboard --logdir ./logs/
 ```
 
-## Advanced Patterns
+## 進階模式
 
-### Curriculum Learning
+### 課程學習
 
 ```python
 class CurriculumCallback(BaseCallback):
     """
-    Increase task difficulty over time.
+    隨時間增加任務難度。
     """
 
     def __init__(self, difficulty_schedule, verbose=0):
@@ -451,7 +451,7 @@ class CurriculumCallback(BaseCallback):
         self.difficulty_schedule = difficulty_schedule
 
     def _on_step(self) -> bool:
-        # Update environment difficulty based on progress
+        # 根據進度更新環境難度
         progress = self.num_timesteps / self.locals["total_timesteps"]
 
         for threshold, difficulty in self.difficulty_schedule:
@@ -461,12 +461,12 @@ class CurriculumCallback(BaseCallback):
         return True
 ```
 
-### Population-Based Training
+### 基於族群的訓練
 
 ```python
 class PopulationBasedCallback(BaseCallback):
     """
-    Adjust hyperparameters based on performance.
+    根據效能調整超參數。
     """
 
     def __init__(self, check_freq=10000, verbose=0):
@@ -476,81 +476,81 @@ class PopulationBasedCallback(BaseCallback):
 
     def _on_step(self) -> bool:
         if self.n_calls % self.check_freq == 0:
-            # Evaluate performance
+            # 評估效能
             perf = self._evaluate_performance()
             self.performance_history.append(perf)
 
-            # Adjust hyperparameters if performance plateaus
+            # 如果效能停滯則調整超參數
             if len(self.performance_history) >= 3:
                 recent = self.performance_history[-3:]
-                if max(recent) - min(recent) < 0.01:  # Plateau detected
+                if max(recent) - min(recent) < 0.01:  # 檢測到停滯
                     self._adjust_hyperparameters()
 
         return True
 
     def _adjust_hyperparameters(self):
-        # Example: increase learning rate
+        # 範例：增加學習率
         for param_group in self.model.policy.optimizer.param_groups:
             param_group["lr"] *= 1.2
 ```
 
-## Debugging Tips
+## 除錯提示
 
-### Print Available Attributes
+### 列印可用屬性
 
 ```python
 class DebugCallback(BaseCallback):
     def _on_step(self) -> bool:
         if self.n_calls == 1:
-            print("Available in self.locals:")
+            print("self.locals 中可用的內容：")
             for key in self.locals.keys():
                 print(f"  {key}: {type(self.locals[key])}")
         return True
 ```
 
-### Common Issues
+### 常見問題
 
-1. **Callback not being called:**
-   - Ensure callback is passed to `model.learn()`
-   - Check that `_on_step()` returns `True`
+1. **回調未被呼叫：**
+   - 確保回調已傳遞給 `model.learn()`
+   - 檢查 `_on_step()` 是否返回 `True`
 
-2. **AttributeError in callback:**
-   - Not all attributes available in all callbacks
-   - Use `self.locals.get("key", default)` for safety
+2. **回調中的 AttributeError：**
+   - 並非所有屬性在所有回調中都可用
+   - 使用 `self.locals.get("key", default)` 以確保安全
 
-3. **Memory leaks:**
-   - Don't store large arrays in callback state
-   - Clear buffers periodically
+3. **記憶體洩漏：**
+   - 不要在回調狀態中儲存大型陣列
+   - 定期清除緩衝區
 
-4. **Performance impact:**
-   - Minimize computation in `_on_step()` (called every step)
-   - Use `check_freq` to limit expensive operations
+4. **效能影響：**
+   - 減少 `_on_step()` 中的計算（每步都會呼叫）
+   - 使用 `check_freq` 限制昂貴的操作
 
-## Best Practices
+## 最佳實踐
 
-1. **Use appropriate callback timing:**
-   - `_on_step()`: For metrics that change every step
-   - `_on_rollout_end()`: For metrics computed over rollouts
-   - `_init_callback()`: For one-time initialization
+1. **使用適當的回調時機：**
+   - `_on_step()`：用於每步都會變化的指標
+   - `_on_rollout_end()`：用於在資料收集期間計算的指標
+   - `_init_callback()`：用於一次性初始化
 
-2. **Log efficiently:**
-   - Don't log every step (hurts performance)
-   - Aggregate metrics and log periodically
+2. **高效記錄：**
+   - 不要每步都記錄（會影響效能）
+   - 聚合指標並定期記錄
 
-3. **Handle vectorized environments:**
-   - Remember that `dones`, `infos`, etc. are arrays
-   - Check `dones[i]` for each environment
+3. **處理向量化環境：**
+   - 記住 `dones`、`infos` 等是陣列
+   - 檢查每個環境的 `dones[i]`
 
-4. **Test callbacks independently:**
-   - Create simple test cases
-   - Verify callback behavior before long training runs
+4. **獨立測試回調：**
+   - 建立簡單的測試案例
+   - 在長時間訓練前驗證回調行為
 
-5. **Document custom callbacks:**
-   - Clear docstrings
-   - Example usage in comments
+5. **記錄自訂回調：**
+   - 清晰的文件字串
+   - 在註解中提供使用範例
 
-## Additional Resources
+## 額外資源
 
-- Official SB3 Callbacks Guide: https://stable-baselines3.readthedocs.io/en/master/guide/callbacks.html
-- Callback API Reference: https://stable-baselines3.readthedocs.io/en/master/common/callbacks.html
-- TensorBoard Documentation: https://www.tensorflow.org/tensorboard
+- 官方 SB3 回調指南：https://stable-baselines3.readthedocs.io/en/master/guide/callbacks.html
+- 回調 API 參考：https://stable-baselines3.readthedocs.io/en/master/common/callbacks.html
+- TensorBoard 文件：https://www.tensorflow.org/tensorboard

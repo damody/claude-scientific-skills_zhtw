@@ -1,395 +1,395 @@
-# RDKit API Reference
+# RDKit API 參考
 
-This document provides a comprehensive reference for RDKit's Python API, organized by functionality.
+本文件提供 RDKit Python API 的完整參考，按功能組織。
 
-## Core Module: rdkit.Chem
+## 核心模組：rdkit.Chem
 
-The fundamental module for working with molecules.
+處理分子的基本模組。
 
-### Molecule I/O
+### 分子 I/O
 
-**Reading Molecules:**
+**讀取分子：**
 
-- `Chem.MolFromSmiles(smiles, sanitize=True)` - Parse SMILES string
-- `Chem.MolFromSmarts(smarts)` - Parse SMARTS pattern
-- `Chem.MolFromMolFile(filename, sanitize=True, removeHs=True)` - Read MOL file
-- `Chem.MolFromMolBlock(molblock, sanitize=True, removeHs=True)` - Parse MOL block string
-- `Chem.MolFromMol2File(filename, sanitize=True, removeHs=True)` - Read MOL2 file
-- `Chem.MolFromMol2Block(molblock, sanitize=True, removeHs=True)` - Parse MOL2 block
-- `Chem.MolFromPDBFile(filename, sanitize=True, removeHs=True)` - Read PDB file
-- `Chem.MolFromPDBBlock(pdbblock, sanitize=True, removeHs=True)` - Parse PDB block
-- `Chem.MolFromInchi(inchi, sanitize=True, removeHs=True)` - Parse InChI string
-- `Chem.MolFromSequence(seq, sanitize=True)` - Create molecule from peptide sequence
+- `Chem.MolFromSmiles(smiles, sanitize=True)` - 解析 SMILES 字串
+- `Chem.MolFromSmarts(smarts)` - 解析 SMARTS 模式
+- `Chem.MolFromMolFile(filename, sanitize=True, removeHs=True)` - 讀取 MOL 檔案
+- `Chem.MolFromMolBlock(molblock, sanitize=True, removeHs=True)` - 解析 MOL 區塊字串
+- `Chem.MolFromMol2File(filename, sanitize=True, removeHs=True)` - 讀取 MOL2 檔案
+- `Chem.MolFromMol2Block(molblock, sanitize=True, removeHs=True)` - 解析 MOL2 區塊
+- `Chem.MolFromPDBFile(filename, sanitize=True, removeHs=True)` - 讀取 PDB 檔案
+- `Chem.MolFromPDBBlock(pdbblock, sanitize=True, removeHs=True)` - 解析 PDB 區塊
+- `Chem.MolFromInchi(inchi, sanitize=True, removeHs=True)` - 解析 InChI 字串
+- `Chem.MolFromSequence(seq, sanitize=True)` - 從胜肽序列建立分子
 
-**Writing Molecules:**
+**寫入分子：**
 
-- `Chem.MolToSmiles(mol, isomericSmiles=True, canonical=True)` - Convert to SMILES
-- `Chem.MolToSmarts(mol, isomericSmarts=False)` - Convert to SMARTS
-- `Chem.MolToMolBlock(mol, includeStereo=True, confId=-1)` - Convert to MOL block
-- `Chem.MolToMolFile(mol, filename, includeStereo=True, confId=-1)` - Write MOL file
-- `Chem.MolToPDBBlock(mol, confId=-1)` - Convert to PDB block
-- `Chem.MolToPDBFile(mol, filename, confId=-1)` - Write PDB file
-- `Chem.MolToInchi(mol, options='')` - Convert to InChI
-- `Chem.MolToInchiKey(mol, options='')` - Generate InChI key
-- `Chem.MolToSequence(mol)` - Convert to peptide sequence
+- `Chem.MolToSmiles(mol, isomericSmiles=True, canonical=True)` - 轉換為 SMILES
+- `Chem.MolToSmarts(mol, isomericSmarts=False)` - 轉換為 SMARTS
+- `Chem.MolToMolBlock(mol, includeStereo=True, confId=-1)` - 轉換為 MOL 區塊
+- `Chem.MolToMolFile(mol, filename, includeStereo=True, confId=-1)` - 寫入 MOL 檔案
+- `Chem.MolToPDBBlock(mol, confId=-1)` - 轉換為 PDB 區塊
+- `Chem.MolToPDBFile(mol, filename, confId=-1)` - 寫入 PDB 檔案
+- `Chem.MolToInchi(mol, options='')` - 轉換為 InChI
+- `Chem.MolToInchiKey(mol, options='')` - 生成 InChI 鍵
+- `Chem.MolToSequence(mol)` - 轉換為胜肽序列
 
-**Batch I/O:**
+**批次 I/O：**
 
-- `Chem.SDMolSupplier(filename, sanitize=True, removeHs=True)` - SDF file reader
-- `Chem.ForwardSDMolSupplier(fileobj, sanitize=True, removeHs=True)` - Forward-only SDF reader
-- `Chem.MultithreadedSDMolSupplier(filename, numWriterThreads=1)` - Parallel SDF reader
-- `Chem.SmilesMolSupplier(filename, delimiter=' ', titleLine=True)` - SMILES file reader
-- `Chem.SDWriter(filename)` - SDF file writer
-- `Chem.SmilesWriter(filename, delimiter=' ', includeHeader=True)` - SMILES file writer
+- `Chem.SDMolSupplier(filename, sanitize=True, removeHs=True)` - SDF 檔案讀取器
+- `Chem.ForwardSDMolSupplier(fileobj, sanitize=True, removeHs=True)` - 僅向前 SDF 讀取器
+- `Chem.MultithreadedSDMolSupplier(filename, numWriterThreads=1)` - 並行 SDF 讀取器
+- `Chem.SmilesMolSupplier(filename, delimiter=' ', titleLine=True)` - SMILES 檔案讀取器
+- `Chem.SDWriter(filename)` - SDF 檔案寫入器
+- `Chem.SmilesWriter(filename, delimiter=' ', includeHeader=True)` - SMILES 檔案寫入器
 
-### Molecular Manipulation
+### 分子操作
 
-**Sanitization:**
+**清理：**
 
-- `Chem.SanitizeMol(mol, sanitizeOps=SANITIZE_ALL, catchErrors=False)` - Sanitize molecule
-- `Chem.DetectChemistryProblems(mol, sanitizeOps=SANITIZE_ALL)` - Detect sanitization issues
-- `Chem.AssignStereochemistry(mol, cleanIt=True, force=False)` - Assign stereochemistry
-- `Chem.FindPotentialStereo(mol)` - Find potential stereocenters
-- `Chem.AssignStereochemistryFrom3D(mol, confId=-1)` - Assign stereo from 3D coords
+- `Chem.SanitizeMol(mol, sanitizeOps=SANITIZE_ALL, catchErrors=False)` - 清理分子
+- `Chem.DetectChemistryProblems(mol, sanitizeOps=SANITIZE_ALL)` - 偵測清理問題
+- `Chem.AssignStereochemistry(mol, cleanIt=True, force=False)` - 分配立體化學
+- `Chem.FindPotentialStereo(mol)` - 尋找潛在立體中心
+- `Chem.AssignStereochemistryFrom3D(mol, confId=-1)` - 從 3D 座標分配立體
 
-**Hydrogen Management:**
+**氫管理：**
 
-- `Chem.AddHs(mol, explicitOnly=False, addCoords=False)` - Add explicit hydrogens
-- `Chem.RemoveHs(mol, implicitOnly=False, updateExplicitCount=False)` - Remove hydrogens
-- `Chem.RemoveAllHs(mol)` - Remove all hydrogens
+- `Chem.AddHs(mol, explicitOnly=False, addCoords=False)` - 新增顯式氫
+- `Chem.RemoveHs(mol, implicitOnly=False, updateExplicitCount=False)` - 移除氫
+- `Chem.RemoveAllHs(mol)` - 移除所有氫
 
-**Aromaticity:**
+**芳香性：**
 
-- `Chem.SetAromaticity(mol, model=AROMATICITY_RDKIT)` - Set aromaticity model
-- `Chem.Kekulize(mol, clearAromaticFlags=False)` - Kekulize aromatic bonds
-- `Chem.SetConjugation(mol)` - Set conjugation flags
+- `Chem.SetAromaticity(mol, model=AROMATICITY_RDKIT)` - 設定芳香性模型
+- `Chem.Kekulize(mol, clearAromaticFlags=False)` - Kekulize 芳香鍵
+- `Chem.SetConjugation(mol)` - 設定共軛標記
 
-**Fragments:**
+**片段：**
 
-- `Chem.GetMolFrags(mol, asMols=False, sanitizeFrags=True)` - Get disconnected fragments
-- `Chem.FragmentOnBonds(mol, bondIndices, addDummies=True)` - Fragment on specific bonds
-- `Chem.ReplaceSubstructs(mol, query, replacement, replaceAll=False)` - Replace substructures
-- `Chem.DeleteSubstructs(mol, query, onlyFrags=False)` - Delete substructures
+- `Chem.GetMolFrags(mol, asMols=False, sanitizeFrags=True)` - 取得斷開的片段
+- `Chem.FragmentOnBonds(mol, bondIndices, addDummies=True)` - 在特定鍵上片段化
+- `Chem.ReplaceSubstructs(mol, query, replacement, replaceAll=False)` - 取代子結構
+- `Chem.DeleteSubstructs(mol, query, onlyFrags=False)` - 刪除子結構
 
-**Stereochemistry:**
+**立體化學：**
 
-- `Chem.FindMolChiralCenters(mol, includeUnassigned=False, useLegacyImplementation=False)` - Find chiral centers
-- `Chem.FindPotentialStereo(mol, cleanIt=True)` - Find potential stereocenters
+- `Chem.FindMolChiralCenters(mol, includeUnassigned=False, useLegacyImplementation=False)` - 尋找手性中心
+- `Chem.FindPotentialStereo(mol, cleanIt=True)` - 尋找潛在立體中心
 
-### Substructure Searching
+### 子結構搜尋
 
-**Basic Matching:**
+**基本匹配：**
 
-- `mol.HasSubstructMatch(query, useChirality=False)` - Check for substructure match
-- `mol.GetSubstructMatch(query, useChirality=False)` - Get first match
-- `mol.GetSubstructMatches(query, uniquify=True, useChirality=False)` - Get all matches
-- `mol.GetSubstructMatches(query, maxMatches=1000)` - Limit number of matches
+- `mol.HasSubstructMatch(query, useChirality=False)` - 檢查子結構匹配
+- `mol.GetSubstructMatch(query, useChirality=False)` - 取得第一個匹配
+- `mol.GetSubstructMatches(query, uniquify=True, useChirality=False)` - 取得所有匹配
+- `mol.GetSubstructMatches(query, maxMatches=1000)` - 限制匹配數量
 
-### Molecular Properties
+### 分子性質
 
-**Atom Methods:**
+**原子方法：**
 
-- `atom.GetSymbol()` - Atomic symbol
-- `atom.GetAtomicNum()` - Atomic number
-- `atom.GetDegree()` - Number of bonds
-- `atom.GetTotalDegree()` - Including hydrogens
-- `atom.GetFormalCharge()` - Formal charge
-- `atom.GetNumRadicalElectrons()` - Radical electrons
-- `atom.GetIsAromatic()` - Aromaticity flag
-- `atom.GetHybridization()` - Hybridization (SP, SP2, SP3, etc.)
-- `atom.GetIdx()` - Atom index
-- `atom.IsInRing()` - In any ring
-- `atom.IsInRingSize(size)` - In ring of specific size
-- `atom.GetChiralTag()` - Chirality tag
+- `atom.GetSymbol()` - 原子符號
+- `atom.GetAtomicNum()` - 原子序數
+- `atom.GetDegree()` - 鍵數量
+- `atom.GetTotalDegree()` - 包含氫
+- `atom.GetFormalCharge()` - 形式電荷
+- `atom.GetNumRadicalElectrons()` - 自由基電子
+- `atom.GetIsAromatic()` - 芳香性標記
+- `atom.GetHybridization()` - 雜化（SP、SP2、SP3 等）
+- `atom.GetIdx()` - 原子索引
+- `atom.IsInRing()` - 在任意環中
+- `atom.IsInRingSize(size)` - 在特定大小的環中
+- `atom.GetChiralTag()` - 手性標籤
 
-**Bond Methods:**
+**鍵方法：**
 
-- `bond.GetBondType()` - Bond type (SINGLE, DOUBLE, TRIPLE, AROMATIC)
-- `bond.GetBeginAtomIdx()` - Starting atom index
-- `bond.GetEndAtomIdx()` - Ending atom index
-- `bond.GetIsConjugated()` - Conjugation flag
-- `bond.GetIsAromatic()` - Aromaticity flag
-- `bond.IsInRing()` - In any ring
-- `bond.GetStereo()` - Stereochemistry (STEREONONE, STEREOZ, STEREOE, etc.)
+- `bond.GetBondType()` - 鍵類型（SINGLE、DOUBLE、TRIPLE、AROMATIC）
+- `bond.GetBeginAtomIdx()` - 起始原子索引
+- `bond.GetEndAtomIdx()` - 結束原子索引
+- `bond.GetIsConjugated()` - 共軛標記
+- `bond.GetIsAromatic()` - 芳香性標記
+- `bond.IsInRing()` - 在任意環中
+- `bond.GetStereo()` - 立體化學（STEREONONE、STEREOZ、STEREOE 等）
 
-**Molecule Methods:**
+**分子方法：**
 
-- `mol.GetNumAtoms(onlyExplicit=True)` - Number of atoms
-- `mol.GetNumHeavyAtoms()` - Number of heavy atoms
-- `mol.GetNumBonds()` - Number of bonds
-- `mol.GetAtoms()` - Iterator over atoms
-- `mol.GetBonds()` - Iterator over bonds
-- `mol.GetAtomWithIdx(idx)` - Get specific atom
-- `mol.GetBondWithIdx(idx)` - Get specific bond
-- `mol.GetRingInfo()` - Ring information object
+- `mol.GetNumAtoms(onlyExplicit=True)` - 原子數量
+- `mol.GetNumHeavyAtoms()` - 重原子數量
+- `mol.GetNumBonds()` - 鍵數量
+- `mol.GetAtoms()` - 原子迭代器
+- `mol.GetBonds()` - 鍵迭代器
+- `mol.GetAtomWithIdx(idx)` - 取得特定原子
+- `mol.GetBondWithIdx(idx)` - 取得特定鍵
+- `mol.GetRingInfo()` - 環資訊物件
 
-**Ring Information:**
+**環資訊：**
 
-- `Chem.GetSymmSSSR(mol)` - Get smallest set of smallest rings
-- `Chem.GetSSSR(mol)` - Alias for GetSymmSSSR
-- `ring_info.NumRings()` - Number of rings
-- `ring_info.AtomRings()` - Tuples of atom indices in rings
-- `ring_info.BondRings()` - Tuples of bond indices in rings
+- `Chem.GetSymmSSSR(mol)` - 取得最小最小環集合
+- `Chem.GetSSSR(mol)` - GetSymmSSSR 的別名
+- `ring_info.NumRings()` - 環數量
+- `ring_info.AtomRings()` - 環中原子索引的元組
+- `ring_info.BondRings()` - 環中鍵索引的元組
 
 ## rdkit.Chem.AllChem
 
-Extended chemistry functionality.
+擴展化學功能。
 
-### 2D/3D Coordinate Generation
+### 2D/3D 座標生成
 
-- `AllChem.Compute2DCoords(mol, canonOrient=True, clearConfs=True)` - Generate 2D coordinates
-- `AllChem.EmbedMolecule(mol, maxAttempts=0, randomSeed=-1, useRandomCoords=False)` - Generate 3D conformer
-- `AllChem.EmbedMultipleConfs(mol, numConfs=10, maxAttempts=0, randomSeed=-1)` - Generate multiple conformers
-- `AllChem.ConstrainedEmbed(mol, core, useTethers=True)` - Constrained embedding
-- `AllChem.GenerateDepictionMatching2DStructure(mol, reference, refPattern=None)` - Align to template
+- `AllChem.Compute2DCoords(mol, canonOrient=True, clearConfs=True)` - 生成 2D 座標
+- `AllChem.EmbedMolecule(mol, maxAttempts=0, randomSeed=-1, useRandomCoords=False)` - 生成 3D 構象異構體
+- `AllChem.EmbedMultipleConfs(mol, numConfs=10, maxAttempts=0, randomSeed=-1)` - 生成多個構象異構體
+- `AllChem.ConstrainedEmbed(mol, core, useTethers=True)` - 約束嵌入
+- `AllChem.GenerateDepictionMatching2DStructure(mol, reference, refPattern=None)` - 對齊到模板
 
-### Force Field Optimization
+### 力場優化
 
-- `AllChem.UFFOptimizeMolecule(mol, maxIters=200, confId=-1)` - UFF optimization
-- `AllChem.MMFFOptimizeMolecule(mol, maxIters=200, confId=-1, mmffVariant='MMFF94')` - MMFF optimization
-- `AllChem.UFFGetMoleculeForceField(mol, confId=-1)` - Get UFF force field object
-- `AllChem.MMFFGetMoleculeForceField(mol, pyMMFFMolProperties, confId=-1)` - Get MMFF force field
+- `AllChem.UFFOptimizeMolecule(mol, maxIters=200, confId=-1)` - UFF 優化
+- `AllChem.MMFFOptimizeMolecule(mol, maxIters=200, confId=-1, mmffVariant='MMFF94')` - MMFF 優化
+- `AllChem.UFFGetMoleculeForceField(mol, confId=-1)` - 取得 UFF 力場物件
+- `AllChem.MMFFGetMoleculeForceField(mol, pyMMFFMolProperties, confId=-1)` - 取得 MMFF 力場
 
-### Conformer Analysis
+### 構象異構體分析
 
-- `AllChem.GetConformerRMS(mol, confId1, confId2, prealigned=False)` - Calculate RMSD
-- `AllChem.GetConformerRMSMatrix(mol, prealigned=False)` - RMSD matrix
-- `AllChem.AlignMol(prbMol, refMol, prbCid=-1, refCid=-1)` - Align molecules
-- `AllChem.AlignMolConformers(mol)` - Align all conformers
+- `AllChem.GetConformerRMS(mol, confId1, confId2, prealigned=False)` - 計算 RMSD
+- `AllChem.GetConformerRMSMatrix(mol, prealigned=False)` - RMSD 矩陣
+- `AllChem.AlignMol(prbMol, refMol, prbCid=-1, refCid=-1)` - 對齊分子
+- `AllChem.AlignMolConformers(mol)` - 對齊所有構象異構體
 
-### Reactions
+### 反應
 
-- `AllChem.ReactionFromSmarts(smarts, useSmiles=False)` - Create reaction from SMARTS
-- `reaction.RunReactants(reactants)` - Apply reaction
-- `reaction.RunReactant(reactant, reactionIdx)` - Apply to specific reactant
-- `AllChem.CreateDifferenceFingerprintForReaction(reaction)` - Reaction fingerprint
+- `AllChem.ReactionFromSmarts(smarts, useSmiles=False)` - 從 SMARTS 建立反應
+- `reaction.RunReactants(reactants)` - 應用反應
+- `reaction.RunReactant(reactant, reactionIdx)` - 應用到特定反應物
+- `AllChem.CreateDifferenceFingerprintForReaction(reaction)` - 反應指紋
 
-### Fingerprints
+### 指紋
 
-- `AllChem.GetMorganFingerprint(mol, radius, useFeatures=False)` - Morgan fingerprint
-- `AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=2048)` - Morgan bit vector
-- `AllChem.GetHashedMorganFingerprint(mol, radius, nBits=2048)` - Hashed Morgan
-- `AllChem.GetErGFingerprint(mol)` - ErG fingerprint
+- `AllChem.GetMorganFingerprint(mol, radius, useFeatures=False)` - Morgan 指紋
+- `AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=2048)` - Morgan 位元向量
+- `AllChem.GetHashedMorganFingerprint(mol, radius, nBits=2048)` - 雜湊 Morgan
+- `AllChem.GetErGFingerprint(mol)` - ErG 指紋
 
 ## rdkit.Chem.Descriptors
 
-Molecular descriptor calculations.
+分子描述子計算。
 
-### Common Descriptors
+### 常見描述子
 
-- `Descriptors.MolWt(mol)` - Molecular weight
-- `Descriptors.ExactMolWt(mol)` - Exact molecular weight
-- `Descriptors.HeavyAtomMolWt(mol)` - Heavy atom molecular weight
-- `Descriptors.MolLogP(mol)` - LogP (lipophilicity)
-- `Descriptors.MolMR(mol)` - Molar refractivity
-- `Descriptors.TPSA(mol)` - Topological polar surface area
-- `Descriptors.NumHDonors(mol)` - Hydrogen bond donors
-- `Descriptors.NumHAcceptors(mol)` - Hydrogen bond acceptors
-- `Descriptors.NumRotatableBonds(mol)` - Rotatable bonds
-- `Descriptors.NumAromaticRings(mol)` - Aromatic rings
-- `Descriptors.NumSaturatedRings(mol)` - Saturated rings
-- `Descriptors.NumAliphaticRings(mol)` - Aliphatic rings
-- `Descriptors.NumAromaticHeterocycles(mol)` - Aromatic heterocycles
-- `Descriptors.NumRadicalElectrons(mol)` - Radical electrons
-- `Descriptors.NumValenceElectrons(mol)` - Valence electrons
+- `Descriptors.MolWt(mol)` - 分子量
+- `Descriptors.ExactMolWt(mol)` - 精確分子量
+- `Descriptors.HeavyAtomMolWt(mol)` - 重原子分子量
+- `Descriptors.MolLogP(mol)` - LogP（親脂性）
+- `Descriptors.MolMR(mol)` - 莫耳折射率
+- `Descriptors.TPSA(mol)` - 拓撲極性表面積
+- `Descriptors.NumHDonors(mol)` - 氫鍵供體
+- `Descriptors.NumHAcceptors(mol)` - 氫鍵受體
+- `Descriptors.NumRotatableBonds(mol)` - 可旋轉鍵
+- `Descriptors.NumAromaticRings(mol)` - 芳香環
+- `Descriptors.NumSaturatedRings(mol)` - 飽和環
+- `Descriptors.NumAliphaticRings(mol)` - 脂肪族環
+- `Descriptors.NumAromaticHeterocycles(mol)` - 芳香雜環
+- `Descriptors.NumRadicalElectrons(mol)` - 自由基電子
+- `Descriptors.NumValenceElectrons(mol)` - 價電子
 
-### Batch Calculation
+### 批次計算
 
-- `Descriptors.CalcMolDescriptors(mol)` - Calculate all descriptors as dictionary
+- `Descriptors.CalcMolDescriptors(mol)` - 計算所有描述子為字典
 
-### Descriptor Lists
+### 描述子列表
 
-- `Descriptors._descList` - List of (name, function) tuples for all descriptors
+- `Descriptors._descList` - 所有描述子的 (名稱, 函數) 元組列表
 
 ## rdkit.Chem.Draw
 
-Molecular visualization.
+分子視覺化。
 
-### Image Generation
+### 圖像生成
 
-- `Draw.MolToImage(mol, size=(300,300), kekulize=True, wedgeBonds=True, highlightAtoms=None)` - Generate PIL image
-- `Draw.MolToFile(mol, filename, size=(300,300), kekulize=True, wedgeBonds=True)` - Save to file
-- `Draw.MolsToGridImage(mols, molsPerRow=3, subImgSize=(200,200), legends=None)` - Grid of molecules
-- `Draw.MolsMatrixToGridImage(mols, molsPerRow=3, subImgSize=(200,200), legends=None)` - Nested grid
-- `Draw.ReactionToImage(rxn, subImgSize=(200,200))` - Reaction image
+- `Draw.MolToImage(mol, size=(300,300), kekulize=True, wedgeBonds=True, highlightAtoms=None)` - 生成 PIL 圖像
+- `Draw.MolToFile(mol, filename, size=(300,300), kekulize=True, wedgeBonds=True)` - 儲存到檔案
+- `Draw.MolsToGridImage(mols, molsPerRow=3, subImgSize=(200,200), legends=None)` - 分子網格
+- `Draw.MolsMatrixToGridImage(mols, molsPerRow=3, subImgSize=(200,200), legends=None)` - 巢狀網格
+- `Draw.ReactionToImage(rxn, subImgSize=(200,200))` - 反應圖像
 
-### Fingerprint Visualization
+### 指紋視覺化
 
-- `Draw.DrawMorganBit(mol, bitId, bitInfo, whichExample=0)` - Visualize Morgan bit
-- `Draw.DrawMorganBits(bits, mol, bitInfo, molsPerRow=3)` - Multiple Morgan bits
-- `Draw.DrawRDKitBit(mol, bitId, bitInfo, whichExample=0)` - Visualize RDKit bit
+- `Draw.DrawMorganBit(mol, bitId, bitInfo, whichExample=0)` - 視覺化 Morgan 位元
+- `Draw.DrawMorganBits(bits, mol, bitInfo, molsPerRow=3)` - 多個 Morgan 位元
+- `Draw.DrawRDKitBit(mol, bitId, bitInfo, whichExample=0)` - 視覺化 RDKit 位元
 
-### IPython Integration
+### IPython 整合
 
-- `Draw.IPythonConsole` - Module for Jupyter integration
-- `Draw.IPythonConsole.ipython_useSVG` - Use SVG (True) or PNG (False)
-- `Draw.IPythonConsole.molSize` - Default molecule image size
+- `Draw.IPythonConsole` - Jupyter 整合模組
+- `Draw.IPythonConsole.ipython_useSVG` - 使用 SVG (True) 或 PNG (False)
+- `Draw.IPythonConsole.molSize` - 預設分子圖像大小
 
-### Drawing Options
+### 繪圖選項
 
-- `rdMolDraw2D.MolDrawOptions()` - Get drawing options object
-  - `.addAtomIndices` - Show atom indices
-  - `.addBondIndices` - Show bond indices
-  - `.addStereoAnnotation` - Show stereochemistry
-  - `.bondLineWidth` - Line width
-  - `.highlightBondWidthMultiplier` - Highlight width
-  - `.minFontSize` - Minimum font size
-  - `.maxFontSize` - Maximum font size
+- `rdMolDraw2D.MolDrawOptions()` - 取得繪圖選項物件
+  - `.addAtomIndices` - 顯示原子索引
+  - `.addBondIndices` - 顯示鍵索引
+  - `.addStereoAnnotation` - 顯示立體化學
+  - `.bondLineWidth` - 線寬
+  - `.highlightBondWidthMultiplier` - 標記寬度
+  - `.minFontSize` - 最小字體大小
+  - `.maxFontSize` - 最大字體大小
 
 ## rdkit.Chem.rdMolDescriptors
 
-Additional descriptor calculations.
+額外描述子計算。
 
-- `rdMolDescriptors.CalcNumRings(mol)` - Number of rings
-- `rdMolDescriptors.CalcNumAromaticRings(mol)` - Aromatic rings
-- `rdMolDescriptors.CalcNumAliphaticRings(mol)` - Aliphatic rings
-- `rdMolDescriptors.CalcNumSaturatedRings(mol)` - Saturated rings
-- `rdMolDescriptors.CalcNumHeterocycles(mol)` - Heterocycles
-- `rdMolDescriptors.CalcNumAromaticHeterocycles(mol)` - Aromatic heterocycles
-- `rdMolDescriptors.CalcNumSpiroAtoms(mol)` - Spiro atoms
-- `rdMolDescriptors.CalcNumBridgeheadAtoms(mol)` - Bridgehead atoms
-- `rdMolDescriptors.CalcFractionCsp3(mol)` - Fraction of sp3 carbons
-- `rdMolDescriptors.CalcLabuteASA(mol)` - Labute accessible surface area
+- `rdMolDescriptors.CalcNumRings(mol)` - 環數量
+- `rdMolDescriptors.CalcNumAromaticRings(mol)` - 芳香環
+- `rdMolDescriptors.CalcNumAliphaticRings(mol)` - 脂肪族環
+- `rdMolDescriptors.CalcNumSaturatedRings(mol)` - 飽和環
+- `rdMolDescriptors.CalcNumHeterocycles(mol)` - 雜環
+- `rdMolDescriptors.CalcNumAromaticHeterocycles(mol)` - 芳香雜環
+- `rdMolDescriptors.CalcNumSpiroAtoms(mol)` - 螺原子
+- `rdMolDescriptors.CalcNumBridgeheadAtoms(mol)` - 橋頭原子
+- `rdMolDescriptors.CalcFractionCsp3(mol)` - sp3 碳比例
+- `rdMolDescriptors.CalcLabuteASA(mol)` - Labute 可及表面積
 - `rdMolDescriptors.CalcTPSA(mol)` - TPSA
-- `rdMolDescriptors.CalcMolFormula(mol)` - Molecular formula
+- `rdMolDescriptors.CalcMolFormula(mol)` - 分子式
 
 ## rdkit.Chem.Scaffolds
 
-Scaffold analysis.
+骨架分析。
 
-### Murcko Scaffolds
+### Murcko 骨架
 
-- `MurckoScaffold.GetScaffoldForMol(mol)` - Get Murcko scaffold
-- `MurckoScaffold.MakeScaffoldGeneric(mol)` - Generic scaffold
-- `MurckoScaffold.MurckoDecompose(mol)` - Decompose to scaffold and sidechains
+- `MurckoScaffold.GetScaffoldForMol(mol)` - 取得 Murcko 骨架
+- `MurckoScaffold.MakeScaffoldGeneric(mol)` - 通用骨架
+- `MurckoScaffold.MurckoDecompose(mol)` - 分解為骨架和側鏈
 
 ## rdkit.Chem.rdMolHash
 
-Molecular hashing and standardization.
+分子雜湊和標準化。
 
-- `rdMolHash.MolHash(mol, hashFunction)` - Generate hash
-  - `rdMolHash.HashFunction.AnonymousGraph` - Anonymized structure
-  - `rdMolHash.HashFunction.CanonicalSmiles` - Canonical SMILES
-  - `rdMolHash.HashFunction.ElementGraph` - Element graph
-  - `rdMolHash.HashFunction.MurckoScaffold` - Murcko scaffold
-  - `rdMolHash.HashFunction.Regioisomer` - Regioisomer (no stereo)
-  - `rdMolHash.HashFunction.NetCharge` - Net charge
-  - `rdMolHash.HashFunction.HetAtomProtomer` - Heteroatom protomer
-  - `rdMolHash.HashFunction.HetAtomTautomer` - Heteroatom tautomer
+- `rdMolHash.MolHash(mol, hashFunction)` - 生成雜湊
+  - `rdMolHash.HashFunction.AnonymousGraph` - 匿名化結構
+  - `rdMolHash.HashFunction.CanonicalSmiles` - 規範 SMILES
+  - `rdMolHash.HashFunction.ElementGraph` - 元素圖
+  - `rdMolHash.HashFunction.MurckoScaffold` - Murcko 骨架
+  - `rdMolHash.HashFunction.Regioisomer` - 區域異構體（無立體）
+  - `rdMolHash.HashFunction.NetCharge` - 淨電荷
+  - `rdMolHash.HashFunction.HetAtomProtomer` - 雜原子質子體
+  - `rdMolHash.HashFunction.HetAtomTautomer` - 雜原子互變異構體
 
 ## rdkit.Chem.MolStandardize
 
-Molecule standardization.
+分子標準化。
 
-- `rdMolStandardize.Normalize(mol)` - Normalize functional groups
-- `rdMolStandardize.Reionize(mol)` - Fix ionization state
-- `rdMolStandardize.RemoveFragments(mol)` - Remove small fragments
-- `rdMolStandardize.Cleanup(mol)` - Full cleanup (normalize + reionize + remove)
-- `rdMolStandardize.Uncharger()` - Create uncharger object
-  - `.uncharge(mol)` - Remove charges
-- `rdMolStandardize.TautomerEnumerator()` - Enumerate tautomers
-  - `.Enumerate(mol)` - Generate tautomers
-  - `.Canonicalize(mol)` - Get canonical tautomer
+- `rdMolStandardize.Normalize(mol)` - 標準化官能基
+- `rdMolStandardize.Reionize(mol)` - 修正離子化狀態
+- `rdMolStandardize.RemoveFragments(mol)` - 移除小片段
+- `rdMolStandardize.Cleanup(mol)` - 完整清理（標準化 + 重新離子化 + 移除）
+- `rdMolStandardize.Uncharger()` - 建立去電荷器物件
+  - `.uncharge(mol)` - 移除電荷
+- `rdMolStandardize.TautomerEnumerator()` - 列舉互變異構體
+  - `.Enumerate(mol)` - 生成互變異構體
+  - `.Canonicalize(mol)` - 取得規範互變異構體
 
 ## rdkit.DataStructs
 
-Fingerprint similarity and operations.
+指紋相似性和操作。
 
-### Similarity Metrics
+### 相似性度量
 
-- `DataStructs.TanimotoSimilarity(fp1, fp2)` - Tanimoto coefficient
-- `DataStructs.DiceSimilarity(fp1, fp2)` - Dice coefficient
-- `DataStructs.CosineSimilarity(fp1, fp2)` - Cosine similarity
-- `DataStructs.SokalSimilarity(fp1, fp2)` - Sokal similarity
-- `DataStructs.KulczynskiSimilarity(fp1, fp2)` - Kulczynski similarity
-- `DataStructs.McConnaugheySimilarity(fp1, fp2)` - McConnaughey similarity
+- `DataStructs.TanimotoSimilarity(fp1, fp2)` - Tanimoto 係數
+- `DataStructs.DiceSimilarity(fp1, fp2)` - Dice 係數
+- `DataStructs.CosineSimilarity(fp1, fp2)` - 餘弦相似性
+- `DataStructs.SokalSimilarity(fp1, fp2)` - Sokal 相似性
+- `DataStructs.KulczynskiSimilarity(fp1, fp2)` - Kulczynski 相似性
+- `DataStructs.McConnaugheySimilarity(fp1, fp2)` - McConnaughey 相似性
 
-### Bulk Operations
+### 批次操作
 
-- `DataStructs.BulkTanimotoSimilarity(fp, fps)` - Tanimoto for list of fingerprints
-- `DataStructs.BulkDiceSimilarity(fp, fps)` - Dice for list
-- `DataStructs.BulkCosineSimilarity(fp, fps)` - Cosine for list
+- `DataStructs.BulkTanimotoSimilarity(fp, fps)` - 指紋列表的 Tanimoto
+- `DataStructs.BulkDiceSimilarity(fp, fps)` - 列表的 Dice
+- `DataStructs.BulkCosineSimilarity(fp, fps)` - 列表的餘弦
 
-### Distance Metrics
+### 距離度量
 
 - `DataStructs.TanimotoDistance(fp1, fp2)` - 1 - Tanimoto
 - `DataStructs.DiceDistance(fp1, fp2)` - 1 - Dice
 
 ## rdkit.Chem.AtomPairs
 
-Atom pair fingerprints.
+原子對指紋。
 
-- `Pairs.GetAtomPairFingerprint(mol, minLength=1, maxLength=30)` - Atom pair fingerprint
-- `Pairs.GetAtomPairFingerprintAsBitVect(mol, minLength=1, maxLength=30, nBits=2048)` - As bit vector
-- `Pairs.GetHashedAtomPairFingerprint(mol, nBits=2048, minLength=1, maxLength=30)` - Hashed version
+- `Pairs.GetAtomPairFingerprint(mol, minLength=1, maxLength=30)` - 原子對指紋
+- `Pairs.GetAtomPairFingerprintAsBitVect(mol, minLength=1, maxLength=30, nBits=2048)` - 作為位元向量
+- `Pairs.GetHashedAtomPairFingerprint(mol, nBits=2048, minLength=1, maxLength=30)` - 雜湊版本
 
 ## rdkit.Chem.Torsions
 
-Topological torsion fingerprints.
+拓撲扭轉角指紋。
 
-- `Torsions.GetTopologicalTorsionFingerprint(mol, targetSize=4)` - Torsion fingerprint
-- `Torsions.GetTopologicalTorsionFingerprintAsIntVect(mol, targetSize=4)` - As int vector
-- `Torsions.GetHashedTopologicalTorsionFingerprint(mol, nBits=2048, targetSize=4)` - Hashed version
+- `Torsions.GetTopologicalTorsionFingerprint(mol, targetSize=4)` - 扭轉角指紋
+- `Torsions.GetTopologicalTorsionFingerprintAsIntVect(mol, targetSize=4)` - 作為整數向量
+- `Torsions.GetHashedTopologicalTorsionFingerprint(mol, nBits=2048, targetSize=4)` - 雜湊版本
 
 ## rdkit.Chem.MACCSkeys
 
-MACCS structural keys.
+MACCS 結構鍵。
 
-- `MACCSkeys.GenMACCSKeys(mol)` - Generate 166-bit MACCS keys
+- `MACCSkeys.GenMACCSKeys(mol)` - 生成 166 位元 MACCS 鍵
 
 ## rdkit.Chem.ChemicalFeatures
 
-Pharmacophore features.
+藥效團特徵。
 
-- `ChemicalFeatures.BuildFeatureFactory(featureFile)` - Create feature factory
-- `factory.GetFeaturesForMol(mol)` - Get pharmacophore features
-- `feature.GetFamily()` - Feature family (Donor, Acceptor, etc.)
-- `feature.GetType()` - Feature type
-- `feature.GetAtomIds()` - Atoms involved in feature
+- `ChemicalFeatures.BuildFeatureFactory(featureFile)` - 建立特徵工廠
+- `factory.GetFeaturesForMol(mol)` - 取得藥效團特徵
+- `feature.GetFamily()` - 特徵家族（Donor、Acceptor 等）
+- `feature.GetType()` - 特徵類型
+- `feature.GetAtomIds()` - 涉及特徵的原子
 
 ## rdkit.ML.Cluster.Butina
 
-Clustering algorithms.
+群集演算法。
 
-- `Butina.ClusterData(distances, nPts, distThresh, isDistData=True)` - Butina clustering
-  - Returns tuple of tuples with cluster members
+- `Butina.ClusterData(distances, nPts, distThresh, isDistData=True)` - Butina 群集
+  - 返回包含群集成員的元組的元組
 
 ## rdkit.Chem.rdFingerprintGenerator
 
-Modern fingerprint generation API (RDKit 2020.09+).
+現代指紋生成 API（RDKit 2020.09+）。
 
-- `rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)` - Morgan generator
-- `rdFingerprintGenerator.GetRDKitFPGenerator(minPath=1, maxPath=7, fpSize=2048)` - RDKit FP generator
-- `rdFingerprintGenerator.GetAtomPairGenerator(minDistance=1, maxDistance=30)` - Atom pair generator
-- `generator.GetFingerprint(mol)` - Generate fingerprint
-- `generator.GetCountFingerprint(mol)` - Count-based fingerprint
+- `rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)` - Morgan 生成器
+- `rdFingerprintGenerator.GetRDKitFPGenerator(minPath=1, maxPath=7, fpSize=2048)` - RDKit FP 生成器
+- `rdFingerprintGenerator.GetAtomPairGenerator(minDistance=1, maxDistance=30)` - 原子對生成器
+- `generator.GetFingerprint(mol)` - 生成指紋
+- `generator.GetCountFingerprint(mol)` - 計數型指紋
 
-## Common Parameters
+## 常見參數
 
-### Sanitization Operations
+### 清理操作
 
-- `SANITIZE_NONE` - No sanitization
-- `SANITIZE_ALL` - All operations (default)
-- `SANITIZE_CLEANUP` - Basic cleanup
-- `SANITIZE_PROPERTIES` - Calculate properties
-- `SANITIZE_SYMMRINGS` - Symmetrize rings
-- `SANITIZE_KEKULIZE` - Kekulize aromatic rings
-- `SANITIZE_FINDRADICALS` - Find radical electrons
-- `SANITIZE_SETAROMATICITY` - Set aromaticity
-- `SANITIZE_SETCONJUGATION` - Set conjugation
-- `SANITIZE_SETHYBRIDIZATION` - Set hybridization
-- `SANITIZE_CLEANUPCHIRALITY` - Cleanup chirality
+- `SANITIZE_NONE` - 不清理
+- `SANITIZE_ALL` - 所有操作（預設）
+- `SANITIZE_CLEANUP` - 基本清理
+- `SANITIZE_PROPERTIES` - 計算性質
+- `SANITIZE_SYMMRINGS` - 對稱化環
+- `SANITIZE_KEKULIZE` - Kekulize 芳香環
+- `SANITIZE_FINDRADICALS` - 尋找自由基電子
+- `SANITIZE_SETAROMATICITY` - 設定芳香性
+- `SANITIZE_SETCONJUGATION` - 設定共軛
+- `SANITIZE_SETHYBRIDIZATION` - 設定雜化
+- `SANITIZE_CLEANUPCHIRALITY` - 清理手性
 
-### Bond Types
+### 鍵類型
 
-- `BondType.SINGLE` - Single bond
-- `BondType.DOUBLE` - Double bond
-- `BondType.TRIPLE` - Triple bond
-- `BondType.AROMATIC` - Aromatic bond
-- `BondType.DATIVE` - Dative bond
-- `BondType.UNSPECIFIED` - Unspecified
+- `BondType.SINGLE` - 單鍵
+- `BondType.DOUBLE` - 雙鍵
+- `BondType.TRIPLE` - 參鍵
+- `BondType.AROMATIC` - 芳香鍵
+- `BondType.DATIVE` - 配位鍵
+- `BondType.UNSPECIFIED` - 未指定
 
-### Hybridization
+### 雜化
 
 - `HybridizationType.S` - S
 - `HybridizationType.SP` - SP
@@ -398,35 +398,35 @@ Modern fingerprint generation API (RDKit 2020.09+).
 - `HybridizationType.SP3D` - SP3D
 - `HybridizationType.SP3D2` - SP3D2
 
-### Chirality
+### 手性
 
-- `ChiralType.CHI_UNSPECIFIED` - Unspecified
-- `ChiralType.CHI_TETRAHEDRAL_CW` - Clockwise
-- `ChiralType.CHI_TETRAHEDRAL_CCW` - Counter-clockwise
+- `ChiralType.CHI_UNSPECIFIED` - 未指定
+- `ChiralType.CHI_TETRAHEDRAL_CW` - 順時針
+- `ChiralType.CHI_TETRAHEDRAL_CCW` - 逆時針
 
-## Installation
+## 安裝
 
 ```bash
-# Using conda (recommended)
+# 使用 conda（推薦）
 conda install -c conda-forge rdkit
 
-# Using pip
+# 使用 pip
 pip install rdkit-pypi
 ```
 
-## Importing
+## 匯入
 
 ```python
-# Core functionality
+# 核心功能
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
-# Descriptors
+# 描述子
 from rdkit.Chem import Descriptors
 
-# Drawing
+# 繪圖
 from rdkit.Chem import Draw
 
-# Similarity
+# 相似性
 from rdkit import DataStructs
 ```

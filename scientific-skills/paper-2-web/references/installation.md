@@ -1,141 +1,141 @@
-# Installation and Configuration
+# 安裝與配置
 
-## System Requirements
+## 系統需求
 
-### Hardware Requirements
-- **GPU**: NVIDIA A6000 (48GB minimum) required for video generation with talking-head features
-- **CPU**: Multi-core processor recommended for PDF processing and document conversion
-- **RAM**: 16GB minimum, 32GB recommended for large papers
+### 硬體需求
+- **GPU**：NVIDIA A6000（最低 48GB）用於具有虛擬主持人功能的影片生成
+- **CPU**：建議使用多核心處理器進行 PDF 處理和文件轉換
+- **RAM**：最低 16GB，大型論文建議 32GB
 
-### Software Requirements
-- **Python**: 3.11 or higher
-- **Conda**: Environment manager for dependency isolation
-- **LibreOffice**: Required for document format conversion (PDF to PPTX, etc.)
-- **Poppler utilities**: Required for PDF processing and manipulation
+### 軟體需求
+- **Python**：3.11 或更高版本
+- **Conda**：用於依賴項隔離的環境管理器
+- **LibreOffice**：用於文件格式轉換（PDF 到 PPTX 等）
+- **Poppler 工具**：用於 PDF 處理和操作
 
-## Installation Steps
+## 安裝步驟
 
-### 1. Clone the Repository
+### 1. 克隆儲存庫
 ```bash
 git clone https://github.com/YuhangChen1/Paper2All.git
 cd Paper2All
 ```
 
-### 2. Create Conda Environment
+### 2. 創建 Conda 環境
 ```bash
 conda create -n paper2all python=3.11
 conda activate paper2all
 ```
 
-### 3. Install Dependencies
+### 3. 安裝依賴項
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Install System Dependencies
+### 4. 安裝系統依賴項
 
-**Ubuntu/Debian:**
+**Ubuntu/Debian：**
 ```bash
 sudo apt-get install libreoffice poppler-utils
 ```
 
-**macOS:**
+**macOS：**
 ```bash
 brew install libreoffice poppler
 ```
 
-**Windows:**
-- Download and install LibreOffice from https://www.libreoffice.org/
-- Download and install Poppler from https://github.com/oschwartz10612/poppler-windows
+**Windows：**
+- 從 https://www.libreoffice.org/ 下載並安裝 LibreOffice
+- 從 https://github.com/oschwartz10612/poppler-windows 下載並安裝 Poppler
 
-## API Configuration
+## API 配置
 
-Create a `.env` file in the project root with the following credentials:
+在專案根目錄中創建 `.env` 檔案，包含以下憑證：
 
-### Required API Keys
+### 必要的 API 金鑰
 
-**Option 1: OpenAI API**
+**選項 1：OpenAI API**
 ```
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-**Option 2: OpenRouter API** (alternative to OpenAI)
+**選項 2：OpenRouter API**（OpenAI 的替代方案）
 ```
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 ```
 
-### Optional API Keys
+### 可選的 API 金鑰
 
-**Google Search API** (for automatic logo discovery)
+**Google Search API**（用於自動標誌發現）
 ```
 GOOGLE_API_KEY=your_google_api_key_here
 GOOGLE_CSE_ID=your_custom_search_engine_id_here
 ```
 
-## Model Configuration
+## 模型配置
 
-The system supports multiple LLM backends:
+系統支援多個 LLM 後端：
 
-### Supported Models
-- GPT-4 (recommended for best quality)
-- GPT-4.1 (latest version)
-- GPT-3.5-turbo (faster, lower cost)
-- Claude models via OpenRouter
-- Other OpenRouter-supported models
+### 支援的模型
+- GPT-4（建議用於最佳品質）
+- GPT-4.1（最新版本）
+- GPT-3.5-turbo（更快速，成本較低）
+- 透過 OpenRouter 使用 Claude 模型
+- 其他 OpenRouter 支援的模型
 
-### Model Selection
+### 模型選擇
 
-Specify models using the `--model-choice` parameter or `--model_name_t` and `--model_name_v` parameters:
-- Model choice 1: GPT-4 for all components
-- Model choice 2: GPT-4.1 for all components
-- Custom: Specify separate models for text and visual processing
+使用 `--model-choice` 參數或 `--model_name_t` 和 `--model_name_v` 參數指定模型：
+- 模型選擇 1：所有組件使用 GPT-4
+- 模型選擇 2：所有組件使用 GPT-4.1
+- 自定義：為文字和視覺處理指定不同的模型
 
-## Verification
+## 驗證
 
-Test the installation:
+測試安裝：
 
 ```bash
 python pipeline_all.py --help
 ```
 
-If successful, you should see the help menu with all available options.
+如果成功，您應該看到包含所有可用選項的說明選單。
 
-## Troubleshooting
+## 故障排除
 
-### Common Issues
+### 常見問題
 
-**1. LibreOffice not found**
-- Ensure LibreOffice is installed and in your system PATH
-- Try running `libreoffice --version` to verify
+**1. 找不到 LibreOffice**
+- 確保 LibreOffice 已安裝並在系統 PATH 中
+- 嘗試運行 `libreoffice --version` 進行驗證
 
-**2. Poppler utilities not found**
-- Verify installation with `pdftoppm -v`
-- Add Poppler bin directory to PATH if needed
+**2. 找不到 Poppler 工具**
+- 使用 `pdftoppm -v` 驗證安裝
+- 如需要，將 Poppler bin 目錄添加到 PATH
 
-**3. GPU/CUDA errors for video generation**
-- Ensure NVIDIA drivers are up to date
-- Verify CUDA toolkit is installed
-- Check GPU memory with `nvidia-smi`
+**3. 影片生成的 GPU/CUDA 錯誤**
+- 確保 NVIDIA 驅動程式是最新的
+- 驗證 CUDA 工具包已安裝
+- 使用 `nvidia-smi` 檢查 GPU 記憶體
 
-**4. API key errors**
-- Verify `.env` file is in the project root
-- Check that API keys are valid and have sufficient credits
-- Ensure no extra spaces or quotes around keys in `.env`
+**4. API 金鑰錯誤**
+- 驗證 `.env` 檔案位於專案根目錄
+- 檢查 API 金鑰是否有效且有足夠的額度
+- 確保 `.env` 中的金鑰周圍沒有額外的空格或引號
 
-## Directory Structure
+## 目錄結構
 
-After installation, organize your workspace:
+安裝後，組織您的工作區：
 
 ```
 Paper2All/
-├── .env                  # API credentials
-├── input/               # Place your paper files here
-│   └── paper_name/      # Each paper in its own directory
-│       └── main.tex     # LaTeX source or PDF
-├── output/              # Generated outputs
+├── .env                  # API 憑證
+├── input/               # 在此放置您的論文檔案
+│   └── paper_name/      # 每篇論文放在自己的目錄中
+│       └── main.tex     # LaTeX 源檔案或 PDF
+├── output/              # 生成的輸出
 │   └── paper_name/
-│       ├── website/     # Generated website files
-│       ├── video/       # Generated video files
-│       └── poster/      # Generated poster files
+│       ├── website/     # 生成的網站檔案
+│       ├── video/       # 生成的影片檔案
+│       └── poster/      # 生成的海報檔案
 └── ...
 ```

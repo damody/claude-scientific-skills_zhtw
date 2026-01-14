@@ -1,20 +1,20 @@
-# SimPy Process Interaction
+# SimPy 流程互動
 
-This guide covers the mechanisms for processes to interact and synchronize in SimPy simulations.
+本指南涵蓋 SimPy 模擬中流程互動和同步的機制。
 
-## Interaction Mechanisms Overview
+## 互動機制概述
 
-SimPy provides three primary ways for processes to interact:
+SimPy 提供三種主要的流程互動方式：
 
-1. **Event-based passivation/reactivation** - Shared events for signaling
-2. **Waiting for process termination** - Yielding process objects
-3. **Interruption** - Forcefully resuming paused processes
+1. **基於事件的暫停/重新啟動** - 用於信號傳遞的共享事件
+2. **等待流程終止** - yield 流程物件
+3. **中斷** - 強制恢復暫停的流程
 
-## 1. Event-Based Passivation and Reactivation
+## 1. 基於事件的暫停和重新啟動
 
-Processes can share events to coordinate their execution.
+流程可以共享事件以協調其執行。
 
-### Basic Signal Pattern
+### 基本信號模式
 
 ```python
 import simpy
@@ -39,14 +39,14 @@ env.process(worker(env, signal))
 env.run()
 ```
 
-**Use cases:**
-- Start signals for coordinated operations
-- Completion notifications
-- Broadcasting state changes
+**使用情境：**
+- 協調操作的啟動信號
+- 完成通知
+- 廣播狀態變更
 
-### Multiple Waiters
+### 多個等待者
 
-Multiple processes can wait for the same signal event.
+多個流程可以等待同一個信號事件。
 
 ```python
 import simpy
@@ -73,7 +73,7 @@ for i in range(3):
 env.run()
 ```
 
-### Barrier Synchronization
+### 屏障同步
 
 ```python
 import simpy
@@ -108,11 +108,11 @@ env.process(worker(env, barrier, 'Worker C', 7))
 env.run()
 ```
 
-## 2. Waiting for Process Termination
+## 2. 等待流程終止
 
-Processes are events themselves, so you can yield them to wait for completion.
+流程本身就是事件，所以您可以 yield 它們以等待完成。
 
-### Sequential Process Execution
+### 順序流程執行
 
 ```python
 import simpy
@@ -139,7 +139,7 @@ env.process(sequential_coordinator(env))
 env.run()
 ```
 
-### Parallel Process Execution
+### 平行流程執行
 
 ```python
 import simpy
@@ -168,7 +168,7 @@ env.process(parallel_coordinator(env))
 env.run()
 ```
 
-### First-to-Complete Pattern
+### 先完成模式
 
 ```python
 import simpy
@@ -197,11 +197,11 @@ env.process(load_balancer(env))
 env.run()
 ```
 
-## 3. Process Interruption
+## 3. 流程中斷
 
-Processes can be interrupted using `process.interrupt()`, which throws an `Interrupt` exception.
+流程可以使用 `process.interrupt()` 來中斷，這會拋出 `Interrupt` 例外。
 
-### Basic Interruption
+### 基本中斷
 
 ```python
 import simpy
@@ -226,9 +226,9 @@ env.process(interrupter(env, worker_process))
 env.run()
 ```
 
-### Resumable Interruption
+### 可恢復中斷
 
-Process can re-yield the same event after interruption to continue waiting.
+流程可以在中斷後重新 yield 同一事件以繼續等待。
 
 ```python
 import simpy
@@ -259,7 +259,7 @@ env.process(interrupter(env, worker_proc))
 env.run()
 ```
 
-### Interrupt with Custom Cause
+### 帶自訂原因的中斷
 
 ```python
 import simpy
@@ -290,7 +290,7 @@ env.process(maintenance_scheduler(env, machine_proc))
 env.run()
 ```
 
-### Preemptive Resource with Interruption
+### 帶中斷的搶占式資源
 
 ```python
 import simpy
@@ -313,9 +313,9 @@ env.process(user(env, 'High priority user', resource, priority=1, duration=5))
 env.run()
 ```
 
-## Advanced Patterns
+## 進階模式
 
-### Producer-Consumer with Signaling
+### 帶信號的生產者-消費者
 
 ```python
 import simpy
@@ -367,7 +367,7 @@ env.process(consumer(env, buffer))
 env.run(until=20)
 ```
 
-### Handshake Protocol
+### 握手協議
 
 ```python
 import simpy
@@ -404,21 +404,21 @@ env.process(receiver(env, request, ack))
 env.run()
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Choose the right mechanism**:
-   - Use events for signals and broadcasts
-   - Use process yields for sequential/parallel workflows
-   - Use interrupts for preemption and emergency handling
+1. **選擇正確的機制**：
+   - 使用事件進行信號和廣播
+   - 使用流程 yield 進行順序/平行工作流程
+   - 使用中斷進行搶占和緊急處理
 
-2. **Exception handling**: Always wrap interrupt-prone code in try-except blocks
+2. **例外處理**：始終將容易中斷的程式碼包裝在 try-except 區塊中
 
-3. **Event lifecycle**: Remember that events can only be triggered once; create new events for repeated signaling
+3. **事件生命週期**：記住事件只能觸發一次；為重複信號建立新事件
 
-4. **Process references**: Store process objects if you need to interrupt them later
+4. **流程參考**：如果需要稍後中斷流程，請儲存流程物件
 
-5. **Cause information**: Use interrupt causes to communicate why interruption occurred
+5. **原因資訊**：使用中斷原因來傳達中斷發生的原因
 
-6. **Resumable patterns**: Track progress to enable resumption after interruption
+6. **可恢復模式**：追蹤進度以在中斷後啟用恢復
 
-7. **Avoid deadlocks**: Ensure at least one process can make progress at any time
+7. **避免死鎖**：確保任何時候至少有一個流程可以繼續進行

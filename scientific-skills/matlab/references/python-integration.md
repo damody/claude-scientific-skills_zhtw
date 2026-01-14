@@ -1,120 +1,120 @@
-# Python Integration Reference
+# Python 整合參考
 
-## Table of Contents
-1. [Calling Python from MATLAB](#calling-python-from-matlab)
-2. [Data Type Conversion](#data-type-conversion)
-3. [Working with Python Objects](#working-with-python-objects)
-4. [Calling MATLAB from Python](#calling-matlab-from-python)
-5. [Common Workflows](#common-workflows)
+## 目錄
+1. [從 MATLAB 呼叫 Python](#從-matlab-呼叫-python)
+2. [資料類型轉換](#資料類型轉換)
+3. [使用 Python 物件](#使用-python-物件)
+4. [從 Python 呼叫 MATLAB](#從-python-呼叫-matlab)
+5. [常見工作流程](#常見工作流程)
 
-## Calling Python from MATLAB
+## 從 MATLAB 呼叫 Python
 
-### Setup
+### 設定
 
 ```matlab
-% Check Python configuration
+% 檢查 Python 設定
 pyenv
 
-% Set Python version (before calling any Python)
+% 設定 Python 版本（在呼叫任何 Python 之前）
 pyenv('Version', '/usr/bin/python3');
 pyenv('Version', '3.10');
 
-% Check if Python is available
+% 檢查 Python 是否可用
 pe = pyenv;
 disp(pe.Version);
 disp(pe.Executable);
 ```
 
-### Basic Python Calls
+### 基本 Python 呼叫
 
 ```matlab
-% Call built-in functions with py. prefix
+% 使用 py. 前綴呼叫內建函數
 result = py.len([1, 2, 3, 4]);  % 4
 result = py.sum([1, 2, 3, 4]);  % 10
 result = py.max([1, 2, 3, 4]);  % 4
 result = py.abs(-5);            % 5
 
-% Create Python objects
+% 建立 Python 物件
 pyList = py.list({1, 2, 3});
 pyDict = py.dict(pyargs('a', 1, 'b', 2));
 pySet = py.set({1, 2, 3});
 pyTuple = py.tuple({1, 2, 3});
 
-% Call module functions
+% 呼叫模組函數
 result = py.math.sqrt(16);
 result = py.os.getcwd();
-wrapped = py.textwrap.wrap('This is a long string');
+wrapped = py.textwrap.wrap('這是一個長字串');
 ```
 
-### Import and Use Modules
+### 匯入與使用模組
 
 ```matlab
-% Import module
+% 匯入模組
 np = py.importlib.import_module('numpy');
 pd = py.importlib.import_module('pandas');
 
-% Use module
+% 使用模組
 arr = np.array({1, 2, 3, 4, 5});
 result = np.mean(arr);
 
-% Alternative: direct py. syntax
+% 替代方案：直接 py. 語法
 arr = py.numpy.array({1, 2, 3, 4, 5});
 result = py.numpy.mean(arr);
 ```
 
-### Run Python Code
+### 執行 Python 程式碼
 
 ```matlab
-% Run Python statements
+% 執行 Python 語句
 pyrun("x = 5")
 pyrun("y = x * 2")
 result = pyrun("z = y + 1", "z");
 
-% Run Python file
+% 執行 Python 檔案
 pyrunfile("script.py");
 result = pyrunfile("script.py", "output_variable");
 
-% Run with input variables
+% 帶輸入變數執行
 x = 10;
 result = pyrun("y = x * 2", "y", x=x);
 ```
 
-### Keyword Arguments
+### 關鍵字參數
 
 ```matlab
-% Use pyargs for keyword arguments
+% 使用 pyargs 傳遞關鍵字參數
 result = py.sorted({3, 1, 4, 1, 5}, pyargs('reverse', true));
 
-% Multiple keyword arguments
+% 多個關鍵字參數
 df = py.pandas.DataFrame(pyargs( ...
     'data', py.dict(pyargs('A', {1, 2, 3}, 'B', {4, 5, 6})), ...
     'index', {'x', 'y', 'z'}));
 ```
 
-## Data Type Conversion
+## 資料類型轉換
 
-### MATLAB to Python
+### MATLAB 到 Python
 
-| MATLAB Type | Python Type |
+| MATLAB 類型 | Python 類型 |
 |-------------|-------------|
 | double, single | float |
 | int8, int16, int32, int64 | int |
 | uint8, uint16, uint32, uint64 | int |
 | logical | bool |
 | char, string | str |
-| cell array | list |
-| struct | dict |
-| numeric array | numpy.ndarray (if numpy available) |
+| cell array（儲存格陣列） | list |
+| struct（結構體） | dict |
+| numeric array（數值陣列） | numpy.ndarray（如果 numpy 可用） |
 
 ```matlab
-% Automatic conversion examples
+% 自動轉換範例
 py.print(3.14);         % float
 py.print(int32(42));    % int
 py.print(true);         % bool (True)
 py.print("hello");      % str
 py.print({'a', 'b'});   % list
 
-% Explicit conversion to Python types
+% 明確轉換為 Python 類型
 pyInt = py.int(42);
 pyFloat = py.float(3.14);
 pyStr = py.str('hello');
@@ -122,81 +122,81 @@ pyList = py.list({1, 2, 3});
 pyDict = py.dict(pyargs('key', 'value'));
 ```
 
-### Python to MATLAB
+### Python 到 MATLAB
 
 ```matlab
-% Convert Python types to MATLAB
+% 轉換 Python 類型到 MATLAB
 matlabDouble = double(py.float(3.14));
 matlabInt = int64(py.int(42));
 matlabChar = char(py.str('hello'));
 matlabString = string(py.str('hello'));
 matlabCell = cell(py.list({1, 2, 3}));
 
-% Convert numpy arrays
+% 轉換 numpy 陣列
 pyArr = py.numpy.array({1, 2, 3, 4, 5});
 matlabArr = double(pyArr);
 
-% Convert pandas DataFrame to MATLAB table
+% 轉換 pandas DataFrame 到 MATLAB 表格
 pyDf = py.pandas.read_csv('data.csv');
-matlabTable = table(pyDf);  % Requires pandas2table or similar
+matlabTable = table(pyDf);  % 需要 pandas2table 或類似工具
 
-% Manual DataFrame conversion
+% 手動 DataFrame 轉換
 colNames = cell(pyDf.columns.tolist());
 data = cell(pyDf.values.tolist());
 T = cell2table(data, 'VariableNames', colNames);
 ```
 
-### Array Conversion
+### 陣列轉換
 
 ```matlab
-% MATLAB array to numpy
+% MATLAB 陣列到 numpy
 matlabArr = [1 2 3; 4 5 6];
 pyArr = py.numpy.array(matlabArr);
 
-% numpy to MATLAB
+% numpy 到 MATLAB
 pyArr = py.numpy.random.rand(int64(3), int64(4));
 matlabArr = double(pyArr);
 
-% Note: numpy uses row-major (C) order, MATLAB uses column-major (Fortran)
-% Transposition may be needed for correct layout
+% 注意：numpy 使用列優先（C）順序，MATLAB 使用欄優先（Fortran）順序
+% 可能需要轉置以取得正確的排列
 ```
 
-## Working with Python Objects
+## 使用 Python 物件
 
-### Object Methods and Properties
+### 物件方法與屬性
 
 ```matlab
-% Call methods
+% 呼叫方法
 pyList = py.list({3, 1, 4, 1, 5});
 pyList.append(9);
 pyList.sort();
 
-% Access properties/attributes
+% 存取屬性
 pyStr = py.str('hello world');
 upper = pyStr.upper();
 words = pyStr.split();
 
-% Check attributes
-methods(pyStr)          % List methods
-fieldnames(pyDict)      % List keys
+% 檢查屬性
+methods(pyStr)          % 列出方法
+fieldnames(pyDict)      % 列出鍵
 ```
 
-### Iterating Python Objects
+### 迭代 Python 物件
 
 ```matlab
-% Iterate over Python list
+% 迭代 Python 列表
 pyList = py.list({1, 2, 3, 4, 5});
 for item = py.list(pyList)
     disp(item{1});
 end
 
-% Convert to cell and iterate
+% 轉換為儲存格並迭代
 items = cell(pyList);
 for i = 1:length(items)
     disp(items{i});
 end
 
-% Iterate dict keys
+% 迭代字典鍵
 pyDict = py.dict(pyargs('a', 1, 'b', 2, 'c', 3));
 keys = cell(pyDict.keys());
 for i = 1:length(keys)
@@ -206,14 +206,14 @@ for i = 1:length(keys)
 end
 ```
 
-### Error Handling
+### 錯誤處理
 
 ```matlab
 try
     result = py.some_module.function_that_might_fail();
 catch ME
     if isa(ME, 'matlab.exception.PyException')
-        disp('Python error occurred:');
+        disp('發生 Python 錯誤：');
         disp(ME.message);
     else
         rethrow(ME);
@@ -221,54 +221,54 @@ catch ME
 end
 ```
 
-## Calling MATLAB from Python
+## 從 Python 呼叫 MATLAB
 
-### Setup MATLAB Engine
+### 設定 MATLAB 引擎
 
 ```python
-# Install MATLAB Engine API for Python
-# From MATLAB: cd(fullfile(matlabroot,'extern','engines','python'))
-# Then: python setup.py install
+# 安裝 MATLAB Engine API for Python
+# 在 MATLAB 中：cd(fullfile(matlabroot,'extern','engines','python'))
+# 然後：python setup.py install
 
 import matlab.engine
 
-# Start MATLAB engine
+# 啟動 MATLAB 引擎
 eng = matlab.engine.start_matlab()
 
-# Or connect to shared session (MATLAB: matlab.engine.shareEngine)
+# 或連接到共享會話（MATLAB：matlab.engine.shareEngine）
 eng = matlab.engine.connect_matlab()
 
-# List available sessions
+# 列出可用會話
 matlab.engine.find_matlab()
 ```
 
-### Call MATLAB Functions
+### 呼叫 MATLAB 函數
 
 ```python
 import matlab.engine
 
 eng = matlab.engine.start_matlab()
 
-# Call built-in functions
+# 呼叫內建函數
 result = eng.sqrt(16.0)
 result = eng.sin(3.14159 / 2)
 
-# Multiple outputs
+# 多輸出
 mean_val, std_val = eng.std([1, 2, 3, 4, 5], nargout=2)
 
-# Matrix operations
+# 矩陣運算
 A = matlab.double([[1, 2], [3, 4]])
 B = eng.inv(A)
-C = eng.mtimes(A, B)  # Matrix multiplication
+C = eng.mtimes(A, B)  # 矩陣乘法
 
-# Call custom function (must be on MATLAB path)
+# 呼叫自訂函數（必須在 MATLAB 路徑上）
 result = eng.myfunction(arg1, arg2)
 
-# Cleanup
+# 清理
 eng.quit()
 ```
 
-### Data Conversion (Python to MATLAB)
+### 資料轉換（Python 到 MATLAB）
 
 ```python
 import matlab.engine
@@ -276,98 +276,98 @@ import numpy as np
 
 eng = matlab.engine.start_matlab()
 
-# Python to MATLAB types
+# Python 到 MATLAB 類型
 matlab_double = matlab.double([1.0, 2.0, 3.0])
 matlab_int = matlab.int32([1, 2, 3])
 matlab_complex = matlab.double([1+2j, 3+4j], is_complex=True)
 
-# 2D array
+# 2D 陣列
 matlab_matrix = matlab.double([[1, 2, 3], [4, 5, 6]])
 
-# numpy to MATLAB
+# numpy 到 MATLAB
 np_array = np.array([[1, 2], [3, 4]], dtype=np.float64)
 matlab_array = matlab.double(np_array.tolist())
 
-# Call MATLAB with numpy data
+# 使用 numpy 資料呼叫 MATLAB
 result = eng.sum(matlab.double(np_array.flatten().tolist()))
 ```
 
-### Async Calls
+### 非同步呼叫
 
 ```python
 import matlab.engine
 
 eng = matlab.engine.start_matlab()
 
-# Asynchronous call
+# 非同步呼叫
 future = eng.sqrt(16.0, background=True)
 
-# Do other work...
+# 做其他工作...
 
-# Get result when ready
+# 準備好時取得結果
 result = future.result()
 
-# Check if done
+# 檢查是否完成
 if future.done():
     result = future.result()
 
-# Cancel if needed
+# 如需要則取消
 future.cancel()
 ```
 
-## Common Workflows
+## 常見工作流程
 
-### Using Python Libraries in MATLAB
+### 在 MATLAB 中使用 Python 函式庫
 
 ```matlab
-% Use scikit-learn from MATLAB
+% 從 MATLAB 使用 scikit-learn
 sklearn = py.importlib.import_module('sklearn.linear_model');
 
-% Prepare data
+% 準備資料
 X = rand(100, 5);
 y = X * [1; 2; 3; 4; 5] + randn(100, 1) * 0.1;
 
-% Convert to Python/numpy
+% 轉換為 Python/numpy
 X_py = py.numpy.array(X);
 y_py = py.numpy.array(y);
 
-% Train model
+% 訓練模型
 model = sklearn.LinearRegression();
 model.fit(X_py, y_py);
 
-% Get coefficients
+% 取得係數
 coefs = double(model.coef_);
 intercept = double(model.intercept_);
 
-% Predict
+% 預測
 y_pred = double(model.predict(X_py));
 ```
 
-### Using MATLAB in Python Scripts
+### 在 Python 腳本中使用 MATLAB
 
 ```python
 import matlab.engine
 import numpy as np
 
-# Start MATLAB
+# 啟動 MATLAB
 eng = matlab.engine.start_matlab()
 
-# Use MATLAB's optimization
+# 使用 MATLAB 的最佳化
 def matlab_fmincon(objective, x0, A, b, Aeq, beq, lb, ub):
-    """Wrapper for MATLAB's fmincon."""
-    # Convert to MATLAB types
+    """MATLAB fmincon 的包裝器。"""
+    # 轉換為 MATLAB 類型
     x0_m = matlab.double(x0.tolist())
     A_m = matlab.double(A.tolist()) if A is not None else matlab.double([])
     b_m = matlab.double(b.tolist()) if b is not None else matlab.double([])
 
-    # Call MATLAB (assuming objective is a MATLAB function)
+    # 呼叫 MATLAB（假設 objective 是 MATLAB 函數）
     x, fval = eng.fmincon(objective, x0_m, A_m, b_m, nargout=2)
 
     return np.array(x).flatten(), fval
 
-# Use MATLAB's plotting
+# 使用 MATLAB 的繪圖
 def matlab_plot(x, y, title_str):
-    """Create plot using MATLAB."""
+    """使用 MATLAB 建立繪圖。"""
     eng.figure(nargout=0)
     eng.plot(matlab.double(x.tolist()), matlab.double(y.tolist()), nargout=0)
     eng.title(title_str, nargout=0)
@@ -376,58 +376,58 @@ def matlab_plot(x, y, title_str):
 eng.quit()
 ```
 
-### Sharing Data Between MATLAB and Python
+### 在 MATLAB 和 Python 之間共享資料
 
 ```matlab
-% Save data for Python
+% 為 Python 儲存資料
 data = rand(100, 10);
 labels = randi([0 1], 100, 1);
 save('data_for_python.mat', 'data', 'labels');
 
-% In Python:
+% 在 Python 中：
 % import scipy.io
 % mat = scipy.io.loadmat('data_for_python.mat')
 % data = mat['data']
 % labels = mat['labels']
 
-% Load data from Python (saved with scipy.io.savemat)
+% 載入來自 Python 的資料（用 scipy.io.savemat 儲存）
 loaded = load('data_from_python.mat');
 data = loaded.data;
 labels = loaded.labels;
 
-% Alternative: use CSV for simple data exchange
+% 替代方案：使用 CSV 進行簡單資料交換
 writematrix(data, 'data.csv');
-% Python: pd.read_csv('data.csv')
+% Python：pd.read_csv('data.csv')
 
-% Python writes: df.to_csv('results.csv')
+% Python 寫入：df.to_csv('results.csv')
 results = readmatrix('results.csv');
 ```
 
-### Using Python Packages Not Available in MATLAB
+### 使用 MATLAB 中不可用的 Python 套件
 
 ```matlab
-% Example: Use Python's requests library
+% 範例：使用 Python 的 requests 函式庫
 requests = py.importlib.import_module('requests');
 
-% Make HTTP request
+% 發送 HTTP 請求
 response = requests.get('https://api.example.com/data');
 status = int64(response.status_code);
 
 if status == 200
     data = response.json();
-    % Convert to MATLAB structure
+    % 轉換為 MATLAB 結構體
     dataStruct = struct(data);
 end
 
-% Example: Use Python's PIL/Pillow for advanced image processing
+% 範例：使用 Python 的 PIL/Pillow 進行進階影像處理
 PIL = py.importlib.import_module('PIL.Image');
 
-% Open image
+% 開啟影像
 img = PIL.open('image.png');
 
-% Resize
+% 調整大小
 img_resized = img.resize(py.tuple({int64(256), int64(256)}));
 
-% Save
+% 儲存
 img_resized.save('image_resized.png');
 ```

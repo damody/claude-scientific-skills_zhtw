@@ -1,14 +1,14 @@
-# EEG Analysis and Microstates
+# EEG 分析與微狀態（Microstates）
 
-## Overview
+## 概述
 
-Analyze electroencephalography (EEG) signals for frequency band power, channel quality assessment, source localization, and microstate identification. NeuroKit2 integrates with MNE-Python for comprehensive EEG processing workflows.
+分析腦電圖（Electroencephalography，EEG）訊號以進行頻帶功率、通道品質評估、源定位和微狀態（microstate）識別。NeuroKit2 與 MNE-Python 整合，提供完整的 EEG 處理工作流程。
 
-## Core EEG Functions
+## 核心 EEG 函數
 
 ### eeg_power()
 
-Compute power across standard frequency bands for specified channels.
+計算指定通道在標準頻帶上的功率。
 
 ```python
 power = nk.eeg_power(eeg_data, sampling_rate=250, channels=['Fz', 'Cz', 'Pz'],
@@ -19,376 +19,376 @@ power = nk.eeg_power(eeg_data, sampling_rate=250, channels=['Fz', 'Cz', 'Pz'],
                                      'Gamma': (30, 45)})
 ```
 
-**Standard frequency bands:**
-- **Delta (0.5-4 Hz)**: Deep sleep, unconscious processes
-- **Theta (4-8 Hz)**: Drowsiness, meditation, memory encoding
-- **Alpha (8-13 Hz)**: Relaxed wakefulness, eyes closed
-- **Beta (13-30 Hz)**: Active thinking, focus, anxiety
-- **Gamma (30-45 Hz)**: Cognitive processing, binding
+**標準頻帶：**
+- **Delta（0.5-4 Hz）**：深度睡眠、無意識過程
+- **Theta（4-8 Hz）**：嗜睡、冥想、記憶編碼
+- **Alpha（8-13 Hz）**：放鬆清醒、閉眼
+- **Beta（13-30 Hz）**：主動思考、專注、焦慮
+- **Gamma（30-45 Hz）**：認知處理、綁定
 
-**Returns:**
-- DataFrame with power values for each channel × frequency band combination
-- Columns: `Channel_Band` (e.g., 'Fz_Alpha', 'Cz_Beta')
+**回傳：**
+- DataFrame，包含每個通道 × 頻帶組合的功率值
+- 欄位名稱：`Channel_Band`（例如 'Fz_Alpha'、'Cz_Beta'）
 
-**Use cases:**
-- Resting state analysis
-- Cognitive state classification
-- Sleep staging
-- Meditation or neurofeedback monitoring
+**應用場景：**
+- 靜息狀態分析
+- 認知狀態分類
+- 睡眠分期
+- 冥想或神經回饋監測
 
 ### eeg_badchannels()
 
-Identify problematic channels using statistical outlier detection.
+使用統計異常值偵測識別問題通道。
 
 ```python
 bad_channels = nk.eeg_badchannels(eeg_data, sampling_rate=250, bad_threshold=2)
 ```
 
-**Detection methods:**
-- Standard deviation outliers across channels
-- Correlation with other channels
-- Flat or dead channels
-- Channels with excessive noise
+**偵測方法：**
+- 跨通道的標準差異常值
+- 與其他通道的相關性
+- 平坦或無訊號通道
+- 噪音過多的通道
 
-**Parameters:**
-- `bad_threshold`: Z-score threshold for outlier detection (default: 2)
+**參數：**
+- `bad_threshold`：異常值偵測的 Z 分數閾值（預設：2）
 
-**Returns:**
-- List of channel names identified as problematic
+**回傳：**
+- 被識別為有問題的通道名稱列表
 
-**Use case:**
-- Quality control before analysis
-- Automatic bad channel rejection
-- Interpolation or exclusion decisions
+**應用場景：**
+- 分析前的品質控制
+- 自動壞通道拒絕
+- 內插或排除決策
 
 ### eeg_rereference()
 
-Re-express voltage measurements relative to different reference points.
+將電壓測量值重新表達為相對於不同參考點。
 
 ```python
 rereferenced = nk.eeg_rereference(eeg_data, reference='average', robust=False)
 ```
 
-**Reference types:**
-- `'average'`: Average reference (mean of all electrodes)
-- `'REST'`: Reference Electrode Standardization Technique
-- `'bipolar'`: Differential recording between electrode pairs
-- Specific channel name: Use single electrode as reference
+**參考類型：**
+- `'average'`：平均參考（所有電極的平均值）
+- `'REST'`：參考電極標準化技術（Reference Electrode Standardization Technique）
+- `'bipolar'`：電極對之間的差分記錄
+- 特定通道名稱：使用單一電極作為參考
 
-**Common references:**
-- **Average reference**: Most common for high-density EEG
-- **Linked mastoids**: Traditional clinical EEG
-- **Vertex (Cz)**: Sometimes used in ERP research
-- **REST**: Approximates infinity reference
+**常見參考：**
+- **平均參考**：高密度 EEG 最常用
+- **連接乳突**：傳統臨床 EEG
+- **頂點（Cz）**：有時用於 ERP 研究
+- **REST**：近似無窮遠參考
 
-**Returns:**
-- Re-referenced EEG data
+**回傳：**
+- 重新參考的 EEG 資料
 
 ### eeg_gfp()
 
-Compute Global Field Power - the standard deviation of all electrodes at each time point.
+計算全域場功率（Global Field Power）- 每個時間點所有電極的標準差。
 
 ```python
 gfp = nk.eeg_gfp(eeg_data)
 ```
 
-**Interpretation:**
-- High GFP: Strong, synchronized brain activity across regions
-- Low GFP: Weak or desynchronized activity
-- GFP peaks: Points of stable topography, used for microstate detection
+**解讀：**
+- 高 GFP：跨區域強烈、同步的大腦活動
+- 低 GFP：弱或不同步的活動
+- GFP 峰值：穩定地形的時間點，用於微狀態偵測
 
-**Use cases:**
-- Identify periods of stable topographic patterns
-- Select time points for microstate analysis
-- Event-related potential (ERP) visualization
+**應用場景：**
+- 識別穩定地形模式的時期
+- 選擇微狀態分析的時間點
+- 事件相關電位（ERP）視覺化
 
 ### eeg_diss()
 
-Measure topographic dissimilarity between electric field configurations.
+測量電場配置之間的地形差異性。
 
 ```python
 dissimilarity = nk.eeg_diss(eeg_data1, eeg_data2, method='gfp')
 ```
 
-**Methods:**
-- GFP-based: Normalized difference
-- Spatial correlation
-- Cosine distance
+**方法：**
+- 基於 GFP：標準化差異
+- 空間相關
+- 餘弦距離
 
-**Use case:**
-- Compare topographies between conditions
-- Microstate transition analysis
-- Template matching
+**應用場景：**
+- 比較不同條件之間的地形
+- 微狀態轉換分析
+- 模板匹配
 
-## Source Localization
+## 源定位（Source Localization）
 
 ### eeg_source()
 
-Perform source reconstruction to estimate brain-level activity from scalp recordings.
+執行源重建以從頭皮記錄估計大腦層級活動。
 
 ```python
 sources = nk.eeg_source(eeg_data, method='sLORETA')
 ```
 
-**Methods:**
-- `'sLORETA'`: Standardized Low-Resolution Electromagnetic Tomography
-  - Zero localization error for point sources
-  - Good spatial resolution
-- `'MNE'`: Minimum Norm Estimate
-  - Fast, well-established
-  - Bias toward superficial sources
-- `'dSPM'`: Dynamic Statistical Parametric Mapping
-  - Normalized MNE
-- `'eLORETA'`: Exact LORETA
-  - Improved localization accuracy
+**方法：**
+- `'sLORETA'`：標準化低解析度電磁斷層成像（Standardized Low-Resolution Electromagnetic Tomography）
+  - 點源的零定位誤差
+  - 良好的空間解析度
+- `'MNE'`：最小範數估計（Minimum Norm Estimate）
+  - 快速、成熟
+  - 傾向淺層源
+- `'dSPM'`：動態統計參數映射（Dynamic Statistical Parametric Mapping）
+  - 標準化的 MNE
+- `'eLORETA'`：精確 LORETA
+  - 改進的定位準確度
 
-**Requirements:**
-- Forward model (lead field matrix)
-- Co-registered electrode positions
-- Head model (boundary element or spherical)
+**需求：**
+- 前向模型（導聯場矩陣）
+- 共配準的電極位置
+- 頭部模型（邊界元素或球形）
 
-**Returns:**
-- Source space activity estimates
+**回傳：**
+- 源空間活動估計
 
 ### eeg_source_extract()
 
-Extract activity from specific anatomical brain regions.
+從特定解剖大腦區域提取活動。
 
 ```python
 regional_activity = nk.eeg_source_extract(sources, regions=['PFC', 'MTL', 'Parietal'])
 ```
 
-**Region options:**
-- Standard atlases: Desikan-Killiany, Destrieux, AAL
-- Custom ROIs
-- Brodmann areas
+**區域選項：**
+- 標準圖譜：Desikan-Killiany、Destrieux、AAL
+- 自訂 ROI
+- Brodmann 區域
 
-**Returns:**
-- Time series for each region
-- Averaged or principal component across voxels
+**回傳：**
+- 每個區域的時間序列
+- 跨體素的平均或主成分
 
-**Use cases:**
-- Region-of-interest analysis
-- Functional connectivity
-- Source-level statistics
+**應用場景：**
+- 感興趣區域分析
+- 功能連接
+- 源層級統計
 
-## Microstate Analysis
+## 微狀態分析（Microstate Analysis）
 
-Microstates are brief (80-120 ms) periods of stable brain topography, representing coordinated neural networks. Typically 4-7 microstate classes (often labeled A, B, C, D) with distinct functions.
+微狀態是短暫（80-120 毫秒）的穩定大腦地形時期，代表協調的神經網路。通常有 4-7 個微狀態類別（通常標記為 A、B、C、D），具有不同的功能。
 
 ### microstates_segment()
 
-Identify and extract microstates using clustering algorithms.
+使用聚類演算法識別和提取微狀態。
 
 ```python
 microstates = nk.microstates_segment(eeg_data, n_microstates=4, sampling_rate=250,
                                       method='kmod', normalize=True)
 ```
 
-**Methods:**
-- `'kmod'` (default): Modified k-means optimized for EEG topographies
-  - Polarity-invariant clustering
-  - Most common in microstate literature
-- `'kmeans'`: Standard k-means clustering
-- `'kmedoids'`: K-medoids (more robust to outliers)
-- `'pca'`: Principal component analysis
-- `'ica'`: Independent component analysis
-- `'aahc'`: Atomize and agglomerate hierarchical clustering
+**方法：**
+- `'kmod'`（預設）：為 EEG 地形最佳化的修改版 k-means
+  - 極性不變聚類
+  - 微狀態文獻中最常見
+- `'kmeans'`：標準 k-means 聚類
+- `'kmedoids'`：K-medoids（對異常值更穩健）
+- `'pca'`：主成分分析
+- `'ica'`：獨立成分分析
+- `'aahc'`：原子化和聚集層次聚類
 
-**Parameters:**
-- `n_microstates`: Number of microstate classes (typically 4-7)
-- `normalize`: Normalize topographies (recommended: True)
-- `n_inits`: Number of random initializations (increase for stability)
+**參數：**
+- `n_microstates`：微狀態類別數（通常 4-7）
+- `normalize`：標準化地形（建議：True）
+- `n_inits`：隨機初始化次數（增加以提高穩定性）
 
-**Returns:**
-- Dictionary with:
-  - `'maps'`: Microstate template topographies
-  - `'labels'`: Microstate label at each time point
-  - `'gfp'`: Global field power
-  - `'gev'`: Global explained variance
+**回傳：**
+- 字典包含：
+  - `'maps'`：微狀態模板地形
+  - `'labels'`：每個時間點的微狀態標籤
+  - `'gfp'`：全域場功率
+  - `'gev'`：全域解釋變異
 
 ### microstates_findnumber()
 
-Estimate the optimal number of microstates.
+估計最佳微狀態數量。
 
 ```python
 optimal_k = nk.microstates_findnumber(eeg_data, show=True)
 ```
 
-**Criteria:**
-- **Global Explained Variance (GEV)**: Percentage of variance explained
-  - Elbow method: find "knee" in GEV curve
-  - Typically 70-80% GEV achieved
-- **Krzanowski-Lai (KL) Criterion**: Statistical measure balancing fit and parsimony
-  - Maximum KL indicates optimal k
+**標準：**
+- **全域解釋變異（GEV）**：解釋的變異百分比
+  - 肘部法：在 GEV 曲線中找到「膝蓋」
+  - 通常達到 70-80% GEV
+- **Krzanowski-Lai（KL）標準**：平衡擬合和簡約性的統計量度
+  - 最大 KL 表示最佳 k
 
-**Typical range:** 4-7 microstates
-- 4 microstates: Classic A, B, C, D states
-- 5-7 microstates: Finer-grained decomposition
+**典型範圍：** 4-7 個微狀態
+- 4 個微狀態：經典的 A、B、C、D 狀態
+- 5-7 個微狀態：更精細的分解
 
 ### microstates_classify()
 
-Reorder microstates based on anterior-posterior and left-right channel values.
+根據前後和左右通道值重新排序微狀態。
 
 ```python
 classified = nk.microstates_classify(microstates)
 ```
 
-**Purpose:**
-- Standardize microstate labels across subjects
-- Match conventional A, B, C, D topographies:
-  - **A**: Left-right orientation, parieto-occipital
-  - **B**: Right-left orientation, fronto-temporal
-  - **C**: Anterior-posterior orientation, frontal-central
-  - **D**: Fronto-central, anterior-posterior (inverse of C)
+**目的：**
+- 跨受試者標準化微狀態標籤
+- 匹配傳統的 A、B、C、D 地形：
+  - **A**：左右方向，頂枕
+  - **B**：右左方向，額顳
+  - **C**：前後方向，額中央
+  - **D**：額中央，前後（C 的反向）
 
-**Returns:**
-- Reordered microstate maps and labels
+**回傳：**
+- 重新排序的微狀態映射和標籤
 
 ### microstates_clean()
 
-Preprocess EEG data for microstate extraction.
+為微狀態提取預處理 EEG 資料。
 
 ```python
 cleaned_eeg = nk.microstates_clean(eeg_data, sampling_rate=250)
 ```
 
-**Preprocessing steps:**
-- Bandpass filtering (typically 2-20 Hz)
-- Artifact rejection
-- Bad channel interpolation
-- Re-referencing to average
+**預處理步驟：**
+- 帶通濾波（通常 2-20 Hz）
+- 偽跡拒絕
+- 壞通道內插
+- 重新參考到平均
 
-**Rationale:**
-- Microstates reflect large-scale network activity
-- High-frequency and low-frequency artifacts can distort topographies
+**原理：**
+- 微狀態反映大規模網路活動
+- 高頻和低頻偽跡可能扭曲地形
 
 ### microstates_peaks()
 
-Identify GFP peaks for microstate analysis.
+識別微狀態分析的 GFP 峰值。
 
 ```python
 peak_indices = nk.microstates_peaks(eeg_data, sampling_rate=250)
 ```
 
-**Purpose:**
-- Microstates typically analyzed at GFP peaks
-- Peaks represent moments of maximal, stable topographic activity
-- Reduces computational load and noise sensitivity
+**目的：**
+- 微狀態通常在 GFP 峰值處分析
+- 峰值代表最大、穩定地形活動的時刻
+- 減少計算負擔和噪音敏感性
 
-**Returns:**
-- Indices of GFP local maxima
+**回傳：**
+- GFP 局部最大值的索引
 
 ### microstates_static()
 
-Compute temporal properties of individual microstates.
+計算個別微狀態的時間特性。
 
 ```python
 static_metrics = nk.microstates_static(microstates)
 ```
 
-**Metrics:**
-- **Duration (ms)**: Mean time spent in each microstate
-  - Typical: 80-120 ms
-  - Reflects stability and persistence
-- **Occurrence (per second)**: Frequency of microstate appearances
-  - How often each state is entered
-- **Coverage (%)**: Percentage of total time in each microstate
-  - Relative dominance
-- **Global Explained Variance (GEV)**: Variance explained by each class
-  - Quality of template fit
+**指標：**
+- **持續時間（ms）**：在每個微狀態中花費的平均時間
+  - 典型：80-120 毫秒
+  - 反映穩定性和持久性
+- **發生次數（每秒）**：微狀態出現的頻率
+  - 每個狀態被進入的頻率
+- **覆蓋率（%）**：在每個微狀態中的總時間百分比
+  - 相對主導性
+- **全域解釋變異（GEV）**：每個類別解釋的變異
+  - 模板擬合的品質
 
-**Returns:**
-- DataFrame with metrics for each microstate class
+**回傳：**
+- 包含每個微狀態類別指標的 DataFrame
 
-**Interpretation:**
-- Changes in duration: altered network stability
-- Changes in occurrence: shifting state dynamics
-- Changes in coverage: dominance of specific networks
+**解讀：**
+- 持續時間變化：改變的網路穩定性
+- 發生次數變化：移動的狀態動態
+- 覆蓋率變化：特定網路的主導性
 
 ### microstates_dynamic()
 
-Analyze transition patterns between microstates.
+分析微狀態之間的轉換模式。
 
 ```python
 dynamic_metrics = nk.microstates_dynamic(microstates)
 ```
 
-**Metrics:**
-- **Transition matrix**: Probability of transitioning from state i to state j
-  - Reveals preferential sequences
-- **Transition rate**: Overall transition frequency
-  - Higher rate: more rapid switching
-- **Entropy**: Randomness of transitions
-  - High entropy: unpredictable switching
-  - Low entropy: stereotyped sequences
-- **Markov test**: Are transitions history-dependent?
+**指標：**
+- **轉換矩陣**：從狀態 i 轉換到狀態 j 的機率
+  - 揭示優先序列
+- **轉換率**：整體轉換頻率
+  - 較高的率：更快速的切換
+- **熵**：轉換的隨機性
+  - 高熵：不可預測的切換
+  - 低熵：刻板的序列
+- **馬可夫檢驗**：轉換是否依賴歷史？
 
-**Returns:**
-- Dictionary with transition statistics
+**回傳：**
+- 包含轉換統計的字典
 
-**Use cases:**
-- Identify abnormal microstate sequences in clinical populations
-- Network dynamics and flexibility
-- State-dependent information processing
+**應用場景：**
+- 識別臨床人群中異常的微狀態序列
+- 網路動態和靈活性
+- 狀態依賴的資訊處理
 
 ### microstates_plot()
 
-Visualize microstate topographies and time course.
+視覺化微狀態地形和時間過程。
 
 ```python
 nk.microstates_plot(microstates, eeg_data)
 ```
 
-**Displays:**
-- Topographic maps for each microstate class
-- GFP trace with microstate labels
-- Transition plot showing state sequences
-- Statistical summary
+**顯示：**
+- 每個微狀態類別的地形圖
+- 帶有微狀態標籤的 GFP 軌跡
+- 顯示狀態序列的轉換圖
+- 統計摘要
 
-## MNE Integration Utilities
+## MNE 整合工具
 
 ### mne_data()
 
-Access sample datasets from MNE-Python.
+從 MNE-Python 存取範例資料集。
 
 ```python
 raw = nk.mne_data(dataset='sample', directory=None)
 ```
 
-**Available datasets:**
-- `'sample'`: Multi-modal (MEG/EEG) example
-- `'ssvep'`: Steady-state visual evoked potentials
-- `'eegbci'`: Motor imagery BCI dataset
+**可用資料集：**
+- `'sample'`：多模態（MEG/EEG）範例
+- `'ssvep'`：穩態視覺誘發電位
+- `'eegbci'`：運動想像 BCI 資料集
 
 ### mne_to_df() / mne_to_dict()
 
-Convert MNE objects to NeuroKit-compatible formats.
+將 MNE 物件轉換為 NeuroKit 相容格式。
 
 ```python
 df = nk.mne_to_df(raw)
 data_dict = nk.mne_to_dict(epochs)
 ```
 
-**Use case:**
-- Work with MNE-processed data in NeuroKit2
-- Convert between formats for analysis
+**應用場景：**
+- 在 NeuroKit2 中處理 MNE 處理過的資料
+- 在格式之間轉換以進行分析
 
 ### mne_channel_add() / mne_channel_extract()
 
-Manage individual channels in MNE objects.
+管理 MNE 物件中的個別通道。
 
 ```python
-# Extract specific channels
+# 提取特定通道
 subset = nk.mne_channel_extract(raw, ['Fz', 'Cz', 'Pz'])
 
-# Add derived channels
+# 添加衍生通道
 raw_with_eog = nk.mne_channel_add(raw, new_channel_data, ch_name='EOG')
 ```
 
 ### mne_crop()
 
-Trim recordings by time or samples.
+按時間或樣本修剪記錄。
 
 ```python
 cropped = nk.mne_crop(raw, tmin=10, tmax=100)
@@ -396,110 +396,110 @@ cropped = nk.mne_crop(raw, tmin=10, tmax=100)
 
 ### mne_templateMRI()
 
-Provide template anatomy for source localization.
+為源定位提供模板解剖。
 
 ```python
 subjects_dir = nk.mne_templateMRI()
 ```
 
-**Use case:**
-- Source analysis without individual MRI
-- Group-level source localization
-- fsaverage template brain
+**應用場景：**
+- 沒有個人 MRI 的源分析
+- 群組層級源定位
+- fsaverage 模板腦
 
 ### eeg_simulate()
 
-Generate synthetic EEG signals for testing.
+生成用於測試的合成 EEG 訊號。
 
 ```python
 synthetic_eeg = nk.eeg_simulate(duration=60, sampling_rate=250, n_channels=32)
 ```
 
-## Practical Considerations
+## 實務考量
 
-### Sampling Rate Recommendations
-- **Minimum**: 100 Hz for basic power analysis
-- **Standard**: 250-500 Hz for most applications
-- **High-resolution**: 1000+ Hz for detailed temporal dynamics
+### 取樣率建議
+- **最低**：100 Hz 用於基本功率分析
+- **標準**：250-500 Hz 用於大多數應用
+- **高解析度**：1000+ Hz 用於詳細的時間動態
 
-### Recording Duration
-- **Power analysis**: ≥2 minutes for stable estimates
-- **Microstates**: ≥2-5 minutes, longer preferred
-- **Resting state**: 3-10 minutes typical
-- **Event-related**: Depends on trial count (≥30 trials per condition)
+### 記錄時長
+- **功率分析**：≥2 分鐘以獲得穩定估計
+- **微狀態**：≥2-5 分鐘，越長越好
+- **靜息狀態**：典型 3-10 分鐘
+- **事件相關**：取決於試驗次數（每條件 ≥30 次試驗）
 
-### Artifact Management
-- **Eye blinks**: Remove with ICA or regression
-- **Muscle artifacts**: High-pass filter (≥1 Hz) or manual rejection
-- **Bad channels**: Detect and interpolate before analysis
-- **Line noise**: Notch filter at 50/60 Hz
+### 偽跡管理
+- **眨眼**：使用 ICA 或迴歸移除
+- **肌肉偽跡**：高通濾波（≥1 Hz）或手動拒絕
+- **壞通道**：分析前偵測並內插
+- **市電噪音**：在 50/60 Hz 使用陷波濾波器
 
-### Best Practices
+### 最佳實踐
 
-**Power analysis:**
+**功率分析：**
 ```python
-# 1. Clean data
+# 1. 清理資料
 cleaned = nk.signal_filter(eeg_data, sampling_rate=250, lowcut=0.5, highcut=45)
 
-# 2. Identify and interpolate bad channels
+# 2. 識別並內插壞通道
 bad = nk.eeg_badchannels(cleaned, sampling_rate=250)
-# Interpolate bad channels using MNE
+# 使用 MNE 內插壞通道
 
-# 3. Re-reference
+# 3. 重新參考
 rereferenced = nk.eeg_rereference(cleaned, reference='average')
 
-# 4. Compute power
+# 4. 計算功率
 power = nk.eeg_power(rereferenced, sampling_rate=250, channels=channel_list)
 ```
 
-**Microstate workflow:**
+**微狀態工作流程：**
 ```python
-# 1. Preprocess
+# 1. 預處理
 cleaned = nk.microstates_clean(eeg_data, sampling_rate=250)
 
-# 2. Determine optimal number of states
+# 2. 確定最佳狀態數
 optimal_k = nk.microstates_findnumber(cleaned, show=True)
 
-# 3. Segment microstates
+# 3. 分割微狀態
 microstates = nk.microstates_segment(cleaned, n_microstates=optimal_k,
                                      sampling_rate=250, method='kmod')
 
-# 4. Classify to standard labels
+# 4. 分類為標準標籤
 microstates = nk.microstates_classify(microstates)
 
-# 5. Compute temporal metrics
+# 5. 計算時間指標
 static = nk.microstates_static(microstates)
 dynamic = nk.microstates_dynamic(microstates)
 
-# 6. Visualize
+# 6. 視覺化
 nk.microstates_plot(microstates, cleaned)
 ```
 
-## Clinical and Research Applications
+## 臨床和研究應用
 
-**Cognitive neuroscience:**
-- Attention, working memory, executive function
-- Language processing
-- Sensory perception
+**認知神經科學：**
+- 注意力、工作記憶、執行功能
+- 語言處理
+- 感覺知覺
 
-**Clinical populations:**
-- Epilepsy: seizure detection, localization
-- Alzheimer's disease: slowing of EEG, microstate alterations
-- Schizophrenia: altered microstates, especially state C
-- ADHD: increased theta/beta ratio
-- Depression: frontal alpha asymmetry
+**臨床人群：**
+- 癲癇：癲癇偵測、定位
+- 阿茲海默症：EEG 減慢、微狀態改變
+- 思覺失調症：改變的微狀態，特別是狀態 C
+- 注意力不足過動症：增加的 theta/beta 比率
+- 憂鬱症：額葉 alpha 不對稱
 
-**Consciousness research:**
-- Anesthesia monitoring
-- Disorders of consciousness
-- Sleep staging
+**意識研究：**
+- 麻醉監測
+- 意識障礙
+- 睡眠分期
 
-**Neurofeedback:**
-- Real-time frequency band training
-- Alpha enhancement for relaxation
-- Beta enhancement for focus
+**神經回饋：**
+- 即時頻帶訓練
+- Alpha 增強以放鬆
+- Beta 增強以專注
 
-## References
+## 參考文獻
 
 - Michel, C. M., & Koenig, T. (2018). EEG microstates as a tool for studying the temporal dynamics of whole-brain neuronal networks: A review. Neuroimage, 180, 577-593.
 - Pascual-Marqui, R. D., Michel, C. M., & Lehmann, D. (1995). Segmentation of brain electrical activity into microstates: model estimation and validation. IEEE Transactions on Biomedical Engineering, 42(7), 658-665.

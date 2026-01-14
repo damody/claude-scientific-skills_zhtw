@@ -1,103 +1,103 @@
-# Pymatgen I/O and File Format Reference
+# Pymatgen I/O 和檔案格式參考
 
-This reference documents pymatgen's extensive input/output capabilities for reading and writing structural and computational data across 100+ file formats.
+本參考記錄 pymatgen 廣泛的輸入/輸出功能，用於讀寫跨 100+ 種檔案格式的結構和計算資料。
 
-## General I/O Philosophy
+## 一般 I/O 理念
 
-Pymatgen provides a unified interface for file operations through the `from_file()` and `to()` methods, with automatic format detection based on file extensions.
+Pymatgen 透過 `from_file()` 和 `to()` 方法提供統一的檔案操作介面，具有基於副檔名的自動格式偵測。
 
-### Reading Files
+### 讀取檔案
 
 ```python
 from pymatgen.core import Structure, Molecule
 
-# Automatic format detection
+# 自動格式偵測
 struct = Structure.from_file("POSCAR")
 struct = Structure.from_file("structure.cif")
 mol = Molecule.from_file("molecule.xyz")
 
-# Explicit format specification
+# 明確格式指定
 struct = Structure.from_file("file.txt", fmt="cif")
 ```
 
-### Writing Files
+### 寫入檔案
 
 ```python
-# Write to file (format inferred from extension)
+# 寫入檔案（從副檔名推斷格式）
 struct.to(filename="output.cif")
 struct.to(filename="POSCAR")
 struct.to(filename="structure.xyz")
 
-# Get string representation without writing
+# 取得字串表示而不寫入
 cif_string = struct.to(fmt="cif")
 poscar_string = struct.to(fmt="poscar")
 ```
 
-## Structure File Formats
+## 結構檔案格式
 
-### CIF (Crystallographic Information File)
-Standard format for crystallographic data.
+### CIF（晶體學資訊檔案）
+晶體學資料的標準格式。
 
 ```python
 from pymatgen.io.cif import CifParser, CifWriter
 
-# Reading
+# 讀取
 parser = CifParser("structure.cif")
-structure = parser.get_structures()[0]  # Returns list of structures
+structure = parser.get_structures()[0]  # 回傳結構列表
 
-# Writing
+# 寫入
 writer = CifWriter(struct)
 writer.write_file("output.cif")
 
-# Or using convenience methods
+# 或使用便捷方法
 struct = Structure.from_file("structure.cif")
 struct.to(filename="output.cif")
 ```
 
-**Key features:**
-- Supports symmetry information
-- Can contain multiple structures
-- Preserves space group and symmetry operations
-- Handles partial occupancies
+**主要功能：**
+- 支援對稱性資訊
+- 可包含多個結構
+- 保留空間群和對稱操作
+- 處理部分佔據
 
-### POSCAR/CONTCAR (VASP)
-VASP's structure format.
+### POSCAR/CONTCAR（VASP）
+VASP 的結構格式。
 
 ```python
 from pymatgen.io.vasp import Poscar
 
-# Reading
+# 讀取
 poscar = Poscar.from_file("POSCAR")
 structure = poscar.structure
 
-# Writing
+# 寫入
 poscar = Poscar(struct)
 poscar.write_file("POSCAR")
 
-# Or using convenience methods
+# 或使用便捷方法
 struct = Structure.from_file("POSCAR")
 struct.to(filename="POSCAR")
 ```
 
-**Key features:**
-- Supports selective dynamics
-- Can include velocities (XDATCAR format)
-- Preserves lattice and coordinate precision
+**主要功能：**
+- 支援選擇性動力學
+- 可包含速度（XDATCAR 格式）
+- 保留晶格和座標精度
 
 ### XYZ
-Simple molecular coordinates format.
+簡單的分子座標格式。
 
 ```python
-# For molecules
+# 用於分子
 mol = Molecule.from_file("molecule.xyz")
 mol.to(filename="output.xyz")
 
-# For structures (Cartesian coordinates)
+# 用於結構（笛卡爾座標）
 struct.to(filename="structure.xyz")
 ```
 
-### PDB (Protein Data Bank)
-Common format for biomolecules.
+### PDB（蛋白質資料庫）
+生物分子的常見格式。
 
 ```python
 mol = Molecule.from_file("protein.pdb")
@@ -105,7 +105,7 @@ mol.to(filename="output.pdb")
 ```
 
 ### JSON/YAML
-Serialization via dictionaries.
+透過字典序列化。
 
 ```python
 import json
@@ -126,42 +126,42 @@ with open("structure.yaml", "r") as f:
     struct = Structure.from_dict(yaml.safe_load(f))
 ```
 
-## Electronic Structure Code I/O
+## 電子結構程式碼 I/O
 
 ### VASP
 
-The most comprehensive integration in pymatgen.
+pymatgen 中最全面的整合。
 
-#### Input Files
+#### 輸入檔案
 
 ```python
 from pymatgen.io.vasp.inputs import Incar, Poscar, Potcar, Kpoints, VaspInput
 
-# INCAR (calculation parameters)
+# INCAR（計算參數）
 incar = Incar.from_file("INCAR")
 incar = Incar({"ENCUT": 520, "ISMEAR": 0, "SIGMA": 0.05})
 incar.write_file("INCAR")
 
-# KPOINTS (k-point mesh)
+# KPOINTS（k 點網格）
 from pymatgen.io.vasp.inputs import Kpoints
-kpoints = Kpoints.automatic(20)  # 20x20x20 Gamma-centered mesh
-kpoints = Kpoints.automatic_density(struct, 1000)  # By density
+kpoints = Kpoints.automatic(20)  # 20x20x20 Gamma 中心網格
+kpoints = Kpoints.automatic_density(struct, 1000)  # 按密度
 kpoints.write_file("KPOINTS")
 
-# POTCAR (pseudopotentials)
-potcar = Potcar(["Fe_pv", "O"])  # Specify functional variants
+# POTCAR（贗勢）
+potcar = Potcar(["Fe_pv", "O"])  # 指定泛函變體
 
-# Complete input set
+# 完整輸入集
 vasp_input = VaspInput(incar, kpoints, poscar, potcar)
 vasp_input.write_input("./vasp_calc")
 ```
 
-#### Output Files
+#### 輸出檔案
 
 ```python
 from pymatgen.io.vasp.outputs import Vasprun, Outcar, Oszicar, Eigenval
 
-# vasprun.xml (comprehensive output)
+# vasprun.xml（全面輸出）
 vasprun = Vasprun("vasprun.xml")
 final_structure = vasprun.final_structure
 energy = vasprun.final_energy
@@ -173,40 +173,40 @@ outcar = Outcar("OUTCAR")
 magnetization = outcar.total_mag
 elastic_tensor = outcar.elastic_tensor
 
-# OSZICAR (convergence information)
+# OSZICAR（收斂資訊）
 oszicar = Oszicar("OSZICAR")
 ```
 
-#### Input Sets
+#### 輸入集
 
-Pymatgen provides pre-configured input sets for common calculations:
+Pymatgen 為常見計算提供預配置的輸入集：
 
 ```python
 from pymatgen.io.vasp.sets import (
-    MPRelaxSet,      # Materials Project relaxation
-    MPStaticSet,     # Static calculation
-    MPNonSCFSet,     # Non-self-consistent (band structure)
-    MPSOCSet,        # Spin-orbit coupling
-    MPHSERelaxSet,   # HSE06 hybrid functional
+    MPRelaxSet,      # Materials Project 弛豫
+    MPStaticSet,     # 靜態計算
+    MPNonSCFSet,     # 非自洽（能帶結構）
+    MPSOCSet,        # 自旋軌道耦合
+    MPHSERelaxSet,   # HSE06 混合泛函
 )
 
-# Create input set
+# 建立輸入集
 relax = MPRelaxSet(struct)
 relax.write_input("./relax_calc")
 
-# Customize parameters
+# 自訂參數
 static = MPStaticSet(struct, user_incar_settings={"ENCUT": 600})
 static.write_input("./static_calc")
 ```
 
 ### Gaussian
 
-Quantum chemistry package integration.
+量子化學套件整合。
 
 ```python
 from pymatgen.io.gaussian import GaussianInput, GaussianOutput
 
-# Input
+# 輸入
 gin = GaussianInput(
     mol,
     charge=0,
@@ -217,7 +217,7 @@ gin = GaussianInput(
 )
 gin.write_file("input.gjf")
 
-# Output
+# 輸出
 gout = GaussianOutput("output.log")
 final_mol = gout.final_structure
 energy = gout.final_energy
@@ -226,17 +226,17 @@ frequencies = gout.frequencies
 
 ### LAMMPS
 
-Classical molecular dynamics.
+經典分子動力學。
 
 ```python
 from pymatgen.io.lammps.data import LammpsData
 from pymatgen.io.lammps.inputs import LammpsInputFile
 
-# Structure to LAMMPS data file
+# 結構轉 LAMMPS 資料檔案
 lammps_data = LammpsData.from_structure(struct)
 lammps_data.write_file("data.lammps")
 
-# LAMMPS input script
+# LAMMPS 輸入腳本
 lammps_input = LammpsInputFile.from_file("in.lammps")
 ```
 
@@ -245,7 +245,7 @@ lammps_input = LammpsInputFile.from_file("in.lammps")
 ```python
 from pymatgen.io.pwscf import PWInput, PWOutput
 
-# Input
+# 輸入
 pwin = PWInput(
     struct,
     control={"calculation": "scf"},
@@ -254,7 +254,7 @@ pwin = PWInput(
 )
 pwin.write_file("pw.in")
 
-# Output
+# 輸出
 pwout = PWOutput("pw.out")
 final_structure = pwout.final_structure
 energy = pwout.final_energy
@@ -276,14 +276,14 @@ abin.write("abinit.in")
 from pymatgen.io.cp2k.inputs import Cp2kInput
 from pymatgen.io.cp2k.outputs import Cp2kOutput
 
-# Input
+# 輸入
 cp2k_input = Cp2kInput.from_file("cp2k.inp")
 
-# Output
+# 輸出
 cp2k_output = Cp2kOutput("cp2k.out")
 ```
 
-### FEFF (XAS/XANES)
+### FEFF（XAS/XANES）
 
 ```python
 from pymatgen.io.feff import FeffInput
@@ -292,7 +292,7 @@ feff_input = FeffInput(struct, absorbing_atom="Fe")
 feff_input.write_file("feff.inp")
 ```
 
-### LMTO (Stuttgart TB-LMTO-ASA)
+### LMTO（Stuttgart TB-LMTO-ASA）
 
 ```python
 from pymatgen.io.lmto import LMTOCtrl
@@ -307,14 +307,14 @@ ctrl.structure
 from pymatgen.io.qchem.inputs import QCInput
 from pymatgen.io.qchem.outputs import QCOutput
 
-# Input
+# 輸入
 qc_input = QCInput(
     mol,
     rem={"method": "B3LYP", "basis": "6-31G*", "job_type": "opt"}
 )
 qc_input.write_file("mol.qin")
 
-# Output
+# 輸出
 qc_output = QCOutput("mol.qout")
 ```
 
@@ -327,7 +327,7 @@ exc_input = ExcitingInput(struct)
 exc_input.write_file("input.xml")
 ```
 
-### ATAT (Alloy Theoretic Automated Toolkit)
+### ATAT（合金理論自動化工具包）
 
 ```python
 from pymatgen.io.atat import Mcsqs
@@ -336,64 +336,64 @@ mcsqs = Mcsqs(struct)
 mcsqs.write_input(".")
 ```
 
-## Special Purpose Formats
+## 特殊用途格式
 
 ### Phonopy
 
 ```python
 from pymatgen.io.phonopy import get_phonopy_structure, get_pmg_structure
 
-# Convert to phonopy structure
+# 轉換為 phonopy 結構
 phonopy_struct = get_phonopy_structure(struct)
 
-# Convert from phonopy
+# 從 phonopy 轉換
 struct = get_pmg_structure(phonopy_struct)
 ```
 
-### ASE (Atomic Simulation Environment)
+### ASE（原子模擬環境）
 
 ```python
 from pymatgen.io.ase import AseAtomsAdaptor
 
 adaptor = AseAtomsAdaptor()
 
-# Pymatgen to ASE
+# Pymatgen 轉 ASE
 atoms = adaptor.get_atoms(struct)
 
-# ASE to Pymatgen
+# ASE 轉 Pymatgen
 struct = adaptor.get_structure(atoms)
 ```
 
-### Zeo++ (Porous Materials)
+### Zeo++（多孔材料）
 
 ```python
 from pymatgen.io.zeopp import get_voronoi_nodes, get_high_accuracy_voronoi_nodes
 
-# Analyze pore structure
+# 分析孔洞結構
 vor_nodes = get_voronoi_nodes(struct)
 ```
 
-### BabelMolAdaptor (OpenBabel)
+### BabelMolAdaptor（OpenBabel）
 
 ```python
 from pymatgen.io.babel import BabelMolAdaptor
 
 adaptor = BabelMolAdaptor(mol)
 
-# Convert to different formats
+# 轉換為不同格式
 pdb_str = adaptor.pdbstring
 sdf_str = adaptor.write_file("mol.sdf", file_format="sdf")
 
-# Generate 3D coordinates
+# 生成 3D 座標
 adaptor.add_hydrogen()
 adaptor.make3d()
 ```
 
-## Alchemy and Transformation I/O
+## 煉金術和轉換 I/O
 
 ### TransformedStructure
 
-Structures that track their transformation history.
+追蹤轉換歷史的結構。
 
 ```python
 from pymatgen.alchemy.materials import TransformedStructure
@@ -402,23 +402,23 @@ from pymatgen.transformations.standard_transformations import (
     SubstitutionTransformation
 )
 
-# Create transformed structure
+# 建立轉換結構
 ts = TransformedStructure(struct, [])
 ts.append_transformation(SupercellTransformation([[2,0,0],[0,2,0],[0,0,2]]))
 ts.append_transformation(SubstitutionTransformation({"Fe": "Mn"}))
 
-# Write with history
+# 寫入包含歷史
 ts.write_vasp_input("./calc_dir")
 
-# Read from SNL (Structure Notebook Language)
+# 從 SNL（結構筆記本語言）讀取
 ts = TransformedStructure.from_snl(snl)
 ```
 
-## Batch Operations
+## 批次操作
 
 ### CifTransmuter
 
-Process multiple CIF files.
+處理多個 CIF 檔案。
 
 ```python
 from pymatgen.alchemy.transmuters import CifTransmuter
@@ -428,13 +428,13 @@ transmuter = CifTransmuter.from_filenames(
     [SupercellTransformation([[2,0,0],[0,2,0],[0,0,2]])]
 )
 
-# Write all structures
+# 寫入所有結構
 transmuter.write_vasp_input("./batch_calc")
 ```
 
 ### PoscarTransmuter
 
-Similar for POSCAR files.
+類似用於 POSCAR 檔案。
 
 ```python
 from pymatgen.alchemy.transmuters import PoscarTransmuter
@@ -445,25 +445,25 @@ transmuter = PoscarTransmuter.from_filenames(
 )
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Automatic format detection**: Use `from_file()` and `to()` methods whenever possible
-2. **Error handling**: Always wrap file I/O in try-except blocks
-3. **Format-specific parsers**: Use specialized parsers (e.g., `Vasprun`) for detailed output analysis
-4. **Input sets**: Prefer pre-configured input sets over manual parameter specification
-5. **Serialization**: Use JSON/YAML for long-term storage and version control
-6. **Batch processing**: Use transmuters for applying transformations to multiple structures
+1. **自動格式偵測**：盡可能使用 `from_file()` 和 `to()` 方法
+2. **錯誤處理**：始終將檔案 I/O 包裝在 try-except 區塊中
+3. **格式專用解析器**：使用專門解析器（例如 `Vasprun`）進行詳細輸出分析
+4. **輸入集**：偏好預配置輸入集而非手動參數指定
+5. **序列化**：使用 JSON/YAML 進行長期儲存和版本控制
+6. **批次處理**：使用 transmuter 將轉換應用於多個結構
 
-## Supported Format Summary
+## 支援格式摘要
 
-### Structure formats:
-CIF, POSCAR/CONTCAR, XYZ, PDB, XSF, PWMAT, Res, CSSR, JSON, YAML
+### 結構格式：
+CIF、POSCAR/CONTCAR、XYZ、PDB、XSF、PWMAT、Res、CSSR、JSON、YAML
 
-### Electronic structure codes:
-VASP, Gaussian, LAMMPS, Quantum ESPRESSO, ABINIT, CP2K, FEFF, Q-Chem, LMTO, Exciting, NWChem, AIMS, Crystallographic data formats
+### 電子結構程式碼：
+VASP、Gaussian、LAMMPS、Quantum ESPRESSO、ABINIT、CP2K、FEFF、Q-Chem、LMTO、Exciting、NWChem、AIMS、晶體學資料格式
 
-### Molecular formats:
-XYZ, PDB, MOL, SDF, PQR, via OpenBabel (many additional formats)
+### 分子格式：
+XYZ、PDB、MOL、SDF、PQR，透過 OpenBabel（許多額外格式）
 
-### Special purpose:
-Phonopy, ASE, Zeo++, Lobster, BoltzTraP
+### 特殊用途：
+Phonopy、ASE、Zeo++、Lobster、BoltzTraP

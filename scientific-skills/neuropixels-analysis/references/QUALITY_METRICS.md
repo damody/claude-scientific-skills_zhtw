@@ -1,23 +1,23 @@
-# Quality Metrics Reference
+# 品質指標參考
 
-Comprehensive guide to unit quality assessment using SpikeInterface metrics and Allen/IBL standards.
+使用 SpikeInterface 指標和 Allen/IBL 標準進行單元品質評估的綜合指南。
 
-## Overview
+## 概述
 
-Quality metrics assess three aspects of sorted units:
+品質指標評估已分選單元的三個面向：
 
-| Category | Question | Key Metrics |
+| 類別 | 問題 | 關鍵指標 |
 |----------|----------|-------------|
-| **Contamination** (Type I) | Are spikes from multiple neurons? | ISI violations, SNR |
-| **Completeness** (Type II) | Are we missing spikes? | Amplitude cutoff, presence ratio |
-| **Stability** | Is the unit stable over time? | Drift metrics, amplitude CV |
+| **污染**（第一型） | 尖峰是否來自多個神經元？ | ISI 違規、SNR |
+| **完整性**（第二型） | 是否遺漏尖峰？ | 振幅截止值、存在比率 |
+| **穩定性** | 單元是否隨時間穩定？ | 漂移指標、振幅 CV |
 
-## Computing Quality Metrics
+## 計算品質指標
 
 ```python
 import spikeinterface.full as si
 
-# Create analyzer with computed waveforms
+# 建立已計算波形的分析器
 analyzer = si.create_sorting_analyzer(sorting, recording, sparse=True)
 analyzer.compute('random_spikes', max_spikes_per_unit=500)
 analyzer.compute('waveforms', ms_before=1.5, ms_after=2.0)
@@ -26,60 +26,60 @@ analyzer.compute('noise_levels')
 analyzer.compute('spike_amplitudes')
 analyzer.compute('principal_components', n_components=5)
 
-# Compute all quality metrics
+# 計算所有品質指標
 analyzer.compute('quality_metrics')
 
-# Or compute specific metrics
+# 或計算特定指標
 analyzer.compute('quality_metrics', metric_names=[
     'firing_rate', 'snr', 'isi_violations_ratio',
     'presence_ratio', 'amplitude_cutoff'
 ])
 
-# Get results
+# 取得結果
 qm = analyzer.get_extension('quality_metrics').get_data()
-print(qm.columns.tolist())  # Available metrics
+print(qm.columns.tolist())  # 可用指標
 ```
 
-## Metric Definitions & Thresholds
+## 指標定義與閾值
 
-### Contamination Metrics
+### 污染指標
 
-#### ISI Violations Ratio
-Fraction of spikes violating refractory period. All neurons have a ~1.5ms refractory period.
+#### ISI 違規比率
+違反反應期的尖峰比例。所有神經元都有約 1.5ms 的反應期。
 
 ```python
-# Compute with custom refractory period
+# 使用自訂反應期計算
 analyzer.compute('quality_metrics',
                  metric_names=['isi_violations_ratio'],
                  isi_threshold_ms=1.5,
                  min_isi_ms=0.0)
 ```
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| < 0.01 | Excellent (well-isolated single unit) |
-| 0.01 - 0.1 | Good (minor contamination) |
-| 0.1 - 0.5 | Moderate (multi-unit activity likely) |
-| > 0.5 | Poor (likely multi-unit) |
+| < 0.01 | 優秀（分離良好的單一單元） |
+| 0.01 - 0.1 | 良好（輕微污染） |
+| 0.1 - 0.5 | 中等（可能為多單元活動） |
+| > 0.5 | 差（可能為多單元） |
 
-**Reference:** Hill et al. (2011) J Neurosci 31:8699-8705
+**參考文獻：** Hill et al. (2011) J Neurosci 31:8699-8705
 
-#### Signal-to-Noise Ratio (SNR)
-Ratio of peak waveform amplitude to background noise.
+#### 訊雜比（SNR）
+波形峰值振幅與背景雜訊的比率。
 
 ```python
 analyzer.compute('quality_metrics', metric_names=['snr'])
 ```
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| > 10 | Excellent |
-| 5 - 10 | Good |
-| 2 - 5 | Acceptable |
-| < 2 | Poor (may be noise) |
+| > 10 | 優秀 |
+| 5 - 10 | 良好 |
+| 2 - 5 | 可接受 |
+| < 2 | 差（可能為雜訊） |
 
-#### Isolation Distance
-Mahalanobis distance to nearest cluster in PCA space.
+#### 分離距離
+PCA 空間中到最近群集的馬氏距離。
 
 ```python
 analyzer.compute('quality_metrics',
@@ -87,103 +87,103 @@ analyzer.compute('quality_metrics',
                  n_neighbors=4)
 ```
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| > 50 | Well-isolated |
-| 20 - 50 | Moderately isolated |
-| < 20 | Poorly isolated |
+| > 50 | 分離良好 |
+| 20 - 50 | 中等分離 |
+| < 20 | 分離不佳 |
 
-#### L-ratio
-Contamination measure based on Mahalanobis distances.
+#### L 比率
+基於馬氏距離的污染測量。
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| < 0.05 | Well-isolated |
-| 0.05 - 0.1 | Acceptable |
-| > 0.1 | Contaminated |
+| < 0.05 | 分離良好 |
+| 0.05 - 0.1 | 可接受 |
+| > 0.1 | 有污染 |
 
 #### D-prime
-Discriminability between unit and nearest neighbor.
+單元與最近鄰之間的可辨別性。
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| > 8 | Excellent separation |
-| 5 - 8 | Good separation |
-| < 5 | Poor separation |
+| > 8 | 優秀分離 |
+| 5 - 8 | 良好分離 |
+| < 5 | 分離不佳 |
 
-### Completeness Metrics
+### 完整性指標
 
-#### Amplitude Cutoff
-Estimates fraction of spikes below detection threshold.
+#### 振幅截止值
+估計低於偵測閾值的尖峰比例。
 
 ```python
 analyzer.compute('quality_metrics',
                  metric_names=['amplitude_cutoff'],
-                 peak_sign='neg')  # 'neg', 'pos', or 'both'
+                 peak_sign='neg')  # 'neg', 'pos' 或 'both'
 ```
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| < 0.01 | Excellent (nearly complete) |
-| 0.01 - 0.1 | Good |
-| 0.1 - 0.2 | Moderate (some missed spikes) |
-| > 0.2 | Poor (many missed spikes) |
+| < 0.01 | 優秀（幾乎完整） |
+| 0.01 - 0.1 | 良好 |
+| 0.1 - 0.2 | 中等（部分遺漏尖峰） |
+| > 0.2 | 差（大量遺漏尖峰） |
 
-**For precise timing analyses:** Use < 0.01
+**精確時序分析：** 使用 < 0.01
 
-#### Presence Ratio
-Fraction of recording time with detected spikes.
+#### 存在比率
+有偵測到尖峰的記錄時間比例。
 
 ```python
 analyzer.compute('quality_metrics',
                  metric_names=['presence_ratio'],
-                 bin_duration_s=60)  # 1-minute bins
+                 bin_duration_s=60)  # 1 分鐘 bin
 ```
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| > 0.99 | Excellent |
-| 0.9 - 0.99 | Good |
-| 0.8 - 0.9 | Acceptable |
-| < 0.8 | Unit may have drifted out |
+| > 0.99 | 優秀 |
+| 0.9 - 0.99 | 良好 |
+| 0.8 - 0.9 | 可接受 |
+| < 0.8 | 單元可能已漂移出去 |
 
-### Stability Metrics
+### 穩定性指標
 
-#### Drift Metrics
-Measure unit movement over time.
+#### 漂移指標
+測量單元隨時間的移動。
 
 ```python
 analyzer.compute('quality_metrics',
                  metric_names=['drift_ptp', 'drift_std', 'drift_mad'])
 ```
 
-| Metric | Description | Good Value |
+| 指標 | 描述 | 良好值 |
 |--------|-------------|------------|
-| `drift_ptp` | Peak-to-peak drift (μm) | < 40 |
-| `drift_std` | Standard deviation of drift | < 10 |
-| `drift_mad` | Median absolute deviation | < 10 |
+| `drift_ptp` | 峰對峰漂移（μm） | < 40 |
+| `drift_std` | 漂移標準差 | < 10 |
+| `drift_mad` | 中位數絕對離差 | < 10 |
 
-#### Amplitude CV
-Coefficient of variation of spike amplitudes.
+#### 振幅 CV
+尖峰振幅的變異係數。
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| < 0.25 | Very stable |
-| 0.25 - 0.5 | Acceptable |
-| > 0.5 | Unstable (drift or contamination) |
+| < 0.25 | 非常穩定 |
+| 0.25 - 0.5 | 可接受 |
+| > 0.5 | 不穩定（漂移或污染） |
 
-### Cluster Quality Metrics
+### 群集品質指標
 
-#### Silhouette Score
-Cluster cohesion vs separation (-1 to 1).
+#### 輪廓係數
+群集內聚性與分離度（-1 到 1）。
 
-| Value | Interpretation |
+| 數值 | 解釋 |
 |-------|---------------|
-| > 0.5 | Well-defined cluster |
-| 0.25 - 0.5 | Moderate |
-| < 0.25 | Overlapping clusters |
+| > 0.5 | 定義良好的群集 |
+| 0.25 - 0.5 | 中等 |
+| < 0.25 | 群集重疊 |
 
-#### Nearest-Neighbor Metrics
+#### 最近鄰指標
 
 ```python
 analyzer.compute('quality_metrics',
@@ -191,17 +191,17 @@ analyzer.compute('quality_metrics',
                  n_neighbors=4)
 ```
 
-| Metric | Description | Good Value |
+| 指標 | 描述 | 良好值 |
 |--------|-------------|------------|
-| `nn_hit_rate` | Fraction of spikes with same-unit neighbors | > 0.9 |
-| `nn_miss_rate` | Fraction of spikes with other-unit neighbors | < 0.1 |
+| `nn_hit_rate` | 具有相同單元鄰居的尖峰比例 | > 0.9 |
+| `nn_miss_rate` | 具有其他單元鄰居的尖峰比例 | < 0.1 |
 
-## Standard Filtering Criteria
+## 標準篩選標準
 
-### Allen Institute Defaults
+### Allen Institute 預設值
 
 ```python
-# Allen Visual Coding / Behavior defaults
+# Allen Visual Coding / Behavior 預設值
 allen_query = """
     presence_ratio > 0.95 and
     isi_violations_ratio < 0.5 and
@@ -210,10 +210,10 @@ allen_query = """
 good_units = qm.query(allen_query).index.tolist()
 ```
 
-### IBL Standards
+### IBL 標準
 
 ```python
-# IBL reproducible ephys criteria
+# IBL 可重現電生理標準
 ibl_query = """
     presence_ratio > 0.9 and
     isi_violations_ratio < 0.1 and
@@ -223,10 +223,10 @@ ibl_query = """
 good_units = qm.query(ibl_query).index.tolist()
 ```
 
-### Strict Single-Unit Criteria
+### 嚴格單一單元標準
 
 ```python
-# For precise timing / spike-timing analyses
+# 用於精確時序/尖峰時序分析
 strict_query = """
     snr > 5 and
     presence_ratio > 0.99 and
@@ -238,10 +238,10 @@ strict_query = """
 single_units = qm.query(strict_query).index.tolist()
 ```
 
-### Multi-Unit Activity (MUA)
+### 多單元活動（MUA）
 
 ```python
-# Include multi-unit activity
+# 包含多單元活動
 mua_query = """
     snr > 2 and
     presence_ratio > 0.5 and
@@ -250,16 +250,16 @@ mua_query = """
 all_units = qm.query(mua_query).index.tolist()
 ```
 
-## Visualization
+## 視覺化
 
-### Quality Metric Summary
+### 品質指標摘要
 
 ```python
-# Plot all metrics
+# 繪製所有指標
 si.plot_quality_metrics(analyzer)
 ```
 
-### Individual Metric Distributions
+### 個別指標分布
 
 ```python
 import matplotlib.pyplot as plt
@@ -273,7 +273,7 @@ for ax, metric in zip(axes.flat, metrics):
     ax.hist(qm[metric].dropna(), bins=50, edgecolor='black')
     ax.set_xlabel(metric)
     ax.set_ylabel('Count')
-    # Add threshold line
+    # 加入閾值線
     if metric == 'snr':
         ax.axvline(5, color='r', linestyle='--', label='threshold')
     elif metric == 'isi_violations_ratio':
@@ -284,14 +284,14 @@ for ax, metric in zip(axes.flat, metrics):
 plt.tight_layout()
 ```
 
-### Unit Quality Summary
+### 單元品質摘要
 
 ```python
-# Comprehensive unit summary plot
+# 綜合單元摘要圖
 si.plot_unit_summary(analyzer, unit_id=0)
 ```
 
-### Quality vs Firing Rate
+### 品質與放電率關係
 
 ```python
 fig, ax = plt.subplots()
@@ -304,54 +304,54 @@ plt.colorbar(scatter, label='ISI Violations')
 ax.set_xscale('log')
 ```
 
-## Compute All Metrics at Once
+## 一次計算所有指標
 
 ```python
-# Full quality metrics computation
+# 完整品質指標計算
 all_metric_names = [
-    # Firing properties
+    # 放電特性
     'firing_rate', 'presence_ratio',
-    # Waveform
+    # 波形
     'snr', 'amplitude_cutoff', 'amplitude_cv_median', 'amplitude_cv_range',
     # ISI
     'isi_violations_ratio', 'isi_violations_count',
-    # Drift
+    # 漂移
     'drift_ptp', 'drift_std', 'drift_mad',
-    # Isolation (require PCA)
+    # 分離（需要 PCA）
     'isolation_distance', 'l_ratio', 'd_prime',
-    # Nearest neighbor (require PCA)
+    # 最近鄰（需要 PCA）
     'nn_hit_rate', 'nn_miss_rate',
-    # Cluster quality
+    # 群集品質
     'silhouette_score',
-    # Synchrony
+    # 同步性
     'sync_spike_2', 'sync_spike_4', 'sync_spike_8',
 ]
 
-# Compute PCA first (required for some metrics)
+# 先計算 PCA（部分指標需要）
 analyzer.compute('principal_components', n_components=5)
 
-# Compute metrics
+# 計算指標
 analyzer.compute('quality_metrics', metric_names=all_metric_names)
 qm = analyzer.get_extension('quality_metrics').get_data()
 
-# Save to CSV
+# 儲存至 CSV
 qm.to_csv('quality_metrics.csv')
 ```
 
-## Custom Metrics
+## 自訂指標
 
 ```python
 from spikeinterface.qualitymetrics import compute_firing_rates, compute_snrs
 
-# Compute individual metrics
+# 計算個別指標
 firing_rates = compute_firing_rates(sorting)
 snrs = compute_snrs(analyzer)
 
-# Add custom metric to DataFrame
+# 將自訂指標加入 DataFrame
 qm['custom_score'] = qm['snr'] * qm['presence_ratio'] / (qm['isi_violations_ratio'] + 0.001)
 ```
 
-## References
+## 參考資料
 
 - [SpikeInterface Quality Metrics](https://spikeinterface.readthedocs.io/en/latest/modules/qualitymetrics.html)
 - [Allen Institute ecephys_quality_metrics](https://allensdk.readthedocs.io/en/latest/_static/examples/nb/ecephys_quality_metrics.html)

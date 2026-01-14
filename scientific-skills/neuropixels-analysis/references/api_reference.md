@@ -1,8 +1,8 @@
-# API Reference
+# API 參考
 
-Quick reference for neuropixels_analysis functions organized by module.
+按模組組織的 neuropixels_analysis 函數快速參考。
 
-## Core Module
+## 核心模組
 
 ### load_recording
 
@@ -10,11 +10,11 @@ Quick reference for neuropixels_analysis functions organized by module.
 npa.load_recording(
     path: str,
     format: str = 'auto',  # 'spikeglx', 'openephys', 'nwb'
-    stream_id: str = None,  # e.g., 'imec0.ap'
+    stream_id: str = None,  # 例如 'imec0.ap'
 ) -> Recording
 ```
 
-Load Neuropixels recording from various formats.
+從各種格式載入 Neuropixels 記錄。
 
 ### run_pipeline
 
@@ -31,9 +31,9 @@ npa.run_pipeline(
 ) -> dict
 ```
 
-Run complete analysis pipeline. Returns dictionary with all results.
+執行完整分析流程。回傳包含所有結果的字典。
 
-## Preprocessing Module
+## 預處理模組
 
 ### preprocess
 
@@ -48,7 +48,7 @@ npa.preprocess(
 ) -> Recording
 ```
 
-Apply standard preprocessing chain.
+套用標準預處理鏈。
 
 ### detect_bad_channels
 
@@ -60,7 +60,7 @@ npa.detect_bad_channels(
 ) -> list
 ```
 
-Detect and return list of bad channel IDs.
+偵測並回傳壞通道 ID 列表。
 
 ### apply_filters
 
@@ -73,7 +73,7 @@ npa.apply_filters(
 ) -> Recording
 ```
 
-Apply frequency filters.
+套用頻率濾波器。
 
 ### common_reference
 
@@ -85,9 +85,9 @@ npa.common_reference(
 ) -> Recording
 ```
 
-Apply common reference (CMR/CAR).
+套用共同參考（CMR/CAR）。
 
-## Motion Module
+## 運動模組
 
 ### check_drift
 
@@ -99,7 +99,7 @@ npa.check_drift(
 ) -> dict
 ```
 
-Check recording for drift. Returns drift statistics.
+檢查記錄的漂移。回傳漂移統計。
 
 ### estimate_motion
 
@@ -111,7 +111,7 @@ npa.estimate_motion(
 ) -> dict
 ```
 
-Estimate motion without applying correction.
+估計運動但不套用修正。
 
 ### correct_motion
 
@@ -124,14 +124,14 @@ npa.correct_motion(
 ) -> Recording
 ```
 
-Apply motion correction.
+套用運動修正。
 
-**Presets:**
-- `'kilosort_like'`: Fast, rigid correction
-- `'nonrigid_accurate'`: Slower, better for severe drift
-- `'nonrigid_fast_and_accurate'`: Balanced option
+**預設：**
+- `'kilosort_like'`：快速、剛性修正
+- `'nonrigid_accurate'`：較慢，適合嚴重漂移
+- `'nonrigid_fast_and_accurate'`：平衡選項
 
-## Sorting Module
+## 分選模組
 
 ### run_sorting
 
@@ -145,13 +145,13 @@ npa.run_sorting(
 ) -> Sorting
 ```
 
-Run spike sorter.
+執行尖峰分選器。
 
-**Supported sorters:**
-- `'kilosort4'`: GPU-based, recommended
-- `'kilosort3'`: Legacy, requires MATLAB
-- `'spykingcircus2'`: CPU-based alternative
-- `'mountainsort5'`: Fast, good for short recordings
+**支援的分選器：**
+- `'kilosort4'`：基於 GPU，建議使用
+- `'kilosort3'`：舊版，需要 MATLAB
+- `'spykingcircus2'`：基於 CPU 的替代方案
+- `'mountainsort5'`：快速，適合短記錄
 
 ### compare_sorters
 
@@ -163,9 +163,9 @@ npa.compare_sorters(
 ) -> Comparison
 ```
 
-Compare results from multiple sorters.
+比較多個分選器的結果。
 
-## Postprocessing Module
+## 後處理模組
 
 ### create_analyzer
 
@@ -178,7 +178,7 @@ npa.create_analyzer(
 ) -> SortingAnalyzer
 ```
 
-Create SortingAnalyzer for postprocessing.
+建立用於後處理的 SortingAnalyzer。
 
 ### postprocess
 
@@ -192,32 +192,32 @@ npa.postprocess(
 ) -> tuple[SortingAnalyzer, DataFrame]
 ```
 
-Full postprocessing. Returns (analyzer, metrics).
+完整後處理。回傳（analyzer, metrics）。
 
 ### compute_quality_metrics
 
 ```python
 npa.compute_quality_metrics(
     analyzer: SortingAnalyzer,
-    metric_names: list = None,  # None = all
+    metric_names: list = None,  # None = 全部
     **kwargs,
 ) -> DataFrame
 ```
 
-Compute quality metrics for all units.
+計算所有單元的品質指標。
 
-**Available metrics:**
-- `snr`: Signal-to-noise ratio
-- `isi_violations_ratio`: ISI violations
-- `presence_ratio`: Recording presence
-- `amplitude_cutoff`: Amplitude distribution cutoff
-- `firing_rate`: Average firing rate
-- `amplitude_cv`: Amplitude coefficient of variation
-- `sliding_rp_violation`: Sliding window refractory violations
-- `d_prime`: Isolation quality
-- `nearest_neighbor`: Nearest-neighbor overlap
+**可用指標：**
+- `snr`：訊雜比
+- `isi_violations_ratio`：ISI 違規
+- `presence_ratio`：記錄存在比率
+- `amplitude_cutoff`：振幅分布截止值
+- `firing_rate`：平均放電率
+- `amplitude_cv`：振幅變異係數
+- `sliding_rp_violation`：滑動視窗反應期違規
+- `d_prime`：分離品質
+- `nearest_neighbor`：最近鄰重疊
 
-## Curation Module
+## 篩選模組
 
 ### curate
 
@@ -229,7 +229,7 @@ npa.curate(
 ) -> dict
 ```
 
-Apply automated curation. Returns {unit_id: label}.
+套用自動篩選。回傳 {unit_id: label}。
 
 ### auto_classify
 
@@ -242,7 +242,7 @@ npa.auto_classify(
 ) -> dict
 ```
 
-Classify units based on custom thresholds.
+基於自訂閾值分類單元。
 
 ### filter_units
 
@@ -254,9 +254,9 @@ npa.filter_units(
 ) -> Sorting
 ```
 
-Filter sorting to keep only specified labels.
+篩選分選結果，僅保留指定標籤。
 
-## AI Curation Module
+## AI 篩選模組
 
 ### generate_unit_report
 
@@ -269,13 +269,13 @@ npa.generate_unit_report(
 ) -> dict
 ```
 
-Generate visual report for AI analysis.
+產生用於 AI 分析的視覺報告。
 
-Returns:
-- `'image_path'`: Path to saved figure
-- `'image_base64'`: Base64 encoded image
-- `'metrics'`: Quality metrics dict
-- `'unit_id'`: Unit ID
+回傳：
+- `'image_path'`：已儲存圖形的路徑
+- `'image_base64'`：Base64 編碼圖片
+- `'metrics'`：品質指標字典
+- `'unit_id'`：單元 ID
 
 ### analyze_unit_visually
 
@@ -290,12 +290,12 @@ npa.analyze_unit_visually(
 ) -> dict
 ```
 
-Analyze unit using vision-language model.
+使用視覺語言模型分析單元。
 
-**Tasks:**
-- `'quality_assessment'`: Classify as good/mua/noise
-- `'merge_candidate'`: Check if units should merge
-- `'drift_assessment'`: Assess motion/drift
+**任務：**
+- `'quality_assessment'`：分類為 good/mua/noise
+- `'merge_candidate'`：檢查單元是否應合併
+- `'drift_assessment'`：評估運動/漂移
 
 ### batch_visual_curation
 
@@ -310,7 +310,7 @@ npa.batch_visual_curation(
 ) -> dict
 ```
 
-Run visual curation on multiple units.
+對多個單元執行視覺篩選。
 
 ### CurationSession
 
@@ -323,27 +323,27 @@ session = npa.CurationSession.create(
     sort_by_confidence: bool = True,
 )
 
-# Navigation
+# 導覽
 session.current_unit() -> UnitCuration
 session.next_unit() -> UnitCuration
 session.prev_unit() -> UnitCuration
 session.go_to_unit(unit_id: int) -> UnitCuration
 
-# Decisions
+# 決策
 session.set_decision(unit_id, decision, notes='')
 session.set_ai_classification(unit_id, classification)
 
-# Export
+# 匯出
 session.get_final_labels() -> dict
 session.export_decisions(output_path) -> DataFrame
 session.get_summary() -> dict
 
-# Persistence
+# 持久化
 session.save()
 session = npa.CurationSession.load(session_dir)
 ```
 
-## Visualization Module
+## 視覺化模組
 
 ### plot_drift
 
@@ -356,7 +356,7 @@ npa.plot_drift(
 )
 ```
 
-Plot drift/motion map.
+繪製漂移/運動圖。
 
 ### plot_quality_metrics
 
@@ -368,7 +368,7 @@ npa.plot_quality_metrics(
 )
 ```
 
-Plot quality metrics overview.
+繪製品質指標概覽。
 
 ### plot_unit_summary
 
@@ -380,36 +380,36 @@ npa.plot_unit_summary(
 )
 ```
 
-Plot comprehensive unit summary.
+繪製綜合單元摘要。
 
-## SpikeInterface Integration
+## SpikeInterface 整合
 
-All neuropixels_analysis functions work with SpikeInterface objects:
+所有 neuropixels_analysis 函數都與 SpikeInterface 物件相容：
 
 ```python
 import spikeinterface.full as si
 import neuropixels_analysis as npa
 
-# SpikeInterface recording works with npa functions
+# SpikeInterface recording 可與 npa 函數配合使用
 recording = si.read_spikeglx('/path/')
 rec = npa.preprocess(recording)
 
-# Access SpikeInterface directly for advanced usage
+# 直接存取 SpikeInterface 進行進階使用
 rec_filtered = si.bandpass_filter(recording, freq_min=300, freq_max=6000)
 ```
 
-## Common Parameters
+## 常用參數
 
-### Recording parameters
-- `freq_min`: Highpass cutoff (Hz)
-- `freq_max`: Lowpass cutoff (Hz)
-- `n_jobs`: Parallel jobs (-1 = all cores)
+### 記錄參數
+- `freq_min`：高通截止頻率（Hz）
+- `freq_max`：低通截止頻率（Hz）
+- `n_jobs`：平行工作數（-1 = 所有核心）
 
-### Sorting parameters
-- `output_folder`: Where to save results
-- `sorter_params`: Dict of sorter-specific params
+### 分選參數
+- `output_folder`：結果儲存位置
+- `sorter_params`：分選器特定參數字典
 
-### Quality metric thresholds
-- `snr_threshold`: SNR cutoff (typically 5)
-- `isi_threshold`: ISI violations cutoff (typically 0.01)
-- `presence_threshold`: Presence ratio cutoff (typically 0.9)
+### 品質指標閾值
+- `snr_threshold`：SNR 截止值（典型值 5）
+- `isi_threshold`：ISI 違規截止值（典型值 0.01）
+- `presence_threshold`：存在比率截止值（典型值 0.9）

@@ -1,104 +1,104 @@
 # Dask Arrays
 
-## Overview
+## 概述
 
-Dask Array implements NumPy's ndarray interface using blocked algorithms. It coordinates many NumPy arrays arranged into a grid to enable computation on datasets larger than available memory, utilizing parallelism across multiple cores.
+Dask Array 使用分塊演算法實作 NumPy 的 ndarray 介面。它協調許多排列成網格的 NumPy 陣列，以實現對超過可用記憶體的資料集進行運算，並利用多核心的平行處理。
 
-## Core Concept
+## 核心概念
 
-A Dask Array is divided into chunks (blocks):
-- Each chunk is a regular NumPy array
-- Operations are applied to each chunk in parallel
-- Results are combined automatically
-- Enables out-of-core computation (data larger than RAM)
+Dask Array 被分成多個分塊（blocks）：
+- 每個分塊是一個常規的 NumPy 陣列
+- 操作以平行方式應用於每個分塊
+- 結果自動組合
+- 支援核心外運算（資料大於 RAM）
 
-## Key Capabilities
+## 主要功能
 
-### What Dask Arrays Support
+### Dask Arrays 支援的功能
 
-**Mathematical Operations**:
-- Arithmetic operations (+, -, *, /)
-- Scalar functions (exponentials, logarithms, trigonometric)
-- Element-wise operations
+**數學操作**：
+- 算術運算（+、-、*、/）
+- 純量函數（指數、對數、三角函數）
+- 逐元素操作
 
-**Reductions**:
-- `sum()`, `mean()`, `std()`, `var()`
-- Reductions along specified axes
-- `min()`, `max()`, `argmin()`, `argmax()`
+**歸約操作**：
+- `sum()`、`mean()`、`std()`、`var()`
+- 沿指定軸的歸約
+- `min()`、`max()`、`argmin()`、`argmax()`
 
-**Linear Algebra**:
-- Tensor contractions
-- Dot products and matrix multiplication
-- Some decompositions (SVD, QR)
+**線性代數**：
+- 張量收縮
+- 點積和矩陣乘法
+- 部分分解（SVD、QR）
 
-**Data Manipulation**:
-- Transposition
-- Slicing (standard and fancy indexing)
-- Reshaping
-- Concatenation and stacking
+**資料操作**：
+- 轉置
+- 切片（標準和花式索引）
+- 重塑
+- 串接和堆疊
 
-**Array Protocols**:
-- Universal functions (ufuncs)
-- NumPy protocols for interoperability
+**陣列協定**：
+- 通用函數（ufuncs）
+- NumPy 協定以實現互操作性
 
-## When to Use Dask Arrays
+## 何時使用 Dask Arrays
 
-**Use Dask Arrays When**:
-- Arrays exceed available RAM
-- Computation can be parallelized across chunks
-- Working with NumPy-style numerical operations
-- Need to scale NumPy code to larger datasets
+**使用 Dask Arrays 的情況**：
+- 陣列超過可用 RAM
+- 運算可以跨分塊平行化
+- 使用 NumPy 風格的數值操作
+- 需要將 NumPy 程式碼擴展到更大的資料集
 
-**Stick with NumPy When**:
-- Arrays fit comfortably in memory
-- Operations require global views of data
-- Using specialized functions not available in Dask
-- Performance is adequate with NumPy alone
+**繼續使用 NumPy 的情況**：
+- 陣列可以輕鬆放入記憶體
+- 操作需要資料的全域視圖
+- 使用 Dask 中未提供的專門函數
+- NumPy 的效能已經足夠
 
-## Important Limitations
+## 重要限制
 
-Dask Arrays intentionally don't implement certain NumPy features:
+Dask Arrays 刻意不實作某些 NumPy 功能：
 
-**Not Implemented**:
-- Most `np.linalg` functions (only basic operations available)
-- Operations difficult to parallelize (like full sorting)
-- Memory-inefficient operations (converting to lists, iterating via loops)
-- Many specialized functions (driven by community needs)
+**未實作**：
+- 大多數 `np.linalg` 函數（僅提供基本操作）
+- 難以平行化的操作（如完整排序）
+- 記憶體效率低的操作（轉換為列表、透過迴圈迭代）
+- 許多專門函數（由社群需求驅動）
 
-**Workarounds**: For unsupported operations, consider using `map_blocks` with custom NumPy code.
+**替代方案**：對於不支援的操作，考慮使用 `map_blocks` 搭配自訂 NumPy 程式碼。
 
-## Creating Dask Arrays
+## 建立 Dask Arrays
 
-### From NumPy Arrays
+### 從 NumPy 陣列
 ```python
 import dask.array as da
 import numpy as np
 
-# Create from NumPy array with specified chunks
+# 從指定分塊的 NumPy 陣列建立
 x = np.arange(10000)
-dx = da.from_array(x, chunks=1000)  # Creates 10 chunks of 1000 elements each
+dx = da.from_array(x, chunks=1000)  # 建立 10 個各 1000 個元素的分塊
 ```
 
-### Random Arrays
+### 隨機陣列
 ```python
-# Create random array with specified chunks
+# 建立指定分塊的隨機陣列
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
 
-# Other random functions
+# 其他隨機函數
 x = da.random.normal(10, 0.1, size=(10000, 10000), chunks=(1000, 1000))
 ```
 
-### Zeros, Ones, and Empty
+### 零、一和空陣列
 ```python
-# Create arrays filled with constants
+# 建立填充常數的陣列
 zeros = da.zeros((10000, 10000), chunks=(1000, 1000))
 ones = da.ones((10000, 10000), chunks=(1000, 1000))
 empty = da.empty((10000, 10000), chunks=(1000, 1000))
 ```
 
-### From Functions
+### 從函數建立
 ```python
-# Create array from function
+# 從函數建立陣列
 def create_block(block_id):
     return np.random.random((1000, 1000)) * block_id[0]
 
@@ -109,345 +109,345 @@ x = da.from_delayed(
 )
 ```
 
-### From Disk
+### 從磁碟載入
 ```python
-# Load from HDF5
+# 從 HDF5 載入
 import h5py
 f = h5py.File('myfile.hdf5', mode='r')
 x = da.from_array(f['/data'], chunks=(1000, 1000))
 
-# Load from Zarr
+# 從 Zarr 載入
 import zarr
 z = zarr.open('myfile.zarr', mode='r')
 x = da.from_array(z, chunks=(1000, 1000))
 ```
 
-## Common Operations
+## 常見操作
 
-### Arithmetic Operations
+### 算術操作
 ```python
 import dask.array as da
 
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
 y = da.random.random((10000, 10000), chunks=(1000, 1000))
 
-# Element-wise operations (lazy)
+# 逐元素操作（延遲）
 z = x + y
 z = x * y
 z = da.exp(x)
 z = da.log(y)
 
-# Compute result
+# 計算結果
 result = z.compute()
 ```
 
-### Reductions
+### 歸約操作
 ```python
-# Reductions along axes
+# 沿軸歸約
 total = x.sum().compute()
 mean = x.mean().compute()
 std = x.std().compute()
 
-# Reduction along specific axis
+# 沿特定軸歸約
 row_means = x.mean(axis=1).compute()
 col_sums = x.sum(axis=0).compute()
 ```
 
-### Slicing and Indexing
+### 切片和索引
 ```python
-# Standard slicing (returns Dask Array)
+# 標準切片（回傳 Dask Array）
 subset = x[1000:5000, 2000:8000]
 
-# Fancy indexing
+# 花式索引
 indices = [0, 5, 10, 15]
 selected = x[indices, :]
 
-# Boolean indexing
+# 布林索引
 mask = x > 0.5
 filtered = x[mask]
 ```
 
-### Matrix Operations
+### 矩陣操作
 ```python
-# Matrix multiplication
+# 矩陣乘法
 A = da.random.random((10000, 5000), chunks=(1000, 1000))
 B = da.random.random((5000, 8000), chunks=(1000, 1000))
 C = da.matmul(A, B)
 result = C.compute()
 
-# Dot product
+# 點積
 dot_product = da.dot(A, B)
 
-# Transpose
+# 轉置
 AT = A.T
 ```
 
-### Linear Algebra
+### 線性代數
 ```python
-# SVD (Singular Value Decomposition)
+# SVD（奇異值分解）
 U, s, Vt = da.linalg.svd(A)
 U_computed, s_computed, Vt_computed = dask.compute(U, s, Vt)
 
-# QR decomposition
+# QR 分解
 Q, R = da.linalg.qr(A)
 Q_computed, R_computed = dask.compute(Q, R)
 
-# Note: Only some linalg operations are available
+# 注意：僅部分線性代數操作可用
 ```
 
-### Reshaping and Manipulation
+### 重塑和操作
 ```python
-# Reshape
+# 重塑
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
 reshaped = x.reshape(5000, 20000)
 
-# Transpose
+# 轉置
 transposed = x.T
 
-# Concatenate
+# 串接
 x1 = da.random.random((5000, 10000), chunks=(1000, 1000))
 x2 = da.random.random((5000, 10000), chunks=(1000, 1000))
 combined = da.concatenate([x1, x2], axis=0)
 
-# Stack
+# 堆疊
 stacked = da.stack([x1, x2], axis=0)
 ```
 
-## Chunking Strategy
+## 分塊策略
 
-Chunking is critical for Dask Array performance.
+分塊對於 Dask Array 效能至關重要。
 
-### Chunk Size Guidelines
+### 分塊大小指南
 
-**Good Chunk Sizes**:
-- Each chunk: ~10-100 MB (compressed)
-- ~1 million elements per chunk for numeric data
-- Balance between parallelism and overhead
+**良好的分塊大小**：
+- 每個分塊：約 10-100 MB（壓縮後）
+- 數值資料每個分塊約 100 萬個元素
+- 在平行性和開銷之間取得平衡
 
-**Example Calculation**:
+**計算範例**：
 ```python
-# For float64 data (8 bytes per element)
-# Target 100 MB chunks: 100 MB / 8 bytes = 12.5M elements
+# 對於 float64 資料（每個元素 8 bytes）
+# 目標 100 MB 分塊：100 MB / 8 bytes = 1250 萬個元素
 
-# For 2D array (10000, 10000):
-x = da.random.random((10000, 10000), chunks=(1000, 1000))  # ~8 MB per chunk
+# 對於 2D 陣列 (10000, 10000)：
+x = da.random.random((10000, 10000), chunks=(1000, 1000))  # 每個分塊約 8 MB
 ```
 
-### Viewing Chunk Structure
+### 查看分塊結構
 ```python
-# Check chunks
+# 檢查分塊
 print(x.chunks)  # ((1000, 1000, ...), (1000, 1000, ...))
 
-# Number of chunks
+# 分塊數量
 print(x.npartitions)
 
-# Chunk sizes in bytes
+# 分塊大小（bytes）
 print(x.nbytes / x.npartitions)
 ```
 
-### Rechunking
+### 重新分塊
 ```python
-# Change chunk sizes
+# 變更分塊大小
 x = da.random.random((10000, 10000), chunks=(500, 500))
 x_rechunked = x.rechunk((2000, 2000))
 
-# Rechunk specific dimension
+# 重新分塊特定維度
 x_rechunked = x.rechunk({0: 2000, 1: 'auto'})
 ```
 
-## Custom Operations with map_blocks
+## 使用 map_blocks 進行自訂操作
 
-For operations not available in Dask, use `map_blocks`:
+對於 Dask 中未提供的操作，使用 `map_blocks`：
 
 ```python
 import dask.array as da
 import numpy as np
 
 def custom_function(block):
-    # Apply custom NumPy operation
+    # 應用自訂 NumPy 操作
     return np.fft.fft2(block)
 
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
 result = da.map_blocks(custom_function, x, dtype=x.dtype)
 
-# Compute
+# 計算
 output = result.compute()
 ```
 
-### map_blocks with Different Output Shape
+### 具有不同輸出形狀的 map_blocks
 ```python
 def reduction_function(block):
-    # Returns scalar for each block
+    # 為每個分塊回傳純量
     return np.array([block.mean()])
 
 result = da.map_blocks(
     reduction_function,
     x,
     dtype='float64',
-    drop_axis=[0, 1],  # Output has no axes from input
-    new_axis=0,        # Output has new axis
-    chunks=(1,)        # One element per block
+    drop_axis=[0, 1],  # 輸出沒有來自輸入的軸
+    new_axis=0,        # 輸出有新軸
+    chunks=(1,)        # 每個分塊一個元素
 )
 ```
 
-## Lazy Evaluation and Computation
+## 延遲求值與運算
 
-### Lazy Operations
+### 延遲操作
 ```python
-# All operations are lazy (instant, no computation)
+# 所有操作都是延遲的（即時、無運算）
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
 y = x + 100
 z = y.mean(axis=0)
 result = z * 2
 
-# Nothing computed yet, just task graph built
+# 尚未運算，只是建構了任務圖
 ```
 
-### Triggering Computation
+### 觸發運算
 ```python
-# Compute single result
+# 計算單一結果
 final = result.compute()
 
-# Compute multiple results efficiently
+# 高效計算多個結果
 result1, result2 = dask.compute(operation1, operation2)
 ```
 
-### Persist in Memory
+### 持久化到記憶體
 ```python
-# Keep intermediate results in memory
+# 將中間結果保留在記憶體中
 x_cached = x.persist()
 
-# Reuse cached results
+# 重複使用快取的結果
 y1 = (x_cached + 10).compute()
 y2 = (x_cached * 2).compute()
 ```
 
-## Saving Results
+## 儲存結果
 
-### To NumPy
+### 轉為 NumPy
 ```python
-# Convert to NumPy (loads all in memory)
+# 轉換為 NumPy（載入所有到記憶體）
 numpy_array = dask_array.compute()
 ```
 
-### To Disk
+### 存到磁碟
 ```python
-# Save to HDF5
+# 儲存到 HDF5
 import h5py
 with h5py.File('output.hdf5', mode='w') as f:
     dset = f.create_dataset('/data', shape=x.shape, dtype=x.dtype)
     da.store(x, dset)
 
-# Save to Zarr
+# 儲存到 Zarr
 import zarr
 z = zarr.open('output.zarr', mode='w', shape=x.shape, dtype=x.dtype, chunks=x.chunks)
 da.store(x, z)
 ```
 
-## Performance Considerations
+## 效能考量
 
-### Efficient Operations
-- Element-wise operations: Very efficient
-- Reductions with parallelizable operations: Efficient
-- Slicing along chunk boundaries: Efficient
-- Matrix operations with good chunk alignment: Efficient
+### 高效操作
+- 逐元素操作：非常高效
+- 可平行化操作的歸約：高效
+- 沿分塊邊界切片：高效
+- 具有良好分塊對齊的矩陣操作：高效
 
-### Expensive Operations
-- Slicing across many chunks: Requires data movement
-- Operations requiring global sorting: Not well supported
-- Extremely irregular access patterns: Poor performance
-- Operations with poor chunk alignment: Requires rechunking
+### 昂貴操作
+- 跨多個分塊切片：需要資料移動
+- 需要全域排序的操作：支援不佳
+- 極不規則的存取模式：效能差
+- 分塊對齊不佳的操作：需要重新分塊
 
-### Optimization Tips
+### 優化技巧
 
-**1. Choose Good Chunk Sizes**
+**1. 選擇良好的分塊大小**
 ```python
-# Aim for balanced chunks
-# Good: ~100 MB per chunk
+# 目標平衡的分塊
+# 良好：每個分塊約 100 MB
 x = da.random.random((100000, 10000), chunks=(10000, 10000))
 ```
 
-**2. Align Chunks for Operations**
+**2. 為操作對齊分塊**
 ```python
-# Make sure chunks align for operations
+# 確保分塊為操作對齊
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
-y = da.random.random((10000, 10000), chunks=(1000, 1000))  # Aligned
-z = x + y  # Efficient
+y = da.random.random((10000, 10000), chunks=(1000, 1000))  # 對齊
+z = x + y  # 高效
 ```
 
-**3. Use Appropriate Scheduler**
+**3. 使用適當的排程器**
 ```python
-# Arrays work well with threaded scheduler (default)
-# Shared memory access is efficient
-result = x.compute()  # Uses threads by default
+# 陣列在執行緒排程器下運作良好（預設）
+# 共享記憶體存取是高效的
+result = x.compute()  # 預設使用執行緒
 ```
 
-**4. Minimize Data Transfer**
+**4. 最小化資料傳輸**
 ```python
-# Better: Compute on each chunk, then transfer results
-means = x.mean(axis=1).compute()  # Transfers less data
+# 較佳：在每個分塊上計算，然後傳輸結果
+means = x.mean(axis=1).compute()  # 傳輸較少資料
 
-# Worse: Transfer all data then compute
+# 較差：傳輸所有資料然後計算
 x_numpy = x.compute()
-means = x_numpy.mean(axis=1)  # Transfers more data
+means = x_numpy.mean(axis=1)  # 傳輸較多資料
 ```
 
-## Common Patterns
+## 常見模式
 
-### Image Processing
+### 影像處理
 ```python
 import dask.array as da
 
-# Load large image stack
+# 載入大型影像堆疊
 images = da.from_zarr('images.zarr')
 
-# Apply filtering
+# 應用濾波
 def apply_gaussian(block):
     from scipy.ndimage import gaussian_filter
     return gaussian_filter(block, sigma=2)
 
 filtered = da.map_blocks(apply_gaussian, images, dtype=images.dtype)
 
-# Compute statistics
+# 計算統計
 mean_intensity = filtered.mean().compute()
 ```
 
-### Scientific Computing
+### 科學運算
 ```python
-# Large-scale numerical simulation
+# 大規模數值模擬
 x = da.random.random((100000, 100000), chunks=(10000, 10000))
 
-# Apply iterative computation
+# 應用迭代運算
 for i in range(num_iterations):
     x = da.exp(-x) * da.sin(x)
-    x = x.persist()  # Keep in memory for next iteration
+    x = x.persist()  # 為下一次迭代保留在記憶體中
 
-# Final result
+# 最終結果
 result = x.compute()
 ```
 
-### Data Analysis
+### 資料分析
 ```python
-# Load large dataset
+# 載入大型資料集
 data = da.from_zarr('measurements.zarr')
 
-# Compute statistics
+# 計算統計
 mean = data.mean(axis=0)
 std = data.std(axis=0)
 normalized = (data - mean) / std
 
-# Save normalized data
+# 儲存標準化資料
 da.to_zarr(normalized, 'normalized.zarr')
 ```
 
-## Integration with Other Tools
+## 與其他工具整合
 
 ### XArray
 ```python
 import xarray as xr
 import dask.array as da
 
-# XArray wraps Dask arrays with labeled dimensions
+# XArray 以標記維度包裝 Dask 陣列
 data = da.random.random((1000, 2000, 3000), chunks=(100, 200, 300))
 dataset = xr.DataArray(
     data,
@@ -456,9 +456,9 @@ dataset = xr.DataArray(
 )
 ```
 
-### Scikit-learn (via Dask-ML)
+### Scikit-learn（透過 Dask-ML）
 ```python
-# Some scikit-learn compatible operations
+# 部分與 scikit-learn 相容的操作
 from dask_ml.preprocessing import StandardScaler
 
 X = da.random.random((10000, 100), chunks=(1000, 100))
@@ -466,32 +466,32 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 ```
 
-## Debugging Tips
+## 除錯技巧
 
-### Visualize Task Graph
+### 視覺化任務圖
 ```python
-# Visualize computation graph (for small arrays)
+# 視覺化運算圖（適用於小陣列）
 x = da.random.random((100, 100), chunks=(10, 10))
 y = x + 1
 y.visualize(filename='graph.png')
 ```
 
-### Check Array Properties
+### 檢查陣列屬性
 ```python
-# Inspect before computing
+# 計算前檢查
 print(f"Shape: {x.shape}")
 print(f"Dtype: {x.dtype}")
 print(f"Chunks: {x.chunks}")
 print(f"Number of tasks: {len(x.__dask_graph__())}")
 ```
 
-### Test on Small Arrays First
+### 先在小陣列上測試
 ```python
-# Test logic on small array
+# 在小陣列上測試邏輯
 small_x = da.random.random((100, 100), chunks=(50, 50))
 result_small = computation(small_x).compute()
 
-# Validate, then scale
+# 驗證後，再擴展
 large_x = da.random.random((100000, 100000), chunks=(10000, 10000))
 result_large = computation(large_x).compute()
 ```

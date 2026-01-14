@@ -1,184 +1,184 @@
-# Spatial Analysis
+# 空間分析
 
-## Attribute Joins
+## 屬性連接
 
-Combine datasets based on common variables using standard pandas merge:
+使用標準 pandas merge 根據共同變數合併資料集：
 
 ```python
-# Merge on common column
+# 在共同欄位上合併
 result = gdf.merge(df, on='common_column')
 
-# Left join
+# 左連接
 result = gdf.merge(df, on='common_column', how='left')
 
-# Important: Call merge on GeoDataFrame to preserve geometry
-# This works: gdf.merge(df, ...)
-# This doesn't: df.merge(gdf, ...) # Returns DataFrame, not GeoDataFrame
+# 重要：在 GeoDataFrame 上呼叫 merge 以保留幾何
+# 正確：gdf.merge(df, ...)
+# 錯誤：df.merge(gdf, ...) # 返回 DataFrame，而非 GeoDataFrame
 ```
 
-## Spatial Joins
+## 空間連接
 
-Combine datasets based on spatial relationships.
+根據空間關係合併資料集。
 
-### Binary Predicate Joins (sjoin)
+### 二元謂詞連接（sjoin）
 
-Join based on geometric predicates:
+根據幾何謂詞連接：
 
 ```python
-# Intersects (default)
+# 相交（預設）
 joined = gpd.sjoin(gdf1, gdf2, how='inner', predicate='intersects')
 
-# Available predicates
+# 可用的謂詞
 joined = gpd.sjoin(gdf1, gdf2, predicate='contains')
 joined = gpd.sjoin(gdf1, gdf2, predicate='within')
 joined = gpd.sjoin(gdf1, gdf2, predicate='touches')
 joined = gpd.sjoin(gdf1, gdf2, predicate='crosses')
 joined = gpd.sjoin(gdf1, gdf2, predicate='overlaps')
 
-# Join types
-joined = gpd.sjoin(gdf1, gdf2, how='left')   # Keep all from left
-joined = gpd.sjoin(gdf1, gdf2, how='right')  # Keep all from right
-joined = gpd.sjoin(gdf1, gdf2, how='inner')  # Intersection only
+# 連接類型
+joined = gpd.sjoin(gdf1, gdf2, how='left')   # 保留左側所有
+joined = gpd.sjoin(gdf1, gdf2, how='right')  # 保留右側所有
+joined = gpd.sjoin(gdf1, gdf2, how='inner')  # 僅交集
 ```
 
-The `how` parameter determines which geometries are retained:
-- **left**: Retains left GeoDataFrame's index and geometry
-- **right**: Retains right GeoDataFrame's index and geometry
-- **inner**: Uses intersection of indices, keeps left geometry
+`how` 參數決定保留哪些幾何：
+- **left**：保留左側 GeoDataFrame 的索引和幾何
+- **right**：保留右側 GeoDataFrame 的索引和幾何
+- **inner**：使用索引的交集，保留左側幾何
 
-### Nearest Joins (sjoin_nearest)
+### 最近鄰連接（sjoin_nearest）
 
-Join to nearest features:
+連接到最近的圖徵：
 
 ```python
-# Find nearest neighbor
+# 找到最近鄰
 nearest = gpd.sjoin_nearest(gdf1, gdf2)
 
-# Add distance column
+# 添加距離欄位
 nearest = gpd.sjoin_nearest(gdf1, gdf2, distance_col='distance')
 
-# Limit search radius (significantly improves performance)
+# 限制搜尋半徑（顯著提高效能）
 nearest = gpd.sjoin_nearest(gdf1, gdf2, max_distance=1000)
 
-# Find k nearest neighbors
+# 找到 k 個最近鄰
 nearest = gpd.sjoin_nearest(gdf1, gdf2, k=5)
 ```
 
-## Overlay Operations
+## 疊加操作
 
-Set-theoretic operations combining geometries from two GeoDataFrames:
+結合兩個 GeoDataFrame 幾何的集合論操作：
 
 ```python
-# Intersection - keep areas where both overlap
+# 交集 - 保留兩者重疊的區域
 intersection = gpd.overlay(gdf1, gdf2, how='intersection')
 
-# Union - combine all areas
+# 聯集 - 合併所有區域
 union = gpd.overlay(gdf1, gdf2, how='union')
 
-# Difference - areas in first not in second
+# 差集 - 第一個中不在第二個中的區域
 difference = gpd.overlay(gdf1, gdf2, how='difference')
 
-# Symmetric difference - areas in either but not both
+# 對稱差集 - 在任一個中但不在兩者中的區域
 sym_diff = gpd.overlay(gdf1, gdf2, how='symmetric_difference')
 
-# Identity - intersection + difference
+# 恆等 - 交集 + 差集
 identity = gpd.overlay(gdf1, gdf2, how='identity')
 ```
 
-Result includes attributes from both input GeoDataFrames.
+結果包含兩個輸入 GeoDataFrame 的屬性。
 
-## Dissolve (Aggregation)
+## 溶解（彙總）
 
-Aggregate geometries based on attribute values:
+根據屬性值彙總幾何：
 
 ```python
-# Dissolve by attribute
+# 按屬性溶解
 dissolved = gdf.dissolve(by='region')
 
-# Dissolve with aggregation functions
+# 帶彙總函數的溶解
 dissolved = gdf.dissolve(by='region', aggfunc='sum')
 dissolved = gdf.dissolve(by='region', aggfunc={'population': 'sum', 'area': 'mean'})
 
-# Dissolve all into single geometry
+# 將所有溶解為單一幾何
 dissolved = gdf.dissolve()
 
-# Preserve internal boundaries
+# 保留內部邊界
 dissolved = gdf.dissolve(by='region', as_index=False)
 ```
 
-## Clipping
+## 裁剪
 
-Clip geometries to boundary of another geometry:
+將幾何裁剪到另一個幾何的邊界：
 
 ```python
-# Clip to polygon boundary
+# 裁剪到多邊形邊界
 clipped = gpd.clip(gdf, boundary_polygon)
 
-# Clip to another GeoDataFrame
+# 裁剪到另一個 GeoDataFrame
 clipped = gpd.clip(gdf, boundary_gdf)
 ```
 
-## Appending
+## 附加
 
-Combine multiple GeoDataFrames:
+合併多個 GeoDataFrame：
 
 ```python
 import pandas as pd
 
-# Concatenate GeoDataFrames (CRS must match)
+# 連接 GeoDataFrame（CRS 必須匹配）
 combined = pd.concat([gdf1, gdf2], ignore_index=True)
 
-# With keys for identification
+# 帶識別鍵
 combined = pd.concat([gdf1, gdf2], keys=['source1', 'source2'])
 ```
 
-## Spatial Indexing
+## 空間索引
 
-Improve performance for spatial operations:
+提高空間操作的效能：
 
 ```python
-# GeoPandas uses spatial index automatically for most operations
-# Access the spatial index directly
+# GeoPandas 自動為大多數操作使用空間索引
+# 直接存取空間索引
 sindex = gdf.sindex
 
-# Query geometries intersecting a bounding box
+# 查詢與邊界框相交的幾何
 possible_matches_index = list(sindex.intersection((xmin, ymin, xmax, ymax)))
 possible_matches = gdf.iloc[possible_matches_index]
 
-# Query geometries intersecting a polygon
+# 查詢與多邊形相交的幾何
 possible_matches_index = list(sindex.query(polygon_geometry))
 possible_matches = gdf.iloc[possible_matches_index]
 ```
 
-Spatial indexing significantly speeds up:
-- Spatial joins
-- Overlay operations
-- Queries with geometric predicates
+空間索引顯著加速：
+- 空間連接
+- 疊加操作
+- 帶幾何謂詞的查詢
 
-## Distance Calculations
+## 距離計算
 
 ```python
-# Distance between geometries
+# 幾何之間的距離
 distances = gdf1.geometry.distance(gdf2.geometry)
 
-# Distance to single geometry
+# 到單一幾何的距離
 distances = gdf.geometry.distance(single_point)
 
-# Minimum distance to any feature
+# 到任何圖徵的最小距離
 min_dist = gdf.geometry.distance(point).min()
 ```
 
-## Area and Length Calculations
+## 面積和長度計算
 
-For accurate measurements, ensure proper CRS:
+為了準確測量，確保正確的 CRS：
 
 ```python
-# Reproject to appropriate projected CRS for area/length calculations
-gdf_projected = gdf.to_crs(epsg=3857)  # Or appropriate UTM zone
+# 重新投影到適當的投影 CRS 進行面積/長度計算
+gdf_projected = gdf.to_crs(epsg=3857)  # 或適當的 UTM 帶
 
-# Calculate area (in CRS units, typically square meters)
+# 計算面積（以 CRS 單位，通常是平方公尺）
 areas = gdf_projected.geometry.area
 
-# Calculate length/perimeter (in CRS units)
+# 計算長度/周長（以 CRS 單位）
 lengths = gdf_projected.geometry.length
 ```

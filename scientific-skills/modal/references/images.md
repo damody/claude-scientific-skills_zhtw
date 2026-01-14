@@ -1,12 +1,12 @@
-# Modal Images
+# Modal 映像
 
-## Overview
+## 概述
 
-Modal Images define the environment code runs in - containers with dependencies installed. Images are built from method chains starting from a base image.
+Modal Images 定義程式碼執行的環境 - 安裝了相依性的容器。映像是從基礎映像開始透過方法鏈建構的。
 
-## Base Images
+## 基礎映像
 
-Start with a base image and chain methods:
+從基礎映像開始並鏈接方法：
 
 ```python
 image = (
@@ -18,17 +18,17 @@ image = (
 )
 ```
 
-Available base images:
-- `Image.debian_slim()` - Debian Linux with Python
-- `Image.micromamba()` - Base with Micromamba package manager
-- `Image.from_registry()` - Pull from Docker Hub, ECR, etc.
-- `Image.from_dockerfile()` - Build from existing Dockerfile
+可用的基礎映像：
+- `Image.debian_slim()` - 帶 Python 的 Debian Linux
+- `Image.micromamba()` - 帶 Micromamba 套件管理器的基礎
+- `Image.from_registry()` - 從 Docker Hub、ECR 等拉取
+- `Image.from_dockerfile()` - 從現有 Dockerfile 建構
 
-## Installing Python Packages
+## 安裝 Python 套件
 
-### With uv (Recommended)
+### 使用 uv（推薦）
 
-Use `.uv_pip_install()` for fast package installation:
+使用 `.uv_pip_install()` 快速安裝套件：
 
 ```python
 image = (
@@ -37,9 +37,9 @@ image = (
 )
 ```
 
-### With pip
+### 使用 pip
 
-Fallback to standard pip if needed:
+如果需要可以退回到標準 pip：
 
 ```python
 image = (
@@ -48,27 +48,27 @@ image = (
 )
 ```
 
-Pin dependencies tightly (e.g., `"torch==2.8.0"`) for reproducibility.
+為了可重現性，嚴格固定相依性版本（例如 `"torch==2.8.0"`）。
 
-## Installing System Packages
+## 安裝系統套件
 
-Install Linux packages with apt:
+使用 apt 安裝 Linux 套件：
 
 ```python
 image = modal.Image.debian_slim().apt_install("git", "curl")
 ```
 
-## Setting Environment Variables
+## 設定環境變數
 
-Pass a dictionary to `.env()`:
+傳遞字典給 `.env()`：
 
 ```python
 image = modal.Image.debian_slim().env({"PORT": "6443"})
 ```
 
-## Running Shell Commands
+## 執行 Shell 命令
 
-Execute commands during image build:
+在映像建構期間執行命令：
 
 ```python
 image = (
@@ -78,9 +78,9 @@ image = (
 )
 ```
 
-## Running Python Functions at Build Time
+## 在建構時執行 Python 函數
 
-Download model weights or perform setup:
+下載模型權重或執行設定：
 
 ```python
 def download_models():
@@ -101,9 +101,9 @@ image = (
 )
 ```
 
-## Adding Local Files
+## 加入本地檔案
 
-### Add Files or Directories
+### 加入檔案或目錄
 
 ```python
 image = modal.Image.debian_slim().add_local_dir(
@@ -112,11 +112,11 @@ image = modal.Image.debian_slim().add_local_dir(
 )
 ```
 
-By default, files are added at container startup. Use `copy=True` to include in built image.
+預設情況下，檔案在容器啟動時加入。使用 `copy=True` 將其包含在建構的映像中。
 
-### Add Python Source
+### 加入 Python 原始碼
 
-Add importable Python modules:
+加入可匯入的 Python 模組：
 
 ```python
 image = modal.Image.debian_slim().add_local_python_source("local_module")
@@ -127,9 +127,9 @@ def f():
     local_module.do_stuff()
 ```
 
-## Using Existing Container Images
+## 使用現有的容器映像
 
-### From Public Registry
+### 從公開 Registry
 
 ```python
 sklearn_image = modal.Image.from_registry("huanjason/scikit-learn")
@@ -140,13 +140,13 @@ def fit_knn():
     ...
 ```
 
-Can pull from Docker Hub, Nvidia NGC, AWS ECR, GitHub ghcr.io.
+可以從 Docker Hub、Nvidia NGC、AWS ECR、GitHub ghcr.io 拉取。
 
-### From Private Registry
+### 從私有 Registry
 
-Use Modal Secrets for authentication:
+使用 Modal Secrets 進行驗證：
 
-**Docker Hub**:
+**Docker Hub**：
 ```python
 secret = modal.Secret.from_name("my-docker-secret")
 image = modal.Image.from_registry(
@@ -155,7 +155,7 @@ image = modal.Image.from_registry(
 )
 ```
 
-**AWS ECR**:
+**AWS ECR**：
 ```python
 aws_secret = modal.Secret.from_name("my-aws-secret")
 image = modal.Image.from_aws_ecr(
@@ -164,7 +164,7 @@ image = modal.Image.from_aws_ecr(
 )
 ```
 
-### From Dockerfile
+### 從 Dockerfile
 
 ```python
 image = modal.Image.from_dockerfile("Dockerfile")
@@ -175,11 +175,11 @@ def fit():
     ...
 ```
 
-Can still extend with other image methods after importing.
+匯入後仍可使用其他映像方法進行擴展。
 
-## Using Micromamba
+## 使用 Micromamba
 
-For coordinated installation of Python and system packages:
+用於協調安裝 Python 和系統套件：
 
 ```python
 numpyro_pymc_image = (
@@ -188,9 +188,9 @@ numpyro_pymc_image = (
 )
 ```
 
-## GPU Support at Build Time
+## 建構時的 GPU 支援
 
-Run build steps on GPU instances:
+在 GPU 實例上執行建構步驟：
 
 ```python
 image = (
@@ -199,13 +199,13 @@ image = (
 )
 ```
 
-## Image Caching
+## 映像快取
 
-Images are cached per layer. Breaking cache on one layer causes cascading rebuilds for subsequent layers.
+映像按層快取。在某一層破壞快取會導致後續層級的連鎖重建。
 
-Define frequently-changing layers last to maximize cache reuse.
+將經常變更的層定義在最後以最大化快取重用。
 
-### Force Rebuild
+### 強制重建
 
 ```python
 image = (
@@ -215,24 +215,24 @@ image = (
 )
 ```
 
-Or set environment variable:
+或設定環境變數：
 ```bash
 MODAL_FORCE_BUILD=1 modal run ...
 ```
 
-## Handling Different Local/Remote Packages
+## 處理不同的本地/遠端套件
 
-Import packages only available remotely inside function bodies:
+只在遠端可用的套件應在函數本體內匯入：
 
 ```python
 @app.function(image=image)
 def my_function():
-    import pandas as pd  # Only imported remotely
+    import pandas as pd  # 只在遠端匯入
     df = pd.DataFrame()
     ...
 ```
 
-Or use the imports context manager:
+或使用 imports 情境管理器：
 
 ```python
 pandas_image = modal.Image.debian_slim().pip_install("pandas")
@@ -245,9 +245,9 @@ def my_function():
     df = pd.DataFrame()
 ```
 
-## Fast Pull from Registry with eStargz
+## 使用 eStargz 從 Registry 快速拉取
 
-Improve pull performance with eStargz compression:
+使用 eStargz 壓縮改善拉取效能：
 
 ```bash
 docker buildx build --tag "<registry>/<namespace>/<repo>:<version>" \
@@ -255,7 +255,7 @@ docker buildx build --tag "<registry>/<namespace>/<repo>:<version>" \
   .
 ```
 
-Supported registries:
+支援的 Registry：
 - AWS ECR
 - Docker Hub
 - Google Artifact Registry

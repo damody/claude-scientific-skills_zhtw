@@ -1,32 +1,32 @@
-# Resource Management in PyLabRobot
+# PyLabRobot 資源管理
 
-## Overview
+## 概述
 
-Resources in PyLabRobot represent laboratory equipment, labware, or components used in protocols. The resource system provides a hierarchical structure for managing plates, tip racks, troughs, tubes, carriers, and other labware with precise spatial positioning and state tracking.
+PyLabRobot 中的資源代表協定中使用的實驗室設備、耗材或元件。資源系統提供階層結構，用於管理微孔盤、吸頭架、槽、試管、載體和其他實驗室耗材，具有精確的空間定位和狀態追蹤。
 
-## Resource Basics
+## 資源基礎
 
-### What is a Resource?
+### 什麼是資源？
 
-A resource represents:
-- A piece of labware (plate, tip rack, trough, tube)
-- Equipment (liquid handler, plate reader)
-- A part of labware (well, tip)
-- A container of labware (deck, carrier)
+資源代表：
+- 一件實驗室耗材（微孔盤、吸頭架、槽、試管）
+- 設備（液體處理器、微孔盤讀取器）
+- 耗材的一部分（孔、吸頭）
+- 耗材的容器（工作台、載體）
 
-All resources inherit from the base `Resource` class and form a tree structure (arborescence) with parent-child relationships.
+所有資源繼承自基礎 `Resource` 類別，並形成具有父子關係的樹狀結構（樹形）。
 
-### Resource Attributes
+### 資源屬性
 
-Every resource requires:
-- **name**: Unique identifier for the resource
-- **size_x, size_y, size_z**: Dimensions in millimeters (cuboid representation)
-- **location**: Coordinate relative to parent's origin (optional, set when assigned)
+每個資源需要：
+- **name**：資源的唯一識別碼
+- **size_x, size_y, size_z**：以毫米為單位的尺寸（長方體表示）
+- **location**：相對於父資源原點的座標（可選，分配時設定）
 
 ```python
 from pylabrobot.resources import Resource
 
-# Create a basic resource
+# 建立基本資源
 resource = Resource(
     name="my_resource",
     size_x=127.76,  # mm
@@ -35,89 +35,89 @@ resource = Resource(
 )
 ```
 
-## Resource Types
+## 資源類型
 
-### Plates
+### 微孔盤
 
-Microplates with wells for holding liquids:
+具有孔的微孔盤用於容納液體：
 
 ```python
 from pylabrobot.resources import (
-    Cos_96_DW_1mL,      # 96-well plate, 1mL deep well
-    Cos_96_DW_500ul,    # 96-well plate, 500µL
-    Plate_384_Sq,       # 384-well square plate
-    Cos_96_PCR          # 96-well PCR plate
+    Cos_96_DW_1mL,      # 96 孔盤，1mL 深孔
+    Cos_96_DW_500ul,    # 96 孔盤，500µL
+    Plate_384_Sq,       # 384 孔方形盤
+    Cos_96_PCR          # 96 孔 PCR 盤
 )
 
-# Create plate
+# 建立微孔盤
 plate = Cos_96_DW_1mL(name="sample_plate")
 
-# Access wells
-well_a1 = plate["A1"]                  # Single well
-row_a = plate["A1:H1"]                 # Entire row (A1-H1)
-col_1 = plate["A1:A12"]                # Entire column (A1-A12)
-range_wells = plate["A1:C3"]           # Range of wells
-all_wells = plate.children             # All wells as list
+# 存取孔
+well_a1 = plate["A1"]                  # 單個孔
+row_a = plate["A1:H1"]                 # 整行（A1-H1）
+col_1 = plate["A1:A12"]                # 整列（A1-A12）
+range_wells = plate["A1:C3"]           # 孔範圍
+all_wells = plate.children             # 所有孔作為列表
 ```
 
-### Tip Racks
+### 吸頭架
 
-Containers holding pipette tips:
+容納移液器吸頭的容器：
 
 ```python
 from pylabrobot.resources import (
-    TIP_CAR_480_A00,    # 96 standard tips
-    HTF_L,              # Hamilton tips, filtered
-    TipRack             # Generic tip rack
+    TIP_CAR_480_A00,    # 96 個標準吸頭
+    HTF_L,              # Hamilton 吸頭，有濾芯
+    TipRack             # 通用吸頭架
 )
 
-# Create tip rack
+# 建立吸頭架
 tip_rack = TIP_CAR_480_A00(name="tips")
 
-# Access tips
-tip_a1 = tip_rack["A1"]                # Single tip position
-tips_row = tip_rack["A1:H1"]           # Row of tips
-tips_col = tip_rack["A1:A12"]          # Column of tips
+# 存取吸頭
+tip_a1 = tip_rack["A1"]                # 單個吸頭位置
+tips_row = tip_rack["A1:H1"]           # 一排吸頭
+tips_col = tip_rack["A1:A12"]          # 一列吸頭
 
-# Check tip presence (requires tip tracking enabled)
+# 檢查吸頭存在（需要啟用吸頭追蹤）
 from pylabrobot.resources import set_tip_tracking
 set_tip_tracking(True)
 
 has_tip = tip_rack["A1"].tracker.has_tip
 ```
 
-### Troughs
+### 槽
 
-Reservoir containers for reagents:
+用於試劑的儲液容器：
 
 ```python
 from pylabrobot.resources import Trough_100ml
 
-# Create trough
+# 建立槽
 trough = Trough_100ml(name="buffer")
 
-# Access channels
+# 存取通道
 channel_1 = trough["channel_1"]
 all_channels = trough.children
 ```
 
-### Tubes
+### 試管
 
-Individual tubes or tube racks:
+單個試管或試管架：
 
 ```python
 from pylabrobot.resources import Tube, TubeRack
 
-# Create tube rack
+# 建立試管架
 tube_rack = TubeRack(name="samples")
 
-# Access tubes
+# 存取試管
 tube_a1 = tube_rack["A1"]
 ```
 
-### Carriers
+### 載體
 
-Platforms that hold plates, tips, or other labware:
+容納微孔盤、吸頭或其他耗材的平台：
 
 ```python
 from pylabrobot.resources import (
@@ -126,33 +126,33 @@ from pylabrobot.resources import (
     MFXCarrier
 )
 
-# Carriers provide positions for labware
+# 載體提供耗材位置
 carrier = PlateCarrier(name="plate_carrier")
 
-# Assign plate to carrier
+# 將微孔盤分配到載體
 plate = Cos_96_DW_1mL(name="plate")
 carrier.assign_child_resource(plate, location=(0, 0, 0))
 ```
 
-## Deck Management
+## 工作台管理
 
-### Working with Decks
+### 使用工作台
 
-The deck represents the robot's work surface:
+工作台代表機器人的工作表面：
 
 ```python
 from pylabrobot.resources import STARLetDeck, OTDeck
 
-# Hamilton STARlet deck
+# Hamilton STARlet 工作台
 deck = STARLetDeck()
 
-# Opentrons OT-2 deck
+# Opentrons OT-2 工作台
 deck = OTDeck()
 ```
 
-### Assigning Resources to Deck
+### 將資源分配到工作台
 
-Resources are assigned to specific deck positions using rails or coordinates:
+使用軌道或座標將資源分配到特定工作台位置：
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -160,7 +160,7 @@ from pylabrobot.resources import STARLetDeck, TIP_CAR_480_A00, Cos_96_DW_1mL
 
 lh = LiquidHandler(backend=backend, deck=STARLetDeck())
 
-# Assign using rail positions (Hamilton STAR)
+# 使用軌道位置分配（Hamilton STAR）
 tip_rack = TIP_CAR_480_A00(name="tips")
 source_plate = Cos_96_DW_1mL(name="source")
 dest_plate = Cos_96_DW_1mL(name="dest")
@@ -169,150 +169,150 @@ lh.deck.assign_child_resource(tip_rack, rails=1)
 lh.deck.assign_child_resource(source_plate, rails=10)
 lh.deck.assign_child_resource(dest_plate, rails=15)
 
-# Assign using coordinates (x, y, z in mm)
+# 使用座標分配（x, y, z 以 mm 為單位）
 lh.deck.assign_child_resource(
     resource=tip_rack,
     location=(100, 200, 0)
 )
 ```
 
-### Unassigning Resources
+### 取消分配資源
 
-Remove resources from deck:
+從工作台移除資源：
 
 ```python
-# Unassign specific resource
+# 取消分配特定資源
 lh.deck.unassign_child_resource(tip_rack)
 
-# Access assigned resources
+# 存取已分配的資源
 all_resources = lh.deck.children
 resource_names = [r.name for r in lh.deck.children]
 ```
 
-## Coordinate System
+## 座標系統
 
-PyLabRobot uses a right-handed Cartesian coordinate system:
+PyLabRobot 使用右手笛卡爾座標系統：
 
-- **X-axis**: Left to right (increasing rightward)
-- **Y-axis**: Front to back (increasing toward back)
-- **Z-axis**: Down to up (increasing upward)
-- **Origin**: Bottom-front-left corner of parent
+- **X 軸**：從左到右（向右增加）
+- **Y 軸**：從前到後（向後增加）
+- **Z 軸**：從下到上（向上增加）
+- **原點**：父資源的左前下角
 
-### Location Calculations
+### 位置計算
 
 ```python
-# Get absolute location (relative to deck/root)
+# 取得絕對位置（相對於工作台/根）
 absolute_loc = plate.get_absolute_location()
 
-# Get location relative to another resource
+# 取得相對於另一個資源的位置
 relative_loc = well.get_location_wrt(deck)
 
-# Get location relative to parent
+# 取得相對於父資源的位置
 parent_relative = plate.location
 ```
 
-## State Management
+## 狀態管理
 
-### Tracking Liquid Volumes
+### 追蹤液體體積
 
-Track liquid volumes in wells and containers:
+追蹤孔和容器中的液體體積：
 
 ```python
 from pylabrobot.resources import set_volume_tracking
 
-# Enable volume tracking globally
+# 全域啟用體積追蹤
 set_volume_tracking(True)
 
-# Set liquid in well
+# 設定孔中的液體
 plate["A1"].tracker.set_liquids([
-    (None, 200)  # (liquid_type, volume_in_uL)
+    (None, 200)  # (液體類型, 體積_µL)
 ])
 
-# Multiple liquids
+# 多種液體
 plate["A2"].tracker.set_liquids([
     ("water", 100),
     ("ethanol", 50)
 ])
 
-# Get current volume
-volume = plate["A1"].tracker.get_volume()  # Returns total volume
+# 取得目前體積
+volume = plate["A1"].tracker.get_volume()  # 回傳總體積
 
-# Get liquids
-liquids = plate["A1"].tracker.get_liquids()  # Returns list of (type, vol) tuples
+# 取得液體
+liquids = plate["A1"].tracker.get_liquids()  # 回傳 (類型, 體積) 元組列表
 ```
 
-### Tracking Tip Presence
+### 追蹤吸頭存在
 
-Track which tips are present in tip racks:
+追蹤吸頭架中哪些吸頭存在：
 
 ```python
 from pylabrobot.resources import set_tip_tracking
 
-# Enable tip tracking globally
+# 全域啟用吸頭追蹤
 set_tip_tracking(True)
 
-# Check if tip is present
+# 檢查吸頭是否存在
 has_tip = tip_rack["A1"].tracker.has_tip
 
-# Tips are automatically tracked when using pick_up_tips/drop_tips
-await lh.pick_up_tips(tip_rack["A1"])  # Marks tip as absent
-await lh.return_tips()                  # Marks tip as present
+# 使用 pick_up_tips/drop_tips 時自動追蹤吸頭
+await lh.pick_up_tips(tip_rack["A1"])  # 標記吸頭為不存在
+await lh.return_tips()                  # 標記吸頭為存在
 ```
 
-## Serialization
+## 序列化
 
-### Saving and Loading Resources
+### 儲存和載入資源
 
-Save resource definitions and states to JSON:
+將資源定義和狀態儲存到 JSON：
 
 ```python
-# Save resource definition
+# 儲存資源定義
 plate.save("plate_definition.json")
 
-# Load resource from JSON
+# 從 JSON 載入資源
 from pylabrobot.resources import Plate
 plate = Plate.load_from_json_file("plate_definition.json")
 
-# Save deck layout
+# 儲存工作台布局
 lh.deck.save("deck_layout.json")
 
-# Load deck layout
+# 載入工作台布局
 from pylabrobot.resources import Deck
 deck = Deck.load_from_json_file("deck_layout.json")
 ```
 
-### State Serialization
+### 狀態序列化
 
-Save and restore resource states separately from definitions:
+與定義分開儲存和還原資源狀態：
 
 ```python
-# Save state (tip presence, liquid volumes)
+# 儲存狀態（吸頭存在、液體體積）
 state = plate.serialize_state()
 with open("plate_state.json", "w") as f:
     json.dump(state, f)
 
-# Load state
+# 載入狀態
 with open("plate_state.json", "r") as f:
     state = json.load(f)
 plate.load_state(state)
 
-# Save all states in hierarchy
+# 儲存階層中的所有狀態
 all_states = lh.deck.serialize_all_state()
 
-# Load all states
+# 載入所有狀態
 lh.deck.load_all_state(all_states)
 ```
 
-## Custom Resources
+## 自訂資源
 
-### Defining Custom Labware
+### 定義自訂耗材
 
-Create custom labware when built-in resources don't match your equipment:
+當內建資源不符合您的設備時建立自訂耗材：
 
 ```python
 from pylabrobot.resources import Plate, Well
 
-# Define custom plate
+# 定義自訂微孔盤
 class CustomPlate(Plate):
     def __init__(self, name: str):
         super().__init__(
@@ -320,94 +320,94 @@ class CustomPlate(Plate):
             size_x=127.76,
             size_y=85.48,
             size_z=14.5,
-            num_items_x=12,  # 12 columns
-            num_items_y=8,   # 8 rows
-            dx=9.0,          # Well spacing X
-            dy=9.0,          # Well spacing Y
-            dz=0.0,          # Well spacing Z (usually 0)
-            item_dx=9.0,     # Distance between well centers X
-            item_dy=9.0      # Distance between well centers Y
+            num_items_x=12,  # 12 列
+            num_items_y=8,   # 8 行
+            dx=9.0,          # 孔間距 X
+            dy=9.0,          # 孔間距 Y
+            dz=0.0,          # 孔間距 Z（通常為 0）
+            item_dx=9.0,     # 孔中心之間的距離 X
+            item_dy=9.0      # 孔中心之間的距離 Y
         )
 
-# Use custom plate
+# 使用自訂微孔盤
 custom_plate = CustomPlate(name="my_custom_plate")
 ```
 
-### Custom Wells
+### 自訂孔
 
-Define custom well geometry:
+定義自訂孔幾何形狀：
 
 ```python
 from pylabrobot.resources import Well
 
-# Create custom well
+# 建立自訂孔
 well = Well(
     name="custom_well",
     size_x=8.0,
     size_y=8.0,
     size_z=10.5,
     max_volume=200,      # µL
-    bottom_shape="flat"  # or "v", "u"
+    bottom_shape="flat"  # 或 "v"、"u"
 )
 ```
 
-## Resource Discovery
+## 資源發現
 
-### Finding Resources
+### 尋找資源
 
-Navigate the resource hierarchy:
+導航資源階層：
 
 ```python
-# Get all wells in a plate
+# 取得微孔盤中的所有孔
 wells = plate.children
 
-# Find resource by name
+# 按名稱尋找資源
 resource = lh.deck.get_resource("plate_name")
 
-# Iterate through resources
+# 遍歷資源
 for resource in lh.deck.children:
     print(f"{resource.name}: {resource.get_absolute_location()}")
 
-# Get wells by pattern
+# 按模式取得孔
 wells_a = [w for w in plate.children if w.name.startswith("A")]
 ```
 
-### Resource Metadata
+### 資源後設資料
 
-Access resource information:
+存取資源資訊：
 
 ```python
-# Resource properties
-print(f"Name: {plate.name}")
-print(f"Size: {plate.size_x} x {plate.size_y} x {plate.size_z} mm")
-print(f"Location: {plate.get_absolute_location()}")
-print(f"Parent: {plate.parent.name if plate.parent else None}")
-print(f"Children: {len(plate.children)}")
+# 資源屬性
+print(f"名稱：{plate.name}")
+print(f"尺寸：{plate.size_x} x {plate.size_y} x {plate.size_z} mm")
+print(f"位置：{plate.get_absolute_location()}")
+print(f"父資源：{plate.parent.name if plate.parent else None}")
+print(f"子資源：{len(plate.children)}")
 
-# Type checking
+# 類型檢查
 from pylabrobot.resources import Plate, TipRack
 if isinstance(resource, Plate):
-    print("This is a plate")
+    print("這是一個微孔盤")
 elif isinstance(resource, TipRack):
-    print("This is a tip rack")
+    print("這是一個吸頭架")
 ```
 
-## Best Practices
+## 最佳實務
 
-1. **Unique Names**: Use descriptive, unique names for all resources
-2. **Enable Tracking**: Turn on tip and volume tracking for accurate state management
-3. **Coordinate Validation**: Verify resource positions don't overlap on deck
-4. **State Serialization**: Save deck layouts and states for reproducible protocols
-5. **Resource Cleanup**: Unassign resources when no longer needed
-6. **Custom Resources**: Define custom labware when built-in options don't match
-7. **Documentation**: Document custom resource dimensions and properties
-8. **Type Checking**: Use isinstance() to verify resource types before operations
-9. **Hierarchy Navigation**: Use parent/children relationships to navigate resource tree
-10. **JSON Storage**: Store deck layouts in JSON for version control and sharing
+1. **唯一名稱**：為所有資源使用描述性的唯一名稱
+2. **啟用追蹤**：開啟吸頭和體積追蹤以實現準確的狀態管理
+3. **座標驗證**：驗證資源位置在工作台上不重疊
+4. **狀態序列化**：儲存工作台布局和狀態以實現可重現的協定
+5. **資源清理**：不再需要時取消分配資源
+6. **自訂資源**：當內建選項不符合時定義自訂耗材
+7. **文件**：記錄自訂資源的尺寸和屬性
+8. **類型檢查**：在操作前使用 isinstance() 驗證資源類型
+9. **階層導航**：使用父/子關係導航資源樹
+10. **JSON 儲存**：將工作台布局儲存在 JSON 中以進行版本控制和共享
 
-## Common Patterns
+## 常見模式
 
-### Complete Deck Setup
+### 完整工作台設置
 
 ```python
 from pylabrobot.liquid_handling import LiquidHandler
@@ -421,69 +421,69 @@ from pylabrobot.resources import (
     set_volume_tracking
 )
 
-# Enable tracking
+# 啟用追蹤
 set_tip_tracking(True)
 set_volume_tracking(True)
 
-# Initialize liquid handler
+# 初始化液體處理器
 lh = LiquidHandler(backend=STAR(), deck=STARLetDeck())
 await lh.setup()
 
-# Define resources
+# 定義資源
 tip_rack_1 = TIP_CAR_480_A00(name="tips_1")
 tip_rack_2 = TIP_CAR_480_A00(name="tips_2")
 source_plate = Cos_96_DW_1mL(name="source")
 dest_plate = Cos_96_DW_1mL(name="dest")
 buffer = Trough_100ml(name="buffer")
 
-# Assign to deck
+# 分配到工作台
 lh.deck.assign_child_resource(tip_rack_1, rails=1)
 lh.deck.assign_child_resource(tip_rack_2, rails=2)
 lh.deck.assign_child_resource(buffer, rails=5)
 lh.deck.assign_child_resource(source_plate, rails=10)
 lh.deck.assign_child_resource(dest_plate, rails=15)
 
-# Set initial volumes
+# 設定初始體積
 for well in source_plate.children:
     well.tracker.set_liquids([(None, 200)])
 
 buffer["channel_1"].tracker.set_liquids([(None, 50000)])  # 50 mL
 
-# Save deck layout
+# 儲存工作台布局
 lh.deck.save("my_protocol_deck.json")
 
-# Save initial state
+# 儲存初始狀態
 import json
 with open("initial_state.json", "w") as f:
     json.dump(lh.deck.serialize_all_state(), f)
 ```
 
-### Loading Saved Deck
+### 載入已儲存的工作台
 
 ```python
 from pylabrobot.resources import Deck
 
-# Load deck from file
+# 從檔案載入工作台
 deck = Deck.load_from_json_file("my_protocol_deck.json")
 
-# Load state
+# 載入狀態
 import json
 with open("initial_state.json", "r") as f:
     state = json.load(f)
 deck.load_all_state(state)
 
-# Use with liquid handler
+# 與液體處理器一起使用
 lh = LiquidHandler(backend=STAR(), deck=deck)
 await lh.setup()
 
-# Access resources by name
+# 按名稱存取資源
 source_plate = deck.get_resource("source")
 dest_plate = deck.get_resource("dest")
 ```
 
-## Additional Resources
+## 其他資源
 
-- Resource Documentation: https://docs.pylabrobot.org/resources/introduction.html
-- Custom Resources Guide: https://docs.pylabrobot.org/resources/custom-resources.html
-- API Reference: https://docs.pylabrobot.org/api/pylabrobot.resources.html
-- Deck Layouts: https://github.com/PyLabRobot/pylabrobot/tree/main/pylabrobot/resources/deck
+- 資源文件：https://docs.pylabrobot.org/resources/introduction.html
+- 自訂資源指南：https://docs.pylabrobot.org/resources/custom-resources.html
+- API 參考：https://docs.pylabrobot.org/api/pylabrobot.resources.html
+- 工作台布局：https://github.com/PyLabRobot/pylabrobot/tree/main/pylabrobot/resources/deck

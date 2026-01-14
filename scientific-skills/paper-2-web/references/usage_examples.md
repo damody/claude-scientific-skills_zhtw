@@ -1,24 +1,24 @@
-# Usage Examples and Workflows
+# 使用範例與工作流程
 
-## Complete Workflow Examples
+## 完整工作流程範例
 
-### Example 1: Conference Presentation Package
+### 範例 1：會議演示套件
 
-**Scenario**: Preparing for a major conference presentation with website, poster, and video.
+**場景**：為重要的會議演示準備網站、海報和影片。
 
-**User Request**: "I need to create a complete presentation package for my NeurIPS paper submission. Generate a website, poster, and video presentation."
+**用戶請求**："我需要為我的 NeurIPS 論文提交創建完整的演示套件。生成網站、海報和影片演示。"
 
-**Workflow**:
+**工作流程**：
 
 ```bash
-# Step 1: Organize paper files
+# 步驟 1：組織論文檔案
 mkdir -p input/neurips2025_paper
 cp main.tex input/neurips2025_paper/
 cp -r figures/ input/neurips2025_paper/
 cp -r tables/ input/neurips2025_paper/
 cp bibliography.bib input/neurips2025_paper/
 
-# Step 2: Generate all components
+# 步驟 2：生成所有組件
 python pipeline_all.py \
   --input-dir input/neurips2025_paper \
   --output-dir output/ \
@@ -30,61 +30,61 @@ python pipeline_all.py \
   --poster-height-inches 36 \
   --enable-logo-search
 
-# Step 3: Review outputs
+# 步驟 3：審核輸出
 ls -R output/neurips2025_paper/
 # - website/index.html
 # - poster/poster_final.pdf
 # - video/final_video.mp4
 ```
 
-**Output**:
-- Interactive website showcasing research
-- 4'×3' conference poster (print-ready)
-- 12-minute presentation video
-- Processing time: ~45 minutes (without talking-head)
+**輸出**：
+- 展示研究的互動式網站
+- 4'×3' 會議海報（可印刷）
+- 12 分鐘演示影片
+- 處理時間：約 45 分鐘（無虛擬主持人）
 
 ---
 
-### Example 2: Quick Website for Preprint
+### 範例 2：預印本快速網站
 
-**Scenario**: Creating an explorable homepage for a bioRxiv preprint.
+**場景**：為 bioRxiv 預印本創建可探索的首頁。
 
-**User Request**: "Convert my genomics preprint to an interactive website to accompany the bioRxiv submission."
+**用戶請求**："將我的基因組學預印本轉換為互動式網站，作為 bioRxiv 提交的配套。"
 
-**Workflow**:
+**工作流程**：
 
 ```bash
-# Using PDF input (LaTeX not available)
+# 使用 PDF 輸入（無 LaTeX 可用）
 python pipeline_all.py \
   --input-dir papers/genomics_preprint/ \
   --output-dir output/genomics_web/ \
   --model-choice 1 \
   --generate-website
 
-# Deploy to GitHub Pages or personal server
+# 部署到 GitHub Pages 或個人伺服器
 cd output/genomics_web/website/
-# Add link to bioRxiv paper, data repositories, code
-# Upload to hosting service
+# 添加 bioRxiv 論文連結、資料儲存庫、程式碼
+# 上傳到託管服務
 ```
 
-**Tips**:
-- Include links to bioRxiv DOI
-- Add GitHub repository links
-- Include data availability section
-- Embed interactive visualizations if possible
+**提示**：
+- 包含 bioRxiv DOI 連結
+- 添加 GitHub 儲存庫連結
+- 包含資料可用性區塊
+- 如可能，嵌入互動式視覺化
 
 ---
 
-### Example 3: Video Abstract for Journal Submission
+### 範例 3：期刊投稿影片摘要
 
-**Scenario**: Creating a video abstract for a journal that encourages multimedia submissions.
+**場景**：為鼓勵多媒體提交的期刊創建影片摘要。
 
-**User Request**: "Generate a 5-minute video abstract for my Nature Communications submission."
+**用戶請求**："為我的 Nature Communications 投稿生成 5 分鐘的影片摘要。"
 
-**Workflow**:
+**工作流程**：
 
 ```bash
-# Generate concise video focusing on key findings
+# 生成聚焦關鍵發現的簡潔影片
 python pipeline_light.py \
   --model_name_t gpt-4.1 \
   --model_name_v gpt-4.1 \
@@ -93,33 +93,33 @@ python pipeline_light.py \
   --video-duration 300 \
   --slides-per-minute 3
 
-# Optional: Add custom intro/outro slides
-# Optional: Include talking-head for introduction
+# 可選：添加自定義片頭/片尾投影片
+# 可選：在引言中加入虛擬主持人
 ```
 
-**Output**:
-- 5-minute video abstract
-- Focus on visual results
-- Clear, accessible narration
-- Journal-ready format
+**輸出**：
+- 5 分鐘影片摘要
+- 聚焦視覺結果
+- 清晰易懂的旁白
+- 期刊規格格式
 
 ---
 
-### Example 4: Multi-Paper Website Generation
+### 範例 4：多論文網站生成
 
-**Scenario**: Creating websites for multiple papers from a research group.
+**場景**：為研究團隊的多篇論文創建網站。
 
-**User Request**: "Generate websites for all 5 papers our lab published this year."
+**用戶請求**："為我們實驗室今年發表的所有 5 篇論文生成網站。"
 
-**Workflow**:
+**工作流程**：
 
 ```bash
-# Organize papers
+# 組織論文
 mkdir -p batch_input/
-# Create subdirectories: paper1/, paper2/, paper3/, paper4/, paper5/
-# Each with their LaTeX sources
+# 創建子目錄：paper1/、paper2/、paper3/、paper4/、paper5/
+# 每個目錄包含其 LaTeX 源檔案
 
-# Batch process
+# 批次處理
 python pipeline_all.py \
   --input-dir batch_input/ \
   --output-dir batch_output/ \
@@ -127,7 +127,7 @@ python pipeline_all.py \
   --generate-website \
   --enable-logo-search
 
-# Creates:
+# 創建：
 # batch_output/paper1/website/
 # batch_output/paper2/website/
 # batch_output/paper3/website/
@@ -135,24 +135,24 @@ python pipeline_all.py \
 # batch_output/paper5/website/
 ```
 
-**Best Practice**:
-- Use consistent naming conventions
-- Process overnight for large batches
-- Review each website for accuracy
-- Deploy to unified lab website
+**最佳實踐**：
+- 使用一致的命名慣例
+- 大批量處理可過夜執行
+- 審核每個網站的準確性
+- 部署到統一的實驗室網站
 
 ---
 
-### Example 5: Poster for Virtual Conference
+### 範例 5：虛擬會議海報
 
-**Scenario**: Creating a digital poster for a virtual conference with interactive elements.
+**場景**：為虛擬會議創建具有互動元素的數位海報。
 
-**User Request**: "Create a poster for the virtual ISMB conference with clickable links to code and data."
+**用戶請求**："為虛擬 ISMB 會議創建海報，包含可點擊的程式碼和資料連結。"
 
-**Workflow**:
+**工作流程**：
 
 ```bash
-# Generate poster with QR codes and links
+# 生成帶有 QR 碼和連結的海報
 python pipeline_all.py \
   --input-dir papers/ismb_submission/ \
   --output-dir output/ismb_poster/ \
@@ -162,30 +162,30 @@ python pipeline_all.py \
   --poster-height-inches 36 \
   --enable-qr-codes
 
-# Manually add QR codes to:
-# - GitHub repository
-# - Interactive results dashboard
-# - Supplementary data
-# - Video presentation
+# 手動添加 QR 碼到：
+# - GitHub 儲存庫
+# - 互動式結果儀表板
+# - 補充資料
+# - 影片演示
 ```
 
-**Digital Enhancements**:
-- PDF with embedded hyperlinks
-- High-resolution PNG for virtual platform
-- Separate PDF with video links for download
+**數位增強**：
+- 具有嵌入超連結的 PDF
+- 用於虛擬平台的高解析度 PNG
+- 帶有影片連結的獨立 PDF 供下載
 
 ---
 
-### Example 6: Promotional Video Clip
+### 範例 6：推廣影片片段
 
-**Scenario**: Creating a short promotional video for social media.
+**場景**：為社交媒體創建簡短的推廣影片。
 
-**User Request**: "Generate a 2-minute highlight video of our Cell paper for Twitter."
+**用戶請求**："為我們的 Cell 論文生成 2 分鐘的精華影片用於 Twitter。"
 
-**Workflow**:
+**工作流程**：
 
 ```bash
-# Generate short, engaging video
+# 生成簡短、引人入勝的影片
 python pipeline_light.py \
   --model_name_t gpt-4.1 \
   --model_name_v gpt-4.1 \
@@ -194,28 +194,28 @@ python pipeline_light.py \
   --video-duration 120 \
   --presentation-style public
 
-# Post-process:
-# - Extract key 30-second clip for Twitter
-# - Add captions for sound-off viewing
-# - Optimize file size for social media
+# 後期處理：
+# - 提取 30 秒的 Twitter 精華片段
+# - 為靜音觀看添加字幕
+# - 針對社交媒體最佳化檔案大小
 ```
 
-**Social Media Optimization**:
-- Square format (1:1) for Instagram
-- Horizontal format (16:9) for Twitter/LinkedIn
-- Vertical format (9:16) for TikTok/Stories
-- Add text overlays for key findings
+**社交媒體最佳化**：
+- 正方形格式（1:1）用於 Instagram
+- 橫式格式（16:9）用於 Twitter/LinkedIn
+- 直式格式（9:16）用於 TikTok/Stories
+- 添加關鍵發現的文字覆蓋
 
 ---
 
-## Common Use Case Patterns
+## 常見使用案例模式
 
-### Pattern 1: LaTeX Paper → Full Package
+### 模式 1：LaTeX 論文 → 完整套件
 
-**Input**: LaTeX source with all assets
-**Output**: Website + Poster + Video
-**Time**: 45-90 minutes
-**Best for**: Major publications, conference presentations
+**輸入**：LaTeX 源檔案及所有資源
+**輸出**：網站 + 海報 + 影片
+**時間**：45-90 分鐘
+**最適合**：重要出版物、會議演示
 
 ```bash
 python pipeline_all.py \
@@ -229,12 +229,12 @@ python pipeline_all.py \
 
 ---
 
-### Pattern 2: PDF → Interactive Website
+### 模式 2：PDF → 互動式網站
 
-**Input**: Published PDF paper
-**Output**: Explorable website
-**Time**: 15-30 minutes
-**Best for**: Post-publication promotion, preprint enhancement
+**輸入**：已發表的 PDF 論文
+**輸出**：可探索的網站
+**時間**：15-30 分鐘
+**最適合**：發表後推廣、預印本增強
 
 ```bash
 python pipeline_all.py \
@@ -246,12 +246,12 @@ python pipeline_all.py \
 
 ---
 
-### Pattern 3: LaTeX → Conference Poster
+### 模式 3：LaTeX → 會議海報
 
-**Input**: LaTeX paper
-**Output**: Print-ready poster (custom size)
-**Time**: 10-20 minutes
-**Best for**: Conference poster sessions
+**輸入**：LaTeX 論文
+**輸出**：可印刷海報（自定義尺寸）
+**時間**：10-20 分鐘
+**最適合**：會議海報展示
 
 ```bash
 python pipeline_all.py \
@@ -265,12 +265,12 @@ python pipeline_all.py \
 
 ---
 
-### Pattern 4: LaTeX → Presentation Video
+### 模式 4：LaTeX → 演示影片
 
-**Input**: LaTeX paper
-**Output**: Narrated presentation video
-**Time**: 20-60 minutes (without talking-head)
-**Best for**: Video abstracts, online presentations, course materials
+**輸入**：LaTeX 論文
+**輸出**：旁白演示影片
+**時間**：20-60 分鐘（無虛擬主持人）
+**最適合**：影片摘要、線上演示、課程材料
 
 ```bash
 python pipeline_light.py \
@@ -282,114 +282,114 @@ python pipeline_light.py \
 
 ---
 
-## Platform-Specific Outputs
+## 平台特定輸出
 
-### Twitter/X Promotional Content
+### Twitter/X 推廣內容
 
-The system auto-detects Twitter targeting for numeric folder names:
+系統針對數字資料夾名稱自動檢測 Twitter 目標：
 
 ```bash
-# Create Twitter-optimized content
+# 創建 Twitter 最佳化內容
 mkdir -p input/001_twitter_post/
-# System generates English promotional content
+# 系統生成英文推廣內容
 ```
 
-**Generated Output**:
-- Short, engaging summary
-- Key figure highlights
-- Hashtag recommendations
-- Thread-ready format
+**生成輸出**：
+- 簡短、引人入勝的摘要
+- 關鍵圖像精華
+- 標籤建議
+- 推文串格式
 
 ---
 
-### Xiaohongshu (小红书) Content
+### 小紅書內容
 
-For Chinese social media, use alphanumeric folder names:
+對於中文社交媒體，使用字母數字資料夾名稱：
 
 ```bash
-# Create Xiaohongshu-optimized content
+# 創建小紅書最佳化內容
 mkdir -p input/xhs_genomics/
-# System generates Chinese promotional content
+# 系統生成中文推廣內容
 ```
 
-**Generated Output**:
-- Chinese language content
-- Platform-appropriate formatting
-- Visual-first presentation
-- Engagement optimizations
+**生成輸出**：
+- 中文內容
+- 平台適當的格式
+- 視覺優先的呈現
+- 參與度最佳化
 
 ---
 
-## Troubleshooting Common Scenarios
+## 常見場景故障排除
 
-### Scenario: Large Paper (>50 pages)
+### 場景：大型論文（>50 頁）
 
-**Challenge**: Processing time and content selection
-**Solution**:
+**挑戰**：處理時間和內容選擇
+**解決方案**：
 ```bash
-# Option 1: Focus on key sections
-# Edit LaTeX to comment out less critical sections
+# 選項 1：聚焦關鍵章節
+# 編輯 LaTeX 註解掉較不重要的章節
 
-# Option 2: Process in parts
-# Generate website for overview
-# Generate separate detailed videos for methods/results
+# 選項 2：分部處理
+# 生成概述網站
+# 為方法/結果生成獨立的詳細影片
 
-# Option 3: Use faster model for initial pass
-# Review and regenerate critical components with better model
+# 選項 3：使用較快模型進行初次處理
+# 審核並使用更好的模型重新生成關鍵組件
 ```
 
 ---
 
-### Scenario: Complex Mathematical Content
+### 場景：複雜數學內容
 
-**Challenge**: Equations may not render perfectly
-**Solution**:
-- Use LaTeX input (not PDF) for best equation handling
-- Review generated content for equation accuracy
-- Manually adjust complex equations if needed
-- Consider using figure screenshots for critical equations
-
----
-
-### Scenario: Non-Standard Paper Structure
-
-**Challenge**: Paper doesn't follow standard IMRAD format
-**Solution**:
-- Provide custom section guidance in paper metadata
-- Review generated structure and adjust
-- Use more powerful model (GPT-4.1) for better adaptation
-- Consider manual section annotation in LaTeX comments
+**挑戰**：方程式可能無法完美渲染
+**解決方案**：
+- 使用 LaTeX 輸入（非 PDF）以獲得最佳方程式處理
+- 審核生成內容的方程式準確性
+- 如需要手動調整複雜方程式
+- 考慮對關鍵方程式使用圖像截圖
 
 ---
 
-### Scenario: Limited API Budget
+### 場景：非標準論文結構
 
-**Challenge**: Reducing costs while maintaining quality
-**Solution**:
+**挑戰**：論文不遵循標準 IMRAD 格式
+**解決方案**：
+- 在論文元資料中提供自定義章節指導
+- 審核生成的結構並調整
+- 使用更強大的模型（GPT-4.1）以獲得更好的適應性
+- 考慮在 LaTeX 註解中手動標注章節
+
+---
+
+### 場景：有限的 API 預算
+
+**挑戰**：在維持品質的同時降低成本
+**解決方案**：
 ```bash
-# Use GPT-3.5-turbo for simple papers
+# 對簡單論文使用 GPT-3.5-turbo
 python pipeline_all.py \
   --input-dir [paper_dir] \
   --output-dir [output_dir] \
   --model-choice 3
 
-# Generate only needed components
-# Website-only (cheapest)
-# Poster-only (moderate)
-# Video without talking-head (moderate)
+# 僅生成所需組件
+# 僅網站（最便宜）
+# 僅海報（中等）
+# 無虛擬主持人的影片（中等）
 ```
 
 ---
 
-### Scenario: Tight Deadline
+### 場景：緊迫的截止日期
 
-**Challenge**: Need outputs quickly
-**Solution**:
+**挑戰**：需要快速輸出
+**解決方案**：
 ```bash
-# Parallel processing if multiple papers
-# Use faster models (GPT-3.5-turbo)
-# Generate only essential component first
-# Skip optional features (logo search, talking-head)
+# 如有多篇論文可並行處理
+# 使用更快的模型（GPT-3.5-turbo）
+# 先生成最重要的組件
+# 跳過可選功能（標誌搜索、虛擬主持人）
 
 python pipeline_light.py \
   --model_name_t gpt-3.5-turbo \
@@ -398,39 +398,39 @@ python pipeline_light.py \
   --paper_latex_root [latex_dir]
 ```
 
-**Priority Order**:
-1. Website (fastest, most versatile)
-2. Poster (moderate speed, print deadline)
-3. Video (slowest, can be generated later)
+**優先順序**：
+1. 網站（最快、最通用）
+2. 海報（中等速度、印刷截止日期）
+3. 影片（最慢、可稍後生成）
 
 ---
 
-## Quality Optimization Tips
+## 品質最佳化提示
 
-### For Best Website Results
-1. Use LaTeX input with all assets
-2. Include high-resolution figures
-3. Ensure paper has clear section structure
-4. Enable logo search for professional appearance
-5. Review and test all interactive elements
+### 獲得最佳網站結果
+1. 使用包含所有資源的 LaTeX 輸入
+2. 包含高解析度圖像
+3. 確保論文具有清晰的章節結構
+4. 啟用標誌搜索以獲得專業外觀
+5. 審核並測試所有互動元素
 
-### For Best Poster Results
-1. Provide high-resolution figures (300+ DPI)
-2. Specify exact poster dimensions needed
-3. Include institution branding information
-4. Use professional color scheme
-5. Test print small preview before full poster
+### 獲得最佳海報結果
+1. 提供高解析度圖像（300+ DPI）
+2. 指定所需的確切海報尺寸
+3. 包含機構品牌資訊
+4. 使用專業配色方案
+5. 在完整海報前測試列印小預覽
 
-### For Best Video Results
-1. Use LaTeX for clearest content extraction
-2. Specify target duration appropriately
-3. Review script before video generation
-4. Choose appropriate presentation style
-5. Test audio quality and pacing
+### 獲得最佳影片結果
+1. 使用 LaTeX 以獲得最清晰的內容提取
+2. 適當指定目標時長
+3. 在生成影片前審核腳本
+4. 選擇適當的演示風格
+5. 測試音訊品質和節奏
 
-### For Best Overall Results
-1. Start with clean, well-organized LaTeX source
-2. Use GPT-4 or GPT-4.1 for highest quality
-3. Review all outputs before finalizing
-4. Iterate on any component that needs adjustment
-5. Combine components for cohesive presentation package
+### 獲得最佳整體結果
+1. 從乾淨、組織良好的 LaTeX 源檔案開始
+2. 使用 GPT-4 或 GPT-4.1 獲得最高品質
+3. 在最終確定前審核所有輸出
+4. 對需要調整的組件進行迭代
+5. 結合組件以獲得連貫的演示套件

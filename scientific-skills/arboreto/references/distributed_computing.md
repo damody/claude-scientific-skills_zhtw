@@ -1,77 +1,77 @@
-# Distributed Computing with Arboreto
+# 使用 Arboreto 進行分散式運算
 
-Arboreto leverages Dask for parallelized computation, enabling efficient GRN inference from single-machine multi-core processing to multi-node cluster environments.
+Arboreto 利用 Dask 進行平行化運算，能夠從單機多核心處理高效擴展到多節點叢集環境進行 GRN 推斷。
 
-## Computation Architecture
+## 運算架構
 
-GRN inference is inherently parallelizable:
-- Each target gene's regression model can be trained independently
-- Arboreto represents computation as a Dask task graph
-- Tasks are distributed across available computational resources
+GRN 推斷本質上是可平行化的：
+- 每個標靶基因的迴歸模型可以獨立訓練
+- Arboreto 將運算表示為 Dask 任務圖
+- 任務分散到可用的運算資源上
 
-## Local Multi-Core Processing (Default)
+## 本機多核心處理（預設）
 
-By default, arboreto uses all available CPU cores on the local machine:
+預設情況下，arboreto 使用本機機器上所有可用的 CPU 核心：
 
 ```python
 from arboreto.algo import grnboost2
 
-# Automatically uses all local cores
+# 自動使用所有本機核心
 network = grnboost2(expression_data=expression_matrix, tf_names=tf_names)
 ```
 
-This is sufficient for most use cases and requires no additional configuration.
+這對大多數使用案例已足夠，不需要額外配置。
 
-## Custom Local Dask Client
+## 自訂本機 Dask 客戶端
 
-For fine-grained control over local resources, create a custom Dask client:
+如需對本機資源進行細緻控制，可建立自訂 Dask 客戶端：
 
 ```python
 from distributed import LocalCluster, Client
 from arboreto.algo import grnboost2
 
 if __name__ == '__main__':
-    # Configure local cluster
+    # 配置本機叢集
     local_cluster = LocalCluster(
-        n_workers=10,              # Number of worker processes
-        threads_per_worker=1,       # Threads per worker
-        memory_limit='8GB'          # Memory limit per worker
+        n_workers=10,              # 工作行程數量
+        threads_per_worker=1,       # 每個工作者的執行緒數
+        memory_limit='8GB'          # 每個工作者的記憶體限制
     )
 
-    # Create client
+    # 建立客戶端
     custom_client = Client(local_cluster)
 
-    # Run inference with custom client
+    # 使用自訂客戶端執行推斷
     network = grnboost2(
         expression_data=expression_matrix,
         tf_names=tf_names,
         client_or_address=custom_client
     )
 
-    # Clean up
+    # 清理
     custom_client.close()
     local_cluster.close()
 ```
 
-### Benefits of Custom Client
-- **Resource control**: Limit CPU and memory usage
-- **Multiple runs**: Reuse same client for different parameter sets
-- **Monitoring**: Access Dask dashboard for performance insights
+### 自訂客戶端的好處
+- **資源控制**：限制 CPU 和記憶體使用
+- **多次執行**：為不同參數集重複使用同一客戶端
+- **監控**：存取 Dask 儀表板以獲得效能洞察
 
-## Multiple Inference Runs with Same Client
+## 使用同一客戶端進行多次推斷
 
-Reuse a single Dask client for multiple inference runs with different parameters:
+為使用不同參數的多次推斷重複使用單一 Dask 客戶端：
 
 ```python
 from distributed import LocalCluster, Client
 from arboreto.algo import grnboost2
 
 if __name__ == '__main__':
-    # Initialize client once
+    # 初始化客戶端一次
     local_cluster = LocalCluster(n_workers=8, threads_per_worker=1)
     client = Client(local_cluster)
 
-    # Run multiple inferences
+    # 執行多次推斷
     network_seed1 = grnboost2(
         expression_data=expression_matrix,
         tf_names=tf_names,
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         seed=777
     )
 
-    # Different algorithms with same client
+    # 使用同一客戶端執行不同演算法
     from arboreto.algo import genie3
     network_genie3 = genie3(
         expression_data=expression_matrix,
@@ -94,37 +94,37 @@ if __name__ == '__main__':
         client_or_address=client
     )
 
-    # Clean up once
+    # 清理一次
     client.close()
     local_cluster.close()
 ```
 
-## Distributed Cluster Computing
+## 分散式叢集運算
 
-For very large datasets, connect to a remote Dask distributed scheduler running on a cluster:
+對於非常大的資料集，連接到叢集上執行的遠端 Dask 分散式排程器：
 
-### Step 1: Set Up Dask Scheduler (on cluster head node)
+### 步驟 1：設定 Dask 排程器（在叢集主節點上）
 ```bash
 dask-scheduler
-# Output: Scheduler at tcp://10.118.224.134:8786
+# 輸出：Scheduler at tcp://10.118.224.134:8786
 ```
 
-### Step 2: Start Dask Workers (on cluster compute nodes)
+### 步驟 2：啟動 Dask 工作者（在叢集計算節點上）
 ```bash
 dask-worker tcp://10.118.224.134:8786
 ```
 
-### Step 3: Connect from Client
+### 步驟 3：從客戶端連接
 ```python
 from distributed import Client
 from arboreto.algo import grnboost2
 
 if __name__ == '__main__':
-    # Connect to remote scheduler
+    # 連接到遠端排程器
     scheduler_address = 'tcp://10.118.224.134:8786'
     cluster_client = Client(scheduler_address)
 
-    # Run inference on cluster
+    # 在叢集上執行推斷
     network = grnboost2(
         expression_data=expression_matrix,
         tf_names=tf_names,
@@ -134,43 +134,43 @@ if __name__ == '__main__':
     cluster_client.close()
 ```
 
-### Cluster Configuration Best Practices
+### 叢集配置最佳實務
 
-**Worker configuration**:
+**工作者配置**：
 ```bash
 dask-worker tcp://scheduler:8786 \
-    --nprocs 4 \              # Number of processes per node
-    --nthreads 1 \            # Threads per process
-    --memory-limit 16GB       # Memory per process
+    --nprocs 4 \              # 每個節點的行程數
+    --nthreads 1 \            # 每個行程的執行緒數
+    --memory-limit 16GB       # 每個行程的記憶體
 ```
 
-**For large-scale inference**:
-- Use more workers with moderate memory rather than fewer workers with large memory
-- Set `threads_per_worker=1` to avoid GIL contention in scikit-learn
-- Monitor memory usage to prevent workers from being killed
+**大規模推斷**：
+- 使用更多中等記憶體的工作者，而非較少的大記憶體工作者
+- 設定 `threads_per_worker=1` 以避免 scikit-learn 中的 GIL 競爭
+- 監控記憶體使用以防止工作者被終止
 
-## Monitoring and Debugging
+## 監控和除錯
 
-### Dask Dashboard
+### Dask 儀表板
 
-Access the Dask dashboard for real-time monitoring:
+存取 Dask 儀表板進行即時監控：
 
 ```python
 from distributed import Client
 
-client = Client()  # Prints dashboard URL
-# Dashboard available at: http://localhost:8787/status
+client = Client()  # 印出儀表板 URL
+# 儀表板可在以下位址存取：http://localhost:8787/status
 ```
 
-The dashboard shows:
-- **Task progress**: Number of tasks completed/pending
-- **Resource usage**: CPU, memory per worker
-- **Task stream**: Real-time visualization of computation
-- **Performance**: Bottleneck identification
+儀表板顯示：
+- **任務進度**：已完成/待處理的任務數量
+- **資源使用**：每個工作者的 CPU、記憶體
+- **任務串流**：運算的即時視覺化
+- **效能**：瓶頸識別
 
-### Verbose Output
+### 詳細輸出
 
-Enable verbose logging to track inference progress:
+啟用詳細日誌以追蹤推斷進度：
 
 ```python
 network = grnboost2(
@@ -180,34 +180,34 @@ network = grnboost2(
 )
 ```
 
-## Performance Optimization Tips
+## 效能優化技巧
 
-### 1. Data Format
-- **Use Pandas DataFrame when possible**: More efficient than NumPy for Dask operations
-- **Reduce data size**: Filter low-variance genes before inference
+### 1. 資料格式
+- **盡可能使用 Pandas DataFrame**：對 Dask 操作更有效率
+- **減少資料大小**：在推斷前過濾低變異基因
 
-### 2. Worker Configuration
-- **CPU-bound tasks**: Set `threads_per_worker=1`, increase `n_workers`
-- **Memory-bound tasks**: Increase `memory_limit` per worker
+### 2. 工作者配置
+- **CPU 密集型任務**：設定 `threads_per_worker=1`，增加 `n_workers`
+- **記憶體密集型任務**：增加每個工作者的 `memory_limit`
 
-### 3. Cluster Setup
-- **Network**: Ensure high-bandwidth, low-latency network between nodes
-- **Storage**: Use shared filesystem or object storage for large datasets
-- **Scheduling**: Allocate dedicated nodes to avoid resource contention
+### 3. 叢集設定
+- **網路**：確保節點間有高頻寬、低延遲的網路
+- **儲存**：對大型資料集使用共享檔案系統或物件儲存
+- **排程**：分配專用節點以避免資源競爭
 
-### 4. Transcription Factor Filtering
-- **Limit TF list**: Providing specific TF names reduces computation
+### 4. 轉錄因子過濾
+- **限制 TF 清單**：提供特定的 TF 名稱可減少運算量
 ```python
-# Full search (slow)
+# 完整搜尋（較慢）
 network = grnboost2(expression_data=matrix)
 
-# Filtered search (faster)
+# 過濾搜尋（較快）
 network = grnboost2(expression_data=matrix, tf_names=known_tfs)
 ```
 
-## Example: Large-Scale Single-Cell Analysis
+## 範例：大規模單細胞分析
 
-Complete workflow for processing single-cell RNA-seq data on a cluster:
+在叢集上處理單細胞 RNA-seq 資料的完整工作流程：
 
 ```python
 from distributed import Client
@@ -215,16 +215,16 @@ from arboreto.algo import grnboost2
 import pandas as pd
 
 if __name__ == '__main__':
-    # Connect to cluster
+    # 連接到叢集
     client = Client('tcp://cluster-scheduler:8786')
 
-    # Load large single-cell dataset (50,000 cells x 20,000 genes)
+    # 載入大型單細胞資料集（50,000 細胞 x 20,000 基因）
     expression_data = pd.read_csv('scrnaseq_data.tsv', sep='\t')
 
-    # Load cell-type-specific TFs
+    # 載入細胞類型特異性 TF
     tf_names = pd.read_csv('tf_list.txt', header=None)[0].tolist()
 
-    # Run distributed inference
+    # 執行分散式推斷
     network = grnboost2(
         expression_data=expression_data,
         tf_names=tf_names,
@@ -233,10 +233,10 @@ if __name__ == '__main__':
         seed=42
     )
 
-    # Save results
+    # 儲存結果
     network.to_csv('grn_results.tsv', sep='\t', index=False)
 
     client.close()
 ```
 
-This approach enables analysis of datasets that would be impractical on a single machine.
+這種方法能夠分析在單機上不切實際的資料集。

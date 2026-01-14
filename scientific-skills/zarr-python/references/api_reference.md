@@ -1,37 +1,37 @@
-# Zarr Python Quick Reference
+# Zarr Python 快速參考
 
-This reference provides a concise overview of commonly used Zarr functions, parameters, and patterns for quick lookup during development.
+本參考提供常用 Zarr 函數、參數和模式的簡明概述，方便在開發過程中快速查閱。
 
-## Array Creation Functions
+## 陣列建立函數
 
 ### `zarr.zeros()` / `zarr.ones()` / `zarr.empty()`
 ```python
 zarr.zeros(shape, chunks=None, dtype='f8', store=None, compressor='default',
            fill_value=0, order='C', filters=None)
 ```
-Create arrays filled with zeros, ones, or empty (uninitialized) values.
+建立填充零、一或空值（未初始化）的陣列。
 
-**Key parameters:**
-- `shape`: Tuple defining array dimensions (e.g., `(1000, 1000)`)
-- `chunks`: Tuple defining chunk dimensions (e.g., `(100, 100)`), or `None` for no chunking
-- `dtype`: NumPy data type (e.g., `'f4'`, `'i8'`, `'bool'`)
-- `store`: Storage location (string path, Store object, or `None` for memory)
-- `compressor`: Compression codec or `None` for no compression
+**關鍵參數：**
+- `shape`：定義陣列維度的元組（例如 `(1000, 1000)`）
+- `chunks`：定義區塊維度的元組（例如 `(100, 100)`），或 `None` 表示不分塊
+- `dtype`：NumPy 資料型別（例如 `'f4'`、`'i8'`、`'bool'`）
+- `store`：儲存位置（字串路徑、Store 物件，或 `None` 表示記憶體）
+- `compressor`：壓縮編解碼器或 `None` 表示不壓縮
 
 ### `zarr.create_array()` / `zarr.create()`
 ```python
 zarr.create_array(store, shape, chunks, dtype='f8', compressor='default',
                   fill_value=0, order='C', filters=None, overwrite=False)
 ```
-Create a new array with explicit control over all parameters.
+建立新陣列，可明確控制所有參數。
 
 ### `zarr.array()`
 ```python
 zarr.array(data, chunks=None, dtype=None, compressor='default', store=None)
 ```
-Create array from existing data (NumPy array, list, etc.).
+從現有資料（NumPy 陣列、列表等）建立陣列。
 
-**Example:**
+**範例：**
 ```python
 import numpy as np
 data = np.random.random((1000, 1000))
@@ -43,18 +43,18 @@ z = zarr.array(data, chunks=(100, 100), store='data.zarr')
 zarr.open_array(store, mode='a', shape=None, chunks=None, dtype=None,
                 compressor='default', fill_value=0)
 ```
-Open existing array or create new one.
+開啟現有陣列或建立新陣列。
 
-**Mode options:**
-- `'r'`: Read-only
-- `'r+'`: Read-write, file must exist
-- `'a'`: Read-write, create if doesn't exist (default)
-- `'w'`: Create new, overwrite if exists
-- `'w-'`: Create new, fail if exists
+**模式選項：**
+- `'r'`：唯讀
+- `'r+'`：讀寫，檔案必須存在
+- `'a'`：讀寫，不存在則建立（預設）
+- `'w'`：建立新檔，存在則覆寫
+- `'w-'`：建立新檔，存在則失敗
 
-## Storage Classes
+## 儲存類別
 
-### LocalStore (Default)
+### LocalStore（預設）
 ```python
 from zarr.storage import LocalStore
 
@@ -66,7 +66,7 @@ z = zarr.open_array(store=store, mode='w', shape=(1000, 1000), chunks=(100, 100)
 ```python
 from zarr.storage import MemoryStore
 
-store = MemoryStore()  # Data only in memory
+store = MemoryStore()  # 資料僅在記憶體中
 z = zarr.open_array(store=store, mode='w', shape=(1000, 1000), chunks=(100, 100))
 ```
 
@@ -74,20 +74,20 @@ z = zarr.open_array(store=store, mode='w', shape=(1000, 1000), chunks=(100, 100)
 ```python
 from zarr.storage import ZipStore
 
-# Write
+# 寫入
 store = ZipStore('data.zip', mode='w')
 z = zarr.open_array(store=store, mode='w', shape=(1000, 1000), chunks=(100, 100))
 z[:] = data
-store.close()  # MUST close
+store.close()  # 必須關閉
 
-# Read
+# 讀取
 store = ZipStore('data.zip', mode='r')
 z = zarr.open_array(store=store)
 data = z[:]
 store.close()
 ```
 
-### Cloud Storage (S3/GCS)
+### 雲端儲存（S3/GCS）
 ```python
 # S3
 import s3fs
@@ -100,137 +100,137 @@ gcs = gcsfs.GCSFileSystem(project='my-project')
 store = gcsfs.GCSMap(root='bucket/path/data.zarr', gcs=gcs)
 ```
 
-## Compression Codecs
+## 壓縮編解碼器
 
-### Blosc Codec (Default)
+### Blosc 編解碼器（預設）
 ```python
 from zarr.codecs.blosc import BloscCodec
 
 codec = BloscCodec(
-    cname='zstd',      # Compressor: 'blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib', 'zstd'
-    clevel=5,          # Compression level: 0-9
-    shuffle='shuffle'  # Shuffle filter: 'noshuffle', 'shuffle', 'bitshuffle'
+    cname='zstd',      # 壓縮器：'blosclz'、'lz4'、'lz4hc'、'snappy'、'zlib'、'zstd'
+    clevel=5,          # 壓縮等級：0-9
+    shuffle='shuffle'  # Shuffle 過濾器：'noshuffle'、'shuffle'、'bitshuffle'
 )
 
 z = zarr.create_array(store='data.zarr', shape=(1000, 1000), chunks=(100, 100),
                       dtype='f4', codecs=[codec])
 ```
 
-**Blosc compressor characteristics:**
-- `'lz4'`: Fastest compression, lower ratio
-- `'zstd'`: Balanced (default), good ratio and speed
-- `'zlib'`: Good compatibility, moderate performance
-- `'lz4hc'`: Better ratio than lz4, slower
-- `'snappy'`: Fast, moderate ratio
-- `'blosclz'`: Blosc's default
+**Blosc 壓縮器特性：**
+- `'lz4'`：最快壓縮，較低壓縮比
+- `'zstd'`：平衡（預設），良好的壓縮比和速度
+- `'zlib'`：良好相容性，中等性能
+- `'lz4hc'`：比 lz4 更好的壓縮比，較慢
+- `'snappy'`：快速，中等壓縮比
+- `'blosclz'`：Blosc 的預設
 
-### Other Codecs
+### 其他編解碼器
 ```python
 from zarr.codecs import GzipCodec, ZstdCodec, BytesCodec
 
-# Gzip compression (maximum ratio, slower)
-GzipCodec(level=6)  # Level 0-9
+# Gzip 壓縮（最大壓縮比，較慢）
+GzipCodec(level=6)  # 等級 0-9
 
-# Zstandard compression
-ZstdCodec(level=3)  # Level 1-22
+# Zstandard 壓縮
+ZstdCodec(level=3)  # 等級 1-22
 
-# No compression
+# 無壓縮
 BytesCodec()
 ```
 
-## Array Indexing and Selection
+## 陣列索引與選擇
 
-### Basic Indexing (NumPy-style)
+### 基本索引（NumPy 風格）
 ```python
 z = zarr.zeros((1000, 1000), chunks=(100, 100))
 
-# Read
-row = z[0, :]           # Single row
-col = z[:, 0]           # Single column
-block = z[10:20, 50:60] # Slice
-element = z[5, 10]      # Single element
+# 讀取
+row = z[0, :]           # 單行
+col = z[:, 0]           # 單列
+block = z[10:20, 50:60] # 切片
+element = z[5, 10]      # 單一元素
 
-# Write
+# 寫入
 z[0, :] = 42
 z[10:20, 50:60] = np.random.random((10, 10))
 ```
 
-### Advanced Indexing
+### 進階索引
 ```python
-# Coordinate indexing (point selection)
-z.vindex[[0, 5, 10], [2, 8, 15]]  # Specific coordinates
+# 座標索引（點選擇）
+z.vindex[[0, 5, 10], [2, 8, 15]]  # 特定座標
 
-# Orthogonal indexing (outer product)
-z.oindex[0:10, [5, 10, 15]]  # Rows 0-9, columns 5, 10, 15
+# 正交索引（外積）
+z.oindex[0:10, [5, 10, 15]]  # 第 0-9 行，第 5、10、15 列
 
-# Block/chunk indexing
-z.blocks[0, 0]  # First chunk
-z.blocks[0:2, 0:2]  # First four chunks
+# 區塊/chunk 索引
+z.blocks[0, 0]  # 第一個 chunk
+z.blocks[0:2, 0:2]  # 前四個 chunks
 ```
 
-## Groups and Hierarchies
+## 群組與階層結構
 
-### Creating Groups
+### 建立群組
 ```python
-# Create root group
+# 建立根群組
 root = zarr.group(store='data.zarr')
 
-# Create nested groups
+# 建立巢狀群組
 grp1 = root.create_group('group1')
 grp2 = grp1.create_group('subgroup')
 
-# Create arrays in groups
+# 在群組中建立陣列
 arr = grp1.create_array(name='data', shape=(1000, 1000),
                         chunks=(100, 100), dtype='f4')
 
-# Access by path
+# 透過路徑存取
 arr2 = root['group1/data']
 ```
 
-### Group Methods
+### 群組方法
 ```python
 root = zarr.group('data.zarr')
 
-# h5py-compatible methods
+# h5py 相容方法
 dataset = root.create_dataset('data', shape=(1000, 1000), chunks=(100, 100))
-subgrp = root.require_group('subgroup')  # Create if doesn't exist
+subgrp = root.require_group('subgroup')  # 不存在則建立
 
-# Visualize structure
+# 視覺化結構
 print(root.tree())
 
-# List contents
+# 列出內容
 print(list(root.keys()))
 print(list(root.groups()))
 print(list(root.arrays()))
 ```
 
-## Array Attributes and Metadata
+## 陣列屬性與元資料
 
-### Working with Attributes
+### 處理屬性
 ```python
 z = zarr.zeros((1000, 1000), chunks=(100, 100))
 
-# Set attributes
+# 設定屬性
 z.attrs['units'] = 'meters'
 z.attrs['description'] = 'Temperature data'
 z.attrs['created'] = '2024-01-15'
 z.attrs['version'] = 1.2
 z.attrs['tags'] = ['climate', 'temperature']
 
-# Read attributes
+# 讀取屬性
 print(z.attrs['units'])
-print(dict(z.attrs))  # All attributes as dict
+print(dict(z.attrs))  # 所有屬性轉為字典
 
-# Update/delete
+# 更新/刪除
 z.attrs['version'] = 2.0
 del z.attrs['tags']
 ```
 
-**Note:** Attributes must be JSON-serializable.
+**注意：** 屬性必須是 JSON 可序列化的。
 
-## Array Properties and Methods
+## 陣列屬性與方法
 
-### Properties
+### 屬性
 ```python
 z = zarr.zeros((1000, 1000), chunks=(100, 100), dtype='f4')
 
@@ -238,112 +238,112 @@ z.shape          # (1000, 1000)
 z.chunks         # (100, 100)
 z.dtype          # dtype('float32')
 z.size           # 1000000
-z.nbytes         # 4000000 (uncompressed size in bytes)
-z.nbytes_stored  # Actual compressed size on disk
-z.nchunks        # 100 (number of chunks)
-z.cdata_shape    # Shape in terms of chunks: (10, 10)
+z.nbytes         # 4000000（未壓縮大小，位元組）
+z.nbytes_stored  # 磁碟上實際壓縮大小
+z.nchunks        # 100（chunk 數量）
+z.cdata_shape    # 以 chunks 表示的形狀：(10, 10)
 ```
 
-### Methods
+### 方法
 ```python
-# Information
-print(z.info)  # Detailed information about array
-print(z.info_items())  # Info as list of tuples
+# 資訊
+print(z.info)  # 陣列的詳細資訊
+print(z.info_items())  # 資訊以元組列表表示
 
-# Resizing
-z.resize(1500, 1500)  # Change dimensions
+# 調整大小
+z.resize(1500, 1500)  # 改變維度
 
-# Appending
-z.append(new_data, axis=0)  # Add data along axis
+# 附加
+z.append(new_data, axis=0)  # 沿軸新增資料
 
-# Copying
+# 複製
 z2 = z.copy(store='new_location.zarr')
 ```
 
-## Chunking Guidelines
+## 分塊指南
 
-### Chunk Size Calculation
+### Chunk 大小計算
 ```python
-# For float32 (4 bytes per element):
-# 1 MB = 262,144 elements
-# 10 MB = 2,621,440 elements
+# 對於 float32（每元素 4 位元組）：
+# 1 MB = 262,144 元素
+# 10 MB = 2,621,440 元素
 
-# Examples for 1 MB chunks:
-(512, 512)      # For 2D: 512 × 512 × 4 = 1,048,576 bytes
-(128, 128, 128) # For 3D: 128 × 128 × 128 × 4 = 8,388,608 bytes ≈ 8 MB
-(64, 256, 256)  # For 3D: 64 × 256 × 256 × 4 = 16,777,216 bytes ≈ 16 MB
+# 1 MB chunks 範例：
+(512, 512)      # 對於 2D：512 × 512 × 4 = 1,048,576 位元組
+(128, 128, 128) # 對於 3D：128 × 128 × 128 × 4 = 8,388,608 位元組 ≈ 8 MB
+(64, 256, 256)  # 對於 3D：64 × 256 × 256 × 4 = 16,777,216 位元組 ≈ 16 MB
 ```
 
-### Chunking Strategies by Access Pattern
+### 依存取模式的分塊策略
 
-**Time series (sequential access along first dimension):**
+**時間序列（沿第一維循序存取）：**
 ```python
-chunks=(1, 720, 1440)  # One time step per chunk
+chunks=(1, 720, 1440)  # 每個 chunk 一個時間步
 ```
 
-**Row-wise access:**
+**逐行存取：**
 ```python
-chunks=(10, 10000)  # Small rows, span columns
+chunks=(10, 10000)  # 小行，跨越列
 ```
 
-**Column-wise access:**
+**逐列存取：**
 ```python
-chunks=(10000, 10)  # Span rows, small columns
+chunks=(10000, 10)  # 跨越行，小列
 ```
 
-**Random access:**
+**隨機存取：**
 ```python
-chunks=(500, 500)  # Balanced square chunks
+chunks=(500, 500)  # 平衡的方形 chunks
 ```
 
-**3D volumetric data:**
+**3D 體積資料：**
 ```python
-chunks=(64, 64, 64)  # Cubic chunks for isotropic access
+chunks=(64, 64, 64)  # 用於各向同性存取的立方體 chunks
 ```
 
-## Integration APIs
+## 整合 API
 
-### NumPy Integration
+### NumPy 整合
 ```python
 import numpy as np
 
 z = zarr.zeros((1000, 1000), chunks=(100, 100))
 
-# Use NumPy functions
+# 使用 NumPy 函數
 result = np.sum(z, axis=0)
 mean = np.mean(z)
 std = np.std(z)
 
-# Convert to NumPy
-arr = z[:]  # Loads entire array into memory
+# 轉換為 NumPy
+arr = z[:]  # 將整個陣列載入記憶體
 ```
 
-### Dask Integration
+### Dask 整合
 ```python
 import dask.array as da
 
-# Load Zarr as Dask array
+# 將 Zarr 載入為 Dask 陣列
 dask_array = da.from_zarr('data.zarr')
 
-# Compute operations in parallel
+# 平行計算運算
 result = dask_array.mean(axis=0).compute()
 
-# Write Dask array to Zarr
+# 將 Dask 陣列寫入 Zarr
 large_array = da.random.random((100000, 100000), chunks=(1000, 1000))
 da.to_zarr(large_array, 'output.zarr')
 ```
 
-### Xarray Integration
+### Xarray 整合
 ```python
 import xarray as xr
 
-# Open Zarr as Xarray Dataset
+# 將 Zarr 開啟為 Xarray Dataset
 ds = xr.open_zarr('data.zarr')
 
-# Write Xarray to Zarr
+# 將 Xarray 寫入 Zarr
 ds.to_zarr('output.zarr')
 
-# Create with coordinates
+# 使用座標建立
 ds = xr.Dataset(
     {'temperature': (['time', 'lat', 'lon'], data)},
     coords={
@@ -355,161 +355,162 @@ ds = xr.Dataset(
 ds.to_zarr('climate.zarr')
 ```
 
-## Parallel Computing
+## 平行運算
 
-### Synchronizers
+### 同步器
 ```python
 from zarr import ThreadSynchronizer, ProcessSynchronizer
 
-# Multi-threaded writes
+# 多執行緒寫入
 sync = ThreadSynchronizer()
 z = zarr.open_array('data.zarr', mode='r+', synchronizer=sync)
 
-# Multi-process writes
+# 多程序寫入
 sync = ProcessSynchronizer('sync.sync')
 z = zarr.open_array('data.zarr', mode='r+', synchronizer=sync)
 ```
 
-**Note:** Synchronization only needed for:
-- Concurrent writes that may span chunk boundaries
-- Not needed for reads (always safe)
-- Not needed if each process writes to separate chunks
+**注意：** 同步僅在以下情況需要：
+- 可能跨越 chunk 邊界的並發寫入
+- 讀取不需要（始終安全）
+- 如果每個程序寫入不同的 chunks 則不需要
 
-## Metadata Consolidation
+## 元資料合併
 
 ```python
-# Consolidate metadata (after creating all arrays/groups)
+# 合併元資料（在建立所有陣列/群組後）
 zarr.consolidate_metadata('data.zarr')
 
-# Open with consolidated metadata (faster, especially on cloud)
+# 使用合併的元資料開啟（更快，特別是在雲端）
 root = zarr.open_consolidated('data.zarr')
 ```
 
-**Benefits:**
-- Reduces I/O from N operations to 1
-- Critical for cloud storage (reduces latency)
-- Speeds up hierarchy traversal
+**優點：**
+- 將 I/O 從 N 次操作減少到 1 次
+- 對雲端儲存至關重要（減少延遲）
+- 加速階層結構遍歷
 
-**Cautions:**
-- Can become stale if data updates
-- Re-consolidate after modifications
-- Not for frequently-updated datasets
+**注意事項：**
+- 如果資料更新可能會過時
+- 修改後需重新合併
+- 不適用於頻繁更新的資料集
 
-## Common Patterns
+## 常見模式
 
-### Time Series with Growing Data
+### 具有增長資料的時間序列
 ```python
-# Start with empty first dimension
+# 以空的第一維開始
 z = zarr.open('timeseries.zarr', mode='a',
               shape=(0, 720, 1440),
               chunks=(1, 720, 1440),
               dtype='f4')
 
-# Append new time steps
+# 附加新的時間步
 for new_timestep in data_stream:
     z.append(new_timestep, axis=0)
 ```
 
-### Processing Large Arrays in Chunks
+### 分塊處理大型陣列
 ```python
 z = zarr.open('large_data.zarr', mode='r')
 
-# Process without loading entire array
+# 不載入整個陣列進行處理
 for i in range(0, z.shape[0], 1000):
     chunk = z[i:i+1000, :]
     result = process(chunk)
     save(result)
 ```
 
-### Format Conversion Pipeline
+### 格式轉換流程
 ```python
 # HDF5 → Zarr
 import h5py
 with h5py.File('data.h5', 'r') as h5:
     z = zarr.array(h5['dataset'][:], chunks=(1000, 1000), store='data.zarr')
 
-# Zarr → NumPy file
+# Zarr → NumPy 檔案
 z = zarr.open('data.zarr', mode='r')
 np.save('data.npy', z[:])
 
-# Zarr → NetCDF (via Xarray)
+# Zarr → NetCDF（透過 Xarray）
 ds = xr.open_zarr('data.zarr')
 ds.to_netcdf('data.nc')
 ```
 
-## Performance Optimization Quick Checklist
+## 性能優化快速檢核表
 
-1. **Chunk size**: 1-10 MB per chunk
-2. **Chunk shape**: Align with access pattern
-3. **Compression**:
-   - Fast: `BloscCodec(cname='lz4', clevel=1)`
-   - Balanced: `BloscCodec(cname='zstd', clevel=5)`
-   - Maximum: `GzipCodec(level=9)`
-4. **Cloud storage**:
-   - Larger chunks (5-100 MB)
-   - Consolidate metadata
-   - Consider sharding
-5. **Parallel I/O**: Use Dask for large operations
-6. **Memory**: Process in chunks, don't load entire arrays
+1. **Chunk 大小**：每個 chunk 1-10 MB
+2. **Chunk 形狀**：與存取模式對齊
+3. **壓縮**：
+   - 快速：`BloscCodec(cname='lz4', clevel=1)`
+   - 平衡：`BloscCodec(cname='zstd', clevel=5)`
+   - 最大壓縮：`GzipCodec(level=9)`
+4. **雲端儲存**：
+   - 較大的 chunks（5-100 MB）
+   - 合併元資料
+   - 考慮 sharding
+5. **平行 I/O**：大型操作使用 Dask
+6. **記憶體**：分塊處理，不要載入整個陣列
 
-## Debugging and Profiling
+## 除錯與效能分析
 
 ```python
 z = zarr.open('data.zarr', mode='r')
 
-# Detailed information
+# 詳細資訊
 print(z.info)
 
-# Size statistics
-print(f"Uncompressed: {z.nbytes / 1e6:.2f} MB")
-print(f"Compressed: {z.nbytes_stored / 1e6:.2f} MB")
-print(f"Ratio: {z.nbytes / z.nbytes_stored:.1f}x")
+# 大小統計
+print(f"未壓縮：{z.nbytes / 1e6:.2f} MB")
+print(f"已壓縮：{z.nbytes_stored / 1e6:.2f} MB")
+print(f"壓縮比：{z.nbytes / z.nbytes_stored:.1f}x")
 
-# Chunk information
-print(f"Chunks: {z.chunks}")
-print(f"Number of chunks: {z.nchunks}")
-print(f"Chunk grid: {z.cdata_shape}")
+# Chunk 資訊
+print(f"Chunks：{z.chunks}")
+print(f"Chunk 數量：{z.nchunks}")
+print(f"Chunk 網格：{z.cdata_shape}")
 ```
 
-## Common Data Types
+## 常見資料型別
 
 ```python
-# Integers
-'i1', 'i2', 'i4', 'i8'  # Signed: 8, 16, 32, 64-bit
-'u1', 'u2', 'u4', 'u8'  # Unsigned: 8, 16, 32, 64-bit
+# 整數
+'i1', 'i2', 'i4', 'i8'  # 有號：8、16、32、64 位元
+'u1', 'u2', 'u4', 'u8'  # 無號：8、16、32、64 位元
 
-# Floats
-'f2', 'f4', 'f8'  # 16, 32, 64-bit (half, single, double precision)
+# 浮點數
+'f2', 'f4', 'f8'  # 16、32、64 位元（半精度、單精度、雙精度）
 
-# Others
-'bool'     # Boolean
-'c8', 'c16'  # Complex: 64, 128-bit
-'S10'      # Fixed-length string (10 bytes)
-'U10'      # Unicode string (10 characters)
+# 其他
+'bool'     # 布林
+'c8', 'c16'  # 複數：64、128 位元
+'S10'      # 固定長度字串（10 位元組）
+'U10'      # Unicode 字串（10 字元）
 ```
 
-## Version Compatibility
+## 版本相容性
 
-Zarr-Python version 3.x supports both:
-- **Zarr v2 format**: Legacy format, widely compatible
-- **Zarr v3 format**: New format with sharding, improved metadata
+Zarr-Python 3.x 版本支援：
+- **Zarr v2 格式**：舊版格式，廣泛相容
+- **Zarr v3 格式**：新格式，具有 sharding、改進的元資料
 
-Check format version:
+檢查格式版本：
 ```python
-# Zarr automatically detects format version
+# Zarr 自動偵測格式版本
 z = zarr.open('data.zarr', mode='r')
-# Format info available in metadata
+# 格式資訊可在元資料中取得
 ```
 
-## Error Handling
+## 錯誤處理
 
 ```python
 try:
     z = zarr.open_array('data.zarr', mode='r')
 except zarr.errors.PathNotFoundError:
-    print("Array does not exist")
+    print("陣列不存在")
 except zarr.errors.ReadOnlyError:
-    print("Cannot write to read-only array")
+    print("無法寫入唯讀陣列")
 except Exception as e:
-    print(f"Unexpected error: {e}")
+    print(f"意外錯誤：{e}")
 ```
+

@@ -1,118 +1,118 @@
-# Time Series Regression
+# 時間序列迴歸
 
-Aeon provides time series regressors across 9 categories for predicting continuous values from temporal sequences.
+Aeon 提供 9 類時間序列迴歸器，用於從時間序列預測連續值。
 
-## Convolution-Based Regressors
+## 基於卷積的迴歸器
 
-Apply convolutional kernels for feature extraction:
+應用卷積核心進行特徵擷取：
 
-- `HydraRegressor` - Multi-resolution dilated convolutions
-- `RocketRegressor` - Random convolutional kernels
-- `MiniRocketRegressor` - Simplified ROCKET for speed
-- `MultiRocketRegressor` - Combined ROCKET variants
-- `MultiRocketHydraRegressor` - Merges ROCKET and Hydra approaches
+- `HydraRegressor` - 多解析度膨脹卷積
+- `RocketRegressor` - 隨機卷積核心
+- `MiniRocketRegressor` - 簡化的 ROCKET，追求速度
+- `MultiRocketRegressor` - 結合的 ROCKET 變體
+- `MultiRocketHydraRegressor` - 合併 ROCKET 和 Hydra 方法
 
-**Use when**: Need fast regression with strong baseline performance.
+**使用時機**：需要快速迴歸與強大的基準效能。
 
-## Deep Learning Regressors
+## 深度學習迴歸器
 
-Neural architectures for end-to-end temporal regression:
+用於端對端時間迴歸的神經架構：
 
-- `FCNRegressor` - Fully convolutional network
-- `ResNetRegressor` - Residual blocks with skip connections
-- `InceptionTimeRegressor` - Multi-scale inception modules
-- `TimeCNNRegressor` - Standard CNN architecture
-- `RecurrentRegressor` - RNN/LSTM/GRU variants
-- `MLPRegressor` - Multi-layer perceptron
-- `EncoderRegressor` - Generic encoder wrapper
-- `LITERegressor` - Lightweight inception time ensemble
-- `DisjointCNNRegressor` - Specialized CNN architecture
+- `FCNRegressor` - 全卷積網路
+- `ResNetRegressor` - 具有跳躍連接的殘差區塊
+- `InceptionTimeRegressor` - 多尺度 Inception 模組
+- `TimeCNNRegressor` - 標準 CNN 架構
+- `RecurrentRegressor` - RNN/LSTM/GRU 變體
+- `MLPRegressor` - 多層感知器
+- `EncoderRegressor` - 通用編碼器包裝器
+- `LITERegressor` - 輕量 Inception Time 集成
+- `DisjointCNNRegressor` - 專門的 CNN 架構
 
-**Use when**: Large datasets, complex patterns, or need feature learning.
+**使用時機**：大型資料集，複雜模式，或需要特徵學習。
 
-## Distance-Based Regressors
+## 基於距離的迴歸器
 
-k-nearest neighbors with temporal distance metrics:
+搭配時間距離度量的 k 最近鄰：
 
-- `KNeighborsTimeSeriesRegressor` - k-NN with DTW, LCSS, ERP, or other distances
+- `KNeighborsTimeSeriesRegressor` - 搭配 DTW、LCSS、ERP 或其他距離的 k-NN
 
-**Use when**: Small datasets, local similarity patterns, or interpretable predictions.
+**使用時機**：小型資料集，局部相似模式，或可解釋的預測。
 
-## Feature-Based Regressors
+## 基於特徵的迴歸器
 
-Extract statistical features before regression:
+在迴歸前擷取統計特徵：
 
-- `Catch22Regressor` - 22 canonical time-series characteristics
-- `FreshPRINCERegressor` - Pipeline combining multiple feature extractors
-- `SummaryRegressor` - Summary statistics features
-- `TSFreshRegressor` - Automated tsfresh feature extraction
+- `Catch22Regressor` - 22 個典型的時間序列特徵
+- `FreshPRINCERegressor` - 結合多個特徵擷取器的流程
+- `SummaryRegressor` - 摘要統計特徵
+- `TSFreshRegressor` - 自動化 tsfresh 特徵擷取
 
-**Use when**: Need interpretable features or domain-specific feature engineering.
+**使用時機**：需要可解釋特徵或領域特定的特徵工程。
 
-## Hybrid Regressors
+## 混合迴歸器
 
-Combine multiple approaches:
+結合多種方法：
 
-- `RISTRegressor` - Randomized Interval-Shapelet Transformation
+- `RISTRegressor` - 隨機化區間-Shapelet 轉換
 
-**Use when**: Benefit from combining interval and shapelet methods.
+**使用時機**：受益於結合區間和 shapelet 方法。
 
-## Interval-Based Regressors
+## 基於區間的迴歸器
 
-Extract features from time intervals:
+從時間區間擷取特徵：
 
-- `CanonicalIntervalForestRegressor` - Random intervals with decision trees
-- `DrCIFRegressor` - Diverse Representation CIF
-- `TimeSeriesForestRegressor` - Random interval ensemble
-- `RandomIntervalRegressor` - Simple interval-based approach
-- `RandomIntervalSpectralEnsembleRegressor` - Spectral interval features
-- `QUANTRegressor` - Quantile-based interval features
+- `CanonicalIntervalForestRegressor` - 搭配決策樹的隨機區間
+- `DrCIFRegressor` - 多樣表示 CIF
+- `TimeSeriesForestRegressor` - 隨機區間集成
+- `RandomIntervalRegressor` - 簡單的基於區間方法
+- `RandomIntervalSpectralEnsembleRegressor` - 頻譜區間特徵
+- `QUANTRegressor` - 基於分位數的區間特徵
 
-**Use when**: Predictive patterns occur in specific time windows.
+**使用時機**：預測模式出現在特定時間視窗中。
 
-## Shapelet-Based Regressors
+## 基於 Shapelet 的迴歸器
 
-Use discriminative subsequences for prediction:
+使用判別性子序列進行預測：
 
-- `RDSTRegressor` - Random Dilated Shapelet Transform
+- `RDSTRegressor` - 隨機膨脹 Shapelet 轉換
 
-**Use when**: Need phase-invariant discriminative patterns.
+**使用時機**：需要相位不變的判別模式。
 
-## Composition Tools
+## 組合工具
 
-Build custom regression pipelines:
+建立自訂迴歸流程：
 
-- `RegressorPipeline` - Chain transformers with regressors
-- `RegressorEnsemble` - Weighted ensemble with learnable weights
-- `SklearnRegressorWrapper` - Adapt sklearn regressors for time series
+- `RegressorPipeline` - 將轉換器與迴歸器串聯
+- `RegressorEnsemble` - 帶有可學習權重的加權集成
+- `SklearnRegressorWrapper` - 將 sklearn 迴歸器適配用於時間序列
 
-## Utilities
+## 工具
 
-- `DummyRegressor` - Baseline strategies (mean, median)
-- `BaseRegressor` - Abstract base for custom regressors
-- `BaseDeepRegressor` - Base for deep learning regressors
+- `DummyRegressor` - 基準策略（平均值、中位數）
+- `BaseRegressor` - 自訂迴歸器的抽象基類
+- `BaseDeepRegressor` - 深度學習迴歸器的基類
 
-## Quick Start
+## 快速開始
 
 ```python
 from aeon.regression.convolution_based import RocketRegressor
 from aeon.datasets import load_regression
 
-# Load data
+# 載入資料
 X_train, y_train = load_regression("Covid3Month", split="train")
 X_test, y_test = load_regression("Covid3Month", split="test")
 
-# Train and predict
+# 訓練並預測
 reg = RocketRegressor()
 reg.fit(X_train, y_train)
 predictions = reg.predict(X_test)
 ```
 
-## Algorithm Selection
+## 演算法選擇
 
-- **Speed priority**: MiniRocketRegressor
-- **Accuracy priority**: InceptionTimeRegressor, MultiRocketHydraRegressor
-- **Interpretability**: Catch22Regressor, SummaryRegressor
-- **Small data**: KNeighborsTimeSeriesRegressor
-- **Large data**: Deep learning regressors, ROCKET variants
-- **Interval patterns**: DrCIFRegressor, CanonicalIntervalForestRegressor
+- **速度優先**：MiniRocketRegressor
+- **準確度優先**：InceptionTimeRegressor、MultiRocketHydraRegressor
+- **可解釋性**：Catch22Regressor、SummaryRegressor
+- **小型資料**：KNeighborsTimeSeriesRegressor
+- **大型資料**：深度學習迴歸器、ROCKET 變體
+- **區間模式**：DrCIFRegressor、CanonicalIntervalForestRegressor

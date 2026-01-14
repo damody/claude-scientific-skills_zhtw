@@ -1,610 +1,610 @@
-# ISO 13485:2016 Requirements Breakdown
-
-This document provides a comprehensive breakdown of ISO 13485:2016 requirements for medical device Quality Management Systems (QMS).
-
-## Table of Contents
-
-1. [Clause 4: Quality Management System](#clause-4-quality-management-system)
-2. [Clause 5: Management Responsibility](#clause-5-management-responsibility)
-3. [Clause 6: Resource Management](#clause-6-resource-management)
-4. [Clause 7: Product Realization](#clause-7-product-realization)
-5. [Clause 8: Measurement, Analysis and Improvement](#clause-8-measurement-analysis-and-improvement)
-
-## Clause 4: Quality Management System
-
-### 4.1 General Requirements
-
-#### 4.1.1 QMS Requirements
-- Establish, document, implement, and maintain a QMS
-- Maintain its effectiveness in accordance with ISO 13485
-- Document the QMS processes and their interactions
-
-#### 4.1.2 Process Approach
-- Identify processes needed for the QMS
-- Determine sequence and interaction of these processes
-- Determine criteria and methods for effective operation and control
-- Ensure availability of resources and information
-- Monitor, measure, and analyze processes
-- Implement actions to achieve planned results and maintain effectiveness
-
-#### 4.1.3 Outsourced Processes
-- Control any QMS process that is outsourced
-- Ensure control is documented in the QMS
-- Outsourcing does not relieve the organization of responsibility
-
-#### 4.1.4 General QMS Requirements
-- Establish, document, implement, and maintain QMS requirements per ISO 13485
-- Include requirements for medical devices and applicable regulatory requirements
-- Establish documented procedures for QMS activities
-
-#### 4.1.5 Risk Management
-- Establish documented requirements for risk management in product realization
-- Maintain risk management records
-- Ensure risk management is conducted according to documented requirements
-
-#### 4.1.6 Software Validation
-- Validate computer software applications used in QMS
-- Validation must be conducted prior to initial use and after changes
-- Establish documented approach including:
-  - Risk associated with the software application
-  - Validation activities
-  - Acceptance criteria
-  - User responsibilities
-  - Validation records
-
-### 4.2 Documentation Requirements
-
-#### 4.2.1 General Documentation
-QMS documentation must include:
-- Quality policy and quality objectives
-- Quality manual
-- Documented procedures and records required by ISO 13485
-- Documents required by organization for effective processes
-- Records required by ISO 13485
-- Medical device files as required by applicable regulatory requirements
-
-#### 4.2.2 Quality Manual
-Establish and maintain a quality manual that includes:
-- Scope of the QMS with details and justification for exclusions
-- Documented procedures or reference to them
-- Description of interaction between QMS processes
-- Structure of documentation used in the QMS
-
-#### 4.2.3 Medical Device File
-Establish and maintain a medical device file for each type or family that includes:
-- General description, intended use/purpose
-- Label and instructions for use specifications
-- Specifications for product and/or manufacturing
-- Specifications for procedures for purchasing, manufacturing, servicing
-- Procedures for measuring and monitoring
-- Installation requirements (if applicable)
-- Risk management file(s)
-- Verification and validation information
-- Design and development file(s) when applicable
-
-#### 4.2.4 Control of Documents
-Establish documented procedure to:
-- Approve documents before issue
-- Review, update, and re-approve documents
-- Ensure changes and current revision status are identified
-- Ensure relevant versions are available at points of use
-- Ensure documents remain legible and readily identifiable
-- Control distribution of documents
-- Prevent unintended use of obsolete documents
-- Apply suitable identification if retained for any purpose
-
-Document changes must:
-- Be reviewed and approved by original function unless otherwise designated
-- Have access to pertinent background information
-- Be identified in the document or appropriate attachments
-
-#### 4.2.5 Control of Records
-Establish documented procedure for:
-- Identification, storage, security, integrity, retrieval, retention time, and disposition
-- Records must remain legible, readily identifiable, and retrievable
-- Changes to records must remain identifiable
-- Retention time must be at least the lifetime of the medical device
-- Records may be stored on any media but must remain retrievable
-
-## Clause 5: Management Responsibility
-
-### 5.1 Management Commitment
-Top management must provide evidence of commitment by:
-- Communicating importance of meeting regulatory and customer requirements
-- Establishing quality policy
-- Establishing quality objectives
-- Conducting management reviews
-- Ensuring availability of resources
-
-### 5.2 Customer Focus
-- Determine customer requirements and regulatory requirements
-- Ensure customer requirements are met to enhance satisfaction
-- Maintain documented requirements related to the medical device
-
-### 5.3 Quality Policy
-- Appropriate to the organization
-- Includes commitment to meet requirements and maintain QMS effectiveness
-- Provides framework for quality objectives
-- Communicated and understood within organization
-- Reviewed for continuing suitability
-
-### 5.4 Planning
-
-#### 5.4.1 Quality Objectives
-- Establish quality objectives at relevant functions and levels
-- Must be measurable and consistent with quality policy
-- Objectives must support conformity to product requirements
-
-#### 5.4.2 QMS Planning
-- Plan to meet general requirements and quality objectives
-- Maintain QMS integrity when changes are planned and implemented
-- Document planning
-
-### 5.5 Responsibility, Authority and Communication
-
-#### 5.5.1 Responsibility and Authority
-- Define and communicate responsibilities and authorities
-- Document roles that manage, perform, verify QMS work
-- Identify interrelation of all personnel
-
-#### 5.5.2 Management Representative
-Appoint a member of management who:
-- Ensures QMS processes are established, implemented, and maintained
-- Reports to top management on QMS performance and improvement needs
-- Ensures promotion of awareness of regulatory and customer requirements
-
-#### 5.5.3 Internal Communication
-- Ensure communication processes are established
-- Ensure communication occurs regarding QMS effectiveness
-
-### 5.6 Management Review
-
-#### 5.6.1 General
-- Review QMS at planned intervals (at least annually)
-- Review to ensure continuing suitability, adequacy, and effectiveness
-- Include assessment of opportunities for improvement
-- Maintain records of management reviews
-
-#### 5.6.2 Review Input
-Include:
-- Results of audits
-- Customer feedback
-- Process performance and product conformity
-- Status of preventive and corrective actions
-- Follow-up actions from previous reviews
-- Changes affecting QMS
-- Recommendations for improvement
-- Applicable new or revised regulatory requirements
-
-#### 5.6.3 Review Output
-Include decisions and actions related to:
-- Improvements to QMS effectiveness and processes
-- Product improvements related to customer requirements
-- Resource needs
-- Changes necessary to maintain QMS effectiveness
-
-## Clause 6: Resource Management
-
-### 6.1 Provision of Resources
-Determine and provide resources needed to:
-- Implement and maintain QMS and its effectiveness
-- Meet regulatory and customer requirements
-
-### 6.2 Human Resources
-
-#### 6.2 General
-Personnel performing work affecting product quality must be competent based on:
-- Education, training, skills, and experience
-- Documented evidence of competence
-
-#### 6.3 Infrastructure
-Determine, provide, and maintain infrastructure including:
-- Buildings, workspace, and associated utilities
-- Process equipment (hardware and software)
-- Supporting services
-
-Infrastructure maintenance requirements:
-- Document requirements including maintenance activities
-- Document requirements when maintenance can affect product quality
-- Maintain records of maintenance activities
-
-### 6.4 Work Environment and Contamination Control
-
-#### 6.4.1 Work Environment
-- Determine and manage work environment needed for product conformity
-- Document requirements for work environment
-- Document requirements if work environment can adversely affect product quality
-
-#### 6.4.2 Contamination Control
-- When applicable to medical device, document requirements for control of contaminated or potentially contaminated product
-- Establish special arrangements for control of contaminated product
-
-## Clause 7: Product Realization
-
-### 7.1 Planning of Product Realization
-Plan and develop processes needed for product realization including:
-- Quality objectives and requirements for the product
-- Need to establish processes, documentation, and resources
-- Required verification, validation, monitoring, measurement, inspection, handling, storage, distribution, and traceability
-- Records to provide evidence of conformity
-
-Risk management requirements:
-- Establish documented requirements for risk management throughout product realization
-- Maintain risk management records
-
-### 7.2 Customer-Related Processes
-
-#### 7.2.1 Determination of Requirements
-Determine:
-- Requirements specified by customer including delivery and post-delivery
-- Requirements not stated but necessary for specified or intended use
-- Applicable regulatory requirements
-- Any additional requirements determined by organization
-
-#### 7.2.2 Review of Requirements
-- Review product requirements before commitment
-- Ensure requirements are defined and documented
-- Ensure differences are resolved
-- Ensure ability to meet requirements
-- Maintain records of review results and follow-up actions
-
-#### 7.2.3 Communication
-Establish and document effective arrangements for communication with customers concerning:
-- Product information
-- Inquiry, contract or order handling, amendments
-- Customer feedback including complaints
-- Advisory notices
-
-### 7.3 Design and Development
-
-#### 7.3.1 General
-- Establish, document, and maintain design and development procedures
-- Document design and development plan for each medical device
-- Maintain design and development files
-
-#### 7.3.2 Design and Development Planning
-Plan and control design and development including:
-- Stages of design and development
-- Required review, verification, and validation activities
-- Responsibilities and authorities
-- Resources and interfaces
-- Update plans as design progresses
-- Document plans
-
-#### 7.3.3 Design and Development Inputs
-- Determine inputs relating to product requirements
-- Include functional, performance, usability, and safety requirements
-- Include applicable regulatory requirements and standards
-- Include applicable outputs of risk management
-- Include appropriate information from previous similar designs
-- Review inputs for adequacy and completeness
-- Resolve incomplete, ambiguous, or conflicting requirements
-- Maintain records
-
-#### 7.3.4 Design and Development Outputs
-Provide outputs that:
-- Meet design input requirements
-- Provide appropriate information for purchasing, production, and service
-- Contain or reference product acceptance criteria
-- Specify characteristics essential for safe and proper use
-- Document outputs and maintain as records
-
-#### 7.3.5 Design and Development Review
-- Conduct systematic reviews at suitable stages
-- Evaluate ability to meet requirements
-- Identify problems and propose actions
-- Include representatives of functions concerned
-- Maintain records including results and follow-up actions
-
-#### 7.3.6 Design and Development Verification
-- Perform verification per planned arrangements
-- Ensure outputs meet input requirements
-- Maintain records of verification results and follow-up actions
-
-#### 7.3.7 Design and Development Validation
-- Perform validation per planned arrangements
-- Ensure product meets specified application or intended use
-- Conduct validation before delivery or implementation
-- Include validation under defined operating conditions
-- Maintain records of validation results and follow-up actions
-
-#### 7.3.8 Design and Development Transfer
-- Document procedures for transfer to manufacturing
-- Verify manufacturing output meets design output
-- Ensure specification for materials, production, QC, servicing are appropriate
-- Maintain records
-
-#### 7.3.9 Control of Design and Development Changes
-- Identify, document, and control changes
-- Review, verify, validate, and approve changes before implementation
-- Evaluate effects on constituent parts, in-process product, and delivered product
-- Maintain records of changes, review results, and follow-up actions
-
-#### 7.3.10 Design and Development Files
-Establish and maintain design and development files for each type or family including:
-- Design and development plan
-- Design inputs
-- Design outputs
-- Design review, verification, validation records
-- Design change records
-- Risk management file
-
-### 7.4 Purchasing
-
-#### 7.4.1 Purchasing Process
-- Ensure purchased product conforms to purchase information
-- Establish documented processes for purchasing activities
-- Establish criteria for evaluation and selection of suppliers
-- Base criteria on ability to supply per organization's requirements
-- Monitor supplier performance
-- Maintain records of evaluations and follow-up actions
-- Establish process for notifying suppliers of changed product requirements
-
-#### 7.4.2 Purchasing Information
-Purchasing information must include:
-- Requirements for approval of product, procedures, processes, equipment
-- Requirements for qualification of personnel
-- Quality management system requirements
-- Requirements for notification to organization of nonconforming product
-- Agreement that suppliers provide notification of changes to purchased product
-- Agreement that purchase information be communicated to sub-tier suppliers
-
-#### 7.4.3 Verification of Purchased Product
-- Establish and implement inspection or other activities to ensure conformity
-- Document extent of verification
-- Verify at supplier's premises when customer intends to perform verification at supplier
-- Document verification arrangements and method of product release
-
-### 7.5 Production and Service Provision
-
-#### 7.5.1 Control of Production and Service Provision
-Plan and carry out production under controlled conditions including:
-- Availability of documented procedures and work instructions
-- Availability of suitable infrastructure and work environment
-- Availability of monitoring and measuring equipment
-- Availability and use of suitable monitoring and measuring activities
-- Implementation of product release, delivery, and post-delivery activities
-- Implementation of defined operations for labelling and packaging
-- Procedures for servicing if applicable
-
-Document requirements for:
-- Control of product cleanliness if applicable
-- Control during installation and verification if applicable
-
-#### 7.5.2 Cleanliness of Product
-Document requirements if:
-- Product is cleaned per specified requirements before sterilization and/or use
-- Product cannot be cleaned before sterilization
-- Product is supplied non-sterile to be cleaned and then sterilized
-
-Establish requirements for product hygiene in manufacturing, handling, and storage.
-
-#### 7.5.3 Installation Activities
-If applicable:
-- Document requirements for installation and verification
-- Maintain records of installation and verification
-
-#### 7.5.4 Servicing Activities
-If servicing is specified requirement:
-- Establish documented procedures, reference materials, and measurements for servicing
-- Analyze records of servicing for feedback into post-production phase
-- Maintain records of servicing activities
-
-#### 7.5.5 Particular Requirements for Sterile Medical Devices
-Maintain records of process parameters for sterilization of each batch.
-
-#### 7.5.6 Validation of Processes
-Validate processes where resulting output cannot be verified by subsequent monitoring or measurement, including:
-- Defined criteria for review and approval
-- Approval of equipment and qualification of personnel
-- Use of specific methods, procedures, and acceptance criteria
-- Requirements for records
-- Revalidation including criteria for revalidation
-- Approval of changes to process
-
-Document requirements for validation of:
-- Computer software used in production and service provision
-- Sterilization processes
-- Aseptic processing
-- Clean room requirements if applicable
-
-#### 7.5.7 Particular Requirements for Validation of Processes for Sterilization and Sterile Barrier Systems
-Maintain records of validation of:
-- Sterilization processes for each batch
-- Sterile barrier systems
-
-#### 7.5.8 Identification
-- Establish documented procedures for product identification throughout realization
-- Identify product by suitable means
-- Maintain records of identification where traceability is a requirement
-
-#### 7.5.9 Traceability
-
-##### 7.5.9.1 General
-Establish documented procedures defining extent of traceability including:
-- Distribution and location of medical device
-
-##### 7.5.9.2 Particular Requirements
-Document procedures to maintain records of:
-- Name and address of shipping package consignee
-- Identification of quantity shipped
-- Include requirements of applicable regulatory requirements
-- Maintain traceability records for defined period
-
-#### 7.5.10 Customer Property
-- Exercise care with customer property while under organization's control
-- Identify, verify, protect, and safeguard customer property
-- Record and report to customer if lost, damaged, or unsuitable
-- Maintain records
-
-#### 7.5.11 Preservation of Product
-- Preserve product during internal processing and delivery
-- Include identification, handling, packaging, storage, and protection
-- Apply to constituent parts of product
-- Document requirements for special handling if applicable
-
-### 7.6 Control of Monitoring and Measuring Equipment
-- Determine monitoring and measurement to be undertaken
-- Determine monitoring and measuring equipment needed
-- Establish documented procedures for:
-  - Calibration or verification at specified intervals before use
-  - Adjustment or re-adjustment as necessary
-  - Identification to enable determination of calibration status
-  - Safeguarding from adjustments that would invalidate calibration
-  - Protection from damage and deterioration
-- Assess and record validity of previous results when found not to conform
-- Maintain records of calibration and verification
-- Confirm ability of computer software to satisfy intended application when used
-- Undertake confirmation before initial use and reconfirm as necessary
-
-## Clause 8: Measurement, Analysis and Improvement
-
-### 8.1 General
-- Plan and implement monitoring, measurement, analysis, and improvement processes
-- Demonstrate product conformity
-- Ensure QMS conformity
-- Maintain QMS effectiveness
-- Include determination of applicable methods including statistical techniques
-
-### 8.2 Monitoring and Measurement
-
-#### 8.2.1 Feedback
-Establish documented procedure for feedback including early warning system for:
-- Post-production information including complaints
-- Requirements for reporting to regulatory authorities
-- Use as potential input to risk management for monitoring and maintaining product requirements
-- Use as potential input for corrective and preventive action
-
-#### 8.2.2 Complaint Handling
-Establish documented procedures for timely complaint handling including:
-- Requirements and responsibilities for receiving, recording, and evaluating complaints
-- Requirements and responsibilities for handling, investigating, and evaluating complaints
-- Requirements and responsibilities for reporting complaint information to regulatory authorities
-- Requirements for informing customer of organization's actions
-- Requirements to ensure complaint information not handled by organization is transferred to organization
-- Maintain records of complaints and investigations
-
-#### 8.2.3 Reporting to Regulatory Authorities
-Establish documented procedures to:
-- Provide notification to regulatory authorities per applicable requirements
-- Provide advisory notices per applicable requirements
-- Maintain records of reporting
-
-#### 8.2.4 Internal Audit
-- Conduct internal audits at planned intervals
-- Determine if QMS conforms to ISO 13485 and organization's requirements
-- Determine if QMS is effectively implemented and maintained
-- Plan audit program considering importance of processes, changes, and previous results
-- Define audit criteria, scope, frequency, and methods
-- Establish documented procedure for audits including responsibilities, requirements, and reporting
-- Select objective and impartial auditors
-- Maintain records of audits and results
-- Identify need for corrections or corrective actions
-- Conduct follow-up activities to verify implementation and effectiveness
-
-#### 8.2.5 Monitoring and Measurement of Processes
-- Apply suitable methods for monitoring and measurement of QMS processes
-- Demonstrate ability to achieve planned results
-- Implement corrections and corrective actions when planned results not achieved
-- Maintain records
-
-#### 8.2.6 Monitoring and Measurement of Product
-- Monitor and measure product characteristics to verify conformity
-- Conduct at appropriate stages per planned arrangements
-- Maintain records showing conformity to acceptance criteria
-- Record authority responsible for release
-- Ensure product release and delivery not proceed until planned arrangements completed
-- Allow release by relevant authority and customer when applicable
-
-### 8.3 Control of Nonconforming Product
-
-#### 8.3.1 General
-- Ensure nonconforming product is identified and controlled
-- Establish documented procedures for:
-  - Identification, documentation, evaluation, segregation, and disposition
-  - Notification to external parties
-  - Review of nonconforming product
-- Maintain records of nonconformities and subsequent actions including concessions
-
-#### 8.3.2 Actions in Response to Nonconforming Product Detected Before Delivery
-Deal with nonconforming product by:
-- Taking action to eliminate detected nonconformity
-- Authorizing use, release, or acceptance under concession per applicable regulatory requirements
-- Taking action to preclude original intended use or application
-- Taking action appropriate to effects of nonconformity when detected after delivery or use
-
-Maintain records of concessions and identify authority making concession.
-
-#### 8.3.3 Actions in Response to Nonconforming Product Detected After Delivery
-When nonconforming product detected after delivery or use:
-- Take action appropriate to effects of nonconformity
-- Establish documented procedure including notification requirements to regulatory authorities
-- Maintain records
-
-#### 8.3.4 Rework
-Establish documented procedures for rework including:
-- Requirements to evaluate potential effects on medical device
-- Approval before implementation
-- Records of results and actions including nonconformities and rework
-- Re-verification after rework
-- Documentation of rework procedure before rework begins
-
-### 8.4 Analysis of Data
-- Determine, collect, and analyze appropriate data from monitoring and measurement
-- Evaluate where continual improvement of QMS effectiveness can be made
-- Establish documented procedures for:
-  - Analysis of data to provide information on customer satisfaction
-  - Analysis of conformity to product requirements
-  - Analysis of characteristics and trends of processes and products including preventive action opportunities
-  - Analysis of suppliers
-  - Analysis of other relevant data including feedback and output from risk management
-- Include use of statistical techniques if necessary
-- Maintain records of analysis results
-
-### 8.5 Improvement
-
-#### 8.5.1 General
-- Identify and implement changes to ensure and maintain QMS effectiveness
-- Include use of quality policy, objectives, audit results, data analysis, corrective and preventive actions, and management review
-
-#### 8.5.2 Corrective Action
-- Establish documented procedures to:
-  - Review nonconformities including complaints
-  - Determine causes of nonconformities
-  - Evaluate need for actions to ensure nonconformities do not recur
-  - Plan and document actions needed and implement
-  - Document results of actions taken
-  - Review effectiveness of corrective actions taken
-- Maintain records including investigation results and follow-up
-
-#### 8.5.3 Preventive Action
-- Establish documented procedures to:
-  - Determine potential nonconformities and their causes
-  - Evaluate need for action to prevent occurrence
-  - Plan and document actions needed and implement
-  - Document results of actions taken
-  - Review effectiveness of preventive actions taken
-- Use appropriate sources of information including:
-  - Work processes and operations affecting product quality
-  - Concessions
-  - Analysis of data and risk management outputs
-  - Medical device performance data
-  - Records of nonconformities
-- Maintain records including investigation results and follow-up
-
-## Key Regulatory Updates
-
-### FDA QMSR Harmonization (Effective February 2, 2026)
-- FDA 21 CFR Part 820 has been harmonized with ISO 13485:2016
-- Renamed to QMSR (Quality Management System Regulation)
-- Medical Device File (MDF) replaces separate DHF, DMR, and DHR
-- Organizations should prepare for transition to unified documentation approach
-
-## References and Resources
-
-This requirements breakdown is based on ISO 13485:2016, which was last reviewed and confirmed in 2025.
-
-For additional guidance, refer to:
-- ISO 13485:2016 standard document
-- FDA Quality Management System Regulation (QMSR)
-- Applicable regional regulatory requirements (EU MDR, Health Canada, etc.)
+# ISO 13485:2016 要求分解
+
+本文件提供醫療器材品質管理系統（QMS）ISO 13485:2016 要求的完整分解。
+
+## 目錄
+
+1. [第 4 條：品質管理系統](#第-4-條品質管理系統)
+2. [第 5 條：管理責任](#第-5-條管理責任)
+3. [第 6 條：資源管理](#第-6-條資源管理)
+4. [第 7 條：產品實現](#第-7-條產品實現)
+5. [第 8 條：量測、分析和改進](#第-8-條量測分析和改進)
+
+## 第 4 條：品質管理系統
+
+### 4.1 一般要求
+
+#### 4.1.1 QMS 要求
+- 建立、記錄、實施並維護 QMS
+- 按照 ISO 13485 維護其有效性
+- 記錄 QMS 流程及其交互作用
+
+#### 4.1.2 流程方法
+- 識別 QMS 所需的流程
+- 確定這些流程的順序和交互作用
+- 確定有效運作和控制的準則和方法
+- 確保資源和資訊的可用性
+- 監測、量測和分析流程
+- 實施行動以達成計畫結果並維護有效性
+
+#### 4.1.3 外包流程
+- 控制任何外包的 QMS 流程
+- 確保控制記錄在 QMS 中
+- 外包不解除組織的責任
+
+#### 4.1.4 一般 QMS 要求
+- 按照 ISO 13485 建立、記錄、實施並維護 QMS 要求
+- 包含醫療器材和適用法規要求的要求
+- 建立 QMS 活動的文件化程序
+
+#### 4.1.5 風險管理
+- 在產品實現中建立風險管理的文件化要求
+- 維護風險管理記錄
+- 確保風險管理按文件化要求進行
+
+#### 4.1.6 軟體驗證
+- 驗證 QMS 中使用的電腦軟體應用程式
+- 驗證必須在初次使用前和變更後進行
+- 建立包括以下內容的文件化方法：
+  - 與軟體應用程式相關的風險
+  - 驗證活動
+  - 驗收準則
+  - 使用者責任
+  - 驗證記錄
+
+### 4.2 文件要求
+
+#### 4.2.1 一般文件
+QMS 文件必須包含：
+- 品質政策和品質目標
+- 品質手冊
+- ISO 13485 要求的文件化程序和記錄
+- 組織為有效流程所需的文件
+- ISO 13485 要求的記錄
+- 適用法規要求規定的醫療器材檔案
+
+#### 4.2.2 品質手冊
+建立並維護包含以下內容的品質手冊：
+- QMS 範圍及排除項目的詳細資訊和理由
+- 文件化程序或其參照
+- QMS 流程間交互作用的描述
+- QMS 中使用的文件結構
+
+#### 4.2.3 醫療器材檔案
+為每種類型或系列建立並維護包含以下內容的醫療器材檔案：
+- 一般描述、預期用途/目的
+- 標籤和使用說明規格
+- 產品和/或製造規格
+- 採購、製造、服務程序規格
+- 量測和監測程序
+- 安裝要求（如適用）
+- 風險管理檔案
+- 驗證和確效資訊
+- 設計和開發檔案（當適用時）
+
+#### 4.2.4 文件管制
+建立文件化程序以：
+- 在發佈前核准文件
+- 審查、更新並重新核准文件
+- 確保識別變更和目前版次狀態
+- 確保相關版本在使用點可用
+- 確保文件保持清晰可讀並可識別
+- 控制文件分發
+- 防止非預期使用作廢文件
+- 如為任何目的保留則適用適當識別
+
+文件變更必須：
+- 由原職能審查和核准，除非另有指定
+- 存取相關背景資訊
+- 在文件或適當附件中識別
+
+#### 4.2.5 記錄管制
+建立文件化程序以進行：
+- 識別、儲存、安全、完整性、檢索、保留時間和處置
+- 記錄必須保持清晰可讀、可識別並可檢索
+- 記錄變更必須保持可識別
+- 保留時間必須至少為醫療器材壽命
+- 記錄可儲存於任何媒體但必須保持可檢索
+
+## 第 5 條：管理責任
+
+### 5.1 管理承諾
+最高管理層必須提供承諾證據：
+- 傳達滿足法規和客戶要求的重要性
+- 建立品質政策
+- 建立品質目標
+- 進行管理審查
+- 確保資源可用性
+
+### 5.2 客戶關注
+- 確定客戶要求和法規要求
+- 確保滿足客戶要求以提高滿意度
+- 維護與醫療器材相關的文件化要求
+
+### 5.3 品質政策
+- 適合組織
+- 包含滿足要求和維護 QMS 有效性的承諾
+- 提供品質目標的架構
+- 在組織內溝通並被理解
+- 審查持續適宜性
+
+### 5.4 規劃
+
+#### 5.4.1 品質目標
+- 在相關職能和層級建立品質目標
+- 必須可衡量且與品質政策一致
+- 目標必須支持產品要求符合性
+
+#### 5.4.2 QMS 規劃
+- 規劃以滿足一般要求和品質目標
+- 在規劃和實施變更時維護 QMS 完整性
+- 記錄規劃
+
+### 5.5 責任、權限和溝通
+
+#### 5.5.1 責任和權限
+- 定義並溝通責任和權限
+- 記錄管理、執行、驗證 QMS 工作的角色
+- 識別所有人員的相互關係
+
+#### 5.5.2 管理代表
+任命具有以下職責的管理層成員：
+- 確保 QMS 流程建立、實施並維護
+- 向最高管理層報告 QMS 績效和改進需求
+- 確保推廣對法規和客戶要求的認識
+
+#### 5.5.3 內部溝通
+- 確保建立溝通流程
+- 確保進行關於 QMS 有效性的溝通
+
+### 5.6 管理審查
+
+#### 5.6.1 一般
+- 按計畫間隔審查 QMS（至少每年）
+- 審查以確保持續適宜性、充分性和有效性
+- 包含改進機會的評估
+- 維護管理審查記錄
+
+#### 5.6.2 審查輸入
+包含：
+- 稽核結果
+- 客戶回饋
+- 流程績效和產品符合性
+- 預防和矯正措施狀態
+- 前次審查的後續行動
+- 影響 QMS 的變更
+- 改進建議
+- 適用的新的或修訂的法規要求
+
+#### 5.6.3 審查輸出
+包含與以下相關的決定和行動：
+- QMS 有效性和流程的改進
+- 與客戶要求相關的產品改進
+- 資源需求
+- 維護 QMS 有效性所需的變更
+
+## 第 6 條：資源管理
+
+### 6.1 資源提供
+確定並提供所需資源以：
+- 實施和維護 QMS 及其有效性
+- 滿足法規和客戶要求
+
+### 6.2 人力資源
+
+#### 6.2 一般
+從事影響產品品質工作的人員必須基於以下方面具備能力：
+- 教育、培訓、技能和經驗
+- 能力的文件化證據
+
+#### 6.3 基礎設施
+確定、提供並維護基礎設施，包括：
+- 建築物、工作空間和相關設施
+- 製程設備（硬體和軟體）
+- 支援服務
+
+基礎設施維護要求：
+- 記錄包括維護活動的要求
+- 當維護可能影響產品品質時記錄要求
+- 維護維護活動記錄
+
+### 6.4 工作環境和汙染控制
+
+#### 6.4.1 工作環境
+- 確定並管理產品符合性所需的工作環境
+- 記錄工作環境要求
+- 當工作環境可能對產品品質產生不利影響時記錄要求
+
+#### 6.4.2 汙染控制
+- 當適用於醫療器材時，記錄受汙染或可能受汙染產品的控制要求
+- 建立受汙染產品控制的特殊安排
+
+## 第 7 條：產品實現
+
+### 7.1 產品實現規劃
+規劃和開發產品實現所需的流程，包括：
+- 產品的品質目標和要求
+- 建立流程、文件和資源的需求
+- 所需的驗證、確效、監測、量測、檢驗、搬運、儲存、配送和追溯性
+- 提供符合性證據的記錄
+
+風險管理要求：
+- 在整個產品實現過程中建立風險管理的文件化要求
+- 維護風險管理記錄
+
+### 7.2 客戶相關流程
+
+#### 7.2.1 要求確定
+確定：
+- 客戶規定的要求，包括交付和交付後
+- 未陳述但對規定或預期用途必要的要求
+- 適用法規要求
+- 組織確定的任何額外要求
+
+#### 7.2.2 要求審查
+- 在承諾前審查產品要求
+- 確保要求已定義並記錄
+- 確保差異已解決
+- 確保滿足要求的能力
+- 維護審查結果和後續行動的記錄
+
+#### 7.2.3 溝通
+建立並記錄與客戶溝通的有效安排，涉及：
+- 產品資訊
+- 詢價、合約或訂單處理、修訂
+- 客戶回饋，包括抱怨
+- 諮詢通知
+
+### 7.3 設計和開發
+
+#### 7.3.1 一般
+- 建立、記錄並維護設計和開發程序
+- 為每種醫療器材記錄設計和開發計畫
+- 維護設計和開發檔案
+
+#### 7.3.2 設計和開發規劃
+規劃和控制設計和開發，包括：
+- 設計和開發階段
+- 所需的審查、驗證和確效活動
+- 責任和權限
+- 資源和介面
+- 隨設計進展更新計畫
+- 記錄計畫
+
+#### 7.3.3 設計和開發輸入
+- 確定與產品要求相關的輸入
+- 包含功能、性能、可用性和安全要求
+- 包含適用法規要求和標準
+- 包含風險管理的適用輸出
+- 包含先前類似設計的適當資訊
+- 審查輸入的充分性和完整性
+- 解決不完整、模糊或衝突的要求
+- 維護記錄
+
+#### 7.3.4 設計和開發輸出
+提供以下輸出：
+- 滿足設計輸入要求
+- 提供採購、生產和服務的適當資訊
+- 包含或參照產品驗收準則
+- 規定安全和適當使用的必要特性
+- 記錄輸出並維護為記錄
+
+#### 7.3.5 設計和開發審查
+- 在適當階段進行系統審查
+- 評估滿足要求的能力
+- 識別問題並提出行動
+- 包含相關職能代表
+- 維護記錄包括結果和後續行動
+
+#### 7.3.6 設計和開發驗證
+- 按計畫安排進行驗證
+- 確保輸出滿足輸入要求
+- 維護驗證結果和後續行動記錄
+
+#### 7.3.7 設計和開發確效
+- 按計畫安排進行確效
+- 確保產品滿足規定應用或預期用途
+- 在交付或實施前進行確效
+- 包含在定義操作條件下的確效
+- 維護確效結果和後續行動記錄
+
+#### 7.3.8 設計和開發轉移
+- 記錄轉移至製造的程序
+- 驗證製造輸出滿足設計輸出
+- 確保材料、生產、品管、服務規格適當
+- 維護記錄
+
+#### 7.3.9 設計和開發變更的控制
+- 識別、記錄並控制變更
+- 在實施前審查、驗證、確效並核准變更
+- 評估對組成零件、在製品和已交付產品的影響
+- 維護變更、審查結果和後續行動記錄
+
+#### 7.3.10 設計和開發檔案
+為每種類型或系列建立並維護設計和開發檔案，包括：
+- 設計和開發計畫
+- 設計輸入
+- 設計輸出
+- 設計審查、驗證、確效記錄
+- 設計變更記錄
+- 風險管理檔案
+
+### 7.4 採購
+
+#### 7.4.1 採購流程
+- 確保採購產品符合採購資訊
+- 建立採購活動的文件化流程
+- 建立供應商評估和選擇標準
+- 標準基於按組織要求供應的能力
+- 監測供應商績效
+- 維護評估和後續行動記錄
+- 建立通知供應商變更的產品要求流程
+
+#### 7.4.2 採購資訊
+採購資訊必須包含：
+- 產品、程序、流程、設備的核准要求
+- 人員資格要求
+- 品質管理系統要求
+- 向組織通知不合格產品的要求
+- 供應商提供採購產品變更通知的協議
+- 採購資訊傳達給次級供應商的協議
+
+#### 7.4.3 採購產品驗證
+- 建立並實施確保符合性的檢驗或其他活動
+- 記錄驗證範圍
+- 當客戶打算在供應商場所進行驗證時，在供應商場所驗證
+- 記錄驗證安排和產品放行方法
+
+### 7.5 生產和服務提供
+
+#### 7.5.1 生產和服務提供的控制
+在受控條件下規劃和進行生產，包括：
+- 文件化程序和工作指導書的可用性
+- 適當基礎設施和工作環境的可用性
+- 監測量測設備的可用性
+- 適當監測和量測活動的可用性和使用
+- 產品放行、交付和交付後活動的實施
+- 標籤和包裝的定義操作
+- 服務程序（如適用）
+
+以下項目需記錄要求：
+- 產品清潔度控制（如適用）
+- 安裝和驗證期間的控制（如適用）
+
+#### 7.5.2 產品清潔度
+以下情況需記錄要求：
+- 產品在滅菌和/或使用前按規定要求清潔
+- 產品無法在滅菌前清潔
+- 產品以非無菌形式供應，需清潔後滅菌
+
+建立製造、搬運和儲存中的產品衛生要求。
+
+#### 7.5.3 安裝活動
+如適用：
+- 記錄安裝和驗證要求
+- 維護安裝和驗證記錄
+
+#### 7.5.4 服務活動
+如服務是規定要求：
+- 建立服務的文件化程序、參考資料和量測
+- 分析服務記錄以回饋到上市後階段
+- 維護服務活動記錄
+
+#### 7.5.5 滅菌醫療器材的特定要求
+維護每批次滅菌製程參數記錄。
+
+#### 7.5.6 製程驗證
+驗證後續監測或量測無法驗證輸出結果的製程，包括：
+- 審查和核准的定義標準
+- 設備核准和人員資格
+- 使用特定方法、程序和驗收準則
+- 記錄要求
+- 再驗證包括再驗證標準
+- 製程變更核准
+
+記錄以下驗證要求：
+- 生產和服務提供中使用的電腦軟體
+- 滅菌製程
+- 無菌製程
+- 潔淨室要求（如適用）
+
+#### 7.5.7 滅菌和無菌屏障系統製程驗證的特定要求
+維護以下驗證記錄：
+- 每批次滅菌製程
+- 無菌屏障系統
+
+#### 7.5.8 識別
+- 建立整個實現過程中產品識別的文件化程序
+- 以適當方式識別產品
+- 當追溯性是要求時維護識別記錄
+
+#### 7.5.9 追溯性
+
+##### 7.5.9.1 一般
+建立定義追溯性範圍的文件化程序，包括：
+- 醫療器材的配送和位置
+
+##### 7.5.9.2 特定要求
+記錄維護以下記錄的程序：
+- 運輸包裹收貨人的名稱和地址
+- 出貨數量識別
+- 包含適用法規要求的要求
+- 在規定期限內維護追溯性記錄
+
+#### 7.5.10 客戶財產
+- 對在組織控制下的客戶財產小心處理
+- 識別、驗證、保護和保障客戶財產
+- 如遺失、損壞或不適用，記錄並向客戶報告
+- 維護記錄
+
+#### 7.5.11 產品保存
+- 在內部加工和交付期間保存產品
+- 包含識別、搬運、包裝、儲存和保護
+- 適用於產品的組成零件
+- 記錄特殊搬運要求（如適用）
+
+### 7.6 監測量測設備管制
+- 確定要進行的監測和量測
+- 確定所需的監測量測設備
+- 建立以下文件化程序：
+  - 使用前按規定間隔校正或驗證
+  - 必要時調整或重新調整
+  - 識別以確定校正狀態
+  - 防止使校正失效的調整
+  - 防止損壞和劣化
+- 當發現不合格時評估並記錄先前結果的有效性
+- 維護校正和驗證記錄
+- 使用時確認電腦軟體滿足預期應用的能力
+- 在初次使用前進行確認並按需要重新確認
+
+## 第 8 條：量測、分析和改進
+
+### 8.1 一般
+- 規劃和實施監測、量測、分析和改進流程
+- 證明產品符合性
+- 確保 QMS 符合性
+- 維護 QMS 有效性
+- 包含確定適用方法包括統計技術
+
+### 8.2 監測和量測
+
+#### 8.2.1 回饋
+建立回饋文件化程序，包括以下早期預警系統：
+- 上市後資訊包括抱怨
+- 向法規機關報告的要求
+- 用作監測和維護產品要求的風險管理潛在輸入
+- 用作矯正和預防措施的潛在輸入
+
+#### 8.2.2 抱怨處理
+建立及時處理抱怨的文件化程序，包括：
+- 接收、記錄和評估抱怨的要求和責任
+- 處理、調查和評估抱怨的要求和責任
+- 向法規機關報告抱怨資訊的要求和責任
+- 通知客戶組織行動的要求
+- 確保非組織直接處理的抱怨資訊轉移至組織的要求
+- 維護抱怨和調查記錄
+
+#### 8.2.3 向法規機關報告
+建立文件化程序以：
+- 按適用要求向法規機關提供通報
+- 按適用要求提供諮詢通知
+- 維護報告記錄
+
+#### 8.2.4 內部稽核
+- 按計畫間隔進行內部稽核
+- 確定 QMS 是否符合 ISO 13485 和組織要求
+- 確定 QMS 是否有效實施和維護
+- 規劃稽核方案考慮流程重要性、變更和先前結果
+- 定義稽核準則、範圍、頻率和方法
+- 建立稽核文件化程序包括責任、要求和報告
+- 選擇客觀和公正的稽核員
+- 維護稽核和結果記錄
+- 識別矯正或矯正措施需求
+- 進行後續活動以驗證實施和有效性
+
+#### 8.2.5 製程監測和量測
+- 對 QMS 製程監測和量測應用適當方法
+- 證明達成計畫結果的能力
+- 當未達成計畫結果時實施矯正和矯正措施
+- 維護記錄
+
+#### 8.2.6 產品監測和量測
+- 監測和量測產品特性以驗證符合性
+- 在適當階段按計畫安排進行
+- 維護記錄顯示符合驗收準則
+- 記錄放行負責權責
+- 確保計畫安排完成前不進行產品放行和交付
+- 允許由相關權責和客戶放行（當適用時）
+
+### 8.3 不合格產品管制
+
+#### 8.3.1 一般
+- 確保不合格產品被識別並控制
+- 建立以下文件化程序：
+  - 識別、記錄、評估、隔離和處置
+  - 通知外部相關方
+  - 審查不合格產品
+- 維護不合格和後續行動記錄包括特許
+
+#### 8.3.2 交付前發現不合格產品的行動
+處理不合格產品：
+- 採取措施消除已偵測的不合格
+- 按適用法規要求授權使用、放行或接受（特許）
+- 採取措施防止原預期用途或應用
+- 當交付或使用後發現時採取適合不合格影響的行動
+
+維護特許記錄並識別做出特許決定的權責。
+
+#### 8.3.3 交付後發現不合格產品的行動
+當交付或使用後發現不合格產品時：
+- 採取適合不合格影響的行動
+- 建立包含向法規機關通報要求的文件化程序
+- 維護記錄
+
+#### 8.3.4 返工
+建立返工文件化程序，包括：
+- 評估對醫療器材潛在影響的要求
+- 實施前核准
+- 結果和行動記錄包括不合格和返工
+- 返工後重新驗證
+- 返工程序在返工開始前記錄
+
+### 8.4 資料分析
+- 從監測和量測確定、收集並分析適當資料
+- 評估可進行 QMS 有效性持續改進的地方
+- 建立以下文件化程序：
+  - 分析資料以提供客戶滿意度資訊
+  - 分析產品要求符合性
+  - 分析製程和產品特性與趨勢包括預防措施機會
+  - 分析供應商
+  - 分析其他相關資料包括回饋和風險管理輸出
+- 必要時包含統計技術使用
+- 維護分析結果記錄
+
+### 8.5 改進
+
+#### 8.5.1 一般
+- 識別並實施變更以確保和維護 QMS 有效性
+- 包含使用品質政策、目標、稽核結果、資料分析、矯正和預防措施及管理審查
+
+#### 8.5.2 矯正措施
+- 建立文件化程序以：
+  - 審查不合格包括抱怨
+  - 確定不合格原因
+  - 評估確保不合格不再發生的措施需求
+  - 規劃並記錄所需措施並實施
+  - 記錄所採取措施的結果
+  - 審查所採取矯正措施的有效性
+- 維護記錄包括調查結果和後續追蹤
+
+#### 8.5.3 預防措施
+- 建立文件化程序以：
+  - 確定潛在不合格及其原因
+  - 評估防止發生的措施需求
+  - 規劃並記錄所需措施並實施
+  - 記錄所採取措施的結果
+  - 審查所採取預防措施的有效性
+- 使用適當資訊來源包括：
+  - 影響產品品質的工作流程和操作
+  - 特許
+  - 資料分析和風險管理輸出
+  - 醫療器材績效資料
+  - 不合格記錄
+- 維護記錄包括調查結果和後續追蹤
+
+## 關鍵法規更新
+
+### FDA QMSR 協調（2026 年 2 月 2 日生效）
+- FDA 21 CFR Part 820 已與 ISO 13485:2016 協調
+- 重新命名為 QMSR（品質管理系統法規）
+- 醫療器材檔案（MDF）取代分開的 DHF、DMR 和 DHR
+- 組織應準備過渡至統一文件方法
+
+## 參考資料和資源
+
+此要求分解基於 ISO 13485:2016，該標準於 2025 年最後審查並確認。
+
+如需額外指導，請參閱：
+- ISO 13485:2016 標準文件
+- FDA 品質管理系統法規（QMSR）
+- 適用區域法規要求（EU MDR、加拿大衛生部等）

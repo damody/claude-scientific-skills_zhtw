@@ -1,111 +1,111 @@
-# Time Series Forecasting
+# 時間序列預測
 
-Aeon provides forecasting algorithms for predicting future time series values.
+Aeon 提供預測演算法用於預測未來的時間序列值。
 
-## Naive and Baseline Methods
+## 樸素和基準方法
 
-Simple forecasting strategies for comparison:
+用於比較的簡單預測策略：
 
-- `NaiveForecaster` - Multiple strategies: last value, mean, seasonal naive
-  - Parameters: `strategy` ("last", "mean", "seasonal"), `sp` (seasonal period)
-  - **Use when**: Establishing baselines or simple patterns
+- `NaiveForecaster` - 多種策略：最後值、平均值、季節樸素
+  - 參數：`strategy`（"last"、"mean"、"seasonal"）、`sp`（季節週期）
+  - **使用時機**：建立基準或簡單模式
 
-## Statistical Models
+## 統計模型
 
-Classical time series forecasting methods:
+經典時間序列預測方法：
 
 ### ARIMA
-- `ARIMA` - AutoRegressive Integrated Moving Average
-  - Parameters: `p` (AR order), `d` (differencing), `q` (MA order)
-  - **Use when**: Linear patterns, stationary or difference-stationary series
+- `ARIMA` - 自迴歸整合移動平均
+  - 參數：`p`（AR 階數）、`d`（差分）、`q`（MA 階數）
+  - **使用時機**：線性模式、平穩或差分平穩序列
 
-### Exponential Smoothing
-- `ETS` - Error-Trend-Seasonal decomposition
-  - Parameters: `error`, `trend`, `seasonal` types
-  - **Use when**: Trend and seasonal patterns present
+### 指數平滑
+- `ETS` - 誤差-趨勢-季節分解
+  - 參數：`error`、`trend`、`seasonal` 類型
+  - **使用時機**：存在趨勢和季節模式
 
-### Threshold Autoregressive
-- `TAR` - Threshold Autoregressive model for regime switching
-- `AutoTAR` - Automated threshold discovery
-  - **Use when**: Series exhibits different behaviors in different regimes
+### 門檻自迴歸
+- `TAR` - 用於體制轉換的門檻自迴歸模型
+- `AutoTAR` - 自動門檻發現
+  - **使用時機**：序列在不同體制下表現不同行為
 
-### Theta Method
-- `Theta` - Classical Theta forecasting
-  - Parameters: `theta`, `weights` for decomposition
-  - **Use when**: Simple but effective baseline needed
+### Theta 方法
+- `Theta` - 經典 Theta 預測
+  - 參數：`theta`、用於分解的 `weights`
+  - **使用時機**：需要簡單但有效的基準
 
-### Time-Varying Parameter
-- `TVP` - Time-varying parameter model with Kalman filtering
-  - **Use when**: Parameters change over time
+### 時變參數
+- `TVP` - 使用 Kalman 濾波的時變參數模型
+  - **使用時機**：參數隨時間變化
 
-## Deep Learning Forecasters
+## 深度學習預測器
 
-Neural networks for complex temporal patterns:
+用於複雜時間模式的神經網路：
 
-- `TCNForecaster` - Temporal Convolutional Network
-  - Dilated convolutions for large receptive fields
-  - **Use when**: Long sequences, need non-recurrent architecture
+- `TCNForecaster` - 時間卷積網路
+  - 膨脹卷積用於大感受野
+  - **使用時機**：長序列，需要非遞迴架構
 
-- `DeepARNetwork` - Probabilistic forecasting with RNNs
-  - Provides prediction intervals
-  - **Use when**: Need probabilistic forecasts, uncertainty quantification
+- `DeepARNetwork` - 使用 RNN 的機率預測
+  - 提供預測區間
+  - **使用時機**：需要機率預測、不確定性量化
 
-## Regression-Based Forecasting
+## 基於迴歸的預測
 
-Apply regression to lagged features:
+對延遲特徵應用迴歸：
 
-- `RegressionForecaster` - Wraps regressors for forecasting
-  - Parameters: `window_length`, `horizon`
-  - **Use when**: Want to use any regressor as forecaster
+- `RegressionForecaster` - 將迴歸器包裝用於預測
+  - 參數：`window_length`、`horizon`
+  - **使用時機**：想使用任何迴歸器作為預測器
 
-## Quick Start
+## 快速開始
 
 ```python
 from aeon.forecasting.naive import NaiveForecaster
 from aeon.forecasting.arima import ARIMA
 import numpy as np
 
-# Create time series
+# 建立時間序列
 y = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
-# Naive baseline
+# 樸素基準
 naive = NaiveForecaster(strategy="last")
 naive.fit(y)
 forecast_naive = naive.predict(fh=[1, 2, 3])
 
-# ARIMA model
+# ARIMA 模型
 arima = ARIMA(order=(1, 1, 1))
 arima.fit(y)
 forecast_arima = arima.predict(fh=[1, 2, 3])
 ```
 
-## Forecasting Horizon
+## 預測時間範圍
 
-The forecasting horizon (`fh`) specifies which future time points to predict:
+預測時間範圍（`fh`）指定要預測的未來時間點：
 
 ```python
-# Relative horizon (next 3 steps)
+# 相對時間範圍（接下來的 3 步）
 fh = [1, 2, 3]
 
-# Absolute horizon (specific time indices)
+# 絕對時間範圍（特定時間索引）
 from aeon.forecasting.base import ForecastingHorizon
 fh = ForecastingHorizon([11, 12, 13], is_relative=False)
 ```
 
-## Model Selection
+## 模型選擇
 
-- **Baseline**: NaiveForecaster with seasonal strategy
-- **Linear patterns**: ARIMA
-- **Trend + seasonality**: ETS
-- **Regime changes**: TAR, AutoTAR
-- **Complex patterns**: TCNForecaster
-- **Probabilistic**: DeepARNetwork
-- **Long sequences**: TCNForecaster
-- **Short sequences**: ARIMA, ETS
+- **基準**：NaiveForecaster 搭配季節策略
+- **線性模式**：ARIMA
+- **趨勢 + 季節性**：ETS
+- **體制變化**：TAR、AutoTAR
+- **複雜模式**：TCNForecaster
+- **機率性**：DeepARNetwork
+- **長序列**：TCNForecaster
+- **短序列**：ARIMA、ETS
 
-## Evaluation Metrics
+## 評估指標
 
-Use standard forecasting metrics:
+使用標準預測指標：
 
 ```python
 from aeon.performance_metrics.forecasting import (
@@ -114,27 +114,27 @@ from aeon.performance_metrics.forecasting import (
     mean_absolute_percentage_error
 )
 
-# Calculate error
+# 計算誤差
 mae = mean_absolute_error(y_true, y_pred)
 mse = mean_squared_error(y_true, y_pred)
 mape = mean_absolute_percentage_error(y_true, y_pred)
 ```
 
-## Exogenous Variables
+## 外生變數
 
-Many forecasters support exogenous features:
+許多預測器支援外生特徵：
 
 ```python
-# Train with exogenous variables
+# 使用外生變數訓練
 forecaster.fit(y, X=X_train)
 
-# Predict requires future exogenous values
+# 預測需要未來的外生值
 y_pred = forecaster.predict(fh=[1, 2, 3], X=X_test)
 ```
 
-## Base Classes
+## 基類
 
-- `BaseForecaster` - Abstract base for all forecasters
-- `BaseDeepForecaster` - Base for deep learning forecasters
+- `BaseForecaster` - 所有預測器的抽象基類
+- `BaseDeepForecaster` - 深度學習預測器的基類
 
-Extend these to implement custom forecasting algorithms.
+擴展這些以實作自訂預測演算法。

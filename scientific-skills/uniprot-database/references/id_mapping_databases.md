@@ -1,8 +1,8 @@
-# UniProt ID Mapping Databases
+# UniProt ID 映射資料庫
 
-Complete list of databases supported by the UniProt ID Mapping service. Use these database names when calling the ID mapping API.
+UniProt ID 映射服務支援的完整資料庫列表。呼叫 ID 映射 API 時使用這些資料庫名稱。
 
-## Retrieving Database List Programmatically
+## 程式化檢索資料庫列表
 
 ```python
 import requests
@@ -10,99 +10,99 @@ response = requests.get("https://rest.uniprot.org/configure/idmapping/fields")
 databases = response.json()
 ```
 
-## UniProt Databases
+## UniProt 資料庫
 
 ### UniProtKB
-- `UniProtKB_AC-ID` - UniProt accession and ID
-- `UniProtKB` - UniProt Knowledgebase
-- `UniProtKB-Swiss-Prot` - Reviewed (Swiss-Prot)
-- `UniProtKB-TrEMBL` - Unreviewed (TrEMBL)
-- `UniParc` - UniProt Archive
-- `UniRef50` - UniRef 50% identity clusters
-- `UniRef90` - UniRef 90% identity clusters
-- `UniRef100` - UniRef 100% identity clusters
+- `UniProtKB_AC-ID` - UniProt 登錄號和 ID
+- `UniProtKB` - UniProt 知識庫
+- `UniProtKB-Swiss-Prot` - 已審核（Swiss-Prot）
+- `UniProtKB-TrEMBL` - 未審核（TrEMBL）
+- `UniParc` - UniProt 檔案庫
+- `UniRef50` - UniRef 50% 同一性叢集
+- `UniRef90` - UniRef 90% 同一性叢集
+- `UniRef100` - UniRef 100% 同一性叢集
 
-## Sequence Databases
+## 序列資料庫
 
-### Nucleotide Sequence
+### 核苷酸序列
 - `EMBL` - EMBL/GenBank/DDBJ
-- `EMBL-CDS` - EMBL coding sequences
-- `RefSeq_Nucleotide` - RefSeq nucleotide sequences
-- `CCDS` - Consensus CDS
+- `EMBL-CDS` - EMBL 編碼序列
+- `RefSeq_Nucleotide` - RefSeq 核苷酸序列
+- `CCDS` - 共識 CDS
 
-### Protein Sequence
-- `RefSeq_Protein` - RefSeq protein sequences
-- `PIR` - Protein Information Resource
+### 蛋白質序列
+- `RefSeq_Protein` - RefSeq 蛋白質序列
+- `PIR` - 蛋白質資訊資源
 
-## Gene Databases
+## 基因資料庫
 
 - `GeneID` - Entrez Gene
-- `Gene_Name` - Gene name
-- `Gene_Synonym` - Gene synonym
-- `Gene_OrderedLocusName` - Ordered locus name
-- `Gene_ORFName` - ORF name
+- `Gene_Name` - 基因名稱
+- `Gene_Synonym` - 基因同義詞
+- `Gene_OrderedLocusName` - 有序位點名稱
+- `Gene_ORFName` - ORF 名稱
 
-## Genome Databases
+## 基因組資料庫
 
-### General
+### 一般
 - `Ensembl` - Ensembl
 - `EnsemblGenomes` - Ensembl Genomes
-- `EnsemblGenomes_PRO` - Ensembl Genomes protein
-- `EnsemblGenomes_TRS` - Ensembl Genomes transcript
-- `Ensembl_PRO` - Ensembl protein
-- `Ensembl_TRS` - Ensembl transcript
+- `EnsemblGenomes_PRO` - Ensembl Genomes 蛋白質
+- `EnsemblGenomes_TRS` - Ensembl Genomes 轉錄本
+- `Ensembl_PRO` - Ensembl 蛋白質
+- `Ensembl_TRS` - Ensembl 轉錄本
 
-### Organism-Specific
+### 物種特定
 - `KEGG` - KEGG Genes
 - `PATRIC` - PATRIC
 - `UCSC` - UCSC Genome Browser
 - `VectorBase` - VectorBase
 - `WBParaSite` - WormBase ParaSite
 
-## Structure Databases
+## 結構資料庫
 
-- `PDB` - Protein Data Bank
-- `AlphaFoldDB` - AlphaFold Database
-- `BMRB` - Biological Magnetic Resonance Data Bank
-- `PDBsum` - PDB summary
-- `SASBDB` - Small Angle Scattering Biological Data Bank
-- `SMR` - SWISS-MODEL Repository
+- `PDB` - 蛋白質資料庫（Protein Data Bank）
+- `AlphaFoldDB` - AlphaFold 資料庫
+- `BMRB` - 生物磁共振資料庫
+- `PDBsum` - PDB 摘要
+- `SASBDB` - 小角散射生物資料庫
+- `SMR` - SWISS-MODEL 儲存庫
 
-## Protein Family and Domain Databases
+## 蛋白質家族和結構域資料庫
 
 - `InterPro` - InterPro
-- `Pfam` - Pfam protein families
+- `Pfam` - Pfam 蛋白質家族
 - `PROSITE` - PROSITE
-- `SMART` - SMART domains
-- `CDD` - Conserved Domain Database
+- `SMART` - SMART 結構域
+- `CDD` - 保守結構域資料庫
 - `HAMAP` - HAMAP
 - `PANTHER` - PANTHER
 - `PRINTS` - PRINTS
 - `ProDom` - ProDom
-- `SFLD` - Structure-Function Linkage Database
+- `SFLD` - 結構-功能連結資料庫
 - `SUPFAM` - SUPERFAMILY
 - `TIGRFAMs` - TIGRFAMs
 
-## Organism-Specific Databases
+## 物種特定資料庫
 
-### Model Organisms
-- `MGI` - Mouse Genome Informatics
-- `RGD` - Rat Genome Database
-- `FlyBase` - FlyBase (Drosophila)
-- `WormBase` - WormBase (C. elegans)
-- `Xenbase` - Xenbase (Xenopus)
-- `ZFIN` - Zebrafish Information Network
-- `dictyBase` - dictyBase (Dictyostelium)
-- `EcoGene` - EcoGene (E. coli)
-- `SGD` - Saccharomyces Genome Database (yeast)
-- `PomBase` - PomBase (S. pombe)
-- `TAIR` - The Arabidopsis Information Resource
+### 模式生物
+- `MGI` - 小鼠基因組資訊學
+- `RGD` - 大鼠基因組資料庫
+- `FlyBase` - FlyBase（果蠅）
+- `WormBase` - WormBase（線蟲）
+- `Xenbase` - Xenbase（非洲爪蟾）
+- `ZFIN` - 斑馬魚資訊網路
+- `dictyBase` - dictyBase（盤基網柄菌）
+- `EcoGene` - EcoGene（大腸桿菌）
+- `SGD` - 酵母菌基因組資料庫
+- `PomBase` - PomBase（粟酒裂殖酵母）
+- `TAIR` - 阿拉伯芥資訊資源
 
-### Human-Specific
-- `HGNC` - HUGO Gene Nomenclature Committee
-- `CCDS` - Consensus Coding Sequence Database
+### 人類特定
+- `HGNC` - HUGO 基因命名委員會
+- `CCDS` - 共識編碼序列資料庫
 
-## Pathway Databases
+## 路徑資料庫
 
 - `Reactome` - Reactome
 - `BioCyc` - BioCyc
@@ -110,41 +110,41 @@ databases = response.json()
 - `SIGNOR` - SIGNOR
 - `SignaLink` - SignaLink
 
-## Enzyme and Metabolism
+## 酵素與代謝
 
-- `EC` - Enzyme Commission number
-- `BRENDA` - BRENDA enzyme database
-- `SABIO-RK` - SABIO-RK (biochemical reactions)
+- `EC` - 酵素委員會編號
+- `BRENDA` - BRENDA 酵素資料庫
+- `SABIO-RK` - SABIO-RK（生化反應）
 - `MetaCyc` - MetaCyc
 
-## Disease and Phenotype Databases
+## 疾病與表型資料庫
 
-- `OMIM` - Online Mendelian Inheritance in Man
-- `MIM` - MIM (same as OMIM)
-- `OrphaNet` - Orphanet (rare diseases)
+- `OMIM` - 線上人類孟德爾遺傳
+- `MIM` - MIM（與 OMIM 相同）
+- `OrphaNet` - Orphanet（罕見疾病）
 - `DisGeNET` - DisGeNET
 - `MalaCards` - MalaCards
-- `CTD` - Comparative Toxicogenomics Database
+- `CTD` - 比較毒理基因組學資料庫
 - `OpenTargets` - Open Targets
 
-## Drug and Chemical Databases
+## 藥物與化學資料庫
 
 - `ChEMBL` - ChEMBL
 - `DrugBank` - DrugBank
 - `DrugCentral` - DrugCentral
-- `GuidetoPHARMACOLOGY` - Guide to Pharmacology
+- `GuidetoPHARMACOLOGY` - 藥理學指南
 - `SwissLipids` - SwissLipids
 
-## Gene Expression Databases
+## 基因表達資料庫
 
-- `Bgee` - Bgee gene expression
+- `Bgee` - Bgee 基因表達
 - `ExpressionAtlas` - Expression Atlas
 - `Genevisible` - Genevisible
 - `CleanEx` - CleanEx
 
-## Proteomics Databases
+## 蛋白質組學資料庫
 
-- `PRIDE` - PRIDE proteomics
+- `PRIDE` - PRIDE 蛋白質組學
 - `PeptideAtlas` - PeptideAtlas
 - `ProteomicsDB` - ProteomicsDB
 - `CPTAC` - CPTAC
@@ -154,113 +154,113 @@ databases = response.json()
 - `PaxDb` - PaxDb
 - `TopDownProteomics` - Top Down Proteomics
 
-## Protein-Protein Interaction
+## 蛋白質-蛋白質交互作用
 
 - `STRING` - STRING
 - `BioGRID` - BioGRID
 - `IntAct` - IntAct
 - `MINT` - MINT
-- `DIP` - Database of Interacting Proteins
+- `DIP` - 交互蛋白質資料庫
 - `ComplexPortal` - Complex Portal
 
-## Ontologies
+## 本體論
 
-- `GO` - Gene Ontology
+- `GO` - 基因本體論
 - `GeneTree` - Ensembl GeneTree
 - `HOGENOM` - HOGENOM
 - `HOVERGEN` - HOVERGEN
 - `KO` - KEGG Orthology
-- `OMA` - OMA orthology
+- `OMA` - OMA 直系同源
 - `OrthoDB` - OrthoDB
 - `TreeFam` - TreeFam
 
-## Other Specialized Databases
+## 其他專業資料庫
 
-### Glycosylation
+### 醣基化
 - `GlyConnect` - GlyConnect
 - `GlyGen` - GlyGen
 
-### Protein Modifications
+### 蛋白質修飾
 - `PhosphoSitePlus` - PhosphoSitePlus
 - `iPTMnet` - iPTMnet
 
-### Antibodies
+### 抗體
 - `Antibodypedia` - Antibodypedia
 - `DNASU` - DNASU
 
-### Protein Localization
+### 蛋白質定位
 - `COMPARTMENTS` - COMPARTMENTS
-- `NeXtProt` - NeXtProt (human proteins)
+- `NeXtProt` - NeXtProt（人類蛋白質）
 
-### Evolution and Phylogeny
+### 演化與系統發生
 - `eggNOG` - eggNOG
 - `GeneTree` - Ensembl GeneTree
 - `InParanoid` - InParanoid
 
-### Technical Resources
-- `PRO` - Protein Ontology
+### 技術資源
+- `PRO` - 蛋白質本體論
 - `GenomeRNAi` - GenomeRNAi
-- `PubMed` - PubMed literature references
+- `PubMed` - PubMed 文獻參考
 
-## Common Mapping Scenarios
+## 常見映射場景
 
-### Example 1: UniProt to PDB
+### 範例 1：UniProt 到 PDB
 ```python
 from_db = "UniProtKB_AC-ID"
 to_db = "PDB"
 ids = ["P01308", "P04637"]
 ```
 
-### Example 2: Gene Name to UniProt
+### 範例 2：基因名稱到 UniProt
 ```python
 from_db = "Gene_Name"
 to_db = "UniProtKB"
 ids = ["BRCA1", "TP53", "INSR"]
 ```
 
-### Example 3: UniProt to Ensembl
+### 範例 3：UniProt 到 Ensembl
 ```python
 from_db = "UniProtKB_AC-ID"
 to_db = "Ensembl"
 ids = ["P12345"]
 ```
 
-### Example 4: RefSeq to UniProt
+### 範例 4：RefSeq 到 UniProt
 ```python
 from_db = "RefSeq_Protein"
 to_db = "UniProtKB"
 ids = ["NP_000207.1"]
 ```
 
-### Example 5: UniProt to GO Terms
+### 範例 5：UniProt 到 GO 術語
 ```python
 from_db = "UniProtKB_AC-ID"
 to_db = "GO"
 ids = ["P01308"]
 ```
 
-## Usage Notes
+## 使用注意事項
 
-1. **Database names are case-sensitive**: Use exact names as listed
+1. **資料庫名稱區分大小寫**：使用列出的確切名稱
 
-2. **Many-to-many mappings**: One ID may map to multiple target IDs
+2. **多對多映射**：一個 ID 可能映射到多個目標 ID
 
-3. **Failed mappings**: Some IDs may not have mappings; check the `failedIds` field in results
+3. **失敗的映射**：某些 ID 可能沒有映射；檢查結果中的 `failedIds` 欄位
 
-4. **Batch size limit**: Maximum 100,000 IDs per job
+4. **批次大小限制**：每個作業最多 100,000 個 ID
 
-5. **Result expiration**: Results are stored for 7 days
+5. **結果過期**：結果儲存 7 天
 
-6. **Bidirectional mapping**: Most databases support mapping in both directions
+6. **雙向映射**：大多數資料庫支援雙向映射
 
-## API Endpoints
+## API 端點
 
-### Get available databases
+### 取得可用資料庫
 ```
 GET https://rest.uniprot.org/configure/idmapping/fields
 ```
 
-### Submit mapping job
+### 提交映射作業
 ```
 POST https://rest.uniprot.org/idmapping/run
 Content-Type: application/x-www-form-urlencoded
@@ -268,18 +268,18 @@ Content-Type: application/x-www-form-urlencoded
 from={from_db}&to={to_db}&ids={comma_separated_ids}
 ```
 
-### Check job status
+### 檢查作業狀態
 ```
 GET https://rest.uniprot.org/idmapping/status/{jobId}
 ```
 
-### Get results
+### 取得結果
 ```
 GET https://rest.uniprot.org/idmapping/results/{jobId}
 ```
 
-## Resources
+## 資源
 
-- ID Mapping tool: https://www.uniprot.org/id-mapping
-- API documentation: https://www.uniprot.org/help/id_mapping
-- Programmatic access: https://www.uniprot.org/help/api_idmapping
+- ID 映射工具：https://www.uniprot.org/id-mapping
+- API 文件：https://www.uniprot.org/help/id_mapping
+- 程式化存取：https://www.uniprot.org/help/api_idmapping

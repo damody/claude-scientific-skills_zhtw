@@ -1,154 +1,154 @@
-# Overlap Detection and IGD
+# 重疊偵測與 IGD
 
-The overlaprs module provides efficient overlap detection between genomic intervals using the Integrated Genome Database (IGD) data structure.
+overlaprs 模組使用整合基因體資料庫（Integrated Genome Database，IGD）資料結構提供基因體區間之間的高效重疊偵測。
 
-## IGD Index
+## IGD 索引
 
-IGD (Integrated Genome Database) is a specialized data structure for fast genomic interval queries and overlap detection.
+IGD（整合基因體資料庫）是用於快速基因體區間查詢和重疊偵測的專門資料結構。
 
-### Building an IGD Index
+### 建立 IGD 索引
 
-Create indexes from genomic region files:
+從基因體區域檔案建立索引：
 
 ```python
 import gtars
 
-# Build IGD index from BED file
+# 從 BED 檔案建立 IGD 索引
 igd = gtars.igd.build_index("regions.bed")
 
-# Save index for reuse
+# 儲存索引以供重複使用
 igd.save("regions.igd")
 
-# Load existing index
+# 載入現有索引
 igd = gtars.igd.load_index("regions.igd")
 ```
 
-### Querying Overlaps
+### 查詢重疊
 
-Find overlapping regions efficiently:
+高效尋找重疊區域：
 
 ```python
-# Query a single region
+# 查詢單一區域
 overlaps = igd.query("chr1", 1000, 2000)
 
-# Query multiple regions
+# 查詢多個區域
 results = []
 for chrom, start, end in query_regions:
     overlaps = igd.query(chrom, start, end)
     results.append(overlaps)
 
-# Get overlap counts only
+# 僅取得重疊計數
 count = igd.count_overlaps("chr1", 1000, 2000)
 ```
 
-## CLI Usage
+## CLI 使用
 
-The overlaprs command-line tool provides overlap detection:
+overlaprs 命令列工具提供重疊偵測：
 
 ```bash
-# Find overlaps between two BED files
+# 尋找兩個 BED 檔案之間的重疊
 gtars overlaprs query --index regions.bed --query query_regions.bed
 
-# Count overlaps
+# 計數重疊
 gtars overlaprs count --index regions.bed --query query_regions.bed
 
-# Output overlapping regions
+# 輸出重疊區域
 gtars overlaprs overlap --index regions.bed --query query_regions.bed --output overlaps.bed
 ```
 
-### IGD CLI Commands
+### IGD CLI 命令
 
-Build and query IGD indexes:
+建立和查詢 IGD 索引：
 
 ```bash
-# Build IGD index
+# 建立 IGD 索引
 gtars igd build --input regions.bed --output regions.igd
 
-# Query IGD index
+# 查詢 IGD 索引
 gtars igd query --index regions.igd --region "chr1:1000-2000"
 
-# Batch query from file
+# 從檔案批次查詢
 gtars igd query --index regions.igd --query-file queries.bed --output results.bed
 ```
 
 ## Python API
 
-### Overlap Detection
+### 重疊偵測
 
-Compute overlaps between region sets:
+計算區域集之間的重疊：
 
 ```python
 import gtars
 
-# Load two region sets
+# 載入兩個區域集
 set_a = gtars.RegionSet.from_bed("regions_a.bed")
 set_b = gtars.RegionSet.from_bed("regions_b.bed")
 
-# Find overlaps
+# 尋找重疊
 overlaps = set_a.overlap(set_b)
 
-# Get regions from A that overlap with B
+# 取得 A 中與 B 重疊的區域
 overlapping_a = set_a.filter_overlapping(set_b)
 
-# Get regions from A that don't overlap with B
+# 取得 A 中不與 B 重疊的區域
 non_overlapping_a = set_a.filter_non_overlapping(set_b)
 ```
 
-### Overlap Statistics
+### 重疊統計
 
-Calculate overlap metrics:
+計算重疊指標：
 
 ```python
-# Count overlaps
+# 計數重疊
 overlap_count = set_a.count_overlaps(set_b)
 
-# Calculate overlap fraction
+# 計算重疊比例
 overlap_fraction = set_a.overlap_fraction(set_b)
 
-# Get overlap coverage
+# 取得重疊涵蓋度
 coverage = set_a.overlap_coverage(set_b)
 ```
 
-## Performance Characteristics
+## 效能特性
 
-IGD provides efficient querying:
-- **Index construction**: O(n log n) where n is number of regions
-- **Query time**: O(k + log n) where k is number of overlaps
-- **Memory efficient**: Compact representation of genomic intervals
+IGD 提供高效查詢：
+- **索引建構**：O(n log n)，其中 n 是區域數量
+- **查詢時間**：O(k + log n)，其中 k 是重疊數量
+- **記憶體高效**：基因體區間的緊湊表示
 
-## Use Cases
+## 使用案例
 
-### Regulatory Element Analysis
+### 調控元件分析
 
-Identify overlap between genomic features:
+識別基因體特徵之間的重疊：
 
 ```python
-# Find transcription factor binding sites overlapping promoters
+# 尋找與啟動子重疊的轉錄因子結合位點
 tfbs = gtars.RegionSet.from_bed("chip_seq_peaks.bed")
 promoters = gtars.RegionSet.from_bed("promoters.bed")
 
 overlapping_tfbs = tfbs.filter_overlapping(promoters)
-print(f"Found {len(overlapping_tfbs)} TFBS in promoters")
+print(f"在啟動子中找到 {len(overlapping_tfbs)} 個 TFBS")
 ```
 
-### Variant Annotation
+### 變異註釋
 
-Annotate variants with overlapping features:
+使用重疊特徵註釋變異：
 
 ```python
-# Check which variants overlap with coding regions
+# 檢查哪些變異與編碼區域重疊
 variants = gtars.RegionSet.from_bed("variants.bed")
 cds = gtars.RegionSet.from_bed("coding_sequences.bed")
 
 coding_variants = variants.filter_overlapping(cds)
 ```
 
-### Chromatin State Analysis
+### 染色質狀態分析
 
-Compare chromatin states across samples:
+比較樣本之間的染色質狀態：
 
 ```python
-# Find regions with consistent chromatin states
+# 尋找具有一致染色質狀態的區域
 sample1 = gtars.RegionSet.from_bed("sample1_peaks.bed")
 sample2 = gtars.RegionSet.from_bed("sample2_peaks.bed")
 

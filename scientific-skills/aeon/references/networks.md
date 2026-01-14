@@ -1,165 +1,165 @@
-# Deep Learning Networks
+# 深度學習網路
 
-Aeon provides neural network architectures specifically designed for time series tasks. These networks serve as building blocks for classification, regression, clustering, and forecasting.
+Aeon 提供專門為時間序列任務設計的神經網路架構。這些網路作為分類、迴歸、聚類和預測的構建模組。
 
-## Core Network Architectures
+## 核心網路架構
 
-### Convolutional Networks
+### 卷積網路
 
-**FCNNetwork** - Fully Convolutional Network
-- Three convolutional blocks with batch normalization
-- Global average pooling for dimensionality reduction
-- **Use when**: Need simple yet effective CNN baseline
+**FCNNetwork** - 全卷積網路
+- 三個帶有批次標準化的卷積區塊
+- 全域平均池化用於降維
+- **使用時機**：需要簡單但有效的 CNN 基準
 
-**ResNetNetwork** - Residual Network
-- Residual blocks with skip connections
-- Prevents vanishing gradients in deep networks
-- **Use when**: Deep networks needed, training stability important
+**ResNetNetwork** - 殘差網路
+- 具有跳躍連接的殘差區塊
+- 防止深層網路中的梯度消失
+- **使用時機**：需要深層網路，訓練穩定性重要
 
-**InceptionNetwork** - Inception Modules
-- Multi-scale feature extraction with parallel convolutions
-- Different kernel sizes capture patterns at various scales
-- **Use when**: Patterns exist at multiple temporal scales
+**InceptionNetwork** - Inception 模組
+- 使用平行卷積的多尺度特徵擷取
+- 不同核心大小捕捉各種尺度的模式
+- **使用時機**：模式存在於多個時間尺度
 
-**TimeCNNNetwork** - Standard CNN
-- Basic convolutional architecture
-- **Use when**: Simple CNN sufficient, interpretability valued
+**TimeCNNNetwork** - 標準 CNN
+- 基本卷積架構
+- **使用時機**：簡單 CNN 足夠，重視可解釋性
 
-**DisjointCNNNetwork** - Separate Pathways
-- Disjoint convolutional pathways
-- **Use when**: Different feature extraction strategies needed
+**DisjointCNNNetwork** - 分離路徑
+- 分離的卷積路徑
+- **使用時機**：需要不同的特徵擷取策略
 
-**DCNNNetwork** - Dilated CNN
-- Dilated convolutions for large receptive fields
-- **Use when**: Long-range dependencies without many layers
+**DCNNNetwork** - 膨脹 CNN
+- 膨脹卷積用於大感受野
+- **使用時機**：無需多層即可處理長程依賴
 
-### Recurrent Networks
+### 遞迴網路
 
 **RecurrentNetwork** - RNN/LSTM/GRU
-- Configurable cell type (RNN, LSTM, GRU)
-- Sequential modeling of temporal dependencies
-- **Use when**: Sequential dependencies critical, variable-length series
+- 可配置的細胞類型（RNN、LSTM、GRU）
+- 時間依賴的序列建模
+- **使用時機**：序列依賴性關鍵，可變長度序列
 
-### Temporal Convolutional Network
+### 時間卷積網路
 
-**TCNNetwork** - Temporal Convolutional Network
-- Dilated causal convolutions
-- Large receptive field without recurrence
-- **Use when**: Long sequences, need parallelizable architecture
+**TCNNetwork** - 時間卷積網路
+- 膨脹因果卷積
+- 無需遞迴的大感受野
+- **使用時機**：長序列，需要可平行化架構
 
-### Multi-Layer Perceptron
+### 多層感知器
 
-**MLPNetwork** - Basic Feedforward
-- Simple fully-connected layers
-- Flattens time series before processing
-- **Use when**: Baseline needed, computational limits, or simple patterns
+**MLPNetwork** - 基本前饋網路
+- 簡單的全連接層
+- 處理前展平時間序列
+- **使用時機**：需要基準，計算限制，或簡單模式
 
-## Encoder-Based Architectures
+## 基於編碼器的架構
 
-Networks designed for representation learning and clustering.
+設計用於表示學習和聚類的網路。
 
-### Autoencoder Variants
+### 自動編碼器變體
 
-**EncoderNetwork** - Generic Encoder
-- Flexible encoder structure
-- **Use when**: Custom encoding needed
+**EncoderNetwork** - 通用編碼器
+- 靈活的編碼器結構
+- **使用時機**：需要自訂編碼
 
-**AEFCNNetwork** - FCN-based Autoencoder
-- Fully convolutional encoder-decoder
-- **Use when**: Need convolutional representation learning
+**AEFCNNetwork** - 基於 FCN 的自動編碼器
+- 全卷積編碼器-解碼器
+- **使用時機**：需要卷積表示學習
 
-**AEResNetNetwork** - ResNet Autoencoder
-- Residual blocks in encoder-decoder
-- **Use when**: Deep autoencoding with skip connections
+**AEResNetNetwork** - ResNet 自動編碼器
+- 編碼器-解碼器中的殘差區塊
+- **使用時機**：帶有跳躍連接的深度自動編碼
 
-**AEDCNNNetwork** - Dilated CNN Autoencoder
-- Dilated convolutions for compression
-- **Use when**: Need large receptive field in autoencoder
+**AEDCNNNetwork** - 膨脹 CNN 自動編碼器
+- 膨脹卷積用於壓縮
+- **使用時機**：自動編碼器中需要大感受野
 
-**AEDRNNNetwork** - Dilated RNN Autoencoder
-- Dilated recurrent connections
-- **Use when**: Sequential patterns with long-range dependencies
+**AEDRNNNetwork** - 膨脹 RNN 自動編碼器
+- 膨脹遞迴連接
+- **使用時機**：具有長程依賴的序列模式
 
-**AEBiGRUNetwork** - Bidirectional GRU
-- Bidirectional recurrent encoding
-- **Use when**: Context from both directions helpful
+**AEBiGRUNetwork** - 雙向 GRU
+- 雙向遞迴編碼
+- **使用時機**：兩個方向的上下文都有幫助
 
-**AEAttentionBiGRUNetwork** - Attention + BiGRU
-- Attention mechanism on BiGRU outputs
-- **Use when**: Need to focus on important time steps
+**AEAttentionBiGRUNetwork** - 注意力 + BiGRU
+- BiGRU 輸出上的注意力機制
+- **使用時機**：需要關注重要的時間步
 
-## Specialized Architectures
+## 專門架構
 
-**LITENetwork** - Lightweight Inception Time Ensemble
-- Efficient inception-based architecture
-- LITEMV variant for multivariate series
-- **Use when**: Need efficiency with strong performance
+**LITENetwork** - 輕量 Inception Time 集成
+- 高效的基於 inception 的架構
+- LITEMV 變體用於多變量序列
+- **使用時機**：需要效率與強效能
 
-**DeepARNetwork** - Probabilistic Forecasting
-- Autoregressive RNN for forecasting
-- Produces probabilistic predictions
-- **Use when**: Need forecast uncertainty quantification
+**DeepARNetwork** - 機率預測
+- 用於預測的自迴歸 RNN
+- 產生機率預測
+- **使用時機**：需要預測不確定性量化
 
-## Usage with Estimators
+## 搭配估計器使用
 
-Networks are typically used within estimators, not directly:
+網路通常在估計器內使用，而非直接使用：
 
 ```python
 from aeon.classification.deep_learning import FCNClassifier
 from aeon.regression.deep_learning import ResNetRegressor
 from aeon.clustering.deep_learning import AEFCNClusterer
 
-# Classification with FCN
+# 使用 FCN 分類
 clf = FCNClassifier(n_epochs=100, batch_size=16)
 clf.fit(X_train, y_train)
 
-# Regression with ResNet
+# 使用 ResNet 迴歸
 reg = ResNetRegressor(n_epochs=100)
 reg.fit(X_train, y_train)
 
-# Clustering with autoencoder
+# 使用自動編碼器聚類
 clusterer = AEFCNClusterer(n_clusters=3, n_epochs=100)
 labels = clusterer.fit_predict(X_train)
 ```
 
-## Custom Network Configuration
+## 自訂網路配置
 
-Many networks accept configuration parameters:
+許多網路接受配置參數：
 
 ```python
-# Configure FCN layers
+# 配置 FCN 層
 clf = FCNClassifier(
     n_epochs=200,
     batch_size=32,
-    kernel_size=[7, 5, 3],  # Kernel sizes for each layer
-    n_filters=[128, 256, 128],  # Filters per layer
+    kernel_size=[7, 5, 3],  # 每層的核心大小
+    n_filters=[128, 256, 128],  # 每層的濾波器數
     learning_rate=0.001
 )
 ```
 
-## Base Classes
+## 基類
 
-- `BaseDeepLearningNetwork` - Abstract base for all networks
-- `BaseDeepRegressor` - Base for deep regression
-- `BaseDeepClassifier` - Base for deep classification
-- `BaseDeepForecaster` - Base for deep forecasting
+- `BaseDeepLearningNetwork` - 所有網路的抽象基類
+- `BaseDeepRegressor` - 深度迴歸的基類
+- `BaseDeepClassifier` - 深度分類的基類
+- `BaseDeepForecaster` - 深度預測的基類
 
-Extend these to implement custom architectures.
+擴展這些以實作自訂架構。
 
-## Training Considerations
+## 訓練考量
 
-### Hyperparameters
+### 超參數
 
-Key hyperparameters to tune:
+需要調整的關鍵超參數：
 
-- `n_epochs` - Training iterations (50-200 typical)
-- `batch_size` - Samples per batch (16-64 typical)
-- `learning_rate` - Step size (0.0001-0.01)
-- Network-specific: layers, filters, kernel sizes
+- `n_epochs` - 訓練迭代次數（典型為 50-200）
+- `batch_size` - 每批次樣本數（典型為 16-64）
+- `learning_rate` - 步長大小（0.0001-0.01）
+- 網路特定：層數、濾波器數、核心大小
 
-### Callbacks
+### 回呼
 
-Many networks support callbacks for training monitoring:
+許多網路支援回呼用於訓練監控：
 
 ```python
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
@@ -173,48 +173,48 @@ clf = FCNClassifier(
 )
 ```
 
-### GPU Acceleration
+### GPU 加速
 
-Deep learning networks benefit from GPU:
+深度學習網路受益於 GPU：
 
 ```python
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # Use first GPU
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # 使用第一個 GPU
 
-# Networks automatically use GPU if available
+# 如果可用，網路自動使用 GPU
 clf = InceptionTimeClassifier(n_epochs=100)
 clf.fit(X_train, y_train)
 ```
 
-## Architecture Selection
+## 架構選擇
 
-### By Task:
+### 按任務：
 
-**Classification**: InceptionNetwork, ResNetNetwork, FCNNetwork
-**Regression**: InceptionNetwork, ResNetNetwork, TCNNetwork
-**Forecasting**: TCNNetwork, DeepARNetwork, RecurrentNetwork
-**Clustering**: AEFCNNetwork, AEResNetNetwork, AEAttentionBiGRUNetwork
+**分類**：InceptionNetwork、ResNetNetwork、FCNNetwork
+**迴歸**：InceptionNetwork、ResNetNetwork、TCNNetwork
+**預測**：TCNNetwork、DeepARNetwork、RecurrentNetwork
+**聚類**：AEFCNNetwork、AEResNetNetwork、AEAttentionBiGRUNetwork
 
-### By Data Characteristics:
+### 按資料特性：
 
-**Long sequences**: TCNNetwork, DCNNNetwork (dilated convolutions)
-**Short sequences**: MLPNetwork, FCNNetwork
-**Multivariate**: InceptionNetwork, FCNNetwork, LITENetwork
-**Variable length**: RecurrentNetwork with masking
-**Multi-scale patterns**: InceptionNetwork
+**長序列**：TCNNetwork、DCNNNetwork（膨脹卷積）
+**短序列**：MLPNetwork、FCNNetwork
+**多變量**：InceptionNetwork、FCNNetwork、LITENetwork
+**可變長度**：帶遮罩的 RecurrentNetwork
+**多尺度模式**：InceptionNetwork
 
-### By Computational Resources:
+### 按計算資源：
 
-**Limited compute**: MLPNetwork, LITENetwork
-**Moderate compute**: FCNNetwork, TimeCNNNetwork
-**High compute available**: InceptionNetwork, ResNetNetwork
-**GPU available**: Any deep network (major speedup)
+**有限計算**：MLPNetwork、LITENetwork
+**中等計算**：FCNNetwork、TimeCNNNetwork
+**高計算可用**：InceptionNetwork、ResNetNetwork
+**GPU 可用**：任何深度網路（顯著加速）
 
-## Best Practices
+## 最佳實務
 
-### 1. Data Preparation
+### 1. 資料準備
 
-Normalize input data:
+標準化輸入資料：
 
 ```python
 from aeon.transformations.collection import Normalizer
@@ -224,9 +224,9 @@ X_train_norm = normalizer.fit_transform(X_train)
 X_test_norm = normalizer.transform(X_test)
 ```
 
-### 2. Training/Validation Split
+### 2. 訓練/驗證分割
 
-Use validation set for early stopping:
+使用驗證集進行早停：
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -239,17 +239,17 @@ clf = FCNClassifier(n_epochs=200)
 clf.fit(X_train_fit, y_train_fit, validation_data=(X_val, y_val))
 ```
 
-### 3. Start Simple
+### 3. 從簡單開始
 
-Begin with simpler architectures before complex ones:
+在複雜架構之前先嘗試較簡單的：
 
-1. Try MLPNetwork or FCNNetwork first
-2. If insufficient, try ResNetNetwork or InceptionNetwork
-3. Consider ensembles if single models insufficient
+1. 首先嘗試 MLPNetwork 或 FCNNetwork
+2. 如果不足，嘗試 ResNetNetwork 或 InceptionNetwork
+3. 如果單一模型不足，考慮集成
 
-### 4. Hyperparameter Tuning
+### 4. 超參數調整
 
-Use grid search or random search:
+使用網格搜尋或隨機搜尋：
 
 ```python
 from sklearn.model_selection import GridSearchCV
@@ -265,17 +265,17 @@ grid = GridSearchCV(clf, param_grid, cv=3)
 grid.fit(X_train, y_train)
 ```
 
-### 5. Regularization
+### 5. 正則化
 
-Prevent overfitting:
-- Use dropout (if network supports)
-- Early stopping
-- Data augmentation (if available)
-- Reduce model complexity
+防止過擬合：
+- 使用 dropout（如果網路支援）
+- 早停
+- 資料增強（如果可用）
+- 減少模型複雜度
 
-### 6. Reproducibility
+### 6. 可重現性
 
-Set random seeds:
+設定隨機種子：
 
 ```python
 import numpy as np

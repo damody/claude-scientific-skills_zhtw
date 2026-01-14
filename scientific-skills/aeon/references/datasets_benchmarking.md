@@ -1,129 +1,129 @@
-# Datasets and Benchmarking
+# 資料集與基準測試
 
-Aeon provides comprehensive tools for loading datasets and benchmarking time series algorithms.
+Aeon 提供全面的工具用於載入資料集和對時間序列演算法進行基準測試。
 
-## Dataset Loading
+## 資料集載入
 
-### Task-Specific Loaders
+### 任務特定載入器
 
-**Classification Datasets**:
+**分類資料集**：
 ```python
 from aeon.datasets import load_classification
 
-# Load train/test split
+# 載入訓練/測試分割
 X_train, y_train = load_classification("GunPoint", split="train")
 X_test, y_test = load_classification("GunPoint", split="test")
 
-# Load entire dataset
+# 載入整個資料集
 X, y = load_classification("GunPoint")
 ```
 
-**Regression Datasets**:
+**迴歸資料集**：
 ```python
 from aeon.datasets import load_regression
 
 X_train, y_train = load_regression("Covid3Month", split="train")
 X_test, y_test = load_regression("Covid3Month", split="test")
 
-# Bulk download
+# 批次下載
 from aeon.datasets import download_all_regression
-download_all_regression()  # Downloads Monash TSER archive
+download_all_regression()  # 下載 Monash TSER 存檔
 ```
 
-**Forecasting Datasets**:
+**預測資料集**：
 ```python
 from aeon.datasets import load_forecasting
 
-# Load from forecastingdata.org
+# 從 forecastingdata.org 載入
 y, X = load_forecasting("airline", return_X_y=True)
 ```
 
-**Anomaly Detection Datasets**:
+**異常檢測資料集**：
 ```python
 from aeon.datasets import load_anomaly_detection
 
 X, y = load_anomaly_detection("NAB_realKnownCause")
 ```
 
-### File Format Loaders
+### 檔案格式載入器
 
-**Load from .ts files**:
+**從 .ts 檔案載入**：
 ```python
 from aeon.datasets import load_from_ts_file
 
 X, y = load_from_ts_file("path/to/data.ts")
 ```
 
-**Load from .tsf files**:
+**從 .tsf 檔案載入**：
 ```python
 from aeon.datasets import load_from_tsf_file
 
 df, metadata = load_from_tsf_file("path/to/data.tsf")
 ```
 
-**Load from ARFF files**:
+**從 ARFF 檔案載入**：
 ```python
 from aeon.datasets import load_from_arff_file
 
 X, y = load_from_arff_file("path/to/data.arff")
 ```
 
-**Load from TSV files**:
+**從 TSV 檔案載入**：
 ```python
 from aeon.datasets import load_from_tsv_file
 
 data = load_from_tsv_file("path/to/data.tsv")
 ```
 
-**Load TimeEval CSV**:
+**載入 TimeEval CSV**：
 ```python
 from aeon.datasets import load_from_timeeval_csv_file
 
 X, y = load_from_timeeval_csv_file("path/to/timeeval.csv")
 ```
 
-### Writing Datasets
+### 寫入資料集
 
-**Write to .ts format**:
+**寫入 .ts 格式**：
 ```python
 from aeon.datasets import write_to_ts_file
 
 write_to_ts_file(X, "output.ts", y=y, problem_name="MyDataset")
 ```
 
-**Write to ARFF format**:
+**寫入 ARFF 格式**：
 ```python
 from aeon.datasets import write_to_arff_file
 
 write_to_arff_file(X, "output.arff", y=y)
 ```
 
-## Built-in Datasets
+## 內建資料集
 
-Aeon includes several benchmark datasets for quick testing:
+Aeon 包含多個基準資料集用於快速測試：
 
-### Classification
-- `ArrowHead` - Shape classification
-- `GunPoint` - Gesture recognition
-- `ItalyPowerDemand` - Energy demand
-- `BasicMotions` - Motion classification
-- And 100+ more from UCR/UEA archives
+### 分類
+- `ArrowHead` - 形狀分類
+- `GunPoint` - 手勢識別
+- `ItalyPowerDemand` - 能源需求
+- `BasicMotions` - 動作分類
+- 以及來自 UCR/UEA 存檔的 100 多個資料集
 
-### Regression
-- `Covid3Month` - COVID forecasting
-- Various datasets from Monash TSER archive
+### 迴歸
+- `Covid3Month` - COVID 預測
+- 來自 Monash TSER 存檔的各種資料集
 
-### Segmentation
-- Time series segmentation datasets
-- Human activity data
-- Sensor data collections
+### 分割
+- 時間序列分割資料集
+- 人類活動資料
+- 感測器資料集合
 
-### Special Collections
-- `RehabPile` - Rehabilitation data (classification & regression)
+### 特殊集合
+- `RehabPile` - 康復資料（分類與迴歸）
 
-## Dataset Metadata
+## 資料集 Metadata
 
-Get information about datasets:
+取得資料集資訊：
 
 ```python
 from aeon.datasets import get_dataset_meta_data
@@ -133,33 +133,33 @@ print(metadata)
 # {'n_train': 50, 'n_test': 150, 'length': 150, 'n_classes': 2, ...}
 ```
 
-## Benchmarking Tools
+## 基準測試工具
 
-### Loading Published Results
+### 載入已發布結果
 
-Access pre-computed benchmark results:
+存取預先計算的基準結果：
 
 ```python
 from aeon.benchmarking import get_estimator_results
 
-# Get results for specific algorithm on dataset
+# 取得特定演算法在資料集上的結果
 results = get_estimator_results(
     estimator_name="ROCKET",
     dataset_name="GunPoint"
 )
 
-# Get all available estimators for a dataset
+# 取得資料集的所有可用估計器
 estimators = get_available_estimators("GunPoint")
 ```
 
-### Resampling Strategies
+### 重抽樣策略
 
-Create reproducible train/test splits:
+建立可重現的訓練/測試分割：
 
 ```python
 from aeon.benchmarking import stratified_resample
 
-# Stratified resampling maintaining class distribution
+# 維持類別分布的分層重抽樣
 X_train, X_test, y_train, y_test = stratified_resample(
     X, y,
     random_state=42,
@@ -167,11 +167,11 @@ X_train, X_test, y_train, y_test = stratified_resample(
 )
 ```
 
-### Performance Metrics
+### 效能指標
 
-Specialized metrics for time series tasks:
+時間序列任務的專門指標：
 
-**Anomaly Detection Metrics**:
+**異常檢測指標**：
 ```python
 from aeon.benchmarking.metrics.anomaly_detection import (
     range_precision,
@@ -180,38 +180,38 @@ from aeon.benchmarking.metrics.anomaly_detection import (
     range_roc_auc_score
 )
 
-# Range-based metrics for window detection
+# 用於視窗檢測的基於範圍的指標
 precision = range_precision(y_true, y_pred, alpha=0.5)
 recall = range_recall(y_true, y_pred, alpha=0.5)
 f1 = range_f_score(y_true, y_pred, alpha=0.5)
 auc = range_roc_auc_score(y_true, y_scores)
 ```
 
-**Clustering Metrics**:
+**聚類指標**：
 ```python
 from aeon.benchmarking.metrics.clustering import clustering_accuracy
 
-# Clustering accuracy with label matching
+# 帶標籤匹配的聚類準確度
 accuracy = clustering_accuracy(y_true, y_pred)
 ```
 
-**Segmentation Metrics**:
+**分割指標**：
 ```python
 from aeon.benchmarking.metrics.segmentation import (
     count_error,
     hausdorff_error
 )
 
-# Number of change points difference
+# 變化點數量差異
 count_err = count_error(y_true, y_pred)
 
-# Maximum distance between predicted and true change points
+# 預測與真實變化點之間的最大距離
 hausdorff_err = hausdorff_error(y_true, y_pred)
 ```
 
-### Statistical Testing
+### 統計檢定
 
-Post-hoc analysis for algorithm comparison:
+用於演算法比較的事後分析：
 
 ```python
 from aeon.benchmarking import (
@@ -219,44 +219,44 @@ from aeon.benchmarking import (
     wilcoxon_test
 )
 
-# Nemenyi test for multiple algorithms
+# 多演算法的 Nemenyi 檢定
 results = nemenyi_test(scores_matrix, alpha=0.05)
 
-# Pairwise Wilcoxon signed-rank test
+# 成對 Wilcoxon 符號秩檢定
 stat, p_value = wilcoxon_test(scores_alg1, scores_alg2)
 ```
 
-## Benchmark Collections
+## 基準集合
 
-### UCR/UEA Time Series Archives
+### UCR/UEA 時間序列存檔
 
-Access to comprehensive benchmark repositories:
+存取全面的基準儲存庫：
 
 ```python
-# Classification: 112 univariate + 30 multivariate datasets
+# 分類：112 個單變量 + 30 個多變量資料集
 X_train, y_train = load_classification("Chinatown", split="train")
 
-# Automatically downloads from timeseriesclassification.com
+# 自動從 timeseriesclassification.com 下載
 ```
 
-### Monash Forecasting Archive
+### Monash 預測存檔
 
 ```python
-# Load forecasting datasets
+# 載入預測資料集
 y = load_forecasting("nn5_daily", return_X_y=False)
 ```
 
-### Published Benchmark Results
+### 已發布的基準結果
 
-Pre-computed results from major competitions:
+來自主要競賽的預先計算結果：
 
-- 2017 Univariate Bake-off
-- 2021 Multivariate Classification
-- 2023 Univariate Bake-off
+- 2017 單變量 Bake-off
+- 2021 多變量分類
+- 2023 單變量 Bake-off
 
-## Workflow Example
+## 工作流程範例
 
-Complete benchmarking workflow:
+完整的基準測試工作流程：
 
 ```python
 from aeon.datasets import load_classification
@@ -265,53 +265,53 @@ from aeon.benchmarking import get_estimator_results
 from sklearn.metrics import accuracy_score
 import numpy as np
 
-# Load dataset
+# 載入資料集
 dataset_name = "GunPoint"
 X_train, y_train = load_classification(dataset_name, split="train")
 X_test, y_test = load_classification(dataset_name, split="test")
 
-# Train model
+# 訓練模型
 clf = RocketClassifier(n_kernels=10000, random_state=42)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
-# Evaluate
+# 評估
 accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy: {accuracy:.4f}")
+print(f"準確度：{accuracy:.4f}")
 
-# Compare with published results
+# 與已發布結果比較
 published = get_estimator_results("ROCKET", dataset_name)
-print(f"Published ROCKET accuracy: {published['accuracy']:.4f}")
+print(f"已發布的 ROCKET 準確度：{published['accuracy']:.4f}")
 ```
 
-## Best Practices
+## 最佳實務
 
-### 1. Use Standard Splits
+### 1. 使用標準分割
 
-For reproducibility, use provided train/test splits:
+為了可重現性，使用提供的訓練/測試分割：
 
 ```python
-# Good: Use standard splits
+# 好：使用標準分割
 X_train, y_train = load_classification("GunPoint", split="train")
 X_test, y_test = load_classification("GunPoint", split="test")
 
-# Avoid: Creating custom splits
+# 避免：建立自訂分割
 X, y = load_classification("GunPoint")
 X_train, X_test, y_train, y_test = train_test_split(X, y)
 ```
 
-### 2. Set Random Seeds
+### 2. 設定隨機種子
 
-Ensure reproducibility:
+確保可重現性：
 
 ```python
 clf = RocketClassifier(random_state=42)
 results = stratified_resample(X, y, random_state=42)
 ```
 
-### 3. Report Multiple Metrics
+### 3. 報告多個指標
 
-Don't rely on single metric:
+不要只依賴單一指標：
 
 ```python
 from sklearn.metrics import accuracy_score, f1_score, precision_score
@@ -321,9 +321,9 @@ f1 = f1_score(y_test, y_pred, average='weighted')
 precision = precision_score(y_test, y_pred, average='weighted')
 ```
 
-### 4. Cross-Validation
+### 4. 交叉驗證
 
-For robust evaluation on small datasets:
+在小型資料集上進行穩健評估：
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -333,53 +333,53 @@ scores = cross_val_score(
     cv=5,
     scoring='accuracy'
 )
-print(f"CV Accuracy: {scores.mean():.4f} (+/- {scores.std():.4f})")
+print(f"CV 準確度：{scores.mean():.4f} (+/- {scores.std():.4f})")
 ```
 
-### 5. Compare Against Baselines
+### 5. 與基準比較
 
-Always compare with simple baselines:
+總是與簡單基準比較：
 
 ```python
 from aeon.classification.distance_based import KNeighborsTimeSeriesClassifier
 
-# Simple baseline: 1-NN with Euclidean distance
+# 簡單基準：1-NN 搭配 Euclidean 距離
 baseline = KNeighborsTimeSeriesClassifier(n_neighbors=1, distance="euclidean")
 baseline.fit(X_train, y_train)
 baseline_acc = baseline.score(X_test, y_test)
 
-print(f"Baseline: {baseline_acc:.4f}")
-print(f"Your model: {accuracy:.4f}")
+print(f"基準：{baseline_acc:.4f}")
+print(f"您的模型：{accuracy:.4f}")
 ```
 
-### 6. Statistical Significance
+### 6. 統計顯著性
 
-Test if improvements are statistically significant:
+檢定改進是否具統計顯著性：
 
 ```python
 from aeon.benchmarking import wilcoxon_test
 
-# Run on multiple datasets
+# 在多個資料集上執行
 accuracies_alg1 = [0.85, 0.92, 0.78, 0.88]
 accuracies_alg2 = [0.83, 0.90, 0.76, 0.86]
 
 stat, p_value = wilcoxon_test(accuracies_alg1, accuracies_alg2)
 if p_value < 0.05:
-    print("Difference is statistically significant")
+    print("差異具統計顯著性")
 ```
 
-## Dataset Discovery
+## 資料集探索
 
-Find datasets matching criteria:
+尋找符合條件的資料集：
 
 ```python
-# List all available classification datasets
+# 列出所有可用的分類資料集
 from aeon.datasets import get_available_datasets
 
 datasets = get_available_datasets("classification")
-print(f"Found {len(datasets)} classification datasets")
+print(f"找到 {len(datasets)} 個分類資料集")
 
-# Filter by properties
+# 按屬性篩選
 univariate_datasets = [
     d for d in datasets
     if get_dataset_meta_data(d)['n_channels'] == 1

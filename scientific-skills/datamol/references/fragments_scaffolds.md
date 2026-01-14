@@ -1,48 +1,48 @@
-# Datamol Fragments and Scaffolds Reference
+# Datamol 片段與骨架參考
 
-## Scaffolds Module (`datamol.scaffold`)
+## 骨架模組（`datamol.scaffold`）
 
-Scaffolds represent the core structure of molecules, useful for identifying structural families and analyzing structure-activity relationships (SAR).
+骨架代表分子的核心結構，用於識別結構家族和分析構效關係（SAR）。
 
-### Murcko Scaffolds
+### Murcko 骨架
 
 #### `dm.to_scaffold_murcko(mol)`
-Extract Bemis-Murcko scaffold (molecular framework).
-- **Method**: Removes side chains, retaining ring systems and linkers
-- **Returns**: Molecule object representing the scaffold
-- **Use case**: Identify core structures across compound series
-- **Example**:
+提取 Bemis-Murcko 骨架（分子框架）。
+- **方法**：移除側鏈，保留環系統和連接子
+- **返回**：代表骨架的分子物件
+- **使用案例**：識別化合物系列的核心結構
+- **範例**：
   ```python
-  mol = dm.to_mol("c1ccc(cc1)CCN")  # Phenethylamine
+  mol = dm.to_mol("c1ccc(cc1)CCN")  # 苯乙胺
   scaffold = dm.to_scaffold_murcko(mol)
   scaffold_smiles = dm.to_smiles(scaffold)
-  # Returns: 'c1ccccc1CC' (benzene ring + ethyl linker)
+  # 返回：'c1ccccc1CC'（苯環 + 乙基連接子）
   ```
 
-**Workflow for scaffold analysis**:
+**骨架分析工作流程**：
 ```python
-# Extract scaffolds from compound library
+# 從化合物庫提取骨架
 scaffolds = [dm.to_scaffold_murcko(mol) for mol in mols]
 scaffold_smiles = [dm.to_smiles(s) for s in scaffolds]
 
-# Count scaffold frequency
+# 計算骨架頻率
 from collections import Counter
 scaffold_counts = Counter(scaffold_smiles)
 most_common = scaffold_counts.most_common(10)
 ```
 
-### Fuzzy Scaffolds
+### 模糊骨架
 
 #### `dm.scaffold.fuzzy_scaffolding(mol, ...)`
-Generate fuzzy scaffolds with enforceable groups that must appear in the core.
-- **Purpose**: More flexible scaffold definition allowing specified functional groups
-- **Use case**: Custom scaffold definitions beyond Murcko rules
+生成帶有可強制執行群組（必須出現在核心中）的模糊骨架。
+- **目的**：更靈活的骨架定義，允許指定的官能基
+- **使用案例**：超越 Murcko 規則的自訂骨架定義
 
-### Applications
+### 應用
 
-**Scaffold-based splitting** (for ML model validation):
+**基於骨架的分割**（用於 ML 模型驗證）：
 ```python
-# Group compounds by scaffold
+# 按骨架分組化合物
 scaffold_to_mols = {}
 for mol, scaffold in zip(mols, scaffolds):
     smi = dm.to_smiles(scaffold)
@@ -50,125 +50,125 @@ for mol, scaffold in zip(mols, scaffolds):
         scaffold_to_mols[smi] = []
     scaffold_to_mols[smi].append(mol)
 
-# Ensure train/test sets have different scaffolds
+# 確保訓練/測試集有不同的骨架
 ```
 
-**SAR analysis**:
+**SAR 分析**：
 ```python
-# Group by scaffold and analyze activity
+# 按骨架分組並分析活性
 for scaffold_smi, molecules in scaffold_to_mols.items():
     activities = [get_activity(mol) for mol in molecules]
-    print(f"Scaffold: {scaffold_smi}, Mean activity: {np.mean(activities)}")
+    print(f"骨架：{scaffold_smi}，平均活性：{np.mean(activities)}")
 ```
 
 ---
 
-## Fragments Module (`datamol.fragment`)
+## 片段模組（`datamol.fragment`）
 
-Molecular fragmentation breaks molecules into smaller pieces based on chemical rules, useful for fragment-based drug design and substructure analysis.
+分子片段化根據化學規則將分子分解成較小的片段，用於基於片段的藥物設計和子結構分析。
 
-### BRICS Fragmentation
+### BRICS 片段化
 
 #### `dm.fragment.brics(mol, ...)`
-Fragment molecule using BRICS (Breaking Retrosynthetically Interesting Chemical Substructures).
-- **Method**: Dissects based on 16 chemically meaningful bond types
-- **Consideration**: Considers chemical environment and surrounding substructures
-- **Returns**: Set of fragment SMILES strings
-- **Use case**: Retrosynthetic analysis, fragment-based design
-- **Example**:
+使用 BRICS（逆合成相關化學子結構斷裂）片段化分子。
+- **方法**：基於 16 種化學有意義的鍵類型進行解剖
+- **考量**：考慮化學環境和周圍子結構
+- **返回**：片段 SMILES 字串集合
+- **使用案例**：逆合成分析、基於片段的設計
+- **範例**：
   ```python
   mol = dm.to_mol("c1ccccc1CCN")
   fragments = dm.fragment.brics(mol)
-  # Returns fragments like: '[1*]CCN', '[1*]c1ccccc1', etc.
-  # [1*] represents attachment points
+  # 返回片段如：'[1*]CCN'、'[1*]c1ccccc1' 等
+  # [1*] 代表連接點
   ```
 
-### RECAP Fragmentation
+### RECAP 片段化
 
 #### `dm.fragment.recap(mol, ...)`
-Fragment molecule using RECAP (Retrosynthetic Combinatorial Analysis Procedure).
-- **Method**: Dissects based on 11 predefined bond types
-- **Rules**:
-  - Leaves alkyl groups smaller than 5 carbons intact
-  - Preserves cyclic bonds
-- **Returns**: Set of fragment SMILES strings
-- **Use case**: Combinatorial library design
-- **Example**:
+使用 RECAP（逆合成組合分析程序）片段化分子。
+- **方法**：基於 11 種預定義鍵類型進行解剖
+- **規則**：
+  - 保持小於 5 個碳的烷基完整
+  - 保留環狀鍵
+- **返回**：片段 SMILES 字串集合
+- **使用案例**：組合庫設計
+- **範例**：
   ```python
   mol = dm.to_mol("CCCCCc1ccccc1")
   fragments = dm.fragment.recap(mol)
   ```
 
-### MMPA Fragmentation
+### MMPA 片段化
 
 #### `dm.fragment.mmpa_frag(mol, ...)`
-Fragment for Matched Molecular Pair Analysis.
-- **Purpose**: Generate fragments suitable for identifying molecular pairs
-- **Use case**: Analyzing how small structural changes affect properties
-- **Example**:
+用於匹配分子對分析的片段化。
+- **目的**：生成適合識別分子對的片段
+- **使用案例**：分析小型結構變化如何影響屬性
+- **範例**：
   ```python
   fragments = dm.fragment.mmpa_frag(mol)
-  # Used to find pairs of molecules differing by single transformation
+  # 用於找出相差單一轉換的分子對
   ```
 
-### Comparison of Methods
+### 方法比較
 
-| Method | Bond Types | Preserves Cycles | Best For |
-|--------|-----------|------------------|----------|
-| BRICS  | 16        | Yes              | Retrosynthetic analysis, fragment recombination |
-| RECAP  | 11        | Yes              | Combinatorial library design |
-| MMPA   | Variable  | Depends          | Structure-activity relationship analysis |
+| 方法 | 鍵類型 | 保留環 | 最適合 |
+|------|--------|--------|--------|
+| BRICS | 16 | 是 | 逆合成分析、片段重組 |
+| RECAP | 11 | 是 | 組合庫設計 |
+| MMPA | 可變 | 視情況而定 | 構效關係分析 |
 
-### Fragmentation Workflow
+### 片段化工作流程
 
 ```python
 import datamol as dm
 
-# 1. Fragment a molecule
-mol = dm.to_mol("CC(=O)Oc1ccccc1C(=O)O")  # Aspirin
+# 1. 片段化分子
+mol = dm.to_mol("CC(=O)Oc1ccccc1C(=O)O")  # 阿斯匹靈
 brics_frags = dm.fragment.brics(mol)
 recap_frags = dm.fragment.recap(mol)
 
-# 2. Analyze fragment frequency across library
+# 2. 分析庫中的片段頻率
 all_fragments = []
 for mol in molecule_library:
     frags = dm.fragment.brics(mol)
     all_fragments.extend(frags)
 
-# 3. Identify common fragments
+# 3. 識別常見片段
 from collections import Counter
 fragment_counts = Counter(all_fragments)
 common_fragments = fragment_counts.most_common(20)
 
-# 4. Convert fragments back to molecules (remove attachment points)
+# 4. 將片段轉換回分子（移除連接點）
 def clean_fragment(frag_smiles):
-    # Remove [1*], [2*], etc. attachment point markers
+    # 移除 [1*]、[2*] 等連接點標記
     clean = frag_smiles.replace('[1*]', '[H]')
     return dm.to_mol(clean)
 ```
 
-### Advanced: Fragment-Based Virtual Screening
+### 進階：基於片段的虛擬篩選
 
 ```python
-# Build fragment library from known actives
+# 從已知活性化合物建立片段庫
 active_fragments = set()
 for active_mol in active_compounds:
     frags = dm.fragment.brics(active_mol)
     active_fragments.update(frags)
 
-# Screen compounds for presence of active fragments
+# 篩選化合物以檢查是否存在活性片段
 def score_by_fragments(mol, fragment_set):
     mol_frags = dm.fragment.brics(mol)
     overlap = mol_frags.intersection(fragment_set)
     return len(overlap) / len(mol_frags)
 
-# Score screening library
+# 評分篩選庫
 scores = [score_by_fragments(mol, active_fragments) for mol in screening_lib]
 ```
 
-### Key Concepts
+### 關鍵概念
 
-- **Attachment Points**: Marked with [1*], [2*], etc. in fragment SMILES
-- **Retrosynthetic**: Fragmentation mimics synthetic disconnections
-- **Chemically Meaningful**: Breaks occur at typical synthetic bonds
-- **Recombination**: Fragments can theoretically be recombined into valid molecules
+- **連接點**：在片段 SMILES 中以 [1*]、[2*] 等標記
+- **逆合成**：片段化模擬合成斷開
+- **化學有意義**：在典型合成鍵處斷裂
+- **重組**：片段理論上可以重組成有效分子

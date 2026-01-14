@@ -1,45 +1,45 @@
-# AlphaFold Database API Reference
+# AlphaFold Database API 參考
 
-This document provides comprehensive technical documentation for programmatic access to the AlphaFold Protein Structure Database.
+本文件提供程式化存取 AlphaFold 蛋白質結構資料庫的完整技術文件。
 
-## Table of Contents
+## 目錄
 
-1. [REST API Endpoints](#rest-api-endpoints)
-2. [File Access Patterns](#file-access-patterns)
-3. [Data Schemas](#data-schemas)
-4. [Google Cloud Access](#google-cloud-access)
-5. [BigQuery Schema](#bigquery-schema)
-6. [Best Practices](#best-practices)
-7. [Error Handling](#error-handling)
-8. [Rate Limiting](#rate-limiting)
+1. [REST API 端點](#rest-api-端點)
+2. [檔案存取模式](#檔案存取模式)
+3. [資料架構](#資料架構)
+4. [Google Cloud 存取](#google-cloud-存取)
+5. [BigQuery 架構](#bigquery-架構)
+6. [最佳實務](#最佳實務)
+7. [錯誤處理](#錯誤處理)
+8. [速率限制](#速率限制)
 
 ---
 
-## REST API Endpoints
+## REST API 端點
 
-### Base URL
+### 基礎 URL
 
 ```
 https://alphafold.ebi.ac.uk/api/
 ```
 
-### 1. Get Prediction by UniProt Accession
+### 1. 透過 UniProt 登錄號取得預測
 
-**Endpoint:** `/prediction/{uniprot_id}`
+**端點：** `/prediction/{uniprot_id}`
 
-**Method:** GET
+**方法：** GET
 
-**Description:** Retrieve AlphaFold prediction metadata for a given UniProt accession.
+**描述：** 擷取指定 UniProt 登錄號的 AlphaFold 預測中繼資料。
 
-**Parameters:**
-- `uniprot_id` (required): UniProt accession (e.g., "P00520")
+**參數：**
+- `uniprot_id`（必要）：UniProt 登錄號（例如「P00520」）
 
-**Example Request:**
+**請求範例：**
 ```bash
 curl https://alphafold.ebi.ac.uk/api/prediction/P00520
 ```
 
-**Example Response:**
+**回應範例：**
 ```json
 [
   {
@@ -65,30 +65,30 @@ curl https://alphafold.ebi.ac.uk/api/prediction/P00520
 ]
 ```
 
-**Response Fields:**
-- `entryId`: AlphaFold internal identifier (format: AF-{uniprot}-F{fragment})
-- `gene`: Gene symbol
-- `uniprotAccession`: UniProt accession
-- `uniprotId`: UniProt entry name
-- `uniprotDescription`: Protein description
-- `taxId`: NCBI taxonomy identifier
-- `organismScientificName`: Species scientific name
-- `uniprotStart/uniprotEnd`: Residue range covered
-- `uniprotSequence`: Full protein sequence
-- `modelCreatedDate`: Initial prediction date
-- `latestVersion`: Current model version number
-- `allVersions`: List of available versions
-- `cifUrl/bcifUrl/pdbUrl`: Structure file download URLs
-- `paeImageUrl`: PAE visualization image URL
-- `paeDocUrl`: PAE data JSON URL
+**回應欄位：**
+- `entryId`：AlphaFold 內部識別碼（格式：AF-{uniprot}-F{fragment}）
+- `gene`：基因符號
+- `uniprotAccession`：UniProt 登錄號
+- `uniprotId`：UniProt 條目名稱
+- `uniprotDescription`：蛋白質描述
+- `taxId`：NCBI 分類識別碼
+- `organismScientificName`：物種學名
+- `uniprotStart/uniprotEnd`：涵蓋的殘基範圍
+- `uniprotSequence`：完整蛋白質序列
+- `modelCreatedDate`：初始預測日期
+- `latestVersion`：當前模型版本號
+- `allVersions`：可用版本列表
+- `cifUrl/bcifUrl/pdbUrl`：結構檔案下載 URL
+- `paeImageUrl`：PAE 視覺化圖片 URL
+- `paeDocUrl`：PAE 資料 JSON URL
 
-### 2. 3D-Beacons Integration
+### 2. 3D-Beacons 整合
 
-AlphaFold is integrated into the 3D-Beacons network for federated structure access.
+AlphaFold 已整合至 3D-Beacons 網路，用於聯合結構存取。
 
-**Endpoint:** `https://www.ebi.ac.uk/pdbe/pdbe-kb/3dbeacons/api/uniprot/summary/{uniprot_id}.json`
+**端點：** `https://www.ebi.ac.uk/pdbe/pdbe-kb/3dbeacons/api/uniprot/summary/{uniprot_id}.json`
 
-**Example:**
+**範例：**
 ```python
 import requests
 
@@ -97,7 +97,7 @@ url = f"https://www.ebi.ac.uk/pdbe/pdbe-kb/3dbeacons/api/uniprot/summary/{unipro
 response = requests.get(url)
 data = response.json()
 
-# Filter for AlphaFold structures
+# 篩選 AlphaFold 結構
 alphafold_structures = [
     s for s in data['structures']
     if s['provider'] == 'AlphaFold DB'
@@ -106,62 +106,62 @@ alphafold_structures = [
 
 ---
 
-## File Access Patterns
+## 檔案存取模式
 
-### Direct File Downloads
+### 直接檔案下載
 
-All AlphaFold files are accessible via direct URLs without authentication.
+所有 AlphaFold 檔案都可透過直接 URL 存取，無需驗證。
 
-**URL Pattern:**
+**URL 模式：**
 ```
 https://alphafold.ebi.ac.uk/files/{alphafold_id}-{file_type}_{version}.{extension}
 ```
 
-**Components:**
-- `{alphafold_id}`: Entry identifier (e.g., "AF-P00520-F1")
-- `{file_type}`: Type of file (see below)
-- `{version}`: Database version (e.g., "v4")
-- `{extension}`: File format extension
+**組成部分：**
+- `{alphafold_id}`：條目識別碼（例如「AF-P00520-F1」）
+- `{file_type}`：檔案類型（見下方）
+- `{version}`：資料庫版本（例如「v4」）
+- `{extension}`：檔案格式副檔名
 
-### Available File Types
+### 可用檔案類型
 
-#### 1. Model Coordinates
+#### 1. 模型座標
 
-**mmCIF Format (Recommended):**
+**mmCIF 格式（推薦）：**
 ```
 https://alphafold.ebi.ac.uk/files/AF-P00520-F1-model_v4.cif
 ```
-- Standard crystallographic format
-- Contains full metadata
-- Supports large structures
-- File size: Variable (100KB - 10MB typical)
+- 標準晶體學格式
+- 包含完整中繼資料
+- 支援大型結構
+- 檔案大小：可變（通常 100KB - 10MB）
 
-**Binary CIF Format:**
+**二進位 CIF 格式：**
 ```
 https://alphafold.ebi.ac.uk/files/AF-P00520-F1-model_v4.bcif
 ```
-- Compressed binary version of mmCIF
-- Smaller file size (~70% reduction)
-- Faster parsing
-- Requires specialized parser
+- mmCIF 的壓縮二進位版本
+- 較小的檔案大小（約減少 70%）
+- 更快的解析速度
+- 需要專門的解析器
 
-**PDB Format (Legacy):**
+**PDB 格式（舊版）：**
 ```
 https://alphafold.ebi.ac.uk/files/AF-P00520-F1-model_v4.pdb
 ```
-- Traditional PDB text format
-- Limited to 99,999 atoms
-- Widely supported by older tools
-- File size: Similar to mmCIF
+- 傳統 PDB 文字格式
+- 限制為 99,999 個原子
+- 舊版工具廣泛支援
+- 檔案大小：與 mmCIF 類似
 
-#### 2. Confidence Metrics
+#### 2. 信心指標
 
-**Per-Residue Confidence (JSON):**
+**每殘基信心（JSON）：**
 ```
 https://alphafold.ebi.ac.uk/files/AF-P00520-F1-confidence_v4.json
 ```
 
-**Structure:**
+**結構：**
 ```json
 {
   "confidenceScore": [87.5, 91.2, 93.8, ...],
@@ -169,17 +169,17 @@ https://alphafold.ebi.ac.uk/files/AF-P00520-F1-confidence_v4.json
 }
 ```
 
-**Fields:**
-- `confidenceScore`: Array of pLDDT values (0-100) for each residue
-- `confidenceCategory`: Categorical classification (very_low, low, high, very_high)
+**欄位：**
+- `confidenceScore`：每個殘基的 pLDDT 值陣列（0-100）
+- `confidenceCategory`：分類分類（very_low、low、high、very_high）
 
-#### 3. Predicted Aligned Error (JSON)
+#### 3. 預測對齊誤差（JSON）
 
 ```
 https://alphafold.ebi.ac.uk/files/AF-P00520-F1-predicted_aligned_error_v4.json
 ```
 
-**Structure:**
+**結構：**
 ```json
 {
   "distance": [[0, 2.3, 4.5, ...], [2.3, 0, 3.1, ...], ...],
@@ -187,157 +187,157 @@ https://alphafold.ebi.ac.uk/files/AF-P00520-F1-predicted_aligned_error_v4.json
 }
 ```
 
-**Fields:**
-- `distance`: N×N matrix of PAE values in Ångströms
-- `max_predicted_aligned_error`: Maximum PAE value in the matrix
+**欄位：**
+- `distance`：N×N PAE 值矩陣（埃）
+- `max_predicted_aligned_error`：矩陣中的最大 PAE 值
 
-#### 4. PAE Visualization (PNG)
+#### 4. PAE 視覺化（PNG）
 
 ```
 https://alphafold.ebi.ac.uk/files/AF-P00520-F1-predicted_aligned_error_v4.png
 ```
-- Pre-rendered PAE heatmap
-- Useful for quick visual assessment
-- Resolution: Variable based on protein size
+- 預先渲染的 PAE 熱圖
+- 用於快速視覺評估
+- 解析度：根據蛋白質大小變化
 
-### Batch Download Strategy
+### 批量下載策略
 
-For downloading multiple files efficiently, use concurrent downloads with proper error handling and rate limiting to respect server resources.
+高效下載多個檔案時，使用具有適當錯誤處理和速率限制的並行下載，以尊重伺服器資源。
 
 ---
 
-## Data Schemas
+## 資料架構
 
-### Coordinate File (mmCIF) Schema
+### 座標檔案（mmCIF）架構
 
-AlphaFold mmCIF files contain:
+AlphaFold mmCIF 檔案包含：
 
-**Key Data Categories:**
-- `_entry`: Entry-level metadata
-- `_struct`: Structure title and description
-- `_entity`: Molecular entity information
-- `_atom_site`: Atomic coordinates and properties
-- `_pdbx_struct_assembly`: Biological assembly info
+**關鍵資料類別：**
+- `_entry`：條目層級中繼資料
+- `_struct`：結構標題和描述
+- `_entity`：分子實體資訊
+- `_atom_site`：原子座標和屬性
+- `_pdbx_struct_assembly`：生物組裝資訊
 
-**Important Fields in `_atom_site`:**
-- `group_PDB`: "ATOM" for all records
-- `id`: Atom serial number
-- `label_atom_id`: Atom name (e.g., "CA", "N", "C")
-- `label_comp_id`: Residue name (e.g., "ALA", "GLY")
-- `label_seq_id`: Residue sequence number
-- `Cartn_x/y/z`: Cartesian coordinates (Ångströms)
-- `B_iso_or_equiv`: B-factor (contains pLDDT score)
+**`_atom_site` 中的重要欄位：**
+- `group_PDB`：所有記錄均為「ATOM」
+- `id`：原子序號
+- `label_atom_id`：原子名稱（例如「CA」、「N」、「C」）
+- `label_comp_id`：殘基名稱（例如「ALA」、「GLY」）
+- `label_seq_id`：殘基序列號
+- `Cartn_x/y/z`：笛卡爾座標（埃）
+- `B_iso_or_equiv`：B 因子（包含 pLDDT 分數）
 
-**pLDDT in B-factor Column:**
-AlphaFold stores per-residue confidence (pLDDT) in the B-factor field. This allows standard structure viewers to color by confidence automatically.
+**B 因子欄位中的 pLDDT：**
+AlphaFold 將每殘基信心（pLDDT）儲存在 B 因子欄位中。這使標準結構檢視器可以自動按信心著色。
 
-### Confidence JSON Schema
+### 信心 JSON 架構
 
 ```json
 {
   "confidenceScore": [
-    87.5,   // Residue 1 pLDDT
-    91.2,   // Residue 2 pLDDT
-    93.8    // Residue 3 pLDDT
-    // ... one value per residue
+    87.5,   // 殘基 1 pLDDT
+    91.2,   // 殘基 2 pLDDT
+    93.8    // 殘基 3 pLDDT
+    // ... 每個殘基一個值
   ],
   "confidenceCategory": [
-    "high",      // Residue 1 category
-    "very_high", // Residue 2 category
-    "very_high"  // Residue 3 category
-    // ... one category per residue
+    "high",      // 殘基 1 類別
+    "very_high", // 殘基 2 類別
+    "very_high"  // 殘基 3 類別
+    // ... 每個殘基一個類別
   ]
 }
 ```
 
-**Confidence Categories:**
-- `very_high`: pLDDT > 90
-- `high`: 70 < pLDDT ≤ 90
-- `low`: 50 < pLDDT ≤ 70
-- `very_low`: pLDDT ≤ 50
+**信心類別：**
+- `very_high`：pLDDT > 90
+- `high`：70 < pLDDT ≤ 90
+- `low`：50 < pLDDT ≤ 70
+- `very_low`：pLDDT ≤ 50
 
-### PAE JSON Schema
+### PAE JSON 架構
 
 ```json
 {
   "distance": [
-    [0.0, 2.3, 4.5, ...],     // PAE from residue 1 to all residues
-    [2.3, 0.0, 3.1, ...],     // PAE from residue 2 to all residues
-    [4.5, 3.1, 0.0, ...]      // PAE from residue 3 to all residues
-    // ... N×N matrix for N residues
+    [0.0, 2.3, 4.5, ...],     // 從殘基 1 到所有殘基的 PAE
+    [2.3, 0.0, 3.1, ...],     // 從殘基 2 到所有殘基的 PAE
+    [4.5, 3.1, 0.0, ...]      // 從殘基 3 到所有殘基的 PAE
+    // ... N 個殘基的 N×N 矩陣
   ],
   "max_predicted_aligned_error": 31.75
 }
 ```
 
-**Interpretation:**
-- `distance[i][j]`: Expected position error (Ångströms) of residue j if the predicted and true structures were aligned on residue i
-- Lower values indicate more confident relative positioning
-- Diagonal is always 0 (residue aligned to itself)
-- Matrix is not symmetric: distance[i][j] ≠ distance[j][i]
+**詮釋：**
+- `distance[i][j]`：如果預測結構和真實結構在殘基 i 上對齊，殘基 j 的預期位置誤差（埃）
+- 較低的值表示相對定位更有信心
+- 對角線始終為 0（殘基與自身對齊）
+- 矩陣不對稱：distance[i][j] ≠ distance[j][i]
 
 ---
 
-## Google Cloud Access
+## Google Cloud 存取
 
-AlphaFold DB is hosted on Google Cloud Platform for bulk access.
+AlphaFold DB 託管在 Google Cloud Platform 上以供批量存取。
 
-### Cloud Storage Bucket
+### Cloud Storage 儲存桶
 
-**Bucket:** `gs://public-datasets-deepmind-alphafold-v4`
+**儲存桶：** `gs://public-datasets-deepmind-alphafold-v4`
 
-**Directory Structure:**
+**目錄結構：**
 ```
 gs://public-datasets-deepmind-alphafold-v4/
-├── accession_ids.csv              # Index of all entries (13.5 GB)
-├── sequences.fasta                # All protein sequences (16.5 GB)
-└── proteomes/                     # Grouped by species (1M+ archives)
+├── accession_ids.csv              # 所有條目索引（13.5 GB）
+├── sequences.fasta                # 所有蛋白質序列（16.5 GB）
+└── proteomes/                     # 按物種分組（100 萬+ 檔案）
 ```
 
-### Installing gsutil
+### 安裝 gsutil
 
 ```bash
-# Using pip
+# 使用 pip
 pip install gsutil
 
-# Or install Google Cloud SDK
+# 或安裝 Google Cloud SDK
 curl https://sdk.cloud.google.com | bash
 ```
 
-### Downloading Proteomes
+### 下載蛋白質體
 
-**By Taxonomy ID:**
+**按分類 ID：**
 
 ```bash
-# Download all archives for a species
-TAX_ID=9606  # Human
+# 下載某物種的所有檔案
+TAX_ID=9606  # 人類
 gsutil -m cp gs://public-datasets-deepmind-alphafold-v4/proteomes/proteome-tax_id-${TAX_ID}-*_v4.tar .
 ```
 
 ---
 
-## BigQuery Schema
+## BigQuery 架構
 
-AlphaFold metadata is available in BigQuery for SQL-based queries.
+AlphaFold 中繼資料可在 BigQuery 中使用 SQL 查詢。
 
-**Dataset:** `bigquery-public-data.deepmind_alphafold`
-**Table:** `metadata`
+**資料集：** `bigquery-public-data.deepmind_alphafold`
+**資料表：** `metadata`
 
-### Key Fields
+### 關鍵欄位
 
-| Field | Type | Description |
+| 欄位 | 類型 | 描述 |
 |-------|------|-------------|
-| `entryId` | STRING | AlphaFold entry ID |
-| `uniprotAccession` | STRING | UniProt accession |
-| `gene` | STRING | Gene symbol |
-| `organismScientificName` | STRING | Species scientific name |
-| `taxId` | INTEGER | NCBI taxonomy ID |
-| `globalMetricValue` | FLOAT | Overall quality metric |
-| `fractionPlddtVeryHigh` | FLOAT | Fraction with pLDDT ≥ 90 |
-| `isReviewed` | BOOLEAN | Swiss-Prot reviewed status |
-| `sequenceLength` | INTEGER | Protein sequence length |
+| `entryId` | STRING | AlphaFold 條目 ID |
+| `uniprotAccession` | STRING | UniProt 登錄號 |
+| `gene` | STRING | 基因符號 |
+| `organismScientificName` | STRING | 物種學名 |
+| `taxId` | INTEGER | NCBI 分類 ID |
+| `globalMetricValue` | FLOAT | 整體品質指標 |
+| `fractionPlddtVeryHigh` | FLOAT | pLDDT ≥ 90 的比例 |
+| `isReviewed` | BOOLEAN | Swiss-Prot 審核狀態 |
+| `sequenceLength` | INTEGER | 蛋白質序列長度 |
 
-### Example Query
+### 查詢範例
 
 ```sql
 SELECT
@@ -356,68 +356,68 @@ LIMIT 100;
 
 ---
 
-## Best Practices
+## 最佳實務
 
-### 1. Caching Strategy
+### 1. 快取策略
 
-Always cache downloaded files locally to avoid repeated downloads.
+始終在本地快取已下載的檔案，以避免重複下載。
 
-### 2. Error Handling
+### 2. 錯誤處理
 
-Implement robust error handling for API requests with retry logic for transient failures.
+為 API 請求實作健全的錯誤處理，並對暫時性故障實作重試邏輯。
 
-### 3. Bulk Processing
+### 3. 批量處理
 
-For processing many proteins, use concurrent downloads with appropriate rate limiting.
+處理多個蛋白質時，使用適當速率限制的並行下載。
 
-### 4. Version Management
+### 4. 版本管理
 
-Always specify and track database versions in your code (current: v4).
+始終在程式碼中指定和追蹤資料庫版本（當前：v4）。
 
 ---
 
-## Error Handling
+## 錯誤處理
 
-### Common HTTP Status Codes
+### 常見 HTTP 狀態碼
 
-| Code | Meaning | Action |
+| 代碼 | 含義 | 動作 |
 |------|---------|--------|
-| 200 | Success | Process response normally |
-| 404 | Not Found | No AlphaFold prediction for this UniProt ID |
-| 429 | Too Many Requests | Implement rate limiting and retry with backoff |
-| 500 | Server Error | Retry with exponential backoff |
-| 503 | Service Unavailable | Wait and retry later |
+| 200 | 成功 | 正常處理回應 |
+| 404 | 未找到 | 此 UniProt ID 沒有 AlphaFold 預測 |
+| 429 | 請求過多 | 實作速率限制並使用退避重試 |
+| 500 | 伺服器錯誤 | 使用指數退避重試 |
+| 503 | 服務不可用 | 稍後等待並重試 |
 
 ---
 
-## Rate Limiting
+## 速率限制
 
-### Recommendations
+### 建議
 
-- Limit to **10 concurrent requests** maximum
-- Add **100-200ms delay** between sequential requests
-- Use Google Cloud for bulk downloads instead of REST API
-- Cache all downloaded data locally
+- 最多限制 **10 個並行請求**
+- 在順序請求之間添加 **100-200ms 延遲**
+- 使用 Google Cloud 進行批量下載，而非 REST API
+- 在本地快取所有已下載的資料
 
 ---
 
-## Additional Resources
+## 額外資源
 
-- **AlphaFold GitHub:** https://github.com/google-deepmind/alphafold
-- **Google Cloud Documentation:** https://cloud.google.com/datasets/alphafold
-- **3D-Beacons Documentation:** https://www.ebi.ac.uk/pdbe/pdbe-kb/3dbeacons/docs
-- **Biopython Tutorial:** https://biopython.org/wiki/AlphaFold
+- **AlphaFold GitHub：** https://github.com/google-deepmind/alphafold
+- **Google Cloud 文件：** https://cloud.google.com/datasets/alphafold
+- **3D-Beacons 文件：** https://www.ebi.ac.uk/pdbe/pdbe-kb/3dbeacons/docs
+- **Biopython 教學：** https://biopython.org/wiki/AlphaFold
 
-## Version History
+## 版本歷史
 
-- **v1** (2021): Initial release with ~350K structures
-- **v2** (2022): Expanded to 200M+ structures
-- **v3** (2023): Updated models and expanded coverage
-- **v4** (2024): Current version with improved confidence metrics
+- **v1**（2021）：初始版本，包含約 35 萬個結構
+- **v2**（2022）：擴展至 2 億+ 結構
+- **v3**（2023）：更新模型和擴展覆蓋範圍
+- **v4**（2024）：當前版本，改進信心指標
 
-## Citation
+## 引用
 
-When using AlphaFold DB in publications, cite:
+在出版物中使用 AlphaFold DB 時，請引用：
 
 1. Jumper, J. et al. Highly accurate protein structure prediction with AlphaFold. Nature 596, 583–589 (2021).
 2. Varadi, M. et al. AlphaFold Protein Structure Database in 2024: providing structure coverage for over 214 million protein sequences. Nucleic Acids Res. 52, D368–D375 (2024).

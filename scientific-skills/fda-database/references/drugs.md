@@ -1,45 +1,45 @@
-# FDA Drug Databases
+# FDA 藥物資料庫
 
-This reference covers all FDA drug-related API endpoints accessible through openFDA.
+本參考文件涵蓋透過 openFDA 可存取的所有 FDA 藥物相關 API 端點。
 
-## Overview
+## 概述
 
-The FDA drug databases provide access to information about pharmaceutical products, including adverse events, labeling, recalls, approvals, and shortages. All endpoints follow the openFDA API structure and return JSON-formatted data.
+FDA 藥物資料庫提供藥品的相關資訊，包括不良事件、標籤、召回、核准和短缺。所有端點遵循 openFDA API 結構並回傳 JSON 格式的資料。
 
-## Available Endpoints
+## 可用端點
 
-### 1. Drug Adverse Events
+### 1. 藥物不良事件
 
-**Endpoint**: `https://api.fda.gov/drug/event.json`
+**端點**：`https://api.fda.gov/drug/event.json`
 
-**Purpose**: Access reports of drug side effects, product use errors, product quality problems, and therapeutic failures submitted to the FDA.
+**目的**：存取向 FDA 提交的藥物副作用、產品使用錯誤、產品品質問題和治療失敗的報告。
 
-**Data Source**: FDA Adverse Event Reporting System (FAERS)
+**資料來源**：FDA 不良事件報告系統（FAERS）
 
-**Key Fields**:
-- `patient.drug.medicinalproduct` - Drug name
-- `patient.drug.drugindication` - Reason for taking the drug
-- `patient.reaction.reactionmeddrapt` - Adverse reaction description
-- `receivedate` - Date report was received
-- `serious` - Whether the event was serious (1 = serious, 2 = not serious)
-- `seriousnessdeath` - Whether the event resulted in death
-- `primarysource.qualification` - Reporter qualification (physician, pharmacist, etc.)
+**主要欄位**：
+- `patient.drug.medicinalproduct` - 藥物名稱
+- `patient.drug.drugindication` - 服藥原因
+- `patient.reaction.reactionmeddrapt` - 不良反應描述
+- `receivedate` - 報告接收日期
+- `serious` - 事件是否嚴重（1 = 嚴重，2 = 不嚴重）
+- `seriousnessdeath` - 事件是否導致死亡
+- `primarysource.qualification` - 報告者資格（醫師、藥師等）
 
-**Common Use Cases**:
-- Safety signal detection
-- Post-market surveillance
-- Drug interaction analysis
-- Comparative safety research
+**常見使用案例**：
+- 安全信號偵測
+- 上市後監測
+- 藥物交互作用分析
+- 比較安全研究
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find adverse events for a specific drug
+# 查詢特定藥物的不良事件
 import requests
 
 api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/drug/event.json"
 
-# Search for aspirin-related adverse events
+# 搜尋阿斯匹靈相關的不良事件
 params = {
     "api_key": api_key,
     "search": "patient.drug.medicinalproduct:aspirin",
@@ -51,7 +51,7 @@ data = response.json()
 ```
 
 ```python
-# Count most common reactions for a drug
+# 計算某藥物最常見的反應
 params = {
     "api_key": api_key,
     "search": "patient.drug.medicinalproduct:metformin",
@@ -59,38 +59,38 @@ params = {
 }
 ```
 
-### 2. Drug Product Labeling
+### 2. 藥物產品標籤
 
-**Endpoint**: `https://api.fda.gov/drug/label.json`
+**端點**：`https://api.fda.gov/drug/label.json`
 
-**Purpose**: Access structured product information including prescribing information, warnings, indications, and usage for FDA-approved and marketed drug products.
+**目的**：存取結構化產品資訊，包括 FDA 核准和上市藥品的處方資訊、警告、適應症和用法。
 
-**Data Source**: Structured Product Labeling (SPL)
+**資料來源**：結構化產品標籤（SPL）
 
-**Key Fields**:
-- `openfda.brand_name` - Brand name(s) of the drug
-- `openfda.generic_name` - Generic name(s)
-- `indications_and_usage` - Approved uses
-- `warnings` - Important safety warnings
-- `adverse_reactions` - Known adverse reactions
-- `dosage_and_administration` - How to use the drug
-- `description` - Chemical and physical description
-- `pharmacodynamics` - How the drug works
-- `contraindications` - When not to use the drug
-- `drug_interactions` - Known drug interactions
-- `active_ingredient` - Active ingredients
-- `inactive_ingredient` - Inactive ingredients
+**主要欄位**：
+- `openfda.brand_name` - 藥物品牌名稱
+- `openfda.generic_name` - 通用名稱
+- `indications_and_usage` - 核准用途
+- `warnings` - 重要安全警告
+- `adverse_reactions` - 已知的不良反應
+- `dosage_and_administration` - 用藥方式
+- `description` - 化學和物理描述
+- `pharmacodynamics` - 藥物作用機制
+- `contraindications` - 禁忌症
+- `drug_interactions` - 已知的藥物交互作用
+- `active_ingredient` - 活性成分
+- `inactive_ingredient` - 非活性成分
 
-**Common Use Cases**:
-- Clinical decision support
-- Drug information lookup
-- Patient education materials
-- Formulary management
-- Drug comparison analysis
+**常見使用案例**：
+- 臨床決策支援
+- 藥物資訊查詢
+- 患者教育資料
+- 處方集管理
+- 藥物比較分析
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Get full labeling for a brand-name drug
+# 取得品牌藥物的完整標籤
 params = {
     "api_key": api_key,
     "search": "openfda.brand_name:Lipitor",
@@ -100,15 +100,15 @@ params = {
 response = requests.get("https://api.fda.gov/drug/label.json", params=params)
 label_data = response.json()
 
-# Extract specific sections
+# 提取特定章節
 if "results" in label_data:
     label = label_data["results"][0]
-    indications = label.get("indications_and_usage", ["Not available"])[0]
-    warnings = label.get("warnings", ["Not available"])[0]
+    indications = label.get("indications_and_usage", ["不可用"])[0]
+    warnings = label.get("warnings", ["不可用"])[0]
 ```
 
 ```python
-# Search labels containing specific warnings
+# 搜尋包含特定警告的標籤
 params = {
     "api_key": api_key,
     "search": "warnings:*hypertension*",
@@ -116,38 +116,38 @@ params = {
 }
 ```
 
-### 3. National Drug Code (NDC) Directory
+### 3. 國家藥品代碼（NDC）目錄
 
-**Endpoint**: `https://api.fda.gov/drug/ndc.json`
+**端點**：`https://api.fda.gov/drug/ndc.json`
 
-**Purpose**: Access the NDC Directory containing information about drug products identified by National Drug Codes.
+**目的**：存取 NDC 目錄，包含由國家藥品代碼識別的藥品資訊。
 
-**Data Source**: FDA NDC Directory
+**資料來源**：FDA NDC 目錄
 
-**Key Fields**:
-- `product_ndc` - 10-digit NDC product identifier
-- `generic_name` - Generic drug name
-- `labeler_name` - Company that manufactures/distributes
-- `brand_name` - Brand name if applicable
-- `dosage_form` - Form (tablet, capsule, solution, etc.)
-- `route` - Administration route (oral, injection, topical, etc.)
-- `product_type` - Type of drug product
-- `marketing_category` - Regulatory pathway (NDA, ANDA, OTC, etc.)
-- `application_number` - FDA application number
-- `active_ingredients` - List of active ingredients with strengths
-- `packaging` - Package descriptions and NDC codes
-- `listing_expiration_date` - When listing expires
+**主要欄位**：
+- `product_ndc` - 10 位數 NDC 產品識別碼
+- `generic_name` - 藥物通用名稱
+- `labeler_name` - 製造/經銷公司
+- `brand_name` - 品牌名稱（如適用）
+- `dosage_form` - 劑型（錠劑、膠囊、溶液等）
+- `route` - 給藥途徑（口服、注射、外用等）
+- `product_type` - 藥品類型
+- `marketing_category` - 法規途徑（NDA、ANDA、OTC 等）
+- `application_number` - FDA 申請編號
+- `active_ingredients` - 含劑量的活性成分列表
+- `packaging` - 包裝描述和 NDC 代碼
+- `listing_expiration_date` - 列名到期日
 
-**Common Use Cases**:
-- NDC lookup and validation
-- Product identification
-- Supply chain management
-- Prescription processing
-- Insurance claims processing
+**常見使用案例**：
+- NDC 查詢和驗證
+- 產品識別
+- 供應鏈管理
+- 處方處理
+- 保險理賠處理
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Look up drug by NDC code
+# 按 NDC 代碼查詢藥物
 params = {
     "api_key": api_key,
     "search": "product_ndc:0069-2110",
@@ -158,7 +158,7 @@ response = requests.get("https://api.fda.gov/drug/ndc.json", params=params)
 ```
 
 ```python
-# Find all products from a specific manufacturer
+# 查詢特定製造商的所有產品
 params = {
     "api_key": api_key,
     "search": "labeler_name:Pfizer",
@@ -167,7 +167,7 @@ params = {
 ```
 
 ```python
-# Get all oral tablets of a generic drug
+# 取得某通用藥物的所有口服錠劑
 params = {
     "api_key": api_key,
     "search": "generic_name:lisinopril+AND+dosage_form:TABLET",
@@ -175,42 +175,42 @@ params = {
 }
 ```
 
-### 4. Drug Recall Enforcement Reports
+### 4. 藥物召回執法報告
 
-**Endpoint**: `https://api.fda.gov/drug/enforcement.json`
+**端點**：`https://api.fda.gov/drug/enforcement.json`
 
-**Purpose**: Access drug product recall enforcement reports issued by the FDA.
+**目的**：存取 FDA 發布的藥品召回執法報告。
 
-**Data Source**: FDA Enforcement Reports
+**資料來源**：FDA 執法報告
 
-**Key Fields**:
-- `status` - Current status (Ongoing, Completed, Terminated)
-- `recall_number` - Unique recall identifier
-- `classification` - Class I, II, or III (severity)
-- `product_description` - Description of recalled product
-- `reason_for_recall` - Why product was recalled
-- `product_quantity` - Amount of product recalled
-- `code_info` - Lot numbers, serial numbers, NDCs
-- `distribution_pattern` - Geographic distribution
-- `recalling_firm` - Company conducting recall
-- `recall_initiation_date` - When recall began
-- `report_date` - When FDA received notice
-- `voluntary_mandated` - Type of recall
+**主要欄位**：
+- `status` - 目前狀態（進行中、已完成、已終止）
+- `recall_number` - 唯一召回識別碼
+- `classification` - 第一類、第二類或第三類（嚴重程度）
+- `product_description` - 被召回產品的描述
+- `reason_for_recall` - 召回原因
+- `product_quantity` - 召回的產品數量
+- `code_info` - 批號、序號、NDC
+- `distribution_pattern` - 地理分佈
+- `recalling_firm` - 進行召回的公司
+- `recall_initiation_date` - 召回開始時間
+- `report_date` - FDA 收到通知時間
+- `voluntary_mandated` - 召回類型
 
-**Classification Levels**:
-- **Class I**: Dangerous or defective products that could cause serious health problems or death
-- **Class II**: Products that might cause temporary health problems or pose slight threat of serious nature
-- **Class III**: Products unlikely to cause adverse health reaction but violate FDA labeling/manufacturing regulations
+**分類等級**：
+- **第一類**：可能導致嚴重健康問題或死亡的危險或有缺陷產品
+- **第二類**：可能導致暫時健康問題或輕微嚴重威脅的產品
+- **第三類**：不太可能導致不良健康反應但違反 FDA 標籤/製造法規的產品
 
-**Common Use Cases**:
-- Quality assurance monitoring
-- Supply chain risk management
-- Patient safety alerts
-- Regulatory compliance tracking
+**常見使用案例**：
+- 品質保證監控
+- 供應鏈風險管理
+- 患者安全警報
+- 法規合規追蹤
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find all Class I (most serious) drug recalls
+# 查詢所有第一類（最嚴重）藥物召回
 params = {
     "api_key": api_key,
     "search": "classification:Class+I",
@@ -222,7 +222,7 @@ response = requests.get("https://api.fda.gov/drug/enforcement.json", params=para
 ```
 
 ```python
-# Search for recalls of a specific drug
+# 搜尋特定藥物的召回
 params = {
     "api_key": api_key,
     "search": "product_description:*metformin*",
@@ -231,7 +231,7 @@ params = {
 ```
 
 ```python
-# Find ongoing recalls
+# 查詢進行中的召回
 params = {
     "api_key": api_key,
     "search": "status:Ongoing",
@@ -241,38 +241,38 @@ params = {
 
 ### 5. Drugs@FDA
 
-**Endpoint**: `https://api.fda.gov/drug/drugsfda.json`
+**端點**：`https://api.fda.gov/drug/drugsfda.json`
 
-**Purpose**: Access comprehensive information about FDA-approved drug products from Drugs@FDA database, including approval history and regulatory information.
+**目的**：存取 Drugs@FDA 資料庫中 FDA 核准藥品的完整資訊，包括核准歷史和法規資訊。
 
-**Data Source**: Drugs@FDA Database (most drugs approved since 1939)
+**資料來源**：Drugs@FDA 資料庫（自 1939 年以來核准的大多數藥物）
 
-**Key Fields**:
-- `application_number` - NDA/ANDA/BLA number
-- `sponsor_name` - Company that submitted application
-- `openfda.brand_name` - Brand name(s)
-- `openfda.generic_name` - Generic name(s)
-- `products` - Array of approved products under this application
-- `products.active_ingredients` - Active ingredients with strengths
-- `products.dosage_form` - Dosage form
-- `products.route` - Route of administration
-- `products.marketing_status` - Current marketing status
-- `submissions` - Array of regulatory submissions
-- `submissions.submission_type` - Type of submission
-- `submissions.submission_status` - Status (approved, pending, etc.)
-- `submissions.submission_status_date` - Status date
-- `submissions.review_priority` - Priority or standard review
+**主要欄位**：
+- `application_number` - NDA/ANDA/BLA 編號
+- `sponsor_name` - 提交申請的公司
+- `openfda.brand_name` - 品牌名稱
+- `openfda.generic_name` - 通用名稱
+- `products` - 此申請下核准的產品陣列
+- `products.active_ingredients` - 含劑量的活性成分
+- `products.dosage_form` - 劑型
+- `products.route` - 給藥途徑
+- `products.marketing_status` - 目前上市狀態
+- `submissions` - 法規提交陣列
+- `submissions.submission_type` - 提交類型
+- `submissions.submission_status` - 狀態（已核准、待審等）
+- `submissions.submission_status_date` - 狀態日期
+- `submissions.review_priority` - 優先或標準審查
 
-**Common Use Cases**:
-- Drug approval research
-- Regulatory pathway analysis
-- Historical approval tracking
-- Competitive intelligence
-- Market access research
+**常見使用案例**：
+- 藥物核准研究
+- 法規途徑分析
+- 歷史核准追蹤
+- 競爭情報
+- 市場准入研究
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find approval information for a specific drug
+# 查詢特定藥物的核准資訊
 params = {
     "api_key": api_key,
     "search": "openfda.brand_name:Keytruda",
@@ -283,7 +283,7 @@ response = requests.get("https://api.fda.gov/drug/drugsfda.json", params=params)
 ```
 
 ```python
-# Get all drugs approved by a specific sponsor
+# 取得特定贊助商核准的所有藥物
 params = {
     "api_key": api_key,
     "search": "sponsor_name:Moderna",
@@ -292,7 +292,7 @@ params = {
 ```
 
 ```python
-# Find drugs with priority review designation
+# 查詢具有優先審查認定的藥物
 params = {
     "api_key": api_key,
     "search": "submissions.review_priority:Priority",
@@ -300,35 +300,35 @@ params = {
 }
 ```
 
-### 6. Drug Shortages
+### 6. 藥物短缺
 
-**Endpoint**: `https://api.fda.gov/drug/drugshortages.json`
+**端點**：`https://api.fda.gov/drug/drugshortages.json`
 
-**Purpose**: Access information about current and resolved drug shortages affecting the United States.
+**目的**：存取影響美國的目前和已解決藥物短缺資訊。
 
-**Data Source**: FDA Drug Shortages Database
+**資料來源**：FDA 藥物短缺資料庫
 
-**Key Fields**:
-- `product_name` - Name of drug in shortage
-- `status` - Current status (Currently in Shortage, Resolved, Discontinued)
-- `reason` - Reason for shortage
-- `shortage_start_date` - When shortage began
-- `resolution_date` - When shortage was resolved (if applicable)
-- `discontinuation_date` - If product was discontinued
-- `active_ingredient` - Active ingredients
-- `marketed_by` - Companies marketing the product
-- `presentation` - Dosage form and strength
+**主要欄位**：
+- `product_name` - 短缺藥物名稱
+- `status` - 目前狀態（目前短缺中、已解決、已停產）
+- `reason` - 短缺原因
+- `shortage_start_date` - 短缺開始時間
+- `resolution_date` - 短缺解決時間（如適用）
+- `discontinuation_date` - 如果產品停產
+- `active_ingredient` - 活性成分
+- `marketed_by` - 行銷該產品的公司
+- `presentation` - 劑型和劑量
 
-**Common Use Cases**:
-- Formulary management
-- Supply chain planning
-- Patient care continuity
-- Therapeutic alternative identification
-- Procurement planning
+**常見使用案例**：
+- 處方集管理
+- 供應鏈規劃
+- 患者照護連續性
+- 治療替代方案識別
+- 採購規劃
 
-**Example Queries**:
+**查詢範例**：
 ```python
-# Find current drug shortages
+# 查詢目前的藥物短缺
 params = {
     "api_key": api_key,
     "search": "status:Currently+in+Shortage",
@@ -339,7 +339,7 @@ response = requests.get("https://api.fda.gov/drug/drugshortages.json", params=pa
 ```
 
 ```python
-# Search for shortages of a specific drug
+# 搜尋特定藥物的短缺
 params = {
     "api_key": api_key,
     "search": "product_name:*amoxicillin*",
@@ -348,7 +348,7 @@ params = {
 ```
 
 ```python
-# Get shortage history (both current and resolved)
+# 取得短缺歷史（目前和已解決）
 params = {
     "api_key": api_key,
     "search": "active_ingredient:epinephrine",
@@ -356,9 +356,9 @@ params = {
 }
 ```
 
-## Integration Tips
+## 整合技巧
 
-### Error Handling
+### 錯誤處理
 
 ```python
 import requests
@@ -366,15 +366,15 @@ import time
 
 def query_fda_drug(endpoint, params, max_retries=3):
     """
-    Query FDA drug database with error handling and retry logic.
+    使用錯誤處理和重試邏輯查詢 FDA 藥物資料庫。
 
-    Args:
-        endpoint: Full URL endpoint (e.g., "https://api.fda.gov/drug/event.json")
-        params: Dictionary of query parameters
-        max_retries: Maximum number of retry attempts
+    參數：
+        endpoint: 完整 URL 端點（例如：「https://api.fda.gov/drug/event.json」）
+        params: 查詢參數字典
+        max_retries: 最大重試次數
 
-    Returns:
-        Response JSON data or None if error
+    回傳：
+        回應 JSON 資料或 None（如果錯誤）
     """
     for attempt in range(max_retries):
         try:
@@ -383,18 +383,18 @@ def query_fda_drug(endpoint, params, max_retries=3):
             return response.json()
         except requests.exceptions.HTTPError as e:
             if response.status_code == 404:
-                print(f"No results found for query")
+                print(f"查詢未找到結果")
                 return None
             elif response.status_code == 429:
-                # Rate limit exceeded, wait and retry
+                # 超過速率限制，等待並重試
                 wait_time = 60 * (attempt + 1)
-                print(f"Rate limit exceeded. Waiting {wait_time} seconds...")
+                print(f"超過速率限制。等待 {wait_time} 秒...")
                 time.sleep(wait_time)
             else:
-                print(f"HTTP error occurred: {e}")
+                print(f"發生 HTTP 錯誤：{e}")
                 return None
         except requests.exceptions.RequestException as e:
-            print(f"Request error: {e}")
+            print(f"請求錯誤：{e}")
             if attempt < max_retries - 1:
                 time.sleep(5)
             else:
@@ -402,25 +402,25 @@ def query_fda_drug(endpoint, params, max_retries=3):
     return None
 ```
 
-### Pagination for Large Result Sets
+### 大型結果集的分頁
 
 ```python
 def get_all_results(endpoint, search_query, api_key, max_results=1000):
     """
-    Retrieve all results for a query using pagination.
+    使用分頁擷取查詢的所有結果。
 
-    Args:
-        endpoint: API endpoint URL
-        search_query: Search query string
-        api_key: FDA API key
-        max_results: Maximum total results to retrieve
+    參數：
+        endpoint: API 端點 URL
+        search_query: 搜尋查詢字串
+        api_key: FDA API 金鑰
+        max_results: 要擷取的最大結果總數
 
-    Returns:
-        List of all result records
+    回傳：
+        所有結果記錄的列表
     """
     all_results = []
     skip = 0
-    limit = 100  # Max per request
+    limit = 100  # 每個請求的最大值
 
     while len(all_results) < max_results:
         params = {
@@ -437,32 +437,32 @@ def get_all_results(endpoint, search_query, api_key, max_results=1000):
         results = data["results"]
         all_results.extend(results)
 
-        # Check if we've retrieved all available results
+        # 檢查是否已擷取所有可用結果
         if len(results) < limit:
             break
 
         skip += limit
-        time.sleep(0.25)  # Rate limiting courtesy
+        time.sleep(0.25)  # 速率限制禮貌
 
     return all_results[:max_results]
 ```
 
-## Best Practices
+## 最佳實踐
 
-1. **Always use HTTPS** - HTTP requests are not accepted
-2. **Include API key** - Provides higher rate limits (120,000/day vs 1,000/day)
-3. **Use exact matching for aggregations** - Add `.exact` suffix to field names in count queries
-4. **Implement rate limiting** - Stay within 240 requests/minute
-5. **Cache results** - Avoid redundant queries for the same data
-6. **Handle errors gracefully** - Implement retry logic for transient failures
-7. **Use specific field searches** - More efficient than full-text searches
-8. **Validate NDC codes** - Use standard 11-digit format with hyphens removed
-9. **Monitor API status** - Check openFDA status page for outages
-10. **Respect data limitations** - OpenFDA contains public data only, not all FDA data
+1. **始終使用 HTTPS** - HTTP 請求不被接受
+2. **包含 API 金鑰** - 提供更高的速率限制（120,000/天 vs 1,000/天）
+3. **聚合時使用精確匹配** - 在 count 查詢的欄位名稱中添加 `.exact` 後綴
+4. **實作速率限制** - 保持在每分鐘 240 個請求內
+5. **快取結果** - 避免對相同資料進行重複查詢
+6. **優雅地處理錯誤** - 對暫時性失敗實作重試邏輯
+7. **使用特定欄位搜尋** - 比全文搜尋更有效率
+8. **驗證 NDC 代碼** - 使用標準 11 位數格式並移除連字號
+9. **監控 API 狀態** - 檢查 openFDA 狀態頁面以了解中斷情況
+10. **尊重資料限制** - OpenFDA 僅包含公開資料，非所有 FDA 資料
 
-## Additional Resources
+## 其他資源
 
-- OpenFDA Drug API Documentation: https://open.fda.gov/apis/drug/
-- API Basics: See `api_basics.md` in this references directory
-- Python examples: See `scripts/fda_drug_query.py`
-- Field reference guides: Available at https://open.fda.gov/apis/drug/[endpoint]/searchable-fields/
+- OpenFDA 藥物 API 文件：https://open.fda.gov/apis/drug/
+- API 基礎：請參閱本參考目錄中的 `api_basics.md`
+- Python 範例：請參閱 `scripts/fda_drug_query.py`
+- 欄位參考指南：可在 https://open.fda.gov/apis/drug/[endpoint]/searchable-fields/ 取得
